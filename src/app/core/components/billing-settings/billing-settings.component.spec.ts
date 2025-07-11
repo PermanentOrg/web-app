@@ -1,6 +1,6 @@
 import { Shallow } from 'shallow-render';
 import { NgModule } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {} from '@angular/common/http/testing';
 import { AccountVO } from '@models/account-vo';
 import { AccountService } from '@shared/services/account/account.service';
 import { ActivatedRoute } from '@angular/router';

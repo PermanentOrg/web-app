@@ -1,9 +1,6 @@
 /* @format */
-import { HttpClient } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from '@root/environments/environment';
 import { firstValueFrom } from 'rxjs';
@@ -46,14 +43,16 @@ describe('HttpV2Service', () => {
   beforeEach(() => {
     MockSecretService.reset();
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
+    imports: [],
+    providers: [
         {
-          provide: SecretsService,
-          useClass: MockSecretService,
+            provide: SecretsService,
+            useClass: MockSecretService,
         },
-      ],
-    });
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+});
     service = TestBed.inject(HttpV2Service);
     httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);

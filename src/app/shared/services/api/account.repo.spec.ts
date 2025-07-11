@@ -1,14 +1,12 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import { AccountRepo } from '@shared/services/api/account.repo';
 import { AccountVO } from '@root/app/models';
 import { HttpV2Service } from '../http-v2/http-v2.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AccountRepo', () => {
   let repo: AccountRepo;
@@ -16,9 +14,9 @@ describe('AccountRepo', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [HttpService],
-    });
+    imports: [],
+    providers: [HttpService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     repo = new AccountRepo(
       TestBed.inject(HttpService),

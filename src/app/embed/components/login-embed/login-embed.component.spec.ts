@@ -7,7 +7,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
 
@@ -18,6 +18,7 @@ import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('LoginEmbedComponent', () => {
   let component: LoginEmbedComponent;
@@ -25,35 +26,34 @@ describe('LoginEmbedComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginEmbedComponent, FormInputComponent],
-      imports: [
-        FormsModule,
+    declarations: [LoginEmbedComponent, FormInputComponent],
+    imports: [FormsModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
-      ],
-      providers: [
+        RouterTestingModule],
+    providers: [
         CookieService,
         MessageService,
         AccountService,
         {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              queryParams: {
-                invite: 'invite',
-              },
+            provide: ActivatedRoute,
+            useValue: {
+                snapshot: {
+                    queryParams: {
+                        invite: 'invite',
+                    },
+                },
             },
-          },
         },
         {
-          provide: IFrameService,
-          useValue: {
-            setParentUrl: function () {},
-          },
+            provide: IFrameService,
+            useValue: {
+                setParentUrl: function () { },
+            },
         },
-      ],
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

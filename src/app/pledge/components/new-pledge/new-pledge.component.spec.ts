@@ -6,7 +6,7 @@ import { BillingResponse } from '@shared/services/api/billing.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {} from '@angular/common/http/testing';
 import { EventService } from '@shared/services/event/event.service';
 import { PledgeService } from '../../services/pledge.service';
 import { ApiService } from '../../../shared/services/api/api.service';

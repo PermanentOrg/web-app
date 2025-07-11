@@ -1,12 +1,10 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpService } from '@shared/services/http/http.service';
 import { environment } from '@root/environments/environment';
 import { StorageService } from '../storage/storage.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('HttpService', () => {
   let service: HttpService;
@@ -15,9 +13,9 @@ describe('HttpService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [HttpService, StorageService],
-    });
+    imports: [],
+    providers: [HttpService, StorageService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     service = TestBed.inject(HttpService);
     storage = TestBed.inject(StorageService);
     httpMock = TestBed.inject(HttpTestingController);

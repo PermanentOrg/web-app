@@ -6,7 +6,7 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { UploadSession } from '@core/services/upload/upload.session';
 import { Uploader } from '@core/services/upload/uploader';
 import { PromptService } from '@shared/services/prompt/prompt.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {} from '@angular/common/http/testing';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { DataService } from '@shared/services/data/data.service';

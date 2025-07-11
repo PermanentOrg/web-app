@@ -1,5 +1,5 @@
 import { DOWN_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {
   ComponentFixture,
   fakeAsync,
@@ -14,6 +14,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { SearchResponse } from '@shared/services/api/index.repo';
 import { of } from 'rxjs';
 import { ArchiveSearchBoxComponent } from './archive-search-box.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ArchiveSearchBoxComponent', () => {
   let relationshipService: RelationshipService;
@@ -23,9 +24,9 @@ describe('ArchiveSearchBoxComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      providers: [RelationshipService, AccountService, ApiService],
-    });
+    imports: [RouterTestingModule],
+    providers: [RelationshipService, AccountService, ApiService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     relationshipService =
       TestBed.inject<RelationshipService>(RelationshipService);
