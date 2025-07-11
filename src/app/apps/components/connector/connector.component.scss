@@ -39,14 +39,14 @@ $info-height: $file-list-row-height;
     background-color: #1877f2;
     .logo-img {
       height: 2 * $grid-unit;
-      background-image: url('assets/img/facebook/f-logo-white.png');
+      background-image: url('/assets/img/facebook/f-logo-white.png');
     }
   }
 
   &.connector-familysearch {
     background-color: #87ba41;
     .logo-img {
-      background-image: url('assets/img/familysearch/tree-name-logo.png');
+      background-image: url('/assets/img/familysearch/tree-name-logo.png');
     }
   }
 }

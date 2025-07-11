@@ -9,7 +9,7 @@ import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import {} from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '@shared/services/event/event.service';
 import { OnboardingModule } from '../../onboarding.module';
 import { OnboardingComponent } from './onboarding.component';
