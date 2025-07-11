@@ -18,7 +18,8 @@
             },
             "index": "src/index.html",
             "polyfills": [
-              "src/polyfills.ts"
+              "src/polyfills.ts",
+              "@angular/localize/init"
             ],
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
@@ -37,6 +38,9 @@
             "scripts": [
               "node_modules/ios-inner-height/dist/ios-inner-height.min.js",
               "node_modules/gsap/dist/gsap.js"
+            ],
+            "externalDependencies": [
+              "assets/*"
             ],
             "aot": false,
             "extractLicenses": false,
