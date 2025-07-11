@@ -217,18 +217,43 @@
           "builder": "@storybook/angular:start-storybook",
           "options": {
             "configDir": ".storybook",
-            "browserTarget": "mdot:build",
+            "browserTarget": "mdot:build-storybook",
             "compodoc": false,
             "port": 6006
           }
         },
         "build-storybook": {
-          "builder": "@storybook/angular:build-storybook",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "configDir": ".storybook",
-            "browserTarget": "mdot:build",
-            "compodoc": false,
-            "outputDir": "storybook-static"
+            "outputPath": "storybook-static",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": [
+              "src/polyfills.ts",
+              "@angular/localize/init"
+            ],
+            "tsConfig": "src/tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "node_modules/vis-timeline/dist/vis-timeline-graph2d.css",
+              "src/styles/main.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            },
+            "scripts": [
+              "node_modules/ios-inner-height/dist/ios-inner-height.min.js",
+              "node_modules/gsap/dist/gsap.js"
+            ],
+            "aot": true,
+            "optimization": false,
+            "sourceMap": true,
+            "namedChunks": true
           }
         }
       }
