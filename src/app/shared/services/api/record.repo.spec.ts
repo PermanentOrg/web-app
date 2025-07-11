@@ -1,13 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import { RecordRepo } from '@shared/services/api/record.repo';
 import { RecordVO } from '@root/app/models';
 import { HttpV2Service } from '../http-v2/http-v2.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('RecordRepo', () => {
   let repo: RecordRepo;
@@ -15,9 +13,9 @@ describe('RecordRepo', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [HttpService, HttpV2Service],
-    });
+    imports: [],
+    providers: [HttpService, HttpV2Service, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     repo = new RecordRepo(
       TestBed.inject(HttpService),

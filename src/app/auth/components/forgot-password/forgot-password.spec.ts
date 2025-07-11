@@ -3,11 +3,12 @@ import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { MessageService } from '@shared/services/message/message.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MfaComponent', () => {
   let component: ForgotPasswordComponent;
@@ -15,15 +16,12 @@ describe('MfaComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ForgotPasswordComponent, LogoComponent],
-      imports: [
-        FormsModule,
+    declarations: [ForgotPasswordComponent, LogoComponent],
+    imports: [FormsModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
-      ],
-      providers: [CookieService, MessageService],
-    }).compileComponents();
+        RouterTestingModule],
+    providers: [CookieService, MessageService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+}).compileComponents();
   }));
 
   beforeEach(() => {

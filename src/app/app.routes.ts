@@ -1,7 +1,7 @@
 /* @format */
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { RouterModule, Routes, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
@@ -155,16 +155,11 @@ const routes: RoutesWithData = [
   },
 ];
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    RouterModule.forRoot(routes, {
-      paramsInheritanceStrategy: 'always',
-      onSameUrlNavigation: 'reload',
-    }),
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-})
+@NgModule({ imports: [BrowserModule,
+        RouterModule.forRoot(routes, {
+            paramsInheritanceStrategy: 'always',
+            onSameUrlNavigation: 'reload',
+        }),
+        FormsModule,
+        ReactiveFormsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppRoutingModule {}

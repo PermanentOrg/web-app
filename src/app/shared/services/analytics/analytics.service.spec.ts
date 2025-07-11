@@ -1,8 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 import { AccountVO } from '@models/account-vo';
 import { Directive, FolderType, FolderVO, RecordVO } from '@models/index';
@@ -22,6 +19,7 @@ import {
   PermanentEvent,
 } from '../event/event-types';
 import { AnalyticsService, EventRequestBody } from './analytics.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 class MockDeviceMobileWidth {
   private mobileWidth: boolean = false;
@@ -93,26 +91,28 @@ describe('AnalyticsService Integration Tests', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
+    imports: [],
+    providers: [
         HttpV2Service,
         EventService,
         AnalyticsService,
         StorageService,
         {
-          provide: DeviceService,
-          useClass: MockDeviceMobileWidth,
+            provide: DeviceService,
+            useClass: MockDeviceMobileWidth,
         },
         {
-          provide: DataService,
-          useClass: MockDataCurrentFolder,
+            provide: DataService,
+            useClass: MockDataCurrentFolder,
         },
         {
-          provide: AccountService,
-          useClass: MockAccountId,
+            provide: AccountService,
+            useClass: MockAccountId,
         },
-      ],
-    });
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+});
     analytics = TestBed.inject(AnalyticsService);
     event = TestBed.inject(EventService);
     http = TestBed.inject(HttpTestingController);
