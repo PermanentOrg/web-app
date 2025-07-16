@@ -63,7 +63,8 @@
         <span class="verified">Verified</span>
       </ng-container>
       <button
-        class="btn btn-primary"
+        class="verify-phone-button btn btn-primary"
+        [disabled]="!account.primaryPhone"
         *ngSwitchDefault
         (click)="onValidatePhoneClick()"
       >
