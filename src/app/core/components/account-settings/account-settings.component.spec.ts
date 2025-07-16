@@ -89,4 +89,28 @@ describe('AccountSettingsComponent', () => {
       done();
     });
   });
+
+  it('should disable "Verify Phone Number" button if primaryPhone is empty', async () => {
+    const { find, instance, fixture } = await shallow.render();
+
+    instance.account.primaryPhone = '';
+    instance.account.phoneStatus = '';
+    fixture.detectChanges();
+
+    const button = find('.verify-phone-button');
+
+    expect(button.properties['disabled']).toBeTrue();
+  });
+
+  it('should enable "Verify Phone Number" button if primaryPhone exists', async () => {
+    const { find, instance, fixture } = await shallow.render();
+
+    instance.account.primaryPhone = '1234567890';
+    instance.account.phoneStatus = '';
+    fixture.detectChanges();
+
+    const button = find('.verify-phone-button');
+
+    expect(button.properties['disabled']).toBeFalse();
+  });
 });
