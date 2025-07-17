@@ -36,19 +36,23 @@
   <div
     class="share-preview-archive-thumb"
     prBgImage
-    [bgSrc]="shareArchive.thumbURL200"
+    [bgSrc]="shareArchive.thumbUrl200"
   ></div>
   <span>
     <strong>{{ displayName }}</strong
     ><br />
     Shared by
     {{
-      account && shareAccount.accountId === account.accountId
+      account && shareAccount?.accountId === account?.accountId
         ? 'you'
-        : shareAccount.fullName
+        : shareAccount?.fullName || shareAccount?.name
     }}<br />
-    <em class="share-preview-archive-name" *ngIf="shareArchive.fullName"
-      >From the <strong>{{ shareArchive.fullName }}</strong> Archive</em
+    <em
+      class="share-preview-archive-name"
+      *ngIf="shareArchive?.fullName || shareArchive?.name"
+      >From the
+      <strong>{{ shareArchive?.fullName || shareArchive?.name }}</strong>
+      Archive</em
     >
   </span>
   <div class="share-preview-archive-buttons" *ngIf="hasAccess">
@@ -87,11 +91,11 @@
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
     <p *ngIf="!isLoggedIn">
       <span *ngIf="isInvite || (isLinkShare && formType === 0)"
-        >Get full access to {{ shareAccount.fullName }}'s shared item and claim
+        >Get full access to {{ shareAccount?.fullName }}'s shared item and claim
         your free gigabyte of storage.</span
       >
       <span *ngIf="isLinkShare && formType === 2"
-        >Get full access to {{ shareAccount.fullName }}'s shared item.</span
+        >Get full access to {{ shareAccount?.fullName }}'s shared item.</span
       >
       <span *ngIf="isRelationshipShare"
         >To view or edit this content, log in to Permanent.org.</span
@@ -99,11 +103,11 @@
     </p>
     <p *ngIf="isLoggedIn">
       <span *ngIf="isLinkShare && !hasRequested"
-        >Request full access from {{ shareAccount.fullName }}.</span
+        >Request full access from {{ shareAccount?.fullName }}.</span
       >
       <span *ngIf="isLinkShare && hasRequested"
         >Your request is awaiting approval from
-        {{ shareAccount.fullName }}.</span
+        {{ shareAccount?.fullName }}.</span
       >
       <span *ngIf="isRelationshipShare"
         >To view or edit this content, switch archives or accounts.</span
@@ -295,12 +299,12 @@
           Accept and view the share in your archive.
         </ng-container>
         <ng-template #requestFullAccessText>
-          Request full access from {{ shareAccount.fullName }}.
+          Request full access from {{ shareAccount?.fullName }}.
         </ng-template>
       </strong>
       <strong *ngIf="isLinkShare && hasRequested"
         >Your request is awaiting approval from
-        {{ shareAccount.fullName }}.</strong
+        {{ shareAccount?.fullName }}.</strong
       >
       <strong *ngIf="isRelationshipShare"
         >Your current archive does not have access to this content. Switch to
@@ -329,7 +333,7 @@
 </div>
 <pr-share-preview-footer
   *ngIf="!isLoggedIn"
-  [accountUserName]="shareAccount.fullName"
+  [accountUserName]="shareAccount?.fullName || shareAccount?.name"
   [closeEvent]="hideBannerObservable"
 ></pr-share-preview-footer>
 <pr-prompt></pr-prompt>
