@@ -13,7 +13,7 @@ import {
   unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
-import { Router, NavigationStart } from '@angular/router';
+import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
 import { ngIfFadeInAnimationSlow, TWEAKED } from '@shared/animations';
 import {
   trigger,
@@ -77,6 +77,7 @@ export class AccountDropdownComponent
     private dialog: DialogCdkService,
     private guidedTour: GuidedTourService,
     private event: EventService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -159,9 +160,9 @@ export class AccountDropdownComponent
 
   async openArchivesDialog() {
     await this.accountService.refreshArchives();
-    this.dialog.open(MyArchivesDialogComponent, {
-      panelClass: 'dialog',
-      width: '1000px',
+
+    this.router.navigate([{ outlets: { dialog: ['archives', 'switch'] } }], {
+      relativeTo: this.route,
     });
   }
 
