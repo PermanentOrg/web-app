@@ -1,5 +1,6 @@
 import { DOWN_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {
   ComponentFixture,
   fakeAsync,
@@ -14,7 +15,6 @@ import { ApiService } from '@shared/services/api/api.service';
 import { SearchResponse } from '@shared/services/api/index.repo';
 import { of } from 'rxjs';
 import { ArchiveSearchBoxComponent } from './archive-search-box.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ArchiveSearchBoxComponent', () => {
   let relationshipService: RelationshipService;

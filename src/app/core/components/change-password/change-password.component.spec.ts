@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MessageService } from '@shared/services/message/message.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ChangePasswordComponent } from './change-password.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 class MessageStub {
   public showMessage(_msg: string): void {}

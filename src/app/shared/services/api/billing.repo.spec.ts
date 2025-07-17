@@ -9,8 +9,8 @@ import {
   BillingResponse,
   ClaimingPromoResponse,
 } from '@shared/services/api/billing.repo';
-import { HttpV2Service } from '../http-v2/http-v2.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpV2Service } from '../http-v2/http-v2.service';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
 

@@ -5,8 +5,8 @@ import { ApiService } from '@shared/services/api/api.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
-import { LegacyContactDialogComponent } from './legacy-contact-dialog.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { LegacyContactDialogComponent } from './legacy-contact-dialog.component';
 
 describe('LegacyContactDialogComponent', () => {
   let component: LegacyContactDialogComponent;

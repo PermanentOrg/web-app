@@ -3,9 +3,9 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { environment } from '@root/environments/environment';
 import { StelaItems } from '@root/utils/stela-items';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ShareLink } from '../models/share-link';
 import { ShareLinksApiService } from './share-links-api.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ShareLinksApiService', () => {
   let service: ShareLinksApiService;

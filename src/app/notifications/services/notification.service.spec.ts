@@ -8,6 +8,7 @@ import {
 import { SharedModule } from '@shared/shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -15,7 +16,6 @@ import { NotificationResponse } from '@shared/services/api/index.repo';
 import { NotificationVOData } from '@models/notification-vo';
 import { cloneDeep } from 'lodash';
 import { NotificationService } from './notification.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const allNotificationsData: NotificationVOData[] = [
   {

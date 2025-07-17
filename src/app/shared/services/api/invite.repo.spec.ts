@@ -13,8 +13,8 @@ import {
   RecordVO,
 } from '@root/app/models';
 import { AccessRoleType } from '@models/access-role';
-import { HttpV2Service } from '../http-v2/http-v2.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpV2Service } from '../http-v2/http-v2.service';
 
 describe('InviteRepo', () => {
   let repo: InviteRepo;

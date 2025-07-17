@@ -5,8 +5,8 @@ import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import { AccountRepo } from '@shared/services/api/account.repo';
 import { AccountVO } from '@root/app/models';
-import { HttpV2Service } from '../http-v2/http-v2.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpV2Service } from '../http-v2/http-v2.service';
 
 describe('AccountRepo', () => {
   let repo: AccountRepo;

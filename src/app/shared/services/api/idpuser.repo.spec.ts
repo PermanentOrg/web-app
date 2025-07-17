@@ -4,9 +4,9 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { IdPuser } from './idpuser.repo';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('IdpUser', () => {
   let repo: IdPuser;

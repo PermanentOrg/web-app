@@ -6,10 +6,10 @@ import { environment } from '@root/environments/environment';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { ArchiveVO } from '@models/index';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ChecklistApiResponse } from '../types/checklist-item';
 import { UserChecklistService } from './user-checklist.service';
 import { ChecklistEventObserverService } from './checklist-event-observer.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('UserChecklistService', () => {
   let service: UserChecklistService;

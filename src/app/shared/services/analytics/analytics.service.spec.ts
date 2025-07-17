@@ -3,6 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { environment } from '@root/environments/environment';
 import { AccountVO } from '@models/account-vo';
 import { Directive, FolderType, FolderVO, RecordVO } from '@models/index';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { StorageService } from '../storage/storage.service';
 import { DeviceService } from '../device/device.service';
@@ -19,7 +20,6 @@ import {
   PermanentEvent,
 } from '../event/event-types';
 import { AnalyticsService, EventRequestBody } from './analytics.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 class MockDeviceMobileWidth {
   private mobileWidth: boolean = false;

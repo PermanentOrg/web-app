@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { environment } from '@root/environments/environment';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FeatureFlag } from '../types/feature-flag';
 import { FeatureFlagApiService } from './feature-flag-api.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('FeatureFlagApiService', () => {
   let service: FeatureFlagApiService;

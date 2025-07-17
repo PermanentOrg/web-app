@@ -10,9 +10,9 @@ import {
   DirectiveCreateRequest,
   DirectiveUpdateRequest,
 } from '@models/index';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { DirectiveRepo } from './directive.repo';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
 

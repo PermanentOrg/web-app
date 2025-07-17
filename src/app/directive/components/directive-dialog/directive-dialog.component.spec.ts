@@ -1,12 +1,11 @@
 /* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApiService } from '@shared/services/api/api.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { DirectiveDialogComponent } from './directive-dialog.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DirectiveDialogComponent', () => {
   let component: DirectiveDialogComponent;
