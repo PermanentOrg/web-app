@@ -1,7 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
 import {
-  HttpClientTestingModule,
   HttpTestingController,
+  provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 
@@ -17,6 +17,10 @@ import {
   AccountVO,
   ArchiveVO,
 } from '@root/app/models';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 describe('ArchiveRepo', () => {
   let repo: ArchiveRepo;
@@ -24,8 +28,12 @@ describe('ArchiveRepo', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [HttpService],
+      imports: [],
+      providers: [
+        HttpService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     });
 
     repo = new ArchiveRepo(TestBed.get(HttpService));

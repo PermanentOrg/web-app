@@ -1,10 +1,13 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
 import { Subscription } from 'rxjs';
-
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO, TagVO } from '@models';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ApiService } from '@shared/services/api/api.service';
 import { EventEmitter } from '@angular/core';
 import { TagsService } from './tags.service';
@@ -45,7 +48,7 @@ describe('TagsService', () => {
     api = new MockApiService();
     account = new MockAccountService();
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
       providers: [
         {
           provide: ApiService,
@@ -55,6 +58,8 @@ describe('TagsService', () => {
           provide: AccountService,
           useValue: account,
         },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     });
     TestBed.inject(ApiService);

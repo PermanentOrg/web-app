@@ -1,13 +1,16 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { HttpService } from '@shared/services/http/http.service';
 import { BaseRepo } from '@shared/services/api/base';
 
 describe('BaseRepo', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule],
-      providers: [HttpService],
+      imports: [],
+      providers: [HttpService, provideHttpClient(withInterceptorsFromDi())],
     });
   });
 

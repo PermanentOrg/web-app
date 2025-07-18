@@ -12,7 +12,7 @@ import {
 } from '@shared/services/api/index.repo';
 import { AccountVO } from '@root/app/models';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
-import { RecaptchaErrorParameters } from 'ng-recaptcha';
+import { RecaptchaErrorParameters } from 'ng-recaptcha-2';
 import { EventService } from '@shared/services/event/event.service';
 import { C } from '@angular/cdk/keycodes';
 

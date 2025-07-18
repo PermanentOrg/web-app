@@ -1,11 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import {
-  HttpClientTestingModule,
   HttpTestingController,
+  provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { environment } from '@root/environments/environment';
 import { StelaItems } from '@root/utils/stela-items';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { ShareLink } from '../models/share-link';
 import { ShareLinksApiService } from './share-links-api.service';
 
@@ -30,8 +34,12 @@ describe('ShareLinksApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [HttpV2Service],
+      imports: [],
+      providers: [
+        HttpV2Service,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     });
     service = TestBed.inject(ShareLinksApiService);
     http = TestBed.inject(HttpTestingController);

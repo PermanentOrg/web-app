@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { GetAccessFile } from '@models/get-access-file';
 import { RecordVO } from '@models/index';
-import * as OpenSeaDragon from 'openseadragon';
+import OpenSeaDragon from 'openseadragon';
 import { ZoomEvent, FullScreenEvent } from 'openseadragon';
 
 @Component({

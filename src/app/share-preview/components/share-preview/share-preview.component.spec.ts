@@ -1,6 +1,5 @@
 /* @format */
 import {
-  async,
   fakeAsync,
   ComponentFixture,
   TestBed,

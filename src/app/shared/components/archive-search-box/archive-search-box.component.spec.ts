@@ -1,5 +1,9 @@
 import { DOWN_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import {
   ComponentFixture,
   fakeAsync,
@@ -23,8 +27,14 @@ describe('ArchiveSearchBoxComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      providers: [RelationshipService, AccountService, ApiService],
+      imports: [RouterTestingModule],
+      providers: [
+        RelationshipService,
+        AccountService,
+        ApiService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     });
 
     relationshipService =

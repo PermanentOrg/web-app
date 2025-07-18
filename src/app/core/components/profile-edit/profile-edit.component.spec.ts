@@ -1,5 +1,5 @@
 /* @format */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -34,7 +34,7 @@ describe('ProfileEditComponent', () => {
   mockProfileService.fetchProfileItems.and.returnValue(Promise.resolve());
   mockProfileService.checkProfilePublic.and.returnValue(true);
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ProfileEditComponent],
       providers: [

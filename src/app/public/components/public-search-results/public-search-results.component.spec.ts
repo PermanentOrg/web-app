@@ -3,7 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FolderVO } from '@root/app/models';
 import { SearchService } from '@search/services/search.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { DataService } from '../../../shared/services/data/data.service';
 import { PublicSearchResultsComponent } from './public-search-results.component';
 
@@ -24,14 +28,16 @@ describe('PublicSearchResultsComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [PublicSearchResultsComponent],
+      imports: [],
       providers: [
         { provide: Router, useValue: mockRouter },
         { provide: SearchService, useValue: mockSearchService },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         Location,
         DataService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
-      imports: [HttpClientTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PublicSearchResultsComponent);

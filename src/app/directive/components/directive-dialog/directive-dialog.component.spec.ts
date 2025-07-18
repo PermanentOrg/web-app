@@ -1,8 +1,11 @@
 /* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { ApiService } from '@shared/services/api/api.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { DirectiveDialogComponent } from './directive-dialog.component';
@@ -14,6 +17,7 @@ describe('DirectiveDialogComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DirectiveDialogComponent],
+      imports: [],
       providers: [
         ApiService,
         {
@@ -24,8 +28,9 @@ describe('DirectiveDialogComponent', () => {
             },
           },
         },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
-      imports: [HttpClientTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DirectiveDialogComponent);
