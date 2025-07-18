@@ -3,6 +3,7 @@ import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
+import { AccountService } from '@shared/services/account/account.service';
 import { UploadItem } from './uploadItem';
 
 const buildForm = (fields: object, file: File) => {
@@ -26,6 +27,7 @@ export class Uploader {
     private api: ApiService,
     private httpClient: HttpClient,
     private event: EventService,
+    private account: AccountService,
   ) {}
 
   private getUploadData = async (item: UploadItem) => {
@@ -41,9 +43,12 @@ export class Uploader {
 
   private registerRecord = async (item: UploadItem, destinationUrl: string) => {
     try {
+      const archiveId = this.account.getArchive().archiveId;
+
       const record = await this.api.record.registerRecord(
         item.RecordVO,
         destinationUrl,
+        archiveId,
       );
 
       this.event.dispatch({
