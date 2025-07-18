@@ -13,7 +13,12 @@ import {
   ActivatedRoute,
   NavigationStart,
 } from '@angular/router';
-import { HttpErrorResponse, provideHttpClient, withInterceptorsFromDi, withJsonpSupport } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withJsonpSupport,
+} from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subscription } from 'rxjs';
@@ -140,41 +145,47 @@ export class PermErrorHandler implements ErrorHandler {
   }
 }
 
-@NgModule({ exports: [],
-    declarations: [AppComponent, MessageComponent],
-    bootstrap: [AppComponent], imports: [AppRoutingModule,
-        RouterModule,
-        BrowserModule,
-        CommonModule,
-        BrowserAnimationsModule,
-        InViewportModule,
-        FontAwesomeModule,
-        FormsModule,
-        RouteHistoryModule,
-        FeatureFlagModule], providers: [
-        CookieService,
-        MessageService,
-        DataService,
-        {
-            provide: OverlayContainer,
-            useClass: CustomOverlayContainer,
-        },
-        {
-            provide: APP_INITIALIZER,
-            useFactory: initializeAnalytics,
-            deps: [EventService, AnalyticsService],
-            multi: true,
-        },
-        {
-            provide: ErrorHandler,
-            useClass: SentryErrorHandler,
-        },
-        {
-            provide: APP_BASE_HREF,
-            useValue: '/',
-        },
-        provideHttpClient(withInterceptorsFromDi(), withJsonpSupport()),
-    ] })
+@NgModule({
+  exports: [],
+  declarations: [AppComponent, MessageComponent],
+  bootstrap: [AppComponent],
+  imports: [
+    AppRoutingModule,
+    RouterModule,
+    BrowserModule,
+    CommonModule,
+    BrowserAnimationsModule,
+    InViewportModule,
+    FontAwesomeModule,
+    FormsModule,
+    RouteHistoryModule,
+    FeatureFlagModule,
+  ],
+  providers: [
+    CookieService,
+    MessageService,
+    DataService,
+    {
+      provide: OverlayContainer,
+      useClass: CustomOverlayContainer,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeAnalytics,
+      deps: [EventService, AnalyticsService],
+      multi: true,
+    },
+    {
+      provide: ErrorHandler,
+      useClass: SentryErrorHandler,
+    },
+    {
+      provide: APP_BASE_HREF,
+      useValue: '/',
+    },
+    provideHttpClient(withInterceptorsFromDi(), withJsonpSupport()),
+  ],
+})
 export class AppModule {
   private routerListener: Subscription;
   private routerDebug = debug('router:navigation');

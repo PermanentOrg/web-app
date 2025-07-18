@@ -5,7 +5,10 @@ import { ApiService } from '@shared/services/api/api.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { LegacyContactDialogComponent } from './legacy-contact-dialog.component';
 
 describe('LegacyContactDialogComponent', () => {
@@ -14,22 +17,22 @@ describe('LegacyContactDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [LegacyContactDialogComponent],
-    imports: [],
-    providers: [
+      declarations: [LegacyContactDialogComponent],
+      imports: [],
+      providers: [
         ApiService,
         {
-            provide: AccountService,
-            useValue: {
-                getAccount: () => {
-                    return new AccountVO({ accountId: 1 });
-                },
+          provide: AccountService,
+          useValue: {
+            getAccount: () => {
+              return new AccountVO({ accountId: 1 });
             },
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents();
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LegacyContactDialogComponent);
     component = fixture.componentInstance;

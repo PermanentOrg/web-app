@@ -25,7 +25,10 @@ import { DebugElement } from '@angular/core';
 import { CheckboxComponent } from '@root/app/component-library/components/checkbox/checkbox.component';
 import { AccountVO } from '@models/account-vo';
 import { AccountService } from '@shared/services/account/account.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
@@ -34,31 +37,29 @@ describe('SignupComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    declarations: [SignupComponent, LogoComponent, FormInputComponent],
-    imports: [FormsModule,
-        ReactiveFormsModule,
-        RouterTestingModule],
-    providers: [
+      declarations: [SignupComponent, LogoComponent, FormInputComponent],
+      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
+      providers: [
         CookieService,
         MessageService,
         ApiService,
         AccountService,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                snapshot: {
-                    queryParams: {
-                        fullName: window.btoa(TEST_DATA.user.name),
-                        primaryEmail: window.btoa(TEST_DATA.user.email),
-                        inviteCode: 'invite',
-                    },
-                },
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParams: {
+                fullName: window.btoa(TEST_DATA.user.name),
+                primaryEmail: window.btoa(TEST_DATA.user.email),
+                inviteCode: 'invite',
+              },
             },
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents();
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

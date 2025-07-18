@@ -1,10 +1,16 @@
 /* @format */
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { IdPuser } from './idpuser.repo';
 
@@ -14,9 +20,13 @@ describe('IdpUser', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [HttpService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [
+        HttpService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    });
 
     repo = new IdPuser(
       TestBed.inject(HttpService),

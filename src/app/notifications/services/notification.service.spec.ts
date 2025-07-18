@@ -8,7 +8,10 @@ import {
 import { SharedModule } from '@shared/shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -79,9 +82,14 @@ describe('NotificationService', () => {
     newNotificationsResponse.isSuccessful = true;
 
     TestBed.configureTestingModule({
-    imports: [SharedModule, RouterTestingModule],
-    providers: [NotificationService, MessageService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [SharedModule, RouterTestingModule],
+      providers: [
+        NotificationService,
+        MessageService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    });
 
     accountService = TestBed.inject(AccountService);
     apiService = TestBed.inject(ApiService);

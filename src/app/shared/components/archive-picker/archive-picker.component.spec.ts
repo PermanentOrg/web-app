@@ -4,7 +4,10 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { ArchivePickerComponent } from './archive-picker.component';
 
 class MockDialogRef {
@@ -17,9 +20,9 @@ describe('ArchivePickerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    declarations: [ArchivePickerComponent],
-    imports: [],
-    providers: [
+      declarations: [ArchivePickerComponent],
+      imports: [],
+      providers: [
         { provide: DialogRef, useClass: MockDialogRef },
         { provide: DIALOG_DATA, useValue: {} },
         { provide: ApiService, useValue: {} },
@@ -27,8 +30,8 @@ describe('ArchivePickerComponent', () => {
         MessageService,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents();
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,5 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import * as Repo from '@shared/services/api/index.repo';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -7,9 +10,9 @@ import { ApiService } from '@shared/services/api/api.service';
 describe('ApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [ApiService, provideHttpClient(withInterceptorsFromDi())]
-});
+      imports: [],
+      providers: [ApiService, provideHttpClient(withInterceptorsFromDi())],
+    });
   });
 
   it('should be created', inject([ApiService], (service: ApiService) => {

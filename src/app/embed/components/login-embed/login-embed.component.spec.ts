@@ -18,7 +18,10 @@ import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 describe('LoginEmbedComponent', () => {
   let component: LoginEmbedComponent;
@@ -26,34 +29,32 @@ describe('LoginEmbedComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    declarations: [LoginEmbedComponent, FormInputComponent],
-    imports: [FormsModule,
-        ReactiveFormsModule,
-        RouterTestingModule],
-    providers: [
+      declarations: [LoginEmbedComponent, FormInputComponent],
+      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
+      providers: [
         CookieService,
         MessageService,
         AccountService,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                snapshot: {
-                    queryParams: {
-                        invite: 'invite',
-                    },
-                },
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParams: {
+                invite: 'invite',
+              },
             },
+          },
         },
         {
-            provide: IFrameService,
-            useValue: {
-                setParentUrl: function () { },
-            },
+          provide: IFrameService,
+          useValue: {
+            setParentUrl: function () {},
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents();
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

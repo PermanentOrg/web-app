@@ -1,6 +1,9 @@
 /* @format */
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { map } from 'rxjs/operators';
 import { environment } from '@root/environments/environment';
 
@@ -12,7 +15,10 @@ import {
   AccountVO,
   ArchiveVO,
 } from '@root/app/models';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 
 describe('AuthRepo', () => {
@@ -39,9 +45,13 @@ describe('AuthRepo', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [HttpService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [
+        HttpService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    });
 
     repo = new AuthRepo(
       TestBed.inject(HttpService),

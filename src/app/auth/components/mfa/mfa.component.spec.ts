@@ -8,7 +8,10 @@ import { CookieService } from 'ngx-cookie-service';
 import { MfaComponent } from '@auth/components/mfa/mfa.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { MessageService } from '@shared/services/message/message.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 describe('MfaComponent', () => {
   let component: MfaComponent;
@@ -16,12 +19,15 @@ describe('MfaComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    declarations: [MfaComponent, LogoComponent],
-    imports: [FormsModule,
-        ReactiveFormsModule,
-        RouterTestingModule],
-    providers: [CookieService, MessageService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-}).compileComponents();
+      declarations: [MfaComponent, LogoComponent],
+      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
+      providers: [
+        CookieService,
+        MessageService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,5 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 
 import { TEST_DATA, TEST_DATA_2 } from '@core/core.module.spec';
@@ -11,7 +14,10 @@ import {
   AccountVO,
   ArchiveVO,
 } from '@root/app/models';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 describe('FolderRepo', () => {
   let repo: FolderRepo;
@@ -19,9 +25,13 @@ describe('FolderRepo', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [HttpService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [
+        HttpService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    });
 
     repo = new FolderRepo(TestBed.get(HttpService));
     httpMock = TestBed.get(HttpTestingController);

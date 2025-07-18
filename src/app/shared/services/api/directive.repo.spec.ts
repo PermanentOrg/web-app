@@ -1,6 +1,9 @@
 /* @format */
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
@@ -10,7 +13,10 @@ import {
   DirectiveCreateRequest,
   DirectiveUpdateRequest,
 } from '@models/index';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { DirectiveRepo } from './directive.repo';
 
@@ -23,9 +29,13 @@ describe('DirectiveRepo', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [HttpService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [
+        HttpService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    });
 
     repo = new DirectiveRepo(
       TestBed.inject(HttpService),

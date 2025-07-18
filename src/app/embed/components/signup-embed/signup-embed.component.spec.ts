@@ -17,7 +17,10 @@ import { FormInputComponent } from '@shared/components/form-input/form-input.com
 import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 describe('SignupEmbedComponent', () => {
   let component: SignupEmbedComponent;
@@ -25,28 +28,26 @@ describe('SignupEmbedComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    declarations: [SignupEmbedComponent, FormInputComponent],
-    imports: [FormsModule,
-        ReactiveFormsModule,
-        RouterTestingModule],
-    providers: [
+      declarations: [SignupEmbedComponent, FormInputComponent],
+      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
+      providers: [
         CookieService,
         MessageService,
         AccountService,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                snapshot: {
-                    queryParams: {
-                        invite: 'invite',
-                    },
-                },
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParams: {
+                invite: 'invite',
+              },
             },
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents();
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

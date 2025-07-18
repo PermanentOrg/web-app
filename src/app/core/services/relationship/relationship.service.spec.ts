@@ -1,6 +1,9 @@
 import { TestBed, inject } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { AccountService } from '@shared/services/account/account.service';
 import { cloneDeep } from 'lodash';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -12,16 +15,16 @@ import { RelationshipService } from './relationship.service';
 describe('RelationshipService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    providers: [
+      imports: [RouterTestingModule],
+      providers: [
         CookieService,
         AccountService,
         StorageService,
         RelationshipService,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-});
+      ],
+    });
   });
 
   it('should be created', inject(

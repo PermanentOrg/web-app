@@ -1,9 +1,15 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { environment } from '@root/environments/environment';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { FeatureFlag } from '../types/feature-flag';
 import { FeatureFlagApiService } from './feature-flag-api.service';
 
@@ -13,9 +19,13 @@ describe('FeatureFlagApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [HttpV2Service, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [
+        HttpV2Service,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    });
     service = TestBed.inject(FeatureFlagApiService);
     http = TestBed.inject(HttpTestingController);
   });
