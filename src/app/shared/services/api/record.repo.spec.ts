@@ -49,7 +49,7 @@ describe('RecordRepo', () => {
     const testUrl = 'test';
 
     repo
-      .registerRecord(testRecord, testUrl)
+      .registerRecord(testRecord, testUrl, '1')
       .then((_) => {
         done();
       })
@@ -67,6 +67,7 @@ describe('RecordRepo', () => {
       uploadFileName: testRecord.uploadFileName,
       size: testRecord.size,
       s3url: testUrl,
+      archiveId: '1',
     });
     req.flush(testRecord);
   });

@@ -101,6 +101,7 @@ export class RecordRepo extends BaseRepo {
   public async registerRecord(
     recordVO: RecordVO,
     s3url: string,
+    archiveId: string,
   ): Promise<RecordVO> {
     return (
       await firstValueFrom(
@@ -112,6 +113,7 @@ export class RecordRepo extends BaseRepo {
             uploadFileName: recordVO.uploadFileName,
             size: recordVO.size,
             s3url,
+            archiveId,
           },
           RecordVO,
         ),
