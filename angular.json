@@ -11,12 +11,16 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/mdot",
+            "outputPath": {
+              "base": "dist/mdot"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts",
+              "@angular/localize/init"
+            ],
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
@@ -35,13 +39,15 @@
               "node_modules/ios-inner-height/dist/ios-inner-height.min.js",
               "node_modules/gsap/dist/gsap.js"
             ],
+            "externalDependencies": [
+              "assets/*"
+            ],
             "aot": false,
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "src/main.ts"
           },
           "configurations": {
             "local": {
@@ -56,8 +62,6 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "deployUrl": "/app/"
             },
             "proxy_local": {
@@ -101,9 +105,7 @@
               },
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             },
             "production": {
               "fileReplacements": [
@@ -124,9 +126,7 @@
               },
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             },
             "staging": {
               "fileReplacements": [
@@ -146,9 +146,7 @@
               },
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             }
           },
           "defaultConfiguration": ""
@@ -219,18 +217,43 @@
           "builder": "@storybook/angular:start-storybook",
           "options": {
             "configDir": ".storybook",
-            "browserTarget": "mdot:build",
+            "browserTarget": "mdot:build-storybook",
             "compodoc": false,
             "port": 6006
           }
         },
         "build-storybook": {
-          "builder": "@storybook/angular:build-storybook",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "configDir": ".storybook",
-            "browserTarget": "mdot:build",
-            "compodoc": false,
-            "outputDir": "storybook-static"
+            "outputPath": "storybook-static",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": [
+              "src/polyfills.ts",
+              "@angular/localize/init"
+            ],
+            "tsConfig": "src/tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "node_modules/vis-timeline/dist/vis-timeline-graph2d.css",
+              "src/styles/main.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            },
+            "scripts": [
+              "node_modules/ios-inner-height/dist/ios-inner-height.min.js",
+              "node_modules/gsap/dist/gsap.js"
+            ],
+            "aot": true,
+            "optimization": false,
+            "sourceMap": true,
+            "namedChunks": true
           }
         }
       }

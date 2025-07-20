@@ -1,11 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import {
-  HttpClientTestingModule,
   HttpTestingController,
+  provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 import { AccountVO } from '@models/account-vo';
 import { Directive, FolderType, FolderVO, RecordVO } from '@models/index';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { StorageService } from '../storage/storage.service';
 import { DeviceService } from '../device/device.service';
@@ -93,7 +97,7 @@ describe('AnalyticsService Integration Tests', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
       providers: [
         HttpV2Service,
         EventService,
@@ -111,6 +115,8 @@ describe('AnalyticsService Integration Tests', () => {
           provide: AccountService,
           useClass: MockAccountId,
         },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     });
     analytics = TestBed.inject(AnalyticsService);

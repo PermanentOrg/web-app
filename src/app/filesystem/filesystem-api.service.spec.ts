@@ -1,11 +1,15 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
 import {
-  HttpClientTestingModule,
   HttpTestingController,
+  provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 import { FolderResponse } from '@shared/services/api/folder.repo';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { FilesystemApiService } from './filesystem-api.service';
 
 describe('FilesystemApiService', () => {
@@ -14,7 +18,11 @@ describe('FilesystemApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
+      providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     });
     service = TestBed.inject(FilesystemApiService);
     http = TestBed.inject(HttpTestingController);

@@ -14,9 +14,10 @@ import {
   NavigationStart,
 } from '@angular/router';
 import {
-  HttpClientModule,
-  HttpClientJsonpModule,
   HttpErrorResponse,
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withJsonpSupport,
 } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -145,11 +146,12 @@ export class PermErrorHandler implements ErrorHandler {
 }
 
 @NgModule({
+  exports: [],
+  declarations: [AppComponent, MessageComponent],
+  bootstrap: [AppComponent],
   imports: [
     AppRoutingModule,
     RouterModule,
-    HttpClientModule,
-    HttpClientJsonpModule,
     BrowserModule,
     CommonModule,
     BrowserAnimationsModule,
@@ -159,8 +161,6 @@ export class PermErrorHandler implements ErrorHandler {
     RouteHistoryModule,
     FeatureFlagModule,
   ],
-  exports: [],
-  declarations: [AppComponent, MessageComponent],
   providers: [
     CookieService,
     MessageService,
@@ -183,8 +183,8 @@ export class PermErrorHandler implements ErrorHandler {
       provide: APP_BASE_HREF,
       useValue: '/',
     },
+    provideHttpClient(withInterceptorsFromDi(), withJsonpSupport()),
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {
   private routerListener: Subscription;
