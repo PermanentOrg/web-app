@@ -6,7 +6,7 @@ const meta: Meta<Button> = {
   title: 'Example/Button',
   component: Button,
   tags: ['autodocs'],
-  render: (args: Button) => ({
+  render: (args) => ({
     props: {
       backgroundColor: null,
       ...args,

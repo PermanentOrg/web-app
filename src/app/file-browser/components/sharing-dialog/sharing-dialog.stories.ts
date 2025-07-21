@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { Meta, moduleMetadata } from '@storybook/angular';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -76,6 +76,6 @@ export default {
   component: SharingDialogComponent,
 } as Meta;
 
-export const SharingDialog: Story = () => ({
+export const SharingDialog = () => ({
   props: {},
 });

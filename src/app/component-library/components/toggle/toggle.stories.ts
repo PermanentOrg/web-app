@@ -7,7 +7,7 @@ const meta: Meta<ToggleComponent> = {
   title: 'Toggle',
   component: ToggleComponent,
   tags: ['autodocs'],
-  render: (args: ToggleComponent) => ({
+  render: (args) => ({
     props: {
       ...args,
       isCheckedChange: action('isCheckedChange'),

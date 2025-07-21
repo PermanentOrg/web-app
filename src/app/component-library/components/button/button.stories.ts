@@ -25,7 +25,7 @@ const meta: Meta<ButtonComponent> = {
   title: 'Button',
   component: ButtonComponent,
   tags: ['autodocs'],
-  render: (args: ButtonComponent) => ({
+  render: (args) => ({
     props: {
       variant: 'primary',
       ...args,

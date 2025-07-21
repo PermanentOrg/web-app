@@ -12,7 +12,7 @@ const meta: Meta<GlamUserSurveySquareComponent> = {
       imports: [GlamUserSurveySquareComponent, CheckboxComponent], // Import the necessary standalone components
     }),
   ],
-  render: (args: GlamUserSurveySquareComponent) => ({
+  render: (args) => ({
     props: {
       ...args,
       selected: true,
