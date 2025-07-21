@@ -3,7 +3,6 @@ import {
   componentWrapperDecorator,
   Meta,
   moduleMetadata,
-  Story,
 } from '@storybook/angular';
 import { AnnouncementModule } from '../../announcement.module';
 
@@ -20,7 +19,7 @@ export default {
   component: AnnouncementComponent,
 } as Meta;
 
-export const Announcement: Story = () => ({
+export const Announcement = () => ({
   props: {
     eventsList: [
       {

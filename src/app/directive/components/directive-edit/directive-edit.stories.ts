@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { Meta, moduleMetadata } from '@storybook/angular';
 import { action } from '@storybook/addon-actions';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -84,7 +84,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story = (args) => {
+const Template = (args) => {
   MockAccountService.mockArchive = new ArchiveVO({
     fullName: 'The Storybook Archive',
     archiveId: 1,
@@ -112,14 +112,14 @@ const Template: Story = (args) => {
   };
 };
 
-export const Create: Story = Template.bind({});
+export const Create = Template.bind({});
 Create.args = {
   editingExistingDirective: false,
   failSaveRequest: false,
   accountExists: true,
 };
 
-export const Edit: Story = Template.bind({});
+export const Edit = Template.bind({});
 Edit.args = {
   editingExistingDirective: true,
   existingDirectiveSteward: 'test@example.com',
@@ -131,12 +131,12 @@ Edit.args = {
   accountExists: true,
 };
 
-export const Error: Story = Template.bind({});
+export const Error = Template.bind({});
 Error.args = Object.assign(Edit.args, {
   failSaveRequest: true,
 });
 
-export const NoAccountForEmail: Story = Template.bind({});
+export const NoAccountForEmail = Template.bind({});
 NoAccountForEmail.args = Object.assign(Edit.args, {
   accountExists: false,
 });

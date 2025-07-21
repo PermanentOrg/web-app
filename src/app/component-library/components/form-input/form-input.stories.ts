@@ -49,7 +49,7 @@ const meta: Meta<FormInputComponent> = {
   ],
   component: FormInputComponent,
   tags: ['autodocs'],
-  render: (args: FormInputComponent) => ({
+  render: (args) => ({
     props: {
       variant: 'light',
       ...args,

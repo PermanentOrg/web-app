@@ -20,7 +20,7 @@ const meta: Meta<CheckboxComponent> = {
   title: 'Checkbox',
   component: CheckboxComponent,
   tags: ['autodocs'],
-  render: (args: CheckboxComponent) => ({
+  render: (args) => ({
     props: {
       variant: 'primary',
       ...args,

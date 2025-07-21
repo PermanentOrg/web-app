@@ -10,7 +10,7 @@ const meta: Meta<GlamArchiveTypeSelectComponent> = {
   title: 'Glam Onboarding: Archive Type Select',
   component: GlamArchiveTypeSelectComponent,
   tags: ['onboarding', 'glam'],
-  render: (args: GlamArchiveTypeSelectComponent) => ({
+  render: (args) => ({
     props: {
       ...args,
       typeSelected,

@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { Meta, moduleMetadata } from '@storybook/angular';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -74,7 +74,7 @@ export default {
   component: DirectiveDisplayComponent,
 } as Meta;
 
-const storyTemplate: Story = (args) => {
+const storyTemplate = (args) => {
   MockAccountService.mockArchive = new ArchiveVO({
     fullName: args.archiveName ?? 'Volunteer Firefighter',
   });
@@ -112,9 +112,9 @@ const storyTemplate: Story = (args) => {
   };
 };
 
-export const WithDirective: Story = storyTemplate.bind({});
+export const WithDirective = storyTemplate.bind({});
 
-export const WithoutDirective: Story = storyTemplate.bind({});
+export const WithoutDirective = storyTemplate.bind({});
 WithoutDirective.args = {
   archiveName: 'Volunteer Firefighter',
   hasArchiveSteward: false,
@@ -122,14 +122,14 @@ WithoutDirective.args = {
   note: 'Test note for Archive Steward',
 };
 
-export const NoPlan: Story = storyTemplate.bind({});
+export const NoPlan = storyTemplate.bind({});
 NoPlan.args = {
   hasArchiveSteward: false,
   checkLegacyContact: true,
   hasLegacyContact: false,
 };
 
-export const ApiError: Story = storyTemplate.bind({});
+export const ApiError = storyTemplate.bind({});
 ApiError.args = {
   failDirectivesFetch: true,
 };
