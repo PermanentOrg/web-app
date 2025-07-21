@@ -1,7 +1,8 @@
 import { EventService } from '@shared/services/event/event.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { HttpClient } from '@angular/common/http';
-import { FolderVO, RecordVO, SimpleVO } from '@models/index';
+import { AccountService } from '@shared/services/account/account.service';
+import { ArchiveVO, FolderVO, RecordVO, SimpleVO } from '@models/index';
 import { RecordResponse } from '@shared/services/api/record.repo';
 import { Uploader } from './uploader';
 import { UploadItem } from './uploadItem';
@@ -99,19 +100,28 @@ class MockHttpClient {
   }
 }
 
+class MockAccountService {
+  public getArchive() {
+    return new ArchiveVO({});
+  }
+}
+
 describe('Uploader', () => {
   let uploader: Uploader;
   let api: MockApiService;
   let http: MockHttpClient;
+  let account: MockAccountService;
 
   beforeEach(() => {
     MockApiService.reset();
     api = new MockApiService();
     http = new MockHttpClient();
+    account = new MockAccountService();
     uploader = new Uploader(
       api as unknown as ApiService,
       http as unknown as HttpClient,
       new EventService(),
+      account as unknown as AccountService,
     );
   });
 
