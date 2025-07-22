@@ -9,7 +9,7 @@ export class ItemTypeIconPipe implements PipeTransform {
   constructor() {}
 
   transform(item: RecordVO | FolderVO, view?: FolderView): any {
-    if (item instanceof RecordVO) {
+    if ((item as RecordVO).recordId) {
       switch (item.type) {
         case 'type.record.image':
           return 'image';
@@ -25,7 +25,7 @@ export class ItemTypeIconPipe implements PipeTransform {
         default:
           return 'insert_drive_file';
       }
-    } else if (item instanceof FolderVO) {
+    } else if ((item as FolderVO).folderId) {
       switch (item.view) {
         case 'folder.view.timeline':
           return 'timeline';
