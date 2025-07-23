@@ -80,7 +80,6 @@ export class PrConstantsService {
     const relationTypes: { type: string; name: string }[] = [];
     for (const key in this.constants.relation) {
       if (key === 'family') {
-        // eslint-disable-next-line guard-for-in
         for (const familyKey in this.constants.relation.family) {
           relationTypes.push({
             type: `relation.family.${familyKey}`,
