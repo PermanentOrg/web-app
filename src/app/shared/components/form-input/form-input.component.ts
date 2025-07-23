@@ -47,6 +47,8 @@ export class FormInputComponent implements OnInit, AfterViewInit {
 	@HostBinding('class.right-align') rightAlign = false;
 	@HostBinding('class.input-vertical') inputVertical = true;
 
+	openStatus = false;
+
 	@Input() config: FormInputConfig;
 
 	constructor(private element: ElementRef) {}
@@ -124,5 +126,12 @@ export class FormInputComponent implements OnInit, AfterViewInit {
 
 	getOptionTextFromValue(value: string) {
 		return find(this.selectOptions, { value })?.text;
+	}
+	openSelect() {
+		this.openStatus = !this.openStatus;
+	}
+
+	handleChange() {
+		this.openStatus = false;
 	}
 }
