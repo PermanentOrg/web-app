@@ -112,11 +112,11 @@ describe('SharingDialogComponent', () => {
 		showMessageSpy = spyOn(
 			TestBed.inject(MessageService),
 			'showMessage',
-		).and.returnValue();
+		).and.returnValue(undefined);
 		showErrorSpy = spyOn(
 			TestBed.inject(MessageService),
 			'showError',
-		).and.returnValue();
+		).and.returnValue(undefined);
 
 		apiService = TestBed.inject(ApiService);
 	});
