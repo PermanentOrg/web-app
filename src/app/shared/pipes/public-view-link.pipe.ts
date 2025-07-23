@@ -6,6 +6,7 @@ const baseUrl = environment.apiUrl.replace('/api', '');
 
 @Pipe({
   name: 'publicViewLink',
+  standalone: false,
 })
 export class PublicViewLinkPipe implements PipeTransform {
   constructor() {}

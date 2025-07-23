@@ -27,6 +27,7 @@ import {
   templateUrl: './global-search-results.component.html',
   styleUrls: ['./global-search-results.component.scss'],
   animations: [ngIfFadeInAnimation],
+  standalone: false,
 })
 export class GlobalSearchResultsComponent
   implements OnInit, OnDestroy, HasSubscriptions

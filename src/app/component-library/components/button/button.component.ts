@@ -12,6 +12,7 @@ type TYPE = 'submit' | 'reset' | 'button';
   selector: 'pr-button',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
+  standalone: false,
 })
 export class ButtonComponent {
   //Inputs

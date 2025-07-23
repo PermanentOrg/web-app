@@ -5,6 +5,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
   selector: 'pr-confirm-payer-dialog',
   templateUrl: './confirm-payer-dialog.component.html',
   styleUrls: ['./confirm-payer-dialog.component.scss'],
+  standalone: false,
 })
 export class ConfirmPayerDialogComponent {
   archiveId;

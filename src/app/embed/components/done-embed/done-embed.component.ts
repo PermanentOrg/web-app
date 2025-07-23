@@ -8,6 +8,7 @@ import { AccountVO } from '@root/app/models';
   selector: 'pr-done-embed',
   templateUrl: './done-embed.component.html',
   styleUrls: ['./done-embed.component.scss'],
+  standalone: false,
 })
 export class DoneEmbedComponent implements OnInit {
   account: AccountVO;

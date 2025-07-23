@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'pr-create-account-dialog',
   templateUrl: './create-account-dialog.component.html',
   styleUrls: ['./create-account-dialog.component.scss'],
+  standalone: false,
 })
 export class CreateAccountDialogComponent implements OnInit {
   sharerName: string = this.data.sharerName;

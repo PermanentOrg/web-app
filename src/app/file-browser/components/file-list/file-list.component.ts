@@ -76,6 +76,7 @@ const DRAG_SCROLL_STEP = 20;
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss'],
   animations: [slideUpAnimation, ngIfScaleAnimationDynamic],
+  standalone: false,
 })
 export class FileListComponent
   implements

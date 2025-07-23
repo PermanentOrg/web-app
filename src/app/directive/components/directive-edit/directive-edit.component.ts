@@ -11,6 +11,7 @@ import { MessageService } from '@shared/services/message/message.service';
   selector: 'pr-directive-edit',
   templateUrl: './directive-edit.component.html',
   styleUrls: ['./directive-edit.component.scss'],
+  standalone: false,
 })
 export class DirectiveEditComponent implements OnInit {
   @Output() public savedDirective = new EventEmitter<Directive>();

@@ -33,6 +33,7 @@ import { Observable, Subscription } from 'rxjs';
       ]),
     ]),
   ],
+  standalone: false,
 })
 export class SharePreviewFooterComponent implements OnInit, OnDestroy {
   @Input() public accountUserName: string;

@@ -11,6 +11,7 @@ import { DeviceService } from '@shared/services/device/device.service';
   selector: 'pr-file-history',
   templateUrl: './file-history.component.html',
   styleUrls: ['./file-history.component.scss'],
+  standalone: false,
 })
 export class FileHistoryComponent implements OnInit {
   currentPage = 1;

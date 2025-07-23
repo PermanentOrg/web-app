@@ -9,6 +9,7 @@ import { SearchService } from '../../../search/services/search.service';
   selector: 'pr-public-search-results',
   templateUrl: './public-search-results.component.html',
   styleUrls: ['./public-search-results.component.scss'],
+  standalone: false,
 })
 export class PublicSearchResultsComponent implements OnInit, OnDestroy {
   public searchResults = [];

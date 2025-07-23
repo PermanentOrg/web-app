@@ -30,6 +30,7 @@ interface FamilyMember {
   selector: 'pr-family-search-import',
   templateUrl: './family-search-import.component.html',
   styleUrls: ['./family-search-import.component.scss'],
+  standalone: false,
 })
 export class FamilySearchImportComponent {
   public stage: 'people' | 'memories' | 'importing' = 'people';

@@ -20,6 +20,7 @@ type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
   selector: 'pr-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
+  standalone: false,
 })
 export class SidebarComponent implements OnDestroy, HasSubscriptions {
   currentTab: SidebarTab = 'info';

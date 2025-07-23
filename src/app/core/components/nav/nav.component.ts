@@ -18,6 +18,7 @@ import { Overlay } from '@angular/cdk/overlay';
   selector: 'pr-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
+  standalone: false,
 })
 export class NavComponent implements AfterViewInit, OnDestroy {
   hambugerMenuVisible: boolean;

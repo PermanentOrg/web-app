@@ -9,6 +9,7 @@ import { DialogRef } from '@angular/cdk/dialog';
   selector: 'pr-welcome-dialog',
   templateUrl: './welcome-dialog.component.html',
   styleUrls: ['./welcome-dialog.component.scss'],
+  standalone: false,
 })
 export class WelcomeDialogComponent implements OnInit {
   public archiveName: string;

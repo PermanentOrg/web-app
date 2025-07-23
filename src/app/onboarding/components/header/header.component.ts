@@ -7,6 +7,7 @@ import { AccountService } from '@shared/services/account/account.service';
   selector: 'pr-onboarding-header',
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  standalone: false,
 })
 export class OnboardingHeaderComponent {
   @Input() public accountName: string = '';

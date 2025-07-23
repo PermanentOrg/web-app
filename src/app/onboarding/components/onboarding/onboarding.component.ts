@@ -20,6 +20,7 @@ import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag
   selector: 'pr-onboarding',
   templateUrl: './onboarding.component.html',
   styleUrls: ['./onboarding.component.scss'],
+  standalone: false,
 })
 export class OnboardingComponent implements OnInit {
   public screen: OnboardingScreen = OnboardingScreen.welcomeScreen;

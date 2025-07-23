@@ -29,6 +29,7 @@ type ResultsListType = 'local' | 'global' | 'tag';
   templateUrl: './global-search-bar.component.html',
   styleUrls: ['./global-search-bar.component.scss'],
   animations: [ngIfScaleHeightEnterAnimation],
+  standalone: false,
 })
 export class GlobalSearchBarComponent {
   public searchTerm: string;

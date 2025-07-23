@@ -40,6 +40,7 @@ type MembersTab = 'members' | 'pending' | 'add';
   selector: 'pr-members-dialog',
   templateUrl: './members-dialog.component.html',
   styleUrls: ['./members-dialog.component.scss'],
+  standalone: false,
 })
 export class MembersDialogComponent {
   members: AccountVO[];

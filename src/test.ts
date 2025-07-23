@@ -16,6 +16,7 @@ import {
   NgbTimepickerModule,
   NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
+import { CountUpDirective } from 'ngx-countup';
 
 window['Stripe'] = () => {
   return {
@@ -49,6 +50,7 @@ Shallow.neverMock(
   NgbTooltipModule,
   NgbDropdownModule,
   NgbPaginationModule,
+  CountUpDirective,
 );
 
 // First, initialize the Angular testing environment.

@@ -79,6 +79,7 @@ const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
   templateUrl: './sharing-dialog.component.html',
   styleUrls: ['./sharing-dialog.component.scss'],
   animations: [ngIfScaleAnimation, ngIfScaleAnimationDynamic],
+  standalone: false,
 })
 export class SharingDialogComponent implements OnInit {
   public shareItem: ItemVO = null;

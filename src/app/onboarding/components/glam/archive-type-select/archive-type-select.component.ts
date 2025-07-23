@@ -9,7 +9,6 @@ import { ArchiveTypeIconComponent } from '../archive-type-icon/archive-type-icon
 
 @Component({
   selector: 'pr-glam-archive-type-select',
-  standalone: true,
   imports: [FontAwesomeModule, ArchiveTypeIconComponent],
   templateUrl: './archive-type-select.component.html',
   styleUrl: './archive-type-select.component.scss',

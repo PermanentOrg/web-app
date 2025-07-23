@@ -22,6 +22,7 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
   selector: 'pr-archive-search-box',
   templateUrl: './archive-search-box.component.html',
   styleUrls: ['./archive-search-box.component.scss'],
+  standalone: false,
 })
 export class ArchiveSearchBoxComponent implements OnInit {
   @Input() searchPublicArchives = false;

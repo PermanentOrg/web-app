@@ -7,6 +7,7 @@ import { FolderVO, RecordVO, TagVOData } from '@models/index';
   selector: 'pr-public-search-bar-results',
   templateUrl: './public-search-bar-results.component.html',
   styleUrl: './public-search-bar-results.component.scss',
+  standalone: false,
 })
 export class PublicSearchBarResultsComponent {
   @Input() searchResults: FolderVO[] | RecordVO[] = [];

@@ -20,6 +20,7 @@ import { GetThumbnail } from '@models/get-thumbnail';
   selector: 'pr-archive-small',
   templateUrl: './archive-small.component.html',
   styleUrls: ['./archive-small.component.scss'],
+  standalone: false,
 })
 export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() archive: ArchiveVO = null;

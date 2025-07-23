@@ -11,6 +11,7 @@ interface ShareLinkType {
   selector: 'pr-share-link-dropdown',
   templateUrl: './share-link-dropdown.component.html',
   styleUrl: './share-link-dropdown.component.scss',
+  standalone: false,
 })
 export class ShareLinkDropdownComponent {
   @Input() linkTypes: ShareLinkType[] = [];

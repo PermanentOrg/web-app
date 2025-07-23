@@ -13,6 +13,7 @@ const FADE_IN_DURATION = 0.3;
 
 @Directive({
   selector: '[prBgImage]',
+  standalone: false,
 })
 export class BgImageSrcDirective implements OnInit, OnChanges {
   @Input() bgSrc: string;

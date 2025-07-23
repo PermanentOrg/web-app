@@ -39,6 +39,7 @@ export interface TimelineBreadcrumb {
   selector: 'pr-timeline-breadcrumbs',
   templateUrl: './timeline-breadcrumbs.component.html',
   styleUrls: ['./timeline-breadcrumbs.component.scss'],
+  standalone: false,
 })
 export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
   @Input() timelineGroups: Map<TimelineGroupTimespan, DataItem[]>;

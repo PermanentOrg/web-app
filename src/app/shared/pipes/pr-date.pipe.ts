@@ -27,6 +27,7 @@ export const NG_DATE_FORMAT = {
 
 @Pipe({
   name: 'prDate',
+  standalone: false,
 })
 export class PrDatePipe implements PipeTransform {
   constructor() {}

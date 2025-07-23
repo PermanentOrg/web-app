@@ -13,6 +13,7 @@ import { ApiService } from '../../services/api/api.service';
   selector: 'pr-storage-meter',
   templateUrl: './storage-meter.component.html',
   styleUrls: ['./storage-meter.component.scss'],
+  standalone: false,
 })
 export class StorageMeterComponent implements OnInit, OnDestroy {
   account: AccountVO;

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
   selector: 'pr-item-not-found',
   templateUrl: './item-not-found.component.html',
   styleUrls: ['./item-not-found.component.scss'],
+  standalone: false,
 })
 export class ItemNotFoundComponent implements OnInit {
   constructor() {}

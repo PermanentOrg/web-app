@@ -21,6 +21,7 @@ type ArchiveSettingsDialogTab = (typeof archiveSettingsTabs)[number];
   selector: 'pr-archive-settings-dialog',
   templateUrl: './archive-settings-dialog.component.html',
   styleUrls: ['./archive-settings-dialog.component.scss'],
+  standalone: false,
 })
 export class ArchiveSettingsDialogComponent implements OnInit {
   public readonly MAX_FETCH_ATTEMPTS: number = 5;

@@ -29,6 +29,7 @@ export interface ProgressData {
   selector: 'pr-phase-progress',
   templateUrl: './phase-progress.component.html',
   styleUrls: ['./phase-progress.component.scss'],
+  standalone: false,
 })
 export class PhaseProgressComponent implements OnInit {
   @HostBinding('class.for-light-bg') forLightBg = true;

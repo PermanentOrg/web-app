@@ -13,6 +13,7 @@ import { ConfirmPayerDialogComponent } from '../confirm-payer-dialog/confirm-pay
   selector: 'pr-archive-payer',
   templateUrl: './archive-payer.component.html',
   styleUrls: ['./archive-payer.component.scss'],
+  standalone: false,
 })
 export class ArchivePayerComponent implements OnInit {
   @Input() public archive: ArchiveVO;

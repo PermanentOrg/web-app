@@ -1,0 +1,11 @@
+diff --git a/node_modules/shepherd.js/dist/cjs/shepherd.d.cts b/node_modules/shepherd.js/dist/cjs/shepherd.d.cts
+index 761d000..959f82e 100644
+--- a/node_modules/shepherd.js/dist/cjs/shepherd.d.cts
++++ b/node_modules/shepherd.js/dist/cjs/shepherd.d.cts
+@@ -581,6 +581,4 @@ export declare class Tour extends Evented {
+  */
+ export declare const Shepherd: ShepherdBase;
+ 
+-export = Shepherd;
+-
+ export {};

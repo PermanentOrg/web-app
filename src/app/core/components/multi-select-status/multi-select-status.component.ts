@@ -10,6 +10,7 @@ import { PromptButton } from '@shared/services/prompt/prompt.service';
   selector: 'pr-multi-select-status',
   templateUrl: './multi-select-status.component.html',
   styleUrls: ['./multi-select-status.component.scss'],
+  standalone: false,
 })
 export class MultiSelectStatusComponent implements OnDestroy {
   @HostBinding('class.visible') isMultiSelectEnabled = false;

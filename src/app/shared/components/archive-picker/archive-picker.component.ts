@@ -36,6 +36,7 @@ export interface ArchivePickerComponentConfig {
   selector: 'pr-archive-picker',
   templateUrl: './archive-picker.component.html',
   styleUrls: ['./archive-picker.component.scss'],
+  standalone: false,
 })
 export class ArchivePickerComponent {
   relations: RelationVO[];

@@ -8,7 +8,6 @@ import { ArchiveTypeIconComponent } from '../archive-type-icon/archive-type-icon
 
 @Component({
   selector: 'pr-archive-type-select-dialog',
-  standalone: true,
   imports: [FontAwesomeModule, ArchiveTypeIconComponent],
   templateUrl: './archive-type-select-dialog.component.html',
   styleUrl: './archive-type-select-dialog.component.scss',

@@ -6,6 +6,7 @@ import { ArchiveVO } from '@models/index';
   selector: 'pr-pending-archive',
   templateUrl: './pending-archive.component.html',
   styleUrl: './pending-archive.component.scss',
+  standalone: false,
 })
 export class PendingArchiveComponent {
   readonly roles = {

@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'metadataValue',
+  standalone: false,
 })
 export class MetadataValuePipe implements PipeTransform {
   transform(value: string): string {

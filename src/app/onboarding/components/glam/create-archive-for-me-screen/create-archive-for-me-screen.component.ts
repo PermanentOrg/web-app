@@ -9,6 +9,7 @@ import { ArchiveCreateEvent } from '../types/archive-types';
   selector: 'pr-create-archive-for-me-screen',
   templateUrl: './create-archive-for-me-screen.component.html',
   styleUrl: './create-archive-for-me-screen.component.scss',
+  standalone: false,
 })
 export class CreateArchiveForMeScreenComponent {
   private readonly TYPE = 'type.archive.person';

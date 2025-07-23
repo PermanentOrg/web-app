@@ -14,6 +14,7 @@ export interface BeforeInstallPromptEvent extends Event {
   selector: 'pr-android-app-notify',
   templateUrl: './android-app-notify.component.html',
   styleUrls: ['./android-app-notify.component.scss'],
+  standalone: false,
 })
 export class AndroidAppNotifyComponent {
   public static readonly storageKey = 'androidAppNotificationDismissed';
