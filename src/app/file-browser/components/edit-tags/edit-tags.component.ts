@@ -38,6 +38,7 @@ export type TagType = 'keyword' | 'customMetadata';
   styleUrls: ['./edit-tags.component.scss'],
   animations: [ngIfScaleAnimation],
   providers: [SearchService, DataService],
+  standalone: false,
 })
 export class EditTagsComponent
   implements OnInit, DoCheck, OnDestroy, HasSubscriptions

@@ -12,6 +12,7 @@ import { ArchiveTypeChangeDialogComponent } from '../archive-type-change-dialog/
   selector: 'pr-public-settings',
   templateUrl: './public-settings.component.html',
   styleUrls: ['./public-settings.component.scss'],
+  standalone: false,
 })
 export class PublicSettingsComponent implements OnInit {
   @Input() public archive: ArchiveVO;

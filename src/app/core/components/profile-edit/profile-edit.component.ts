@@ -45,6 +45,7 @@ import {
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.scss'],
   animations: [collapseAnimation, ngIfScaleAnimationDynamic],
+  standalone: false,
 })
 export class ProfileEditComponent implements OnInit, AfterViewInit {
   archive: ArchiveVO;

@@ -12,6 +12,7 @@ import { AuthResponse } from '@shared/services/api/auth.repo';
   selector: 'pr-forgot-password-embed',
   templateUrl: './forgot-password-embed.component.html',
   styleUrls: ['./forgot-password-embed.component.scss'],
+  standalone: false,
 })
 export class ForgotPasswordEmbedComponent {
   forgotForm: UntypedFormGroup;

@@ -7,7 +7,10 @@ const TB = 1024 * GB;
 const GB_THRESHOLD = MB * 100;
 const TB_THRESHOLD = GB * 100;
 
-@Pipe({ name: 'prStorageAmount' })
+@Pipe({
+  name: 'prStorageAmount',
+  standalone: false,
+})
 export class StorageAmountPipe implements PipeTransform {
   transform(bytes: number = 0, precision: number = 1): string {
     let result: string;

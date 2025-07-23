@@ -35,6 +35,7 @@ export interface FormInputConfig {
   selector: 'pr-form-input-glam',
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
+  standalone: false,
 })
 export class FormInputComponent implements OnInit, AfterViewInit {
   @Input() type = 'text';

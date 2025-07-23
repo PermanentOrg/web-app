@@ -19,6 +19,7 @@ import { DataService } from '@shared/services/data/data.service';
 
 @Directive({
   selector: '[prDragTargetRouterLink]',
+  standalone: false,
 })
 export class DragTargetRouterLinkDirective
   implements DragTargetDroppableComponent, OnDestroy, AfterViewInit

@@ -6,6 +6,7 @@ import { FeaturedArchive } from '../../types/featured-archive';
   selector: 'pr-featured-archive',
   templateUrl: './featured-archive.component.html',
   styleUrls: ['./featured-archive.component.scss'],
+  standalone: false,
 })
 export class FeaturedArchiveComponent implements OnInit {
   @Input() archive: FeaturedArchive;

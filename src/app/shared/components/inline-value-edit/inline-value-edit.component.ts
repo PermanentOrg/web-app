@@ -45,6 +45,7 @@ type ValueType = string | number;
   templateUrl: './inline-value-edit.component.html',
   styleUrls: ['./inline-value-edit.component.scss'],
   animations: [ngIfScaleAnimation, collapseAnimation],
+  standalone: false,
 })
 export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() displayBorder: boolean = false;

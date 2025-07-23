@@ -11,6 +11,7 @@ interface ReasonsEmit {
   selector: 'pr-glam-reasons-screen',
   templateUrl: './glam-reasons-screen.component.html',
   styleUrl: './glam-reasons-screen.component.scss',
+  standalone: false,
 })
 export class GlamReasonsScreenComponent implements OnInit {
   public reasons = [];

@@ -5,6 +5,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
   selector: 'pr-toggle',
   templateUrl: './toggle.component.html',
   styleUrls: ['./toggle.component.scss'],
+  standalone: false,
 })
 export class ToggleComponent implements OnInit {
   @Input() isChecked: boolean = false;

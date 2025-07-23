@@ -5,6 +5,7 @@ import { Subject, Subscription } from 'rxjs';
   selector: 'pr-metadata-creation-form',
   templateUrl: './form-create.component.html',
   styleUrls: ['./form-create.component.scss'],
+  standalone: false,
 })
 export class FormCreateComponent implements OnInit, OnDestroy {
   @Input() public placeholder = '';

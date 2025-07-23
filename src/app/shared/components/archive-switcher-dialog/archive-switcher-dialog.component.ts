@@ -10,6 +10,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
   selector: 'pr-archive-switcher-dialog',
   templateUrl: './archive-switcher-dialog.component.html',
   styleUrls: ['./archive-switcher-dialog.component.scss'],
+  standalone: false,
 })
 export class ArchiveSwitcherDialogComponent {
   public loadingArchives = false;

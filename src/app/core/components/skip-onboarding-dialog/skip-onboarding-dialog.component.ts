@@ -7,6 +7,7 @@ import { AccountService } from '../../../shared/services/account/account.service
   selector: 'pr-skip-onboarding-dialog',
   templateUrl: './skip-onboarding-dialog.component.html',
   styleUrls: ['./skip-onboarding-dialog.component.scss'],
+  standalone: false,
 })
 export class SkipOnboardingDialogComponent implements OnInit {
   TYPE = 'type.archive.person';

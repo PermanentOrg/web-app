@@ -14,6 +14,7 @@ import { savePropertyOnAccount } from '@shared/services/account/account.service.
   selector: 'pr-billing-settings',
   templateUrl: './billing-settings.component.html',
   styleUrls: ['./billing-settings.component.scss'],
+  standalone: false,
 })
 export class BillingSettingsComponent implements OnInit {
   public account: AccountVO;

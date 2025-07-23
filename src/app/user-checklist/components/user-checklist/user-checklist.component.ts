@@ -8,6 +8,7 @@ import { ChecklistItem } from '../../types/checklist-item';
   selector: 'pr-user-checklist',
   templateUrl: './user-checklist.component.html',
   styleUrl: './user-checklist.component.scss',
+  standalone: false,
 })
 export class UserChecklistComponent implements OnInit, OnDestroy {
   public items: ChecklistItem[] = [];

@@ -55,6 +55,7 @@ export class Breadcrumb {
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
   public currentFolder: FolderVO;

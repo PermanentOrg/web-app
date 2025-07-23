@@ -22,6 +22,7 @@ export type SettingsTab = (typeof settingsTabs)[number];
   selector: 'pr-account-settings-dialog',
   templateUrl: './account-settings-dialog.component.html',
   styleUrls: ['./account-settings-dialog.component.scss'],
+  standalone: false,
 })
 export class AccountSettingsDialogComponent {
   public activeTab: SettingsTab = 'account';

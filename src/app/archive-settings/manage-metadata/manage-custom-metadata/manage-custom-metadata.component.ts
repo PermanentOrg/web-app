@@ -16,6 +16,7 @@ import { Subject } from 'rxjs';
   selector: 'pr-manage-custom-metadata',
   templateUrl: './manage-custom-metadata.component.html',
   styleUrls: ['./manage-custom-metadata.component.scss'],
+  standalone: false,
 })
 export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
   @ViewChild('element') public element: ElementRef;

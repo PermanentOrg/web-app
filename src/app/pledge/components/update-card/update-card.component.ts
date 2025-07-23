@@ -20,6 +20,7 @@ const elements = stripe.elements();
   selector: 'pr-update-card',
   templateUrl: './update-card.component.html',
   styleUrls: ['./update-card.component.scss'],
+  standalone: false,
 })
 export class UpdateCardComponent implements OnInit, AfterViewInit {
   userId: string;

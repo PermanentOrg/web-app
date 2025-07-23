@@ -10,7 +10,10 @@ import { Pipe, PipeTransform } from '@angular/core';
  *   formats to: 1 KB
  */
 
-@Pipe({ name: 'dsFileSize' })
+@Pipe({
+  name: 'dsFileSize',
+  standalone: false,
+})
 export class FileSizePipe implements PipeTransform {
   private units: string[] = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
 

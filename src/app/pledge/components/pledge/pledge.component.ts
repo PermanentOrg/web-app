@@ -7,6 +7,7 @@ import { IFrameService } from '@shared/services/iframe/iframe.service';
   selector: 'pr-pledge',
   templateUrl: './pledge.component.html',
   styleUrls: ['./pledge.component.scss'],
+  standalone: false,
 })
 export class PledgeComponent implements OnInit {
   @HostBinding('class.for-light-bg') forLightBg = true;

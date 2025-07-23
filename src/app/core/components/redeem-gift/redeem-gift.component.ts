@@ -25,6 +25,7 @@ interface StorageRedemptionMessage {
   selector: 'pr-redeem-gift',
   templateUrl: './redeem-gift.component.html',
   styleUrl: './redeem-gift.component.scss',
+  standalone: false,
 })
 export class RedeemGiftComponent implements OnInit {
   @Input() public promoCode: string = '';

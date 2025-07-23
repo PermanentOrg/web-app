@@ -38,6 +38,7 @@ export const FAMILYSEARCH_CONNECT_KEY = 'familysearchConnect';
   selector: 'pr-connector',
   templateUrl: './connector.component.html',
   styleUrls: ['./connector.component.scss'],
+  standalone: false,
 })
 export class ConnectorComponent implements OnInit {
   @Input() connector: ConnectorOverviewVO;

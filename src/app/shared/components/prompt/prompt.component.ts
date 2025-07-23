@@ -23,6 +23,7 @@ const DEFAULT_CANCEL_TEXT = 'Cancel';
   selector: 'pr-prompt',
   templateUrl: './prompt.component.html',
   styleUrls: ['./prompt.component.scss'],
+  standalone: false,
 })
 export class PromptComponent implements OnDestroy {
   @Input() isVisible: boolean;

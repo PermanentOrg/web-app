@@ -9,6 +9,7 @@ export type DialogState = 'display' | 'edit';
   selector: 'pr-directive-dialog',
   templateUrl: './directive-dialog.component.html',
   styleUrls: ['./directive-dialog.component.scss'],
+  standalone: false,
 })
 export class DirectiveDialogComponent {
   constructor(private event: EventService) {

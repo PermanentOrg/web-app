@@ -7,6 +7,7 @@ import { ApiService } from '@shared/services/api/api.service';
   selector: 'pr-directive-display',
   templateUrl: './directive-display.component.html',
   styleUrls: ['./directive-display.component.scss'],
+  standalone: false,
 })
 export class DirectiveDisplayComponent implements OnInit {
   @Input() public checkLegacyContact: boolean = true;

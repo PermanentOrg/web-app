@@ -9,6 +9,7 @@ import { ngIfScaleAnimationDynamic } from '@shared/animations';
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss'],
   animations: [ngIfScaleAnimationDynamic],
+  standalone: false,
 })
 export class TagsComponent implements OnChanges {
   @Input() tags: TagVOData[];

@@ -20,6 +20,7 @@ import { GetThumbnailInfo } from '@models/get-thumbnail';
   selector: 'pr-thumbnail',
   templateUrl: './thumbnail.component.html',
   styleUrls: ['./thumbnail.component.scss'],
+  standalone: false,
 })
 export class ThumbnailComponent implements OnInit, DoCheck {
   @Input() public item: ItemVO;

@@ -20,6 +20,7 @@ import { C } from '@angular/cdk/keycodes';
   selector: 'pr-verify',
   templateUrl: './verify.component.html',
   styleUrls: ['./verify.component.scss'],
+  standalone: false,
 })
 export class VerifyComponent implements OnInit {
   @HostBinding('class.pr-auth-form') classBinding = true;

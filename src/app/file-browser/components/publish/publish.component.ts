@@ -27,6 +27,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
   templateUrl: './publish.component.html',
   styleUrls: ['./publish.component.scss'],
   providers: [PublicLinkPipe, PublicRoutePipe],
+  standalone: false,
 })
 export class PublishComponent {
   public sourceItem: RecordVO | FolderVO = null;

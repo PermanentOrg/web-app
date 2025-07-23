@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'prependProtocol',
+  standalone: false,
 })
 export class PrependProtocolPipe implements PipeTransform {
   transform(value: string, ...args: unknown[]): string {

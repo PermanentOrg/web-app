@@ -18,6 +18,7 @@ import { RouteData } from '@root/app/app.routes';
   templateUrl: './public-archive.component.html',
   styleUrls: ['./public-archive.component.scss'],
   animations: [collapseAnimationCustom(250)],
+  standalone: false,
 })
 export class PublicArchiveComponent implements OnInit, OnDestroy {
   publicRoot: FolderVO;

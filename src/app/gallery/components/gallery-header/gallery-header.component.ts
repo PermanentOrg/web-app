@@ -5,6 +5,7 @@ import { AccountService } from '@shared/services/account/account.service';
   selector: 'pr-gallery-header',
   templateUrl: './gallery-header.component.html',
   styleUrls: ['./gallery-header.component.scss'],
+  standalone: false,
 })
 export class GalleryHeaderComponent {
   public isLoggedIn: boolean;

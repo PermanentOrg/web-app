@@ -12,6 +12,7 @@ import { RouteHistoryService } from './route-history.service';
 @Component({
   selector: 'pr-dummy',
   template: 'test',
+  standalone: false,
 })
 class DummyComponent {}
 

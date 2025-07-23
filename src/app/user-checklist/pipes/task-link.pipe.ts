@@ -8,6 +8,7 @@ export interface TaskRouterLink {
 
 @Pipe({
   name: 'taskLink',
+  standalone: false,
 })
 export class TaskLinkPipe implements PipeTransform {
   private readonly links: Record<string, TaskRouterLink> = {

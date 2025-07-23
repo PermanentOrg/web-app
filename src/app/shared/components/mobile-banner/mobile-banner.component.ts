@@ -9,6 +9,7 @@ import { MobileBannerService } from '@shared/services/mobile-banner/mobile-banne
   templateUrl: './mobile-banner.component.html',
   styleUrls: ['./mobile-banner.component.scss'],
   animations: [ngIfSlideUpAnimation],
+  standalone: false,
 })
 export class MobileBannerComponent {
   public url = '';

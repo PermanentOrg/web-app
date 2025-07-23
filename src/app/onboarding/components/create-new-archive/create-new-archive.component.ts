@@ -46,6 +46,7 @@ type NewArchiveScreen =
   selector: 'pr-create-new-archive',
   templateUrl: './create-new-archive.component.html',
   styleUrls: ['./create-new-archive.component.scss'],
+  standalone: false,
 })
 export class CreateNewArchiveComponent implements OnInit {
   @Output() back = new EventEmitter<void>();

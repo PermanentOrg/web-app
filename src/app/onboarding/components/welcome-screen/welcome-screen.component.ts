@@ -7,6 +7,7 @@ import { ArchiveVO } from '@models/archive-vo';
   selector: 'pr-welcome-screen',
   templateUrl: './welcome-screen.component.html',
   styleUrls: ['./welcome-screen.component.scss'],
+  standalone: false,
 })
 export class WelcomeScreenComponent {
   @Input() pendingArchives: ArchiveVO[] = [];

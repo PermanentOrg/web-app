@@ -20,6 +20,7 @@ import { Breadcrumb } from './breadcrumbs.component';
 @Component({
   selector: 'pr-breadcrumb',
   templateUrl: './breadcrumb.component.html',
+  standalone: false,
 })
 export class BreadcrumbComponent
   implements DragTargetDroppableComponent, OnDestroy, OnInit

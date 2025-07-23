@@ -20,6 +20,7 @@ interface Message {
   selector: 'pr-message',
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss'],
+  standalone: false,
 })
 export class MessageComponent {
   displayText: string;

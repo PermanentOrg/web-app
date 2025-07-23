@@ -11,6 +11,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
   selector: 'pr-timeline-complete-dialog',
   templateUrl: './timeline-complete-dialog.component.html',
   styleUrls: ['./timeline-complete-dialog.component.scss'],
+  standalone: false,
 })
 export class TimelineCompleteDialogComponent {
   public folder: FolderVO;

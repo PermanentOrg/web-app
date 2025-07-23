@@ -11,6 +11,7 @@ import { NotificationVOData } from '@models/notification-vo';
   selector: 'pr-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
+  standalone: false,
 })
 export class NotificationComponent implements OnInit {
   @Input() notification: NotificationVOData;

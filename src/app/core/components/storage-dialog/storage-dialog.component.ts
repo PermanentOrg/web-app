@@ -12,6 +12,7 @@ type StorageDialogTab = (typeof dialogTabs)[number];
   selector: 'pr-storage-dialog',
   templateUrl: './storage-dialog.component.html',
   styleUrls: ['./storage-dialog.component.scss'],
+  standalone: false,
 })
 export class StorageDialogComponent implements OnInit, OnDestroy {
   public activeTab: StorageDialogTab = 'add';

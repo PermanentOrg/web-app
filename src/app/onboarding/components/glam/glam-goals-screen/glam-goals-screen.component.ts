@@ -11,6 +11,7 @@ interface OutputModel {
   selector: 'pr-glam-goals-screen',
   templateUrl: './glam-goals-screen.component.html',
   styleUrl: './glam-goals-screen.component.scss',
+  standalone: false,
 })
 export class GlamGoalsScreenComponent implements OnInit {
   public goals = [];

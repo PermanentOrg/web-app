@@ -6,6 +6,7 @@ import { ApiService } from '@shared/services/api/api.service';
   selector: 'pr-archive-creation-start-screen',
   templateUrl: './archive-creation-start-screen.component.html',
   styleUrl: './archive-creation-start-screen.component.scss',
+  standalone: false,
 })
 export class ArchiveCreationStartScreenComponent implements OnInit {
   @Output() public getStartedOutput = new EventEmitter<void>();

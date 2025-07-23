@@ -14,6 +14,7 @@ import { SecretsService } from '../../services/secrets/secrets.service';
   selector: 'pr-static-map',
   templateUrl: './static-map.component.html',
   styleUrls: ['./static-map.component.scss'],
+  standalone: false,
 })
 export class StaticMapComponent implements OnChanges {
   private dpiScale = 1;

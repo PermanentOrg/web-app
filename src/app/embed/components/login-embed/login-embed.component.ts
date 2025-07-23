@@ -19,6 +19,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   selector: 'pr-login',
   templateUrl: './login-embed.component.html',
   styleUrls: ['./login-embed.component.scss'],
+  standalone: false,
 })
 export class LoginEmbedComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;

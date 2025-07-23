@@ -21,6 +21,7 @@ interface KeyedPledges {
   selector: 'pr-pledge-list',
   templateUrl: './pledge-list.component.html',
   styleUrls: ['./pledge-list.component.scss'],
+  standalone: false,
 })
 export class PledgeListComponent implements OnInit, OnDestroy {
   newPledgeRef = this.db.database
