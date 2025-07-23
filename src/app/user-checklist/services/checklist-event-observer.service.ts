@@ -4,25 +4,25 @@ import { Subject } from 'rxjs';
 import { PermanentEvent } from '@shared/services/event/event-types';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class ChecklistEventObserverService implements EventObserver {
-  private subject = new Subject<void>();
-  private delayMs: number = 1000;
+	private subject = new Subject<void>();
+	private delayMs: number = 1000;
 
-  constructor() {}
+	constructor() {}
 
-  public async update(_: PermanentEvent): Promise<void> {
-    setTimeout(() => {
-      this.subject.next();
-    }, this.delayMs);
-  }
+	public async update(_: PermanentEvent): Promise<void> {
+		setTimeout(() => {
+			this.subject.next();
+		}, this.delayMs);
+	}
 
-  public getSubject(): Subject<void> {
-    return this.subject;
-  }
+	public getSubject(): Subject<void> {
+		return this.subject;
+	}
 
-  public setDelay(ms: number): void {
-    this.delayMs = ms;
-  }
+	public setDelay(ms: number): void {
+		this.delayMs = ms;
+	}
 }

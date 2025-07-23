@@ -6,47 +6,47 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 type MessageType = 'success' | 'info' | 'warning' | 'danger';
 
 export interface MessageDisplayOptions {
-  message: string;
-  style?: MessageType;
-  translate?: boolean;
-  navigateTo?: string[];
-  navigateParams?: any;
-  externalUrl?: string;
-  externalMessage?: string;
+	message: string;
+	style?: MessageType;
+	translate?: boolean;
+	navigateTo?: string[];
+	navigateParams?: any;
+	externalUrl?: string;
+	externalMessage?: string;
 }
 
 @Injectable()
 export class MessageService {
-  private component: MessageComponent;
+	private component: MessageComponent;
 
-  constructor(private constants: PrConstantsService) {}
+	constructor(private constants: PrConstantsService) {}
 
-  registerComponent(toRegister: MessageComponent) {
-    if (this.component) {
-      throw new Error('MessageService - Message component already registered');
-    }
+	registerComponent(toRegister: MessageComponent) {
+		if (this.component) {
+			throw new Error('MessageService - Message component already registered');
+		}
 
-    this.component = toRegister;
-  }
+		this.component = toRegister;
+	}
 
-  public showMessage(data: MessageDisplayOptions) {
-    if (!this.component) {
-      throw new Error('MessageService - Missing component');
-    }
+	public showMessage(data: MessageDisplayOptions) {
+		if (!this.component) {
+			throw new Error('MessageService - Missing component');
+		}
 
-    const { translate } = data;
+		const { translate } = data;
 
-    if (!translate) {
-      this.component.display(data);
-    } else {
-      this.component.display({
-        message: this.constants.translate(data.message),
-        ...data,
-      });
-    }
-  }
+		if (!translate) {
+			this.component.display(data);
+		} else {
+			this.component.display({
+				message: this.constants.translate(data.message),
+				...data,
+			});
+		}
+	}
 
-  public showError(data: MessageDisplayOptions) {
-    return this.showMessage({ style: 'danger', ...data });
-  }
+	public showError(data: MessageDisplayOptions) {
+		return this.showMessage({ style: 'danger', ...data });
+	}
 }

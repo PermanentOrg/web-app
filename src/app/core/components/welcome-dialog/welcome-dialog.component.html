@@ -1,36 +1,36 @@
 <!-- @format -->
 <div class="dialog-content">
-  <div class="header">
-    <button class="btn" (click)="close()">
-      <i class="material-icons">close</i>
-    </button>
-  </div>
-  <div class="dialog-body">
-    <h3>Congratulations on your first archive!</h3>
-    <p>
-      Your archive is <strong>The {{ archiveName }} Archive.</strong>
-    </p>
-    <ng-container *ngIf="isEarlyBird; else defaultWelcome">
-      <strong class="get-started">Let's Get Started:</strong>
-      <ol>
-        <li>Check your email to redeem free storage.</li>
-        <li>
-          Use the free storage by uploading your first files on your archive.
-        </li>
-        <li>Begin preserving your digital legacy.</li>
-      </ol>
-      <p class="learn-more">
-        Learn more about your new archive by viewing our help articles through
-        the "?" button in the lower right hand corner.
-      </p>
-    </ng-container>
-    <ng-template #defaultWelcome>
-      <p>
-        Get started by uploading your first files, or learn more about your new
-        archive by viewing our help articles through the "?" button in the lower
-        right-hand corner.
-      </p>
-    </ng-template>
-    <button class="btn btn-primary" (click)="close()">Get Started</button>
-  </div>
+	<div class="header">
+		<button class="btn" (click)="close()">
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+	<div class="dialog-body">
+		<h3>Congratulations on your first archive!</h3>
+		<p>
+			Your archive is <strong>The {{ archiveName }} Archive.</strong>
+		</p>
+		<ng-container *ngIf="isEarlyBird; else defaultWelcome">
+			<strong class="get-started">Let's Get Started:</strong>
+			<ol>
+				<li>Check your email to redeem free storage.</li>
+				<li>
+					Use the free storage by uploading your first files on your archive.
+				</li>
+				<li>Begin preserving your digital legacy.</li>
+			</ol>
+			<p class="learn-more">
+				Learn more about your new archive by viewing our help articles through
+				the "?" button in the lower right hand corner.
+			</p>
+		</ng-container>
+		<ng-template #defaultWelcome>
+			<p>
+				Get started by uploading your first files, or learn more about your new
+				archive by viewing our help articles through the "?" button in the lower
+				right-hand corner.
+			</p>
+		</ng-template>
+		<button class="btn btn-primary" (click)="close()">Get Started</button>
+	</div>
 </div>

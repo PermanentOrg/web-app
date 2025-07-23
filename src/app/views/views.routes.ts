@@ -13,77 +13,77 @@ import { RoutesWithData } from '../app.routes';
 import { TimelineViewComponent } from './components/timeline-view/timeline-view.component';
 
 const folderResolve = {
-  currentFolder: FolderResolveService,
+	currentFolder: FolderResolveService,
 };
 
 const leanFolderResolve = {
-  currentFolder: LeanFolderResolveService,
+	currentFolder: LeanFolderResolveService,
 };
 
 const recordResolve = {
-  currentRecord: RecordResolveService,
+	currentRecord: RecordResolveService,
 };
 
 export const routes: RoutesWithData = [
-  {
-    path: 'timeline',
-    data: {
-      folderView: FolderView.Timeline,
-    },
-    children: [
-      {
-        path: '',
-        component: TimelineViewComponent,
-        resolve: leanFolderResolve,
-        children: fileListChildRoutes,
-      },
-      {
-        path: ':archiveNbr/:folderLinkId',
-        component: TimelineViewComponent,
-        resolve: leanFolderResolve,
-        children: [
-          {
-            path: 'record/:recArchiveNbr',
-            component: FileViewerComponent,
-            resolve: recordResolve,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: 'grid',
-    data: {
-      folderView: FolderView.Grid,
-    },
-    children: [
-      {
-        path: '',
-        component: FileListComponent,
-        resolve: folderResolve,
-        children: fileListChildRoutes,
-      },
-      {
-        path: ':archiveNbr/:folderLinkId',
-        component: FileListComponent,
-        resolve: folderResolve,
-        children: fileListChildRoutes,
-      },
-    ],
-  },
+	{
+		path: 'timeline',
+		data: {
+			folderView: FolderView.Timeline,
+		},
+		children: [
+			{
+				path: '',
+                                component: TimelineViewComponent,
+                                resolve: leanFolderResolve,
+				children: fileListChildRoutes,
+			},
+			{
+				path: ':archiveNbr/:folderLinkId',
+                                component: TimelineViewComponent,
+                                resolve: leanFolderResolve,
+				children: fileListChildRoutes,
+			},
+		],
+	},
+	{
+		path: 'grid',
+		data: {
+			folderView: FolderView.Grid,
+		},
+		children: [
+			{
+				path: '',
+				component: FileListComponent,
+				resolve: folderResolve,
+				children: fileListChildRoutes,
+			},
+			{
+				path: ':archiveNbr/:folderLinkId',
+				component: FileListComponent,
+				resolve: folderResolve,
+				children: [
+                                  {
+                                    path: 'record/:recArchiveNbr',
+                                    component: FileViewerComponent,
+                                    resolve: recordResolve,
+                                  },
+                                ],
+			},
+		],
+	},
 ];
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-    SharedModule,
-    FileBrowserComponentsModule,
-  ],
-  exports: [],
-  providers: [
-    LeanFolderResolveService,
-    RecordResolveService,
-    FolderResolveService,
-  ],
-  declarations: [],
+	imports: [
+		RouterModule.forChild(routes),
+		SharedModule,
+		FileBrowserComponentsModule,
+	],
+	exports: [],
+	providers: [
+		LeanFolderResolveService,
+		RecordResolveService,
+		FolderResolveService,
+	],
+	declarations: [],
 })
 export class ViewsRoutingModule {}

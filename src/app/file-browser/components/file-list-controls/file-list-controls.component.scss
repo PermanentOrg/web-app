@@ -1,268 +1,268 @@
 @import 'variables';
 
 :host {
-  display: block;
-  height: $file-list-controls-height;
-  align-items: center;
-  border-bottom: $file-list-border;
-  position: relative;
+	display: block;
+	height: $file-list-controls-height;
+	align-items: center;
+	border-bottom: $file-list-border;
+	position: relative;
 
-  @include beforeDesktop {
-    display: none;
-  }
+	@include beforeDesktop {
+		display: none;
+	}
 }
 
 .file-list-header {
-  flex: 1 1 100%;
-  display: flex;
-  align-items: center;
-  height: $file-list-controls-height * 0.5;
+	flex: 1 1 100%;
+	display: flex;
+	align-items: center;
+	height: $file-list-controls-height * 0.5;
 
-  > * {
-    font-weight: 600;
-    position: relative;
-    display: flex;
-    align-items: baseline;
+	> * {
+		font-weight: 600;
+		position: relative;
+		display: flex;
+		align-items: baseline;
 
-    .col-title {
-      cursor: pointer;
-      user-select: none;
-      display: flex;
-      align-items: center;
-    }
+		.col-title {
+			cursor: pointer;
+			user-select: none;
+			display: flex;
+			align-items: center;
+		}
 
-    .col-title::after {
-      @include material-icon;
-      content: 'expand_more';
-      margin-left: $grid-unit * 0.5;
-      font-size: $font-size-lg;
-      display: inline-flex;
-      align-items: center;
-      opacity: 0.5;
-      position: relative;
-      transition: 250ms $tweaked-ease transform;
-      transform: rotate(0deg);
-    }
+		.col-title::after {
+			@include material-icon;
+			content: 'expand_more';
+			margin-left: $grid-unit * 0.5;
+			font-size: $font-size-lg;
+			display: inline-flex;
+			align-items: center;
+			opacity: 0.5;
+			position: relative;
+			transition: 250ms $tweaked-ease transform;
+			transform: rotate(0deg);
+		}
 
-    .col-title:hover::after {
-      opacity: 0.75;
-    }
+		.col-title:hover::after {
+			opacity: 0.75;
+		}
 
-    .col-title:only-child {
-      cursor: auto;
-      &::after {
-        display: none;
-      }
-    }
-  }
+		.col-title:only-child {
+			cursor: auto;
+			&::after {
+				display: none;
+			}
+		}
+	}
 
-  .save-sort {
-    display: none;
-    opacity: 0.5;
-    cursor: pointer;
-    font-size: 0.85em;
-    padding-left: $grid-unit * 0.5;
+	.save-sort {
+		display: none;
+		opacity: 0.5;
+		cursor: pointer;
+		font-size: 0.85em;
+		padding-left: $grid-unit * 0.5;
 
-    &:hover {
-      opacity: 0.8;
-    }
-  }
+		&:hover {
+			opacity: 0.8;
+		}
+	}
 
-  .dropdown + .save-sort {
-    padding-left: 0;
-  }
-  .active-sort {
-    .col-title::after {
-      opacity: 1;
-    }
+	.dropdown + .save-sort {
+		padding-left: 0;
+	}
+	.active-sort {
+		.col-title::after {
+			opacity: 1;
+		}
 
-    &.sort-desc .col-title::after {
-      // content: 'expand_less';
-      transform: rotate(180deg);
-    }
-  }
+		&.sort-desc .col-title::after {
+			// content: 'expand_less';
+			transform: rotate(180deg);
+		}
+	}
 
-  &.is-sort-changed {
-    .active-sort .save-sort,
-    & > .save-sort {
-      display: initial;
-    }
-  }
+	&.is-sort-changed {
+		.active-sort .save-sort,
+		& > .save-sort {
+			display: initial;
+		}
+	}
 
-  &.hide-sort {
-    *::after,
-    .save-sort {
-      display: none;
-    }
+	&.hide-sort {
+		*::after,
+		.save-sort {
+			display: none;
+		}
 
-    .col-title {
-      cursor: auto;
-    }
-  }
+		.col-title {
+			cursor: auto;
+		}
+	}
 
-  &.is-sorting {
-    .col-title {
-      cursor: wait;
-    }
-  }
+	&.is-sorting {
+		.col-title {
+			cursor: wait;
+		}
+	}
 
-  &.is-saving-sort {
-    .save-sort {
-      cursor: wait;
-      opacity: 0.5;
-    }
-  }
+	&.is-saving-sort {
+		.save-sort {
+			cursor: wait;
+			opacity: 0.5;
+		}
+	}
 
-  .name {
-    @include file-list-col-name;
-    margin-left: $file-list-thumb-col-width + $grid-unit;
-  }
+	.name {
+		@include file-list-col-name;
+		margin-left: $file-list-thumb-col-width + $grid-unit;
+	}
 
-  .type {
-    @include file-list-col-type;
-  }
+	.type {
+		@include file-list-col-type;
+	}
 
-  .date {
-    @include file-list-col-date;
-  }
+	.date {
+		@include file-list-col-date;
+	}
 
-  .access {
-    @include file-list-col-access;
-  }
+	.access {
+		@include file-list-col-access;
+	}
 
-  .shared-by {
-    @include file-list-col-shared-by;
-  }
+	.shared-by {
+		@include file-list-col-shared-by;
+	}
 
-  .shared-icon {
-    @include file-list-col-shared-icon;
-  }
+	.shared-icon {
+		@include file-list-col-shared-icon;
+	}
 
-  .single-col-sort {
-    padding: 0 10px;
-    cursor: pointer;
-  }
+	.single-col-sort {
+		padding: 0 10px;
+		cursor: pointer;
+	}
 
-  .single-col-sort-option {
-    font-size: $font-size-sm;
-    padding: 0.5rem 10px;
-    cursor: pointer;
-    &:hover {
-      background-color: $gray-200;
-    }
-  }
+	.single-col-sort-option {
+		font-size: $font-size-sm;
+		padding: 0.5rem 10px;
+		cursor: pointer;
+		&:hover {
+			background-color: $gray-200;
+		}
+	}
 
-  .dropdown-menu {
-    margin-top: 0;
-    padding: 0px;
-  }
+	.dropdown-menu {
+		margin-top: 0;
+		padding: 0px;
+	}
 }
 
 .top-row {
-  display: flex;
-  height: $file-list-controls-height * 0.5;
-  align-items: center;
+	display: flex;
+	height: $file-list-controls-height * 0.5;
+	align-items: center;
 
-  @media screen and (max-width: 1150px) {
-    flex-direction: column;
-    align-items: flex-end;
-  }
+	@media screen and (max-width: 1150px) {
+		flex-direction: column;
+		align-items: flex-end;
+	}
 }
 
 pr-folder-view-toggle {
-  flex: 0 0 auto;
+	flex: 0 0 auto;
 }
 
 .file-list-controls {
-  flex: 1 1 auto;
-  display: flex;
-  align-items: center;
-  background-color: white;
-  padding-left: 5px;
+	flex: 1 1 auto;
+	display: flex;
+	align-items: center;
+	background-color: white;
+	padding-left: 5px;
 
-  &.visible {
-    opacity: 1;
-    transition: 125ms $tweaked-ease opacity;
-  }
+	&.visible {
+		opacity: 1;
+		transition: 125ms $tweaked-ease opacity;
+	}
 
-  .file-list-control {
-    &:not(:last-child) {
-      margin-right: $grid-unit;
-    }
+	.file-list-control {
+		&:not(:last-child) {
+			margin-right: $grid-unit;
+		}
 
-    cursor: pointer;
-    user-select: none;
+		cursor: pointer;
+		user-select: none;
 
-    display: flex;
-    align-items: center;
+		display: flex;
+		align-items: center;
 
-    i {
-      opacity: 0.7;
-      margin-right: 0.25em;
-      transition: opacity 0.125s $tweaked-ease;
-      font-size: $mat-icon-sm;
-    }
+		i {
+			opacity: 0.7;
+			margin-right: 0.25em;
+			transition: opacity 0.125s $tweaked-ease;
+			font-size: $mat-icon-sm;
+		}
 
-    @include until(1100px) {
-      font-size: $font-size-sm;
-      &:not(:last-child) {
-        margin-right: $grid-unit * 0.25;
-      }
+		@include until(1100px) {
+			font-size: $font-size-sm;
+			&:not(:last-child) {
+				margin-right: $grid-unit * 0.25;
+			}
 
-      i {
-        font-size: $mat-icon-sm * 0.75;
-        margin-right: 0.125em;
-      }
-    }
+			i {
+				font-size: $mat-icon-sm * 0.75;
+				margin-right: 0.125em;
+			}
+		}
 
-    @include until(1200px) {
-      &:not(:last-child) {
-        margin-right: $grid-unit * 0.5;
-      }
-    }
+		@include until(1200px) {
+			&:not(:last-child) {
+				margin-right: $grid-unit * 0.5;
+			}
+		}
 
-    &.disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
+		&.disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
 
-    &:hover:not(.disabled) {
-      i {
-        opacity: 1;
-        transition: none;
-      }
-    }
-  }
+		&:hover:not(.disabled) {
+			i {
+				opacity: 1;
+				transition: none;
+			}
+		}
+	}
 }
 
 .download-options {
-  box-shadow:
-    0px 2px 2px rgba(0, 0, 0, 0.24),
-    0px 0px 2px rgba(0, 0, 0, 0.12);
-  border-radius: 2px;
-  width: 211px;
-  height: auto;
-  position: absolute;
-  top: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: white;
-  margin-left: 7rem;
-  z-index: 1000;
+	box-shadow:
+		0px 2px 2px rgba(0, 0, 0, 0.24),
+		0px 0px 2px rgba(0, 0, 0, 0.12);
+	border-radius: 2px;
+	width: 211px;
+	height: auto;
+	position: absolute;
+	top: 2rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background-color: white;
+	margin-left: 7rem;
+	z-index: 1000;
 
-  @media screen and (max-width: 1300px) {
-    margin-left: 0;
-  }
+	@media screen and (max-width: 1300px) {
+		margin-left: 0;
+	}
 }
 
 .download-option {
-  cursor: pointer;
-  &:hover {
-    background-color: #eaeaea;
-  }
-  & > span {
-    font-size: 14px;
-    margin-left: 10px;
-  }
+	cursor: pointer;
+	&:hover {
+		background-color: #eaeaea;
+	}
+	& > span {
+		font-size: 14px;
+		margin-left: 10px;
+	}
 }

@@ -3,96 +3,96 @@
 $info-height: $file-list-row-height;
 
 :host {
-  display: block;
+	display: block;
 }
 
 .view-files {
-  cursor: pointer;
-  user-select: none;
+	cursor: pointer;
+	user-select: none;
 }
 
 .connector-about {
-  border-radius: $border-radius-lg;
-  border: $file-list-border;
+	border-radius: $border-radius-lg;
+	border: $file-list-border;
 
-  &.clickable {
-    cursor: pointer;
-  }
+	&.clickable {
+		cursor: pointer;
+	}
 }
 
 .connector-logo {
-  height: 10 * $grid-unit;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	height: 10 * $grid-unit;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  .logo-img {
-    background-size: contain;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    width: 50%;
-    height: 3 * $grid-unit;
-  }
+	.logo-img {
+		background-size: contain;
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+		width: 50%;
+		height: 3 * $grid-unit;
+	}
 
-  &.connector-facebook {
-    background-color: #1877f2;
-    .logo-img {
-      height: 2 * $grid-unit;
-      background-image: url('/assets/img/facebook/f-logo-white.png');
-    }
-  }
+	&.connector-facebook {
+		background-color: #1877f2;
+		.logo-img {
+			height: 2 * $grid-unit;
+			background-image: url('/assets/img/facebook/f-logo-white.png');
+		}
+	}
 
-  &.connector-familysearch {
-    background-color: #87ba41;
-    .logo-img {
-      background-image: url('/assets/img/familysearch/tree-name-logo.png');
-    }
-  }
+	&.connector-familysearch {
+		background-color: #87ba41;
+		.logo-img {
+			background-image: url('/assets/img/familysearch/tree-name-logo.png');
+		}
+	}
 }
 
 .connector-info {
-  padding: $grid-unit;
+	padding: $grid-unit;
 
-  .name {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-  }
+	.name {
+		font-size: $font-size-lg;
+		font-weight: $font-weight-bold;
+	}
 
-  .blurb {
-    color: $text-muted;
-  }
+	.blurb {
+		color: $text-muted;
+	}
 }
 
 .connector-info-more {
-  padding: 0px 10px;
+	padding: 0px 10px;
 }
 
 .connector-actions {
-  padding-top: $grid-unit * 0.5;
+	padding-top: $grid-unit * 0.5;
 
-  .btn {
-    margin: 0 auto;
-    margin-bottom: $grid-unit * 0.5;
-  }
+	.btn {
+		margin: 0 auto;
+		margin-bottom: $grid-unit * 0.5;
+	}
 }
 
 .name {
-  flex: 1 1 auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
+	flex: 1 1 auto;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-weight: 500;
 }
 
 [prBgImage] {
-  height: $info-height - ($grid-unit * 0.5);
-  width: $info-height - ($grid-unit * 0.5);
-  flex: 0 0 $info-height - ($grid-unit * 0.5);
-  margin: 5px 0px;
-  margin-right: 5px;
+	height: $info-height - ($grid-unit * 0.5);
+	width: $info-height - ($grid-unit * 0.5);
+	flex: 0 0 $info-height - ($grid-unit * 0.5);
+	margin: 5px 0px;
+	margin-right: 5px;
 }
 
 .connector-help {
-  padding: 0 10px;
+	padding: 0 10px;
 }

@@ -1,601 +1,602 @@
 import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  ViewChild,
-  ElementRef,
-  OnDestroy,
-  HostListener,
-  Inject,
-  Optional,
+	Component,
+	OnInit,
+	AfterViewInit,
+	ViewChild,
+	ElementRef,
+	OnDestroy,
+	HostListener,
+	Inject,
+        Optional,
 } from '@angular/core';
 
 import {
-  Timeline,
-  // @ts-ignore: DataSet is exported from index.js but not defined in index.d.ts
-  DataSet,
-  TimelineOptions,
-  TimelineEventPropertiesResult,
-  DataItem,
+	Timeline,
+	// @ts-ignore: DataSet is exported from index.js but not defined in index.d.ts
+	DataSet,
+	TimelineOptions,
+	TimelineEventPropertiesResult,
+	DataItem,
 } from 'vis-timeline/standalone';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import {
-  FolderVO,
-  RecordVO,
-  ItemVO,
-  TimezoneVO,
-  TimezoneVOData,
+	FolderVO,
+	RecordVO,
+	ItemVO,
+	TimezoneVO,
+	TimezoneVOData,
 } from '@models';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { BasePortalOutlet } from '@angular/cdk/portal';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import {
-  remove,
-  find,
-  throttle,
-  minBy,
-  maxBy,
-  debounce,
-  countBy,
+	remove,
+	find,
+	throttle,
+	minBy,
+	maxBy,
+	debounce,
+	countBy,
 } from 'lodash';
 import { Subscription } from 'rxjs';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { slideUpAnimation } from '@shared/animations';
 import {
-  TimelineBreadcrumbsComponent,
-  TimelineBreadcrumb,
+	TimelineBreadcrumbsComponent,
+	TimelineBreadcrumb,
 } from './timeline-breadcrumbs/timeline-breadcrumbs.component';
 import {
-  TimelineRecordTemplate,
-  TimelineFolderTemplate,
-  TimelineGroupTemplate,
+	TimelineRecordTemplate,
+	TimelineFolderTemplate,
+	TimelineGroupTemplate,
 } from './timeline-templates';
 import {
-  TimelineGroup,
-  TimelineItem,
-  TimelineDataItem,
-  TimelineGroupTimespan,
-  Minute,
-  Year,
-  GroupByTimespan,
-  GetTimespanFromRange,
-  getBestFitTimespanForItems,
-  dateTypeToNumber,
+	TimelineGroup,
+	TimelineItem,
+	TimelineDataItem,
+	TimelineGroupTimespan,
+	Minute,
+	Year,
+	GroupByTimespan,
+	GetTimespanFromRange,
+	getBestFitTimespanForItems,
+	dateTypeToNumber,
 } from './timeline-util';
 
 export interface TimelineDataItemExtended extends DataItem {
-  uuid: string;
-  dataType: 'record' | 'folder' | 'group';
-  item: unknown;
-}
+	uuid: string;
+	dataType: 'record' | 'folder' | 'group';
+	item: unknown;
 
 const ZOOM_PERCENTAGE = 1;
 
 const DEFAULT_MAJOR_MINUTE_LABEL = 'MMMM Do, h:mm A';
 const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
 @Component({
-  selector: 'pr-timeline-view',
-  templateUrl: './timeline-view.component.html',
-  styleUrls: ['./timeline-view.component.scss'],
-  animations: [slideUpAnimation],
-  standalone: false,
+	selector: 'pr-timeline-view',
+	templateUrl: './timeline-view.component.html',
+	styleUrls: ['./timeline-view.component.scss'],
+	animations: [slideUpAnimation],
+	standalone: false,
 })
 export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
-  public isNavigating = false;
 
-  private throttledZoomHandler = throttle((evt) => {
-    this.onTimelineZoom();
-  }, 256);
-  private debouncedResizeHandler = debounce(() => {
-    this.groupTimelineItems(true);
-    setTimeout(() => {
-      this.timeline.redraw();
-    });
-  }, 250);
-  private dataServiceSubscription: Subscription;
+	public isNavigating = false;
 
-  public hasPrev = true;
-  public hasNext = true;
+	private route: ActivatedRoute;
 
-  public timelineRootFolder: FolderVO;
-  public showFolderDetails = false;
+	private throttledZoomHandler = throttle((evt) => {
+		this.onTimelineZoom();
+	}, 256);
+	private debouncedResizeHandler = debounce(() => {
+		this.groupTimelineItems(true);
+		setTimeout(() => {
+			this.timeline.redraw();
+		});
+	}, 250);
+	private dataServiceSubscription: Subscription;
 
-  public displayTimezoneOffset: string;
-  public currentTimezone: TimezoneVOData;
-  public timezones: Map<number, TimezoneVOData> = new Map();
+	public hasPrev = true;
+	public hasNext = true;
 
-  @ViewChild(TimelineBreadcrumbsComponent, { static: true })
-  breadcrumbs: TimelineBreadcrumbsComponent;
-  @ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
-  public timeline: Timeline;
-  private currentTimespan: TimelineGroupTimespan;
-  public timelineGroups = new Map<TimelineGroupTimespan, DataItem[]>();
-  private timelineItems: DataSet<TimelineDataItemExtended> =
-    new DataSet<TimelineDataItemExtended>();
+	public timelineRootFolder: FolderVO;
+	public showFolderDetails = false;
 
-  private timelineOptions: TimelineOptions = {
-    zoomMin: Minute * 1,
-    showCurrentTime: false,
-    height: '100%',
-    selectable: false,
-    zoomable: false,
-    orientation: {
-      axis: 'bottom',
-      item: 'center',
-    },
-    format: {
-      minorLabels: {
-        minute: 'h:mm A',
-        hour: 'h A',
-        weekday: 'Do',
-        day: 'Do',
-        week: 'Do',
-      },
-      majorLabels: {
-        second: DEFAULT_MAJOR_MINUTE_LABEL,
-        minute: DEFAULT_MAJOR_MINUTE_LABEL,
-        hour: 'MMMM Do, h A',
-        weekday: 'MMMM Do, YYYY',
-        day: 'MMMM Do, YYYY',
-        week: 'MMMM YYYY',
-      },
-    },
-    template: (item: any, element: HTMLDivElement, data) => {
-      switch ((item as TimelineDataItem).dataType) {
-        case 'record':
-          return TimelineRecordTemplate(item);
-        case 'folder':
-          return TimelineFolderTemplate(item);
-        case 'group':
-          return TimelineGroupTemplate(item);
-      }
-    },
-  };
+	public displayTimezoneOffset: string;
+	public currentTimezone: TimezoneVOData;
+	public timezones: Map<number, TimezoneVOData> = new Map();
 
-  constructor(
-    @Optional() @Inject(DIALOG_DATA) public dialogData: any,
-    @Optional() private dialog: DialogRef,
-    private route: ActivatedRoute,
-    private dataService: DataService,
-    private api: ApiService,
-    private router: Router,
-    private elementRef: ElementRef,
-    private fvService: FolderViewService,
-    private device: DeviceService,
-  ) {
-    this.currentTimespan = TimelineGroupTimespan.Year;
-    this.dataService.showBreadcrumbs = false;
-    this.dataService.showPublicArchiveDescription = false;
-    this.dataService.publicCta = 'timeline';
-    this.fvService.containerFlexChange.emit(true);
+	@ViewChild(TimelineBreadcrumbsComponent, { static: true })
+	breadcrumbs: TimelineBreadcrumbsComponent;
+	@ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
+	public timeline: Timeline;
+	private currentTimespan: TimelineGroupTimespan;
+	public timelineGroups = new Map<TimelineGroupTimespan, DataItem[]>();
+	private timelineItems: DataSet<TimelineDataItemExtended> =
+        	new DataSet<TimelineDataItemExtended>();
+	private timelineOptions: TimelineOptions = {
+		zoomMin: Minute * 1,
+		showCurrentTime: false,
+		height: '100%',
+		selectable: false,
+		zoomable: false,
+		orientation: {
+			axis: 'bottom',
+			item: 'center',
+		},
+		format: {
+			minorLabels: {
+				minute: 'h:mm A',
+				hour: 'h A',
+				weekday: 'Do',
+				day: 'Do',
+				week: 'Do',
+			},
+			majorLabels: {
+				second: DEFAULT_MAJOR_MINUTE_LABEL,
+				minute: DEFAULT_MAJOR_MINUTE_LABEL,
+				hour: 'MMMM Do, h A',
+				weekday: 'MMMM Do, YYYY',
+				day: 'MMMM Do, YYYY',
+				week: 'MMMM YYYY',
+			},
+		},
+		template: (item: any, element: HTMLDivElement, data) => {
+			switch ((item as TimelineDataItem).dataType) {
+				case 'record':
+					return TimelineRecordTemplate(item);
+				case 'folder':
+					return TimelineFolderTemplate(item);
+				case 'group':
+					return TimelineGroupTemplate(item);
+			}
+		},
+	};
 
-    this.timelineRootFolder = this.route.snapshot.data.currentFolder;
-    this.dataService.setCurrentFolder(this.route.snapshot.data.currentFolder);
-    if (dialogData?.activatedRoute) {
-      this.route = dialogData.activatedRoute;
-    }
-  }
+	constructor(
+		@Optional() private dialog: DialogRef,
+		private route: ActivatedRoute,
+		private dataService: DataService,
+		private dataService: DataService,
+		private api: ApiService,
+		private router: Router,
+		private elementRef: ElementRef,
+		private fvService: FolderViewService,
+		private device: DeviceService,
+	) {
+		this.currentTimespan = TimelineGroupTimespan.Year;
+		this.dataService.showBreadcrumbs = false;
+		this.dataService.showPublicArchiveDescription = false;
+		this.dataService.publicCta = 'timeline';
+		this.fvService.containerFlexChange.emit(true);
 
-  ngOnInit() {
-    this.onFolderChange();
-    this.dataServiceSubscription =
-      this.dataService.currentFolderChange.subscribe(() => {
-        this.onFolderChange();
-      });
-  }
+		this.timelineRootFolder = this.route.snapshot.data.currentFolder;
+		this.dataService.setCurrentFolder(this.route.snapshot.data.currentFolder);
+		if (dialogData?.activatedRoute) {	
+			this.route = dialogData.activatedRoute;
+		}
+	}
 
-  ngAfterViewInit() {
-    this.initTimeline();
-    this.setMaxZoom();
-    this.addPixelMargin();
-    this.timeline.fit();
+	ngOnInit() {
+		this.onFolderChange();
+		this.dataServiceSubscription =
+			this.dataService.currentFolderChange.subscribe(() => {
+				this.onFolderChange();
+			});
+	}
 
-    const elem = this.elementRef.nativeElement as HTMLDivElement;
-  }
+	ngAfterViewInit() {
+		this.initTimeline();
+		this.setMaxZoom();
+		this.addPixelMargin();
+		this.timeline.fit();
 
-  ngOnDestroy() {
-    this.timeline.destroy();
-    this.dataServiceSubscription.unsubscribe();
-    this.dataService.showBreadcrumbs = true;
-    this.dataService.showPublicArchiveDescription = true;
-    this.dataService.publicCta = null;
-    this.fvService.containerFlexChange.emit(false);
-  }
+		const elem = this.elementRef.nativeElement as HTMLDivElement;
+	}
 
-  @HostListener('window:resize', ['$event'])
-  onViewportResize(event) {
-    this.debouncedResizeHandler();
-  }
+	ngOnDestroy() {
+		this.timeline.destroy();
+		this.dataServiceSubscription.unsubscribe();
+		this.dataService.showBreadcrumbs = true;
+		this.dataService.showPublicArchiveDescription = true;
+		this.dataService.publicCta = null;
+		this.fvService.containerFlexChange.emit(false);
+	}
 
-  toggleFolderDetails() {
-    if (this.timelineRootFolder.description) {
-      this.showFolderDetails = !this.showFolderDetails;
-    } else {
-      this.showFolderDetails = false;
-    }
-  }
+	@HostListener('window:resize', ['$event'])
+	onViewportResize(event) {
+		this.debouncedResizeHandler();
+	}
 
-  onFolderChange() {
-    this.timelineGroups.clear();
-    this.findBestTimezone();
-    this.timelineRootFolder = this.dataService.currentFolder;
-    this.groupTimelineItems(true, false);
-    if (this.timeline) {
-      this.setMaxZoom();
-      this.addPixelMargin();
-      this.timeline.fit();
-    }
-  }
+	toggleFolderDetails() {
+		if (this.timelineRootFolder.description) {
+			this.showFolderDetails = !this.showFolderDetails;
+		} else {
+			this.showFolderDetails = false;
+		}
+	}
 
-  initTimeline() {
-    const container = this.timelineElemRef.nativeElement;
-    this.timeline = new Timeline(
-      container,
-      this.timelineItems,
-      this.timelineOptions,
-    );
-    this.timeline.on('click', (evt) => {
-      this.onTimelineItemClick(evt);
-    });
+	onFolderChange() {
+		this.timelineGroups.clear();
+		this.findBestTimezone();
+		this.timelineRootFolder = this.dataService.currentFolder;
+		this.groupTimelineItems(true, false);
+		if (this.timeline) {
+			this.setMaxZoom();
+			this.addPixelMargin();
+			this.timeline.fit();
+		}
+	}
 
-    this.timeline.on('rangechanged', (evt) => {
-      this.breadcrumbs.debouncedZoomHandler(evt);
-    });
-  }
+	initTimeline() {
+		const container = this.timelineElemRef.nativeElement;
+		this.timeline = new Timeline(
+			container,
+			this.timelineItems,
+			this.timelineOptions,
+		);
+		this.timeline.on('click', (evt) => {
+			this.onTimelineItemClick(evt);
+		});
 
-  findBestTimezone() {
-    const counts = countBy(
-      this.dataService.currentFolder.ChildItemVOs.filter((i) => i.TimezoneVO),
-      (i: ItemVO) => {
-        const id = i.TimezoneVO.timeZoneId;
-        if (!this.timezones.has(id)) {
-          this.timezones.set(id, i.TimezoneVO);
-        }
-        return id;
-      },
-    );
+		this.timeline.on('rangechanged', (evt) => {
+			this.breadcrumbs.debouncedZoomHandler(evt);
+		});
+	}
 
-    const ids = Object.keys(counts);
+	findBestTimezone() {
+		const counts = countBy(
+			this.dataService.currentFolder.ChildItemVOs.filter((i) => i.TimezoneVO),
+			(i: ItemVO) => {
+				const id = i.TimezoneVO.timeZoneId;
+				if (!this.timezones.has(id)) {
+					this.timezones.set(id, i.TimezoneVO);
+				}
+				return id;
+			},
+		);
 
-    if (!ids.length) {
-      this.currentTimezone = null;
-    } else {
-      const mostCommonId = Number(maxBy(ids, (o) => counts[o]));
-      this.currentTimezone = this.timezones.get(mostCommonId);
-    }
+		const ids = Object.keys(counts);
 
-    const setMajorTimeLabel = (timezone: TimezoneVOData) => {
-      let hourLabel = DEFAULT_MAJOR_HOUR_LABEL;
-      let minuteLabel = DEFAULT_MAJOR_MINUTE_LABEL;
-      if (timezone) {
-        const split = timezone.stdAbbrev.split('');
-        split.unshift('');
-        const abbrev = split.join('\\');
-        minuteLabel = `${minuteLabel} ${abbrev}`;
-        hourLabel = `${hourLabel} ${abbrev}`;
-      }
-      if (this.timeline) {
-        const options: TimelineOptions = {
-          format: {
-            majorLabels: {
-              minute: minuteLabel,
-              second: minuteLabel,
-              hour: hourLabel,
-            },
-          },
-        };
+		if (!ids.length) {
+			this.currentTimezone = null;
+		} else {
+			const mostCommonId = Number(maxBy(ids, (o) => counts[o]));
+			this.currentTimezone = this.timezones.get(mostCommonId);
+		}
 
-        this.timeline.setOptions(options);
-      } else {
-        (this.timelineOptions.format.majorLabels as any).minute = minuteLabel;
-        (this.timelineOptions.format.majorLabels as any).second = minuteLabel;
-        (this.timelineOptions.format.majorLabels as any).hour = hourLabel;
-      }
-    };
+		const setMajorTimeLabel = (timezone: TimezoneVOData) => {
+			let hourLabel = DEFAULT_MAJOR_HOUR_LABEL;
+			let minuteLabel = DEFAULT_MAJOR_MINUTE_LABEL;
+			if (timezone) {
+				const split = timezone.stdAbbrev.split('');
+				split.unshift('');
+				const abbrev = split.join('\\');
+				minuteLabel = `${minuteLabel} ${abbrev}`;
+				hourLabel = `${hourLabel} ${abbrev}`;
+			}
+			if (this.timeline) {
+				const options: TimelineOptions = {
+					format: {
+						majorLabels: {
+							minute: minuteLabel,
+							second: minuteLabel,
+							hour: hourLabel,
+						},
+					},
+				};
 
-    setMajorTimeLabel(this.currentTimezone);
-  }
+				this.timeline.setOptions(options);
+			} else {
+				(this.timelineOptions.format.majorLabels as any).minute = minuteLabel;
+				(this.timelineOptions.format.majorLabels as any).second = minuteLabel;
+				(this.timelineOptions.format.majorLabels as any).hour = hourLabel;
+			}
+		};
 
-  setMaxZoom() {
-    const range = this.timeline.getItemRange();
-    if (!range || !range.min || !range.max) {
-      return;
-    }
+		setMajorTimeLabel(this.currentTimezone);
+	}
 
-    const start = range.min.valueOf();
-    const end = range.max.valueOf();
-    const diff = end - start;
-    const buffer = diff * 0.5;
+	setMaxZoom() {
+		const range = this.timeline.getItemRange();
+		if (!range || !range.min || !range.max) {
+			return;
+		}
 
-    this.timeline.setOptions({
-      min: start - buffer,
-      max: end + buffer,
-    });
-  }
+		const start = range.min.valueOf();
+		const end = range.max.valueOf();
+		const diff = end - start;
+		const buffer = diff * 0.5;
 
-  groupTimelineItems(bestFitTimespan = false, keepFolders = true) {
-    if (this.timelineItems.length) {
-      let ids = this.timelineItems.getIds();
-      if (keepFolders) {
-        ids = ids.filter((id) => {
-          const item: any = this.timelineItems.get(id);
-          return (item as TimelineDataItem).dataType !== 'folder';
-        });
-      }
-      this.timelineItems.remove(ids);
-    }
+		this.timeline.setOptions({
+			min: start - buffer,
+			max: end + buffer,
+		});
+	}
 
-    let timespan = this.currentTimespan;
-    if (bestFitTimespan) {
-      timespan = getBestFitTimespanForItems(
-        this.dataService.currentFolder.ChildItemVOs,
-      );
-    }
+	groupTimelineItems(bestFitTimespan = false, keepFolders = true) {
+		if (this.timelineItems.length) {
+			let ids = this.timelineItems.getIds();
+			if (keepFolders) {
+				ids = ids.filter((id) => {
+					const item: any = this.timelineItems.get(id);
+					return (item as TimelineDataItem).dataType !== 'folder';
+				});
+			}
+			this.timelineItems.remove(ids);
+		}
 
-    let itemsToAdd: any[];
+		let timespan = this.currentTimespan;
+		if (bestFitTimespan) {
+			timespan = getBestFitTimespanForItems(
+				this.dataService.currentFolder.ChildItemVOs,
+			);
+		}
 
-    if (this.timelineGroups.has(timespan)) {
-      itemsToAdd = this.timelineGroups.get(timespan);
-    } else {
-      const groupResult = GroupByTimespan(
-        this.dataService.currentFolder.ChildItemVOs,
-        this.currentTimespan,
-        bestFitTimespan,
-        this.currentTimezone,
-      );
-      this.currentTimespan = groupResult.timespan;
-      this.timelineGroups.set(groupResult.timespan, groupResult.groupedItems);
-      itemsToAdd = groupResult.groupedItems;
-    }
+		let itemsToAdd: any[];
 
-    if (keepFolders) {
-      itemsToAdd = itemsToAdd.filter(
-        (x: TimelineDataItem) => x.dataType !== 'folder',
-      );
-    }
+		if (this.timelineGroups.has(timespan)) {
+			itemsToAdd = this.timelineGroups.get(timespan);
+		} else {
+			const groupResult = GroupByTimespan(
+				this.dataService.currentFolder.ChildItemVOs,
+				this.currentTimespan,
+				bestFitTimespan,
+				this.currentTimezone,
+			);
+			this.currentTimespan = groupResult.timespan;
+			this.timelineGroups.set(groupResult.timespan, groupResult.groupedItems);
+			itemsToAdd = groupResult.groupedItems;
+		}
 
-    this.timelineItems.add(itemsToAdd);
-  }
+		if (keepFolders) {
+			itemsToAdd = itemsToAdd.filter(
+				(x: TimelineDataItem) => x.dataType !== 'folder',
+			);
+		}
 
-  focusItemsWithBuffer(ids: (string | number)[], animate = true) {
-    if (ids.length === 1) {
-      const item = this.timelineItems.get(ids[0]) as DataItem &
-        TimelineDataItem;
-      if (item.dataType !== 'group') {
-        return this.timeline.focus(ids);
-      } else {
-        this.onGroupClick(item as TimelineGroup);
-      }
-    }
+		this.timelineItems.add(itemsToAdd);
+	}
 
-    let start = null;
-    let end = null;
-    for (const id of ids) {
-      const item = this.timelineItems.get(id);
-      const s = item.start;
-      const e = 'end' in item ? item.end : item.start;
+	focusItemsWithBuffer(ids: (string | number)[], animate = true) {
+		if (ids.length === 1) {
+			const item = this.timelineItems.get(ids[0]) as DataItem &
+				TimelineDataItem;
+			if (item.dataType !== 'group') {
+				return this.timeline.focus(ids);
+			} else {
+				this.onGroupClick(item as TimelineGroup);
+			}
+		}
 
-      if (start === null || s < start) {
-        start = s;
-      }
+		let start = null;
+		let end = null;
+		for (const id of ids) {
+			const item = this.timelineItems.get(id);
+			const s = item.start;
+			const e = 'end' in item ? item.end : item.start;
 
-      if (end === null || e > end) {
-        end = e;
-      }
-    }
+			if (start === null || s < start) {
+				start = s;
+			}
 
-    const bufferSize = 0.1;
-    const range = end - start;
-    start -= bufferSize * range;
-    end += bufferSize * range;
+			if (end === null || e > end) {
+				end = e;
+			}
+		}
 
-    if (animate) {
-      this.timeline.setWindow(start, end);
-    } else {
-      this.timeline.setWindow(start, end, { animation: false });
-    }
-  }
+		const bufferSize = 0.1;
+		const range = end - start;
+		start -= bufferSize * range;
+		end += bufferSize * range;
 
-  onZoomInClick() {
-    this.timeline.zoomIn(ZOOM_PERCENTAGE, null, () => {
-      this.onTimelineZoom();
-    });
-  }
+		if (animate) {
+			this.timeline.setWindow(start, end);
+		} else {
+			this.timeline.setWindow(start, end, { animation: false });
+		}
+	}
 
-  onZoomOutClick() {
-    this.timeline.zoomOut(ZOOM_PERCENTAGE, null, () => {
-      this.onTimelineZoom();
-    });
-  }
+	onZoomInClick() {
+		this.timeline.zoomIn(ZOOM_PERCENTAGE, null, () => {
+			this.onTimelineZoom();
+		});
+	}
 
-  onPrevClick() {
-    const range = this.timeline.getWindow();
-    const start = range.start.valueOf();
-    const end = range.end.valueOf();
-    const minDiff = (end - start) * 0.5;
-    const midpoint = (end + start) / 2;
-    const midpointWithMinDiff = midpoint - minDiff;
+	onZoomOutClick() {
+		this.timeline.zoomOut(ZOOM_PERCENTAGE, null, () => {
+			this.onTimelineZoom();
+		});
+	}
 
-    let firstItemBefore: DataItem;
-    this.timelineItems.forEach((i) => {
-      if (dateTypeToNumber(i.start) < midpointWithMinDiff) {
-        if (!firstItemBefore) {
-          firstItemBefore = i;
-        } else if ((firstItemBefore.start as number) < (i.start as number)) {
-          firstItemBefore = i;
-        }
-      }
-    });
+	onPrevClick() {
+		const range = this.timeline.getWindow();
+		const start = range.start.valueOf();
+		const end = range.end.valueOf();
+		const minDiff = (end - start) * 0.5;
+		const midpoint = (end + start) / 2;
+		const midpointWithMinDiff = midpoint - minDiff;
 
-    if (firstItemBefore) {
-      const newMidpoint = dateTypeToNumber(firstItemBefore.start) - 10;
-      this.timeline.moveTo(newMidpoint);
-    } else {
-      this.hasPrev = false;
-    }
-  }
+		let firstItemBefore: DataItem;
+		this.timelineItems.forEach((i) => {
+			if (dateTypeToNumber(i.start) < midpointWithMinDiff) {
+				if (!firstItemBefore) {
+					firstItemBefore = i;
+				} else if ((firstItemBefore.start as number) < (i.start as number)) {
+					firstItemBefore = i;
+				}
+			}
+		});
 
-  onNextClick() {
-    const range = this.timeline.getWindow();
-    const start = range.start.valueOf();
-    const end = range.end.valueOf();
-    const minDiff = (end - start) * 0.5;
-    const midpoint = (end + start) / 2;
-    const midpointWithMinDiff = midpoint + minDiff;
+		if (firstItemBefore) {
+			const newMidpoint = dateTypeToNumber(firstItemBefore.start) - 10;
+			this.timeline.moveTo(newMidpoint);
+		} else {
+			this.hasPrev = false;
+		}
+	}
 
-    let firstItemAfter: DataItem;
-    this.timelineItems.forEach((i) => {
-      if (dateTypeToNumber(i.start) > midpointWithMinDiff) {
-        if (!firstItemAfter) {
-          firstItemAfter = i;
-        } else if ((firstItemAfter.start as number) > Number(i.start)) {
-          firstItemAfter = i;
-        }
-      }
-    });
+	onNextClick() {
+		const range = this.timeline.getWindow();
+		const start = range.start.valueOf();
+		const end = range.end.valueOf();
+		const minDiff = (end - start) * 0.5;
+		const midpoint = (end + start) / 2;
+		const midpointWithMinDiff = midpoint + minDiff;
 
-    if (firstItemAfter) {
-      const newMidpoint = dateTypeToNumber(firstItemAfter.start) + 10;
-      this.timeline.moveTo(newMidpoint);
-    } else {
-      this.hasPrev = false;
-    }
-  }
+		let firstItemAfter: DataItem;
+		this.timelineItems.forEach((i) => {
+			if (dateTypeToNumber(i.start) > midpointWithMinDiff) {
+				if (!firstItemAfter) {
+					firstItemAfter = i;
+				} else if ((firstItemAfter.start as number) > Number(i.start)) {
+					firstItemAfter = i;
+				}
+			}
+		});
 
-  onTimelineZoom() {
-    const range = this.timeline.getWindow();
-    const start = range.start.valueOf();
-    const end = range.end.valueOf();
-    const newTimespan = GetTimespanFromRange(start, end);
+		if (firstItemAfter) {
+			const newMidpoint = dateTypeToNumber(firstItemAfter.start) + 10;
+			this.timeline.moveTo(newMidpoint);
+		} else {
+			this.hasPrev = false;
+		}
+	}
 
-    if (newTimespan !== undefined && newTimespan !== this.currentTimespan) {
-      this.currentTimespan = newTimespan;
-      this.groupTimelineItems(false);
-    }
+	onTimelineZoom() {
+		const range = this.timeline.getWindow();
+		const start = range.start.valueOf();
+		const end = range.end.valueOf();
+		const newTimespan = GetTimespanFromRange(start, end);
 
-    this.hasNext = true;
-    this.hasPrev = true;
-  }
+		if (newTimespan !== undefined && newTimespan !== this.currentTimespan) {
+			this.currentTimespan = newTimespan;
+			this.groupTimelineItems(false);
+		}
 
-  onTimelineItemClick(
-    event: TimelineEventPropertiesResult & { isCluster: boolean },
-  ) {
-    if (!event.isCluster && !this.isNavigating) {
-      const timelineItem: any = this.timelineItems.get(event.item);
-      switch ((timelineItem as TimelineDataItem).dataType) {
-        case 'folder':
-          this.onFolderClick((timelineItem as TimelineItem).item as FolderVO);
-          break;
-        case 'group':
-          this.onGroupClick(timelineItem as TimelineGroup);
-          break;
-        case 'record':
-          this.onRecordClick((timelineItem as TimelineItem).item as RecordVO);
-          break;
-      }
-    }
-  }
+		this.hasNext = true;
+		this.hasPrev = true;
+	}
 
-  async onFolderClick(folder: FolderVO) {
-    this.isNavigating = true;
-    if (folder.isFetching) {
-      await folder.fetched;
-    }
-    const folderResponse = await this.api.folder
-      .navigateLean(folder)
-      .toPromise();
-    this.dataService.setCurrentFolder(folderResponse.getFolderVO(true));
-    this.isNavigating = false;
-  }
+	onTimelineItemClick(
+		event: TimelineEventPropertiesResult & { isCluster: boolean },
+	) {
+		if (!event.isCluster && !this.isNavigating) {
+			const timelineItem: any = this.timelineItems.get(event.item);
+			switch ((timelineItem as TimelineDataItem).dataType) {
+				case 'folder':
+					this.onFolderClick((timelineItem as TimelineItem).item as FolderVO);
+					break;
+				case 'group':
+					this.onGroupClick(timelineItem as TimelineGroup);
+					break;
+				case 'record':
+					this.onRecordClick((timelineItem as TimelineItem).item as RecordVO);
+					break;
+			}
+		}
+	}
 
-  async onRecordClick(record: RecordVO) {
-    this.isNavigating = true;
-    await this.router.navigate([
-      this.router.routerState.snapshot.url.split('/record')[0],
-      'record',
-      record.archiveNbr,
-    ]);
-    this.isNavigating = false;
-  }
+	async onFolderClick(folder: FolderVO) {
+		this.isNavigating = true;
+		if (folder.isFetching) {
+			await folder.fetched;
+		}
+		const folderResponse = await this.api.folder
+			.navigateLean(folder)
+			.toPromise();
+		this.dataService.setCurrentFolder(folderResponse.getFolderVO(true));
+		this.isNavigating = false;
+	}
 
-  findItemsInRange(start: number, end: number) {
-    const itemIds = [];
-    const startDate = new Date(start); // Convert start to a Date object
-    const endDate = new Date(end); // Convert end to a Date object
-    this.timelineItems.forEach((item) => {
-      const itemStart = dateTypeToNumber(item.start);
-      if (
-        itemStart >= start &&
-        itemStart <= end &&
-        (!item.end || dateTypeToNumber(item.end) <= end)
-      ) {
-        itemIds.push(item.id);
-      }
-    });
+	async onRecordClick(record: RecordVO) {
+		this.isNavigating = true;
+		await this.router.navigate([
+			this.router.routerState.snapshot.url.split('/record')[0],
+			'record',
+			record.archiveNbr,
+		]);
+		this.isNavigating = false;
+	}
 
-    return itemIds;
-  }
+	findItemsInRange(start: number, end: number) {
+		const itemIds = [];
+		const startDate = new Date(start); // Convert start to a Date object
+		const endDate = new Date(end); // Convert end to a Date object
+		this.timelineItems.forEach((item) => {
+			const itemStart = dateTypeToNumber(item.start);
+			if (
+				itemStart >= start &&
+				itemStart <= end &&
+				(!item.end || dateTypeToNumber(item.end) <= end)
+			) {
+				itemIds.push(item.id);
+			}
+		});
 
-  focusItemsInRange(start: number, end: number) {
-    this.focusItemsWithBuffer(this.findItemsInRange(start, end));
-  }
+		return itemIds;
+	}
 
-  findOnscreenItemIds() {
-    const range = this.timeline.getWindow();
-    const start = range.start.valueOf();
-    const end = range.end.valueOf();
-    return this.findItemsInRange(start, end);
-  }
+	focusItemsInRange(start: number, end: number) {
+		this.focusItemsWithBuffer(this.findItemsInRange(start, end));
+	}
 
-  onGroupClick(group: TimelineGroup) {
-    const newTimespan: TimelineGroupTimespan = group.groupTimespan + 1;
+	findOnscreenItemIds() {
+		const range = this.timeline.getWindow();
+		const start = range.start.valueOf();
+		const end = range.end.valueOf();
+		return this.findItemsInRange(start, end);
+	}
 
-    this.currentTimespan = newTimespan;
+	onGroupClick(group: TimelineGroup) {
+		const newTimespan: TimelineGroupTimespan = group.groupTimespan + 1;
 
-    this.groupTimelineItems(false);
-    this.focusItemsInRange(group.groupStart, group.groupEnd);
-    this.breadcrumbs.onGroupClick(group);
-  }
+		this.currentTimespan = newTimespan;
 
-  onBreadcrumbClick(breadcrumb: TimelineBreadcrumb) {
-    this.showFolderDetails = false;
-    if (breadcrumb.type === 'folder') {
-      if (
-        breadcrumb.folder_linkId ===
-        this.dataService.currentFolder.folder_linkId
-      ) {
-        this.groupTimelineItems(true, false);
-        this.addPixelMargin();
-        this.timeline.fit();
-        this.breadcrumbs.setTimeBreadcrumbs();
-      } else {
-        this.onFolderClick(
-          new FolderVO({
-            archiveNbr: breadcrumb.archiveNbr,
-            folder_linkId: breadcrumb.folder_linkId,
-          }),
-        );
-      }
-    } else {
-      const groups = this.timelineGroups.get(breadcrumb.timespan);
-      const group = find(groups, (g: TimelineGroup | TimelineItem) => {
-        return g.dataType === 'group' && g.content === breadcrumb.text;
-      });
-      this.onGroupClick(group as TimelineGroup);
-    }
-  }
+		this.groupTimelineItems(false);
+		this.focusItemsInRange(group.groupStart, group.groupEnd);
+		this.breadcrumbs.onGroupClick(group);
+	}
 
-  protected addPixelMargin(): void {
-    // @ts-ignore: This is a hack to bypass maintaining a fork of vis-timeline
-    for (const uuid in this.timeline.itemSet.items) {
-      if (uuid.includes('-')) {
-        // @ts-ignore
-        const item = this.timeline.itemSet.items[uuid];
-        item.width += (this.device.isMobileWidth() ? 10 : 100) * 2;
-      }
-    }
-    this.debouncedResizeHandler();
-  }
+	onBreadcrumbClick(breadcrumb: TimelineBreadcrumb) {
+		this.showFolderDetails = false;
+		if (breadcrumb.type === 'folder') {
+			if (
+				breadcrumb.folder_linkId ===
+				this.dataService.currentFolder.folder_linkId
+			) {
+				this.groupTimelineItems(true, false);
+				this.addPixelMargin();
+				this.timeline.fit();
+				this.breadcrumbs.setTimeBreadcrumbs();
+			} else {
+				this.onFolderClick(
+					new FolderVO({
+						archiveNbr: breadcrumb.archiveNbr,
+						folder_linkId: breadcrumb.folder_linkId,
+					}),
+				);
+			}
+		} else {
+			const groups = this.timelineGroups.get(breadcrumb.timespan);
+			const group = find(groups, (g: TimelineGroup | TimelineItem) => {
+				return g.dataType === 'group' && g.content === breadcrumb.text;
+			});
+			this.onGroupClick(group as TimelineGroup);
+		}
+	}
+
+	protected addPixelMargin(): void {
+		// @ts-ignore: This is a hack to bypass maintaining a fork of vis-timeline
+		for (const uuid in this.timeline.itemSet.items) {
+			if (uuid.includes('-')) {
+				// @ts-ignore
+				const item = this.timeline.itemSet.items[uuid];
+				item.width += (this.device.isMobileWidth() ? 10 : 100) * 2;
+			}
+		}
+		this.debouncedResizeHandler();
+	}
 }

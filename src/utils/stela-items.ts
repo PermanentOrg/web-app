@@ -1,3 +1,3 @@
 export interface StelaItems<Type> {
-  items: Type[];
+	items: Type[];
 }

@@ -6,58 +6,58 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import debug from 'debug';
 import { Subscription, Observable } from 'rxjs';
 import {
-  unsubscribeAll,
-  HasSubscriptions,
+	unsubscribeAll,
+	HasSubscriptions,
 } from '@shared/utilities/hasSubscriptions';
 
 interface FolderViewToggleOption {
-  iconClass: 'reorder' | 'view_module';
-  folderView: FolderView;
-  tooltip?: string;
+	iconClass: 'reorder' | 'view_module';
+	folderView: FolderView;
+	tooltip?: string;
 }
 
 @Component({
-  selector: 'pr-folder-view-toggle',
-  templateUrl: './folder-view-toggle.component.html',
-  styleUrls: ['./folder-view-toggle.component.scss'],
-  standalone: false,
+	selector: 'pr-folder-view-toggle',
+	templateUrl: './folder-view-toggle.component.html',
+	styleUrls: ['./folder-view-toggle.component.scss'],
+	standalone: false,
 })
 export class FolderViewToggleComponent implements OnDestroy, HasSubscriptions {
-  currentFolderView: FolderView;
-  folderViews: FolderViewToggleOption[] = [
-    {
-      iconClass: 'reorder',
-      folderView: FolderView.List,
-      tooltip: 'fileList.viewToggle.list',
-    },
-    {
-      iconClass: 'view_module',
-      folderView: FolderView.Grid,
-      tooltip: 'fileList.viewToggle.grid',
-    },
-  ];
+	currentFolderView: FolderView;
+	folderViews: FolderViewToggleOption[] = [
+		{
+			iconClass: 'reorder',
+			folderView: FolderView.List,
+			tooltip: 'fileList.viewToggle.list',
+		},
+		{
+			iconClass: 'view_module',
+			folderView: FolderView.Grid,
+			tooltip: 'fileList.viewToggle.grid',
+		},
+	];
 
-  showToggle$: Observable<boolean>;
+	showToggle$: Observable<boolean>;
 
-  private debug = debug('component:folderViewToggle');
-  subscriptions: Subscription[] = [];
-  constructor(private folderView: FolderViewService) {
-    this.currentFolderView = this.folderView.folderView;
-    this.debug('init view %o', this.currentFolderView);
+	private debug = debug('component:folderViewToggle');
+	subscriptions: Subscription[] = [];
+	constructor(private folderView: FolderViewService) {
+		this.currentFolderView = this.folderView.folderView;
+		this.debug('init view %o', this.currentFolderView);
 
-    this.subscriptions.push(
-      folderView.viewChange.subscribe((view) => {
-        this.currentFolderView = view;
-      }),
-    );
-  }
+		this.subscriptions.push(
+			folderView.viewChange.subscribe((view) => {
+				this.currentFolderView = view;
+			}),
+		);
+	}
 
-  ngOnDestroy() {
-    unsubscribeAll(this.subscriptions);
-  }
+	ngOnDestroy() {
+		unsubscribeAll(this.subscriptions);
+	}
 
-  onFolderViewClick(option: FolderViewToggleOption) {
-    this.debug('set view %o', option.folderView);
-    this.folderView.setFolderView(option.folderView);
-  }
+	onFolderViewClick(option: FolderViewToggleOption) {
+		this.debug('set view %o', option.folderView);
+		this.folderView.setFolderView(option.folderView);
+	}
 }

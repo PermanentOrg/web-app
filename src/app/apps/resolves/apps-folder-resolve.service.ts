@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
+	ActivatedRouteSnapshot,
+	RouterStateSnapshot,
+	Router,
 } from '@angular/router';
 import { find } from 'lodash';
 
@@ -13,22 +13,22 @@ import { FolderVO } from '@root/app/models';
 
 @Injectable()
 export class AppsFolderResolveService {
-  constructor(
-    private api: ApiService,
-    private accountService: AccountService,
-  ) {}
+	constructor(
+		private api: ApiService,
+		private accountService: AccountService,
+	) {}
 
-  async resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Promise<any> {
-    const appsFolder = find(this.accountService.getRootFolder().ChildItemVOs, {
-      type: 'type.folder.root.app',
-    });
-    const folderResponse = await this.api.folder.getWithChildren([
-      new FolderVO(appsFolder),
-    ]);
+	async resolve(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Promise<any> {
+		const appsFolder = find(this.accountService.getRootFolder().ChildItemVOs, {
+			type: 'type.folder.root.app',
+		});
+		const folderResponse = await this.api.folder.getWithChildren([
+			new FolderVO(appsFolder),
+		]);
 
-    return folderResponse.getFolderVO(true);
-  }
+		return folderResponse.getFolderVO(true);
+	}
 }

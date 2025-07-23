@@ -1,77 +1,77 @@
 @import 'variables';
 
 :host {
-  display: block;
+	display: block;
 }
 
 $settings-padding-x: 0;
 
 p {
-  padding: 10px;
+	padding: 10px;
 }
 
 .settings-group {
-  margin-bottom: $grid-unit;
+	margin-bottom: $grid-unit;
 
-  .settings-group-title {
-    font-weight: $font-weight-bold;
-    padding: $grid-unit * 0.5 0;
-  }
+	.settings-group-title {
+		font-weight: $font-weight-bold;
+		padding: $grid-unit * 0.5 0;
+	}
 }
 
 .form-check {
-  font-size: $font-size-sm;
+	font-size: $font-size-sm;
 }
 
 .settings-item {
-  @include desktop {
-    display: flex;
-  }
+	@include desktop {
+		display: flex;
+	}
 
-  & > label {
-    font-weight: $font-weight-bold;
-    padding: $grid-unit * 0.5 0;
-    margin-bottom: 0px;
-    flex: 0 0 12rem;
-    display: flex;
-    align-items: center;
+	& > label {
+		font-weight: $font-weight-bold;
+		padding: $grid-unit * 0.5 0;
+		margin-bottom: 0px;
+		flex: 0 0 12rem;
+		display: flex;
+		align-items: center;
 
-    i {
-      font-size: $mat-icon-sm;
-      margin-left: $grid-unit * 0.5;
-      cursor: pointer;
-    }
-  }
+		i {
+			font-size: $mat-icon-sm;
+			margin-left: $grid-unit * 0.5;
+			cursor: pointer;
+		}
+	}
 
-  .settings-item-content {
-    flex: 1 1 auto;
+	.settings-item-content {
+		flex: 1 1 auto;
 
-    display: flex;
-    align-items: center;
+		display: flex;
+		align-items: center;
 
-    .btn {
-      @include gridHeightButtonSmall;
-      margin: 0;
-      flex: 0 0 auto;
-      width: auto;
-    }
-  }
+		.btn {
+			@include gridHeightButtonSmall;
+			margin: 0;
+			flex: 0 0 auto;
+			width: auto;
+		}
+	}
 
-  @include after($phone) {
-    .settings-item-content {
-      max-width: 15rem;
-    }
+	@include after($phone) {
+		.settings-item-content {
+			max-width: 15rem;
+		}
 
-    &.settings-item-large .settings-item-content {
-      max-width: 30rem;
-    }
-  }
+		&.settings-item-large .settings-item-content {
+			max-width: 30rem;
+		}
+	}
 }
 
 .verified {
-  color: $success;
+	color: $success;
 }
 
 form {
-  @include tabbedDialogPanelForm;
+	@include tabbedDialogPanelForm;
 }

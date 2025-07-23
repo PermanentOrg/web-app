@@ -1,133 +1,133 @@
 .timeline {
-  $image-height: 40px;
-  $record-image-height: 100px;
-  $record-preview-height: 40px;
+	$image-height: 40px;
+	$record-image-height: 100px;
+	$record-preview-height: 40px;
 
-  .vis-item {
-    cursor: pointer;
+	.vis-item {
+		cursor: pointer;
 
-    &.timeline-perm-orange {
-      border-color: $PR-orange;
-      background-color: lighten($PR-orange, 30%);
-    }
+		&.timeline-perm-orange {
+			border-color: $PR-orange;
+			background-color: lighten($PR-orange, 30%);
+		}
 
-    &.timeline-perm-blue {
-      border-color: $PR-blue;
-      background-color: lighten($PR-blue, 70%);
-    }
+		&.timeline-perm-blue {
+			border-color: $PR-blue;
+			background-color: lighten($PR-blue, 70%);
+		}
 
-    &.timeline-perm-purple {
-      border-color: $PR-purple;
-      background-color: lighten($PR-purple, 70%);
-    }
-  }
+		&.timeline-perm-purple {
+			border-color: $PR-purple;
+			background-color: lighten($PR-purple, 70%);
+		}
+	}
 
-  // .vis-item {
-  //   cursor: pointer;
-  //   border-color: $PR-blue;
-  //   background-color: lighten($PR-blue, 70%);
-  // }
+	// .vis-item {
+	//   cursor: pointer;
+	//   border-color: $PR-blue;
+	//   background-color: lighten($PR-blue, 70%);
+	// }
 
-  // .vis-item {
-  //   cursor: pointer;
-  //   border-color: $PR-purple;
-  //   background-color: lighten($PR-purple, 70%);
-  // }
+	// .vis-item {
+	//   cursor: pointer;
+	//   border-color: $PR-purple;
+	//   background-color: lighten($PR-purple, 70%);
+	// }
 
-  .timeline-item {
-    display: flex;
-    align-items: center;
+	.timeline-item {
+		display: flex;
+		align-items: center;
 
-    img {
-      height: 40px;
-      width: auto;
-      margin-right: 5px;
-    }
+		img {
+			height: 40px;
+			width: auto;
+			margin-right: 5px;
+		}
 
-    .timeline-thumbnail {
-      height: 40px;
-      width: 40px;
-      flex: 0 0 40px;
-      background-size: contain;
-      background-position: 50% 50%;
-      background-repeat: no-repeat;
-    }
-  }
+		.timeline-thumbnail {
+			height: 40px;
+			width: 40px;
+			flex: 0 0 40px;
+			background-size: contain;
+			background-position: 50% 50%;
+			background-repeat: no-repeat;
+		}
+	}
 
-  .timeline-record {
-    img {
-      margin-right: 0px;
-    }
-  }
+	.timeline-record {
+		img {
+			margin-right: 0px;
+		}
+	}
 
-  .timeline-group,
-  .timeline-folder,
-  .timeline-record {
-    text-align: left;
-    line-height: 20px;
-  }
+	.timeline-group,
+	.timeline-folder,
+	.timeline-record {
+		text-align: left;
+		line-height: 20px;
+	}
 
-  .timeline-group-name,
-  .timeline-folder-name {
-    font-weight: bolder;
-  }
+	.timeline-group-name,
+	.timeline-folder-name {
+		font-weight: bolder;
+	}
 
-  .timeline-record-name {
-    font-weight: 500;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+	.timeline-record-name {
+		font-weight: 500;
+		max-width: 200px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 
-  .timeline-record-type {
-    text-transform: capitalize;
-    font-weight: 300;
-  }
+	.timeline-record-type {
+		text-transform: capitalize;
+		font-weight: 300;
+	}
 
-  .timeline-group-preview {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    max-width: 40px;
-    width: 40px;
-    height: 40px;
-    max-height: 40px;
-    overflow: hidden;
-    margin-right: 5px;
+	.timeline-group-preview {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		max-width: 40px;
+		width: 40px;
+		height: 40px;
+		max-height: 40px;
+		overflow: hidden;
+		margin-right: 5px;
 
-    img,
-    > div {
-      height: 20px;
-      width: 20px;
-      flex: 0 0 20px;
-      margin: 0px;
-      background-size: cover;
-      background-position: 50% 50%;
-      background-repeat: no-repeat;
-    }
-  }
+		img,
+		> div {
+			height: 20px;
+			width: 20px;
+			flex: 0 0 20px;
+			margin: 0px;
+			background-size: cover;
+			background-position: 50% 50%;
+			background-repeat: no-repeat;
+		}
+	}
 
-  @media screen and (min-width: 768px) {
-    .timeline-record {
-      height: $record-image-height;
-      img {
-        height: $record-image-height;
-      }
-    }
+	@media screen and (min-width: 768px) {
+		.timeline-record {
+			height: $record-image-height;
+			img {
+				height: $record-image-height;
+			}
+		}
 
-    .timeline-group-preview {
-      max-width: $record-preview-height * 2;
-      width: $record-preview-height * 2;
-      height: $record-preview-height * 2;
-      max-height: $record-preview-height * 2;
+		.timeline-group-preview {
+			max-width: $record-preview-height * 2;
+			width: $record-preview-height * 2;
+			height: $record-preview-height * 2;
+			max-height: $record-preview-height * 2;
 
-      img,
-      > div {
-        height: $record-preview-height;
-        width: $record-preview-height;
-        flex: 0 0 $record-preview-height;
-        margin: 0px;
-      }
-    }
-  }
+			img,
+			> div {
+				height: $record-preview-height;
+				width: $record-preview-height;
+				flex: 0 0 $record-preview-height;
+				margin: 0px;
+			}
+		}
+	}
 }

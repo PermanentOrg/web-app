@@ -11,26 +11,26 @@ import { AppsFolderResolveService } from '@apps/resolves/apps-folder-resolve.ser
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
 
 const appsRootResolve = {
-  appsFolder: AppsFolderResolveService,
-  connectors: ConnectorsResolveService,
+	appsFolder: AppsFolderResolveService,
+	connectors: ConnectorsResolveService,
 };
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: AppsComponent,
-    resolve: appsRootResolve,
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: ':archiveNbr/:folderLinkId',
-    loadChildren: LazyLoadFileBrowserSibling,
-    canActivate: [AppsGuard],
-    canActivateChild: [AppsGuard],
-  },
+	{
+		path: '',
+		component: AppsComponent,
+		resolve: appsRootResolve,
+		runGuardsAndResolvers: 'always',
+	},
+	{
+		path: ':archiveNbr/:folderLinkId',
+		loadChildren: LazyLoadFileBrowserSibling,
+		canActivate: [AppsGuard],
+		canActivateChild: [AppsGuard],
+	},
 ];
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  providers: [AppsFolderResolveService, ConnectorsResolveService],
+	imports: [RouterModule.forChild(routes)],
+	providers: [AppsFolderResolveService, ConnectorsResolveService],
 })
 export class AppsRoutingModule {}

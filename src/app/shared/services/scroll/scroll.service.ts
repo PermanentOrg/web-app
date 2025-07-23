@@ -3,22 +3,22 @@ import { Subject } from 'rxjs';
 import { throttle } from 'lodash';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class ScrollService {
-  private subject: Subject<Event> = new Subject();
+	private subject: Subject<Event> = new Subject();
 
-  private throttled = throttle((event: Event) => {
-    // this.subject.next(event);
-  }, 64);
+	private throttled = throttle((event: Event) => {
+		// this.subject.next(event);
+	}, 64);
 
-  constructor() {}
+	constructor() {}
 
-  scrollEvent(event: Event) {
-    this.throttled(event);
-  }
+	scrollEvent(event: Event) {
+		this.throttled(event);
+	}
 
-  getScrolls() {
-    return this.subject.asObservable();
-  }
+	getScrolls() {
+		return this.subject.asObservable();
+	}
 }

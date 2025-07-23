@@ -1,67 +1,67 @@
 $transition-length: 0.33s;
 
 :host {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  transform: translateY(-100%);
-  z-index: 6;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	transform: translateY(-100%);
+	z-index: 6;
 }
 
 .alert {
-  margin: 0;
-  cursor: pointer;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-  border-top: none;
-  box-shadow: 0 1rem 1rem rgb(0 0 0 / 15%);
-  padding-top: 0px;
+	margin: 0;
+	cursor: pointer;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-top: none;
+	box-shadow: 0 1rem 1rem rgb(0 0 0 / 15%);
+	padding-top: 0px;
 }
 
 .alert-wrapper {
-  padding: 10px 10px;
-  transform: translateY(0);
-  transition:
-    transform $transition-length ease-in 0s,
-    visibility 0s linear $transition-length;
-  display: block;
-  margin: 0 auto;
-  visibility: hidden;
+	padding: 10px 10px;
+	transform: translateY(0);
+	transition:
+		transform $transition-length ease-in 0s,
+		visibility 0s linear $transition-length;
+	display: block;
+	margin: 0 auto;
+	visibility: hidden;
 
-  &.visible {
-    transform: translateY(100%);
-    transition:
-      transform $transition-length ease-out,
-      visibility 0s linear 0s;
-    visibility: visible;
-  }
+	&.visible {
+		transform: translateY(100%);
+		transition:
+			transform $transition-length ease-out,
+			visibility 0s linear 0s;
+		visibility: visible;
+	}
 }
 
 .alert-wrapper.fade {
-  opacity: 0;
-  transition:
-    transform 0s linear $transition-length,
-    opacity $transition-length ease-in 0s,
-    visibility 0s linear $transition-length;
+	opacity: 0;
+	transition:
+		transform 0s linear $transition-length,
+		opacity $transition-length ease-in 0s,
+		visibility 0s linear $transition-length;
 
-  &.visible {
-    opacity: 1;
-    transition:
-      transform 0s,
-      opacity $transition-length ease-out,
-      visibility 0s linear 0s;
-  }
+	&.visible {
+		opacity: 1;
+		transition:
+			transform 0s,
+			opacity $transition-length ease-out,
+			visibility 0s linear 0s;
+	}
 }
 
 .icon-container {
-  padding: 0;
-  border-radius: 0.25rem 0.25rem 0 0;
-  border-bottom: none;
-  display: flex;
-  justify-content: flex-end;
-  box-shadow: none;
-  & > i {
-    padding-right: 1px;
-  }
+	padding: 0;
+	border-radius: 0.25rem 0.25rem 0 0;
+	border-bottom: none;
+	display: flex;
+	justify-content: flex-end;
+	box-shadow: none;
+	& > i {
+		padding-right: 1px;
+	}
 }

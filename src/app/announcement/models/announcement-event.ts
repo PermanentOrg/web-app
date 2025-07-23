@@ -1,5 +1,5 @@
 export interface AnnouncementEvent {
-  start: number;
-  end: number;
-  message: string;
+	start: number;
+	end: number;
+	message: string;
 }

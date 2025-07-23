@@ -1,23 +1,23 @@
 @import 'variables';
 
 .panel-title {
-  @include tabbedDialogPanelTitle;
+	@include tabbedDialogPanelTitle;
 }
 
 .btn {
-  margin: $grid-unit 0;
-  width: auto;
+	margin: $grid-unit 0;
+	width: auto;
 }
 
 form {
-  @include tabbedDialogPanelForm;
+	@include tabbedDialogPanelForm;
 }
 
 .results-message {
-  &.successful {
-    color: green;
-  }
-  &:not(.successful) {
-    color: $form-error-red;
-  }
+	&.successful {
+		color: green;
+	}
+	&:not(.successful) {
+		color: $form-error-red;
+	}
 }

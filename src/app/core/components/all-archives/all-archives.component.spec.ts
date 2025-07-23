@@ -12,47 +12,47 @@ import { AllArchivesComponent } from './all-archives.component';
 const archiveResponseData = require('@root/test/responses/archive.get.multiple.success.json');
 
 describe('AllArchivesComponent', () => {
-  let component: AllArchivesComponent;
-  let fixture: ComponentFixture<AllArchivesComponent>;
+	let component: AllArchivesComponent;
+	let fixture: ComponentFixture<AllArchivesComponent>;
 
-  const archiveResponse = new ArchiveResponse(archiveResponseData);
-  const archives = archiveResponse.getArchiveVOs();
-  const currentArchive = new ArchiveVO(archives.pop());
+	const archiveResponse = new ArchiveResponse(archiveResponseData);
+	const archives = archiveResponse.getArchiveVOs();
+	const currentArchive = new ArchiveVO(archives.pop());
 
-  beforeEach(waitForAsync(() => {
-    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+	beforeEach(waitForAsync(() => {
+		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
-    config.imports.push(SharedModule);
-    config.declarations.push(AllArchivesComponent);
+		config.imports.push(SharedModule);
+		config.declarations.push(AllArchivesComponent);
 
-    config.providers.push({
-      provide: ActivatedRoute,
-      useValue: {
-        snapshot: {
-          data: {
-            archives: archives,
-          },
-        },
-      },
-    });
-    TestBed.configureTestingModule(config).compileComponents();
-  }));
+		config.providers.push({
+			provide: ActivatedRoute,
+			useValue: {
+				snapshot: {
+					data: {
+						archives: archives,
+					},
+				},
+			},
+		});
+		TestBed.configureTestingModule(config).compileComponents();
+	}));
 
-  beforeEach(() => {
-    const accountService = TestBed.inject(AccountService) as AccountService;
-    accountService.setArchive(currentArchive);
+	beforeEach(() => {
+		const accountService = TestBed.inject(AccountService) as AccountService;
+		accountService.setArchive(currentArchive);
 
-    fixture = TestBed.createComponent(AllArchivesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(AllArchivesComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  afterEach(() => {
-    const accountService = TestBed.inject(AccountService) as AccountService;
-    accountService.clearArchive();
-  });
+	afterEach(() => {
+		const accountService = TestBed.inject(AccountService) as AccountService;
+		accountService.clearArchive();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

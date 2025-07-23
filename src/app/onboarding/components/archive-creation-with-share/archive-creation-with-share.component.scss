@@ -1,39 +1,39 @@
 @import 'fonts';
 
 p {
-  color: white;
+	color: white;
 }
 
 .text > p {
-  font-size: 16px;
-  font-family: 'UsualLight', sans-serif;
+	font-size: 16px;
+	font-family: 'UsualLight', sans-serif;
 }
 
 .invitation-info {
-  display: flex;
+	display: flex;
 }
 
 .text-share {
-  & > p {
-    margin-bottom: 1rem;
-    font-family: 'UsualRegular', sans-serif;
-  }
+	& > p {
+		margin-bottom: 1rem;
+		font-family: 'UsualRegular', sans-serif;
+	}
 
-  & > div {
-    margin-bottom: 1rem;
-  }
+	& > div {
+		margin-bottom: 1rem;
+	}
 }
 
 .sharer-info {
-  margin-left: 10px;
+	margin-left: 10px;
 }
 
 .shared-item-name {
-  font-family: 'UsualBold', sans-serif;
-  margin-bottom: 5px;
+	font-family: 'UsualBold', sans-serif;
+	margin-bottom: 5px;
 }
 
 .sharer-name {
-  color: rgba(184, 187, 201, 1);
-  margin-bottom: 0px;
+	color: rgba(184, 187, 201, 1);
+	margin-bottom: 0px;
 }

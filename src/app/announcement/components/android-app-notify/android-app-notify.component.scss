@@ -3,72 +3,72 @@
 $perm-blue: #131b4a;
 
 .android-app-notify {
-  width: 100%;
-  background-color: $perm-blue;
-  color: #fff;
-  box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 0.25rem;
+	width: 100%;
+	background-color: $perm-blue;
+	color: #fff;
+	box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 0.25rem;
 
-  @include desktop {
-    padding: 0 1.5rem;
-  }
+	@include desktop {
+		padding: 0 1.5rem;
+	}
 }
 
 .prompt-button {
-  color: #fff !important;
-  background-color: $perm-blue !important;
-  border: 1px solid #fff !important;
-  padding: 0.5rem;
-  border-radius: 3em;
-  font-weight: normal !important;
-  line-height: 1;
+	color: #fff !important;
+	background-color: $perm-blue !important;
+	border: 1px solid #fff !important;
+	padding: 0.5rem;
+	border-radius: 3em;
+	font-weight: normal !important;
+	line-height: 1;
 }
 
 .description {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  img {
-    margin-right: 0.25rem;
-    @include desktop {
-      margin-right: 1rem;
-    }
-  }
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	img {
+		margin-right: 0.25rem;
+		@include desktop {
+			margin-right: 1rem;
+		}
+	}
 
-  .description-text {
-    line-height: 1;
+	.description-text {
+		line-height: 1;
 
-    .app-name {
-      font-size: 1.1rem;
-      margin-bottom: 0.25rem;
-    }
-    .app-description {
-      color: #fff9;
-      font-size: 0.8rem;
-    }
-  }
+		.app-name {
+			font-size: 1.1rem;
+			margin-bottom: 0.25rem;
+		}
+		.app-description {
+			color: #fff9;
+			font-size: 0.8rem;
+		}
+	}
 }
 
 .buttons {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0.25rem 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 0.25rem 0;
 
-  .dismiss-button {
-    &:hover {
-      opacity: 1;
-    }
-    opacity: 0.6;
-    transition: opacity 0.3s;
-    font-size: 1.75em;
-    cursor: pointer;
-    margin-left: 0.75rem;
-    @include desktop {
-      margin-left: 1rem;
-    }
-  }
+	.dismiss-button {
+		&:hover {
+			opacity: 1;
+		}
+		opacity: 0.6;
+		transition: opacity 0.3s;
+		font-size: 1.75em;
+		cursor: pointer;
+		margin-left: 0.75rem;
+		@include desktop {
+			margin-left: 1rem;
+		}
+	}
 }

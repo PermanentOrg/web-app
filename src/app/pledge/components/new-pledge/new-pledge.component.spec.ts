@@ -14,200 +14,200 @@ import { PledgeModule } from '../../pledge.module';
 import { NewPledgeComponent } from './new-pledge.component';
 
 const mockPromoData = {
-  Results: [
-    {
-      data: [
-        {
-          PromoVO: {
-            promoId: 13,
-            code: 'promo9',
-            sizeInMB: 5000,
-          },
-        },
-      ],
-    },
-  ],
-  isSuccessful: true,
+	Results: [
+		{
+			data: [
+				{
+					PromoVO: {
+						promoId: 13,
+						code: 'promo9',
+						sizeInMB: 5000,
+					},
+				},
+			],
+		},
+	],
+	isSuccessful: true,
 };
 
 const mockAccountService = {
-  refreshAccount: (): Promise<void> => {
-    return Promise.resolve();
-  },
-  setAccount: (account: AccountVO): void => {},
-  getAccount: (): AccountVO => {
-    return new AccountVO({ spaceLeft: 10000, spaceTotal: 10000, accountId: 1 });
-  },
-  isLoggedIn: (): boolean => true,
+	refreshAccount: (): Promise<void> => {
+		return Promise.resolve();
+	},
+	setAccount: (account: AccountVO): void => {},
+	getAccount: (): AccountVO => {
+		return new AccountVO({ spaceLeft: 10000, spaceTotal: 10000, accountId: 1 });
+	},
+	isLoggedIn: (): boolean => true,
 };
 
 const mockPledgeService = {
-  loadPledge: (id): Promise<any> => {
-    return Promise.resolve();
-  },
-  createBillingPaymentVo: (account: AccountVO): BillingPaymentVO => {
-    return new BillingPaymentVO({ spaceAmountInGb: 5 });
-  },
-  linkAccount: (account: AccountVO): Promise<void> => {
-    return Promise.resolve();
-  },
+	loadPledge: (id): Promise<any> => {
+		return Promise.resolve();
+	},
+	createBillingPaymentVo: (account: AccountVO): BillingPaymentVO => {
+		return new BillingPaymentVO({ spaceAmountInGb: 5 });
+	},
+	linkAccount: (account: AccountVO): Promise<void> => {
+		return Promise.resolve();
+	},
 };
 
 const mockApiService = {
-  billing: {
-    claimPledge: (
-      billingPaymentVO: BillingPaymentVO,
-      pledgeId: string,
-    ): Promise<BillingResponse> => {
-      return Promise.resolve(new BillingResponse(mockPromoData));
-    },
-  },
+	billing: {
+		claimPledge: (
+			billingPaymentVO: BillingPaymentVO,
+			pledgeId: string,
+		): Promise<BillingResponse> => {
+			return Promise.resolve(new BillingResponse(mockPromoData));
+		},
+	},
 };
 
 describe('NewPledgeComponent', () => {
-  let shallow: Shallow<NewPledgeComponent>;
-  let messageShown = false;
+	let shallow: Shallow<NewPledgeComponent>;
+	let messageShown = false;
 
-  beforeEach(() => {
-    shallow = new Shallow(NewPledgeComponent, PledgeModule)
-      .provide(HttpClient)
-      .replaceModule(HttpClient, HttpClientTestingModule)
-      .dontMock(HttpClientTestingModule)
-      .mock(ApiService, mockApiService)
-      .mock(AccountService, mockAccountService)
-      .mock(PledgeService, mockPledgeService)
-      .mock(MessageService, {
-        showError: () => {
-          messageShown = true;
-        },
-      })
-      .provide(EventService)
-      .dontMock(EventService);
-  });
+	beforeEach(() => {
+		shallow = new Shallow(NewPledgeComponent, PledgeModule)
+			.provide(HttpClient)
+			.replaceModule(HttpClient, HttpClientTestingModule)
+			.dontMock(HttpClientTestingModule)
+			.mock(ApiService, mockApiService)
+			.mock(AccountService, mockAccountService)
+			.mock(PledgeService, mockPledgeService)
+			.mock(MessageService, {
+				showError: () => {
+					messageShown = true;
+				},
+			})
+			.provide(EventService)
+			.dontMock(EventService);
+	});
 
-  it('should exist', async () => {
-    const { element } = await shallow.render();
+	it('should exist', async () => {
+		const { element } = await shallow.render();
 
-    expect(element).not.toBeNull();
-  });
+		expect(element).not.toBeNull();
+	});
 
-  it('should enable the button if the data is correct', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    const button = find('.btn-primary');
+	it('should enable the button if the data is correct', async () => {
+		const { find, instance, fixture } = await shallow.render();
+		const button = find('.btn-primary');
 
-    instance.pledgeForm.patchValue({
-      email: 'test@example.com',
-      name: 'Test User',
-    });
+		instance.pledgeForm.patchValue({
+			email: 'test@example.com',
+			name: 'Test User',
+		});
 
-    instance.cardError = false;
-    instance.cardComplete = true;
+		instance.cardError = false;
+		instance.cardComplete = true;
 
-    instance.pledgeForm.updateValueAndValidity();
+		instance.pledgeForm.updateValueAndValidity();
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    expect(button.nativeElement.disabled).toBeFalsy();
-  });
+		expect(button.nativeElement.disabled).toBeFalsy();
+	});
 
-  it('should disabled the button if there is card form is not complete', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    const button = find('.btn-primary');
+	it('should disabled the button if there is card form is not complete', async () => {
+		const { find, instance, fixture } = await shallow.render();
+		const button = find('.btn-primary');
 
-    instance.pledgeForm.patchValue({
-      email: 'test@example.com',
-      name: 'Test User',
-    });
+		instance.pledgeForm.patchValue({
+			email: 'test@example.com',
+			name: 'Test User',
+		});
 
-    instance.cardError = false;
-    instance.cardComplete = false;
+		instance.cardError = false;
+		instance.cardComplete = false;
 
-    instance.pledgeForm.updateValueAndValidity();
+		instance.pledgeForm.updateValueAndValidity();
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    expect(button.nativeElement.disabled).toBeTruthy();
-  });
+		expect(button.nativeElement.disabled).toBeTruthy();
+	});
 
-  it('should disabled the button if the email is invalid', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    const button = find('.btn-primary');
+	it('should disabled the button if the email is invalid', async () => {
+		const { find, instance, fixture } = await shallow.render();
+		const button = find('.btn-primary');
 
-    instance.pledgeForm.patchValue({
-      email: 'test',
-      name: 'Test User',
-    });
+		instance.pledgeForm.patchValue({
+			email: 'test',
+			name: 'Test User',
+		});
 
-    instance.cardError = false;
-    instance.cardComplete = true;
+		instance.cardError = false;
+		instance.cardComplete = true;
 
-    instance.pledgeForm.updateValueAndValidity();
+		instance.pledgeForm.updateValueAndValidity();
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    expect(button.nativeElement.disabled).toBeTruthy();
-  });
+		expect(button.nativeElement.disabled).toBeTruthy();
+	});
 
-  it('should disabled the button if no name was provided', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    const button = find('.btn-primary');
+	it('should disabled the button if no name was provided', async () => {
+		const { find, instance, fixture } = await shallow.render();
+		const button = find('.btn-primary');
 
-    instance.pledgeForm.patchValue({
-      email: 'test@mail.com',
-    });
+		instance.pledgeForm.patchValue({
+			email: 'test@mail.com',
+		});
 
-    instance.cardError = false;
-    instance.cardComplete = true;
+		instance.cardError = false;
+		instance.cardComplete = true;
 
-    instance.pledgeForm.updateValueAndValidity();
+		instance.pledgeForm.updateValueAndValidity();
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    expect(button.nativeElement.disabled).toBeTruthy();
-  });
+		expect(button.nativeElement.disabled).toBeTruthy();
+	});
 
-  it('should set the correct amount when clicking on a button', async () => {
-    const { find, instance } = await shallow.render();
+	it('should set the correct amount when clicking on a button', async () => {
+		const { find, instance } = await shallow.render();
 
-    const buttons = find('.pledge-button');
+		const buttons = find('.pledge-button');
 
-    expect(buttons.length).toBe(4);
+		expect(buttons.length).toBe(4);
 
-    buttons[1].triggerEventHandler('click', null);
+		buttons[1].triggerEventHandler('click', null);
 
-    expect(instance.donationAmount).toBe(20);
-  });
+		expect(instance.donationAmount).toBe(20);
+	});
 
-  it('should select the custom value for the last input when clicked on it', async () => {
-    const { find, instance } = await shallow.render();
+	it('should select the custom value for the last input when clicked on it', async () => {
+		const { find, instance } = await shallow.render();
 
-    const buttons = find('.pledge-button');
+		const buttons = find('.pledge-button');
 
-    expect(buttons.length).toBe(4);
+		expect(buttons.length).toBe(4);
 
-    buttons[3].triggerEventHandler('click', null);
+		buttons[3].triggerEventHandler('click', null);
 
-    expect(instance.donationSelection).toBe('custom');
-  });
+		expect(instance.donationSelection).toBe('custom');
+	});
 
-  it('should display the loading spinner', async () => {
-    const { find, instance } = await shallow.render();
+	it('should display the loading spinner', async () => {
+		const { find, instance } = await shallow.render();
 
-    instance.waiting = true;
+		instance.waiting = true;
 
-    expect(find('pr-loading-spinner')).toBeTruthy();
-  });
+		expect(find('pr-loading-spinner')).toBeTruthy();
+	});
 
-  it('should display the succes message if the transaction is succesful', async () => {
-    const { find, instance, fixture } = await shallow.render();
+	it('should display the succes message if the transaction is succesful', async () => {
+		const { find, instance, fixture } = await shallow.render();
 
-    instance.isSuccessful = true;
-    instance.amountInGb = 5;
+		instance.isSuccessful = true;
+		instance.amountInGb = 5;
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    const displayedMessage = find('.success-message');
+		const displayedMessage = find('.success-message');
 
-    expect(displayedMessage).toBeTruthy();
-  });
+		expect(displayedMessage).toBeTruthy();
+	});
 });

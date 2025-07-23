@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class OnboardingService {
-  private onboardedArchives: ArchiveVO[] = [];
+	private onboardedArchives: ArchiveVO[] = [];
 
-  constructor() {}
+	constructor() {}
 
-  public registerArchive(archive: ArchiveVO): void {
-    this.onboardedArchives.push(archive);
-  }
+	public registerArchive(archive: ArchiveVO): void {
+		this.onboardedArchives.push(archive);
+	}
 
-  public getFinalArchives(): ArchiveVO[] {
-    return this.onboardedArchives;
-  }
+	public getFinalArchives(): ArchiveVO[] {
+		return this.onboardedArchives;
+	}
 }

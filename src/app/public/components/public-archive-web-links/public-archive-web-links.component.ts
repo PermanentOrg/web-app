@@ -2,17 +2,17 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'pr-public-archive-web-links',
-  templateUrl: './public-archive-web-links.component.html',
-  styleUrls: ['./public-archive-web-links.component.scss'],
-  standalone: false,
+	selector: 'pr-public-archive-web-links',
+	templateUrl: './public-archive-web-links.component.html',
+	styleUrls: ['./public-archive-web-links.component.scss'],
+	standalone: false,
 })
 export class PublicArchiveWebLinksComponent {
-  componentName: string = 'public-archive-web-links';
+	componentName: string = 'public-archive-web-links';
 
-  @Input() description: string = '';
-  @Input() emails: string[] = [];
-  @Input() websites: string[] = [];
+	@Input() description: string = '';
+	@Input() emails: string[] = [];
+	@Input() websites: string[] = [];
 
-  constructor() {}
+	constructor() {}
 }

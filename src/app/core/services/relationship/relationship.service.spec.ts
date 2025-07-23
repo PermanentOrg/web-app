@@ -1,8 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
+	provideHttpClient,
+	withInterceptorsFromDi,
 } from '@angular/common/http';
 import { AccountService } from '@shared/services/account/account.service';
 import { cloneDeep } from 'lodash';
@@ -13,24 +13,24 @@ import { StorageService } from '@shared/services/storage/storage.service';
 import { RelationshipService } from './relationship.service';
 
 describe('RelationshipService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [
-        CookieService,
-        AccountService,
-        StorageService,
-        RelationshipService,
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-      ],
-    });
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			imports: [RouterTestingModule],
+			providers: [
+				CookieService,
+				AccountService,
+				StorageService,
+				RelationshipService,
+				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClientTesting(),
+			],
+		});
+	});
 
-  it('should be created', inject(
-    [RelationshipService],
-    (service: RelationshipService) => {
-      expect(service).toBeTruthy();
-    },
-  ));
+	it('should be created', inject(
+		[RelationshipService],
+		(service: RelationshipService) => {
+			expect(service).toBeTruthy();
+		},
+	));
 });

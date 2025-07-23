@@ -1,56 +1,56 @@
 :host {
-  width: 100%;
+	width: 100%;
 }
 
 .header {
-  .btn {
-    background: none;
-    outline: none;
-    height: 2.5rem;
-    width: auto;
-    margin: 0;
-    flex: 0 0 auto;
+	.btn {
+		background: none;
+		outline: none;
+		height: 2.5rem;
+		width: auto;
+		margin: 0;
+		flex: 0 0 auto;
 
-    &:focus {
-      box-shadow: none;
-      border: none;
-    }
-  }
-  height: 2rem;
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  font-size: 1.25rem;
-  padding: 0 1.25rem;
-  padding-right: 0;
+		&:focus {
+			box-shadow: none;
+			border: none;
+		}
+	}
+	height: 2rem;
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	font-size: 1.25rem;
+	padding: 0 1.25rem;
+	padding-right: 0;
 }
 
 .dialog-body {
-  padding: 0 30px 30px 30px;
+	padding: 0 30px 30px 30px;
 }
 
 h3 {
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 27px;
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 27px;
 }
 
 .learn-more {
-  color: #646464;
+	color: #646464;
 }
 
 .get-started {
-  color: #5261b7;
-  margin-bottom: 20px;
-  display: inline-block;
+	color: #5261b7;
+	margin-bottom: 20px;
+	display: inline-block;
 }
 
 .btn-primary {
-  width: 30%;
-  margin-top: 50px;
+	width: 30%;
+	margin-top: 50px;
 }
 
 .dialog-content {
-  background-color: white;
+	background-color: white;
 }
