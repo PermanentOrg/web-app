@@ -1,45 +1,45 @@
 <!-- @format -->
 <div (click)="onHandleSearch()" class="search-icon">
-  <svg
-    width="23"
-    height="23"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
-      stroke="#555555"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
+	<svg
+		width="23"
+		height="23"
+		viewBox="0 0 24 24"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path
+			d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+			stroke="#555555"
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+	</svg>
 </div>
 <div class="search-box-input">
-  <form class="form-container" [formGroup]="searchForm">
-    <input
-      (keydown.enter)="onHandleSearch()"
-      type="text"
-      class="form-control"
-      [placeholder]="'Search...'"
-      formControlName="query"
-      #searchInput
-    />
-    <fa-icon
-      (click)="clearForm()"
-      class="clear-icon"
-      *ngIf="searchForm.value.query"
-      [icon]="['fas', 'times-circle']"
-    ></fa-icon>
-  </form>
-  <pr-public-search-bar-results
-    (search)="onHandleSearch()"
-    *ngIf="searchResults.length || filteredTags.length"
-    [tags]="filteredTags"
-    [searchResults]="searchResults"
-    (tagClickOutput)="onTagClick($event)"
-  />
+	<form class="form-container" [formGroup]="searchForm">
+		<input
+			(keydown.enter)="onHandleSearch()"
+			type="text"
+			class="form-control"
+			[placeholder]="'Search...'"
+			formControlName="query"
+			#searchInput
+		/>
+		<fa-icon
+			(click)="clearForm()"
+			class="clear-icon"
+			*ngIf="searchForm.value.query"
+			[icon]="['fas', 'times-circle']"
+		></fa-icon>
+	</form>
+	<pr-public-search-bar-results
+		(search)="onHandleSearch()"
+		*ngIf="searchResults.length || filteredTags.length"
+		[tags]="filteredTags"
+		[searchResults]="searchResults"
+		(tagClickOutput)="onTagClick($event)"
+	/>
 </div>
 
 <div class="fade-ring-loader" *ngIf="waiting"></div>

@@ -9,63 +9,63 @@ import { CookieService } from 'ngx-cookie-service';
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { MessageService } from '@shared/services/message/message.service';
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
+	provideHttpClient,
+	withInterceptorsFromDi,
 } from '@angular/common/http';
 
 describe('MfaComponent', () => {
-  let component: ForgotPasswordComponent;
-  let fixture: ComponentFixture<ForgotPasswordComponent>;
+	let component: ForgotPasswordComponent;
+	let fixture: ComponentFixture<ForgotPasswordComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ForgotPasswordComponent, LogoComponent],
-      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
-      providers: [
-        CookieService,
-        MessageService,
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-      ],
-    }).compileComponents();
-  }));
+	beforeEach(waitForAsync(() => {
+		TestBed.configureTestingModule({
+			declarations: [ForgotPasswordComponent, LogoComponent],
+			imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
+			providers: [
+				CookieService,
+				MessageService,
+				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClientTesting(),
+			],
+		}).compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ForgotPasswordComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(ForgotPasswordComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 
-  it('should set error for missing email', () => {
-    component.forgotForm.get('email').markAsTouched();
-    component.forgotForm.patchValue({
-      email: '',
-    });
+	it('should set error for missing email', () => {
+		component.forgotForm.get('email').markAsTouched();
+		component.forgotForm.patchValue({
+			email: '',
+		});
 
-    expect(component.forgotForm.invalid).toBeTruthy();
-    expect(component.forgotForm.get('email').errors.required).toBeTruthy();
-  });
+		expect(component.forgotForm.invalid).toBeTruthy();
+		expect(component.forgotForm.get('email').errors.required).toBeTruthy();
+	});
 
-  it('should set error for invalid email', () => {
-    component.forgotForm.get('email').markAsTouched();
-    component.forgotForm.patchValue({
-      email: 'test',
-    });
+	it('should set error for invalid email', () => {
+		component.forgotForm.get('email').markAsTouched();
+		component.forgotForm.patchValue({
+			email: 'test',
+		});
 
-    expect(component.forgotForm.invalid).toBeTruthy();
-    expect(component.forgotForm.get('email').errors.email).toBeTruthy();
-  });
+		expect(component.forgotForm.invalid).toBeTruthy();
+		expect(component.forgotForm.get('email').errors.email).toBeTruthy();
+	});
 
-  it('should display the loading spinner', () => {
-    component.waiting = true;
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    const loadingSpinner = compiled.querySelector('pr-loading-spinner');
+	it('should display the loading spinner', () => {
+		component.waiting = true;
+		fixture.detectChanges();
+		const compiled = fixture.debugElement.nativeElement;
+		const loadingSpinner = compiled.querySelector('pr-loading-spinner');
 
-    expect(loadingSpinner).toBeTruthy();
-  });
+		expect(loadingSpinner).toBeTruthy();
+	});
 });

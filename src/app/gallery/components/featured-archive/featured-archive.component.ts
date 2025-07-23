@@ -3,37 +3,37 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FeaturedArchive } from '../../types/featured-archive';
 
 @Component({
-  selector: 'pr-featured-archive',
-  templateUrl: './featured-archive.component.html',
-  styleUrls: ['./featured-archive.component.scss'],
-  standalone: false,
+	selector: 'pr-featured-archive',
+	templateUrl: './featured-archive.component.html',
+	styleUrls: ['./featured-archive.component.scss'],
+	standalone: false,
 })
 export class FeaturedArchiveComponent implements OnInit {
-  @Input() archive: FeaturedArchive;
-  public classNames: string[] = ['featured-archive'];
+	@Input() archive: FeaturedArchive;
+	public classNames: string[] = ['featured-archive'];
 
-  constructor() {}
+	constructor() {}
 
-  async ngOnInit() {
-    this.classNames = this.getClasses();
-  }
+	async ngOnInit() {
+		this.classNames = this.getClasses();
+	}
 
-  public getClasses(): string[] {
-    const classes = ['featured-archive'];
-    if (this.archive.type === 'type.archive.person') {
-      classes.push('personal');
-    } else if (
-      this.archive.type === 'type.archive.group' ||
-      this.archive.type === 'type.archive.family'
-    ) {
-      classes.push('group');
-    } else {
-      classes.push('organization');
-    }
-    return classes;
-  }
+	public getClasses(): string[] {
+		const classes = ['featured-archive'];
+		if (this.archive.type === 'type.archive.person') {
+			classes.push('personal');
+		} else if (
+			this.archive.type === 'type.archive.group' ||
+			this.archive.type === 'type.archive.family'
+		) {
+			classes.push('group');
+		} else {
+			classes.push('organization');
+		}
+		return classes;
+	}
 
-  public getArchiveLink(): string {
-    return ['/p', 'archive', this.archive.archiveNbr].join('/');
-  }
+	public getArchiveLink(): string {
+		return ['/p', 'archive', this.archive.archiveNbr].join('/');
+	}
 }

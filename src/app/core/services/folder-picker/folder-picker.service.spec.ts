@@ -1,100 +1,100 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
 import {
-  FolderPickerComponent,
-  FolderPickerOperations,
+	FolderPickerComponent,
+	FolderPickerOperations,
 } from '@core/components/folder-picker/folder-picker.component';
 import { FolderVO } from '@models/index';
 import { FolderPickerService } from './folder-picker.service';
 
 class FakeComponent {
-  public async show(
-    startingFolder: FolderVO,
-    operation: FolderPickerOperations,
-    savePromise?: Promise<any>,
-    filterFolderLinkIds: number[] = null,
-    allowRecords = false,
-  ) {
-    return {
-      startingFolder,
-      operation,
-      savePromise,
-      filterFolderLinkIds,
-      allowRecords,
-    };
-  }
+	public async show(
+		startingFolder: FolderVO,
+		operation: FolderPickerOperations,
+		savePromise?: Promise<any>,
+		filterFolderLinkIds: number[] = null,
+		allowRecords = false,
+	) {
+		return {
+			startingFolder,
+			operation,
+			savePromise,
+			filterFolderLinkIds,
+			allowRecords,
+		};
+	}
 }
 
 describe('FolderPickerService', () => {
-  let service: FolderPickerService;
-  let component: FakeComponent;
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [FolderPickerService],
-    });
-    service = TestBed.inject(FolderPickerService);
-    component = new FakeComponent();
-    service.registerComponent(component as FolderPickerComponent);
-  });
+	let service: FolderPickerService;
+	let component: FakeComponent;
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			providers: [FolderPickerService],
+		});
+		service = TestBed.inject(FolderPickerService);
+		component = new FakeComponent();
+		service.registerComponent(component as FolderPickerComponent);
+	});
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+	it('should be created', () => {
+		expect(service).toBeTruthy();
+	});
 
-  it('should throw an error when choosing a folder if the component is not registered', () => {
-    service.unregisterComponent();
+	it('should throw an error when choosing a folder if the component is not registered', () => {
+		service.unregisterComponent();
 
-    expect(() =>
-      service.chooseFolder(new FolderVO({}), FolderPickerOperations.Move),
-    ).toThrow();
-  });
+		expect(() =>
+			service.chooseFolder(new FolderVO({}), FolderPickerOperations.Move),
+		).toThrow();
+	});
 
-  it('should throw an error when choosing a record if the component is not registered', () => {
-    service.unregisterComponent();
+	it('should throw an error when choosing a record if the component is not registered', () => {
+		service.unregisterComponent();
 
-    expect(() => service.chooseRecord(new FolderVO({}))).toThrow();
-  });
+		expect(() => service.chooseRecord(new FolderVO({}))).toThrow();
+	});
 
-  it('cannot register a FolderPickerComponent twice', () => {
-    expect(() =>
-      service.registerComponent(component as FolderPickerComponent),
-    ).toThrow();
-  });
+	it('cannot register a FolderPickerComponent twice', () => {
+		expect(() =>
+			service.registerComponent(component as FolderPickerComponent),
+		).toThrow();
+	});
 
-  it('can unregister a FolderPickerComponent', () => {
-    service.unregisterComponent();
+	it('can unregister a FolderPickerComponent', () => {
+		service.unregisterComponent();
 
-    expect(() =>
-      service.registerComponent(component as FolderPickerComponent),
-    ).not.toThrow();
-  });
+		expect(() =>
+			service.registerComponent(component as FolderPickerComponent),
+		).not.toThrow();
+	});
 
-  it('should call the correct component method when choosing a folder', async () => {
-    const params = {
-      startingFolder: new FolderVO({ folderId: 1 }),
-      operation: FolderPickerOperations.Copy,
-      savePromise: undefined,
-      filterFolderLinkIds: null,
-      allowRecords: false,
-    };
-    const result = await service.chooseFolder(
-      params.startingFolder,
-      params.operation,
-    );
+	it('should call the correct component method when choosing a folder', async () => {
+		const params = {
+			startingFolder: new FolderVO({ folderId: 1 }),
+			operation: FolderPickerOperations.Copy,
+			savePromise: undefined,
+			filterFolderLinkIds: null,
+			allowRecords: false,
+		};
+		const result = await service.chooseFolder(
+			params.startingFolder,
+			params.operation,
+		);
 
-    expect(result).toEqual(params);
-  });
+		expect(result).toEqual(params);
+	});
 
-  it('should call the correct component method when choosing a record', async () => {
-    const params = {
-      startingFolder: new FolderVO({ folderId: 1 }),
-      operation: FolderPickerOperations.ChooseRecord,
-      savePromise: null,
-      filterFolderLinkIds: null,
-      allowRecords: true,
-    };
-    const result = (await service.chooseRecord(params.startingFolder)) as any;
+	it('should call the correct component method when choosing a record', async () => {
+		const params = {
+			startingFolder: new FolderVO({ folderId: 1 }),
+			operation: FolderPickerOperations.ChooseRecord,
+			savePromise: null,
+			filterFolderLinkIds: null,
+			allowRecords: true,
+		};
+		const result = (await service.chooseRecord(params.startingFolder)) as any;
 
-    expect(result).toEqual(params);
-  });
+		expect(result).toEqual(params);
+	});
 });

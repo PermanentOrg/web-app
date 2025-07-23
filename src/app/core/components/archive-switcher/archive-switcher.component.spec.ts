@@ -13,57 +13,57 @@ import { ArchiveSwitcherComponent } from './archive-switcher.component';
 const archiveResponseData = require('@root/test/responses/archive.get.multiple.success.json');
 
 describe('ArchiveSwitcherComponent', () => {
-  let component: ArchiveSwitcherComponent;
-  let fixture: ComponentFixture<ArchiveSwitcherComponent>;
+	let component: ArchiveSwitcherComponent;
+	let fixture: ComponentFixture<ArchiveSwitcherComponent>;
 
-  const archiveResponse = new ArchiveResponse(archiveResponseData);
-  const archives = archiveResponse.getArchiveVOs();
-  const currentArchive = new ArchiveVO(archives.pop());
+	const archiveResponse = new ArchiveResponse(archiveResponseData);
+	const archives = archiveResponse.getArchiveVOs();
+	const currentArchive = new ArchiveVO(archives.pop());
 
-  beforeEach(waitForAsync(() => {
-    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+	beforeEach(waitForAsync(() => {
+		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
-    config.imports.push(SharedModule);
-    config.declarations.push(ArchiveSwitcherComponent);
+		config.imports.push(SharedModule);
+		config.declarations.push(ArchiveSwitcherComponent);
 
-    config.providers.push({
-      provide: ActivatedRoute,
-      useValue: {
-        snapshot: {
-          data: {
-            archives: archives,
-          },
-        },
-      },
-    });
-    TestBed.configureTestingModule(config).compileComponents();
-  }));
+		config.providers.push({
+			provide: ActivatedRoute,
+			useValue: {
+				snapshot: {
+					data: {
+						archives: archives,
+					},
+				},
+			},
+		});
+		TestBed.configureTestingModule(config).compileComponents();
+	}));
 
-  beforeEach(() => {
-    const accountService = TestBed.get(AccountService) as AccountService;
-    accountService.setArchive(currentArchive);
+	beforeEach(() => {
+		const accountService = TestBed.get(AccountService) as AccountService;
+		accountService.setArchive(currentArchive);
 
-    fixture = TestBed.createComponent(ArchiveSwitcherComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(ArchiveSwitcherComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  afterEach(() => {
-    const accountService = TestBed.get(AccountService) as AccountService;
-    accountService.clearArchive();
-  });
+	afterEach(() => {
+		const accountService = TestBed.get(AccountService) as AccountService;
+		accountService.clearArchive();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 
-  it('should have the correct number of archives listed', () => {
-    expect(component.archives.length).toEqual(archives.length);
+	it('should have the correct number of archives listed', () => {
+		expect(component.archives.length).toEqual(archives.length);
 
-    const element = fixture.debugElement.nativeElement as HTMLElement;
+		const element = fixture.debugElement.nativeElement as HTMLElement;
 
-    expect(
-      element.querySelectorAll('.archive-list pr-archive-small').length,
-    ).toEqual(component.archives.length);
-  });
+		expect(
+			element.querySelectorAll('.archive-list pr-archive-small').length,
+		).toEqual(component.archives.length);
+	});
 });

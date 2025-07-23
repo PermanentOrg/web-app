@@ -1,16 +1,16 @@
 <div class="banner">
-  <div>
-    <div class="banner-heading">Easily connect your favorite memories</div>
-    <div class="banner-text">
-      Sync your memories already on the web into your permanent digital archive
-      to keep them secure so you can enjoy them for years to come.
-    </div>
-  </div>
+	<div>
+		<div class="banner-heading">Easily connect your favorite memories</div>
+		<div class="banner-text">
+			Sync your memories already on the web into your permanent digital archive
+			to keep them secure so you can enjoy them for years to come.
+		</div>
+	</div>
 </div>
 <div class="connectors">
-  <pr-connector
-    [connector]="connector"
-    [appsFolder]="appsFolder"
-    *ngFor="let connector of connectors"
-  ></pr-connector>
+	<pr-connector
+		[connector]="connector"
+		[appsFolder]="appsFolder"
+		*ngFor="let connector of connectors"
+	></pr-connector>
 </div>

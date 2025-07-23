@@ -5,44 +5,44 @@ import { ApiService } from '../api/api.service';
 import { AccountService } from './account.service';
 
 interface SavePropertyOnAccountServices {
-  messageService: MessageService;
-  accountService: AccountService;
-  apiService: ApiService;
+	messageService: MessageService;
+	accountService: AccountService;
+	apiService: ApiService;
 }
 
 interface AccountChange {
-  prop: keyof AccountVO;
-  value: string;
+	prop: keyof AccountVO;
+	value: string;
 }
 
 export async function savePropertyOnAccount(
-  account: AccountVO,
-  change: AccountChange,
-  services: SavePropertyOnAccountServices,
+	account: AccountVO,
+	change: AccountChange,
+	services: SavePropertyOnAccountServices,
 ) {
-  const originalValue = account[change.prop];
-  const updateData = {
-    primaryEmail: account.primaryEmail,
-    [change.prop]: change.value,
-  };
-  account.update(updateData);
-  try {
-    const response = omitBy(
-      await services.apiService.account.update(updateData),
-      isNull,
-    );
-    account.update(response);
-    services.accountService.setAccount(account);
-    services.messageService.showMessage({
-      message: 'Account information saved.',
-      style: 'success',
-    });
-  } catch (err) {
-    account.update({
-      [change.prop]: originalValue,
-    });
-    services.messageService.showError({
-      message: 'There was a problem saving your account changes',
-    });
-  }
+	const originalValue = account[change.prop];
+	const updateData = {
+		primaryEmail: account.primaryEmail,
+		[change.prop]: change.value,
+	};
+	account.update(updateData);
+	try {
+		const response = omitBy(
+			await services.apiService.account.update(updateData),
+			isNull,
+		);
+		account.update(response);
+		services.accountService.setAccount(account);
+		services.messageService.showMessage({
+			message: 'Account information saved.',
+			style: 'success',
+		});
+	} catch (err) {
+		account.update({
+			[change.prop]: originalValue,
+		});
+		services.messageService.showError({
+			message: 'There was a problem saving your account changes',
+		});
+	}
 }

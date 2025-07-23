@@ -1,24 +1,24 @@
 <div class="dialog-content">
-  <div class="header">
-    <span>Activity Feed</span>
-    <button class="btn" (click)="onDoneClick()">
-      <i class="material-icons">close</i>
-    </button>
-  </div>
-  <div class="notifications">
-    <div class="empty-message" *ngIf="!notificationService.notifications">
-      No activity
-    </div>
-    <pr-notification
-      *ngFor="let notification of notificationService.notifications"
-      [isUnread]="notification.status !== 'status.notification.read'"
-      [notification]="notification"
-      (click)="onNotificationClick(notification)"
-    ></pr-notification>
-  </div>
-  <div class="footer">
-    <button class="btn btn-primary" (click)="markAllAsRead()">
-      Mark All Complete
-    </button>
-  </div>
+	<div class="header">
+		<span>Activity Feed</span>
+		<button class="btn" (click)="onDoneClick()">
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+	<div class="notifications">
+		<div class="empty-message" *ngIf="!notificationService.notifications">
+			No activity
+		</div>
+		<pr-notification
+			*ngFor="let notification of notificationService.notifications"
+			[isUnread]="notification.status !== 'status.notification.read'"
+			[notification]="notification"
+			(click)="onNotificationClick(notification)"
+		></pr-notification>
+	</div>
+	<div class="footer">
+		<button class="btn btn-primary" (click)="markAllAsRead()">
+			Mark All Complete
+		</button>
+	</div>
 </div>

@@ -3,10 +3,10 @@ import { Meta, StoryObj } from '@storybook/angular';
 import { LoadingSpinnerComponent } from './loading-spinner.component';
 
 const meta: Meta<LoadingSpinnerComponent> = {
-  title: 'LoadingSpinner',
-  component: LoadingSpinnerComponent,
-  tags: ['autodocs'],
-  argTypes: {},
+	title: 'LoadingSpinner',
+	component: LoadingSpinnerComponent,
+	tags: ['autodocs'],
+	argTypes: {},
 };
 
 export default meta;

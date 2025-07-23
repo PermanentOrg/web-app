@@ -8,19 +8,19 @@ import { RedeemGiftComponent } from './redeem-gift.component';
 import { MockAccountService, MockBillingRepo } from './shared-mocks';
 
 const meta: Meta<RedeemGiftComponent> = {
-  title: 'Redeem Gift Form',
-  component: RedeemGiftComponent,
-  tags: ['storage-dialog', 'dialog'],
-  decorators: [
-    moduleMetadata({
-      imports: [FormsModule, ReactiveFormsModule],
-      declarations: [PrConstantsPipe],
-      providers: [
-        { provide: AccountService, useClass: MockAccountService },
-        { provide: ApiService, useValue: { billing: new MockBillingRepo() } },
-      ],
-    }),
-  ],
+	title: 'Redeem Gift Form',
+	component: RedeemGiftComponent,
+	tags: ['storage-dialog', 'dialog'],
+	decorators: [
+		moduleMetadata({
+			imports: [FormsModule, ReactiveFormsModule],
+			declarations: [PrConstantsPipe],
+			providers: [
+				{ provide: AccountService, useClass: MockAccountService },
+				{ provide: ApiService, useValue: { billing: new MockBillingRepo() } },
+			],
+		}),
+	],
 };
 export default meta;
 
@@ -28,13 +28,13 @@ type Story = StoryObj<RedeemGiftComponent>;
 
 export const Successful: Story = {};
 export const ForceError: Story = (() => {
-  const billing = new MockBillingRepo();
-  billing.isSuccessful = false;
-  return {
-    decorators: [
-      moduleMetadata({
-        providers: [{ provide: ApiService, useValue: { billing } }],
-      }),
-    ],
-  };
+	const billing = new MockBillingRepo();
+	billing.isSuccessful = false;
+	return {
+		decorators: [
+			moduleMetadata({
+				providers: [{ provide: ApiService, useValue: { billing } }],
+			}),
+		],
+	};
 })();

@@ -11,56 +11,56 @@ import { EventService } from '@shared/services/event/event.service';
 import { savePropertyOnAccount } from '@shared/services/account/account.service.helpers';
 
 @Component({
-  selector: 'pr-billing-settings',
-  templateUrl: './billing-settings.component.html',
-  styleUrls: ['./billing-settings.component.scss'],
-  standalone: false,
+	selector: 'pr-billing-settings',
+	templateUrl: './billing-settings.component.html',
+	styleUrls: ['./billing-settings.component.scss'],
+	standalone: false,
 })
 export class BillingSettingsComponent implements OnInit {
-  public account: AccountVO;
-  public countries: FormInputSelectOption[];
-  public states: FormInputSelectOption[];
+	public account: AccountVO;
+	public countries: FormInputSelectOption[];
+	public states: FormInputSelectOption[];
 
-  constructor(
-    private accountService: AccountService,
-    private prConstants: PrConstantsService,
-    private api: ApiService,
-    private message: MessageService,
-    private event: EventService,
-  ) {
-    this.account = this.accountService.getAccount();
-    this.countries = this.prConstants.getCountries().map((c) => {
-      return {
-        text: c.name,
-        value: c.abbrev,
-      };
-    });
-    this.states = Object.values(this.prConstants.getStates()).map(
-      (s: string) => {
-        return {
-          text: s,
-          value: s,
-        };
-      },
-    );
-  }
+	constructor(
+		private accountService: AccountService,
+		private prConstants: PrConstantsService,
+		private api: ApiService,
+		private message: MessageService,
+		private event: EventService,
+	) {
+		this.account = this.accountService.getAccount();
+		this.countries = this.prConstants.getCountries().map((c) => {
+			return {
+				text: c.name,
+				value: c.abbrev,
+			};
+		});
+		this.states = Object.values(this.prConstants.getStates()).map(
+			(s: string) => {
+				return {
+					text: s,
+					value: s,
+				};
+			},
+		);
+	}
 
-  ngOnInit(): void {
-    this.event.dispatch({
-      action: 'open_billing_info',
-      entity: 'account',
-    });
-  }
+	ngOnInit(): void {
+		this.event.dispatch({
+			action: 'open_billing_info',
+			entity: 'account',
+		});
+	}
 
-  async onSaveInfo(prop: keyof AccountVO, value: string) {
-    savePropertyOnAccount(
-      this.account,
-      { prop, value },
-      {
-        accountService: this.accountService,
-        messageService: this.message,
-        apiService: this.api,
-      },
-    );
-  }
+	async onSaveInfo(prop: keyof AccountVO, value: string) {
+		savePropertyOnAccount(
+			this.account,
+			{ prop, value },
+			{
+				accountService: this.accountService,
+				messageService: this.message,
+				apiService: this.api,
+			},
+		);
+	}
 }

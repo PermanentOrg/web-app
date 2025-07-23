@@ -1,32 +1,32 @@
 @import 'variables';
 
 :host {
-  display: block;
-  width: 100%;
+	display: block;
+	width: 100%;
 }
 
 .header {
-  @include tabbedDialogHeader($PR-blue-light);
+	@include tabbedDialogHeader($PR-blue-light);
 }
 
 .content {
-  @include tabbedDialogContent;
+	@include tabbedDialogContent;
 }
 
 .tabs {
-  @include tabbedDialogNav($PR-blue-light);
+	@include tabbedDialogNav($PR-blue-light);
 }
 
 .panel {
-  @include tabbedDialogPanel;
+	@include tabbedDialogPanel;
 }
 
 .panel-title {
-  @include tabbedDialogPanelTitle;
+	@include tabbedDialogPanelTitle;
 }
 
 .connections {
-  pr-archive-small {
-    margin-bottom: $grid-unit;
-  }
+	pr-archive-small {
+		margin-bottom: $grid-unit;
+	}
 }

@@ -17,258 +17,258 @@ import { FileBrowserComponentsModule } from '../../file-browser-components.modul
 import { EditTagsComponent, TagType } from './edit-tags.component';
 
 const defaultTagList: TagVOData[] = [
-  {
-    tagId: 1,
-    name: 'tagOne',
-    type: 'type.generic.placeholder',
-  },
-  {
-    tagId: 2,
-    name: 'tagTwo',
-    type: 'type.generic.placeholder',
-  },
-  {
-    tagId: 3,
-    name: 'customField:customValueOne',
-    type: 'type.tag.metadata.customField',
-  },
-  {
-    tagId: 4,
-    name: 'customField:customValueTwo',
-    type: 'type.tag.metadata.customField',
-  },
+	{
+		tagId: 1,
+		name: 'tagOne',
+		type: 'type.generic.placeholder',
+	},
+	{
+		tagId: 2,
+		name: 'tagTwo',
+		type: 'type.generic.placeholder',
+	},
+	{
+		tagId: 3,
+		name: 'customField:customValueOne',
+		type: 'type.tag.metadata.customField',
+	},
+	{
+		tagId: 4,
+		name: 'customField:customValueTwo',
+		type: 'type.tag.metadata.customField',
+	},
 ];
 const defaultItem: ItemVO = new RecordVO({ TagVOs: defaultTagList });
 
 describe('EditTagsComponent', () => {
-  let shallow: Shallow<EditTagsComponent>;
-  async function defaultRender(
-    item: ItemVO = defaultItem,
-    tagType: TagType = 'keyword',
-  ) {
-    return await shallow.render(
-      `<pr-edit-tags [item]="item" [tagType]="tagType"></pr-edit-tags>`,
-      {
-        bind: {
-          item: item,
-          tagType: tagType,
-        },
-      },
-    );
-  }
+	let shallow: Shallow<EditTagsComponent>;
+	async function defaultRender(
+		item: ItemVO = defaultItem,
+		tagType: TagType = 'keyword',
+	) {
+		return await shallow.render(
+			`<pr-edit-tags [item]="item" [tagType]="tagType"></pr-edit-tags>`,
+			{
+				bind: {
+					item: item,
+					tagType: tagType,
+				},
+			},
+		);
+	}
 
-  beforeEach(waitForAsync(() => {
-    shallow = new Shallow(EditTagsComponent, FileBrowserComponentsModule)
-      .dontMock(NoopAnimationsModule)
-      .import(NoopAnimationsModule)
-      .mock(SearchService, { getTagResults: (tag) => defaultTagList })
-      .mock(TagsService, {
-        getTags: () => defaultTagList,
-        getTags$: () => of(defaultTagList),
-        setItemTags: () => {},
-      })
-      .mock(MessageService, { showError: () => {} })
-      .mock(ApiService, {
-        tag: {
-          deleteTagLink: (tag, tagLink) => Promise.resolve(new TagResponse()),
-          create: (tag, tagLink) => Promise.resolve(new TagResponse()),
-        },
-      })
-      .mock(DataService, { fetchFullItems: (items) => Promise.resolve([]) })
-      .mock(
-        DialogCdkService,
-        jasmine.createSpyObj('DialogCdkService', ['open']),
-      );
-  }));
+	beforeEach(waitForAsync(() => {
+		shallow = new Shallow(EditTagsComponent, FileBrowserComponentsModule)
+			.dontMock(NoopAnimationsModule)
+			.import(NoopAnimationsModule)
+			.mock(SearchService, { getTagResults: (tag) => defaultTagList })
+			.mock(TagsService, {
+				getTags: () => defaultTagList,
+				getTags$: () => of(defaultTagList),
+				setItemTags: () => {},
+			})
+			.mock(MessageService, { showError: () => {} })
+			.mock(ApiService, {
+				tag: {
+					deleteTagLink: (tag, tagLink) => Promise.resolve(new TagResponse()),
+					create: (tag, tagLink) => Promise.resolve(new TagResponse()),
+				},
+			})
+			.mock(DataService, { fetchFullItems: (items) => Promise.resolve([]) })
+			.mock(
+				DialogCdkService,
+				jasmine.createSpyObj('DialogCdkService', ['open']),
+			);
+	}));
 
-  it('should create', async () => {
-    const { element } = await defaultRender();
+	it('should create', async () => {
+		const { element } = await defaultRender();
 
-    expect(element).not.toBeNull();
-  });
+		expect(element).not.toBeNull();
+	});
 
-  it('should only show keywords in keyword mode', async () => {
-    const { element } = await defaultRender();
+	it('should only show keywords in keyword mode', async () => {
+		const { element } = await defaultRender();
 
-    expect(
-      element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
-    ).toBeTruthy();
+		expect(
+			element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
+		).toBeTruthy();
 
-    expect(
-      element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo'),
-    ).toBeTruthy();
+		expect(
+			element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo'),
+		).toBeTruthy();
 
-    expect(
-      element.componentInstance.itemTags.find(
-        (tag) => tag.name === 'customField:customValueOne',
-      ),
-    ).not.toBeTruthy();
+		expect(
+			element.componentInstance.itemTags.find(
+				(tag) => tag.name === 'customField:customValueOne',
+			),
+		).not.toBeTruthy();
 
-    expect(
-      element.componentInstance.itemTags.find(
-        (tag) => tag.name === 'customField:customValueTwo',
-      ),
-    ).not.toBeTruthy();
+		expect(
+			element.componentInstance.itemTags.find(
+				(tag) => tag.name === 'customField:customValueTwo',
+			),
+		).not.toBeTruthy();
 
-    expect(
-      element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'tagOne',
-      ),
-    ).toBeTruthy();
+		expect(
+			element.componentInstance.matchingTags.find(
+				(tag) => tag.name === 'tagOne',
+			),
+		).toBeTruthy();
 
-    expect(
-      element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'tagTwo',
-      ),
-    ).toBeTruthy();
+		expect(
+			element.componentInstance.matchingTags.find(
+				(tag) => tag.name === 'tagTwo',
+			),
+		).toBeTruthy();
 
-    expect(
-      element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'customField:customValueOne',
-      ),
-    ).not.toBeTruthy();
+		expect(
+			element.componentInstance.matchingTags.find(
+				(tag) => tag.name === 'customField:customValueOne',
+			),
+		).not.toBeTruthy();
 
-    expect(
-      element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'customField:customValueTwo',
-      ),
-    ).not.toBeTruthy();
-  });
+		expect(
+			element.componentInstance.matchingTags.find(
+				(tag) => tag.name === 'customField:customValueTwo',
+			),
+		).not.toBeTruthy();
+	});
 
-  it('should only show custom metadata in custom metadata mode', async () => {
-    const { element } = await defaultRender(defaultItem, 'customMetadata');
+	it('should only show custom metadata in custom metadata mode', async () => {
+		const { element } = await defaultRender(defaultItem, 'customMetadata');
 
-    expect(
-      element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
-    ).not.toBeTruthy();
+		expect(
+			element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
+		).not.toBeTruthy();
 
-    expect(
-      element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo'),
-    ).not.toBeTruthy();
+		expect(
+			element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo'),
+		).not.toBeTruthy();
 
-    expect(
-      element.componentInstance.itemTags.find(
-        (tag) => tag.name === 'customField:customValueOne',
-      ),
-    ).toBeTruthy();
+		expect(
+			element.componentInstance.itemTags.find(
+				(tag) => tag.name === 'customField:customValueOne',
+			),
+		).toBeTruthy();
 
-    expect(
-      element.componentInstance.itemTags.find(
-        (tag) => tag.name === 'customField:customValueTwo',
-      ),
-    ).toBeTruthy();
+		expect(
+			element.componentInstance.itemTags.find(
+				(tag) => tag.name === 'customField:customValueTwo',
+			),
+		).toBeTruthy();
 
-    expect(
-      element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'tagOne',
-      ),
-    ).not.toBeTruthy();
+		expect(
+			element.componentInstance.matchingTags.find(
+				(tag) => tag.name === 'tagOne',
+			),
+		).not.toBeTruthy();
 
-    expect(
-      element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'tagTwo',
-      ),
-    ).not.toBeTruthy();
+		expect(
+			element.componentInstance.matchingTags.find(
+				(tag) => tag.name === 'tagTwo',
+			),
+		).not.toBeTruthy();
 
-    expect(
-      element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'customField:customValueOne',
-      ),
-    ).toBeTruthy();
+		expect(
+			element.componentInstance.matchingTags.find(
+				(tag) => tag.name === 'customField:customValueOne',
+			),
+		).toBeTruthy();
 
-    expect(
-      element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'customField:customValueTwo',
-      ),
-    ).toBeTruthy();
-  });
+		expect(
+			element.componentInstance.matchingTags.find(
+				(tag) => tag.name === 'customField:customValueTwo',
+			),
+		).toBeTruthy();
+	});
 
-  it('should not create custom metadata in keyword mode', async () => {
-    const { element } = await defaultRender();
-    const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
-    await element.componentInstance.onInputEnter('key:value');
+	it('should not create custom metadata in keyword mode', async () => {
+		const { element } = await defaultRender();
+		const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
+		await element.componentInstance.onInputEnter('key:value');
 
-    expect(element.componentInstance.newTagInputError).toBeTruthy();
-    expect(tagCreateSpy).not.toHaveBeenCalled();
-  });
+		expect(element.componentInstance.newTagInputError).toBeTruthy();
+		expect(tagCreateSpy).not.toHaveBeenCalled();
+	});
 
-  it('should not create keyword in custom metadata mode', async () => {
-    const { element } = await defaultRender(defaultItem, 'customMetadata');
-    const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
-    await element.componentInstance.onInputEnter('keyword');
+	it('should not create keyword in custom metadata mode', async () => {
+		const { element } = await defaultRender(defaultItem, 'customMetadata');
+		const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
+		await element.componentInstance.onInputEnter('keyword');
 
-    expect(element.componentInstance.newTagInputError).toBeTruthy();
-    expect(tagCreateSpy).not.toHaveBeenCalled();
-  });
+		expect(element.componentInstance.newTagInputError).toBeTruthy();
+		expect(tagCreateSpy).not.toHaveBeenCalled();
+	});
 
-  it('should highlight the correct tag on key down', async () => {
-    const { fixture, element } = await defaultRender();
+	it('should highlight the correct tag on key down', async () => {
+		const { fixture, element } = await defaultRender();
 
-    element.componentInstance.isEditing = true;
+		element.componentInstance.isEditing = true;
 
-    fixture.detectChanges();
-    const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
+		fixture.detectChanges();
+		const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
 
-    const arrowKeyDown = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-    tags[0].nativeElement.dispatchEvent(arrowKeyDown);
+		const arrowKeyDown = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+		tags[0].nativeElement.dispatchEvent(arrowKeyDown);
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    const focusedElement = document.activeElement as HTMLElement;
+		const focusedElement = document.activeElement as HTMLElement;
 
-    expect(focusedElement).toBe(tags[1].nativeElement);
-  });
+		expect(focusedElement).toBe(tags[1].nativeElement);
+	});
 
-  it('should highlight the correct tag on key up', async () => {
-    const { fixture, element } = await defaultRender();
+	it('should highlight the correct tag on key up', async () => {
+		const { fixture, element } = await defaultRender();
 
-    element.componentInstance.isEditing = true;
+		element.componentInstance.isEditing = true;
 
-    fixture.detectChanges();
-    const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
+		fixture.detectChanges();
+		const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
 
-    const arrowKeyDown = new KeyboardEvent('keydown', { key: 'ArrowUp' });
-    tags[1].nativeElement.dispatchEvent(arrowKeyDown);
+		const arrowKeyDown = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+		tags[1].nativeElement.dispatchEvent(arrowKeyDown);
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    const focusedElement = document.activeElement as HTMLElement;
+		const focusedElement = document.activeElement as HTMLElement;
 
-    expect(focusedElement).toBe(tags[0].nativeElement);
-  });
+		expect(focusedElement).toBe(tags[0].nativeElement);
+	});
 
-  it('should highlight the input on key up', async () => {
-    const { fixture, element } = await defaultRender();
+	it('should highlight the input on key up', async () => {
+		const { fixture, element } = await defaultRender();
 
-    element.componentInstance.isEditing = true;
+		element.componentInstance.isEditing = true;
 
-    fixture.detectChanges();
-    const tag = fixture.debugElement.query(By.css('.edit-tag'));
+		fixture.detectChanges();
+		const tag = fixture.debugElement.query(By.css('.edit-tag'));
 
-    const arrowKeyUp = new KeyboardEvent('keydown', { key: 'ArrowUp' });
-    const input = fixture.debugElement.query(By.css('.new-tag'));
+		const arrowKeyUp = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+		const input = fixture.debugElement.query(By.css('.new-tag'));
 
-    tag.nativeElement.dispatchEvent(arrowKeyUp);
+		tag.nativeElement.dispatchEvent(arrowKeyUp);
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    const focusedElement = document.activeElement as HTMLElement;
+		const focusedElement = document.activeElement as HTMLElement;
 
-    expect(focusedElement).toEqual(input.nativeElement);
-  });
+		expect(focusedElement).toEqual(input.nativeElement);
+	});
 
-  it('should open dialog when manage link is clicked', async () => {
-    const { element, find, inject, fixture } = await defaultRender();
-    const dialogOpenSpy = inject(DialogCdkService);
+	it('should open dialog when manage link is clicked', async () => {
+		const { element, find, inject, fixture } = await defaultRender();
+		const dialogOpenSpy = inject(DialogCdkService);
 
-    element.componentInstance.isEditing = true;
-    fixture.detectChanges();
+		element.componentInstance.isEditing = true;
+		fixture.detectChanges();
 
-    find('.manage-tags-message .manage-tags-link').triggerEventHandler(
-      'click',
-      {},
-    );
+		find('.manage-tags-message .manage-tags-link').triggerEventHandler(
+			'click',
+			{},
+		);
 
-    expect(dialogOpenSpy.open).toHaveBeenCalled();
-  });
+		expect(dialogOpenSpy.open).toHaveBeenCalled();
+	});
 });

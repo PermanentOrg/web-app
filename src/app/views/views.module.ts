@@ -6,14 +6,14 @@ import { ViewsComponentsModule } from './views-components.module';
 import { ViewsRoutingModule } from './views.routes';
 
 @NgModule({
-  declarations: [],
-  exports: [],
-  imports: [
-    CommonModule,
-    RouterModule,
-    ViewsComponentsModule,
-    ViewsRoutingModule,
-    DialogModule,
-  ],
+	declarations: [],
+	exports: [],
+	imports: [
+		CommonModule,
+		RouterModule,
+		ViewsComponentsModule,
+		ViewsRoutingModule,
+		DialogModule,
+	],
 })
 export class ViewsModule {}

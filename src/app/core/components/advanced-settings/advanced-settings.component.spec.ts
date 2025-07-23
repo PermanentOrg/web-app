@@ -8,66 +8,66 @@ import { ApiService } from '../../../shared/services/api/api.service';
 import { AdvancedSettingsComponent } from './advanced-settings.component';
 
 const mockAccountService = {
-  getAccount: () => {
-    return new AccountVO({ accountId: 1, allowSftpDeletion: true });
-  },
-  setAccount: (account: AccountVO) => {},
+	getAccount: () => {
+		return new AccountVO({ accountId: 1, allowSftpDeletion: true });
+	},
+	setAccount: (account: AccountVO) => {},
 };
 
 const mockApiService = {
-  account: {
-    update: (account: AccountVO) => {
-      return Promise.resolve(account);
-    },
-  },
+	account: {
+		update: (account: AccountVO) => {
+			return Promise.resolve(account);
+		},
+	},
 };
 
 describe('AdvancedSettingsComponent', () => {
-  let shallow: Shallow<AdvancedSettingsComponent>;
-  let messageShown = false;
+	let shallow: Shallow<AdvancedSettingsComponent>;
+	let messageShown = false;
 
-  beforeEach(async () => {
-    shallow = new Shallow(AdvancedSettingsComponent, CoreModule)
-      .mock(MessageService, {
-        showError: () => {
-          messageShown = true;
-        },
-      })
-      .mock(ApiService, mockApiService)
-      .mock(AccountService, mockAccountService);
-  });
+	beforeEach(async () => {
+		shallow = new Shallow(AdvancedSettingsComponent, CoreModule)
+			.mock(MessageService, {
+				showError: () => {
+					messageShown = true;
+				},
+			})
+			.mock(ApiService, mockApiService)
+			.mock(AccountService, mockAccountService);
+	});
 
-  it('should create', async () => {
-    const { instance } = await shallow.render();
+	it('should create', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance).not.toBeNull();
-  });
+		expect(instance).not.toBeNull();
+	});
 
-  it('initializes allowSFTPDeletion from the account service', async () => {
-    const { instance } = await shallow.render();
+	it('initializes allowSFTPDeletion from the account service', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance.allowSFTPDeletion).toEqual(1);
-  });
+		expect(instance.allowSFTPDeletion).toEqual(1);
+	});
 
-  it('updates account on calling onAllowSFTPDeletion', async () => {
-    const { instance, inject } = await shallow.render();
-    const apiService = inject(ApiService);
-    const spy = spyOn(apiService.account, 'update').and.resolveTo(
-      new AccountVO({}),
-    );
+	it('updates account on calling onAllowSFTPDeletion', async () => {
+		const { instance, inject } = await shallow.render();
+		const apiService = inject(ApiService);
+		const spy = spyOn(apiService.account, 'update').and.resolveTo(
+			new AccountVO({}),
+		);
 
-    await instance.onAllowSFTPDeletion();
+		await instance.onAllowSFTPDeletion();
 
-    expect(spy).toHaveBeenCalled();
-  });
+		expect(spy).toHaveBeenCalled();
+	});
 
-  it('handles errors in onAllowSFTPDeletion', async () => {
-    const { instance, inject } = await shallow.render();
+	it('handles errors in onAllowSFTPDeletion', async () => {
+		const { instance, inject } = await shallow.render();
 
-    spyOn(inject(ApiService).account, 'update').and.throwError('test error');
+		spyOn(inject(ApiService).account, 'update').and.throwError('test error');
 
-    await instance.onAllowSFTPDeletion();
+		await instance.onAllowSFTPDeletion();
 
-    expect(messageShown).toBe(true);
-  });
+		expect(messageShown).toBe(true);
+	});
 });

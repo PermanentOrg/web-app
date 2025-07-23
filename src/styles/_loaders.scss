@@ -1,148 +1,148 @@
 $dual-ring-size: 95px;
 
 .lds-dual-ring {
-  display: inline-block;
-  width: $dual-ring-size;
-  height: $dual-ring-size;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+	display: inline-block;
+	width: $dual-ring-size;
+	height: $dual-ring-size;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 .lds-dual-ring:after {
-  content: ' ';
-  display: block;
-  width: $dual-ring-size;
-  height: $dual-ring-size;
-  margin: 1px;
-  border-radius: 50%;
-  border: 6px solid $PR-blue;
-  border-color: $PR-blue transparent $PR-blue transparent;
-  animation: lds-dual-ring 1.5s linear infinite;
+	content: ' ';
+	display: block;
+	width: $dual-ring-size;
+	height: $dual-ring-size;
+	margin: 1px;
+	border-radius: 50%;
+	border: 6px solid $PR-blue;
+	border-color: $PR-blue transparent $PR-blue transparent;
+	animation: lds-dual-ring 1.5s linear infinite;
 }
 
 .lds-dual-ring-purple {
-  &:after {
-    border: 6px solid $PR-purple;
-    border-color: $PR-purple transparent $PR-purple transparent;
-  }
+	&:after {
+		border: 6px solid $PR-purple;
+		border-color: $PR-purple transparent $PR-purple transparent;
+	}
 }
 
 .lds-dual-ring-orange {
-  &:after {
-    border: 6px solid $PR-orange;
-    border-color: $PR-orange transparent $PR-orange transparent;
-  }
+	&:after {
+		border: 6px solid $PR-orange;
+		border-color: $PR-orange transparent $PR-orange transparent;
+	}
 }
 
 @keyframes lds-dual-ring {
-  0% {
-    transform: rotate(0deg);
-    opacity: 1;
-  }
+	0% {
+		transform: rotate(0deg);
+		opacity: 1;
+	}
 
-  50% {
-    transform: rotate(180deg);
-    opacity: 0.6;
-  }
-  100% {
-    transform: rotate(360deg);
-    opacity: 1;
-  }
+	50% {
+		transform: rotate(180deg);
+		opacity: 0.6;
+	}
+	100% {
+		transform: rotate(360deg);
+		opacity: 1;
+	}
 }
 
 $fade-ring-size: 15px;
 $fade-ring-opacity: 0.6;
 
 .fade-ring-loader {
-  font-size: 10px;
-  margin: 0px auto;
-  text-indent: -9999em;
-  width: $fade-ring-size;
-  height: $fade-ring-size;
-  border-radius: 50%;
-  background: #ffffff;
-  background: -moz-linear-gradient(
-    left,
-    #ffffff 10%,
-    rgba(255, 255, 255, 0) 42%
-  );
-  background: -webkit-linear-gradient(
-    left,
-    #ffffff 10%,
-    rgba(255, 255, 255, 0) 42%
-  );
-  background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-  background: -ms-linear-gradient(
-    left,
-    #ffffff 10%,
-    rgba(255, 255, 255, 0) 42%
-  );
-  background: linear-gradient(
-    to right,
-    #ffffff 10%,
-    rgba(255, 255, 255, 0) 42%
-  );
-  position: relative;
-  animation:
-    load3 1.4s infinite linear,
-    fadeInHalf 0.25s ease;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  opacity: $fade-ring-opacity;
+	font-size: 10px;
+	margin: 0px auto;
+	text-indent: -9999em;
+	width: $fade-ring-size;
+	height: $fade-ring-size;
+	border-radius: 50%;
+	background: #ffffff;
+	background: -moz-linear-gradient(
+		left,
+		#ffffff 10%,
+		rgba(255, 255, 255, 0) 42%
+	);
+	background: -webkit-linear-gradient(
+		left,
+		#ffffff 10%,
+		rgba(255, 255, 255, 0) 42%
+	);
+	background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+	background: -ms-linear-gradient(
+		left,
+		#ffffff 10%,
+		rgba(255, 255, 255, 0) 42%
+	);
+	background: linear-gradient(
+		to right,
+		#ffffff 10%,
+		rgba(255, 255, 255, 0) 42%
+	);
+	position: relative;
+	animation:
+		load3 1.4s infinite linear,
+		fadeInHalf 0.25s ease;
+	-webkit-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	transform: translateZ(0);
+	opacity: $fade-ring-opacity;
 }
 .fade-ring-loader:before {
-  width: 50%;
-  height: 50%;
-  background: #ffffff;
-  border-radius: 100% 0 0 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  content: '';
+	width: 50%;
+	height: 50%;
+	background: #ffffff;
+	border-radius: 100% 0 0 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	content: '';
 }
 .fade-ring-loader:after {
-  background: $PR-blue;
-  width: 75%;
-  height: 75%;
-  border-radius: 50%;
-  content: '';
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+	background: $PR-blue;
+	width: 75%;
+	height: 75%;
+	border-radius: 50%;
+	content: '';
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
 }
 
 @keyframes fadeInHalf {
-  0% {
-    opacity: 0;
-  }
+	0% {
+		opacity: 0;
+	}
 
-  100% {
-    opacity: $fade-ring-opacity;
-  }
+	100% {
+		opacity: $fade-ring-opacity;
+	}
 }
 
 @-webkit-keyframes load3 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
 }
 @keyframes load3 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
 }

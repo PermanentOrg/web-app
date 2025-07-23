@@ -1,48 +1,48 @@
 @import 'variables';
 
 :host {
-  display: block;
-  flex: 1;
-  max-width: 100%;
-  background-color: white;
+	display: block;
+	flex: 1;
+	max-width: 100%;
+	background-color: white;
 }
 
 .map-wrapper {
-  height: 20rem;
-  position: relative;
-  margin: 10px 10px 0;
+	height: 20rem;
+	position: relative;
+	margin: 10px 10px 0;
 }
 
 .location-panel {
-  position: absolute;
-  bottom: 30px;
-  left: 5px;
-  padding: 0.5rem;
-  max-width: 15rem;
-  background: white;
-  font-size: $font-size-sm;
-  box-shadow: $box-shadow-sm;
+	position: absolute;
+	bottom: 30px;
+	left: 5px;
+	padding: 0.5rem;
+	max-width: 15rem;
+	background: white;
+	font-size: $font-size-sm;
+	box-shadow: $box-shadow-sm;
 }
 
 .location-info {
-  span:first-child {
-    font-weight: 700;
-  }
+	span:first-child {
+		font-weight: 700;
+	}
 }
 
 .location-search {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  box-shadow: $box-shadow-sm;
-  max-width: 66%;
-  width: 30rem;
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	box-shadow: $box-shadow-sm;
+	max-width: 66%;
+	width: 30rem;
 
-  input {
-    width: 100%;
-    font-size: $font-size-sm;
-    padding: 0.5rem;
-  }
+	input {
+		width: 100%;
+		font-size: $font-size-sm;
+		padding: 0.5rem;
+	}
 }
 
 // .dialog-footer {
@@ -52,5 +52,5 @@
 //   }
 // }
 .dialog-content {
-  background-color: white;
+	background-color: white;
 }

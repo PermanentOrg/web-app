@@ -1,57 +1,57 @@
 <ng-template cdkPortal>
-  <button
-    class="btn btn-primary"
-    (click)="onCreateArchiveClick()"
-    id="createArchive"
-  >
-    Create an Archive
-  </button>
+	<button
+		class="btn btn-primary"
+		(click)="onCreateArchiveClick()"
+		id="createArchive"
+	>
+		Create an Archive
+	</button>
 </ng-template>
 <div class="sidebar">
-  <div class="title">Pending archives</div>
-  <div *ngIf="!pendingArchives.length">No pending archives</div>
-  <div class="sidebar-archive" *ngFor="let archive of pendingArchives">
-    <div class="sidebar-archive-main">
-      <div
-        class="archive-thumb"
-        prBgImage
-        [bgSrc]="archive.thumbURL200"
-        [cover]="true"
-      ></div>
-      <div class="archive-info">
-        <div class="name">{{ archive.fullName }}</div>
-        <div class="access-role">
-          Access: {{ archive.accessRole | prConstants }}
-        </div>
-      </div>
-    </div>
-    <div class="sidebar-archive-actions">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="acceptPendingArchive(archive)"
-      >
-        Accept
-      </button>
-      <button
-        class="btn btn-sm btn-danger"
-        (click)="declinePendingArchive(archive)"
-      >
-        Accept
-      </button>
-    </div>
-  </div>
+	<div class="title">Pending archives</div>
+	<div *ngIf="!pendingArchives.length">No pending archives</div>
+	<div class="sidebar-archive" *ngFor="let archive of pendingArchives">
+		<div class="sidebar-archive-main">
+			<div
+				class="archive-thumb"
+				prBgImage
+				[bgSrc]="archive.thumbURL200"
+				[cover]="true"
+			></div>
+			<div class="archive-info">
+				<div class="name">{{ archive.fullName }}</div>
+				<div class="access-role">
+					Access: {{ archive.accessRole | prConstants }}
+				</div>
+			</div>
+		</div>
+		<div class="sidebar-archive-actions">
+			<button
+				class="btn btn-sm btn-success"
+				(click)="acceptPendingArchive(archive)"
+			>
+				Accept
+			</button>
+			<button
+				class="btn btn-sm btn-danger"
+				(click)="declinePendingArchive(archive)"
+			>
+				Accept
+			</button>
+		</div>
+	</div>
 </div>
 <div class="page-subheading">({{ archives.length }}) Archives</div>
 <div *ngIf="!archives.length">No archives</div>
 <div class="archives">
-  <pr-archive-small
-    *ngFor="let archive of archives"
-    [largeOnDesktop]="true"
-    [archive]="archive"
-    [accessRole]="archive.accessRole"
-    [showAccept]="true"
-    [acceptText]="'Switch'"
-    (acceptClick)="archiveClick(archive)"
-  >
-  </pr-archive-small>
+	<pr-archive-small
+		*ngFor="let archive of archives"
+		[largeOnDesktop]="true"
+		[archive]="archive"
+		[accessRole]="archive.accessRole"
+		[showAccept]="true"
+		[acceptText]="'Switch'"
+		(acceptClick)="archiveClick(archive)"
+	>
+	</pr-archive-small>
 </div>

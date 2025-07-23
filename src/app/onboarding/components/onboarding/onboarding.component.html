@@ -1,59 +1,59 @@
 <!-- @format  -->
 <div class="onboarding-header-container">
-  @if (isGlam) {
-    <pr-onboarding-glam-header></pr-onboarding-glam-header>
-  } @else {
-    <pr-onboarding-header [accountName]="accountName"></pr-onboarding-header>
-  }
+	@if (isGlam) {
+		<pr-onboarding-glam-header></pr-onboarding-glam-header>
+	} @else {
+		<pr-onboarding-header [accountName]="accountName"></pr-onboarding-header>
+	}
 </div>
 <div *ngIf="errorMessage.length > 0">
-  <div class="alert-wrapper" class="visible fade">
-    <div class="alert alert-primary alert-warning">
-      {{ errorMessage }}
-    </div>
-  </div>
+	<div class="alert-wrapper" class="visible fade">
+		<div class="alert alert-primary alert-warning">
+			{{ errorMessage }}
+		</div>
+	</div>
 </div>
 <div
-  class="onboarding"
-  [ngClass]="{ 'onboarding-glam': isGlam }"
-  *ngIf="showOnboarding; else loading"
+	class="onboarding"
+	[ngClass]="{ 'onboarding-glam': isGlam }"
+	*ngIf="showOnboarding; else loading"
 >
-  <div class="progress-bar">
-    <div [ngClass]="getProgressChunkClasses(0)"></div>
-    <div [ngClass]="getProgressChunkClasses(1)"></div>
-    <div [ngClass]="getProgressChunkClasses(2)"></div>
-  </div>
-  <ng-container>
-    @if (screen === OnboardingScreen.pendingArchives && !isGlam) {
-      <pr-welcome-screen
-        (nextScreen)="setScreen($event)"
-        (selectInvitation)="selectArchiveInvitation($event)"
-        [pendingArchives]="pendingArchives"
-      ></pr-welcome-screen>
-    } @else if (screen === OnboardingScreen.pendingArchives && isGlam) {
-      <pr-glam-pending-archives
-        [pendingArchives]="pendingArchives"
-        (createNewArchiveOutput)="setScreen(OnboardingScreen.welcomeScreen)"
-        (nextOutput)="selectArchiveInvitation($event)"
-      ></pr-glam-pending-archives>
-    } @else if (screen === OnboardingScreen.welcomeScreen) {
-      <pr-create-new-archive
-        (back)="setScreen(OnboardingScreen.pendingArchives)"
-        (createdArchive)="setNewArchive($event)"
-        (progress)="setProgress($event)"
-        (error)="errorMessage = $event"
-        [pendingArchives]="pendingArchives"
-        [pendingArchive]="selectedPendingArchive"
-      ></pr-create-new-archive>
-    } @else if (screen === OnboardingScreen.done) {
-      <div class="loading">Loading...</div>
-    } @else {
-      <div>Something went wrong.</div>
-    }
-  </ng-container>
+	<div class="progress-bar">
+		<div [ngClass]="getProgressChunkClasses(0)"></div>
+		<div [ngClass]="getProgressChunkClasses(1)"></div>
+		<div [ngClass]="getProgressChunkClasses(2)"></div>
+	</div>
+	<ng-container>
+		@if (screen === OnboardingScreen.pendingArchives && !isGlam) {
+			<pr-welcome-screen
+				(nextScreen)="setScreen($event)"
+				(selectInvitation)="selectArchiveInvitation($event)"
+				[pendingArchives]="pendingArchives"
+			></pr-welcome-screen>
+		} @else if (screen === OnboardingScreen.pendingArchives && isGlam) {
+			<pr-glam-pending-archives
+				[pendingArchives]="pendingArchives"
+				(createNewArchiveOutput)="setScreen(OnboardingScreen.welcomeScreen)"
+				(nextOutput)="selectArchiveInvitation($event)"
+			></pr-glam-pending-archives>
+		} @else if (screen === OnboardingScreen.welcomeScreen) {
+			<pr-create-new-archive
+				(back)="setScreen(OnboardingScreen.pendingArchives)"
+				(createdArchive)="setNewArchive($event)"
+				(progress)="setProgress($event)"
+				(error)="errorMessage = $event"
+				[pendingArchives]="pendingArchives"
+				[pendingArchive]="selectedPendingArchive"
+			></pr-create-new-archive>
+		} @else if (screen === OnboardingScreen.done) {
+			<div class="loading">Loading...</div>
+		} @else {
+			<div>Something went wrong.</div>
+		}
+	</ng-container>
 </div>
 <ng-template #loading>
-  <div class="loading">Loading...</div>
+	<div class="loading">Loading...</div>
 </ng-template>
 <pr-mobile-banner></pr-mobile-banner>
 <pr-prompt></pr-prompt>

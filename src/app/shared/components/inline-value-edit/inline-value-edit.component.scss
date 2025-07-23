@@ -4,231 +4,231 @@ $inline-padding-x: $grid-unit * 0.2;
 $inline-padding-y: $grid-unit * 0.5;
 
 :host {
-  display: block;
-  position: relative;
-  width: 96%;
-  margin: 0 auto;
+	display: block;
+	position: relative;
+	width: 96%;
+	margin: 0 auto;
 }
 
 form {
-  padding: 0px;
-  margin: 0;
-  max-width: none;
+	padding: 0px;
+	margin: 0;
+	max-width: none;
 }
 
 .inline-value-container {
-  position: relative;
+	position: relative;
 
-  &.inline-value-date {
-    display: flex;
-    justify-content: center;
+	&.inline-value-date {
+		display: flex;
+		justify-content: center;
 
-    ngb-datepicker {
-      flex: 1 1 auto;
-    }
-  }
+		ngb-datepicker {
+			flex: 1 1 auto;
+		}
+	}
 }
 
 .inline-value-display,
 select {
-  width: calc(100% + #{2 * $inline-padding-x});
-  height: auto;
-  background-color: white;
-  padding: $inline-padding-y $inline-padding-x;
-  margin-left: -1 * $inline-padding-x;
-  margin-right: -1 * $inline-padding-x;
-  position: relative;
-  border-color: rgba($input-border-color, 0);
+	width: calc(100% + #{2 * $inline-padding-x});
+	height: auto;
+	background-color: white;
+	padding: $inline-padding-y $inline-padding-x;
+	margin-left: -1 * $inline-padding-x;
+	margin-right: -1 * $inline-padding-x;
+	position: relative;
+	border-color: rgba($input-border-color, 0);
 }
 
 select {
-  height: auto !important;
-  appearance: none;
+	height: auto !important;
+	appearance: none;
 }
 
 .inline-value-display {
-  &.is-editing {
-    opacity: 0;
-  }
+	&.is-editing {
+		opacity: 0;
+	}
 }
 
 .inline-value-placeholder {
-  position: absolute;
-  padding: $inline-padding-y $inline-padding-x;
-  left: -1 * $inline-padding-x;
-  right: -1 * $inline-padding-x;
-  top: 0;
-  bottom: 0;
+	position: absolute;
+	padding: $inline-padding-y $inline-padding-x;
+	left: -1 * $inline-padding-x;
+	right: -1 * $inline-padding-x;
+	top: 0;
+	bottom: 0;
 
-  .placeholder-line {
-    height: 1.5rem;
-    width: 95%;
-    position: relative;
+	.placeholder-line {
+		height: 1.5rem;
+		width: 95%;
+		position: relative;
 
-    &:after {
-      content: '';
-      background-color: $gray-200;
-      position: absolute;
-      top: 4px;
-      bottom: 2px;
-      width: 100%;
-    }
+		&:after {
+			content: '';
+			background-color: $gray-200;
+			position: absolute;
+			top: 4px;
+			bottom: 2px;
+			width: 100%;
+		}
 
-    &.two-thirds {
-      &:after {
-        width: 66.66%;
-      }
-    }
+		&.two-thirds {
+			&:after {
+				width: 66.66%;
+			}
+		}
 
-    &.three-quarters {
-      &:after {
-        width: 75%;
-      }
-    }
-  }
+		&.three-quarters {
+			&:after {
+				width: 75%;
+			}
+		}
+	}
 }
 
 .inline-value-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 
-  &-with-border {
-    border: 1px solid $input-border-color;
-    border-radius: $border-radius;
-  }
+	&-with-border {
+		border: 1px solid $input-border-color;
+		border-radius: $border-radius;
+	}
 
-  &.showing-empty-message {
-    color: $text-muted;
-  }
+	&.showing-empty-message {
+		color: $text-muted;
+	}
 }
 
 .is-name-hovered {
-  overflow: visible;
-  text-overflow: initial;
-  white-space: initial;
+	overflow: visible;
+	text-overflow: initial;
+	white-space: initial;
 }
 
 .inline-value-select {
-  &.showing-empty-message {
-    select {
-      color: $text-muted;
-    }
-  }
+	&.showing-empty-message {
+		select {
+			color: $text-muted;
+		}
+	}
 }
 
 .inline-value-textarea {
-  min-height: 6 * 1.5rem;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
+	min-height: 6 * 1.5rem;
+	overflow-wrap: break-word;
+	white-space: pre-wrap;
 
-  &.showing-empty-message {
-    color: $text-muted;
-  }
+	&.showing-empty-message {
+		color: $text-muted;
+	}
 }
 
 div.form-control {
-  color: $body-color;
+	color: $body-color;
 }
 
 .form-control {
-  padding: $inline-padding-y $inline-padding-x;
+	padding: $inline-padding-y $inline-padding-x;
 }
 
 .inline-value-container {
-  & > input,
-  & > textarea {
-    position: absolute;
-    top: 0px;
-    left: -1 * $inline-padding-x;
-    right: -1 * $inline-padding-x;
-    bottom: 0px;
-    opacity: 0;
-    z-index: 0;
-    resize: none;
-    width: calc(100% + #{2 * $inline-padding-x});
-    display: none;
+	& > input,
+	& > textarea {
+		position: absolute;
+		top: 0px;
+		left: -1 * $inline-padding-x;
+		right: -1 * $inline-padding-x;
+		bottom: 0px;
+		opacity: 0;
+		z-index: 0;
+		resize: none;
+		width: calc(100% + #{2 * $inline-padding-x});
+		display: none;
 
-    &.is-editing {
-      opacity: 1;
-      z-index: 1;
-    }
-  }
+		&.is-editing {
+			opacity: 1;
+			z-index: 1;
+		}
+	}
 }
 
 .inline-value-container {
-  &.can-edit {
-    .inline-value-display,
-    select {
-      cursor: pointer;
-      &:hover {
-        border-color: rgba($input-border-color, 0.75);
-      }
-    }
+	&.can-edit {
+		.inline-value-display,
+		select {
+			cursor: pointer;
+			&:hover {
+				border-color: rgba($input-border-color, 0.75);
+			}
+		}
 
-    & > input,
-    & > textarea,
-    & > select {
-      display: initial;
-    }
-  }
+		& > input,
+		& > textarea,
+		& > select {
+			display: initial;
+		}
+	}
 }
 
 .input-group {
-  button {
-    margin: 0;
-  }
+	button {
+		margin: 0;
+	}
 }
 
 :host.horizontal-controls {
-  display: flex;
-  align-items: center;
-  form {
-    display: flex;
-    align-items: center;
-  }
+	display: flex;
+	align-items: center;
+	form {
+		display: flex;
+		align-items: center;
+	}
 
-  .inline-value-container {
-    flex: 1 0 100%;
-  }
+	.inline-value-container {
+		flex: 1 0 100%;
+	}
 
-  .inline-value-controls {
-    flex: 0 0 auto;
-    margin-top: 0;
-  }
+	.inline-value-controls {
+		flex: 0 0 auto;
+		margin-top: 0;
+	}
 }
 
 :host.always-show {
-  .inline-value-display,
-  select {
-    border-color: rgba($input-border-color, 0.75);
-  }
+	.inline-value-display,
+	select {
+		border-color: rgba($input-border-color, 0.75);
+	}
 }
 
 input,
 select,
 textarea {
-  &.ng-invalid {
-    &.ng-touched,
-    &.ng-dirty {
-      background-color: rgba($danger, 0.2);
-      border-color: $danger !important;
-    }
-  }
+	&.ng-invalid {
+		&.ng-touched,
+		&.ng-dirty {
+			background-color: rgba($danger, 0.2);
+			border-color: $danger !important;
+		}
+	}
 }
 
 .no-padding {
-  padding: 0;
+	padding: 0;
 }
 
 .description-textarea {
-  &.can-edit {
-    .description-textarea-value {
-      cursor: pointer;
-      border: 1px solid transparent;
-      &:hover {
-        border: 1px solid rgba($input-border-color, 0.75);
-      }
-    }
-  }
+	&.can-edit {
+		.description-textarea-value {
+			cursor: pointer;
+			border: 1px solid transparent;
+			&:hover {
+				border: 1px solid rgba($input-border-color, 0.75);
+			}
+		}
+	}
 }

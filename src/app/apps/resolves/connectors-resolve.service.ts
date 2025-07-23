@@ -13,34 +13,34 @@ import { ConnectorOverviewVO } from '@root/app/models';
 
 @Injectable()
 export class ConnectorsResolveService {
-  constructor(
-    private api: ApiService,
-    private accountService: AccountService,
-  ) {}
+	constructor(
+		private api: ApiService,
+		private accountService: AccountService,
+	) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<any> | Promise<any> {
-    const archiveId = this.accountService.getArchive().archiveId;
-    const connectors = [
-      new ConnectorOverviewVO({
-        archiveId: archiveId,
-        type: 'type.connector.familysearch',
-      }),
-    ];
+	resolve(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Observable<any> | Promise<any> {
+		const archiveId = this.accountService.getArchive().archiveId;
+		const connectors = [
+			new ConnectorOverviewVO({
+				archiveId: archiveId,
+				type: 'type.connector.familysearch',
+			}),
+		];
 
-    return this.api.connector
-      .getOverview(connectors)
-      .pipe(
-        map((response: ConnectorResponse) => {
-          if (!response.isSuccessful) {
-            throw response;
-          }
+		return this.api.connector
+			.getOverview(connectors)
+			.pipe(
+				map((response: ConnectorResponse) => {
+					if (!response.isSuccessful) {
+						throw response;
+					}
 
-          return response.getConnectorOverviewVOs();
-        }),
-      )
-      .toPromise();
-  }
+					return response.getConnectorOverviewVOs();
+				}),
+			)
+			.toPromise();
+	}
 }

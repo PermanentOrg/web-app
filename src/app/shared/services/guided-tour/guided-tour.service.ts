@@ -14,78 +14,78 @@ const STORAGE_KEY = 'guidedTour';
 type AllTourHistory = Record<number, GuidedTourHistory>;
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class GuidedTourService {
-  private eventsSubject = new Subject<GuidedTourEvent>();
+	private eventsSubject = new Subject<GuidedTourEvent>();
 
-  constructor(
-    private shepherd: ShepherdService,
-    private storage: StorageService,
-    private account: AccountService,
-    private device: DeviceService,
-  ) {
-    this.shepherd.modal = true;
-  }
-  startTour(steps: ShepherdStep[]) {
-    // Convert to any type since angular-shepherd is expecting the StepOptions[]
-    // type but it does not expose this type at all so we can't use it.
-    this.shepherd.addSteps(steps as any);
-    setTimeout(() => {
-      this.shepherd.start();
-    });
+	constructor(
+		private shepherd: ShepherdService,
+		private storage: StorageService,
+		private account: AccountService,
+		private device: DeviceService,
+	) {
+		this.shepherd.modal = true;
+	}
+	startTour(steps: ShepherdStep[]) {
+		// Convert to any type since angular-shepherd is expecting the StepOptions[]
+		// type but it does not expose this type at all so we can't use it.
+		this.shepherd.addSteps(steps as any);
+		setTimeout(() => {
+			this.shepherd.start();
+		});
 
-    return this.shepherd.tourObject;
-  }
+		return this.shepherd.tourObject;
+	}
 
-  emit(event: GuidedTourEvent, data?: any) {
-    this.eventsSubject.next(event);
-  }
+	emit(event: GuidedTourEvent, data?: any) {
+		this.eventsSubject.next(event);
+	}
 
-  next() {
-    this.shepherd.next();
-  }
+	next() {
+		this.shepherd.next();
+	}
 
-  events$() {
-    return this.eventsSubject.asObservable();
-  }
+	events$() {
+		return this.eventsSubject.asObservable();
+	}
 
-  private getAllHistory(): AllTourHistory {
-    return this.storage.local.get<AllTourHistory>(STORAGE_KEY) || {};
-  }
+	private getAllHistory(): AllTourHistory {
+		return this.storage.local.get<AllTourHistory>(STORAGE_KEY) || {};
+	}
 
-  private getHistoryForAccount(): GuidedTourHistory {
-    const account = this.account.getAccount();
-    const allHistory = this.getAllHistory();
-    return allHistory[account.accountId] || {};
-  }
+	private getHistoryForAccount(): GuidedTourHistory {
+		const account = this.account.getAccount();
+		const allHistory = this.getAllHistory();
+		return allHistory[account.accountId] || {};
+	}
 
-  isStepComplete(tour: TourName, step: TourStep, skipMobile = true): boolean {
-    if (skipMobile && this.device.isMobileWidth()) {
-      return true;
-    }
+	isStepComplete(tour: TourName, step: TourStep, skipMobile = true): boolean {
+		if (skipMobile && this.device.isMobileWidth()) {
+			return true;
+		}
 
-    const history = this.getHistoryForAccount();
+		const history = this.getHistoryForAccount();
 
-    if (!history[tour]) {
-      return false;
-    } else {
-      return history[tour][step] ? true : false;
-    }
-  }
+		if (!history[tour]) {
+			return false;
+		} else {
+			return history[tour][step] ? true : false;
+		}
+	}
 
-  markStepComplete(tour: TourName, step: TourStep) {
-    const history = this.getHistoryForAccount();
-    if (!history[tour]) {
-      history[tour] = {};
-    }
+	markStepComplete(tour: TourName, step: TourStep) {
+		const history = this.getHistoryForAccount();
+		if (!history[tour]) {
+			history[tour] = {};
+		}
 
-    history[tour][step] = true;
+		history[tour][step] = true;
 
-    const account = this.account.getAccount();
-    const allHistory = this.getAllHistory();
+		const account = this.account.getAccount();
+		const allHistory = this.getAllHistory();
 
-    allHistory[account.accountId] = history;
-    this.storage.local.set<AllTourHistory>(STORAGE_KEY, allHistory);
-  }
+		allHistory[account.accountId] = history;
+		this.storage.local.set<AllTourHistory>(STORAGE_KEY, allHistory);
+	}
 }

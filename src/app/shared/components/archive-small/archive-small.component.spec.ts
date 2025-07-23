@@ -10,35 +10,35 @@ import { StorageService } from '@shared/services/storage/storage.service';
 import { ArchiveSmallComponent } from './archive-small.component';
 
 describe('ArchiveSmallComponent', () => {
-  let component: ArchiveSmallComponent;
-  let fixture: ComponentFixture<ArchiveSmallComponent>;
+	let component: ArchiveSmallComponent;
+	let fixture: ComponentFixture<ArchiveSmallComponent>;
 
-  beforeEach(waitForAsync(() => {
-    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+	beforeEach(waitForAsync(() => {
+		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
-    config.declarations.push(ArchiveSmallComponent);
-    config.declarations.push(BgImageSrcDirective);
+		config.declarations.push(ArchiveSmallComponent);
+		config.declarations.push(BgImageSrcDirective);
 
-    TestBed.configureTestingModule(config).compileComponents();
-  }));
+		TestBed.configureTestingModule(config).compileComponents();
+	}));
 
-  beforeEach(() => {
-    const currentArchive = new ArchiveVO(TEST_DATA.archive);
-    const accountService = TestBed.get(AccountService) as AccountService;
-    accountService.setArchive(currentArchive);
+	beforeEach(() => {
+		const currentArchive = new ArchiveVO(TEST_DATA.archive);
+		const accountService = TestBed.get(AccountService) as AccountService;
+		accountService.setArchive(currentArchive);
 
-    fixture = TestBed.createComponent(ArchiveSmallComponent);
-    component = fixture.componentInstance;
-    component.archive = currentArchive;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(ArchiveSmallComponent);
+		component = fixture.componentInstance;
+		component.archive = currentArchive;
+		fixture.detectChanges();
+	});
 
-  afterEach(() => {
-    const storage = TestBed.get(StorageService) as StorageService;
-    storage.local.clear();
-  });
+	afterEach(() => {
+		const storage = TestBed.get(StorageService) as StorageService;
+		storage.local.clear();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

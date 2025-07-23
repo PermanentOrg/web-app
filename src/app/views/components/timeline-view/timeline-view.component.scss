@@ -1,128 +1,128 @@
 @import 'variables';
 
 :host {
-  display: block;
-  height: 100%;
-  flex: 1 1 auto;
+	display: block;
+	height: 100%;
+	flex: 1 1 auto;
 }
 
 .timeline {
-  background-color: white;
-  position: absolute !important;
-  top: $timeline-breadcrumb-height;
-  bottom: $timeline-folder-info-height;
-  width: 100%;
+	background-color: white;
+	position: absolute !important;
+	top: $timeline-breadcrumb-height;
+	bottom: $timeline-folder-info-height;
+	width: 100%;
 
-  &.navigating {
-    opacity: 0.7;
-    pointer-events: none;
-  }
+	&.navigating {
+		opacity: 0.7;
+		pointer-events: none;
+	}
 }
 
 .timeline-zoom-controls {
-  position: absolute;
-  top: $timeline-breadcrumb-height;
-  left: 0;
-  opacity: 0.7;
-  margin: 0;
-  width: 150px;
+	position: absolute;
+	top: $timeline-breadcrumb-height;
+	left: 0;
+	opacity: 0.7;
+	margin: 0;
+	width: 150px;
 
-  .control-row {
-    padding: $btn-padding-y * 0.5;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+	.control-row {
+		padding: $btn-padding-y * 0.5;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 
-    button {
-      opacity: 0.7;
-      display: inline-block;
-      cursor: pointer;
-      flex: 0 0 40px;
-      width: 40px;
-      margin: 0 auto;
-      padding: 5px;
-      border: 1px solid $gray-500;
+		button {
+			opacity: 0.7;
+			display: inline-block;
+			cursor: pointer;
+			flex: 0 0 40px;
+			width: 40px;
+			margin: 0 auto;
+			padding: 5px;
+			border: 1px solid $gray-500;
 
-      &:hover {
-        opacity: 0.95;
-      }
-    }
-  }
+			&:hover {
+				opacity: 0.95;
+			}
+		}
+	}
 }
 
 .timeline-folder-info {
-  background-color: $gray-700;
-  color: white;
+	background-color: $gray-700;
+	color: white;
 
-  position: absolute;
-  top: calc(100% - #{$timeline-folder-info-height});
-  width: 100%;
-  z-index: 2;
+	position: absolute;
+	top: calc(100% - #{$timeline-folder-info-height});
+	width: 100%;
+	z-index: 2;
 
-  transform: translateY(0);
-  transition: transform $default-transition-length ease-in;
+	transform: translateY(0);
+	transition: transform $default-transition-length ease-in;
 
-  &.showing-details {
-    transform: translateY(calc((100% - #{$timeline-folder-info-height}) * -1));
-    transition-timing-function: ease-out;
-  }
+	&.showing-details {
+		transform: translateY(calc((100% - #{$timeline-folder-info-height}) * -1));
+		transition-timing-function: ease-out;
+	}
 
-  .timeline-folder-info-content {
-    height: $timeline-folder-info-height;
-    padding: 0px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: $public-max-width;
-    margin: 0 auto;
+	.timeline-folder-info-content {
+		height: $timeline-folder-info-height;
+		padding: 0px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		max-width: $public-max-width;
+		margin: 0 auto;
 
-    .timeline-folder-details-button {
-      font-size: small;
-    }
-  }
+		.timeline-folder-details-button {
+			font-size: small;
+		}
+	}
 
-  .timeline-folder-info-details {
-    max-width: $public-max-width;
-    padding: 10px 0px 0px;
-    margin: 0 auto;
+	.timeline-folder-info-details {
+		max-width: $public-max-width;
+		padding: 10px 0px 0px;
+		margin: 0 auto;
 
-    > div {
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-    }
+		> div {
+			font-weight: 500;
+			margin-bottom: 0.5rem;
+		}
 
-    > p {
-      font-size: small;
-      max-height: calc(50vh - #{$timeline-folder-info-height} - 30px);
-      overflow-y: auto;
-      margin-bottom: 0px;
-      padding-bottom: 10px;
-    }
-  }
+		> p {
+			font-size: small;
+			max-height: calc(50vh - #{$timeline-folder-info-height} - 30px);
+			overflow-y: auto;
+			margin-bottom: 0px;
+			padding-bottom: 10px;
+		}
+	}
 
-  @media screen and (max-width: $public-max-width) {
-    .timeline-folder-info-details,
-    .timeline-folder-info-content {
-      padding-left: 5px;
-      padding-right: 5px;
-    }
-  }
+	@media screen and (max-width: $public-max-width) {
+		.timeline-folder-info-details,
+		.timeline-folder-info-content {
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+	}
 
-  .timeline-folder-info-name {
-    font-weight: bold;
-  }
+	.timeline-folder-info-name {
+		font-weight: bold;
+	}
 
-  .timeline-folder-info-date {
-    font-size: small;
+	.timeline-folder-info-date {
+		font-size: small;
 
-    &:nth-child(3) {
-      @media screen and (max-width: 767px) {
-        display: none;
-      }
-    }
-  }
+		&:nth-child(3) {
+			@media screen and (max-width: 767px) {
+				display: none;
+			}
+		}
+	}
 }
 
 .timeline-item-control {
-  margin: 0;
+	margin: 0;
 }

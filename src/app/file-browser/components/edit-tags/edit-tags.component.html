@@ -1,156 +1,156 @@
 <ng-container *ngIf="!isDialog">
-  <pr-tags
-    (focus)="startEditing()"
-    tabindex="0"
-    [tags]="itemTags"
-    (click)="startEditing()"
-    [readOnly]="false"
-    [class.clickable]="canEdit && !isEditing"
-    [canEdit]="canEdit"
-    [animate]="isEditing"
-    [isEditing]="isEditing"
-  ></pr-tags>
-  <div
-    class="input-group"
-    *ngIf="isEditing"
-    @ngIfScaleAnimation
-    [class.has-tags]="allTags?.length"
-  >
-    <input
-      type="text"
-      class="new-tag form-control"
-      [ngClass]="'new-tag-' + tagType"
-      [placeholder]="placeholderText"
-      [(ngModel)]="newTagName"
-      (ngModelChange)="onTagType(newTagName)"
-      (keydown.enter)="onInputEnter(newTagName)"
-      (keydown)="setFocusToFirstTagOrButton($event)"
-    />
-    <div *ngIf="newTagInputError" class="input-vertical-error">
-      {{
-        this.tagType === 'keyword'
-          ? "Keyword cannot contain ':'"
-          : 'Format must be key:value'
-      }}
-    </div>
-    <div class="input-group-append">
-      <button
-        class="btn btn-primary"
-        [ngClass]="'add-tag-' + tagType"
-        (click)="newTagName ? onInputEnter(newTagName) : endEditing()"
-        (keydown)="setFocusToFirstTagOrButton($event)"
-      >
-        {{ newTagName ? 'Add' : 'Done' }}
-      </button>
-    </div>
-  </div>
-  <div class="edit-tags" *ngIf="isEditing && matchingTags?.length">
-    <div
-      class="edit-tag"
-      [ngClass]="'edit-tag-' + tagType"
-      *ngFor="let tag of matchingTags; let i = index"
-      [class.is-selected]="itemTagsById.has(tag.tagId)"
-      (click)="onTagClick(tag)"
-      (keydown)="onArrowNav($event, i)"
-      (keydown.enter)="onTagClick(tag)"
-      tabindex="0"
-    >
-      <div class="select">
-        <div class="select-active"></div>
-      </div>
-      <div class="tag-name">
-        {{ tag.name }}
-      </div>
-    </div>
-  </div>
-  <p class="manage-tags-message" *ngIf="isEditing" @ngIfScaleAnimation>
-    <span class="manage-tags-link" (click)="onManageTagsClick()">
-      Manage
-      {{ this.tagType === 'keyword' ? 'keywords' : 'custom metadata' }}</span
-    >
-    in archive settings.
-  </p>
+	<pr-tags
+		(focus)="startEditing()"
+		tabindex="0"
+		[tags]="itemTags"
+		(click)="startEditing()"
+		[readOnly]="false"
+		[class.clickable]="canEdit && !isEditing"
+		[canEdit]="canEdit"
+		[animate]="isEditing"
+		[isEditing]="isEditing"
+	></pr-tags>
+	<div
+		class="input-group"
+		*ngIf="isEditing"
+		@ngIfScaleAnimation
+		[class.has-tags]="allTags?.length"
+	>
+		<input
+			type="text"
+			class="new-tag form-control"
+			[ngClass]="'new-tag-' + tagType"
+			[placeholder]="placeholderText"
+			[(ngModel)]="newTagName"
+			(ngModelChange)="onTagType(newTagName)"
+			(keydown.enter)="onInputEnter(newTagName)"
+			(keydown)="setFocusToFirstTagOrButton($event)"
+		/>
+		<div *ngIf="newTagInputError" class="input-vertical-error">
+			{{
+				this.tagType === 'keyword'
+					? "Keyword cannot contain ':'"
+					: 'Format must be key:value'
+			}}
+		</div>
+		<div class="input-group-append">
+			<button
+				class="btn btn-primary"
+				[ngClass]="'add-tag-' + tagType"
+				(click)="newTagName ? onInputEnter(newTagName) : endEditing()"
+				(keydown)="setFocusToFirstTagOrButton($event)"
+			>
+				{{ newTagName ? 'Add' : 'Done' }}
+			</button>
+		</div>
+	</div>
+	<div class="edit-tags" *ngIf="isEditing && matchingTags?.length">
+		<div
+			class="edit-tag"
+			[ngClass]="'edit-tag-' + tagType"
+			*ngFor="let tag of matchingTags; let i = index"
+			[class.is-selected]="itemTagsById.has(tag.tagId)"
+			(click)="onTagClick(tag)"
+			(keydown)="onArrowNav($event, i)"
+			(keydown.enter)="onTagClick(tag)"
+			tabindex="0"
+		>
+			<div class="select">
+				<div class="select-active"></div>
+			</div>
+			<div class="tag-name">
+				{{ tag.name }}
+			</div>
+		</div>
+	</div>
+	<p class="manage-tags-message" *ngIf="isEditing" @ngIfScaleAnimation>
+		<span class="manage-tags-link" (click)="onManageTagsClick()">
+			Manage
+			{{ this.tagType === 'keyword' ? 'keywords' : 'custom metadata' }}</span
+		>
+		in archive settings.
+	</p>
 </ng-container>
 <ng-container *ngIf="isDialog">
-  <div class="dialog-content">
-    <div class="dialog-body">
-      <div class="page-title break-all">{{ item.displayName }}</div>
-      <div class="edit-tags-dialog-body">
-        <pr-tags
-          [tags]="dialogTags"
-          (click)="startEditing()"
-          [canEdit]="true"
-          [animate]="isEditing"
-          [isEditing]="isEditing"
-          [isDialog]="isDialog"
-        ></pr-tags>
-        <div class="input-group">
-          <input
-            type="text"
-            class="new-tag form-control"
-            [ngClass]="'new-tag-' + tagType"
-            [placeholder]="placeholderText"
-            *ngIf="isEditing"
-            @ngIfScaleAnimation
-            [(ngModel)]="newTagName"
-            (keydown.enter)="onInputEnter(newTagName)"
-            (ngModelChange)="onTagType(newTagName)"
-            (keydown)="setFocusToFirstTagOrButton($event)"
-          />
-          <div *ngIf="newTagInputError" class="input-vertical-error">
-            {{
-              this.tagType === 'keyword'
-                ? "Keyword cannot contain ':'"
-                : 'Format must be key:value'
-            }}
-          </div>
-          <div class="input-group-append">
-            <button
-              class="btn btn-primary"
-              [ngClass]="'add-tag-' + tagType"
-              (click)="onInputEnter(newTagName)"
-              [disabled]="!newTagName"
-              (keydown)="setFocusToFirstTagOrButton($event)"
-            >
-              Add
-            </button>
-          </div>
-        </div>
-        <div class="edit-tags" *ngIf="isEditing" @ngIfScaleAnimation>
-          <div
-            class="edit-tag"
-            [ngClass]="'edit-tag-' + tagType"
-            *ngFor="let tag of matchingTags; let i = index"
-            [class.is-selected]="itemTagsById.has(tag.tagId)"
-            (click)="onTagClick(tag)"
-            (keydown)="onArrowNav($event, i)"
-            (keydown.enter)="onTagClick(tag)"
-            tabindex="0"
-          >
-            <div class="select">
-              <div class="select-active"></div>
-            </div>
-            <div class="tag-name">
-              {{ tag.name }}
-            </div>
-          </div>
-          <div class="edit-tag" *ngIf="!matchingTags.length">
-            No existing keywords found
-          </div>
-        </div>
-        <p class="manage-tags-message" *ngIf="isEditing" @ngIfScaleAnimation>
-          <span class="manage-tags-link" (click)="onManageTagsClick()">
-            Manage
-            {{
-              this.tagType === 'keyword' ? 'keywords' : 'custom metadata'
-            }}</span
-          >
-          in archive settings.
-        </p>
-      </div>
-    </div>
-    <div class="dialog-footer">
-      <button class="btn btn-secondary" (click)="close()">Done</button>
-    </div>
-  </div>
+	<div class="dialog-content">
+		<div class="dialog-body">
+			<div class="page-title break-all">{{ item.displayName }}</div>
+			<div class="edit-tags-dialog-body">
+				<pr-tags
+					[tags]="dialogTags"
+					(click)="startEditing()"
+					[canEdit]="true"
+					[animate]="isEditing"
+					[isEditing]="isEditing"
+					[isDialog]="isDialog"
+				></pr-tags>
+				<div class="input-group">
+					<input
+						type="text"
+						class="new-tag form-control"
+						[ngClass]="'new-tag-' + tagType"
+						[placeholder]="placeholderText"
+						*ngIf="isEditing"
+						@ngIfScaleAnimation
+						[(ngModel)]="newTagName"
+						(keydown.enter)="onInputEnter(newTagName)"
+						(ngModelChange)="onTagType(newTagName)"
+						(keydown)="setFocusToFirstTagOrButton($event)"
+					/>
+					<div *ngIf="newTagInputError" class="input-vertical-error">
+						{{
+							this.tagType === 'keyword'
+								? "Keyword cannot contain ':'"
+								: 'Format must be key:value'
+						}}
+					</div>
+					<div class="input-group-append">
+						<button
+							class="btn btn-primary"
+							[ngClass]="'add-tag-' + tagType"
+							(click)="onInputEnter(newTagName)"
+							[disabled]="!newTagName"
+							(keydown)="setFocusToFirstTagOrButton($event)"
+						>
+							Add
+						</button>
+					</div>
+				</div>
+				<div class="edit-tags" *ngIf="isEditing" @ngIfScaleAnimation>
+					<div
+						class="edit-tag"
+						[ngClass]="'edit-tag-' + tagType"
+						*ngFor="let tag of matchingTags; let i = index"
+						[class.is-selected]="itemTagsById.has(tag.tagId)"
+						(click)="onTagClick(tag)"
+						(keydown)="onArrowNav($event, i)"
+						(keydown.enter)="onTagClick(tag)"
+						tabindex="0"
+					>
+						<div class="select">
+							<div class="select-active"></div>
+						</div>
+						<div class="tag-name">
+							{{ tag.name }}
+						</div>
+					</div>
+					<div class="edit-tag" *ngIf="!matchingTags.length">
+						No existing keywords found
+					</div>
+				</div>
+				<p class="manage-tags-message" *ngIf="isEditing" @ngIfScaleAnimation>
+					<span class="manage-tags-link" (click)="onManageTagsClick()">
+						Manage
+						{{
+							this.tagType === 'keyword' ? 'keywords' : 'custom metadata'
+						}}</span
+					>
+					in archive settings.
+				</p>
+			</div>
+		</div>
+		<div class="dialog-footer">
+			<button class="btn btn-secondary" (click)="close()">Done</button>
+		</div>
+	</div>
 </ng-container>

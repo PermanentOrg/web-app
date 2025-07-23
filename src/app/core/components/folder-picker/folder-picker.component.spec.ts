@@ -9,8 +9,8 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 import { SharedModule } from '@shared/shared.module';
 import { FolderVO } from '@root/app/models';
 import {
-  HttpTestingController,
-  TestRequest,
+	HttpTestingController,
+	TestRequest,
 } from '@angular/common/http/testing';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { DataStatus } from '@models/data-status.enum';
@@ -18,74 +18,74 @@ import { of } from 'rxjs';
 import { FolderPickerComponent } from './folder-picker.component';
 
 describe('FolderPickerComponent', () => {
-  let component: FolderPickerComponent;
-  let fixture: ComponentFixture<FolderPickerComponent>;
-  let httpMock: HttpTestingController;
+	let component: FolderPickerComponent;
+	let fixture: ComponentFixture<FolderPickerComponent>;
+	let httpMock: HttpTestingController;
 
-  beforeEach(waitForAsync(() => {
-    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+	beforeEach(waitForAsync(() => {
+		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
-    config.imports.push(SharedModule);
+		config.imports.push(SharedModule);
 
-    config.declarations.push(FolderPickerComponent);
+		config.declarations.push(FolderPickerComponent);
 
-    config.providers.push(DataService);
-    config.providers.push(ApiService);
-    config.providers.push(FolderPickerService);
+		config.providers.push(DataService);
+		config.providers.push(ApiService);
+		config.providers.push(FolderPickerService);
 
-    TestBed.configureTestingModule(config).compileComponents();
-  }));
+		TestBed.configureTestingModule(config).compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(FolderPickerComponent);
+	beforeEach(() => {
+		fixture = TestBed.createComponent(FolderPickerComponent);
 
-    httpMock = TestBed.get(HttpTestingController);
+		httpMock = TestBed.get(HttpTestingController);
 
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create with no folder and should be hidden', () => {
-    expect(component).toBeTruthy();
-    expect(component.visible).toBeFalsy();
-    expect(component.currentFolder).toBeFalsy();
-  });
+	it('should create with no folder and should be hidden', () => {
+		expect(component).toBeTruthy();
+		expect(component.visible).toBeFalsy();
+		expect(component.currentFolder).toBeFalsy();
+	});
 
-  it('should initialize a folder, strip out records, and load lean child folders', async () => {
-    const api = TestBed.get(ApiService) as ApiService;
-    const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
-    const myFiles = new FolderResponse(navigateMinExpected).getFolderVO();
+	it('should initialize a folder, strip out records, and load lean child folders', async () => {
+		const api = TestBed.get(ApiService) as ApiService;
+		const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
+		const myFiles = new FolderResponse(navigateMinExpected).getFolderVO();
 
-    spyOn(api.folder, 'navigate').and.returnValue(
-      of(new FolderResponse(navigateMinExpected)),
-    );
+		spyOn(api.folder, 'navigate').and.returnValue(
+			of(new FolderResponse(navigateMinExpected)),
+		);
 
-    await component.setFolder(myFiles);
+		await component.setFolder(myFiles);
 
-    expect(api.folder.navigate).toHaveBeenCalledTimes(1);
-    expect(component.currentFolder).toBeTruthy();
-    expect(component.currentFolder.folder_linkId).toEqual(
-      myFiles.folder_linkId,
-    );
+		expect(api.folder.navigate).toHaveBeenCalledTimes(1);
+		expect(component.currentFolder).toBeTruthy();
+		expect(component.currentFolder.folder_linkId).toEqual(
+			myFiles.folder_linkId,
+		);
 
-    expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
+		expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
 
-    const getLeanItemsExpected = require('@root/test/responses/folder.getLeanItems.folderPicker.myFiles.success.json');
-    spyOn(api.folder, 'getLeanItems').and.returnValue(
-      of(new FolderResponse(getLeanItemsExpected)),
-    );
+		const getLeanItemsExpected = require('@root/test/responses/folder.getLeanItems.folderPicker.myFiles.success.json');
+		spyOn(api.folder, 'getLeanItems').and.returnValue(
+			of(new FolderResponse(getLeanItemsExpected)),
+		);
 
-    await component.loadCurrentFolderChildData();
+		await component.loadCurrentFolderChildData();
 
-    expect(component.currentFolder).toBeTruthy();
-    expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
-    expect(
-      some(
-        component.currentFolder.ChildItemVOs as FolderVO[],
-        (childFolder: FolderVO) => {
-          return childFolder.dataStatus === DataStatus.Placeholder;
-        },
-      ),
-    ).toBeFalsy();
-  });
+		expect(component.currentFolder).toBeTruthy();
+		expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
+		expect(
+			some(
+				component.currentFolder.ChildItemVOs as FolderVO[],
+				(childFolder: FolderVO) => {
+					return childFolder.dataStatus === DataStatus.Placeholder;
+				},
+			),
+		).toBeFalsy();
+	});
 });

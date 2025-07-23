@@ -1,10 +1,10 @@
 /* @format */
 import {
-  ArchiveVO,
-  RecordVO,
-  FolderVO,
-  ItemVO,
-  TagVOData,
+	ArchiveVO,
+	RecordVO,
+	FolderVO,
+	ItemVO,
+	TagVOData,
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
@@ -12,142 +12,142 @@ import { Observable } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
 
 export class SearchRepo extends BaseRepo {
-  public archiveByEmail(email: string): Observable<SearchResponse> {
-    const data = [
-      {
-        SearchVO: {
-          query: email,
-        },
-      },
-    ];
+	public archiveByEmail(email: string): Observable<SearchResponse> {
+		const data = [
+			{
+				SearchVO: {
+					query: email,
+				},
+			},
+		];
 
-    return this.http.sendRequest<SearchResponse>(
-      '/search/archiveByEmail',
-      data,
-      { responseClass: SearchResponse },
-    );
-  }
+		return this.http.sendRequest<SearchResponse>(
+			'/search/archiveByEmail',
+			data,
+			{ responseClass: SearchResponse },
+		);
+	}
 
-  public archiveByNameObservable(query: string): Observable<SearchResponse> {
-    const data = [
-      {
-        SearchVO: {
-          query,
-        },
-      },
-    ];
+	public archiveByNameObservable(query: string): Observable<SearchResponse> {
+		const data = [
+			{
+				SearchVO: {
+					query,
+				},
+			},
+		];
 
-    return this.http.sendRequest<SearchResponse>('/search/archive', data, {
-      responseClass: SearchResponse,
-    });
-  }
+		return this.http.sendRequest<SearchResponse>('/search/archive', data, {
+			responseClass: SearchResponse,
+		});
+	}
 
-  public itemsByNameObservable(
-    query: string,
-    tags: any[] = [],
-    limit?: number,
-  ): Observable<SearchResponse> {
-    const data = {
-      SearchVO: {
-        query,
-        TagVOs: tags,
-        numberOfResults: limit,
-      },
-    };
+	public itemsByNameObservable(
+		query: string,
+		tags: any[] = [],
+		limit?: number,
+	): Observable<SearchResponse> {
+		const data = {
+			SearchVO: {
+				query,
+				TagVOs: tags,
+				numberOfResults: limit,
+			},
+		};
 
-    return this.http.sendRequest<SearchResponse>(
-      '/search/folderAndRecord',
-      [data],
-      { responseClass: SearchResponse },
-    );
-  }
+		return this.http.sendRequest<SearchResponse>(
+			'/search/folderAndRecord',
+			[data],
+			{ responseClass: SearchResponse },
+		);
+	}
 
-  public itemsByNameInPublicArchiveObservable(
-    query: string,
-    tags: TagVOData[] = [],
-    archiveId: string,
-    limit?: number,
-  ) {
-    const tagsDict = tags.reduce((obj, tag, index) => {
-      obj[`tags[${index}][tagId]`] = tag.tagId;
-      return obj;
-    }, {});
+	public itemsByNameInPublicArchiveObservable(
+		query: string,
+		tags: TagVOData[] = [],
+		archiveId: string,
+		limit?: number,
+	) {
+		const tagsDict = tags.reduce((obj, tag, index) => {
+			obj[`tags[${index}][tagId]`] = tag.tagId;
+			return obj;
+		}, {});
 
-    const data: {
-      query: string;
-      archiveId: string | number;
-      publicOnly: boolean;
-      tagsDict?: Record<string, string>;
-      numberOfResults?: number;
-    } = {
-      query,
-      archiveId,
-      publicOnly: true,
-      ...tagsDict,
-    };
+		const data: {
+			query: string;
+			archiveId: string | number;
+			publicOnly: boolean;
+			tagsDict?: Record<string, string>;
+			numberOfResults?: number;
+		} = {
+			query,
+			archiveId,
+			publicOnly: true,
+			...tagsDict,
+		};
 
-    if (limit) {
-      data.numberOfResults = limit;
-    }
+		if (limit) {
+			data.numberOfResults = limit;
+		}
 
-    return getFirst(
-      this.httpV2.get<SearchResponse>('/search/folderAndRecord', data, null, {
-        authToken: false,
-      }),
-    );
-  }
+		return getFirst(
+			this.httpV2.get<SearchResponse>('/search/folderAndRecord', data, null, {
+				authToken: false,
+			}),
+		);
+	}
 
-  public getPublicArchiveTags(archiveId: string): Observable<TagVOData[]> {
-    return this.httpV2.get(`v2/archive/${archiveId}/tags/public`);
-  }
+	public getPublicArchiveTags(archiveId: string): Observable<TagVOData[]> {
+		return this.httpV2.get(`v2/archive/${archiveId}/tags/public`);
+	}
 }
 
 export class SearchResponse extends BaseResponse {
-  public ChildItemVOs: ItemVO[];
+	public ChildItemVOs: ItemVO[];
 
-  public getArchiveVOs(): ArchiveVO[] {
-    const data = this.getResultsData();
+	public getArchiveVOs(): ArchiveVO[] {
+		const data = this.getResultsData();
 
-    if (!data || !data.length) {
-      return [];
-    }
+		if (!data || !data.length) {
+			return [];
+		}
 
-    const archives = data.map((result) => {
-      return result.map((resultList) => {
-        return new ArchiveVO(resultList.ArchiveVO);
-      });
-    });
+		const archives = data.map((result) => {
+			return result.map((resultList) => {
+				return new ArchiveVO(resultList.ArchiveVO);
+			});
+		});
 
-    return flatten(archives);
-  }
+		return flatten(archives);
+	}
 
-  public getItemVOs(initChildren?: boolean): ItemVO[] {
-    const data = this.getResultsData();
+	public getItemVOs(initChildren?: boolean): ItemVO[] {
+		const data = this.getResultsData();
 
-    if (!data.length) {
-      return [];
-    }
+		if (!data.length) {
+			return [];
+		}
 
-    const searchVO = data[0][0].SearchVO;
+		const searchVO = data[0][0].SearchVO;
 
-    return searchVO.ChildItemVOs.map((i) => {
-      if (i.recordId) {
-        return new RecordVO(i);
-      } else {
-        return new FolderVO(i, initChildren);
-      }
-    });
-  }
+		return searchVO.ChildItemVOs.map((i) => {
+			if (i.recordId) {
+				return new RecordVO(i);
+			} else {
+				return new FolderVO(i, initChildren);
+			}
+		});
+	}
 
-  public getRecordVOs() {
-    const data = this.getResultsData();
+	public getRecordVOs() {
+		const data = this.getResultsData();
 
-    if (!data.length) {
-      return [];
-    }
+		if (!data.length) {
+			return [];
+		}
 
-    return data[0].map((result) => {
-      return new RecordVO(result.RecordVO);
-    });
-  }
+		return data[0].map((result) => {
+			return new RecordVO(result.RecordVO);
+		});
+	}
 }

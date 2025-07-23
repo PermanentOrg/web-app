@@ -1,124 +1,124 @@
 @import 'variables';
 
 .public-archive {
-  display: flex;
-  font-family: Arial, sans-serif;
-  background: #fff;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  &-info {
-    display: flex;
-    flex-direction: column;
-  }
+	display: flex;
+	font-family: Arial, sans-serif;
+	background: #fff;
+	padding: 20px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	&-info {
+		display: flex;
+		flex-direction: column;
+	}
 }
 
 .public-archives-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 320px;
-  overflow-x: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	max-height: 320px;
+	overflow-x: auto;
 
-  @include beforeDesktop {
-    overflow: hidden;
+	@include beforeDesktop {
+		overflow: hidden;
 
-    &-expanded {
-      max-height: fit-content;
-    }
-  }
+		&-expanded {
+			max-height: fit-content;
+		}
+	}
 }
 
 .public-archive {
-  display: flex;
-  align-items: center;
-  padding: 0px 10px 0px 0px;
-  border: 1px solid #eaeaea;
-  width: 90%;
-  cursor: pointer;
-  box-shadow:
-    0px 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0px 2px 4px -1px rgba(0, 0, 0, 0.06);
+	display: flex;
+	align-items: center;
+	padding: 0px 10px 0px 0px;
+	border: 1px solid #eaeaea;
+	width: 90%;
+	cursor: pointer;
+	box-shadow:
+		0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0px 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .public-archive img {
-  width: 95px;
-  height: 95px;
-  margin-right: 10px;
-  object-fit: cover;
+	width: 95px;
+	height: 95px;
+	margin-right: 10px;
+	object-fit: cover;
 }
 
 .public-archive-info {
-  flex-grow: 1;
+	flex-grow: 1;
 }
 
 .public-archive-info span {
-  display: block;
-  color: #333;
+	display: block;
+	color: #333;
 }
 
 .public-archive-info span:first-child {
-  font-weight: bold;
-  margin-bottom: 5px;
+	font-weight: bold;
+	margin-bottom: 5px;
 }
 
 .public-archives {
-  width: 450px;
-  margin-left: 50px;
+	width: 450px;
+	margin-left: 50px;
 
-  h3 {
-    margin-bottom: 40px;
-  }
-  @include beforeDesktop {
-    margin-left: 0;
+	h3 {
+		margin-bottom: 40px;
+	}
+	@include beforeDesktop {
+		margin-left: 0;
 
-    h3 {
-      margin-bottom: 20px;
-      margin-top: 40px;
-    }
-  }
+		h3 {
+			margin-bottom: 20px;
+			margin-top: 40px;
+		}
+	}
 }
 
 .no-archives {
-  background-color: $gray-200;
-  height: 315px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  width: 430px;
-  padding: 20px;
+	background-color: $gray-200;
+	height: 315px;
+	border-radius: 8px;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	width: 430px;
+	padding: 20px;
 
-  & > p,
-  & > a {
-    font-size: 22px;
-  }
-  @include beforeDesktop {
-    width: 390px;
-    height: 250px;
-    padding-left: 30px;
-    margin-bottom: 40px;
+	& > p,
+	& > a {
+		font-size: 22px;
+	}
+	@include beforeDesktop {
+		width: 390px;
+		height: 250px;
+		padding-left: 30px;
+		margin-bottom: 40px;
 
-    & > p,
-    & > a {
-      font-size: 22px;
-    }
-  }
+		& > p,
+		& > a {
+			font-size: 22px;
+		}
+	}
 }
 
 .no-archives-text {
-  color: $gray-800;
+	color: $gray-800;
 }
 
 .learn-more {
-  color: $PR-blue;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
+	color: $PR-blue;
+	font-weight: bold;
+	cursor: pointer;
+	text-decoration: none;
 }
 
 .see-more {
-  display: none;
-  @include beforeDesktop {
-    display: inline;
-  }
+	display: none;
+	@include beforeDesktop {
+		display: inline;
+	}
 }

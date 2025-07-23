@@ -1,24 +1,24 @@
 <!-- @format -->
 <div
-  class="checkbox-container"
-  [class.checkbox-container-disabled]="disabled"
-  [class.checkbox-container-enabled]="!disabled"
-  [class.checkbox-container-primary]="variant === 'primary'"
-  [class.checkbox-container-secondary]="variant === 'secondary'"
-  [class.checkbox-container-secondary-onboarding]="
-    variant === 'secondary' && onboarding
-  "
-  (click)="toggleCheck()"
-  (keydown)="handleKeyDown($event)"
+	class="checkbox-container"
+	[class.checkbox-container-disabled]="disabled"
+	[class.checkbox-container-enabled]="!disabled"
+	[class.checkbox-container-primary]="variant === 'primary'"
+	[class.checkbox-container-secondary]="variant === 'secondary'"
+	[class.checkbox-container-secondary-onboarding]="
+		variant === 'secondary' && onboarding
+	"
+	(click)="toggleCheck()"
+	(keydown)="handleKeyDown($event)"
 >
-  <div
-    role="checkbox"
-    [attr.tabindex]="disabled ? -1 : 0"
-    [attr.aria-checked]="isChecked"
-    [attr.aria-disabled]="disabled"
-    aria-labelledby="checkboxLabel"
-    class="checkbox"
-    [class.checked]="isChecked"
-  ></div>
-  <label id="checkboxLabel">{{ text }}</label>
+	<div
+		role="checkbox"
+		[attr.tabindex]="disabled ? -1 : 0"
+		[attr.aria-checked]="isChecked"
+		[attr.aria-disabled]="disabled"
+		aria-labelledby="checkboxLabel"
+		class="checkbox"
+		[class.checked]="isChecked"
+	></div>
+	<label id="checkboxLabel">{{ text }}</label>
 </div>

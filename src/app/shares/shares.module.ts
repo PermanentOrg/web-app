@@ -8,14 +8,14 @@ import { SharedModule } from '@shared/shared.module';
 import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule,
-    AppsRoutingModule,
-    FileBrowserComponentsModule,
-  ],
-  declarations: [SharesComponent],
-  providers: [],
+	imports: [
+		CommonModule,
+		SharedModule,
+		RouterModule,
+		AppsRoutingModule,
+		FileBrowserComponentsModule,
+	],
+	declarations: [SharesComponent],
+	providers: [],
 })
 export class SharesModule {}

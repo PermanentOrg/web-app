@@ -1,48 +1,48 @@
 @import 'variables';
 
 .main-content {
-  opacity: 1;
+	opacity: 1;
 
-  &.navigating {
-    opacity: 0.5;
-    pointer-events: none;
-    transition: 0.1s ease-in opacity;
-  }
+	&.navigating {
+		opacity: 0.5;
+		pointer-events: none;
+		transition: 0.1s ease-in opacity;
+	}
 
-  &.uploading {
-    padding-bottom: 80px;
-  }
+	&.uploading {
+		padding-bottom: 80px;
+	}
 }
 
 pr-folder-picker {
-  z-index: 1010;
+	z-index: 1010;
 }
 
 @include desktop {
-  :host {
-    display: flex;
-    height: 100vh;
-    overflow-y: hidden;
-  }
+	:host {
+		display: flex;
+		height: 100vh;
+		overflow-y: hidden;
+	}
 
-  .main-panel {
-    flex: 1 1 auto;
-    max-width: calc(100% - #{$left-menu-width});
-    display: flex;
-    flex-direction: column;
-  }
+	.main-panel {
+		flex: 1 1 auto;
+		max-width: calc(100% - #{$left-menu-width});
+		display: flex;
+		flex-direction: column;
+	}
 
-  .main-content {
-    padding-top: 0;
-    padding-left: 1 * $grid-unit;
-    padding-right: 1 * $grid-unit;
+	.main-content {
+		padding-top: 0;
+		padding-left: 1 * $grid-unit;
+		padding-right: 1 * $grid-unit;
 
-    &.uploading {
-      padding-bottom: 0;
-    }
-  }
+		&.uploading {
+			padding-bottom: 0;
+		}
+	}
 
-  pr-nav {
-    flex: 0 0 $navbar-total-height-desktop;
-  }
+	pr-nav {
+		flex: 0 0 $navbar-total-height-desktop;
+	}
 }

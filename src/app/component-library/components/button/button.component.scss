@@ -1,147 +1,147 @@
 @import 'variables';
 
 @mixin darkButton($isLink: false) {
-  background-color: rgba(255, 255, 255, 0);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+	background-color: rgba(255, 255, 255, 0);
+	border: 1px solid rgba(255, 255, 255, 0.32);
 
-  & > .button-text {
-    color: white;
-    margin: 0;
-    @include bodyMedium;
+	& > .button-text {
+		color: white;
+		margin: 0;
+		@include bodyMedium;
 
-    @if $isLink {
-      font-size: 14px;
-    }
-  }
+		@if $isLink {
+			font-size: 14px;
+		}
+	}
 }
 
 @mixin lightButton($isLink: false) {
-  background-color: $white;
-  border: 1px solid rgba(184, 187, 201, 1);
-  & > .button-text {
-    color: rgba(19, 27, 74, 1);
-    margin: 0;
-    @include bodyMedium;
+	background-color: $white;
+	border: 1px solid rgba(184, 187, 201, 1);
+	& > .button-text {
+		color: rgba(19, 27, 74, 1);
+		margin: 0;
+		@include bodyMedium;
 
-    @if $isLink {
-      font-size: 14px;
-    }
-  }
+		@if $isLink {
+			font-size: 14px;
+		}
+	}
 
-  & > .icon {
-    color: rgba(19, 27, 74, 1);
-  }
+	& > .icon {
+		color: rgba(19, 27, 74, 1);
+	}
 }
 
 .button {
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
 
-  &:focus {
-    outline: none;
-  }
+	&:focus {
+		outline: none;
+	}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 12px;
-  padding: 0px 24px;
-  gap: 16px;
-  cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 12px;
+	padding: 0px 24px;
+	gap: 16px;
+	cursor: pointer;
 
-  &-large {
-    height: 64px;
-  }
+	&-large {
+		height: 64px;
+	}
 
-  &-reverse {
-    flex-direction: row-reverse;
-  }
+	&-reverse {
+		flex-direction: row-reverse;
+	}
 
-  & > .icon {
-    color: white;
-  }
+	& > .icon {
+		color: white;
+	}
 
-  &-primary {
-    &.button-light {
-      @include darkButton();
-      &:focus {
-        border: 2px solid white;
-      }
-    }
-    &.button-dark {
-      @include lightButton();
-    }
-  }
+	&-primary {
+		&.button-light {
+			@include darkButton();
+			&:focus {
+				border: 2px solid white;
+			}
+		}
+		&.button-dark {
+			@include lightButton();
+		}
+	}
 
-  &-secondary {
-    &.button-light {
-      @include lightButton();
-      &:focus {
-        border: 2px solid black;
-      }
-    }
-    &.button-dark {
-      @include darkButton();
-      border: 1px solid rgba(255, 255, 255, 0.32);
-    }
-  }
+	&-secondary {
+		&.button-light {
+			@include lightButton();
+			&:focus {
+				border: 2px solid black;
+			}
+		}
+		&.button-dark {
+			@include darkButton();
+			border: 1px solid rgba(255, 255, 255, 0.32);
+		}
+	}
 
-  &-tertiary {
-    &.button-dark {
-      @include darkButton();
-      border: 1px solid transparent;
-    }
-    &.button-light {
-      @include lightButton();
-      border: 1px solid transparent;
-    }
-  }
+	&-tertiary {
+		&.button-dark {
+			@include darkButton();
+			border: 1px solid transparent;
+		}
+		&.button-light {
+			@include lightButton();
+			border: 1px solid transparent;
+		}
+	}
 
-  &-hug {
-    padding: 16px 24px;
-  }
+	&-hug {
+		padding: 16px 24px;
+	}
 
-  &-fill {
-    width: 100%;
-    padding: 12px 24px;
-    height: 56px;
-    justify-content: space-between;
-    &-no-icon {
-      justify-content: center;
-    }
-  }
+	&-fill {
+		width: 100%;
+		padding: 12px 24px;
+		height: 56px;
+		justify-content: space-between;
+		&-no-icon {
+			justify-content: center;
+		}
+	}
 
-  &-fill.button-large {
-    height: 64px;
-  }
+	&-fill.button-large {
+		height: 64px;
+	}
 
-  &-text {
-    color: white;
-    margin: 0;
-    @include bodyMedium;
-  }
+	&-text {
+		color: white;
+		margin: 0;
+		@include bodyMedium;
+	}
 
-  &-link {
-    margin-left: 4px;
-    padding: 0px;
-    &.button-dark {
-      @include darkButton(true);
-      font-size: 14px;
-      border: 1px solid transparent;
-    }
-    &.button-light {
-      @include lightButton(true);
-      font-size: 14px;
-      border: 1px solid transparent;
-    }
+	&-link {
+		margin-left: 4px;
+		padding: 0px;
+		&.button-dark {
+			@include darkButton(true);
+			font-size: 14px;
+			border: 1px solid transparent;
+		}
+		&.button-light {
+			@include lightButton(true);
+			font-size: 14px;
+			border: 1px solid transparent;
+		}
 
-    &:focus {
-      outline: none;
-      background-color: #e0e0e0;
-      box-shadow: 0 0 0 3px rgba(21, 156, 228, 0.4);
-      border-color: #159ce4;
-    }
-  }
+		&:focus {
+			outline: none;
+			background-color: #e0e0e0;
+			box-shadow: 0 0 0 3px rgba(21, 156, 228, 0.4);
+			border-color: #159ce4;
+		}
+	}
 }

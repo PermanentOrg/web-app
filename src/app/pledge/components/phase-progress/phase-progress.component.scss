@@ -1,80 +1,80 @@
 @import 'variables';
 
 :host {
-  padding: 20px;
-  opacity: 0;
+	padding: 20px;
+	opacity: 0;
 
-  &.visible {
-    opacity: 1;
-    transition: 0.5s opacity ease-in;
-  }
+	&.visible {
+		opacity: 1;
+		transition: 0.5s opacity ease-in;
+	}
 
-  &.for-light-bg {
-    color: black;
-  }
+	&.for-light-bg {
+		color: black;
+	}
 
-  &.for-dark-bg {
-    color: white;
-  }
+	&.for-dark-bg {
+		color: white;
+	}
 }
 
 .phase-progress {
-  padding: 10px 0px;
+	padding: 10px 0px;
 }
 
 .progress-bar {
-  width: 100%;
-  border-radius: 0.25rem;
-  height: 40px;
-  background: rgba($gray-300, 0.5);
-  border: 0px solid $PR-orange;
-  overflow: hidden;
+	width: 100%;
+	border-radius: 0.25rem;
+	height: 40px;
+	background: rgba($gray-300, 0.5);
+	border: 0px solid $PR-orange;
+	overflow: hidden;
 }
 
 .pledge-progress-header {
-  font-size: 2rem;
+	font-size: 2rem;
 }
 
 .pledge-progress-details {
-  display: flex;
-  .pledge-progress-detail {
-    font-size: 1rem;
-    flex: 0 1 10rem;
+	display: flex;
+	.pledge-progress-detail {
+		font-size: 1rem;
+		flex: 0 1 10rem;
 
-    .detail-heading {
-      font-weight: 600;
-      font-size: 1.3rem;
-      line-height: 1.1;
-    }
-  }
+		.detail-heading {
+			font-weight: 600;
+			font-size: 1.3rem;
+			line-height: 1.1;
+		}
+	}
 }
 
 @media screen and (max-width: 767px) {
-  :host {
-    padding: 20px 0px;
-  }
+	:host {
+		padding: 20px 0px;
+	}
 
-  .pledge-progress-header {
-    font-size: 1.2rem;
-  }
+	.pledge-progress-header {
+		font-size: 1.2rem;
+	}
 
-  .pledge-progress-details {
-    flex-wrap: wrap;
-  }
+	.pledge-progress-details {
+		flex-wrap: wrap;
+	}
 
-  .pledge-progress-details .pledge-progress-detail {
-    flex: 0 0 100%;
-    line-height: 1.4;
+	.pledge-progress-details .pledge-progress-detail {
+		flex: 0 0 100%;
+		line-height: 1.4;
 
-    .detail-heading {
-      font-weight: 600;
-      display: inline-block;
-      font-size: 1rem;
-      line-height: 1;
-    }
+		.detail-heading {
+			font-weight: 600;
+			display: inline-block;
+			font-size: 1rem;
+			line-height: 1;
+		}
 
-    &:not(:last-child) {
-      margin-bottom: 10px;
-    }
-  }
+		&:not(:last-child) {
+			margin-bottom: 10px;
+		}
+	}
 }

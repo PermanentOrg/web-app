@@ -1,37 +1,37 @@
 <!-- @format  -->
 <div class="advanced-settings">
-  <p class="title">Advanced settings</p>
-  <div class="settings-item">
-    <label>Allow SFTP Deletion</label>
-    <div class="form-check form-check-inline">
-      <input
-        class="form-check-input"
-        type="radio"
-        name="allowSFTPDeletion"
-        id="allowSFTPDeletionOn"
-        [value]="1"
-        [disabled]="updating"
-        [(ngModel)]="allowSFTPDeletion"
-        (ngModelChange)="onAllowSFTPDeletion()"
-      />
-      <label class="form-check-label" for="allowDownloadsToggleOn">On</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input
-        class="form-check-input"
-        type="radio"
-        name="allowSFTPDeletion"
-        id="allowSFTPDeletionOff"
-        [value]="0"
-        [disabled]="updating"
-        [(ngModel)]="allowSFTPDeletion"
-        (ngModelChange)="onAllowSFTPDeletion()"
-      />
-      <label class="form-check-label" for="allowDownloadsToggleOff">Off</label>
-    </div>
-  </div>
-  <small class="text-muted">
-    When deletion is on, files will be deleted from your archive while using
-    SFTP if the file is not in your repository.
-  </small>
+	<p class="title">Advanced settings</p>
+	<div class="settings-item">
+		<label>Allow SFTP Deletion</label>
+		<div class="form-check form-check-inline">
+			<input
+				class="form-check-input"
+				type="radio"
+				name="allowSFTPDeletion"
+				id="allowSFTPDeletionOn"
+				[value]="1"
+				[disabled]="updating"
+				[(ngModel)]="allowSFTPDeletion"
+				(ngModelChange)="onAllowSFTPDeletion()"
+			/>
+			<label class="form-check-label" for="allowDownloadsToggleOn">On</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input
+				class="form-check-input"
+				type="radio"
+				name="allowSFTPDeletion"
+				id="allowSFTPDeletionOff"
+				[value]="0"
+				[disabled]="updating"
+				[(ngModel)]="allowSFTPDeletion"
+				(ngModelChange)="onAllowSFTPDeletion()"
+			/>
+			<label class="form-check-label" for="allowDownloadsToggleOff">Off</label>
+		</div>
+	</div>
+	<small class="text-muted">
+		When deletion is on, files will be deleted from your archive while using
+		SFTP if the file is not in your repository.
+	</small>
 </div>

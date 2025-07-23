@@ -1,24 +1,24 @@
 <!-- @format  -->
 <button
-  [attr.type]="buttonType"
-  class="button"
-  [style]="style"
-  [ngClass]="[
-    'button-' + variant,
-    'button-' + size,
-    'button-' + mode,
-    'button-' + height,
-    size === 'fill' && !icon && !faIcon ? 'button-fill-no-icon' : '',
-    orientation === 'right' ? 'button-reverse' : ''
-  ]"
-  [disabled]="disabled"
-  [style]="style"
-  (click)="onClick($event)"
-  [style]="style"
+	[attr.type]="buttonType"
+	class="button"
+	[style]="style"
+	[ngClass]="[
+		'button-' + variant,
+		'button-' + size,
+		'button-' + mode,
+		'button-' + height,
+		size === 'fill' && !icon && !faIcon ? 'button-fill-no-icon' : '',
+		orientation === 'right' ? 'button-reverse' : ''
+	]"
+	[disabled]="disabled"
+	[style]="style"
+	(click)="onClick($event)"
+	[style]="style"
 >
-  <img *ngIf="icon" class="icon" src="{{ 'assets/svg/' + icon + '.svg' }}" />
-  <fa-icon class="icon" *ngIf="faIcon" [icon]="['fas', faIcon]"></fa-icon>
-  <p [style]="{ color: color }" class="button-text">
-    <ng-content></ng-content>
-  </p>
+	<img *ngIf="icon" class="icon" src="{{ 'assets/svg/' + icon + '.svg' }}" />
+	<fa-icon class="icon" *ngIf="faIcon" [icon]="['fas', faIcon]"></fa-icon>
+	<p [style]="{ color: color }" class="button-text">
+		<ng-content></ng-content>
+	</p>
 </button>

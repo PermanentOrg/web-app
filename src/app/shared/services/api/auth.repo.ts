@@ -1,198 +1,198 @@
 /* @format */
 import {
-  AccountVO,
-  AccountPasswordVO,
-  ArchiveVO,
-  AuthVO,
-  AccountPasswordVOData,
-  SimpleVO,
+	AccountVO,
+	AccountPasswordVO,
+	ArchiveVO,
+	AuthVO,
+	AccountPasswordVOData,
+	SimpleVO,
 } from '@root/app/models';
 import {
-  BaseResponse,
-  BaseRepo,
-  CSRFResponse,
+	BaseResponse,
+	BaseRepo,
+	CSRFResponse,
 } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
 
 export class AuthRepo extends BaseRepo {
-  public isLoggedIn(): Promise<AuthResponse> {
-    return this.http.sendRequestPromise('/auth/loggedIn', undefined, {
-      responseClass: AuthResponse,
-    });
-  }
+	public isLoggedIn(): Promise<AuthResponse> {
+		return this.http.sendRequestPromise('/auth/loggedIn', undefined, {
+			responseClass: AuthResponse,
+		});
+	}
 
-  public logIn(
-    email: string,
-    password: string,
-    rememberMe: boolean,
-    keepLoggedIn: boolean,
-  ): Observable<AuthResponse> {
-    const accountVO = new AccountVO({
-      primaryEmail: email,
-      rememberMe: rememberMe,
-      keepLoggedIn: keepLoggedIn,
-    });
+	public logIn(
+		email: string,
+		password: string,
+		rememberMe: boolean,
+		keepLoggedIn: boolean,
+	): Observable<AuthResponse> {
+		const accountVO = new AccountVO({
+			primaryEmail: email,
+			rememberMe: rememberMe,
+			keepLoggedIn: keepLoggedIn,
+		});
 
-    const accountPasswordVO = new AccountPasswordVO({
-      password: password,
-    });
+		const accountPasswordVO = new AccountPasswordVO({
+			password: password,
+		});
 
-    return this.http.sendRequest<AuthResponse>(
-      '/auth/login',
-      [{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO }],
-      { responseClass: AuthResponse },
-    );
-  }
+		return this.http.sendRequest<AuthResponse>(
+			'/auth/login',
+			[{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO }],
+			{ responseClass: AuthResponse },
+		);
+	}
 
-  public logOut() {
-    return this.http.sendRequest<AuthResponse>('/auth/logout');
-  }
+	public logOut() {
+		return this.http.sendRequest<AuthResponse>('/auth/logout');
+	}
 
-  public verify(account: AccountVO, token: string, type: string) {
-    const accountVO = new AccountVO({
-      primaryEmail: account.primaryEmail,
-      accountId: account.accountId,
-    });
+	public verify(account: AccountVO, token: string, type: string) {
+		const accountVO = new AccountVO({
+			primaryEmail: account.primaryEmail,
+			accountId: account.accountId,
+		});
 
-    const authVO = new AuthVO({
-      token: token,
-      type: type,
-    });
+		const authVO = new AuthVO({
+			token: token,
+			type: type,
+		});
 
-    return this.http.sendRequest<AuthResponse>(
-      '/auth/verify',
-      [{ AccountVO: accountVO, AuthVO: authVO }],
-      { responseClass: AuthResponse },
-    );
-  }
+		return this.http.sendRequest<AuthResponse>(
+			'/auth/verify',
+			[{ AccountVO: accountVO, AuthVO: authVO }],
+			{ responseClass: AuthResponse },
+		);
+	}
 
-  public forgotPassword(email: string) {
-    const accountVO = new AccountVO({
-      primaryEmail: email,
-    });
+	public forgotPassword(email: string) {
+		const accountVO = new AccountVO({
+			primaryEmail: email,
+		});
 
-    return this.http.sendRequest<AuthResponse>(
-      '/auth/sendEmailForgotPassword',
-      [{ AccountVO: accountVO }],
-      { responseClass: AuthResponse },
-    );
-  }
+		return this.http.sendRequest<AuthResponse>(
+			'/auth/sendEmailForgotPassword',
+			[{ AccountVO: accountVO }],
+			{ responseClass: AuthResponse },
+		);
+	}
 
-  public updatePassword(
-    account: AccountVO,
-    passwordVo: AccountPasswordVOData,
-    trustToken?: string,
-  ) {
-    const data = [
-      {
-        AccountVO: account,
-        AccountPasswordVO: passwordVo,
-      },
-    ];
+	public updatePassword(
+		account: AccountVO,
+		passwordVo: AccountPasswordVOData,
+		trustToken?: string,
+	) {
+		const data = [
+			{
+				AccountVO: account,
+				AccountPasswordVO: passwordVo,
+			},
+		];
 
-    if (trustToken) {
-      const v2data = {
-        accountId: parseInt(account.accountId, 10),
-        passwordOld: passwordVo.passwordOld,
-        password: passwordVo.password,
-        passwordVerify: passwordVo.passwordVerify,
-        trustToken,
-      };
-      return this.httpV2
-        .post('/account/changePassword', v2data, null, { csrf: true })
-        .toPromise();
-    }
+		if (trustToken) {
+			const v2data = {
+				accountId: parseInt(account.accountId, 10),
+				passwordOld: passwordVo.passwordOld,
+				password: passwordVo.password,
+				passwordVerify: passwordVo.passwordVerify,
+				trustToken,
+			};
+			return this.httpV2
+				.post('/account/changePassword', v2data, null, { csrf: true })
+				.toPromise();
+		}
 
-    return this.http.sendRequestPromise<AuthResponse>(
-      '/account/changePassword',
-      data,
-      { responseClass: AuthResponse },
-    );
-  }
+		return this.http.sendRequestPromise<AuthResponse>(
+			'/account/changePassword',
+			data,
+			{ responseClass: AuthResponse },
+		);
+	}
 
-  public resendEmailVerification(accountVO: AccountVO) {
-    const account = {
-      primaryEmail: accountVO.primaryEmail,
-      accountId: accountVO.accountId,
-    };
+	public resendEmailVerification(accountVO: AccountVO) {
+		const account = {
+			primaryEmail: accountVO.primaryEmail,
+			accountId: accountVO.accountId,
+		};
 
-    return this.http.sendRequestPromise<AuthResponse>(
-      '/auth/resendMailCreatedAccount',
-      [account],
-      { responseClass: AuthResponse },
-    );
-  }
+		return this.http.sendRequestPromise<AuthResponse>(
+			'/auth/resendMailCreatedAccount',
+			[account],
+			{ responseClass: AuthResponse },
+		);
+	}
 
-  public resendPhoneVerification(accountVO: AccountVO) {
-    const account = {
-      primaryEmail: accountVO.primaryEmail,
-      accountId: accountVO.accountId,
-    };
+	public resendPhoneVerification(accountVO: AccountVO) {
+		const account = {
+			primaryEmail: accountVO.primaryEmail,
+			accountId: accountVO.accountId,
+		};
 
-    return this.http.sendRequestPromise<AuthResponse>(
-      '/auth/resendTextCreatedAccount',
-      [account],
-      { responseClass: AuthResponse },
-    );
-  }
+		return this.http.sendRequestPromise<AuthResponse>(
+			'/auth/resendTextCreatedAccount',
+			[account],
+			{ responseClass: AuthResponse },
+		);
+	}
 
-  public getInviteToken() {
-    return getFirst(
-      this.httpV2.get<{ token: string }>('v2/account/signup'),
-    ).toPromise();
-  }
+	public getInviteToken() {
+		return getFirst(
+			this.httpV2.get<{ token: string }>('v2/account/signup'),
+		).toPromise();
+	}
 }
 
 export class AuthResponse extends BaseResponse {
-  public getAccountVO() {
-    const data = this.getResultsData();
-    if (!data || !data.length || !data[0]) {
-      return null;
-    }
+	public getAccountVO() {
+		const data = this.getResultsData();
+		if (!data || !data.length || !data[0]) {
+			return null;
+		}
 
-    return new AccountVO(data[0][0].AccountVO);
-  }
+		return new AccountVO(data[0][0].AccountVO);
+	}
 
-  public getArchiveVO() {
-    const data = this.getResultsData();
-    if (!data || !data.length) {
-      return null;
-    }
+	public getArchiveVO() {
+		const data = this.getResultsData();
+		if (!data || !data.length) {
+			return null;
+		}
 
-    return new ArchiveVO(data[0][0].ArchiveVO);
-  }
+		return new ArchiveVO(data[0][0].ArchiveVO);
+	}
 
-  public needsVerification() {
-    return !this.isSuccessful && this.messageIncludesPhrase('status.auth.need');
-  }
+	public needsVerification() {
+		return !this.isSuccessful && this.messageIncludesPhrase('status.auth.need');
+	}
 
-  public needsMFA() {
-    return !this.isSuccessful && this.messageIncludes('warning.auth.mfaToken');
-  }
+	public needsMFA() {
+		return !this.isSuccessful && this.messageIncludes('warning.auth.mfaToken');
+	}
 
-  public getTrustToken() {
-    const data = this.getResultsData();
-    if (!data || !data.length) {
-      return null;
-    }
+	public getTrustToken() {
+		const data = this.getResultsData();
+		if (!data || !data.length) {
+			return null;
+		}
 
-    return new SimpleVO(data[0][0].SimpleVO);
-  }
+		return new SimpleVO(data[0][0].SimpleVO);
+	}
 
-  public getAuthToken() {
-    const data = this.getResultsData();
-    if (!data || !data.length) {
-      return null;
-    }
+	public getAuthToken() {
+		const data = this.getResultsData();
+		if (!data || !data.length) {
+			return null;
+		}
 
-    for (const voType in data[0][0]) {
-      if (data[0][0][voType]?.key === 'authToken') {
-        return new SimpleVO(data[0][0][voType]);
-      }
-    }
+		for (const voType in data[0][0]) {
+			if (data[0][0][voType]?.key === 'authToken') {
+				return new SimpleVO(data[0][0][voType]);
+			}
+		}
 
-    return null;
-  }
+		return null;
+	}
 }

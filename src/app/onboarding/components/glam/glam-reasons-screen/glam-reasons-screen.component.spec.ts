@@ -5,90 +5,90 @@ import { reasons } from '../../../shared/onboarding-screen';
 import { GlamReasonsScreenComponent } from './glam-reasons-screen.component';
 
 describe('GlamReasonsScreenComponent', () => {
-  let shallow: Shallow<GlamReasonsScreenComponent>;
+	let shallow: Shallow<GlamReasonsScreenComponent>;
 
-  beforeEach(async () => {
-    shallow = new Shallow(GlamReasonsScreenComponent, OnboardingModule);
+	beforeEach(async () => {
+		shallow = new Shallow(GlamReasonsScreenComponent, OnboardingModule);
 
-    spyOn(sessionStorage, 'getItem').and.callFake((key) => {
-      const store = {
-        reasons: JSON.stringify(['Mock Reason']),
-      };
-      return store[key] || null;
-    });
+		spyOn(sessionStorage, 'getItem').and.callFake((key) => {
+			const store = {
+				reasons: JSON.stringify(['Mock Reason']),
+			};
+			return store[key] || null;
+		});
 
-    spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {});
-  });
+		spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {});
+	});
 
-  it('should create', async () => {
-    const { instance } = await shallow.render();
+	it('should create', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance).toBeTruthy();
-  });
+		expect(instance).toBeTruthy();
+	});
 
-  it('should initialize reasons from shared/onboarding-screen', async () => {
-    const { instance } = await shallow.render();
+	it('should initialize reasons from shared/onboarding-screen', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance.reasons).toEqual(reasons);
-  });
+		expect(instance.reasons).toEqual(reasons);
+	});
 
-  it('should initialize selectedReasons from sessionStorage', async () => {
-    const { instance } = await shallow.render();
+	it('should initialize selectedReasons from sessionStorage', async () => {
+		const { instance } = await shallow.render();
 
-    expect(sessionStorage.getItem).toHaveBeenCalledWith('reasons');
-    expect(instance.selectedReasons).toEqual(['Mock Reason']);
-  });
+		expect(sessionStorage.getItem).toHaveBeenCalledWith('reasons');
+		expect(instance.selectedReasons).toEqual(['Mock Reason']);
+	});
 
-  it('should update sessionStorage when addReason is called', async () => {
-    const { instance } = await shallow.render();
-    const reason = 'Test Reason';
+	it('should update sessionStorage when addReason is called', async () => {
+		const { instance } = await shallow.render();
+		const reason = 'Test Reason';
 
-    instance.addReason(reason);
+		instance.addReason(reason);
 
-    expect(sessionStorage.setItem).toHaveBeenCalledWith(
-      'reasons',
-      JSON.stringify(['Mock Reason', 'Test Reason']),
-    );
-  });
+		expect(sessionStorage.setItem).toHaveBeenCalledWith(
+			'reasons',
+			JSON.stringify(['Mock Reason', 'Test Reason']),
+		);
+	});
 
-  it('should add reason to selectedReasons when addReason is called', async () => {
-    const { instance } = await shallow.render();
-    const reason = 'Test Reason';
-    instance.addReason(reason);
+	it('should add reason to selectedReasons when addReason is called', async () => {
+		const { instance } = await shallow.render();
+		const reason = 'Test Reason';
+		instance.addReason(reason);
 
-    expect(instance.selectedReasons).toContain(reason);
-  });
+		expect(instance.selectedReasons).toContain(reason);
+	});
 
-  it('should remove reason from selectedReasons when addReason is called twice', async () => {
-    const { instance } = await shallow.render();
-    const reason = 'Test Reason';
-    instance.addReason(reason);
-    instance.addReason(reason);
+	it('should remove reason from selectedReasons when addReason is called twice', async () => {
+		const { instance } = await shallow.render();
+		const reason = 'Test Reason';
+		instance.addReason(reason);
+		instance.addReason(reason);
 
-    expect(instance.selectedReasons).not.toContain(reason);
-  });
+		expect(instance.selectedReasons).not.toContain(reason);
+	});
 
-  it('should emit reasonsEmit with selectedReasons when finalizeArchive is called', async () => {
-    const { instance, outputs } = await shallow.render();
-    const reason = 'Test Reason';
-    instance.addReason(reason);
-    instance.finalizeArchive();
+	it('should emit reasonsEmit with selectedReasons when finalizeArchive is called', async () => {
+		const { instance, outputs } = await shallow.render();
+		const reason = 'Test Reason';
+		instance.addReason(reason);
+		instance.finalizeArchive();
 
-    expect(outputs.reasonsEmit.emit).toHaveBeenCalledWith({
-      screen: 'finalize',
-      reasons: ['Mock Reason', reason],
-    });
-  });
+		expect(outputs.reasonsEmit.emit).toHaveBeenCalledWith({
+			screen: 'finalize',
+			reasons: ['Mock Reason', reason],
+		});
+	});
 
-  it('should emit reasonsEmit with selectedReasons when backToGoals is called', async () => {
-    const { instance, outputs } = await shallow.render();
-    const reason = 'Test Reason';
-    instance.addReason(reason);
-    instance.backToGoals();
+	it('should emit reasonsEmit with selectedReasons when backToGoals is called', async () => {
+		const { instance, outputs } = await shallow.render();
+		const reason = 'Test Reason';
+		instance.addReason(reason);
+		instance.backToGoals();
 
-    expect(outputs.reasonsEmit.emit).toHaveBeenCalledWith({
-      screen: 'goals',
-      reasons: ['Mock Reason', reason],
-    });
-  });
+		expect(outputs.reasonsEmit.emit).toHaveBeenCalledWith({
+			screen: 'goals',
+			reasons: ['Mock Reason', reason],
+		});
+	});
 });

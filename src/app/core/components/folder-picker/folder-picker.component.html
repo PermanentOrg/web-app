@@ -1,72 +1,72 @@
 <div class="menu-wrapper" [ngClass]="{ visible: visible }">
-  <div class="menu folder-picker">
-    <div class="picker-header">
-      <div
-        class="picker-back"
-        *ngIf="!isRootFolder || selectedRecord"
-        (click)="onBackClick()"
-      >
-        <i class="ion-md-arrow-dropleft"></i> Back
-      </div>
-      <div class="picker-folder-name">
-        {{
-          currentFolder
-            ? selectedRecord
-              ? selectedRecord.displayName
-              : currentFolder.displayName
-            : 'Loading...'
-        }}
-      </div>
-      <div class="picker-back" *ngIf="!isRootFolder || selectedRecord"></div>
-    </div>
-    <div class="picker-contents" *ngIf="!currentFolder"></div>
-    <div
-      class="picker-contents"
-      *ngIf="currentFolder && !selectedRecord"
-      [ngClass]="{ navigating: waiting }"
-    >
-      <div
-        class="picker-row"
-        *ngFor="let item of currentFolder.ChildItemVOs"
-        (click)="onItemClick(item, $event)"
-      >
-        <ng-container [ngSwitch]="item.isFolder">
-          <div class="folder-icon" *ngSwitchCase="true">
-            <i class="material-icons">folder</i>
-          </div>
-          <div *ngSwitchDefault prBgImage [bgSrc]="item.thumbURL200"></div>
-        </ng-container>
-        <div class="name">{{ item.displayName }}</div>
-      </div>
+	<div class="menu folder-picker">
+		<div class="picker-header">
+			<div
+				class="picker-back"
+				*ngIf="!isRootFolder || selectedRecord"
+				(click)="onBackClick()"
+			>
+				<i class="ion-md-arrow-dropleft"></i> Back
+			</div>
+			<div class="picker-folder-name">
+				{{
+					currentFolder
+						? selectedRecord
+							? selectedRecord.displayName
+							: currentFolder.displayName
+						: 'Loading...'
+				}}
+			</div>
+			<div class="picker-back" *ngIf="!isRootFolder || selectedRecord"></div>
+		</div>
+		<div class="picker-contents" *ngIf="!currentFolder"></div>
+		<div
+			class="picker-contents"
+			*ngIf="currentFolder && !selectedRecord"
+			[ngClass]="{ navigating: waiting }"
+		>
+			<div
+				class="picker-row"
+				*ngFor="let item of currentFolder.ChildItemVOs"
+				(click)="onItemClick(item, $event)"
+			>
+				<ng-container [ngSwitch]="item.isFolder">
+					<div class="folder-icon" *ngSwitchCase="true">
+						<i class="material-icons">folder</i>
+					</div>
+					<div *ngSwitchDefault prBgImage [bgSrc]="item.thumbURL200"></div>
+				</ng-container>
+				<div class="name">{{ item.displayName }}</div>
+			</div>
 
-      <div
-        class="picker-empty"
-        *ngIf="
-          !currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length
-        "
-      >
-        {{ allowRecords ? 'This folder is empty' : 'No subfolders' }}
-      </div>
-    </div>
-    <div class="picker-contents picker-selected-record" *ngIf="selectedRecord">
-      <div prBgImage [bgSrc]="selectedRecord.thumbURL200"></div>
-    </div>
-    <div class="picker-footer">
-      <button class="btn btn-secondary" (click)="hide()" [disabled]="saving">
-        Cancel
-      </button>
-      <button
-        class="btn btn-primary"
-        (click)="chooseFolder()"
-        [disabled]="
-          saving ||
-          waiting ||
-          (operation === 3 && !selectedRecord) ||
-          cannotCopyToFolder()
-        "
-      >
-        {{ operation ? operationName : 'Choose' }}
-      </button>
-    </div>
-  </div>
+			<div
+				class="picker-empty"
+				*ngIf="
+					!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length
+				"
+			>
+				{{ allowRecords ? 'This folder is empty' : 'No subfolders' }}
+			</div>
+		</div>
+		<div class="picker-contents picker-selected-record" *ngIf="selectedRecord">
+			<div prBgImage [bgSrc]="selectedRecord.thumbURL200"></div>
+		</div>
+		<div class="picker-footer">
+			<button class="btn btn-secondary" (click)="hide()" [disabled]="saving">
+				Cancel
+			</button>
+			<button
+				class="btn btn-primary"
+				(click)="chooseFolder()"
+				[disabled]="
+					saving ||
+					waiting ||
+					(operation === 3 && !selectedRecord) ||
+					cannotCopyToFolder()
+				"
+			>
+				{{ operation ? operationName : 'Choose' }}
+			</button>
+		</div>
+	</div>
 </div>

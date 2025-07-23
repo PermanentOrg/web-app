@@ -7,15 +7,15 @@ import { ProfileService } from '@shared/services/profile/profile.service';
 
 @Injectable()
 export class ProfileItemsResolveService {
-  constructor(
-    private profile: ProfileService,
-    private account: AccountService,
-  ) {}
+	constructor(
+		private profile: ProfileService,
+		private account: AccountService,
+	) {}
 
-  async resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Promise<any> {
-    return this.profile.fetchProfileItems();
-  }
+	async resolve(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Promise<any> {
+		return this.profile.fetchProfileItems();
+	}
 }

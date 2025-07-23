@@ -13,67 +13,67 @@ import { ApiService } from '../../../shared/services/api/api.service';
 import { PublishComponent } from './publish.component';
 
 const mockAccountService = {
-  getArchive: () => {
-    const archive = new ArchiveVO({ accessRole: 'access.role.viewer' });
-    return archive;
-  },
+	getArchive: () => {
+		const archive = new ArchiveVO({ accessRole: 'access.role.viewer' });
+		return archive;
+	},
 };
 
 class MockDialogRef {
-  close() {}
+	close() {}
 }
 
 const mockApiService = {
-  folder: {
-    copy: (
-      folderVOs: FolderVO[],
-      destination: FolderVO,
-    ): Promise<FolderResponse> => {
-      return Promise.resolve(new FolderResponse({}));
-    },
-    navigateLean: (folder: FolderVO): Observable<FolderResponse> => {
-      return new Observable<FolderResponse>();
-    },
-  },
+	folder: {
+		copy: (
+			folderVOs: FolderVO[],
+			destination: FolderVO,
+		): Promise<FolderResponse> => {
+			return Promise.resolve(new FolderResponse({}));
+		},
+		navigateLean: (folder: FolderVO): Observable<FolderResponse> => {
+			return new Observable<FolderResponse>();
+		},
+	},
 };
 
 describe('PublishComponent', () => {
-  let shallow: Shallow<PublishComponent>;
-  let messageShown = false;
+	let shallow: Shallow<PublishComponent>;
+	let messageShown = false;
 
-  beforeEach(() => {
-    shallow = new Shallow(PublishComponent, FileBrowserComponentsModule)
-      .mock(AccountService, mockAccountService)
-      .mock(ApiService, mockApiService)
-      .mock(DIALOG_DATA, {
-        item: { folder_linkType: 'linkType' },
-      })
-      .provide({ provide: DialogRef, useClass: MockDialogRef })
-      .provide(EventService)
-      .dontMock(EventService)
-      .mock(MessageService, {
-        showError: () => {
-          messageShown = true;
-        },
-      });
-  });
+	beforeEach(() => {
+		shallow = new Shallow(PublishComponent, FileBrowserComponentsModule)
+			.mock(AccountService, mockAccountService)
+			.mock(ApiService, mockApiService)
+			.mock(DIALOG_DATA, {
+				item: { folder_linkType: 'linkType' },
+			})
+			.provide({ provide: DialogRef, useClass: MockDialogRef })
+			.provide(EventService)
+			.dontMock(EventService)
+			.mock(MessageService, {
+				showError: () => {
+					messageShown = true;
+				},
+			});
+	});
 
-  it('should create', async () => {
-    const { instance } = await shallow.render();
+	it('should create', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance).toBeTruthy();
-  });
+		expect(instance).toBeTruthy();
+	});
 
-  it('should disaple the public to internet archive button if the user does not have the correct access role', async () => {
-    const { instance, find, fixture } = await shallow.render();
-    instance.publicItem = new RecordVO({ recordId: 1 });
-    instance.publishIa = null;
-    instance.publicLink = null;
+	it('should disaple the public to internet archive button if the user does not have the correct access role', async () => {
+		const { instance, find, fixture } = await shallow.render();
+		instance.publicItem = new RecordVO({ recordId: 1 });
+		instance.publishIa = null;
+		instance.publicLink = null;
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    const button = find('.publish-to-archive');
+		const button = find('.publish-to-archive');
 
-    expect(button.nativeElement.disabled).toBeTruthy();
-  });
+		expect(button.nativeElement.disabled).toBeTruthy();
+	});
 });

@@ -1,52 +1,52 @@
 @import 'variables';
 
 :host {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 0;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-height: 0;
 }
 
 .header {
-  @include tabbedDialogHeader;
+	@include tabbedDialogHeader;
 }
 
 .notifications {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  background-color: white;
-  height: 90vh;
+	flex: 1 1 auto;
+	overflow-y: auto;
+	background-color: white;
+	height: 90vh;
 
-  .empty-message {
-    font-size: $font-size-sm;
-    text-align: center;
-    padding: $grid-unit;
-  }
+	.empty-message {
+		font-size: $font-size-sm;
+		text-align: center;
+		padding: $grid-unit;
+	}
 }
 
 .footer {
-  display: flex;
-  justify-content: center;
-  padding: $grid-unit * 0.5;
-  border-top: $file-list-border;
-  background-color: white;
-  .btn {
-    @include gridHeightButtonSmall;
-    width: auto;
-    flex: 0 0 auto;
-    margin: 0;
-  }
+	display: flex;
+	justify-content: center;
+	padding: $grid-unit * 0.5;
+	border-top: $file-list-border;
+	background-color: white;
+	.btn {
+		@include gridHeightButtonSmall;
+		width: auto;
+		flex: 0 0 auto;
+		margin: 0;
+	}
 }
 
 pr-notification:not(:last-child) {
-  border-bottom: $file-list-border;
+	border-bottom: $file-list-border;
 }
 
 .btn:focus {
-  box-shadow: none;
-  border: none;
+	box-shadow: none;
+	border: none;
 }
 
 .dialog-content {
-  width: 460px;
+	width: 460px;
 }

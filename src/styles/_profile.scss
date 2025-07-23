@@ -4,156 +4,156 @@ $profile-max-width: 1000px;
 $profile-sidebar-width: pxToGrid(360px);
 
 @mixin profileBanner(
-  $desktop-size: pxToGrid(300px),
-  $mobile-size: pxToGrid(160px)
+	$desktop-size: pxToGrid(300px),
+	$mobile-size: pxToGrid(160px)
 ) {
-  height: $desktop-size;
-  background-size: cover;
-  background-position: 50% 50%;
-  position: relative;
+	height: $desktop-size;
+	background-size: cover;
+	background-position: 50% 50%;
+	position: relative;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  &.show-gradient {
-    $list:
-      $PR-blue 0%,
-      $PR-purple 66%,
-      mix($PR-purple, $PR-orange, 50%) 100%;
-    @include gradient(to top left, $list);
-  }
+	&.show-gradient {
+		$list:
+			$PR-blue 0%,
+			$PR-purple 66%,
+			mix($PR-purple, $PR-orange, 50%) 100%;
+		@include gradient(to top left, $list);
+	}
 
-  @include beforeDesktop {
-    height: $mobile-size;
-  }
+	@include beforeDesktop {
+		height: $mobile-size;
+	}
 }
 
 @mixin profilePhoto(
-  $desktop-size: pxToGrid(180px),
-  $mobile-size: pxToGrid(60px)
+	$desktop-size: pxToGrid(180px),
+	$mobile-size: pxToGrid(60px)
 ) {
-  height: $desktop-size;
-  width: $desktop-size;
-  background-size: cover;
-  background-position: 50% 50%;
-  position: relative;
-  margin-left: 2 * $grid-unit;
-  transform: translateY(-(math.div(2, 3) * 100%));
-  cursor: pointer;
+	height: $desktop-size;
+	width: $desktop-size;
+	background-size: cover;
+	background-position: 50% 50%;
+	position: relative;
+	margin-left: 2 * $grid-unit;
+	transform: translateY(-(math.div(2, 3) * 100%));
+	cursor: pointer;
 
-  @include beforeDesktop {
-    height: $mobile-size;
-    width: $mobile-size;
-    margin-left: $grid-unit * 0.5;
-    margin-bottom: -$mobile-size * 0.5 + $grid-unit;
-  }
+	@include beforeDesktop {
+		height: $mobile-size;
+		width: $mobile-size;
+		margin-left: $grid-unit * 0.5;
+		margin-bottom: -$mobile-size * 0.5 + $grid-unit;
+	}
 }
 
 @mixin profileSection {
-  max-width: $profile-max-width;
-  padding-top: $grid-unit;
+	max-width: $profile-max-width;
+	padding-top: $grid-unit;
 
-  button {
-    margin: 0;
-    width: auto;
-    @include gridHeightButton;
-  }
+	button {
+		margin: 0;
+		width: auto;
+		@include gridHeightButton;
+	}
 
-  & > button {
-    margin: $grid-unit 0;
-  }
+	& > button {
+		margin: $grid-unit 0;
+	}
 
-  .profile-repeat-entry:not(:last-of-type) {
-    margin-bottom: 2 * $grid-unit;
-    border-bottom: $file-list-border;
-  }
+	.profile-repeat-entry:not(:last-of-type) {
+		margin-bottom: 2 * $grid-unit;
+		border-bottom: $file-list-border;
+	}
 }
 
 @mixin profileSectionHeader {
-  margin-top: $grid-unit;
-  max-width: $profile-max-width;
-  $height: 3 * $grid-unit;
-  height: $height;
-  display: flex;
-  align-items: center;
-  padding-left: $grid-unit;
+	margin-top: $grid-unit;
+	max-width: $profile-max-width;
+	$height: 3 * $grid-unit;
+	height: $height;
+	display: flex;
+	align-items: center;
+	padding-left: $grid-unit;
 
-  background-color: $gray-200;
+	background-color: $gray-200;
 
-  font-size: $font-size-lg;
-  font-weight: $font-weight-bold;
+	font-size: $font-size-lg;
+	font-weight: $font-weight-bold;
 }
 
 @mixin profileGroup {
-  display: flex;
-  margin-bottom: 2 * $grid-unit;
-  flex-basis: 100%;
+	display: flex;
+	margin-bottom: 2 * $grid-unit;
+	flex-basis: 100%;
 
-  > * {
-    flex: 1 1 100%;
-    &:not(:last-child) {
-      margin-right: $grid-unit;
-    }
-  }
+	> * {
+		flex: 1 1 100%;
+		&:not(:last-child) {
+			margin-right: $grid-unit;
+		}
+	}
 
-  > .profile-group {
-    margin-bottom: 0;
-  }
+	> .profile-group {
+		margin-bottom: 0;
+	}
 
-  &.align-right > *:first-child {
-    margin-left: auto;
-  }
+	&.align-right > *:first-child {
+		margin-left: auto;
+	}
 
-  > button {
-    flex: 0 0 auto;
-    width: auto;
-  }
+	> button {
+		flex: 0 0 auto;
+		width: auto;
+	}
 
-  @include beforeDesktop {
-    display: block;
-  }
+	@include beforeDesktop {
+		display: block;
+	}
 
-  @include desktop {
-    &.in-thirds > * {
-      flex: 0 1 math.div(100% * 1, 3);
-      max-width: math.div(100% * 1, 3);
+	@include desktop {
+		&.in-thirds > * {
+			flex: 0 1 math.div(100% * 1, 3);
+			max-width: math.div(100% * 1, 3);
 
-      &.two-thirds {
-        flex: 0 1 68.9%;
-        max-width: 68.9%;
-      }
-    }
+			&.two-thirds {
+				flex: 0 1 68.9%;
+				max-width: 68.9%;
+			}
+		}
 
-    &.in-half > * {
-      flex: 0 1 50%;
-      max-width: 50%;
-    }
-  }
+		&.in-half > * {
+			flex: 0 1 50%;
+			max-width: 50%;
+		}
+	}
 }
 
 @mixin profileField {
-  label {
-    margin-bottom: $grid-unit * 0.25;
-    font-weight: $font-weight-semibold;
-  }
+	label {
+		margin-bottom: $grid-unit * 0.25;
+		font-weight: $font-weight-semibold;
+	}
 
-  pr-inline-value-edit {
-    margin-left: $grid-unit * 0.25;
-    margin-right: $grid-unit * 0.25;
+	pr-inline-value-edit {
+		margin-left: $grid-unit * 0.25;
+		margin-right: $grid-unit * 0.25;
 
-    &:not(:first-of-type) {
-      margin-top: $grid-unit;
-    }
-  }
+		&:not(:first-of-type) {
+			margin-top: $grid-unit;
+		}
+	}
 
-  > button:last-child {
-    margin-top: $grid-unit;
-  }
+	> button:last-child {
+		margin-top: $grid-unit;
+	}
 }
 
 @mixin profilePrompt {
-  font-weight: $font-weight-bold;
-  font-size: $font-size-lg;
-  height: 2 * $grid-unit;
-  display: flex;
-  align-items: center;
+	font-weight: $font-weight-bold;
+	font-size: $font-size-lg;
+	height: 2 * $grid-unit;
+	display: flex;
+	align-items: center;
 }

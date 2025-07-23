@@ -1,111 +1,111 @@
 $mobile-breakpoint: 950px;
 
 .welcome-screen {
-  text-align: left;
+	text-align: left;
 }
 
 .btn {
-  white-space: normal !important;
+	white-space: normal !important;
 }
 
 h2 {
-  font-weight: bold;
-  font-size: 1.5em;
-  margin-top: 2.25em;
-  margin-bottom: 1.2em;
+	font-weight: bold;
+	font-size: 1.5em;
+	margin-top: 2.25em;
+	margin-bottom: 1.2em;
 }
 
 h3 {
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 22px;
-  letter-spacing: 0em;
-  text-align: left;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 22px;
+	letter-spacing: 0em;
+	text-align: left;
 }
 
 .select-option {
-  font-family: Open Sans;
-  font-size: 16px;
-  font-style: italic;
-  line-height: 22px;
-  color: #646464;
+	font-family: Open Sans;
+	font-size: 16px;
+	font-style: italic;
+	line-height: 22px;
+	color: #646464;
 }
 
 .archive-name {
-  &-container {
-    position: relative;
-    margin-top: 30px;
-  }
+	&-container {
+		position: relative;
+		margin-top: 30px;
+	}
 
-  & > h3 {
-    margin-bottom: 0;
-  }
+	& > h3 {
+		margin-bottom: 0;
+	}
 
-  &-input {
-    display: flex;
-    justify-content: center;
+	&-input {
+		display: flex;
+		justify-content: center;
 
-    & > span {
-      margin: 10px 20px 0px 20px;
-      font-size: 20px;
-      display: inline-flex;
-      align-items: center;
-    }
+		& > span {
+			margin: 10px 20px 0px 20px;
+			font-size: 20px;
+			display: inline-flex;
+			align-items: center;
+		}
 
-    & > input {
-      width: 400px;
-      border: 1px solid #c8c8c8;
-      border-radius: 6px;
-      height: 42px;
-      margin-top: 10px;
-    }
-  }
+		& > input {
+			width: 400px;
+			border: 1px solid #c8c8c8;
+			border-radius: 6px;
+			height: 42px;
+			margin-top: 10px;
+		}
+	}
 }
 
 .disabled-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.6);
-  pointer-events: none;
-  z-index: 10;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.6);
+	pointer-events: none;
+	z-index: 10;
 }
 
 .buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 50px;
-  & > .btn-link {
-    text-decoration: underline;
-  }
-  & > .btn {
-    width: 250px;
-    margin: 0;
-  }
+	display: flex;
+	justify-content: space-between;
+	margin-top: 50px;
+	& > .btn-link {
+		text-decoration: underline;
+	}
+	& > .btn {
+		width: 250px;
+		margin: 0;
+	}
 
-  & > .btn-disabled {
-    background-color: #c8c8c8;
-    color: #646464;
-    border-color: #c8c8c8;
-  }
+	& > .btn-disabled {
+		background-color: #c8c8c8;
+		color: #646464;
+		border-color: #c8c8c8;
+	}
 }
 
 .archive-type {
-  margin-top: 50px;
+	margin-top: 50px;
 }
 
 .get-started {
-  & > button.btn {
-    @media only screen and (max-width: $mobile-breakpoint) {
-      width: 100%;
-    }
-    display: inline-block;
-    width: 33%;
-  }
-  @media only screen and (max-width: $mobile-breakpoint) {
-    text-align: center;
-  }
-  text-align: right;
+	& > button.btn {
+		@media only screen and (max-width: $mobile-breakpoint) {
+			width: 100%;
+		}
+		display: inline-block;
+		width: 33%;
+	}
+	@media only screen and (max-width: $mobile-breakpoint) {
+		text-align: center;
+	}
+	text-align: right;
 }

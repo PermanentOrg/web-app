@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
+	ActivatedRouteSnapshot,
+	RouterStateSnapshot,
+	Router,
 } from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -10,21 +10,21 @@ import { PublicProfileService } from '@public/services/public-profile/public-pro
 
 @Injectable()
 export class PublicRootResolveService {
-  constructor(
-    private api: ApiService,
-    private router: Router,
-    private publicProfile: PublicProfileService,
-  ) {}
+	constructor(
+		private api: ApiService,
+		private router: Router,
+		private publicProfile: PublicProfileService,
+	) {}
 
-  async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const archiveNbr = route.params.publicArchiveNbr;
-    try {
-      const response = await this.api.folder.getPublicRoot(archiveNbr);
-      const publicRoot = response.getFolderVO();
-      this.publicProfile.setPublicRoot(response.getFolderVO());
-      return publicRoot;
-    } catch (err) {
-      return this.router.navigate(['/p', 'error']);
-    }
-  }
+	async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+		const archiveNbr = route.params.publicArchiveNbr;
+		try {
+			const response = await this.api.folder.getPublicRoot(archiveNbr);
+			const publicRoot = response.getFolderVO();
+			this.publicProfile.setPublicRoot(response.getFolderVO());
+			return publicRoot;
+		} catch (err) {
+			return this.router.navigate(['/p', 'error']);
+		}
+	}
 }

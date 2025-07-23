@@ -1,26 +1,26 @@
 <!-- #format  -->
 <div class="pending-archive">
-  <div class="archive-image-and-text">
-    <div class="archive-image">
-      <img src="assets/svg/onboarding/default-archive.svg" />
-    </div>
-    <div class="info">
-      <p class="name">
-        The <b>{{ archive?.fullName }}</b> Archive
-      </p>
-      <p class="role">Invited as {{ roles[archive.accessRole] }}</p>
-    </div>
-  </div>
-  <div class="accept-button">
-    <pr-button
-      (buttonClick)="acceptArchive(archive)"
-      [variant]="isSelected ? 'tertiary' : 'primary'"
-      [mode]="isSelected ? 'dark' : 'light'"
-      [orientation]="'right'"
-      [icon]="isSelected ? '/accept-green' : ''"
-      [color]="isSelected ? '#32D583' : ''"
-    >
-      {{ isSelected ? 'Accepted' : 'Accept' }}
-    </pr-button>
-  </div>
+	<div class="archive-image-and-text">
+		<div class="archive-image">
+			<img src="assets/svg/onboarding/default-archive.svg" />
+		</div>
+		<div class="info">
+			<p class="name">
+				The <b>{{ archive?.fullName }}</b> Archive
+			</p>
+			<p class="role">Invited as {{ roles[archive.accessRole] }}</p>
+		</div>
+	</div>
+	<div class="accept-button">
+		<pr-button
+			(buttonClick)="acceptArchive(archive)"
+			[variant]="isSelected ? 'tertiary' : 'primary'"
+			[mode]="isSelected ? 'dark' : 'light'"
+			[orientation]="'right'"
+			[icon]="isSelected ? '/accept-green' : ''"
+			[color]="isSelected ? '#32D583' : ''"
+		>
+			{{ isSelected ? 'Accepted' : 'Accept' }}
+		</pr-button>
+	</div>
 </div>

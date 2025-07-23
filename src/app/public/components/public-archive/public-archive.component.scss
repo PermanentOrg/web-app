@@ -2,9 +2,9 @@
 @import 'variables';
 
 :host {
-  display: block;
-  width: 100%;
-  padding: 0 $grid-unit * 0.5;
+	display: block;
+	width: 100%;
+	padding: 0 $grid-unit * 0.5;
 }
 
 $photo-desktop: pxToGrid(300px);
@@ -13,404 +13,404 @@ $profile-max-width: 1200px;
 $desktop-size: pxToGrid(200px);
 
 @mixin sidebarMargin {
-  margin-right: $profile-sidebar-width + 3 * $grid-unit;
+	margin-right: $profile-sidebar-width + 3 * $grid-unit;
 }
 
 @mixin marginBottomSearchResults {
-  margin-bottom: $grid-unit * 0.7;
+	margin-bottom: $grid-unit * 0.7;
 }
 
 @mixin banner-margin-offset {
-  position: relative;
-  top: math.div(-$desktop-size * 2, 3) + $grid-unit;
+	position: relative;
+	top: math.div(-$desktop-size * 2, 3) + $grid-unit;
 }
 
 @mixin banner-margin-offset-public-profile {
-  top: 0rem;
+	top: 0rem;
 }
 
 .banner-section {
-  margin: 0 (-$grid-unit);
-  position: relative;
-  margin-bottom: 10rem;
-  &-search-result {
-    margin-bottom: 5rem;
-  }
-  & hr {
-    width: 90%;
-    @include beforeDesktop {
-      margin-top: 3rem;
-    }
-  }
+	margin: 0 (-$grid-unit);
+	position: relative;
+	margin-bottom: 10rem;
+	&-search-result {
+		margin-bottom: 5rem;
+	}
+	& hr {
+		width: 90%;
+		@include beforeDesktop {
+			margin-top: 3rem;
+		}
+	}
 
-  @include beforeDesktop {
-    margin: 0 - $grid-unit * 0.5;
-    margin-top: 3rem !important;
-  }
+	@include beforeDesktop {
+		margin: 0 - $grid-unit * 0.5;
+		margin-top: 3rem !important;
+	}
 }
 
 .profile-banner {
-  @include profileBanner($photo-desktop, $photo-mobile);
-  cursor: initial;
+	@include profileBanner($photo-desktop, $photo-mobile);
+	cursor: initial;
 }
 
 .profile-photo {
-  @include profilePhoto($desktop-size, $photo-mobile);
-  transform: translateY(-(math.div(2, 3.5) * 100%));
-  border: 4px solid white;
+	@include profilePhoto($desktop-size, $photo-mobile);
+	transform: translateY(-(math.div(2, 3.5) * 100%));
+	border: 4px solid white;
 
-  cursor: initial;
+	cursor: initial;
 }
 
 .profile-about-search {
-  display: flex;
-  width: 80%;
-  justify-content: space-between;
-  flex-direction: column;
+	display: flex;
+	width: 80%;
+	justify-content: space-between;
+	flex-direction: column;
 
-  @include desktop {
-    flex-direction: row;
-    padding-left: $grid-unit;
-    top: 0;
-    margin-top: 30px;
-  }
+	@include desktop {
+		flex-direction: row;
+		padding-left: $grid-unit;
+		top: 0;
+		margin-top: 30px;
+	}
 
-  &-public-profile {
-    @include banner-margin-offset-public-profile;
+	&-public-profile {
+		@include banner-margin-offset-public-profile;
 
-    @media screen and (max-width: 1440px) {
-      top: 0;
-    }
-  }
+		@media screen and (max-width: 1440px) {
+			top: 0;
+		}
+	}
 }
 
 .profile-name {
-  font-size: $font-size-base * 1.25;
-  font-weight: $font-weight-bold;
-  margin-bottom: $grid-unit * 0.4;
-  color: $darkBlue;
-  font-family: 'Usual';
+	font-size: $font-size-base * 1.25;
+	font-weight: $font-weight-bold;
+	margin-bottom: $grid-unit * 0.4;
+	color: $darkBlue;
+	font-family: 'Usual';
 
-  @include beforeDesktop {
-    font-size: $font-size-base;
-  }
+	@include beforeDesktop {
+		font-size: $font-size-base;
+	}
 }
 
 .profile-data {
-  font-size: $font-size-base * 0.9;
-  font-weight: $font-weight-light;
-  color: #777777;
-  font-family: 'Usual';
+	font-size: $font-size-base * 0.9;
+	font-weight: $font-weight-light;
+	color: #777777;
+	font-family: 'Usual';
 
-  &-date {
-    color: #555555;
-    font-weight: $font-weight-normal;
-  }
+	&-date {
+		color: #555555;
+		font-weight: $font-weight-normal;
+	}
 }
 
 .profile-blurb {
-  color: $text-muted;
-  font-style: oblique;
-  margin-bottom: $grid-unit;
+	color: $text-muted;
+	font-style: oblique;
+	margin-bottom: $grid-unit;
 }
 
 .profile-archive-link {
-  display: flex;
-  > .btn {
-    flex: 0 0 auto;
-    width: auto;
-    margin: 0;
-    @include gridHeightButton;
-  }
+	display: flex;
+	> .btn {
+		flex: 0 0 auto;
+		width: auto;
+		margin: 0;
+		@include gridHeightButton;
+	}
 
-  margin-bottom: $grid-unit;
+	margin-bottom: $grid-unit;
 }
 
 .profile-sidebar {
-  @include desktop {
-    width: $profile-sidebar-width;
-    position: absolute;
-    right: $grid-unit * 2;
-    top: $photo-desktop * 1.5 + $grid-unit;
-  }
+	@include desktop {
+		width: $profile-sidebar-width;
+		position: absolute;
+		right: $grid-unit * 2;
+		top: $photo-desktop * 1.5 + $grid-unit;
+	}
 
-  .sidebar-title {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-    margin-bottom: $grid-unit;
-  }
+	.sidebar-title {
+		font-size: $font-size-lg;
+		font-weight: $font-weight-bold;
+		margin-bottom: $grid-unit;
+	}
 
-  .sidebar-inline-item {
-    display: flex;
-    min-width: 0;
-    align-items: flex-start;
-    margin-bottom: $grid-unit;
+	.sidebar-inline-item {
+		display: flex;
+		min-width: 0;
+		align-items: flex-start;
+		margin-bottom: $grid-unit;
 
-    span {
-      flex: 1 1 auto;
-      text-align: right;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-width: 0;
-    }
+		span {
+			flex: 1 1 auto;
+			text-align: right;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			min-width: 0;
+		}
 
-    label {
-      margin: 0;
-      margin-right: $grid-unit * 0.5;
-      font-weight: $font-weight-semibold;
-      white-space: nowrap;
-    }
-  }
+		label {
+			margin: 0;
+			margin-right: $grid-unit * 0.5;
+			font-weight: $font-weight-semibold;
+			white-space: nowrap;
+		}
+	}
 
-  .sidebar-list-item {
-    label {
-      font-weight: $font-weight-semibold;
-      white-space: nowrap;
-    }
+	.sidebar-list-item {
+		label {
+			font-weight: $font-weight-semibold;
+			white-space: nowrap;
+		}
 
-    > * {
-      margin-bottom: $grid-unit * 0.5;
-    }
-  }
+		> * {
+			margin-bottom: $grid-unit * 0.5;
+		}
+	}
 }
 
 .profile-contents {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: space-evenly;
+	min-height: 100vh;
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
 
-  @include desktop {
-    padding-left: $grid-unit;
-    @include sidebarMargin;
-    @include banner-margin-offset;
-  }
+	@include desktop {
+		padding-left: $grid-unit;
+		@include sidebarMargin;
+		@include banner-margin-offset;
+	}
 
-  @include beforeDesktop {
-    margin-top: $grid-unit * 0.5;
-    flex-direction: column;
-  }
+	@include beforeDesktop {
+		margin-top: $grid-unit * 0.5;
+		flex-direction: column;
+	}
 }
 
 .archive-description {
-  white-space: pre-line;
+	white-space: pre-line;
 
-  @include beforeDesktop {
-    display: none;
-  }
+	@include beforeDesktop {
+		display: none;
+	}
 
-  &-show {
-    @include beforeDesktop {
-      display: block;
-    }
-  }
+	&-show {
+		@include beforeDesktop {
+			display: block;
+		}
+	}
 }
 
 .profile-description {
-  white-space: pre-line;
+	white-space: pre-line;
 }
 
 .search-box-public-archive {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  border-radius: 5px;
-  border: solid 1px #d0d5dd;
-  height: 48px;
+	display: flex;
+	align-items: center;
+	padding: 12px 16px;
+	border-radius: 5px;
+	border: solid 1px #d0d5dd;
+	height: 48px;
 
-  @media screen and (max-width: 1300px) and (min-width: 900px) {
-    width: 60%;
-  }
+	@media screen and (max-width: 1300px) and (min-width: 900px) {
+		width: 60%;
+	}
 
-  pr-archive-search {
-    display: flex;
-    width: 340px;
-  }
+	pr-archive-search {
+		display: flex;
+		width: 340px;
+	}
 }
 
 .search-results-container {
-  margin-left: 120px;
+	margin-left: 120px;
 
-  @include beforeDesktop {
-    margin-left: 0;
-  }
+	@include beforeDesktop {
+		margin-left: 0;
+	}
 
-  .search-results {
-    font-size: 1.75rem;
-    font-family: 'Usual';
-    font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    color: #131b4a;
+	.search-results {
+		font-size: 1.75rem;
+		font-family: 'Usual';
+		font-weight: 600;
+		font-stretch: normal;
+		font-style: normal;
+		color: #131b4a;
 
-    &-param {
-      font-weight: 400;
-      font-style: italic;
-    }
-  }
+		&-param {
+			font-weight: 400;
+			font-style: italic;
+		}
+	}
 }
 
 .back-to-archive-container {
-  cursor: pointer;
-  .back-to-archive {
-    margin-left: 0.4rem;
-    font-family: Usual;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #131b4a;
-  }
+	cursor: pointer;
+	.back-to-archive {
+		margin-left: 0.4rem;
+		font-family: Usual;
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: 0em;
+		text-align: left;
+		color: #131b4a;
+	}
 
-  .no-results {
-    font-size: 24px;
-  }
+	.no-results {
+		font-size: 24px;
+	}
 }
 
 .search-results-view {
-  margin-top: 80px;
+	margin-top: 80px;
 }
 
 .result {
-  display: flex;
-  margin-bottom: 60px;
+	display: flex;
+	margin-bottom: 60px;
 
-  &-archive-image {
-    width: 10rem;
-    height: 10rem;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
+	&-archive-image {
+		width: 10rem;
+		height: 10rem;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
 
-  &-text {
-    font-family: Usual;
-    @include marginBottomSearchResults();
-  }
+	&-text {
+		font-family: Usual;
+		@include marginBottomSearchResults();
+	}
 
-  &-archive-info {
-    margin-left: 3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+	&-archive-info {
+		margin-left: 3rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
 
-  &-archive-type {
-    font-size: $font-size-base * 0.7;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: $darkBlue;
-    text-transform: uppercase;
-    margin: 0;
-    margin-left: 5px;
+	&-archive-type {
+		font-size: $font-size-base * 0.7;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		color: $darkBlue;
+		text-transform: uppercase;
+		margin: 0;
+		margin-left: 5px;
 
-    &-container {
-      @include marginBottomSearchResults();
-      background: linear-gradient(
-        179.15deg,
-        rgba(19, 27, 74, 0.08) 0%,
-        rgba(54, 68, 147, 0.08) 100%
-      );
-      border-radius: $border-radius;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding: 0.4rem 0.5rem;
-      width: fit-content;
-      height: 1.5rem;
-    }
-  }
+		&-container {
+			@include marginBottomSearchResults();
+			background: linear-gradient(
+				179.15deg,
+				rgba(19, 27, 74, 0.08) 0%,
+				rgba(54, 68, 147, 0.08) 100%
+			);
+			border-radius: $border-radius;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			padding: 0.4rem 0.5rem;
+			width: fit-content;
+			height: 1.5rem;
+		}
+	}
 
-  &-archive-name {
-    font-size: $font-size-base;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    text-align: left;
-    color: $black;
-  }
+	&-archive-name {
+		font-size: $font-size-base;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		text-align: left;
+		color: $black;
+	}
 
-  &-archive-description {
-    font-size: $font-size-base * 0.85;
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    text-align: left;
-    color: #777777;
-  }
+	&-archive-description {
+		font-size: $font-size-base * 0.85;
+		font-weight: 400;
+		letter-spacing: -0.02em;
+		text-align: left;
+		color: #777777;
+	}
 }
 
 .profile-image-search {
-  display: flex;
-  padding-left: 3.5rem;
+	display: flex;
+	padding-left: 3.5rem;
 
-  &-archive {
-    height: 150px;
+	&-archive {
+		height: 150px;
 
-    @include beforeDesktop {
-      height: auto;
-    }
-  }
+		@include beforeDesktop {
+			height: auto;
+		}
+	}
 
-  @include beforeDesktop {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-left: 1rem;
-  }
+	@include beforeDesktop {
+		flex-direction: column;
+		align-items: flex-start;
+		padding-left: 1rem;
+	}
 }
 
 .profile-controls {
-  display: flex;
-  flex-direction: row;
-  @include beforeDesktop {
-    flex-direction: column;
-  }
+	display: flex;
+	flex-direction: row;
+	@include beforeDesktop {
+		flex-direction: column;
+	}
 }
 
 .profile-archive-link {
-  .btn-link {
-    font-weight: 600;
-    color: $darkBlue;
-    & > svg {
-      margin-left: 0.5rem;
-    }
-  }
+	.btn-link {
+		font-weight: 600;
+		color: $darkBlue;
+		& > svg {
+			margin-left: 0.5rem;
+		}
+	}
 }
 
 .result-rectangle {
-  background: linear-gradient(179.15deg, #131b4a 0%, #364493 100%);
-  opacity: 0.03;
-  height: 200px;
-  margin-top: 30px;
+	background: linear-gradient(179.15deg, #131b4a 0%, #364493 100%);
+	opacity: 0.03;
+	height: 200px;
+	margin-top: 30px;
 }
 
 .profile-container {
-  width: 60%;
+	width: 60%;
 
-  @include beforeDesktop {
-    width: 100%;
-  }
+	@include beforeDesktop {
+		width: 100%;
+	}
 }
 
 .result-nav {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .expand-text {
-  cursor: pointer;
-  color: gray;
+	cursor: pointer;
+	color: gray;
 }
 
 .icon-expand {
-  display: none;
+	display: none;
 
-  @include beforeDesktop {
-    display: inline-block;
-    font-size: $mat-icon-sm;
-    transition: transform 250ms $tweaked-ease;
-    cursor: pointer;
-    &.reverse {
-      transform: rotate(180deg);
-    }
-  }
+	@include beforeDesktop {
+		display: inline-block;
+		font-size: $mat-icon-sm;
+		transition: transform 250ms $tweaked-ease;
+		cursor: pointer;
+		&.reverse {
+			transform: rotate(180deg);
+		}
+	}
 }

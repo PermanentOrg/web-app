@@ -1,108 +1,108 @@
 <!-- @format -->
 <div class="dialog-content">
-  <div class="header">
-    <span>Archive Settings</span>
-    <button class="btn" (click)="onDoneClick()">
-      <i class="material-icons">close</i>
-    </button>
-  </div>
-  <div class="content">
-    <div class="tabs">
-      <div
-        class="dialog-tab"
-        (click)="setTab('public-settings')"
-        [class.active]="activeTab === 'public-settings'"
-      >
-        Archive Settings
-      </div>
-      <div
-        class="dialog-tab"
-        (click)="setTab('legacy-planning')"
-        [class.active]="activeTab === 'legacy-planning'"
-      >
-        Legacy Planning
-      </div>
-      <div
-        class="dialog-tab"
-        (click)="setTab('manage-keywords')"
-        [class.active]="activeTab === 'manage-keywords'"
-      >
-        Manage Keywords
-      </div>
-      <div
-        class="dialog-tab"
-        (click)="setTab('manage-metadata')"
-        [class.active]="activeTab === 'manage-metadata'"
-      >
-        Manage Metadata
-      </div>
-    </div>
-    <div class="panel" #panel>
-      <ng-container [ngSwitch]="activeTab">
-        <ng-container *ngSwitchCase="'manage-keywords'">
-          <div class="panel-title">Manage Keywords</div>
-          <ng-container *ngIf="hasTagsAccess; else noAccess">
-            <pr-manage-tags
-              [tags]="tags"
-              *ngIf="!loadingTags; else loadText"
-              (refreshTags)="refreshTags()"
-            >
-            </pr-manage-tags>
-            <ng-template #loadText> Loading Archive Keywords... </ng-template>
-          </ng-container>
-          <ng-template #noAccess>
-            <p>
-              You do not have permission to manage settings for this archive.
-              <a
-                href="https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing"
-                target="_blank"
-                >Learn more about permissions for managing archive settings
-                here.</a
-              >
-            </p>
-          </ng-template>
-        </ng-container>
-        <ng-container *ngSwitchCase="'public-settings'">
-          <div class="panel-title">Archive Storage</div>
-          <pr-archive-payer
-            [payer]="payer"
-            [archive]="archive"
-          ></pr-archive-payer>
-          <div class="panel-title">Public Gallery Page Settings</div>
-          <ng-container *ngIf="hasTagsAccess; else noAccess">
-            <pr-public-settings [archive]="archive"></pr-public-settings>
-          </ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="'manage-metadata'">
-          <div class="panel-title">Manage Custom Metadata</div>
-          <p>
-            Custom metadata allows you to add additional metadata fields and
-            values that are not currently included on Permanent.org. Manage the
-            fields and values on this page.
-            <a
-              href="https://permanent.zohodesk.com/portal/en/kb/articles/extended-metadata-options-with-tags"
-              target="_blank"
-              >Learn more.</a
-            >
-          </p>
-          <ng-container *ngIf="hasTagsAccess; else noAccess">
-            <pr-manage-custom-metadata></pr-manage-custom-metadata>
-          </ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="'legacy-planning'">
-          <ng-container *ngIf="hasStewardAccess; else noLegacyPlanningAccess">
-            <pr-directive-dialog></pr-directive-dialog>
-          </ng-container>
-          <ng-template #noLegacyPlanningAccess>
-            You do not have permission to set an Archive Steward for this
-            archive. Only owners can set an Archive Steward for an archive.
-            <a
-              href="https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing"
-              >Learn more.</a
-            >
-          </ng-template>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
+	<div class="header">
+		<span>Archive Settings</span>
+		<button class="btn" (click)="onDoneClick()">
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+	<div class="content">
+		<div class="tabs">
+			<div
+				class="dialog-tab"
+				(click)="setTab('public-settings')"
+				[class.active]="activeTab === 'public-settings'"
+			>
+				Archive Settings
+			</div>
+			<div
+				class="dialog-tab"
+				(click)="setTab('legacy-planning')"
+				[class.active]="activeTab === 'legacy-planning'"
+			>
+				Legacy Planning
+			</div>
+			<div
+				class="dialog-tab"
+				(click)="setTab('manage-keywords')"
+				[class.active]="activeTab === 'manage-keywords'"
+			>
+				Manage Keywords
+			</div>
+			<div
+				class="dialog-tab"
+				(click)="setTab('manage-metadata')"
+				[class.active]="activeTab === 'manage-metadata'"
+			>
+				Manage Metadata
+			</div>
+		</div>
+		<div class="panel" #panel>
+			<ng-container [ngSwitch]="activeTab">
+				<ng-container *ngSwitchCase="'manage-keywords'">
+					<div class="panel-title">Manage Keywords</div>
+					<ng-container *ngIf="hasTagsAccess; else noAccess">
+						<pr-manage-tags
+							[tags]="tags"
+							*ngIf="!loadingTags; else loadText"
+							(refreshTags)="refreshTags()"
+						>
+						</pr-manage-tags>
+						<ng-template #loadText> Loading Archive Keywords... </ng-template>
+					</ng-container>
+					<ng-template #noAccess>
+						<p>
+							You do not have permission to manage settings for this archive.
+							<a
+								href="https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing"
+								target="_blank"
+								>Learn more about permissions for managing archive settings
+								here.</a
+							>
+						</p>
+					</ng-template>
+				</ng-container>
+				<ng-container *ngSwitchCase="'public-settings'">
+					<div class="panel-title">Archive Storage</div>
+					<pr-archive-payer
+						[payer]="payer"
+						[archive]="archive"
+					></pr-archive-payer>
+					<div class="panel-title">Public Gallery Page Settings</div>
+					<ng-container *ngIf="hasTagsAccess; else noAccess">
+						<pr-public-settings [archive]="archive"></pr-public-settings>
+					</ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'manage-metadata'">
+					<div class="panel-title">Manage Custom Metadata</div>
+					<p>
+						Custom metadata allows you to add additional metadata fields and
+						values that are not currently included on Permanent.org. Manage the
+						fields and values on this page.
+						<a
+							href="https://permanent.zohodesk.com/portal/en/kb/articles/extended-metadata-options-with-tags"
+							target="_blank"
+							>Learn more.</a
+						>
+					</p>
+					<ng-container *ngIf="hasTagsAccess; else noAccess">
+						<pr-manage-custom-metadata></pr-manage-custom-metadata>
+					</ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'legacy-planning'">
+					<ng-container *ngIf="hasStewardAccess; else noLegacyPlanningAccess">
+						<pr-directive-dialog></pr-directive-dialog>
+					</ng-container>
+					<ng-template #noLegacyPlanningAccess>
+						You do not have permission to set an Archive Steward for this
+						archive. Only owners can set an Archive Steward for an archive.
+						<a
+							href="https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing"
+							>Learn more.</a
+						>
+					</ng-template>
+				</ng-container>
+			</ng-container>
+		</div>
+	</div>
 </div>

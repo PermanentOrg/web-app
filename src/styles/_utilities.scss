@@ -1,180 +1,180 @@
 @mixin after($min-width) {
-  @media screen and (min-width: $min-width) {
-    @content;
-  }
+	@media screen and (min-width: $min-width) {
+		@content;
+	}
 }
 
 @mixin until($max-width) {
-  @media screen and (max-width: $max-width - 1) {
-    @content;
-  }
+	@media screen and (max-width: $max-width - 1) {
+		@content;
+	}
 }
 
 @mixin desktop {
-  @include after($tablet-horizontal) {
-    @content;
-  }
+	@include after($tablet-horizontal) {
+		@content;
+	}
 }
 
 @mixin beforeDesktop {
-  @include until($tablet-horizontal) {
-    @content;
-  }
+	@include until($tablet-horizontal) {
+		@content;
+	}
 }
 
 @mixin afterTabletBeforeDesktop {
-  @media screen and (min-width: $tablet-horizontal) and (max-width: 1200px) {
-    @content;
-  }
+	@media screen and (min-width: $tablet-horizontal) and (max-width: 1200px) {
+		@content;
+	}
 }
 
 @mixin fullscreen {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 }
 
 .fullscreen {
-  @include fullscreen();
+	@include fullscreen();
 }
 
 @mixin positionReset {
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+	position: relative;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
 @mixin flexCenter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 @mixin mainContentScrollDesktop {
-  @include after($tablet-horizontal) {
-    max-height: calc(100vh - #{$navbar-total-height-desktop});
-    overflow: hidden;
-    overflow-y: auto;
-  }
+	@include after($tablet-horizontal) {
+		max-height: calc(100vh - #{$navbar-total-height-desktop});
+		overflow: hidden;
+		overflow-y: auto;
+	}
 }
 
 @mixin hasFloatSidebar {
-  @include desktop {
-    width: calc(100% - #{$sidebar-width});
-  }
+	@include desktop {
+		width: calc(100% - #{$sidebar-width});
+	}
 }
 
 @mixin mainContentFloatSidebar {
-  display: none;
+	display: none;
 
-  @include desktop {
-    display: block;
-    position: fixed;
-    right: $grid-unit;
-    width: $sidebar-width - $grid-unit;
-    top: $navbar-total-height-desktop;
-    bottom: $grid-unit;
-    padding: 0 $grid-unit;
-    border: $file-list-border;
-    overflow-y: auto;
+	@include desktop {
+		display: block;
+		position: fixed;
+		right: $grid-unit;
+		width: $sidebar-width - $grid-unit;
+		top: $navbar-total-height-desktop;
+		bottom: $grid-unit;
+		padding: 0 $grid-unit;
+		border: $file-list-border;
+		overflow-y: auto;
 
-    .title {
-      height: 2 * $grid-unit;
-      display: flex;
-      align-items: center;
-      border-bottom: $file-list-border;
-      margin-bottom: $grid-unit;
-    }
-  }
+		.title {
+			height: 2 * $grid-unit;
+			display: flex;
+			align-items: center;
+			border-bottom: $file-list-border;
+			margin-bottom: $grid-unit;
+		}
+	}
 }
 
 @mixin gridHeightInput {
-  height: 2 * $grid-unit;
-  display: flex;
-  padding-top: 0;
-  padding-bottom: 0;
-  align-items: center;
+	height: 2 * $grid-unit;
+	display: flex;
+	padding-top: 0;
+	padding-bottom: 0;
+	align-items: center;
 }
 
 @mixin gridHeightInputSmall {
-  height: 1.5 * $grid-unit;
-  display: flex;
-  padding-top: 0;
-  padding-bottom: 0;
-  align-items: center;
-  font-size: $font-size-sm;
+	height: 1.5 * $grid-unit;
+	display: flex;
+	padding-top: 0;
+	padding-bottom: 0;
+	align-items: center;
+	font-size: $font-size-sm;
 }
 
 @mixin gridHeightButton {
-  height: 2 * $grid-unit;
-  display: flex;
-  padding-top: 0;
-  padding-bottom: 0;
-  align-items: center;
+	height: 2 * $grid-unit;
+	display: flex;
+	padding-top: 0;
+	padding-bottom: 0;
+	align-items: center;
 }
 
 @mixin gridHeightButtonSmall {
-  height: 1.5 * $grid-unit;
-  font-weight: $font-weight-semibold;
-  font-size: $font-size-sm;
-  display: flex;
-  padding-top: 0;
-  padding-bottom: 0;
-  align-items: center;
-  justify-content: center;
+	height: 1.5 * $grid-unit;
+	font-weight: $font-weight-semibold;
+	font-size: $font-size-sm;
+	display: flex;
+	padding-top: 0;
+	padding-bottom: 0;
+	align-items: center;
+	justify-content: center;
 }
 
 @mixin folderIcon($height: $file-list-row-height) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #f7c985;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #f7c985;
 
-  i {
-    font-size: $height - ($grid-unit * 0.25);
-  }
+	i {
+		font-size: $height - ($grid-unit * 0.25);
+	}
 }
 
 .hide-desktop {
-  @include after($tablet-horizontal) {
-    display: none !important;
-  }
+	@include after($tablet-horizontal) {
+		display: none !important;
+	}
 }
 
 .hide-mobile {
-  @include until($tablet-horizontal) {
-    display: none !important;
-  }
+	@include until($tablet-horizontal) {
+		display: none !important;
+	}
 }
 
 @mixin gradient($direction, $list) {
-  background: -webkit-linear-gradient($direction, $list);
-  background: -moz-linear-gradient($direction, $list);
-  background: -o-linear-gradient($direction, $list);
-  background: linear-gradient($direction, $list);
+	background: -webkit-linear-gradient($direction, $list);
+	background: -moz-linear-gradient($direction, $list);
+	background: -o-linear-gradient($direction, $list);
+	background: linear-gradient($direction, $list);
 }
 
 @mixin flexGridWithGutter($count: 4, $gutter: $grid-unit) {
-  $flex-basis: calc((100% - #{($count - 1)} * #{$gutter}) / #{$count});
+	$flex-basis: calc((100% - #{($count - 1)} * #{$gutter}) / #{$count});
 
-  flex: 0 0 $flex-basis;
+	flex: 0 0 $flex-basis;
 
-  &:not(:nth-child(#{$count}n)) {
-    margin-right: $gutter;
-  }
+	&:not(:nth-child(#{$count}n)) {
+		margin-right: $gutter;
+	}
 }
 
 @mixin fullscreenComponent {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  display: block;
-  background: white;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	display: block;
+	background: white;
 }

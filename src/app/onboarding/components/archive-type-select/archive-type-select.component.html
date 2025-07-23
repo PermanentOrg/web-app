@@ -1,29 +1,29 @@
 <!-- @format -->
 <div class="archive-type-select">
-  <div class="archive-image">
-    <img
-      *ngIf="selectedValue"
-      [src]="icons[selectedValue.split('+')[0]]"
-      [alt]="altTexts[selectedValue.split('+')[0]]"
-    />
-  </div>
-  <div class="archive-dropdown">
-    <select
-      class="form-control"
-      [class.no-value]="!selectedValue"
-      [(ngModel)]="selectedValue"
-      (change)="onSelectionChange()"
-    >
-      <option value="" disabled>Select content type</option>
-      <option
-        *ngFor="let option of options"
-        [value]="option.value + '+' + option.type"
-      >
-        {{ option.text }}
-      </option>
-    </select>
-    <span class="archive-description">{{
-      descriptions[selectedValue.split('+')[1]]
-    }}</span>
-  </div>
+	<div class="archive-image">
+		<img
+			*ngIf="selectedValue"
+			[src]="icons[selectedValue.split('+')[0]]"
+			[alt]="altTexts[selectedValue.split('+')[0]]"
+		/>
+	</div>
+	<div class="archive-dropdown">
+		<select
+			class="form-control"
+			[class.no-value]="!selectedValue"
+			[(ngModel)]="selectedValue"
+			(change)="onSelectionChange()"
+		>
+			<option value="" disabled>Select content type</option>
+			<option
+				*ngFor="let option of options"
+				[value]="option.value + '+' + option.type"
+			>
+				{{ option.text }}
+			</option>
+		</select>
+		<span class="archive-description">{{
+			descriptions[selectedValue.split('+')[1]]
+		}}</span>
+	</div>
 </div>

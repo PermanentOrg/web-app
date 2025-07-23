@@ -1,123 +1,123 @@
 @import 'variables';
 :host {
-  display: flex;
-  max-width: 100%;
-  align-items: center;
+	display: flex;
+	max-width: 100%;
+	align-items: center;
 
-  &:hover {
-    background-color: darken(white, 4%);
-  }
+	&:hover {
+		background-color: darken(white, 4%);
+	}
 }
 
 .archive {
-  display: flex;
-  align-items: center;
-  flex: 1 1 auto;
-  cursor: pointer;
-  overflow: hidden;
+	display: flex;
+	align-items: center;
+	flex: 1 1 auto;
+	cursor: pointer;
+	overflow: hidden;
 }
 
 $thumb-size: 50px;
 
 .archive-thumb {
-  width: $thumb-size;
-  height: $thumb-size;
-  margin-right: 10px;
-  flex: 0 0 $thumb-size;
+	width: $thumb-size;
+	height: $thumb-size;
+	margin-right: 10px;
+	flex: 0 0 $thumb-size;
 }
 
 .archive-name {
-  font-weight: 600;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1 1 auto;
-  line-height: 1.2;
+	font-weight: 600;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	flex: 1 1 auto;
+	line-height: 1.2;
 }
 
 .archive-current {
-  font-weight: 400;
-  line-height: 1.5;
+	font-weight: 400;
+	line-height: 1.5;
 }
 
 .archive-switch,
 .archive-pending,
 .archive-subtitle {
-  font-weight: 400;
-  font-size: 12px;
-  color: $text-muted;
+	font-weight: 400;
+	font-size: 12px;
+	color: $text-muted;
 }
 
 .archive-default {
-  i {
-    width: $mat-icon;
-    text-align: center;
-    font-size: $mat-icon-sm;
-    color: $yellow;
-  }
+	i {
+		width: $mat-icon;
+		text-align: center;
+		font-size: $mat-icon-sm;
+		color: $yellow;
+	}
 }
 
 .archive-edit {
-  display: flex;
+	display: flex;
 
-  button {
-    margin: 0;
-    @include gridHeightButtonSmall;
-    margin-left: $grid-unit * 0.5;
-  }
+	button {
+		margin: 0;
+		@include gridHeightButtonSmall;
+		margin-left: $grid-unit * 0.5;
+	}
 }
 $desktop-height: pxToGrid(60px);
 
 :host.large-on-desktop {
-  @include desktop {
-    $desktop-height: 4 * $grid-unit;
-    height: $desktop-height;
-    padding: 0;
-    padding-right: $grid-unit;
-    border: $file-list-border;
-    border-radius: $border-radius;
+	@include desktop {
+		$desktop-height: 4 * $grid-unit;
+		height: $desktop-height;
+		padding: 0;
+		padding-right: $grid-unit;
+		border: $file-list-border;
+		border-radius: $border-radius;
 
-    .archive {
-      margin-right: auto;
-    }
+		.archive {
+			margin-right: auto;
+		}
 
-    .archive-thumb {
-      width: $desktop-height;
-      height: $desktop-height;
-      flex-basis: $desktop-height;
-      margin-right: $grid-unit;
-    }
+		.archive-thumb {
+			width: $desktop-height;
+			height: $desktop-height;
+			flex-basis: $desktop-height;
+			margin-right: $grid-unit;
+		}
 
-    .archive-edit-dropdown {
-      > i {
-        cursor: pointer;
-        padding: $grid-unit;
-        margin-right: -$grid-unit;
-      }
+		.archive-edit-dropdown {
+			> i {
+				cursor: pointer;
+				padding: $grid-unit;
+				margin-right: -$grid-unit;
+			}
 
-      .dropdown-toggle {
-        &:after {
-          display: none;
-        }
-      }
+			.dropdown-toggle {
+				&:after {
+					display: none;
+				}
+			}
 
-      .dropdown {
-        padding: 0px;
-        > a {
-          display: flex;
-          padding: $grid-unit * 0.25 $grid-unit * 0.5;
-          align-items: center;
+			.dropdown {
+				padding: 0px;
+				> a {
+					display: flex;
+					padding: $grid-unit * 0.25 $grid-unit * 0.5;
+					align-items: center;
 
-          > i {
-            margin-right: $grid-unit * 0.5;
-          }
+					> i {
+						margin-right: $grid-unit * 0.5;
+					}
 
-          &:hover {
-            background-color: darken(white, 4%);
-          }
-        }
-      }
-    }
-  }
+					&:hover {
+						background-color: darken(white, 4%);
+					}
+				}
+			}
+		}
+	}
 }

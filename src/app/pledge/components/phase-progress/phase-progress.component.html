@@ -1,61 +1,61 @@
 <!-- @format -->
 <div class="pledge-progress-header">
-  <strong
-    [options]="percentCountUpOptions"
-    decimals="1"
-    duration="1.5"
-    [countUp]="
-      (100 * this.currentProgress.totalDollarAmount) /
-      this.currentProgress.goalDollarAmount
-    "
-    duration="1.5"
-  >
-    0%
-  </strong>
-  of
-  <strong>
-    {{
-      this.currentProgress.goalDollarAmount
-        | currency: 'USD' : 'symbol' : '1.0-0'
-    }}
-  </strong>
-  goal reached
+	<strong
+		[options]="percentCountUpOptions"
+		decimals="1"
+		duration="1.5"
+		[countUp]="
+			(100 * this.currentProgress.totalDollarAmount) /
+			this.currentProgress.goalDollarAmount
+		"
+		duration="1.5"
+	>
+		0%
+	</strong>
+	of
+	<strong>
+		{{
+			this.currentProgress.goalDollarAmount
+				| currency: 'USD' : 'symbol' : '1.0-0'
+		}}
+	</strong>
+	goal reached
 </div>
 <div class="phase-progress">
-  <div class="progress-bar"></div>
+	<div class="progress-bar"></div>
 </div>
 <div class="pledge-progress-details">
-  <div class="pledge-progress-detail">
-    <div
-      class="detail-heading"
-      [options]="dollarCountUpOptions"
-      [countUp]="this.currentProgress.totalDollarAmount"
-      duration="1.5"
-    >
-      $0
-    </div>
-    donated
-  </div>
-  <div class="pledge-progress-detail">
-    <div
-      class="detail-heading"
-      [options]="pledgeCountUpOptions"
-      [countUp]="this.currentProgress.totalPledges"
-      duration="1.5"
-    >
-      0
-    </div>
-    contributors
-  </div>
-  <div class="pledge-progress-detail">
-    <div
-      class="detail-heading"
-      [options]="storageCountUpOptions"
-      [countUp]="this.currentProgress.totalStorageAmount"
-      duration="1.5"
-    >
-      0
-    </div>
-    storage endowed
-  </div>
+	<div class="pledge-progress-detail">
+		<div
+			class="detail-heading"
+			[options]="dollarCountUpOptions"
+			[countUp]="this.currentProgress.totalDollarAmount"
+			duration="1.5"
+		>
+			$0
+		</div>
+		donated
+	</div>
+	<div class="pledge-progress-detail">
+		<div
+			class="detail-heading"
+			[options]="pledgeCountUpOptions"
+			[countUp]="this.currentProgress.totalPledges"
+			duration="1.5"
+		>
+			0
+		</div>
+		contributors
+	</div>
+	<div class="pledge-progress-detail">
+		<div
+			class="detail-heading"
+			[options]="storageCountUpOptions"
+			[countUp]="this.currentProgress.totalStorageAmount"
+			duration="1.5"
+		>
+			0
+		</div>
+		storage endowed
+	</div>
 </div>

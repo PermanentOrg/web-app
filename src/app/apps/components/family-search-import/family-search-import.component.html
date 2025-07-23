@@ -1,108 +1,108 @@
 <div class="dialog-content" *ngIf="stage === 'people'">
-  <div class="dialog-body">
-    <div class="page-title">Select Person(s) To Import</div>
-    <p>
-      <span
-        >Choose members of your family tree to create Permanent Archives
-        for:</span
-      >
-    </p>
-    <div class="family-member-list">
-      <div class="family-member" *ngFor="let family of familyMembers">
-        <div class="select" [ngClass]="{ exists: family.permExists }">
-          <label>
-            <input
-              type="checkbox"
-              [(ngModel)]="family.isSelected"
-              [disabled]="family.permExists"
-            />
-            <div class="select-active" *ngIf="family.isSelected"></div>
-          </label>
-        </div>
-        <div class="family-name">
-          {{ family.display.name }}
-        </div>
-        <div class="family-birth">
-          <em *ngIf="!family.permExists">{{ family.display.lifespan }}</em>
-          <em *ngIf="family.permExists">Imported</em>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="dialog-footer">
-    <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
-    <button
-      class="btn btn-primary"
-      (click)="stage = 'memories'"
-      [disabled]="!getSelectedCount()"
-    >
-      Next
-    </button>
-  </div>
+	<div class="dialog-body">
+		<div class="page-title">Select Person(s) To Import</div>
+		<p>
+			<span
+				>Choose members of your family tree to create Permanent Archives
+				for:</span
+			>
+		</p>
+		<div class="family-member-list">
+			<div class="family-member" *ngFor="let family of familyMembers">
+				<div class="select" [ngClass]="{ exists: family.permExists }">
+					<label>
+						<input
+							type="checkbox"
+							[(ngModel)]="family.isSelected"
+							[disabled]="family.permExists"
+						/>
+						<div class="select-active" *ngIf="family.isSelected"></div>
+					</label>
+				</div>
+				<div class="family-name">
+					{{ family.display.name }}
+				</div>
+				<div class="family-birth">
+					<em *ngIf="!family.permExists">{{ family.display.lifespan }}</em>
+					<em *ngIf="family.permExists">Imported</em>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="dialog-footer">
+		<button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+		<button
+			class="btn btn-primary"
+			(click)="stage = 'memories'"
+			[disabled]="!getSelectedCount()"
+		>
+			Next
+		</button>
+	</div>
 </div>
 <div class="dialog-content" *ngIf="stage === 'memories'">
-  <div class="dialog-body">
-    <div class="page-title">Import Memories</div>
-    <p>
-      <span
-        >Any FamilySearch Memories associated with the selected Persons can be
-        imported to the matching Permanent Archive</span
-      >
-    </p>
-    <div class="select-options">
-      <div class="select-option">
-        <div class="select">
-          <label>
-            <input type="radio" [(ngModel)]="importMemories" value="yes" />
-            <div class="select-active" *ngIf="importMemories === 'yes'"></div>
-          </label>
-        </div>
-        <div class="select-label">Yes, import Memories</div>
-      </div>
-      <div class="select-option">
-        <div class="select">
-          <label>
-            <input type="radio" [(ngModel)]="importMemories" value="no" />
-            <div class="select-active" *ngIf="importMemories === 'no'"></div>
-          </label>
-        </div>
-        <div class="select-label">No, don't import Memories</div>
-      </div>
-    </div>
-    <p>
-      After import, selected Persons will have new Permanent Archives available
-      to start curating and contributing to.
-    </p>
-  </div>
-  <div class="dialog-footer">
-    <button class="btn btn-secondary" (click)="cancel()" [disabled]="waiting">
-      Cancel
-    </button>
-    <button
-      class="btn btn-primary"
-      (click)="startImport()"
-      [disabled]="waiting"
-    >
-      Import Family Tree
-    </button>
-  </div>
+	<div class="dialog-body">
+		<div class="page-title">Import Memories</div>
+		<p>
+			<span
+				>Any FamilySearch Memories associated with the selected Persons can be
+				imported to the matching Permanent Archive</span
+			>
+		</p>
+		<div class="select-options">
+			<div class="select-option">
+				<div class="select">
+					<label>
+						<input type="radio" [(ngModel)]="importMemories" value="yes" />
+						<div class="select-active" *ngIf="importMemories === 'yes'"></div>
+					</label>
+				</div>
+				<div class="select-label">Yes, import Memories</div>
+			</div>
+			<div class="select-option">
+				<div class="select">
+					<label>
+						<input type="radio" [(ngModel)]="importMemories" value="no" />
+						<div class="select-active" *ngIf="importMemories === 'no'"></div>
+					</label>
+				</div>
+				<div class="select-label">No, don't import Memories</div>
+			</div>
+		</div>
+		<p>
+			After import, selected Persons will have new Permanent Archives available
+			to start curating and contributing to.
+		</p>
+	</div>
+	<div class="dialog-footer">
+		<button class="btn btn-secondary" (click)="cancel()" [disabled]="waiting">
+			Cancel
+		</button>
+		<button
+			class="btn btn-primary"
+			(click)="startImport()"
+			[disabled]="waiting"
+		>
+			Import Family Tree
+		</button>
+	</div>
 </div>
 <div class="dialog-content" *ngIf="stage === 'importing'">
-  <div class="dialog-body">
-    <div class="page-title">Importing {{ getSelectedCount() }} person(s)</div>
-    <p>
-      <span>Do not close your browser your refresh this window.</span>
-    </p>
-    <div *ngIf="showImportSpinner" class="import-spinner">
-      <div class="lds-dual-ring"></div>
-    </div>
-  </div>
-  <div class="dialog-footer">
-    <button class="btn btn-secondary" (click)="cancel()" [disabled]="waiting">
-      Cancel
-    </button>
-    <button class="btn btn-primary" [disabled]="waiting">
-      Import Family Tree
-    </button>
-  </div>
+	<div class="dialog-body">
+		<div class="page-title">Importing {{ getSelectedCount() }} person(s)</div>
+		<p>
+			<span>Do not close your browser your refresh this window.</span>
+		</p>
+		<div *ngIf="showImportSpinner" class="import-spinner">
+			<div class="lds-dual-ring"></div>
+		</div>
+	</div>
+	<div class="dialog-footer">
+		<button class="btn btn-secondary" (click)="cancel()" [disabled]="waiting">
+			Cancel
+		</button>
+		<button class="btn btn-primary" [disabled]="waiting">
+			Import Family Tree
+		</button>
+	</div>
 </div>

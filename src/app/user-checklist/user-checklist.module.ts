@@ -13,28 +13,28 @@ import { ChecklistEventObserverService } from './services/checklist-event-observ
 import { TaskLinkPipe } from './pipes/task-link.pipe';
 
 @NgModule({
-  declarations: [
-    UserChecklistComponent,
-    ChecklistIconComponent,
-    TaskIconComponent,
-    MinimizeIconComponent,
-    TaskLinkPipe,
-  ],
-  exports: [UserChecklistComponent],
-  imports: [CommonModule, SharedModule, RouterModule],
-  providers: [
-    {
-      provide: CHECKLIST_API,
-      useClass: UserChecklistService,
-    },
-    ChecklistEventObserverService,
-  ],
+	declarations: [
+		UserChecklistComponent,
+		ChecklistIconComponent,
+		TaskIconComponent,
+		MinimizeIconComponent,
+		TaskLinkPipe,
+	],
+	exports: [UserChecklistComponent],
+	imports: [CommonModule, SharedModule, RouterModule],
+	providers: [
+		{
+			provide: CHECKLIST_API,
+			useClass: UserChecklistService,
+		},
+		ChecklistEventObserverService,
+	],
 })
 export class UserChecklistModule {
-  constructor(
-    event: EventService,
-    checklistEventObserver: ChecklistEventObserverService,
-  ) {
-    event.addObserver(checklistEventObserver);
-  }
+	constructor(
+		event: EventService,
+		checklistEventObserver: ChecklistEventObserverService,
+	) {
+		event.addObserver(checklistEventObserver);
+	}
 }

@@ -6,8 +6,8 @@ import { FilesystemService } from './filesystem.service';
 import { FilesystemApiService } from './filesystem-api.service';
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule, SharedModule],
-  providers: [FilesystemService, FilesystemApiService],
+	declarations: [],
+	imports: [CommonModule, SharedModule],
+	providers: [FilesystemService, FilesystemApiService],
 })
 export class FilesystemModule {}

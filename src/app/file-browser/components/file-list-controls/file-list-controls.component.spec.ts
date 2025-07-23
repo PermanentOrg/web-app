@@ -16,92 +16,92 @@ import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 import { FileListControlsComponent } from './file-list-controls.component';
 
 describe('FileListControlsComponent', () => {
-  let component: FileListControlsComponent;
-  let fixture: ComponentFixture<FileListControlsComponent>;
+	let component: FileListControlsComponent;
+	let fixture: ComponentFixture<FileListControlsComponent>;
 
-  const dataServiceMock = {
-    currentFolder: {
-      sort: 'sort.alphabetical_asc',
-      accessRole: AccessRole.Manager,
-    },
-    selectedItems$: () => of([]),
-    refreshCurrentFolder: jasmine
-      .createSpy('refreshCurrentFolder')
-      .and.returnValue(Promise.resolve(true)),
-  };
+	const dataServiceMock = {
+		currentFolder: {
+			sort: 'sort.alphabetical_asc',
+			accessRole: AccessRole.Manager,
+		},
+		selectedItems$: () => of([]),
+		refreshCurrentFolder: jasmine
+			.createSpy('refreshCurrentFolder')
+			.and.returnValue(Promise.resolve(true)),
+	};
 
-  const editServiceMock = {
-    deleteItems: jasmine.createSpy('deleteItems'),
-    unshareItem: jasmine.createSpy('unshareItem'),
-    openFolderPicker: jasmine.createSpy('openFolderPicker'),
-    openShareDialog: jasmine.createSpy('openShareDialog'),
-    openPublishDialog: jasmine.createSpy('openPublishDialog'),
-  };
+	const editServiceMock = {
+		deleteItems: jasmine.createSpy('deleteItems'),
+		unshareItem: jasmine.createSpy('unshareItem'),
+		openFolderPicker: jasmine.createSpy('openFolderPicker'),
+		openShareDialog: jasmine.createSpy('openShareDialog'),
+		openPublishDialog: jasmine.createSpy('openPublishDialog'),
+	};
 
-  const accountServiceMock = {
-    checkMinimumAccess: jasmine
-      .createSpy('checkMinimumAccess')
-      .and.returnValue(true),
-    checkMinimumArchiveAccess: jasmine
-      .createSpy('checkMinimumArchiveAccess')
-      .and.returnValue(true),
-    getArchive: jasmine
-      .createSpy('getArchive')
-      .and.returnValue({ accessRole: AccessRole.Manager }),
-    deductAccountStorage: jasmine.createSpy('deductAccountStorage'),
-  };
+	const accountServiceMock = {
+		checkMinimumAccess: jasmine
+			.createSpy('checkMinimumAccess')
+			.and.returnValue(true),
+		checkMinimumArchiveAccess: jasmine
+			.createSpy('checkMinimumArchiveAccess')
+			.and.returnValue(true),
+		getArchive: jasmine
+			.createSpy('getArchive')
+			.and.returnValue({ accessRole: AccessRole.Manager }),
+		deductAccountStorage: jasmine.createSpy('deductAccountStorage'),
+	};
 
-  const apiServiceMock = {
-    folder: {
-      sort: jasmine.createSpy('sort').and.returnValue(Promise.resolve(true)),
-    },
-  };
+	const apiServiceMock = {
+		folder: {
+			sort: jasmine.createSpy('sort').and.returnValue(Promise.resolve(true)),
+		},
+	};
 
-  const promptServiceMock = {
-    confirmBoolean: jasmine
-      .createSpy('confirmBoolean')
-      .and.returnValue(Promise.resolve(true)),
-  };
+	const promptServiceMock = {
+		confirmBoolean: jasmine
+			.createSpy('confirmBoolean')
+			.and.returnValue(Promise.resolve(true)),
+	};
 
-  const messageServiceMock = {
-    showError: jasmine.createSpy('showError'),
-    showMessage: jasmine.createSpy('showMessage'),
-  };
+	const messageServiceMock = {
+		showError: jasmine.createSpy('showError'),
+		showMessage: jasmine.createSpy('showMessage'),
+	};
 
-  const folderViewServiceMock = {
-    folderView: FolderView.List,
-    viewChange: new Subject<FolderView>(),
-  };
+	const folderViewServiceMock = {
+		folderView: FolderView.List,
+		viewChange: new Subject<FolderView>(),
+	};
 
-  const eventServiceMock = {
-    dispatch: jasmine.createSpy('dispatch'),
-  };
+	const eventServiceMock = {
+		dispatch: jasmine.createSpy('dispatch'),
+	};
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [FileListControlsComponent, TooltipsPipe],
-      providers: [
-        { provide: DataService, useValue: dataServiceMock },
-        { provide: EditService, useValue: editServiceMock },
-        { provide: AccountService, useValue: accountServiceMock },
-        { provide: ApiService, useValue: apiServiceMock },
-        { provide: PromptService, useValue: promptServiceMock },
-        { provide: MessageService, useValue: messageServiceMock },
-        { provide: FolderViewService, useValue: folderViewServiceMock },
-        { provide: EventService, useValue: eventServiceMock },
-        {
-          provide: ElementRef,
-          useValue: new ElementRef({ nativeElement: {} }),
-        },
-      ],
-    }).compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [FileListControlsComponent, TooltipsPipe],
+			providers: [
+				{ provide: DataService, useValue: dataServiceMock },
+				{ provide: EditService, useValue: editServiceMock },
+				{ provide: AccountService, useValue: accountServiceMock },
+				{ provide: ApiService, useValue: apiServiceMock },
+				{ provide: PromptService, useValue: promptServiceMock },
+				{ provide: MessageService, useValue: messageServiceMock },
+				{ provide: FolderViewService, useValue: folderViewServiceMock },
+				{ provide: EventService, useValue: eventServiceMock },
+				{
+					provide: ElementRef,
+					useValue: new ElementRef({ nativeElement: {} }),
+				},
+			],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(FileListControlsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(FileListControlsComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create the component', () => {
+		expect(component).toBeTruthy();
+	});
 });

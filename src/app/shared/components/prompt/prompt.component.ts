@@ -1,18 +1,18 @@
 /* @format */
 import {
-  Component,
-  Input,
-  ElementRef,
-  OnDestroy,
-  ViewChildren,
-  QueryList,
+	Component,
+	Input,
+	ElementRef,
+	OnDestroy,
+	ViewChildren,
+	QueryList,
 } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import {
-  PromptService,
-  PromptField,
-  PromptButton,
-  PromptConfig,
+	PromptService,
+	PromptField,
+	PromptButton,
+	PromptConfig,
 } from '@shared/services/prompt/prompt.service';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
@@ -20,278 +20,278 @@ const DEFAULT_SAVE_TEXT = 'OK';
 const DEFAULT_CANCEL_TEXT = 'Cancel';
 
 @Component({
-  selector: 'pr-prompt',
-  templateUrl: './prompt.component.html',
-  styleUrls: ['./prompt.component.scss'],
-  standalone: false,
+	selector: 'pr-prompt',
+	templateUrl: './prompt.component.html',
+	styleUrls: ['./prompt.component.scss'],
+	standalone: false,
 })
 export class PromptComponent implements OnDestroy {
-  @Input() isVisible: boolean;
+	@Input() isVisible: boolean;
 
-  @ViewChildren(FormInputComponent) inputQuery: QueryList<FormInputComponent>;
+	@ViewChildren(FormInputComponent) inputQuery: QueryList<FormInputComponent>;
 
-  public waiting = false;
-  public editForm: UntypedFormGroup;
-  public fields: any[] = [];
-  public placeholderText = 'test';
-  public title: string;
+	public waiting = false;
+	public editForm: UntypedFormGroup;
+	public fields: any[] = [];
+	public placeholderText = 'test';
+	public title: string;
 
-  public editButtons: PromptButton[];
+	public editButtons: PromptButton[];
 
-  public template: string;
-  public saveText = DEFAULT_SAVE_TEXT;
-  public cancelText = DEFAULT_CANCEL_TEXT;
+	public template: string;
+	public saveText = DEFAULT_SAVE_TEXT;
+	public cancelText = DEFAULT_CANCEL_TEXT;
 
-  public savePromise: Promise<any>;
+	public savePromise: Promise<any>;
 
-  public donePromise: Promise<any>;
-  public doneResolve: Function;
-  public doneReject: Function;
+	public donePromise: Promise<any>;
+	public doneResolve: Function;
+	public doneReject: Function;
 
-  private defaultForm: UntypedFormGroup;
+	private defaultForm: UntypedFormGroup;
 
-  private promptQueue: PromptConfig[] = [];
+	private promptQueue: PromptConfig[] = [];
 
-  constructor(
-    private service: PromptService,
-    private fb: UntypedFormBuilder,
-    private element: ElementRef,
-  ) {
-    this.service.registerComponent(this);
-    this.defaultForm = fb.group({});
-  }
+	constructor(
+		private service: PromptService,
+		private fb: UntypedFormBuilder,
+		private element: ElementRef,
+	) {
+		this.service.registerComponent(this);
+		this.defaultForm = fb.group({});
+	}
 
-  ngOnDestroy() {
-    this.service.unregisterComponent();
-  }
+	ngOnDestroy() {
+		this.service.unregisterComponent();
+	}
 
-  hide(event: Event) {
-    this.isVisible = false;
-    setTimeout(() => {
-      this.reset();
-    }, 500);
-    return false;
-  }
+	hide(event: Event) {
+		this.isVisible = false;
+		setTimeout(() => {
+			this.reset();
+		}, 500);
+		return false;
+	}
 
-  prompt(
-    form: UntypedFormGroup,
-    fields: PromptField[],
-    title: string,
-    savePromise?: Promise<any>,
-    saveText?: string,
-    cancelText?: string,
-    donePromise?: Promise<any>,
-    doneResolve?: Function,
-    doneReject?: Function,
-    template?: string,
-  ) {
-    if (this.donePromise) {
-      let newDoneReject, newDoneResolve;
+	prompt(
+		form: UntypedFormGroup,
+		fields: PromptField[],
+		title: string,
+		savePromise?: Promise<any>,
+		saveText?: string,
+		cancelText?: string,
+		donePromise?: Promise<any>,
+		doneResolve?: Function,
+		doneReject?: Function,
+		template?: string,
+	) {
+		if (this.donePromise) {
+			let newDoneReject, newDoneResolve;
 
-      const newDonePromise = new Promise((resolve, reject) => {
-        newDoneResolve = resolve;
-        newDoneReject = reject;
-      });
+			const newDonePromise = new Promise((resolve, reject) => {
+				newDoneResolve = resolve;
+				newDoneReject = reject;
+			});
 
-      this.promptQueue.push({
-        form: form,
-        fields: fields,
-        title: title,
-        savePromise: savePromise,
-        saveText: saveText,
-        cancelText: cancelText,
-        donePromise: newDonePromise,
-        doneResolve: newDoneResolve,
-        doneReject: newDoneReject,
-      });
+			this.promptQueue.push({
+				form: form,
+				fields: fields,
+				title: title,
+				savePromise: savePromise,
+				saveText: saveText,
+				cancelText: cancelText,
+				donePromise: newDonePromise,
+				doneResolve: newDoneResolve,
+				doneReject: newDoneReject,
+			});
 
-      return newDonePromise;
-    }
+			return newDonePromise;
+		}
 
-    this.title = title;
-    this.savePromise = savePromise;
+		this.title = title;
+		this.savePromise = savePromise;
 
-    this.template = template;
-    this.saveText = saveText || DEFAULT_SAVE_TEXT;
-    this.cancelText = cancelText || DEFAULT_CANCEL_TEXT;
-    this.template = template;
+		this.template = template;
+		this.saveText = saveText || DEFAULT_SAVE_TEXT;
+		this.cancelText = cancelText || DEFAULT_CANCEL_TEXT;
+		this.template = template;
 
-    this.editForm = form;
-    this.fields = fields;
+		this.editForm = form;
+		this.fields = fields;
 
-    if (!donePromise) {
-      this.donePromise = new Promise((resolve, reject) => {
-        this.doneResolve = resolve;
-        this.doneReject = reject;
-      });
-    } else {
-      this.donePromise = donePromise;
-      this.doneResolve = doneResolve;
-      this.doneReject = doneReject;
-    }
+		if (!donePromise) {
+			this.donePromise = new Promise((resolve, reject) => {
+				this.doneResolve = resolve;
+				this.doneReject = reject;
+			});
+		} else {
+			this.donePromise = donePromise;
+			this.doneResolve = doneResolve;
+			this.doneReject = doneReject;
+		}
 
-    this.isVisible = true;
+		this.isVisible = true;
 
-    setTimeout(() => {
-      const elem = this.element.nativeElement as Element;
-      const firstInput = elem.querySelector('input');
-      if (firstInput) {
-        firstInput.focus();
-      }
-    }, 32);
+		setTimeout(() => {
+			const elem = this.element.nativeElement as Element;
+			const firstInput = elem.querySelector('input');
+			if (firstInput) {
+				firstInput.focus();
+			}
+		}, 32);
 
-    return this.donePromise;
-  }
+		return this.donePromise;
+	}
 
-  save(event: Event) {
-    event.stopPropagation();
-    this.doneResolve(this.editForm.value);
-    if (!this.savePromise) {
-      this.hide(event);
-    } else {
-      this.waiting = true;
-      this.savePromise
-        .then(() => {
-          this.waiting = false;
-          this.hide(event);
-        })
-        .catch(() => {
-          this.waiting = false;
-          this.hide(event);
-        });
-    }
-    return false;
-  }
+	save(event: Event) {
+		event.stopPropagation();
+		this.doneResolve(this.editForm.value);
+		if (!this.savePromise) {
+			this.hide(event);
+		} else {
+			this.waiting = true;
+			this.savePromise
+				.then(() => {
+					this.waiting = false;
+					this.hide(event);
+				})
+				.catch(() => {
+					this.waiting = false;
+					this.hide(event);
+				});
+		}
+		return false;
+	}
 
-  cancel(event: Event) {
-    event.stopPropagation();
-    this.doneReject();
-    this.hide(event);
-    return false;
-  }
+	cancel(event: Event) {
+		event.stopPropagation();
+		this.doneReject();
+		this.hide(event);
+		return false;
+	}
 
-  getInput(fieldName: string) {
-    const component = this.inputQuery.find(
-      (input) => input.fieldName === fieldName,
-    );
-    if (component) {
-      return component
-        .getElement()
-        .nativeElement.querySelector('.form-control');
-    } else {
-      return null;
-    }
-  }
+	getInput(fieldName: string) {
+		const component = this.inputQuery.find(
+			(input) => input.fieldName === fieldName,
+		);
+		if (component) {
+			return component
+				.getElement()
+				.nativeElement.querySelector('.form-control');
+		} else {
+			return null;
+		}
+	}
 
-  promptButtons(
-    buttons: PromptButton[],
-    title: string,
-    savePromise?: Promise<any>,
-    donePromise?: Promise<any>,
-    doneResolve?: Function,
-    doneReject?: Function,
-    template?: string,
-  ) {
-    if (this.donePromise) {
-      let newDoneReject, newDoneResolve;
+	promptButtons(
+		buttons: PromptButton[],
+		title: string,
+		savePromise?: Promise<any>,
+		donePromise?: Promise<any>,
+		doneResolve?: Function,
+		doneReject?: Function,
+		template?: string,
+	) {
+		if (this.donePromise) {
+			let newDoneReject, newDoneResolve;
 
-      const newDonePromise = new Promise((resolve, reject) => {
-        newDoneResolve = resolve;
-        newDoneReject = reject;
-      });
+			const newDonePromise = new Promise((resolve, reject) => {
+				newDoneResolve = resolve;
+				newDoneReject = reject;
+			});
 
-      this.promptQueue.push({
-        buttons: buttons,
-        title: title,
-        savePromise: savePromise,
-        donePromise: newDonePromise,
-        doneResolve: newDoneResolve,
-        doneReject: newDoneReject,
-        template: template,
-      });
+			this.promptQueue.push({
+				buttons: buttons,
+				title: title,
+				savePromise: savePromise,
+				donePromise: newDonePromise,
+				doneResolve: newDoneResolve,
+				doneReject: newDoneReject,
+				template: template,
+			});
 
-      return newDonePromise;
-    }
+			return newDonePromise;
+		}
 
-    this.editButtons = buttons;
-    this.title = title;
-    this.template = template;
-    this.savePromise = savePromise;
+		this.editButtons = buttons;
+		this.title = title;
+		this.template = template;
+		this.savePromise = savePromise;
 
-    if (!donePromise) {
-      this.donePromise = new Promise((resolve, reject) => {
-        this.doneResolve = resolve;
-        this.doneReject = reject;
-      });
-    } else {
-      this.donePromise = donePromise;
-      this.doneResolve = doneResolve;
-      this.doneReject = doneReject;
-    }
+		if (!donePromise) {
+			this.donePromise = new Promise((resolve, reject) => {
+				this.doneResolve = resolve;
+				this.doneReject = reject;
+			});
+		} else {
+			this.donePromise = donePromise;
+			this.doneResolve = doneResolve;
+			this.doneReject = doneReject;
+		}
 
-    setTimeout(() => {
-      this.isVisible = true;
-    });
+		setTimeout(() => {
+			this.isVisible = true;
+		});
 
-    return this.donePromise;
-  }
+		return this.donePromise;
+	}
 
-  clickButton(button: PromptButton, event: Event) {
-    this.doneResolve(button.value || button.buttonName);
-    event.stopPropagation();
-    if (!this.savePromise) {
-      this.hide(event);
-    } else {
-      this.waiting = true;
-      this.savePromise
-        .then(() => {
-          this.waiting = false;
-          this.hide(event);
-        })
-        .catch(() => {
-          this.waiting = false;
-        });
-    }
-    return false;
-  }
+	clickButton(button: PromptButton, event: Event) {
+		this.doneResolve(button.value || button.buttonName);
+		event.stopPropagation();
+		if (!this.savePromise) {
+			this.hide(event);
+		} else {
+			this.waiting = true;
+			this.savePromise
+				.then(() => {
+					this.waiting = false;
+					this.hide(event);
+				})
+				.catch(() => {
+					this.waiting = false;
+				});
+		}
+		return false;
+	}
 
-  reset() {
-    this.editForm = null;
-    this.editButtons = null;
-    this.title = null;
-    this.fields = null;
-    this.donePromise = null;
-    this.doneResolve = null;
-    this.doneReject = null;
-    this.template = null;
-    this.waiting = false;
+	reset() {
+		this.editForm = null;
+		this.editButtons = null;
+		this.title = null;
+		this.fields = null;
+		this.donePromise = null;
+		this.doneResolve = null;
+		this.doneReject = null;
+		this.template = null;
+		this.waiting = false;
 
-    if (this.promptQueue.length) {
-      const next = this.promptQueue.shift();
-      if (next.fields) {
-        this.prompt(
-          next.form,
-          next.fields,
-          next.title,
-          next.savePromise,
-          next.saveText,
-          next.cancelText,
-          next.donePromise,
-          next.doneResolve,
-          next.doneReject,
-          next.template,
-        );
-      } else if (next.buttons) {
-        this.promptButtons(
-          next.buttons,
-          next.title,
-          next.savePromise,
-          next.donePromise,
-          next.doneResolve,
-          next.doneReject,
-          next.template,
-        );
-      }
-    }
-  }
+		if (this.promptQueue.length) {
+			const next = this.promptQueue.shift();
+			if (next.fields) {
+				this.prompt(
+					next.form,
+					next.fields,
+					next.title,
+					next.savePromise,
+					next.saveText,
+					next.cancelText,
+					next.donePromise,
+					next.doneResolve,
+					next.doneReject,
+					next.template,
+				);
+			} else if (next.buttons) {
+				this.promptButtons(
+					next.buttons,
+					next.title,
+					next.savePromise,
+					next.donePromise,
+					next.doneResolve,
+					next.doneReject,
+					next.template,
+				);
+			}
+		}
+	}
 }

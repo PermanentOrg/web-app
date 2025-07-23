@@ -2,105 +2,105 @@
 @import 'variables';
 
 :host {
-  max-width: 78rem;
+	max-width: 78rem;
 }
 
 .reasons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+	margin-bottom: 24px;
 
-  @media (max-width: 1200px) and (min-width: 990px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+	@media (max-width: 1200px) and (min-width: 990px) {
+		grid-template-columns: repeat(3, 1fr);
+	}
 
-  @media (max-width: 1062px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
+	@media (max-width: 1062px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+	@media (max-width: 768px) {
+		grid-template-columns: 1fr;
+	}
 }
 
 .what-is-important {
-  font-family: 'UsualLight', sans-serif;
-  font-size: 56px;
-  width: 60%;
+	font-family: 'UsualLight', sans-serif;
+	font-size: 56px;
+	width: 60%;
 
-  @media screen and (max-width: 500px) {
-    width: auto;
-  }
+	@media screen and (max-width: 500px) {
+		width: auto;
+	}
 }
 
 .bold {
-  font-family: 'UsualBold', sans-serif;
+	font-family: 'UsualBold', sans-serif;
 }
 
 .text {
-  font-family: 'UsualRegular', sans-serif;
-  font-size: 16px;
-  width: 40%;
+	font-family: 'UsualRegular', sans-serif;
+	font-size: 16px;
+	width: 40%;
 
-  @media screen and (max-width: 500px) {
-    width: auto;
-  }
+	@media screen and (max-width: 500px) {
+		width: auto;
+	}
 }
 
 p {
-  color: white;
+	color: white;
 }
 
 .text-container {
-  display: flex;
-  gap: 15rem;
+	display: flex;
+	gap: 15rem;
 
-  @media (max-width: 1062px) {
-    flex-direction: column;
-    gap: 2rem;
-  }
+	@media (max-width: 1062px) {
+		flex-direction: column;
+		gap: 2rem;
+	}
 
-  @media screen and (max-width: 425px) {
-    padding: 0px 60px;
-  }
+	@media screen and (max-width: 425px) {
+		padding: 0px 60px;
+	}
 }
 
 .buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 16px;
-  padding-bottom: 100px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	gap: 16px;
+	padding-bottom: 100px;
 
-  @media (max-width: 768px) {
-    justify-content: space-between;
-  }
+	@media (max-width: 768px) {
+		justify-content: space-between;
+	}
 }
 
 .reason-container {
-  @media (max-width: 768px) {
-    display: flex;
-    justify-content: center;
-  }
+	@media (max-width: 768px) {
+		display: flex;
+		justify-content: center;
+	}
 }
 
 .back-button {
-  width: 280px;
-  @include beforeDesktop {
-    width: 100%;
-  }
+	width: 280px;
+	@include beforeDesktop {
+		width: 100%;
+	}
 }
 
 .next-button {
-  width: 280px;
-  @include beforeDesktop {
-    width: 100%;
-  }
+	width: 280px;
+	@include beforeDesktop {
+		width: 100%;
+	}
 }
 
 .raesons-screen {
-  @media screen and (max-width: 465px) {
-    margin-top: 20px;
-  }
+	@media screen and (max-width: 465px) {
+		margin-top: 20px;
+	}
 }

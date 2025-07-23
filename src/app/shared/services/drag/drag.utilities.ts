@@ -5,13 +5,13 @@ import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-ro
 import { DragTargetDroppableComponent } from './drag.service';
 
 export function getItemFromDropTarget(
-  dropTarget: DragTargetDroppableComponent,
+	dropTarget: DragTargetDroppableComponent,
 ) {
-  if (dropTarget instanceof FileListItemComponent) {
-    return dropTarget.item;
-  } else if (dropTarget instanceof BreadcrumbComponent) {
-    return dropTarget.breadcrumb;
-  } else if (dropTarget instanceof DragTargetRouterLinkDirective) {
-    return dropTarget.getFolderTypeFromLink();
-  }
+	if (dropTarget instanceof FileListItemComponent) {
+		return dropTarget.item;
+	} else if (dropTarget instanceof BreadcrumbComponent) {
+		return dropTarget.breadcrumb;
+	} else if (dropTarget instanceof DragTargetRouterLinkDirective) {
+		return dropTarget.getFolderTypeFromLink();
+	}
 }

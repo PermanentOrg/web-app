@@ -4,36 +4,36 @@ import { action } from '@storybook/addon-actions';
 import { ToggleComponent } from './toggle.component';
 
 const meta: Meta<ToggleComponent> = {
-  title: 'Toggle',
-  component: ToggleComponent,
-  tags: ['autodocs'],
-  render: (args) => ({
-    props: {
-      ...args,
-      isCheckedChange: action('isCheckedChange'),
-    },
-    argTypes: {
-      isChecked: 'checked',
-      text: 'text',
-      disabled: 'disabled',
-    },
-  }),
+	title: 'Toggle',
+	component: ToggleComponent,
+	tags: ['autodocs'],
+	render: (args) => ({
+		props: {
+			...args,
+			isCheckedChange: action('isCheckedChange'),
+		},
+		argTypes: {
+			isChecked: 'checked',
+			text: 'text',
+			disabled: 'disabled',
+		},
+	}),
 };
 
 export default meta;
 type Story = StoryObj<ToggleComponent>;
 
 export const Enabled: Story = {
-  args: {
-    isChecked: true,
-    text: 'Toggle Example',
-    disabled: false,
-  },
+	args: {
+		isChecked: true,
+		text: 'Toggle Example',
+		disabled: false,
+	},
 };
 
 export const Disabled: Story = {
-  args: {
-    disabled: true,
-    text: 'Disabled Toggle Example',
-  },
+	args: {
+		disabled: true,
+		text: 'Disabled Toggle Example',
+	},
 };

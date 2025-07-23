@@ -6,37 +6,37 @@ import { ApiService } from '@shared/services/api/api.service';
 import { DialogRef } from '@angular/cdk/dialog';
 
 @Component({
-  selector: 'pr-welcome-dialog',
-  templateUrl: './welcome-dialog.component.html',
-  styleUrls: ['./welcome-dialog.component.scss'],
-  standalone: false,
+	selector: 'pr-welcome-dialog',
+	templateUrl: './welcome-dialog.component.html',
+	styleUrls: ['./welcome-dialog.component.scss'],
+	standalone: false,
 })
 export class WelcomeDialogComponent implements OnInit {
-  public archiveName: string;
-  public accessRole: string;
-  public isEarlyBird: boolean;
+	public archiveName: string;
+	public accessRole: string;
+	public isEarlyBird: boolean;
 
-  constructor(
-    private dialogRef: DialogRef,
-    private account: AccountService,
-    private constants: PrConstantsService,
-    private api: ApiService,
-  ) {}
+	constructor(
+		private dialogRef: DialogRef,
+		private account: AccountService,
+		private constants: PrConstantsService,
+		private api: ApiService,
+	) {}
 
-  async ngOnInit(): Promise<void> {
-    try {
-      const res = await this.api.auth.getInviteToken();
-      this.isEarlyBird = res.token === 'earlyb1rd';
-    } catch (error) {
-      this.isEarlyBird = false;
-    }
+	async ngOnInit(): Promise<void> {
+		try {
+			const res = await this.api.auth.getInviteToken();
+			this.isEarlyBird = res.token === 'earlyb1rd';
+		} catch (error) {
+			this.isEarlyBird = false;
+		}
 
-    const archive = this.account.getArchive();
-    this.archiveName = archive.fullName;
-    this.accessRole = this.constants.translate(archive.accessRole);
-  }
+		const archive = this.account.getArchive();
+		this.archiveName = archive.fullName;
+		this.accessRole = this.constants.translate(archive.accessRole);
+	}
 
-  public close(): void {
-    this.dialogRef.close();
-  }
+	public close(): void {
+		this.dialogRef.close();
+	}
 }

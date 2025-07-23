@@ -8,8 +8,8 @@ import { TimelineViewComponent } from './components/timeline-view/timeline-view.
 import { TimelineBreadcrumbsComponent } from './components/timeline-view/timeline-breadcrumbs/timeline-breadcrumbs.component';
 
 @NgModule({
-  imports: [CommonModule, RouterModule, SharedModule],
-  exports: [TimelineViewComponent],
-  declarations: [TimelineViewComponent, TimelineBreadcrumbsComponent],
+	imports: [CommonModule, RouterModule, SharedModule],
+	exports: [TimelineViewComponent],
+	declarations: [TimelineViewComponent, TimelineBreadcrumbsComponent],
 })
 export class ViewsComponentsModule {}

@@ -1,8 +1,8 @@
 @import 'variables';
 
 :host {
-  display: block;
-  width: 100%;
+	display: block;
+	width: 100%;
 }
 
 $photo-desktop: pxToGrid(220px);
@@ -10,55 +10,55 @@ $photo-mobile: pxToGrid(80px);
 $profile-max-width: 1200px;
 
 .profile-archive-link {
-  display: flex;
-  > .btn {
-    flex: 0 0 auto;
-    width: auto;
-    margin: 0;
-    @include gridHeightButton;
-  }
+	display: flex;
+	> .btn {
+		flex: 0 0 auto;
+		width: auto;
+		margin: 0;
+		@include gridHeightButton;
+	}
 }
 
 .profile-section {
-  @include profileSection;
+	@include profileSection;
 }
 
 .profile-section-header {
-  @include profileSectionHeader;
+	@include profileSectionHeader;
 
-  max-width: none;
+	max-width: none;
 }
 
 .profile-group {
-  margin-bottom: 2 * $grid-unit;
-  flex-basis: 100%;
+	margin-bottom: 2 * $grid-unit;
+	flex-basis: 100%;
 }
 
 .profile-prompt {
-  @include profilePrompt;
+	@include profilePrompt;
 }
 
 .profile-field {
-  @include profileField;
+	@include profileField;
 
-  &:last-child {
-    margin-bottom: $grid-unit * 0.5;
-  }
+	&:last-child {
+		margin-bottom: $grid-unit * 0.5;
+	}
 }
 
 .profile-field-title {
-  font-size: $font-size-lg;
-  font-weight: $font-weight-bold;
+	font-size: $font-size-lg;
+	font-weight: $font-weight-bold;
 }
 
 .profile-field-subtitle {
-  font-weight: $font-weight-semibold;
+	font-weight: $font-weight-semibold;
 }
 
 .profile-field-date {
-  color: $text-muted;
+	color: $text-muted;
 }
 
 .profile-field-description {
-  margin-top: $grid-unit * 0.5;
+	margin-top: $grid-unit * 0.5;
 }

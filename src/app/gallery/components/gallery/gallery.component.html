@@ -1,51 +1,51 @@
 <!-- @format -->
 <pr-gallery-header></pr-gallery-header>
 <div class="public-gallery">
-  <div class="page-top">
-    <div class="description-search">
-      <div class="description">
-        <h1>Welcome to the Permanent Public Gallery</h1>
-        <p>
-          Create your own public archive in minutes or explore archives created
-          by our members.
-        </p>
-      </div>
-      <ng-container *ngTemplateOutlet="searchBox"></ng-container>
-    </div>
-    <div *ngIf="!isLoggedIn" class="actions">
-      <ng-container *ngTemplateOutlet="archivesImg"></ng-container>
-      <div class="button-container">
-        <a
-          href="https://permanent.zohodesk.com/portal/en/kb/articles/public-archives"
-          target="_blank"
-          class="btn btn-primary"
-          >Learn More</a
-        >
-      </div>
-    </div>
-    <pr-public-archives-list *ngIf="isLoggedIn"></pr-public-archives-list>
-  </div>
-  <div class="featured-archives">
-    <h2>Featured Archives</h2>
-    <div class="featured-archives-list">
-      <pr-featured-archive
-        *ngFor="let archive of archives"
-        [archive]="archive"
-      ></pr-featured-archive>
-    </div>
-    <div *ngIf="!loading && archives.length === 0" class="null-message">
-      <p>There are no featured archives at this time.</p>
-    </div>
-  </div>
+	<div class="page-top">
+		<div class="description-search">
+			<div class="description">
+				<h1>Welcome to the Permanent Public Gallery</h1>
+				<p>
+					Create your own public archive in minutes or explore archives created
+					by our members.
+				</p>
+			</div>
+			<ng-container *ngTemplateOutlet="searchBox"></ng-container>
+		</div>
+		<div *ngIf="!isLoggedIn" class="actions">
+			<ng-container *ngTemplateOutlet="archivesImg"></ng-container>
+			<div class="button-container">
+				<a
+					href="https://permanent.zohodesk.com/portal/en/kb/articles/public-archives"
+					target="_blank"
+					class="btn btn-primary"
+					>Learn More</a
+				>
+			</div>
+		</div>
+		<pr-public-archives-list *ngIf="isLoggedIn"></pr-public-archives-list>
+	</div>
+	<div class="featured-archives">
+		<h2>Featured Archives</h2>
+		<div class="featured-archives-list">
+			<pr-featured-archive
+				*ngFor="let archive of archives"
+				[archive]="archive"
+			></pr-featured-archive>
+		</div>
+		<div *ngIf="!loading && archives.length === 0" class="null-message">
+			<p>There are no featured archives at this time.</p>
+		</div>
+	</div>
 </div>
 <ng-template #searchBox>
-  <div class="searchBox">
-    <fa-icon [icon]="['fas', 'search']"></fa-icon>
-    <pr-search-box [isPublicGallery]="true"></pr-search-box>
-  </div>
+	<div class="searchBox">
+		<fa-icon [icon]="['fas', 'search']"></fa-icon>
+		<pr-search-box [isPublicGallery]="true"></pr-search-box>
+	</div>
 </ng-template>
 <ng-template #archivesImg>
-  <div class="archives-image">
-    <img src="assets/img/gallery/Create-Your-Archive-Collage.jpg" />
-  </div>
+	<div class="archives-image">
+		<img src="assets/img/gallery/Create-Your-Archive-Collage.jpg" />
+	</div>
 </ng-template>

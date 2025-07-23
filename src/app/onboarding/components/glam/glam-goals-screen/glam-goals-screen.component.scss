@@ -2,107 +2,107 @@
 @import 'variables';
 
 :host {
-  max-width: 80rem;
+	max-width: 80rem;
 }
 
 .goals {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px 50px;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px 50px;
 
-  @media (max-width: 1270px) and (min-width: 990px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+	@media (max-width: 1270px) and (min-width: 990px) {
+		grid-template-columns: repeat(3, 1fr);
+	}
 
-  @media (max-width: 990px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
+	@media (max-width: 990px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+	@media (max-width: 768px) {
+		grid-template-columns: 1fr;
+	}
 }
 
 .chart-path {
-  font-family: 'UsualLight', sans-serif;
-  font-size: 56px;
-  width: 500px;
+	font-family: 'UsualLight', sans-serif;
+	font-size: 56px;
+	width: 500px;
 
-  @media screen and (max-width: 1024px) {
-    width: 400px;
-  }
+	@media screen and (max-width: 1024px) {
+		width: 400px;
+	}
 
-  @media screen and (max-width: 500px) {
-    width: auto;
-    margin-top: 20px;
-  }
+	@media screen and (max-width: 500px) {
+		width: auto;
+		margin-top: 20px;
+	}
 }
 
 .text {
-  font-family: 'UsualLight', sans-serif;
-  font-size: 1rem;
-  text-align: left;
+	font-family: 'UsualLight', sans-serif;
+	font-size: 1rem;
+	text-align: left;
 }
 
 .bold {
-  font-family: 'UsualBold', sans-serif;
+	font-family: 'UsualBold', sans-serif;
 }
 
 .text-right {
-  width: 40%;
+	width: 40%;
 
-  @media screen and (max-width: 500px) {
-    width: auto;
-  }
+	@media screen and (max-width: 500px) {
+		width: auto;
+	}
 }
 
 p {
-  color: white;
+	color: white;
 }
 
 .text-container {
-  display: flex;
-  gap: 15rem;
-  justify-content: space-between;
-  @media (max-width: 854px) {
-    flex-direction: column;
-    gap: 16px;
-  }
+	display: flex;
+	gap: 15rem;
+	justify-content: space-between;
+	@media (max-width: 854px) {
+		flex-direction: column;
+		gap: 16px;
+	}
 
-  @media screen and (max-width: 425px) {
-    padding: 0px 60px;
-  }
+	@media screen and (max-width: 425px) {
+		padding: 0px 60px;
+	}
 }
 
 .buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 32px;
-  margin-top: 24px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	gap: 32px;
+	margin-top: 24px;
 
-  @media (max-width: 768px) {
-    justify-content: space-between;
-  }
+	@media (max-width: 768px) {
+		justify-content: space-between;
+	}
 }
 
 .goal-container {
-  @media (max-width: 768px) {
-    display: flex;
-    justify-content: center;
-  }
+	@media (max-width: 768px) {
+		display: flex;
+		justify-content: center;
+	}
 }
 
 .back-button {
-  width: 280px;
-  @include beforeDesktop {
-    width: 100%;
-  }
+	width: 280px;
+	@include beforeDesktop {
+		width: 100%;
+	}
 }
 
 .next-button {
-  width: 280px;
-  @include beforeDesktop {
-    width: 100%;
-  }
+	width: 280px;
+	@include beforeDesktop {
+		width: 100%;
+	}
 }

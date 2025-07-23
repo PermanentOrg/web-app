@@ -7,13 +7,13 @@ import { DomSanitizer } from '@angular/platform-browser';
  * See https://angular.io/api/core/Pipe for more info on Angular Pipes.
  */
 @Pipe({
-  name: 'safeHtml',
-  standalone: false,
+	name: 'safeHtml',
+	standalone: false,
 })
 export class SafeHtmlPipe implements PipeTransform {
-  constructor(private sanitizer: DomSanitizer) {}
+	constructor(private sanitizer: DomSanitizer) {}
 
-  transform(html) {
-    return this.sanitizer.bypassSecurityTrustHtml(html);
-  }
+	transform(html) {
+		return this.sanitizer.bypassSecurityTrustHtml(html);
+	}
 }

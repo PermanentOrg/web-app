@@ -8,47 +8,47 @@ import { GetAccessFile } from '@models/get-access-file';
 const FADE_IN_DURATION = 0.3;
 
 @Component({
-  selector: 'pr-video',
-  templateUrl: './video.component.html',
-  styleUrls: ['./video.component.scss'],
-  standalone: false,
+	selector: 'pr-video',
+	templateUrl: './video.component.html',
+	styleUrls: ['./video.component.scss'],
+	standalone: false,
 })
 export class VideoComponent implements OnInit {
-  @Input() item: RecordVO;
+	@Input() item: RecordVO;
 
-  private videoWrapperElem: Element;
-  private videoElem: Element;
-  public videoSrc: string;
-  public isProcessing: boolean;
+	private videoWrapperElem: Element;
+	private videoElem: Element;
+	public videoSrc: string;
+	public isProcessing: boolean;
 
-  constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-  ) {}
+	constructor(
+		private elementRef: ElementRef,
+		private renderer: Renderer2,
+	) {}
 
-  ngOnInit() {
-    this.videoElem = this.elementRef.nativeElement.querySelector('video');
-    this.videoWrapperElem =
-      this.elementRef.nativeElement.querySelector('.pr-video-wrapper');
+	ngOnInit() {
+		this.videoElem = this.elementRef.nativeElement.querySelector('video');
+		this.videoWrapperElem =
+			this.elementRef.nativeElement.querySelector('.pr-video-wrapper');
 
-    this.videoElem.addEventListener('loadstart', (event) => {
-      setTimeout(() => {
-        this.renderer.removeClass(this.videoWrapperElem, 'loading');
-        gsap.from(this.videoElem, FADE_IN_DURATION, {
-          opacity: 0,
-          ease: 'Power4.easeOut',
-        });
-      }, 250);
-    });
+		this.videoElem.addEventListener('loadstart', (event) => {
+			setTimeout(() => {
+				this.renderer.removeClass(this.videoWrapperElem, 'loading');
+				gsap.from(this.videoElem, FADE_IN_DURATION, {
+					opacity: 0,
+					ease: 'Power4.easeOut',
+				});
+			}, 250);
+		});
 
-    const accessFile = GetAccessFile(this.item);
+		const accessFile = GetAccessFile(this.item);
 
-    if (accessFile) {
-      this.videoSrc = accessFile.fileURL;
-      this.isProcessing = false;
-    } else {
-      this.renderer.removeClass(this.videoWrapperElem, 'loading');
-      this.isProcessing = true;
-    }
-  }
+		if (accessFile) {
+			this.videoSrc = accessFile.fileURL;
+			this.isProcessing = false;
+		} else {
+			this.renderer.removeClass(this.videoWrapperElem, 'loading');
+			this.isProcessing = true;
+		}
+	}
 }

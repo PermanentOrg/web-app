@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
+	ActivatedRouteSnapshot,
+	RouterStateSnapshot,
+	Router,
 } from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -13,27 +13,27 @@ import { RecordVO, ArchiveVO } from '@models';
 
 @Injectable()
 export class PublishArchiveResolveService {
-  constructor(
-    private api: ApiService,
-    private message: MessageService,
-    private router: Router,
-  ) {}
+	constructor(
+		private api: ApiService,
+		private message: MessageService,
+		private router: Router,
+	) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const archiveId = route.parent.data.publishedItem.archiveId;
-    const archiveNbr = route.parent.data.publishedItem.archiveArchiveNbr;
-    return this.api.archive
-      .get([new ArchiveVO({ archiveId, archiveNbr })])
-      .then((response: ArchiveResponse): ArchiveVO => {
-        return response.getArchiveVO();
-      });
-    // return this.api.publish.getResource(route.params.publishUrlToken)
-    //   .then((response: PublishResponse): RecordVO | any => {
-    //     if (response.getRecordVO()) {
-    //       return response.getRecordVO();
-    //     } else {
-    //       return response.getFolderVO();
-    //     }
-    //   });
-  }
+	resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+		const archiveId = route.parent.data.publishedItem.archiveId;
+		const archiveNbr = route.parent.data.publishedItem.archiveArchiveNbr;
+		return this.api.archive
+			.get([new ArchiveVO({ archiveId, archiveNbr })])
+			.then((response: ArchiveResponse): ArchiveVO => {
+				return response.getArchiveVO();
+			});
+		// return this.api.publish.getResource(route.params.publishUrlToken)
+		//   .then((response: PublishResponse): RecordVO | any => {
+		//     if (response.getRecordVO()) {
+		//       return response.getRecordVO();
+		//     } else {
+		//       return response.getFolderVO();
+		//     }
+		//   });
+	}
 }

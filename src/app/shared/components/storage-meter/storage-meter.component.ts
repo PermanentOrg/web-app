@@ -10,123 +10,123 @@ import { UploadSessionStatus } from '@core/services/upload/upload.session';
 import { ApiService } from '../../services/api/api.service';
 
 @Component({
-  selector: 'pr-storage-meter',
-  templateUrl: './storage-meter.component.html',
-  styleUrls: ['./storage-meter.component.scss'],
-  standalone: false,
+	selector: 'pr-storage-meter',
+	templateUrl: './storage-meter.component.html',
+	styleUrls: ['./storage-meter.component.scss'],
+	standalone: false,
 })
 export class StorageMeterComponent implements OnInit, OnDestroy {
-  account: AccountVO;
-  @Input() showForArchive = false;
+	account: AccountVO;
+	@Input() showForArchive = false;
 
-  animate = false;
-  private archiveSpaceLeft: number = 0;
-  private archiveSpaceTotal: number = 0;
+	animate = false;
+	private archiveSpaceLeft: number = 0;
+	private archiveSpaceTotal: number = 0;
 
-  private accountChangeSubscription: Subscription;
-  private deleteSubscription: Subscription;
+	private accountChangeSubscription: Subscription;
+	private deleteSubscription: Subscription;
 
-  accountSpaceTotal: number = 0;
-  accountSpaceLeft: number = 0;
+	accountSpaceTotal: number = 0;
+	accountSpaceLeft: number = 0;
 
-  subscriptions: Subscription[] = [];
+	subscriptions: Subscription[] = [];
 
-  constructor(
-    private accountService: AccountService,
-    private api: ApiService,
-    private upload: UploadService,
-    private edit: EditService,
-    private dataService: DataService,
-  ) {
-    this.account = this.accountService.getAccount();
-    this.accountSpaceLeft = this.account.spaceLeft;
-    this.accountSpaceTotal = this.account.spaceTotal;
-  }
+	constructor(
+		private accountService: AccountService,
+		private api: ApiService,
+		private upload: UploadService,
+		private edit: EditService,
+		private dataService: DataService,
+	) {
+		this.account = this.accountService.getAccount();
+		this.accountSpaceLeft = this.account.spaceLeft;
+		this.accountSpaceTotal = this.account.spaceTotal;
+	}
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.animate = true;
-    });
-    if (this.showForArchive) {
-      this.getArchiveStorage();
+	ngOnInit(): void {
+		setTimeout(() => {
+			this.animate = true;
+		});
+		if (this.showForArchive) {
+			this.getArchiveStorage();
 
-      this.subscriptions.push(
-        this.accountService.archiveChange.subscribe(() => {
-          if (this.showForArchive) {
-            this.getArchiveStorage();
-          }
-        }),
+			this.subscriptions.push(
+				this.accountService.archiveChange.subscribe(() => {
+					if (this.showForArchive) {
+						this.getArchiveStorage();
+					}
+				}),
 
-        this.dataService.folderUpdate.subscribe(() => {
-          this.getArchiveStorage();
-        }),
+				this.dataService.folderUpdate.subscribe(() => {
+					this.getArchiveStorage();
+				}),
 
-        this.edit.deleteNotifier$.subscribe(() => {
-          this.getArchiveStorage();
-        }),
-      );
-    } else {
-      this.subscriptions.push(
-        this.accountService.accountStorageUpdate.subscribe((account) => {
-          this.accountSpaceTotal = account.spaceTotal;
-          this.accountSpaceLeft = account.spaceLeft;
-        }),
-      );
-    }
-  }
+				this.edit.deleteNotifier$.subscribe(() => {
+					this.getArchiveStorage();
+				}),
+			);
+		} else {
+			this.subscriptions.push(
+				this.accountService.accountStorageUpdate.subscribe((account) => {
+					this.accountSpaceTotal = account.spaceTotal;
+					this.accountSpaceLeft = account.spaceLeft;
+				}),
+			);
+		}
+	}
 
-  ngOnDestroy(): void {
-    unsubscribeAll(this.subscriptions);
-  }
+	ngOnDestroy(): void {
+		unsubscribeAll(this.subscriptions);
+	}
 
-  getMeterWidth() {
-    let widthFraction;
+	getMeterWidth() {
+		let widthFraction;
 
-    if (this.showForArchive) {
-      widthFraction = Math.min(
-        (this.archiveSpaceTotal - this.archiveSpaceLeft) /
-          this.archiveSpaceTotal,
-        1,
-      );
-    } else {
-      widthFraction = Math.min(
-        (this.accountSpaceTotal - this.accountSpaceLeft) /
-          this.accountSpaceTotal,
-        1,
-      );
-    }
+		if (this.showForArchive) {
+			widthFraction = Math.min(
+				(this.archiveSpaceTotal - this.archiveSpaceLeft) /
+					this.archiveSpaceTotal,
+				1,
+			);
+		} else {
+			widthFraction = Math.min(
+				(this.accountSpaceTotal - this.accountSpaceLeft) /
+					this.accountSpaceTotal,
+				1,
+			);
+		}
 
-    return `${widthFraction * 100}%`;
-  }
+		return `${widthFraction * 100}%`;
+	}
 
-  getMeterTransform() {
-    if (!this.animate) {
-      return null;
-    }
+	getMeterTransform() {
+		if (!this.animate) {
+			return null;
+		}
 
-    let widthFraction;
-    if (this.showForArchive) {
-      widthFraction = Math.min(
-        (this.archiveSpaceTotal - this.archiveSpaceLeft) /
-          this.archiveSpaceTotal,
-        1,
-      );
-    } else {
-      widthFraction = Math.min(
-        (this.accountSpaceTotal - this.accountSpaceLeft) /
-          this.accountSpaceTotal,
-        1,
-      );
-    }
-    return `transform: translateX(${widthFraction * 100 - 100}%)`;
-  }
+		let widthFraction;
+		if (this.showForArchive) {
+			widthFraction = Math.min(
+				(this.archiveSpaceTotal - this.archiveSpaceLeft) /
+					this.archiveSpaceTotal,
+				1,
+			);
+		} else {
+			widthFraction = Math.min(
+				(this.accountSpaceTotal - this.accountSpaceLeft) /
+					this.accountSpaceTotal,
+				1,
+			);
+		}
+		return `transform: translateX(${widthFraction * 100 - 100}%)`;
+	}
 
-  getArchiveStorage() {
-    const archiveId = this.accountService.getArchive()?.archiveId;
+	getArchiveStorage() {
+		const archiveId = this.accountService.getArchive()?.archiveId;
 
-    this.api.archive.getArchiveStorage(archiveId).then((res) => {
-      this.archiveSpaceLeft = Number(res.spaceLeft);
-      this.archiveSpaceTotal = Number(res.spaceTotal);
-    });
-  }
+		this.api.archive.getArchiveStorage(archiveId).then((res) => {
+			this.archiveSpaceLeft = Number(res.spaceLeft);
+			this.archiveSpaceTotal = Number(res.spaceTotal);
+		});
+	}
 }

@@ -8,46 +8,46 @@ import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { RoutesWithData } from '../app.routes';
 
 const sharesRootResolve = {
-  shares: SharesResolveService,
+	shares: SharesResolveService,
 };
 
 const shareRootChildren: RoutesWithData = [
-  {
-    path: 'record/:recArchiveNbr',
-    component: FileViewerComponent,
-    data: {
-      singleFile: true,
-    },
-    resolve: {
-      currentRecord: RecordResolveService,
-    },
-  },
+	{
+		path: 'record/:recArchiveNbr',
+		component: FileViewerComponent,
+		data: {
+			singleFile: true,
+		},
+		resolve: {
+			currentRecord: RecordResolveService,
+		},
+	},
 ];
 
 export const routes: RoutesWithData = [
-  {
-    path: '',
-    component: SharesComponent,
-    resolve: sharesRootResolve,
-    children: shareRootChildren,
-    data: {
-      showSidebar: true,
-    },
-  },
-  {
-    path: ':archiveNbr',
-    redirectTo: '',
-  },
-  {
-    path: ':archiveNbr/:folderLinkId',
-    loadChildren: () =>
-      import('../file-browser/file-browser.module').then(
-        (m) => m.FileBrowserModule,
-      ),
-  },
+	{
+		path: '',
+		component: SharesComponent,
+		resolve: sharesRootResolve,
+		children: shareRootChildren,
+		data: {
+			showSidebar: true,
+		},
+	},
+	{
+		path: ':archiveNbr',
+		redirectTo: '',
+	},
+	{
+		path: ':archiveNbr/:folderLinkId',
+		loadChildren: () =>
+			import('../file-browser/file-browser.module').then(
+				(m) => m.FileBrowserModule,
+			),
+	},
 ];
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  providers: [SharesResolveService],
+	imports: [RouterModule.forChild(routes)],
+	providers: [SharesResolveService],
 })
 export class AppsRoutingModule {}

@@ -1,131 +1,131 @@
 <!-- @format -->
 <div class="dialog-content">
-  <div class="header">
-    <span>Account Settings</span>
-    <button class="btn" (click)="onDoneClick()">
-      <i class="material-icons">close</i>
-    </button>
-  </div>
-  <div class="settings-content">
-    <div class="settings-tabs">
-      <div
-        class="settings-tab"
-        (click)="setTab('account')"
-        [class.active]="activeTab === 'account'"
-      >
-        Account Info
-        <i
-          class="material-icons text-warning"
-          *ngIf="accountService.isEmailOrPhoneUnverified()"
-          >report_problem</i
-        >
-      </div>
-      <div
-        class="settings-tab"
-        (click)="setTab('security')"
-        [class.active]="activeTab === 'security'"
-      >
-        Login and Security
-      </div>
-      <div
-        class="settings-tab"
-        (click)="setTab('notification')"
-        [class.active]="activeTab === 'notification'"
-      >
-        Notification Preferences
-      </div>
-      <div
-        class="settings-tab"
-        (click)="setTab('billing')"
-        [class.active]="activeTab === 'billing'"
-      >
-        Billing Info
-      </div>
-      <div
-        class="settings-tab"
-        (click)="setTab('legacy-contact')"
-        [class.active]="activeTab === 'legacy-contact'"
-      >
-        Legacy Contact
-      </div>
-      <div
-        class="settings-tab"
-        (click)="setTab('delete')"
-        [class.active]="activeTab === 'delete'"
-      >
-        Delete Account
-      </div>
-      <div
-        class="settings-tab"
-        (click)="setTab('advanced-settings')"
-        [class.active]="activeTab === 'advanced-settings'"
-      >
-        Advanced Settings
-      </div>
-    </div>
+	<div class="header">
+		<span>Account Settings</span>
+		<button class="btn" (click)="onDoneClick()">
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+	<div class="settings-content">
+		<div class="settings-tabs">
+			<div
+				class="settings-tab"
+				(click)="setTab('account')"
+				[class.active]="activeTab === 'account'"
+			>
+				Account Info
+				<i
+					class="material-icons text-warning"
+					*ngIf="accountService.isEmailOrPhoneUnverified()"
+					>report_problem</i
+				>
+			</div>
+			<div
+				class="settings-tab"
+				(click)="setTab('security')"
+				[class.active]="activeTab === 'security'"
+			>
+				Login and Security
+			</div>
+			<div
+				class="settings-tab"
+				(click)="setTab('notification')"
+				[class.active]="activeTab === 'notification'"
+			>
+				Notification Preferences
+			</div>
+			<div
+				class="settings-tab"
+				(click)="setTab('billing')"
+				[class.active]="activeTab === 'billing'"
+			>
+				Billing Info
+			</div>
+			<div
+				class="settings-tab"
+				(click)="setTab('legacy-contact')"
+				[class.active]="activeTab === 'legacy-contact'"
+			>
+				Legacy Contact
+			</div>
+			<div
+				class="settings-tab"
+				(click)="setTab('delete')"
+				[class.active]="activeTab === 'delete'"
+			>
+				Delete Account
+			</div>
+			<div
+				class="settings-tab"
+				(click)="setTab('advanced-settings')"
+				[class.active]="activeTab === 'advanced-settings'"
+			>
+				Advanced Settings
+			</div>
+		</div>
 
-    <div class="settings-panel">
-      <ng-container [ngSwitch]="activeTab">
-        <pr-advanced-settings
-          *ngSwitchCase="'advanced-settings'"
-        ></pr-advanced-settings>
-        <pr-account-settings *ngSwitchCase="'account'"></pr-account-settings>
-        <pr-account-security *ngSwitchCase="'security'"></pr-account-security>
-        <pr-billing-settings *ngSwitchCase="'billing'"></pr-billing-settings>
-        <pr-notification-preferences
-          *ngSwitchCase="'notification'"
-        ></pr-notification-preferences>
-        <ng-container *ngSwitchCase="'legacy-contact'"
-          ><pr-legacy-contact-dialog></pr-legacy-contact-dialog
-        ></ng-container>
-        <ng-container *ngSwitchCase="'delete'">
-          <div class="panel-title">Delete Account</div>
-          <p>
-            Please note: deleting your account will remove all reference to
-            personally identifiable and contact information as well as payment
-            options you have provided to us in your account settings.
-          </p>
-          <p>
-            The account deletion action will not delete any archives that you
-            own or personally identifiable information in the records stored in
-            those archives. You must delete archives using the delete archive
-            function under the Archives account menu item.
-          </p>
-          <p>
-            Any archives you own that are not deleted prior to deleting your
-            account will become orphaned archives.
-          </p>
-          <p>
-            <a
-              href="https://desk.zoho.com/portal/permanent/en/kb/articles/how-to-delete-an-archive"
-              >Learn more here.</a
-            >
-          </p>
-          <p>
-            When you are ready, type ‘DELETE’ in all caps and press confirm
-            below to confirm account deletion.
-          </p>
-          <div class="dialog-form">
-            <div class="dialog-form-field">
-              <label>Type DELETE</label>
-              <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="deleteVerify"
-              />
-            </div>
-            <div class="dialog-form-field">
-              <button
-                class="btn btn-danger"
-                [disabled]="deleteVerify !== verifyText || waiting"
-                (click)="onDeleteAccountConfirm()"
-              >
-                Delete Account
-              </button>
-            </div>
-          </div>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
+		<div class="settings-panel">
+			<ng-container [ngSwitch]="activeTab">
+				<pr-advanced-settings
+					*ngSwitchCase="'advanced-settings'"
+				></pr-advanced-settings>
+				<pr-account-settings *ngSwitchCase="'account'"></pr-account-settings>
+				<pr-account-security *ngSwitchCase="'security'"></pr-account-security>
+				<pr-billing-settings *ngSwitchCase="'billing'"></pr-billing-settings>
+				<pr-notification-preferences
+					*ngSwitchCase="'notification'"
+				></pr-notification-preferences>
+				<ng-container *ngSwitchCase="'legacy-contact'"
+					><pr-legacy-contact-dialog></pr-legacy-contact-dialog
+				></ng-container>
+				<ng-container *ngSwitchCase="'delete'">
+					<div class="panel-title">Delete Account</div>
+					<p>
+						Please note: deleting your account will remove all reference to
+						personally identifiable and contact information as well as payment
+						options you have provided to us in your account settings.
+					</p>
+					<p>
+						The account deletion action will not delete any archives that you
+						own or personally identifiable information in the records stored in
+						those archives. You must delete archives using the delete archive
+						function under the Archives account menu item.
+					</p>
+					<p>
+						Any archives you own that are not deleted prior to deleting your
+						account will become orphaned archives.
+					</p>
+					<p>
+						<a
+							href="https://desk.zoho.com/portal/permanent/en/kb/articles/how-to-delete-an-archive"
+							>Learn more here.</a
+						>
+					</p>
+					<p>
+						When you are ready, type ‘DELETE’ in all caps and press confirm
+						below to confirm account deletion.
+					</p>
+					<div class="dialog-form">
+						<div class="dialog-form-field">
+							<label>Type DELETE</label>
+							<input
+								type="text"
+								class="form-control"
+								[(ngModel)]="deleteVerify"
+							/>
+						</div>
+						<div class="dialog-form-field">
+							<button
+								class="btn btn-danger"
+								[disabled]="deleteVerify !== verifyText || waiting"
+								(click)="onDeleteAccountConfirm()"
+							>
+								Delete Account
+							</button>
+						</div>
+					</div>
+				</ng-container>
+			</ng-container>
+		</div>
+	</div>
 </div>

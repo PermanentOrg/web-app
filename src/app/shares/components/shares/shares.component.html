@@ -1,26 +1,26 @@
 <pr-file-list-controls
-  [allowSort]="false"
-  [showAccess]="true"
+	[allowSort]="false"
+	[showAccess]="true"
 ></pr-file-list-controls>
 <div class="file-list-scroll">
-  <pr-file-list-item
-    [item]="item"
-    *ngFor="let item of shareItems"
-    [showAccess]="true"
-    [canSelect]="true"
-    [isSelected]="selectedItems.has(item)"
-    (itemClicked)="onItemClick($event)"
-    [@ngIfScaleAnimationDynamic]="item.isPendingAction ? 'animate' : 'static'"
-  ></pr-file-list-item>
-  <div class="empty-message" *ngIf="!shareItems?.length">
-    This archive has no shared items
-  </div>
+	<pr-file-list-item
+		[item]="item"
+		*ngFor="let item of shareItems"
+		[showAccess]="true"
+		[canSelect]="true"
+		[isSelected]="selectedItems.has(item)"
+		(itemClicked)="onItemClick($event)"
+		[@ngIfScaleAnimationDynamic]="item.isPendingAction ? 'animate' : 'static'"
+	></pr-file-list-item>
+	<div class="empty-message" *ngIf="!shareItems?.length">
+		This archive has no shared items
+	</div>
 </div>
 <pr-sidebar></pr-sidebar>
 <div
-  [@slideUpAnimation]="
-    device.isMobileWidth() && o.isActivated ? o.activatedRoute : ''
-  "
+	[@slideUpAnimation]="
+		device.isMobileWidth() && o.isActivated ? o.activatedRoute : ''
+	"
 >
-  <router-outlet #o="outlet"></router-outlet>
+	<router-outlet #o="outlet"></router-outlet>
 </div>

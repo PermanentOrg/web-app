@@ -17,151 +17,151 @@ let calledCreate: boolean = false;
 let createdArchive: ArchiveVO | null;
 let acceptedArchive: ArchiveVO | undefined;
 const mockApiService = {
-  archive: {
-    create: async (a: ArchiveVO) => {
-      calledCreate = true;
-      createdArchive = a;
-      return {
-        getArchiveVO: () => a,
-      };
-    },
-    accept: async (a: ArchiveVO) => {
-      calledAccept = true;
-      acceptedArchive = a;
-      return {
-        getArchiveVO: () => a,
-      };
-    },
-  },
+	archive: {
+		create: async (a: ArchiveVO) => {
+			calledCreate = true;
+			createdArchive = a;
+			return {
+				getArchiveVO: () => a,
+			};
+		},
+		accept: async (a: ArchiveVO) => {
+			calledAccept = true;
+			acceptedArchive = a;
+			return {
+				getArchiveVO: () => a,
+			};
+		},
+	},
 };
 
 const mockAccountService = {
-  getAccount: () => {
-    return new AccountVO({ accountId: 1 });
-  },
-  createAccountForMe: new BehaviorSubject<{ name: string; action: string }>({
-    name: '',
-    action: '',
-  }),
+	getAccount: () => {
+		return new AccountVO({ accountId: 1 });
+	},
+	createAccountForMe: new BehaviorSubject<{ name: string; action: string }>({
+		name: '',
+		action: '',
+	}),
 };
 
 let shallow: Shallow<CreateNewArchiveComponent>;
 
 function checkRadio(type: string, find: any): void {
-  const radio = find(`input[value="${type}"]`);
-  radio.triggerEventHandler('change', { target: radio[0].nativeElement });
+	const radio = find(`input[value="${type}"]`);
+	radio.triggerEventHandler('change', { target: radio[0].nativeElement });
 }
 
 function clickButton(selector: string, find: any): void {
-  const button = find(selector);
-  button.triggerEventHandler('click', { target: button[0].nativeElement });
+	const button = find(selector);
+	button.triggerEventHandler('click', { target: button[0].nativeElement });
 }
 
 function enterText(selector: string, text: string, find: any): void {
-  const box = find(selector);
-  box[0].nativeElement.value = text;
-  box.triggerEventHandler('input', { target: box[0].nativeElement });
+	const box = find(selector);
+	box[0].nativeElement.value = text;
+	box.triggerEventHandler('input', { target: box[0].nativeElement });
 }
 
 describe('CreateNewArchiveComponent #onboarding', () => {
-  let feature: FeatureFlagService;
-  beforeEach(() => {
-    feature = new FeatureFlagService(undefined, new SecretsService());
-    calledCreate = false;
-    createdArchive = null;
-    calledAccept = false;
-    acceptedArchive = null;
-    shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
-      .mock(ApiService, mockApiService)
-      .mock(AccountService, mockAccountService)
-      .provide(EventService)
-      .provide({ provide: FeatureFlagService, useValue: feature })
-      .dontMock(EventService)
-      .dontMock(OnboardingService)
-      .dontMock(FeatureFlagService);
-  });
+	let feature: FeatureFlagService;
+	beforeEach(() => {
+		feature = new FeatureFlagService(undefined, new SecretsService());
+		calledCreate = false;
+		createdArchive = null;
+		calledAccept = false;
+		acceptedArchive = null;
+		shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
+			.mock(ApiService, mockApiService)
+			.mock(AccountService, mockAccountService)
+			.provide(EventService)
+			.provide({ provide: FeatureFlagService, useValue: feature })
+			.dontMock(EventService)
+			.dontMock(OnboardingService)
+			.dontMock(FeatureFlagService);
+	});
 
-  it('should exist', async () => {
-    const { element } = await shallow.render();
+	it('should exist', async () => {
+		const { element } = await shallow.render();
 
-    expect(element).not.toBeNull();
-  });
+		expect(element).not.toBeNull();
+	});
 
-  it('should emit a progress bar change event on mount', async () => {
-    const { outputs } = await shallow.render();
+	it('should emit a progress bar change event on mount', async () => {
+		const { outputs } = await shallow.render();
 
-    expect(outputs.progress.emit).toHaveBeenCalledWith(0);
-  });
+		expect(outputs.progress.emit).toHaveBeenCalledWith(0);
+	});
 
-  it('the next button should be disabled if no goals have been selected', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.screen = 'goals';
-    instance.selectedGoals = [];
+	it('the next button should be disabled if no goals have been selected', async () => {
+		const { find, instance, fixture } = await shallow.render();
+		instance.screen = 'goals';
+		instance.selectedGoals = [];
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    const button = find('.goals-next').nativeElement;
+		const button = find('.goals-next').nativeElement;
 
-    expect(button.disabled).toBe(true);
-  });
+		expect(button.disabled).toBe(true);
+	});
 
-  it('should show the reasons screen after selecting goals and then clicking next', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.screen = 'goals';
-    instance.selectedGoals = ['goal 1', 'goal 2'];
+	it('should show the reasons screen after selecting goals and then clicking next', async () => {
+		const { find, instance, fixture } = await shallow.render();
+		instance.screen = 'goals';
+		instance.selectedGoals = ['goal 1', 'goal 2'];
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    find('.goals-next').triggerEventHandler('click', null);
+		find('.goals-next').triggerEventHandler('click', null);
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    expect(instance.screen).toBe('reasons'); // Expecting the overlay to be present
-  });
+		expect(instance.screen).toBe('reasons'); // Expecting the overlay to be present
+	});
 
-  it('the create archive button should not work without any reasons selected', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.screen = 'reasons';
-    instance.selectedReasons = [];
+	it('the create archive button should not work without any reasons selected', async () => {
+		const { find, instance, fixture } = await shallow.render();
+		instance.screen = 'reasons';
+		instance.selectedReasons = [];
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    const button = find('.create-archive').nativeElement;
+		const button = find('.create-archive').nativeElement;
 
-    expect(button.disabled).toBe(true);
-  });
+		expect(button.disabled).toBe(true);
+	});
 
-  it('should disable the Skip This Step and submit buttons when the archive has been submitted', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.screen = 'reasons';
-    instance.isArchiveSubmitted = true;
+	it('should disable the Skip This Step and submit buttons when the archive has been submitted', async () => {
+		const { find, instance, fixture } = await shallow.render();
+		instance.screen = 'reasons';
+		instance.isArchiveSubmitted = true;
 
-    fixture.detectChanges();
-    const submitButton = find('.create-archive').nativeElement;
+		fixture.detectChanges();
+		const submitButton = find('.create-archive').nativeElement;
 
-    const skipStepButton = find('.skip-step').nativeElement;
+		const skipStepButton = find('.skip-step').nativeElement;
 
-    expect(submitButton.disabled).toBe(true);
-    expect(skipStepButton.disabled).toBe(true);
-  });
+		expect(submitButton.disabled).toBe(true);
+		expect(skipStepButton.disabled).toBe(true);
+	});
 
-  it('should accept pending archives in the old flow', async () => {
-    feature.set('glam-onboarding', false);
-    const { instance } = await shallow.render();
-    instance.pendingArchive = new ArchiveVO({ archiveId: 1234 });
-    await instance.onSubmit();
+	it('should accept pending archives in the old flow', async () => {
+		feature.set('glam-onboarding', false);
+		const { instance } = await shallow.render();
+		instance.pendingArchive = new ArchiveVO({ archiveId: 1234 });
+		await instance.onSubmit();
 
-    expect(calledAccept).toBeTrue();
-    expect(acceptedArchive.archiveId).toBe(1234);
-  });
+		expect(calledAccept).toBeTrue();
+		expect(acceptedArchive.archiveId).toBe(1234);
+	});
 
-  it('should not accept pending archives in the glam flow (they are already accepted in an earlier step)', async () => {
-    feature.set('glam-onboarding', true);
-    const { instance } = await shallow.render();
-    instance.pendingArchive = new ArchiveVO({ archiveId: 1234 });
-    await instance.onSubmit();
+	it('should not accept pending archives in the glam flow (they are already accepted in an earlier step)', async () => {
+		feature.set('glam-onboarding', true);
+		const { instance } = await shallow.render();
+		instance.pendingArchive = new ArchiveVO({ archiveId: 1234 });
+		await instance.onSubmit();
 
-    expect(calledAccept).toBeFalse();
-    expect(acceptedArchive).toBeNull();
-  });
+		expect(calledAccept).toBeFalse();
+		expect(acceptedArchive).toBeNull();
+	});
 });

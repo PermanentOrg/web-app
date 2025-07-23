@@ -1,54 +1,54 @@
 <!-- @format -->
 <div class="pending-archives">
-  <div class="text-container">
-    <p class="greeting">
-      Hello <b class="bold">{{ accountName }}</b
-      >. Welcome to Permanent!
-    </p>
-    <p class="text">
-      You’ve been invited to collaborate on an archive as an archive member. A
-      Permanent archive is the collection of digital materials about an
-      individual, family or group, or organizational entity. Get started by
-      accepting an invitation, or by creating a new archive of your own.
-    </p>
-  </div>
-  <div class="pending-archives-container">
-    <div class="pending-info">
-      @for (archive of pendingArchives; track archive.archiveId) {
-        <pr-pending-archive
-          [archive]="archive"
-          (acceptArchiveOutput)="selectArchive(archive)"
-          [isSelected]="isSelected(archive.archiveId)"
-        ></pr-pending-archive>
-      }
-    </div>
+	<div class="text-container">
+		<p class="greeting">
+			Hello <b class="bold">{{ accountName }}</b
+			>. Welcome to Permanent!
+		</p>
+		<p class="text">
+			You’ve been invited to collaborate on an archive as an archive member. A
+			Permanent archive is the collection of digital materials about an
+			individual, family or group, or organizational entity. Get started by
+			accepting an invitation, or by creating a new archive of your own.
+		</p>
+	</div>
+	<div class="pending-archives-container">
+		<div class="pending-info">
+			@for (archive of pendingArchives; track archive.archiveId) {
+				<pr-pending-archive
+					[archive]="archive"
+					(acceptArchiveOutput)="selectArchive(archive)"
+					[isSelected]="isSelected(archive.archiveId)"
+				></pr-pending-archive>
+			}
+		</div>
 
-    <div class="buttons">
-      <div class="create-button">
-        <pr-button
-          [variant]="'primary'"
-          [orientation]="'right'"
-          [icon]="'onboarding/plus'"
-          (buttonClick)="createNewArchive()"
-          [size]="'fill'"
-        >
-          Create new Archive</pr-button
-        >
-      </div>
+		<div class="buttons">
+			<div class="create-button">
+				<pr-button
+					[variant]="'primary'"
+					[orientation]="'right'"
+					[icon]="'onboarding/plus'"
+					(buttonClick)="createNewArchive()"
+					[size]="'fill'"
+				>
+					Create new Archive</pr-button
+				>
+			</div>
 
-      <div class="next-button">
-        <pr-button
-          [variant]="'secondary'"
-          [orientation]="'right'"
-          [icon]="'onboarding/arrow-right'"
-          (buttonClick)="next()"
-          [size]="'fill'"
-          [disabled]="!selectedArchive"
-          [style]="{ justifyContent: 'center' }"
-        >
-          Next</pr-button
-        >
-      </div>
-    </div>
-  </div>
+			<div class="next-button">
+				<pr-button
+					[variant]="'secondary'"
+					[orientation]="'right'"
+					[icon]="'onboarding/arrow-right'"
+					(buttonClick)="next()"
+					[size]="'fill'"
+					[disabled]="!selectedArchive"
+					[style]="{ justifyContent: 'center' }"
+				>
+					Next</pr-button
+				>
+			</div>
+		</div>
+	</div>
 </div>

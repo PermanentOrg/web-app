@@ -8,30 +8,30 @@ import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
-  selector: 'pr-notification-preferences',
-  templateUrl: './notification-preferences.component.html',
-  styleUrls: ['./notification-preferences.component.scss'],
-  standalone: false,
+	selector: 'pr-notification-preferences',
+	templateUrl: './notification-preferences.component.html',
+	styleUrls: ['./notification-preferences.component.scss'],
+	standalone: false,
 })
 export class NotificationPreferencesComponent {
-  public account: AccountVO;
-  public preferences: NotificationPreferencesI;
-  constructor(
-    private accountService: AccountService,
-    private dataService: DataService,
-    private api: ApiService,
-    private message: MessageService,
-  ) {
-    this.account = this.accountService.getAccount();
-    this.preferences = cloneDeep(this.account.notificationPreferences);
-  }
+	public account: AccountVO;
+	public preferences: NotificationPreferencesI;
+	constructor(
+		private accountService: AccountService,
+		private dataService: DataService,
+		private api: ApiService,
+		private message: MessageService,
+	) {
+		this.account = this.accountService.getAccount();
+		this.preferences = cloneDeep(this.account.notificationPreferences);
+	}
 
-  async onPreferenceChange(path: string[], value: boolean) {
-    const response = await this.api.account.updateNotificationPreference(
-      path.join('.'),
-      value,
-    );
-    if (response.isSuccessful) {
-    }
-  }
+	async onPreferenceChange(path: string[], value: boolean) {
+		const response = await this.api.account.updateNotificationPreference(
+			path.join('.'),
+			value,
+		);
+		if (response.isSuccessful) {
+		}
+	}
 }

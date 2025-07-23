@@ -1,36 +1,36 @@
 export interface ShepherdStep {
-  id: string;
-  advanceOn?: AdvanceOn;
-  attachTo: AttachTo;
-  beforeShowPromise?: ShowOrHideOrBeforeShowPromise;
-  buttons?: ButtonsEntity[] | null;
-  cancelIcon?: CancelIcon;
-  classes?: string;
-  highlightClass?: string;
-  scrollTo?: boolean;
-  title?: string;
-  text?: string[] | null;
-  when?: When;
+	id: string;
+	advanceOn?: AdvanceOn;
+	attachTo: AttachTo;
+	beforeShowPromise?: ShowOrHideOrBeforeShowPromise;
+	buttons?: ButtonsEntity[] | null;
+	cancelIcon?: CancelIcon;
+	classes?: string;
+	highlightClass?: string;
+	scrollTo?: boolean;
+	title?: string;
+	text?: string[] | null;
+	when?: When;
 }
 interface AdvanceOn {
-  selector: string;
-  event: string;
+	selector: string;
+	event: string;
 }
 
 export interface AttachTo {
-  element: string;
-  on: 'left' | 'right' | 'top' | 'bottom';
+	element: string;
+	on: 'left' | 'right' | 'top' | 'bottom';
 }
 export interface ShowOrHideOrBeforeShowPromise {}
 export interface ButtonsEntity {
-  classes: string;
-  text: string;
-  type: string;
+	classes: string;
+	text: string;
+	type: string;
 }
 export interface CancelIcon {
-  enabled: boolean;
+	enabled: boolean;
 }
 export interface When {
-  show?: ShowOrHideOrBeforeShowPromise;
-  hide?: ShowOrHideOrBeforeShowPromise;
+	show?: ShowOrHideOrBeforeShowPromise;
+	hide?: ShowOrHideOrBeforeShowPromise;
 }

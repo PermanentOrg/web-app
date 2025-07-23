@@ -12,56 +12,56 @@ import { MissingPledgeComponent } from './components/missing-pledge/missing-pled
 import { UpdateCardComponent } from './components/update-card/update-card.component';
 
 export const routes: Routes = [
-  {
-    path: 'pledge',
-    component: PledgeComponent,
-    children: [
-      {
-        path: '',
-        component: NewPledgeComponent,
-      },
-      {
-        path: 'claim',
-        component: ClaimStorageComponent,
-        resolve: {
-          existingPledge: PledgeResolveService,
-        },
-      },
-      {
-        path: 'claimlogin',
-        component: ClaimStorageLoginComponent,
-      },
-      {
-        path: 'done',
-        component: ClaimDoneComponent,
-      },
-      {
-        path: 'missing',
-        component: MissingPledgeComponent,
-      },
-    ],
-  },
-  {
-    path: 'pledgeList',
-    component: PledgeListComponent,
-  },
-  {
-    path: 'progress',
-    component: PhaseProgressComponent,
-  },
-  {
-    path: 'update/:userId',
-    component: UpdateCardComponent,
-  },
-  {
-    path: '',
-    pathMatch: 'prefix',
-    redirectTo: 'pledge',
-  },
+	{
+		path: 'pledge',
+		component: PledgeComponent,
+		children: [
+			{
+				path: '',
+				component: NewPledgeComponent,
+			},
+			{
+				path: 'claim',
+				component: ClaimStorageComponent,
+				resolve: {
+					existingPledge: PledgeResolveService,
+				},
+			},
+			{
+				path: 'claimlogin',
+				component: ClaimStorageLoginComponent,
+			},
+			{
+				path: 'done',
+				component: ClaimDoneComponent,
+			},
+			{
+				path: 'missing',
+				component: MissingPledgeComponent,
+			},
+		],
+	},
+	{
+		path: 'pledgeList',
+		component: PledgeListComponent,
+	},
+	{
+		path: 'progress',
+		component: PhaseProgressComponent,
+	},
+	{
+		path: 'update/:userId',
+		component: UpdateCardComponent,
+	},
+	{
+		path: '',
+		pathMatch: 'prefix',
+		redirectTo: 'pledge',
+	},
 ];
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  providers: [PledgeResolveService],
-  declarations: [],
+	imports: [RouterModule.forChild(routes)],
+	providers: [PledgeResolveService],
+	declarations: [],
 })
 export class PledgeRoutingModule {}

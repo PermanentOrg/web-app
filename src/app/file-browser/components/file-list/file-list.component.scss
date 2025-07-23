@@ -1,55 +1,55 @@
 @import 'variables';
 
 :host {
-  width: 100%;
-  @include has-breadcrumbs;
+	width: 100%;
+	@include has-breadcrumbs;
 
-  &.no-padding {
-    padding-top: 0px;
-  }
+	&.no-padding {
+		padding-top: 0px;
+	}
 
-  &.file-list-centered {
-    @include public-centered;
-  }
+	&.file-list-centered {
+		@include public-centered;
+	}
 
-  .file-list-scroll {
-    opacity: 1;
+	.file-list-scroll {
+		opacity: 1;
 
-    &.is-sorting {
-      opacity: 0.5;
-      cursor: wait;
-      * {
-        pointer-events: none;
-      }
-    }
-  }
+		&.is-sorting {
+			opacity: 0.5;
+			cursor: wait;
+			* {
+				pointer-events: none;
+			}
+		}
+	}
 }
 
 .empty-message {
-  padding: 20px 10px;
-  text-align: center;
+	padding: 20px 10px;
+	text-align: center;
 }
 
 .file-list-drag-target {
-  width: calc(100% - #{$sidebar-width});
-  border: 5px solid $PR-orange;
-  position: fixed;
-  top: $file-list-controls-height;
-  left: 0;
-  right: $sidebar-width;
-  bottom: 0;
-  z-index: -1;
-  opacity: 0;
+	width: calc(100% - #{$sidebar-width});
+	border: 5px solid $PR-orange;
+	position: fixed;
+	top: $file-list-controls-height;
+	left: 0;
+	right: $sidebar-width;
+	bottom: 0;
+	z-index: -1;
+	opacity: 0;
 
-  font-weight: 700;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	font-weight: 700;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-  &.active {
-    z-index: 10;
-    opacity: 1;
-    transition: opacity 0.25s $tweaked-ease;
-    background: rgba(white, 0.7);
-  }
+	&.active {
+		z-index: 10;
+		opacity: 1;
+		transition: opacity 0.25s $tweaked-ease;
+		background: rgba(white, 0.7);
+	}
 }

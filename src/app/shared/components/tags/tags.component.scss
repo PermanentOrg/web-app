@@ -1,75 +1,75 @@
 @import 'variables';
 $gutter-size: 0.25rem;
 .tags {
-  display: flex;
-  flex-wrap: wrap;
-  height: auto;
-  margin-bottom: -$gutter-size;
+	display: flex;
+	flex-wrap: wrap;
+	height: auto;
+	margin-bottom: -$gutter-size;
 
-  &.can-edit {
-    min-height: 1.5rem + 0.75rem;
-  }
+	&.can-edit {
+		min-height: 1.5rem + 0.75rem;
+	}
 
-  &:not(.read-only) {
-    .empty {
-      color: $text-muted;
-      padding: 0.25rem 0rem;
-    }
-  }
+	&:not(.read-only) {
+		.empty {
+			color: $text-muted;
+			padding: 0.25rem 0rem;
+		}
+	}
 
-  .tag {
-    padding: 0.5rem 0rem;
-    border-radius: 0.5rem;
-    margin-right: $gutter-size;
-    margin-bottom: $gutter-size;
-    user-select: none;
-    color: $gray-900;
-    display: flex;
+	.tag {
+		padding: 0.5rem 0rem;
+		border-radius: 0.5rem;
+		margin-right: $gutter-size;
+		margin-bottom: $gutter-size;
+		user-select: none;
+		color: $gray-900;
+		display: flex;
 
-    .keyword,
-    .customMetadataField,
-    .customMetadataValue {
-      border-radius: 0.5rem;
-      padding: 0.5rem 0.5rem;
-      overflow-wrap: break-word;
-      hyphens: auto;
-      margin-bottom: 0;
-    }
-    .keyword {
-      background: rgba($PR-purple, 0.2);
-    }
-    .customMetadataField {
-      float: left;
-      padding: 0 0.5rem;
-      border-radius: 0.5rem 0rem 0rem 0.5rem;
-      color: #ffffff;
-      background: #5261b7;
-      max-width: 6.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .customMetadataValue {
-      float: left;
-      border-radius: 0rem 0.5rem 0.5rem 0rem;
-      background: rgba(#5261b7, 0.2);
-      max-width: 6.5rem;
-      margin-right: 0.25em;
-    }
-  }
+		.keyword,
+		.customMetadataField,
+		.customMetadataValue {
+			border-radius: 0.5rem;
+			padding: 0.5rem 0.5rem;
+			overflow-wrap: break-word;
+			hyphens: auto;
+			margin-bottom: 0;
+		}
+		.keyword {
+			background: rgba($PR-purple, 0.2);
+		}
+		.customMetadataField {
+			float: left;
+			padding: 0 0.5rem;
+			border-radius: 0.5rem 0rem 0rem 0.5rem;
+			color: #ffffff;
+			background: #5261b7;
+			max-width: 6.5rem;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+		.customMetadataValue {
+			float: left;
+			border-radius: 0rem 0.5rem 0.5rem 0rem;
+			background: rgba(#5261b7, 0.2);
+			max-width: 6.5rem;
+			margin-right: 0.25em;
+		}
+	}
 
-  @include beforeDesktop {
-    max-height: 25vh;
-    overflow-y: auto;
-  }
+	@include beforeDesktop {
+		max-height: 25vh;
+		overflow-y: auto;
+	}
 }
 
 .empty,
 .not-empty {
-  margin-bottom: 0.25rem;
+	margin-bottom: 0.25rem;
 }
 
 .not-empty {
-  color: $text-muted;
-  padding: 0.25rem 0rem;
+	color: $text-muted;
+	padding: 0.25rem 0rem;
 }

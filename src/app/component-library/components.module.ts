@@ -2,8 +2,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  FaIconLibrary,
-  FontAwesomeModule,
+	FaIconLibrary,
+	FontAwesomeModule,
 } from '@fortawesome/angular-fontawesome';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,24 +15,24 @@ import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 @NgModule({
-  declarations: [
-    FormInputComponent,
-    ToggleComponent,
-    ButtonComponent,
-    CheckboxComponent,
-    LoadingSpinnerComponent,
-  ],
-  imports: [CommonModule, FontAwesomeModule, FormsModule, ReactiveFormsModule],
-  exports: [
-    FormInputComponent,
-    ToggleComponent,
-    ButtonComponent,
-    CheckboxComponent,
-    LoadingSpinnerComponent,
-  ],
+	declarations: [
+		FormInputComponent,
+		ToggleComponent,
+		ButtonComponent,
+		CheckboxComponent,
+		LoadingSpinnerComponent,
+	],
+	imports: [CommonModule, FontAwesomeModule, FormsModule, ReactiveFormsModule],
+	exports: [
+		FormInputComponent,
+		ToggleComponent,
+		ButtonComponent,
+		CheckboxComponent,
+		LoadingSpinnerComponent,
+	],
 })
 export class ComponentsModule {
-  constructor(private library: FaIconLibrary) {
-    library.addIcons(faExclamationCircle);
-  }
+	constructor(private library: FaIconLibrary) {
+		library.addIcons(faExclamationCircle);
+	}
 }

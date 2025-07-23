@@ -1,87 +1,87 @@
 <!-- @format -->
 <div class="dialog-content">
-  <div class="header">
-    <span>Storage</span>
-    <button class="btn" (click)="onDoneClick()">
-      <i class="material-icons">close</i>
-    </button>
-  </div>
-  <div class="content">
-    <div class="tabs">
-      <div
-        class="dialog-tab"
-        (click)="setTab('add')"
-        [class.active]="activeTab === 'add'"
-      >
-        Add Storage
-      </div>
-      <div
-        class="dialog-tab"
-        (click)="setTab('gift')"
-        [class.active]="activeTab === 'gift'"
-      >
-        Gift Storage
-      </div>
-      <div
-        class="dialog-tab"
-        (click)="setTab('promo')"
-        [class.active]="activeTab === 'promo'"
-      >
-        Redeem Storage
-      </div>
-      <div
-        class="dialog-tab"
-        (click)="setTab('transaction')"
-        [class.active]="activeTab === 'transaction'"
-      >
-        Transaction History
-      </div>
-      <div
-        class="dialog-tab"
-        (click)="setTab('file')"
-        [class.active]="activeTab === 'file'"
-      >
-        File History
-      </div>
-    </div>
-    <div class="panel" #panel>
-      <ng-container [ngSwitch]="activeTab">
-        <ng-container *ngSwitchCase="'add'">
-          <div class="panel-title">Add Storage</div>
-          <pr-storage-meter></pr-storage-meter>
-          <p>
-            Need more storage? Purchase as little or as much at a time, anytime
-            you'd like.
-            <br />
-            How do our one time storage fees work?
-            <a
-              href="https://desk.zoho.com/portal/permanent/en/kb/articles/how-our-endowment-works"
-              target="_blank"
-              >Click here to learn more about our endowment model.</a
-            >
-          </p>
-          <pr-new-pledge [inlineFlow]="true"></pr-new-pledge>
-          <p class="nav-to-redeem">
-            <a href="#" (click)="setTab('promo'); $event.preventDefault()">
-              Have a code to redeem for free storage? Click here to redeem it.
-            </a>
-          </p>
-        </ng-container>
-        <ng-container *ngSwitchCase="'gift'">
-          <pr-gift-storage></pr-gift-storage>
-        </ng-container>
-        <ng-container *ngSwitchCase="'promo'">
-          <pr-redeem-gift [promoCode]="promoCode"></pr-redeem-gift>
-        </ng-container>
-        <ng-container *ngSwitchCase="'transaction'">
-          <div class="panel-title">Transaction History</div>
-          <pr-transaction-history></pr-transaction-history>
-        </ng-container>
-        <ng-container *ngSwitchCase="'file'">
-          <div class="panel-title">File History</div>
-          <pr-file-history></pr-file-history>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
+	<div class="header">
+		<span>Storage</span>
+		<button class="btn" (click)="onDoneClick()">
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+	<div class="content">
+		<div class="tabs">
+			<div
+				class="dialog-tab"
+				(click)="setTab('add')"
+				[class.active]="activeTab === 'add'"
+			>
+				Add Storage
+			</div>
+			<div
+				class="dialog-tab"
+				(click)="setTab('gift')"
+				[class.active]="activeTab === 'gift'"
+			>
+				Gift Storage
+			</div>
+			<div
+				class="dialog-tab"
+				(click)="setTab('promo')"
+				[class.active]="activeTab === 'promo'"
+			>
+				Redeem Storage
+			</div>
+			<div
+				class="dialog-tab"
+				(click)="setTab('transaction')"
+				[class.active]="activeTab === 'transaction'"
+			>
+				Transaction History
+			</div>
+			<div
+				class="dialog-tab"
+				(click)="setTab('file')"
+				[class.active]="activeTab === 'file'"
+			>
+				File History
+			</div>
+		</div>
+		<div class="panel" #panel>
+			<ng-container [ngSwitch]="activeTab">
+				<ng-container *ngSwitchCase="'add'">
+					<div class="panel-title">Add Storage</div>
+					<pr-storage-meter></pr-storage-meter>
+					<p>
+						Need more storage? Purchase as little or as much at a time, anytime
+						you'd like.
+						<br />
+						How do our one time storage fees work?
+						<a
+							href="https://desk.zoho.com/portal/permanent/en/kb/articles/how-our-endowment-works"
+							target="_blank"
+							>Click here to learn more about our endowment model.</a
+						>
+					</p>
+					<pr-new-pledge [inlineFlow]="true"></pr-new-pledge>
+					<p class="nav-to-redeem">
+						<a href="#" (click)="setTab('promo'); $event.preventDefault()">
+							Have a code to redeem for free storage? Click here to redeem it.
+						</a>
+					</p>
+				</ng-container>
+				<ng-container *ngSwitchCase="'gift'">
+					<pr-gift-storage></pr-gift-storage>
+				</ng-container>
+				<ng-container *ngSwitchCase="'promo'">
+					<pr-redeem-gift [promoCode]="promoCode"></pr-redeem-gift>
+				</ng-container>
+				<ng-container *ngSwitchCase="'transaction'">
+					<div class="panel-title">Transaction History</div>
+					<pr-transaction-history></pr-transaction-history>
+				</ng-container>
+				<ng-container *ngSwitchCase="'file'">
+					<div class="panel-title">File History</div>
+					<pr-file-history></pr-file-history>
+				</ng-container>
+			</ng-container>
+		</div>
+	</div>
 </div>

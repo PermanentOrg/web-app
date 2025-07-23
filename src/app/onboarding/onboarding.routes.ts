@@ -6,24 +6,24 @@ import { CreateNewArchiveComponent } from './components/create-new-archive/creat
 import { OnboardingAuthGuard } from './guards/onboarding.auth.guard';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: OnboardingComponent,
-    canActivate: [OnboardingAuthGuard],
-    children: [
-      {
-        path: 'new-archive',
-        component: CreateNewArchiveComponent,
-        data: {
-          onboardingScreen: 'newArchive',
-        },
-      },
-    ],
-  },
+	{
+		path: '',
+		component: OnboardingComponent,
+		canActivate: [OnboardingAuthGuard],
+		children: [
+			{
+				path: 'new-archive',
+				component: CreateNewArchiveComponent,
+				data: {
+					onboardingScreen: 'newArchive',
+				},
+			},
+		],
+	},
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+	imports: [RouterModule.forChild(routes)],
+	exports: [RouterModule],
 })
 export class OnboardingRoutingModule {}

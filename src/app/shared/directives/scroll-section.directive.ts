@@ -1,14 +1,14 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 
 @Directive({
-  selector: '[prScrollSection]',
-  standalone: false,
+	selector: '[prScrollSection]',
+	standalone: false,
 })
 export class ScrollSectionDirective {
-  @Input('prScrollSection') sectionId: string;
-  element: HTMLElement;
+	@Input('prScrollSection') sectionId: string;
+	element: HTMLElement;
 
-  constructor(elementRef: ElementRef) {
-    this.element = elementRef.nativeElement;
-  }
+	constructor(elementRef: ElementRef) {
+		this.element = elementRef.nativeElement;
+	}
 }

@@ -5,103 +5,103 @@ import { OnboardingModule } from '../../../onboarding.module';
 import { SelectArchiveTypeScreenComponent } from './select-archive-type-screen.component';
 
 describe('SelectArchiveTypeScreenComponent', () => {
-  let shallow: Shallow<SelectArchiveTypeScreenComponent>;
+	let shallow: Shallow<SelectArchiveTypeScreenComponent>;
 
-  beforeEach(async () => {
-    shallow = new Shallow(SelectArchiveTypeScreenComponent, OnboardingModule);
-  });
+	beforeEach(async () => {
+		shallow = new Shallow(SelectArchiveTypeScreenComponent, OnboardingModule);
+	});
 
-  it('should create', async () => {
-    const { instance } = await shallow.render();
+	it('should create', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance).toBeTruthy();
-  });
+		expect(instance).toBeTruthy();
+	});
 
-  it('should initialize with default values', async () => {
-    const { instance } = await shallow.render();
+	it('should initialize with default values', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance.selectedValue).toBe('');
-    expect(instance.buttonText).toBe('a Personal');
-    expect(instance['headerText']).toBe('');
-    expect(instance['tag']).toBe('');
-    expect(instance['type']).toBe('');
-  });
+		expect(instance.selectedValue).toBe('');
+		expect(instance.buttonText).toBe('a Personal');
+		expect(instance['headerText']).toBe('');
+		expect(instance['tag']).toBe('');
+		expect(instance['type']).toBe('');
+	});
 
-  it('should emit navigation event when navigate is called with start', async () => {
-    const { instance, outputs } = await shallow.render();
-    instance['type'] = 'mockType';
-    instance['tag'] = 'mockTag';
-    instance['headerText'] = 'mockHeaderText';
-    instance.navigate('start');
+	it('should emit navigation event when navigate is called with start', async () => {
+		const { instance, outputs } = await shallow.render();
+		instance['type'] = 'mockType';
+		instance['tag'] = 'mockTag';
+		instance['headerText'] = 'mockHeaderText';
+		instance.navigate('start');
 
-    expect(outputs.submitEmitter.emit).toHaveBeenCalledWith({
-      screen: 'start',
-      type: 'mockType',
-      tag: 'mockTag',
-      headerText: 'mockHeaderText',
-    });
-  });
+		expect(outputs.submitEmitter.emit).toHaveBeenCalledWith({
+			screen: 'start',
+			type: 'mockType',
+			tag: 'mockTag',
+			headerText: 'mockHeaderText',
+		});
+	});
 
-  it('should emit submit event when navigate is called with other screen', async () => {
-    const { instance, outputs } = await shallow.render();
-    instance['type'] = 'mockType';
-    instance['tag'] = 'mockTag';
-    instance['headerText'] = 'mockHeaderText';
+	it('should emit submit event when navigate is called with other screen', async () => {
+		const { instance, outputs } = await shallow.render();
+		instance['type'] = 'mockType';
+		instance['tag'] = 'mockTag';
+		instance['headerText'] = 'mockHeaderText';
 
-    instance.navigate('name-archive');
+		instance.navigate('name-archive');
 
-    expect(outputs.submitEmitter.emit).toHaveBeenCalledWith({
-      screen: 'name-archive',
-      type: 'mockType',
-      tag: 'mockTag',
-      headerText: 'mockHeaderText',
-    });
-  });
+		expect(outputs.submitEmitter.emit).toHaveBeenCalledWith({
+			screen: 'name-archive',
+			type: 'mockType',
+			tag: 'mockTag',
+			headerText: 'mockHeaderText',
+		});
+	});
 
-  it('should call navigate with start when Back button is clicked', async () => {
-    const { fixture, instance } = await shallow.render();
-    spyOn(instance, 'navigate');
-    const backButton = fixture.debugElement.query(By.css('.back-button'));
-    backButton.triggerEventHandler('buttonClick', null);
+	it('should call navigate with start when Back button is clicked', async () => {
+		const { fixture, instance } = await shallow.render();
+		spyOn(instance, 'navigate');
+		const backButton = fixture.debugElement.query(By.css('.back-button'));
+		backButton.triggerEventHandler('buttonClick', null);
 
-    expect(instance.navigate).toHaveBeenCalledWith('start');
-  });
+		expect(instance.navigate).toHaveBeenCalledWith('start');
+	});
 
-  it('should call navigate with name-archive when create archive button is clicked', async () => {
-    const { fixture, instance } = await shallow.render();
-    spyOn(instance, 'navigate');
-    instance.selectedValue = 'someValue';
-    fixture.detectChanges();
+	it('should call navigate with name-archive when create archive button is clicked', async () => {
+		const { fixture, instance } = await shallow.render();
+		spyOn(instance, 'navigate');
+		instance.selectedValue = 'someValue';
+		fixture.detectChanges();
 
-    const createButton = fixture.debugElement.query(
-      By.css('.create-archive-button'),
-    );
-    createButton.triggerEventHandler('buttonClick', null);
+		const createButton = fixture.debugElement.query(
+			By.css('.create-archive-button'),
+		);
+		createButton.triggerEventHandler('buttonClick', null);
 
-    expect(instance.navigate).toHaveBeenCalledWith('name-archive');
-  });
+		expect(instance.navigate).toHaveBeenCalledWith('name-archive');
+	});
 
-  it('should set buttonText correctly in ngOnInit if tag is defined', async () => {
-    const { instance } = await shallow.render({
-      bind: {
-        tag: 'type:community',
-      },
-    });
+	it('should set buttonText correctly in ngOnInit if tag is defined', async () => {
+		const { instance } = await shallow.render({
+			bind: {
+				tag: 'type:community',
+			},
+		});
 
-    instance.ngOnInit();
+		instance.ngOnInit();
 
-    expect(instance.buttonText).toBe('a Community');
-  });
+		expect(instance.buttonText).toBe('a Community');
+	});
 
-  it('should not call generateElementText if tag is not defined', async () => {
-    const { instance, fixture } = await shallow.render();
+	it('should not call generateElementText if tag is not defined', async () => {
+		const { instance, fixture } = await shallow.render();
 
-    instance.tag = '';
+		instance.tag = '';
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    instance.ngOnInit();
+		instance.ngOnInit();
 
-    expect(instance.buttonText).toBe('a Personal'); // Default value
-  });
+		expect(instance.buttonText).toBe('a Personal'); // Default value
+	});
 });

@@ -1,53 +1,53 @@
 @import 'variables';
 
 .public-archive-web-links {
-  width: 300px;
+	width: 300px;
 
-  &-about {
-    margin-top: 4rem;
-    & > .title {
-      margin-bottom: 2rem;
-    }
-  }
-  &-contact {
-    & > .title {
-      margin-bottom: 2rem;
-    }
-  }
+	&-about {
+		margin-top: 4rem;
+		& > .title {
+			margin-bottom: 2rem;
+		}
+	}
+	&-contact {
+		& > .title {
+			margin-bottom: 2rem;
+		}
+	}
 }
 
 .title {
-  font-family: 'Usual', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: #999999;
-  margin-bottom: 10px;
+	font-family: 'Usual', sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	color: #999999;
+	margin-bottom: 10px;
 }
 
 .link {
-  font-family: Usual;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
-  letter-spacing: -0.02em;
-  text-align: left;
-  color: $darkBlue;
-  margin-bottom: 0;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-width: 15rem;
-  display: block;
-  margin-bottom: 2rem;
-  text-decoration: none;
+	font-family: Usual;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 16px;
+	letter-spacing: -0.02em;
+	text-align: left;
+	color: $darkBlue;
+	margin-bottom: 0;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	max-width: 15rem;
+	display: block;
+	margin-bottom: 2rem;
+	text-decoration: none;
 }
 
 .description {
-  font-family: Usual;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 26px;
-  letter-spacing: -0.02em;
-  text-align: left;
-  color: #777777;
-  white-space: pre-line;
+	font-family: Usual;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 26px;
+	letter-spacing: -0.02em;
+	text-align: left;
+	color: #777777;
+	white-space: pre-line;
 }

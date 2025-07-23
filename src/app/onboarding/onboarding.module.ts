@@ -2,8 +2,8 @@
 import { ComponentFactoryResolver, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  FontAwesomeModule,
-  FaIconLibrary,
+	FontAwesomeModule,
+	FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { SharedModule } from '@shared/shared.module';
@@ -35,41 +35,41 @@ import { ArchiveCreationWithShareComponent } from './components/archive-creation
 import { OnboardingService } from './services/onboarding.service';
 
 @NgModule({
-  declarations: [
-    OnboardingComponent,
-    WelcomeScreenComponent,
-    CreateNewArchiveComponent,
-    ArchiveTypeSelectComponent,
-    ArchiveCreationStartScreenComponent,
-    SelectArchiveTypeScreenComponent,
-    NameArchiveScreenComponent,
-    CreateArchiveForMeScreenComponent,
-    FinalizeArchiveCreationScreenComponent,
-    GlamReasonsScreenComponent,
-    GlamGoalsScreenComponent,
-    GlamUserSurveySquareComponent,
-    OnboardingHeaderComponent,
-    GlamOnboardingHeaderComponent,
-    GlamPendingArchivesComponent,
-    PendingArchiveComponent,
-    ArchiveCreationWithShareComponent,
-  ],
-  imports: [
-    CommonModule,
-    OnboardingRoutingModule,
-    SharedModule,
-    CoreModule,
-    DialogCdkModule,
-    FontAwesomeModule,
-    ComponentsModule,
-    GlamArchiveTypeSelectComponent,
-    ArchiveTypeIconComponent,
-    FeatureFlagModule,
-  ],
-  providers: [OnboardingService],
+	declarations: [
+		OnboardingComponent,
+		WelcomeScreenComponent,
+		CreateNewArchiveComponent,
+		ArchiveTypeSelectComponent,
+		ArchiveCreationStartScreenComponent,
+		SelectArchiveTypeScreenComponent,
+		NameArchiveScreenComponent,
+		CreateArchiveForMeScreenComponent,
+		FinalizeArchiveCreationScreenComponent,
+		GlamReasonsScreenComponent,
+		GlamGoalsScreenComponent,
+		GlamUserSurveySquareComponent,
+		OnboardingHeaderComponent,
+		GlamOnboardingHeaderComponent,
+		GlamPendingArchivesComponent,
+		PendingArchiveComponent,
+		ArchiveCreationWithShareComponent,
+	],
+	imports: [
+		CommonModule,
+		OnboardingRoutingModule,
+		SharedModule,
+		CoreModule,
+		DialogCdkModule,
+		FontAwesomeModule,
+		ComponentsModule,
+		GlamArchiveTypeSelectComponent,
+		ArchiveTypeIconComponent,
+		FeatureFlagModule,
+	],
+	providers: [OnboardingService],
 })
 export class OnboardingModule {
-  constructor(private library: FaIconLibrary) {
-    library.addIcons(faHeart);
-  }
+	constructor(private library: FaIconLibrary) {
+		library.addIcons(faHeart);
+	}
 }

@@ -13,69 +13,69 @@ import { FileBrowserComponentsModule } from '../../file-browser-components.modul
 import { SharingDialogComponent } from './sharing-dialog.component';
 
 import {
-  MockAccountService,
-  MockApiService,
-  MockPromptService,
-  MockRelationshipService,
-  NullDependency,
+	MockAccountService,
+	MockApiService,
+	MockPromptService,
+	MockRelationshipService,
+	NullDependency,
 } from './shared-test-classes';
 
 const testingProviders = [
-  {
-    provide: DIALOG_DATA,
-    useValue: {
-      item: new RecordVO({
-        displayName: 'Test File',
-        accessRole: 'access.role.owner',
-      }),
-    },
-  },
-  {
-    provide: AccountService,
-    useClass: MockAccountService,
-  },
-  {
-    provide: DialogRef,
-    useClass: NullDependency,
-  },
-  {
-    provide: PromptService,
-    useClass: NullDependency,
-  },
-  {
-    provide: ApiService,
-    useClass: MockApiService,
-  },
-  {
-    provide: MessageService,
-    useClass: NullDependency,
-  },
-  {
-    provide: ActivatedRoute,
-    useClass: NullDependency,
-  },
-  {
-    provide: RelationshipService,
-    useClass: MockRelationshipService,
-  },
-  {
-    provide: PromptService,
-    useClass: MockPromptService,
-  },
+	{
+		provide: DIALOG_DATA,
+		useValue: {
+			item: new RecordVO({
+				displayName: 'Test File',
+				accessRole: 'access.role.owner',
+			}),
+		},
+	},
+	{
+		provide: AccountService,
+		useClass: MockAccountService,
+	},
+	{
+		provide: DialogRef,
+		useClass: NullDependency,
+	},
+	{
+		provide: PromptService,
+		useClass: NullDependency,
+	},
+	{
+		provide: ApiService,
+		useClass: MockApiService,
+	},
+	{
+		provide: MessageService,
+		useClass: NullDependency,
+	},
+	{
+		provide: ActivatedRoute,
+		useClass: NullDependency,
+	},
+	{
+		provide: RelationshipService,
+		useClass: MockRelationshipService,
+	},
+	{
+		provide: PromptService,
+		useClass: MockPromptService,
+	},
 ];
 
 export default {
-  title: 'SharingDialog',
-  decorators: [
-    moduleMetadata({
-      declarations: [],
-      imports: [FileBrowserComponentsModule, NoopAnimationsModule],
-      providers: testingProviders,
-    }),
-  ],
-  component: SharingDialogComponent,
+	title: 'SharingDialog',
+	decorators: [
+		moduleMetadata({
+			declarations: [],
+			imports: [FileBrowserComponentsModule, NoopAnimationsModule],
+			providers: testingProviders,
+		}),
+	],
+	component: SharingDialogComponent,
 } as Meta;
 
 export const SharingDialog = () => ({
-  props: {},
+	props: {},
 });

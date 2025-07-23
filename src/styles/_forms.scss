@@ -1,187 +1,187 @@
 form {
-  padding: 10px;
-  margin: 0 auto;
-  max-width: $max-form-width;
+	padding: 10px;
+	margin: 0 auto;
+	max-width: $max-form-width;
 
-  > a {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-  }
+	> a {
+		display: block;
+		text-align: center;
+		margin-top: 20px;
+	}
 }
 
 .form-title {
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  padding: 10px 0;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	padding: 10px 0;
 }
 
 .form-check {
-  margin-top: 5px;
+	margin-top: 5px;
 }
 
 .input-group-vertical {
-  margin-bottom: 10px;
-  $transition-length: 0.1s;
-  border-radius: 0.25rem;
-  background: white;
+	margin-bottom: 10px;
+	$transition-length: 0.1s;
+	border-radius: 0.25rem;
+	background: white;
 
-  &.round {
-    border-radius: 2rem;
-    .form-control {
-      border-radius: 2rem;
-      padding: $input-btn-padding-y + 0.2rem $input-btn-padding-x + 0.2rem;
-    }
+	&.round {
+		border-radius: 2rem;
+		.form-control {
+			border-radius: 2rem;
+			padding: $input-btn-padding-y + 0.2rem $input-btn-padding-x + 0.2rem;
+		}
 
-    .input-vertical-label {
-      left: $input-btn-padding-x + 0.2rem;
-      top: 0.2rem;
-    }
-  }
+		.input-vertical-label {
+			left: $input-btn-padding-x + 0.2rem;
+			top: 0.2rem;
+		}
+	}
 
-  select {
-    -webkit-appearance: none;
-  }
+	select {
+		-webkit-appearance: none;
+	}
 
-  > input,
-  > .input-vertical {
-    position: relative;
-    display: block;
+	> input,
+	> .input-vertical {
+		position: relative;
+		display: block;
 
-    &:not(:first-child):not(:last-child),
-    &:not(:first-child):not(:last-child) > input,
-    &:not(:first-child):not(:last-child) > select {
-      border-top: 0px solid;
-      border-bottom: 0px solid;
-      border-radius: 0px;
-      -webkit-border-radius: 0px;
-    }
+		&:not(:first-child):not(:last-child),
+		&:not(:first-child):not(:last-child) > input,
+		&:not(:first-child):not(:last-child) > select {
+			border-top: 0px solid;
+			border-bottom: 0px solid;
+			border-radius: 0px;
+			-webkit-border-radius: 0px;
+		}
 
-    &:first-child:not(:last-child),
-    &:first-child:not(:last-child) > input,
-    &:first-child:not(:last-child) > select {
-      border-bottom: 0px solid;
-      border-bottom-left-radius: 0px;
-      border-bottom-right-radius: 0px;
-    }
+		&:first-child:not(:last-child),
+		&:first-child:not(:last-child) > input,
+		&:first-child:not(:last-child) > select {
+			border-bottom: 0px solid;
+			border-bottom-left-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
 
-    &:last-child:not(:first-child),
-    &:last-child:not(:first-child) > input,
-    &:last-child:not(:first-child) > select {
-      border-top: 0px solid;
-      border-top-left-radius: 0px;
-      border-top-right-radius: 0px;
-    }
+		&:last-child:not(:first-child),
+		&:last-child:not(:first-child) > input,
+		&:last-child:not(:first-child) > select {
+			border-top: 0px solid;
+			border-top-left-radius: 0px;
+			border-top-right-radius: 0px;
+		}
 
-    &:focus,
-    & > input:focus,
-    & > select:focus {
-      box-shadow: none;
-      background-color: darken(white, 3%);
-      border-color: $gray-500;
-    }
+		&:focus,
+		& > input:focus,
+		& > select:focus {
+			box-shadow: none;
+			background-color: darken(white, 3%);
+			border-color: $gray-500;
+		}
 
-    &.ng-touched.ng-invalid,
-    & > input.ng-touched.ng-invalid,
-    & > select.ng-touched.ng-invalid,
-    & .validate-dirty.ng-dirty.ng-invalid,
-    & > input.validate-dirty.ng-dirty.ng-invalid,
-    & > select.validate-dirty.ng-dirty.ng-invalid {
-      background-color: rgba($danger, 0.2);
-      border-color: $danger !important;
-    }
-  }
+		&.ng-touched.ng-invalid,
+		& > input.ng-touched.ng-invalid,
+		& > select.ng-touched.ng-invalid,
+		& .validate-dirty.ng-dirty.ng-invalid,
+		& > input.validate-dirty.ng-dirty.ng-invalid,
+		& > select.validate-dirty.ng-dirty.ng-invalid {
+			background-color: rgba($danger, 0.2);
+			border-color: $danger !important;
+		}
+	}
 
-  .input-vertical-error,
-  .input-vertical-label {
-    position: absolute;
-    font-size: 12px;
-    line-height: $input-btn-padding-y * 1.5;
-    background: none;
-    pointer-events: none;
-    opacity: 1;
-    transition: $transition-length ease-in opacity;
-  }
+	.input-vertical-error,
+	.input-vertical-label {
+		position: absolute;
+		font-size: 12px;
+		line-height: $input-btn-padding-y * 1.5;
+		background: none;
+		pointer-events: none;
+		opacity: 1;
+		transition: $transition-length ease-in opacity;
+	}
 
-  .hidden {
-    opacity: 0;
-    transition: 0s ease-in opacity;
-  }
+	.hidden {
+		opacity: 0;
+		transition: 0s ease-in opacity;
+	}
 
-  .input-vertical-error {
-    bottom: 0px;
-    right: $input-btn-padding-x;
-    color: $danger;
-  }
+	.input-vertical-error {
+		bottom: 0px;
+		right: $input-btn-padding-x;
+		color: $danger;
+	}
 
-  .input-vertical-label {
-    left: $input-btn-padding-x;
-    color: rgba($body-color, 0.7);
-  }
+	.input-vertical-label {
+		left: $input-btn-padding-x;
+		color: rgba($body-color, 0.7);
+	}
 
-  .input-vertical.checkbox {
-    background: $gray-600;
-    color: white;
-    padding: $input-padding-y * 0.5 $input-padding-x;
+	.input-vertical.checkbox {
+		background: $gray-600;
+		color: white;
+		padding: $input-padding-y * 0.5 $input-padding-x;
 
-    .form-check {
-      margin: 0;
-    }
-  }
+		.form-check {
+			margin: 0;
+		}
+	}
 
-  select.form-control {
-    color: rgba(white, 0);
+	select.form-control {
+		color: rgba(white, 0);
 
-    option {
-      color: $body-color;
-    }
-  }
+		option {
+			color: $body-color;
+		}
+	}
 
-  .input-vertical-select-placeholder {
-    color: $gray-600;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: $input-padding-x;
+	.input-vertical-select-placeholder {
+		color: $gray-600;
+		cursor: pointer;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		left: $input-padding-x;
 
-    &.selected {
-      color: $body-color;
-    }
-  }
+		&.selected {
+			color: $body-color;
+		}
+	}
 }
 
 select.placeholder {
-  color: $gray-600;
+	color: $gray-600;
 }
 
 .pr-auth-form {
-  max-width: 500px;
-  display: block;
+	max-width: 500px;
+	display: block;
 }
 
 .right-align {
-  input {
-    text-align: right;
-  }
+	input {
+		text-align: right;
+	}
 
-  input::placeholder {
-    text-align: left;
-  }
+	input::placeholder {
+		text-align: left;
+	}
 }
 
 .gravity-form {
-  input {
-    padding: 8px;
-    border-radius: 100px;
-    height: 50px;
-    font-size: 16px;
-    text-align: center;
-  }
+	input {
+		padding: 8px;
+		border-radius: 100px;
+		height: 50px;
+		font-size: 16px;
+		text-align: center;
+	}
 
-  button,
-  .btn {
-    border-radius: 100px;
-  }
+	button,
+	.btn {
+		border-radius: 100px;
+	}
 }

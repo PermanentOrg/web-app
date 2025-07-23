@@ -2,9 +2,9 @@
 @import 'variables';
 
 .header {
-  @include tabbedDialogHeader($PR-blue-light);
+	@include tabbedDialogHeader($PR-blue-light);
 }
 
 .tabs {
-  @include tabbedDialogNav($PR-blue-light);
+	@include tabbedDialogNav($PR-blue-light);
 }

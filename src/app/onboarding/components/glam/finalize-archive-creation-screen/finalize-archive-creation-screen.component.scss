@@ -2,102 +2,102 @@
 @import 'fonts';
 
 p {
-  color: white;
-  font-family: 'UsualRegular', sans-serif;
-  font-size: 16px;
+	color: white;
+	font-family: 'UsualRegular', sans-serif;
+	font-size: 16px;
 }
 
 .title {
-  font-size: 56px;
-  @media screen and (max-width: 465px) {
-    text-align: center;
-    font-size: 36px;
-  }
+	font-size: 56px;
+	@media screen and (max-width: 465px) {
+		text-align: center;
+		font-size: 36px;
+	}
 }
 
 .finalize-archive {
-  display: flex;
-  gap: 64px;
+	display: flex;
+	gap: 64px;
 
-  @media screen and (max-width: 900px) {
-    flex-direction: column;
-    height: 100vh;
-  }
+	@media screen and (max-width: 900px) {
+		flex-direction: column;
+		height: 100vh;
+	}
 }
 
 .square {
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 6px;
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 6px;
 
-  & > span {
-    color: white;
-    text-transform: uppercase;
-  }
+	& > span {
+		color: white;
+		text-transform: uppercase;
+	}
 }
 
 .single-archive {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+	display: flex;
+	flex-direction: row;
+	gap: 16px;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1rem;
 
-  & > div {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    & > p {
-      margin-bottom: 0px;
-    }
-  }
+	& > div {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		& > p {
+			margin-bottom: 0px;
+		}
+	}
 
-  & img {
-    width: 48px;
-    height: 48px;
-  }
+	& img {
+		width: 48px;
+		height: 48px;
+	}
 }
 
 hr {
-  margin: 32px 0px;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
+	margin: 32px 0px;
+	border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .content-container {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  height: 50vh;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	height: 50vh;
 
-  @media screen and (max-width: 900px) {
-    height: 60vh;
-  }
+	@media screen and (max-width: 900px) {
+		height: 60vh;
+	}
 
-  @media screen and (max-width: 465px) {
-    padding: 0px 50px;
+	@media screen and (max-width: 465px) {
+		padding: 0px 50px;
 
-    & .archive-info {
-      justify-content: center;
-    }
-  }
+		& .archive-info {
+			justify-content: center;
+		}
+	}
 }
 
 .button-container {
-  display: flex;
-  justify-content: flex-end;
-  @media screen and (max-width: 465px) {
-    padding: 20px;
-  }
+	display: flex;
+	justify-content: flex-end;
+	@media screen and (max-width: 465px) {
+		padding: 20px;
+	}
 }
 
 .button {
-  width: 50%;
+	width: 50%;
 }
 
 .get-started-text {
-  & > a {
-    color: white;
-  }
-  margin-bottom: 2rem;
+	& > a {
+		color: white;
+	}
+	margin-bottom: 2rem;
 }

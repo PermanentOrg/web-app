@@ -9,81 +9,81 @@ import { ArchiveVO } from '@models/index';
 import { PublicArchiveComponent } from './public-archive.component';
 
 const publicProfileServiceMock = {
-  publicRoot$: () => of({}),
-  archive$: () => of({}),
-  profileItemsDictionary$: () => of({}),
+	publicRoot$: () => of({}),
+	archive$: () => of({}),
+	profileItemsDictionary$: () => of({}),
 };
 
 describe('PublicArchiveComponent', () => {
-  let shallow: Shallow<PublicArchiveComponent>;
+	let shallow: Shallow<PublicArchiveComponent>;
 
-  beforeEach(waitForAsync(() => {
-    shallow = new Shallow(PublicArchiveComponent, PublicModule).provideMock({
-      provide: PublicProfileService,
-      useValue: publicProfileServiceMock,
-    });
-  }));
+	beforeEach(waitForAsync(() => {
+		shallow = new Shallow(PublicArchiveComponent, PublicModule).provideMock({
+			provide: PublicProfileService,
+			useValue: publicProfileServiceMock,
+		});
+	}));
 
-  it('should create', async () => {
-    const { instance } = await shallow.render();
+	it('should create', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance).toBeTruthy();
-  });
+		expect(instance).toBeTruthy();
+	});
 
-  it('should have the information hidden as default', async () => {
-    const { instance } = await shallow.render();
+	it('should have the information hidden as default', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance.showProfileInformation).toBe(false);
-  });
+		expect(instance.showProfileInformation).toBe(false);
+	});
 
-  it('should have the information shown when the button is clicked', async () => {
-    const { instance, find } = await shallow.render();
-    const icon = find('.icon-expand');
-    icon.nativeElement.click();
+	it('should have the information shown when the button is clicked', async () => {
+		const { instance, find } = await shallow.render();
+		const icon = find('.icon-expand');
+		icon.nativeElement.click();
 
-    expect(instance.showProfileInformation).toBe(true);
-  });
+		expect(instance.showProfileInformation).toBe(true);
+	});
 
-  it('should give the correct classes when expanding the information', async () => {
-    const { find, fixture, instance } = await shallow.render();
-    const icon = find('.icon-expand');
-    icon.nativeElement.click();
+	it('should give the correct classes when expanding the information', async () => {
+		const { find, fixture, instance } = await shallow.render();
+		const icon = find('.icon-expand');
+		icon.nativeElement.click();
 
-    fixture.detectChanges();
+		fixture.detectChanges();
 
-    expect(find('.archive-description').classes).toEqual({
-      'archive-description': true,
-      'archive-description-show': true,
-    });
-  });
+		expect(find('.archive-description').classes).toEqual({
+			'archive-description': true,
+			'archive-description-show': true,
+		});
+	});
 
-  it('should navigate to the correct search URL on handleSearch', async () => {
-    const { instance, inject } = await shallow.render();
-    const router = inject(Router);
-    spyOn(router, 'navigate');
+	it('should navigate to the correct search URL on handleSearch', async () => {
+		const { instance, inject } = await shallow.render();
+		const router = inject(Router);
+		spyOn(router, 'navigate');
 
-    instance.archive = { archiveId: '123' } as any;
+		instance.archive = { archiveId: '123' } as any;
 
-    instance.onHandleSearch('test-query');
+		instance.onHandleSearch('test-query');
 
-    expect(router.navigate).toHaveBeenCalledWith(
-      ['search', '123', 'test-query'],
-      jasmine.any(Object),
-    );
-  });
+		expect(router.navigate).toHaveBeenCalledWith(
+			['search', '123', 'test-query'],
+			jasmine.any(Object),
+		);
+	});
 
-  it('should navigate to the correct search-tag URL on tag click', async () => {
-    const { instance, inject } = await shallow.render();
-    const router = inject(Router);
-    spyOn(router, 'navigate');
+	it('should navigate to the correct search-tag URL on tag click', async () => {
+		const { instance, inject } = await shallow.render();
+		const router = inject(Router);
+		spyOn(router, 'navigate');
 
-    instance.archive = new ArchiveVO({ archiveId: '123' });
+		instance.archive = new ArchiveVO({ archiveId: '123' });
 
-    instance.onTagClick({ tagId: 'example-tag-id', tagName: 'tag-name' });
+		instance.onTagClick({ tagId: 'example-tag-id', tagName: 'tag-name' });
 
-    expect(router.navigate).toHaveBeenCalledWith(
-      ['search-tag', '123', 'example-tag-id', 'tag-name'],
-      jasmine.any(Object),
-    );
-  });
+		expect(router.navigate).toHaveBeenCalledWith(
+			['search-tag', '123', 'example-tag-id', 'tag-name'],
+			jasmine.any(Object),
+		);
+	});
 });

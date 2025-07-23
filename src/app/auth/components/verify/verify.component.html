@@ -1,71 +1,71 @@
 <ng-container
-  *ngIf="
-    (currentVerifyFlow === 'phone' || showCaptchaForEmail) &&
-      captchaEnabled &&
-      !captchaPassed;
-    else verifyFormElement
-  "
+	*ngIf="
+		(currentVerifyFlow === 'phone' || showCaptchaForEmail) &&
+			captchaEnabled &&
+			!captchaPassed;
+		else verifyFormElement
+	"
 >
-  <div class="captcha">
-    <p>
-      Please complete this verification challenge to receive a code on your
-      device.
-    </p>
-    <re-captcha
-      [siteKey]="captchaSiteKey"
-      (resolved)="resolveCaptcha($event)"
-      (error)="onCaptchaError($event)"
-    ></re-captcha>
-  </div>
+	<div class="captcha">
+		<p>
+			Please complete this verification challenge to receive a code on your
+			device.
+		</p>
+		<re-captcha
+			[siteKey]="captchaSiteKey"
+			(resolved)="resolveCaptcha($event)"
+			(error)="onCaptchaError($event)"
+		></re-captcha>
+	</div>
 </ng-container>
 <ng-template #verifyFormElement>
-  <form [formGroup]="verifyForm" (ngSubmit)="onSubmit(verifyForm.value)">
-    <h1 class="page-title">
-      {{
-        currentVerifyFlow === 'email' ? 'Verify Email' : 'Verify Phone Number'
-      }}
-    </h1>
-    <p class="verify-text">
-      A verification code has been sent to your
-      {{ currentVerifyFlow === 'email' ? 'email address' : 'mobile device' }}.
-      <span *ngIf="currentVerifyFlow === 'phone'">
-        Permanent only supports US and Canada numbers.
-      </span>
-    </p>
-    <p class="verify-text">Enter it below to continue.</p>
-    <div class="input-container">
-      <pr-form-input-glam
-        type="{{ currentVerifyFlow === 'email' ? 'email' : 'tel' }}"
-        fieldName="token"
-        [variant]="'dark'"
-        placeholder="Code"
-        [control]="verifyForm.controls['token']"
-        [config]="{
-          autocomplete: currentVerifyFlow === 'email' ? 'email' : 'tel',
-          autocorrect: 'off',
-          autocapitalize: 'off',
-          spellcheck: 'off'
-        }"
-      ></pr-form-input-glam>
-    </div>
-    <div class="buttons">
-      <pr-button
-        [buttonType]="'submit'"
-        [variant]="'secondary'"
-        [size]="'fill'"
-        [disabled]="waiting"
-        >Verify Access</pr-button
-      >
-      <pr-or-divider></pr-or-divider>
-      <pr-button
-        [variant]="'primary'"
-        [size]="'fill'"
-        [orientation]="'right'"
-        [disabled]="waiting"
-        (click)="resendCode()"
-        >Resend Code</pr-button
-      >
-    </div>
-  </form>
+	<form [formGroup]="verifyForm" (ngSubmit)="onSubmit(verifyForm.value)">
+		<h1 class="page-title">
+			{{
+				currentVerifyFlow === 'email' ? 'Verify Email' : 'Verify Phone Number'
+			}}
+		</h1>
+		<p class="verify-text">
+			A verification code has been sent to your
+			{{ currentVerifyFlow === 'email' ? 'email address' : 'mobile device' }}.
+			<span *ngIf="currentVerifyFlow === 'phone'">
+				Permanent only supports US and Canada numbers.
+			</span>
+		</p>
+		<p class="verify-text">Enter it below to continue.</p>
+		<div class="input-container">
+			<pr-form-input-glam
+				type="{{ currentVerifyFlow === 'email' ? 'email' : 'tel' }}"
+				fieldName="token"
+				[variant]="'dark'"
+				placeholder="Code"
+				[control]="verifyForm.controls['token']"
+				[config]="{
+					autocomplete: currentVerifyFlow === 'email' ? 'email' : 'tel',
+					autocorrect: 'off',
+					autocapitalize: 'off',
+					spellcheck: 'off'
+				}"
+			></pr-form-input-glam>
+		</div>
+		<div class="buttons">
+			<pr-button
+				[buttonType]="'submit'"
+				[variant]="'secondary'"
+				[size]="'fill'"
+				[disabled]="waiting"
+				>Verify Access</pr-button
+			>
+			<pr-or-divider></pr-or-divider>
+			<pr-button
+				[variant]="'primary'"
+				[size]="'fill'"
+				[orientation]="'right'"
+				[disabled]="waiting"
+				(click)="resendCode()"
+				>Resend Code</pr-button
+			>
+		</div>
+	</form>
 </ng-template>
 <pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>

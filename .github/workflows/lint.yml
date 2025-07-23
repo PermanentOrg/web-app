@@ -1,24 +1,30 @@
-name: Linting
+name: lint
 on:
   pull_request:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  FONTAWESOME_PACKAGE_TOKEN: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
+
 jobs:
-  lint:
+  eslint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-      - uses: actions/cache@v4
+      - run: npm ci
+      - run: npm run lint:eslint
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-      - name: Install dependencies
-        run: FONTAWESOME_PACKAGE_TOKEN="${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}" npm install
-      - name: Run Prettier
-        run: npx prettier --check .
-      - name: Run eslint
-        run: npm run lint
+          node-version-file: .node-version
+      - run: npm ci
+      - run: npm run lint:prettier

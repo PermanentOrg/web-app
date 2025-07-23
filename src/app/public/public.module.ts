@@ -3,14 +3,14 @@ import { NgModule, Optional, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
-  FaIconLibrary,
-  FontAwesomeModule,
+	FaIconLibrary,
+	FontAwesomeModule,
 } from '@fortawesome/angular-fontawesome';
 import {
-  faSearch,
-  faTimesCircle,
-  faChevronDown,
-  faChevronUp,
+	faSearch,
+	faTimesCircle,
+	faChevronDown,
+	faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
@@ -33,36 +33,36 @@ import { PublicSearchResultsComponent } from './components/public-search-results
 import { PublicSearchBarResultsComponent } from './components/public-search-bar-results/public-search-bar-results.component';
 
 @NgModule({
-  declarations: [
-    PublicComponent,
-    ItemNotFoundComponent,
-    PublicArchiveComponent,
-    SearchBoxComponent,
-    PublicProfileComponent,
-    ArchiveSearchComponent,
-    PublicArchiveWebLinksComponent,
-    PublicSearchResultsComponent,
-    PublicSearchBarResultsComponent,
-  ],
-  exports: [SearchBoxComponent],
-  imports: [
-    AnnouncementModule,
-    CommonModule,
-    RouterModule,
-    PublicRoutingModule,
-    SharedModule,
-    FileBrowserModule,
-    CoreModule,
-    FontAwesomeModule,
-  ],
-  providers: [DataService, FolderViewService, PublicProfileService],
+	declarations: [
+		PublicComponent,
+		ItemNotFoundComponent,
+		PublicArchiveComponent,
+		SearchBoxComponent,
+		PublicProfileComponent,
+		ArchiveSearchComponent,
+		PublicArchiveWebLinksComponent,
+		PublicSearchResultsComponent,
+		PublicSearchBarResultsComponent,
+	],
+	exports: [SearchBoxComponent],
+	imports: [
+		AnnouncementModule,
+		CommonModule,
+		RouterModule,
+		PublicRoutingModule,
+		SharedModule,
+		FileBrowserModule,
+		CoreModule,
+		FontAwesomeModule,
+	],
+	providers: [DataService, FolderViewService, PublicProfileService],
 })
 export class PublicModule {
-  constructor(
-    folderView: FolderViewService,
-    private library: FaIconLibrary,
-  ) {
-    this.library.addIcons(faSearch, faTimesCircle, faChevronDown, faChevronUp);
-    folderView.setFolderView(FolderView.Grid, true);
-  }
+	constructor(
+		folderView: FolderViewService,
+		private library: FaIconLibrary,
+	) {
+		this.library.addIcons(faSearch, faTimesCircle, faChevronDown, faChevronUp);
+		folderView.setFolderView(FolderView.Grid, true);
+	}
 }

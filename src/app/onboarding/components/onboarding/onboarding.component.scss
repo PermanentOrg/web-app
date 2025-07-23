@@ -4,114 +4,114 @@ $mobile-breakpoint: 950px;
 $mobile-transition-breakpoint: 1200px;
 
 :host(.glam) {
-  background: $linear-gradient-background;
-  display: block;
-  min-height: 100vh;
+	background: $linear-gradient-background;
+	display: block;
+	min-height: 100vh;
 
-  @include beforeDesktop {
-    height: auto;
-  }
+	@include beforeDesktop {
+		height: auto;
+	}
 }
 
 .onboarding,
 .onboarding-header-container {
-  @media only screen and (max-width: $mobile-transition-breakpoint) {
-    width: 75%;
-  }
-  @media only screen and (max-width: $mobile-breakpoint) {
-    width: auto;
-    margin: 10px;
-  }
-  width: 90%;
-  margin: 0 auto;
+	@media only screen and (max-width: $mobile-transition-breakpoint) {
+		width: 75%;
+	}
+	@media only screen and (max-width: $mobile-breakpoint) {
+		width: auto;
+		margin: 10px;
+	}
+	width: 90%;
+	margin: 0 auto;
 }
 
 .onboarding-header-container {
-  margin: 0 auto;
+	margin: 0 auto;
 }
 
 .onboarding-glam {
-  height: auto;
-  @include beforeDesktop {
-    height: auto;
-  }
+	height: auto;
+	@include beforeDesktop {
+		height: auto;
+	}
 }
 
 .progress-bar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 1.5em 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 1.5em 0;
 }
 
 .progress-chunk {
-  opacity: 0.1;
-  &.completed {
-    background-color: #5261b7;
-    opacity: 1;
-  }
+	opacity: 0.1;
+	&.completed {
+		background-color: #5261b7;
+		opacity: 1;
+	}
 
-  &.completed-glam {
-    background: linear-gradient(90deg, #8d0085 0%, #ff9400 100%);
-    opacity: 1;
-  }
-  width: 30%;
-  height: 4px;
-  background-color: #eaeaea;
-  transition: background-color 0.3s;
+	&.completed-glam {
+		background: linear-gradient(90deg, #8d0085 0%, #ff9400 100%);
+		opacity: 1;
+	}
+	width: 30%;
+	height: 4px;
+	background-color: #eaeaea;
+	transition: background-color 0.3s;
 }
 
 .loading {
-  text-align: center;
+	text-align: center;
 }
 
 $transition-length: 0.33s;
 
 .alert {
-  margin: 0;
-  cursor: pointer;
+	margin: 0;
+	cursor: pointer;
 }
 
 .alert-wrapper {
-  padding: 10px 10px;
-  transform: translateY(0);
-  transition:
-    transform $transition-length ease-in 0s,
-    visibility 0s linear $transition-length;
-  display: block;
-  margin: 0 auto;
-  visibility: hidden;
+	padding: 10px 10px;
+	transform: translateY(0);
+	transition:
+		transform $transition-length ease-in 0s,
+		visibility 0s linear $transition-length;
+	display: block;
+	margin: 0 auto;
+	visibility: hidden;
 
-  &.visible {
-    transform: translateY(100%);
-    transition:
-      transform $transition-length ease-out,
-      visibility 0s linear 0s;
-    visibility: visible;
-  }
+	&.visible {
+		transform: translateY(100%);
+		transition:
+			transform $transition-length ease-out,
+			visibility 0s linear 0s;
+		visibility: visible;
+	}
 }
 
 .alert-wrapper.fade {
-  opacity: 0;
-  transition:
-    transform 0s linear $transition-length,
-    opacity $transition-length ease-in 0s,
-    visibility 0s linear $transition-length;
+	opacity: 0;
+	transition:
+		transform 0s linear $transition-length,
+		opacity $transition-length ease-in 0s,
+		visibility 0s linear $transition-length;
 
-  &.visible {
-    opacity: 1;
-    transition:
-      transform 0s,
-      opacity $transition-length ease-out,
-      visibility 0s linear 0s;
-  }
+	&.visible {
+		opacity: 1;
+		transition:
+			transform 0s,
+			opacity $transition-length ease-out,
+			visibility 0s linear 0s;
+	}
 }
 
 pr-create-new-archive {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  @media screen and (max-width: 770px) {
-    flex-direction: column;
-  }
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	@media screen and (max-width: 770px) {
+		flex-direction: column;
+	}
 }

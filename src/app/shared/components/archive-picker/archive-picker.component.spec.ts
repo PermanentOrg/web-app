@@ -5,42 +5,42 @@ import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
+	provideHttpClient,
+	withInterceptorsFromDi,
 } from '@angular/common/http';
 import { ArchivePickerComponent } from './archive-picker.component';
 
 class MockDialogRef {
-  close() {}
+	close() {}
 }
 
 describe('ArchivePickerComponent', () => {
-  let component: ArchivePickerComponent;
-  let fixture: ComponentFixture<ArchivePickerComponent>;
+	let component: ArchivePickerComponent;
+	let fixture: ComponentFixture<ArchivePickerComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ArchivePickerComponent],
-      imports: [],
-      providers: [
-        { provide: DialogRef, useClass: MockDialogRef },
-        { provide: DIALOG_DATA, useValue: {} },
-        { provide: ApiService, useValue: {} },
-        { provide: AccountService, useValue: {} },
-        MessageService,
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-      ],
-    }).compileComponents();
-  }));
+	beforeEach(waitForAsync(() => {
+		TestBed.configureTestingModule({
+			declarations: [ArchivePickerComponent],
+			imports: [],
+			providers: [
+				{ provide: DialogRef, useClass: MockDialogRef },
+				{ provide: DIALOG_DATA, useValue: {} },
+				{ provide: ApiService, useValue: {} },
+				{ provide: AccountService, useValue: {} },
+				MessageService,
+				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClientTesting(),
+			],
+		}).compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ArchivePickerComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(ArchivePickerComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

@@ -1,13 +1,13 @@
 @import '../directive-display/directive-display.component.scss';
 
 .legacy-contact-header {
-  @extend .archive-steward-header;
+	@extend .archive-steward-header;
 }
 
 .legacy-contact-description {
-  @extend .archive-steward-description;
+	@extend .archive-steward-description;
 }
 
 .legacy-contact-table {
-  @extend .archive-steward-table;
+	@extend .archive-steward-table;
 }

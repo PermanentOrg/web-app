@@ -9,12 +9,12 @@ import { RelationshipService } from '@core/services/relationship/relationship.se
 
 @Injectable()
 export class RelationshipsResolveService {
-  constructor(private relationshipService: RelationshipService) {}
+	constructor(private relationshipService: RelationshipService) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Promise<any> {
-    return this.relationshipService.get();
-  }
+	resolve(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Promise<any> {
+		return this.relationshipService.get();
+	}
 }

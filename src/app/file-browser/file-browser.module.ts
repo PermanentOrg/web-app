@@ -14,19 +14,19 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    FileBrowserComponentsModule,
-    FileBrowserRoutingModule,
-    SharedModule,
-    NgbTooltipModule,
-  ],
-  exports: [
-    FileListComponent,
-    FileListItemComponent,
-    FileViewerComponent,
-    VideoComponent,
-  ],
+	imports: [
+		CommonModule,
+		RouterModule,
+		FileBrowserComponentsModule,
+		FileBrowserRoutingModule,
+		SharedModule,
+		NgbTooltipModule,
+	],
+	exports: [
+		FileListComponent,
+		FileListItemComponent,
+		FileViewerComponent,
+		VideoComponent,
+	],
 })
 export class FileBrowserModule {}

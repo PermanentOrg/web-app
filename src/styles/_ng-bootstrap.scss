@@ -1,65 +1,65 @@
 ngb-datepicker {
-  .ngb-dp-header {
-    background-color: $PR-orange;
-    padding: 0.25rem 0;
-    align-items: center;
+	.ngb-dp-header {
+		background-color: $PR-orange;
+		padding: 0.25rem 0;
+		align-items: center;
 
-    button.btn {
-      margin: 0;
-      opacity: 0.7;
+		button.btn {
+			margin: 0;
+			opacity: 0.7;
 
-      &:hover {
-        opacity: 1;
-      }
+			&:hover {
+				opacity: 1;
+			}
 
-      &:focus {
-        outline: 0;
-      }
-    }
-  }
+			&:focus {
+				outline: 0;
+			}
+		}
+	}
 
-  .ngb-dp-month {
-    flex: 1 1 auto;
+	.ngb-dp-month {
+		flex: 1 1 auto;
 
-    .ngb-dp-week {
-      justify-content: space-evenly;
-    }
+		.ngb-dp-week {
+			justify-content: space-evenly;
+		}
 
-    .ngb-dp-weekday,
-    .ngb-dp-day {
-      // flex: 1 1 auto;
-    }
-  }
+		.ngb-dp-weekday,
+		.ngb-dp-day {
+			// flex: 1 1 auto;
+		}
+	}
 
-  .datepicker-footer {
-    display: flex;
-    justify-content: center;
-    background: $gray-300;
-    padding: $input-padding-y-sm 0;
-    border-top: 1px solid $gray-300;
-  }
+	.datepicker-footer {
+		display: flex;
+		justify-content: center;
+		background: $gray-300;
+		padding: $input-padding-y-sm 0;
+		border-top: 1px solid $gray-300;
+	}
 }
 
 ngb-timepicker {
-  .ngb-tp-input-container,
-  .ngb-tp-meridian {
-    input,
-    button {
-      padding: $input-padding-y-sm * 0.5 $input-padding-x-sm * 0.5;
-    }
+	.ngb-tp-input-container,
+	.ngb-tp-meridian {
+		input,
+		button {
+			padding: $input-padding-y-sm * 0.5 $input-padding-x-sm * 0.5;
+		}
 
-    button {
-      margin: 0;
-      background: white;
-      border-color: $input-border-color;
-    }
-  }
+		button {
+			margin: 0;
+			background: white;
+			border-color: $input-border-color;
+		}
+	}
 
-  .ngb-tp-input-container {
-    flex-basis: 2rem;
-  }
+	.ngb-tp-input-container {
+		flex-basis: 2rem;
+	}
 
-  .ngb-tp {
-    justify-content: center;
-  }
+	.ngb-tp {
+		justify-content: center;
+	}
 }

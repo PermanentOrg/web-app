@@ -1,35 +1,35 @@
 @import 'variables';
 
 :host {
-  display: block;
-  width: 100%;
+	display: block;
+	width: 100%;
 }
 
 .header {
-  @include tabbedDialogHeader($PR-purple);
+	@include tabbedDialogHeader($PR-purple);
 }
 
 .settings-content {
-  @include tabbedDialogContent(560px);
+	@include tabbedDialogContent(560px);
 }
 
 .settings-tabs {
-  @include tabbedDialogNav($PR-purple, 'settings-tab');
+	@include tabbedDialogNav($PR-purple, 'settings-tab');
 }
 
 .settings-panel {
-  @include tabbedDialogPanel;
+	@include tabbedDialogPanel;
 }
 
 .panel-title {
-  @include tabbedDialogPanelTitle;
+	@include tabbedDialogPanelTitle;
 }
 
 .dialog-form {
-  @include tabbedDialogPanelForm;
+	@include tabbedDialogPanelForm;
 }
 
 .btn:focus {
-  box-shadow: none;
-  border: none;
+	box-shadow: none;
+	border: none;
 }

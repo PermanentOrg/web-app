@@ -1,9 +1,9 @@
 /* @format */
 import { Component } from '@angular/core';
 import {
-  UntypedFormGroup,
-  UntypedFormBuilder,
-  Validators,
+	UntypedFormGroup,
+	UntypedFormBuilder,
+	Validators,
 } from '@angular/forms';
 import { APP_CONFIG } from '@root/app/app.config';
 import { AccountVO } from '@root/app/models';
@@ -16,87 +16,87 @@ import { PledgeData } from '../new-pledge/new-pledge.component';
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
 @Component({
-  selector: 'pr-claim-storage',
-  templateUrl: './claim-storage.component.html',
-  styleUrls: ['./claim-storage.component.scss'],
-  standalone: false,
+	selector: 'pr-claim-storage',
+	templateUrl: './claim-storage.component.html',
+	styleUrls: ['./claim-storage.component.scss'],
+	standalone: false,
 })
 export class ClaimStorageComponent {
-  public signupForm: UntypedFormGroup;
-  public pledge: PledgeData = this.pledgeService.currentPledgeData;
+	public signupForm: UntypedFormGroup;
+	public pledge: PledgeData = this.pledgeService.currentPledgeData;
 
-  public waiting: boolean;
-  public storageAmount: number;
+	public waiting: boolean;
+	public storageAmount: number;
 
-  constructor(
-    fb: UntypedFormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private api: ApiService,
-    private accountService: AccountService,
-    private pledgeService: PledgeService,
-  ) {
-    if (!pledgeService.currentPledgeData) {
-      this.router.navigate(['..'], { relativeTo: this.route });
-      return this;
-    } else if (!pledgeService.currentPledgeData.timestamp) {
-      this.router.navigate(['..', 'missing'], { relativeTo: this.route });
-      return this;
-    }
+	constructor(
+		fb: UntypedFormBuilder,
+		private route: ActivatedRoute,
+		private router: Router,
+		private api: ApiService,
+		private accountService: AccountService,
+		private pledgeService: PledgeService,
+	) {
+		if (!pledgeService.currentPledgeData) {
+			this.router.navigate(['..'], { relativeTo: this.route });
+			return this;
+		} else if (!pledgeService.currentPledgeData.timestamp) {
+			this.router.navigate(['..', 'missing'], { relativeTo: this.route });
+			return this;
+		}
 
-    this.pledge = pledgeService.currentPledgeData;
+		this.pledge = pledgeService.currentPledgeData;
 
-    this.signupForm = fb.group({
-      email: [this.pledge.email || '', [Validators.required, Validators.email]],
-      name: [this.pledge.name || '', Validators.required],
-      password: [
-        '',
-        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
-      ],
-      agreed: [false, [Validators.requiredTrue]],
-      optIn: [true],
-    });
-  }
+		this.signupForm = fb.group({
+			email: [this.pledge.email || '', [Validators.required, Validators.email]],
+			name: [this.pledge.name || '', Validators.required],
+			password: [
+				'',
+				[Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
+			],
+			agreed: [false, [Validators.requiredTrue]],
+			optIn: [true],
+		});
+	}
 
-  async onSubmit(formValue: any) {
-    this.waiting = true;
+	async onSubmit(formValue: any) {
+		this.waiting = true;
 
-    this.accountService
-      .signUp(
-        formValue.email,
-        formValue.name,
-        formValue.password,
-        formValue.password,
-        formValue.agreed,
-        formValue.optIn,
-        null,
-        null,
-        true,
-      )
-      .then(async (account: AccountVO) => {
-        await this.pledgeService.linkAccount(account);
-        await this.accountService.logIn(
-          formValue.email,
-          formValue.password,
-          true,
-          true,
-        );
+		this.accountService
+			.signUp(
+				formValue.email,
+				formValue.name,
+				formValue.password,
+				formValue.password,
+				formValue.agreed,
+				formValue.optIn,
+				null,
+				null,
+				true,
+			)
+			.then(async (account: AccountVO) => {
+				await this.pledgeService.linkAccount(account);
+				await this.accountService.logIn(
+					formValue.email,
+					formValue.password,
+					true,
+					true,
+				);
 
-        const billingVo = this.pledgeService.createBillingPaymentVo(account);
+				const billingVo = this.pledgeService.createBillingPaymentVo(account);
 
-        const billingResponse = await this.api.billing.claimPledge(
-          billingVo,
-          this.pledgeService.getPledgeId(),
-        );
+				const billingResponse = await this.api.billing.claimPledge(
+					billingVo,
+					this.pledgeService.getPledgeId(),
+				);
 
-        this.waiting = false;
+				this.waiting = false;
 
-        if (billingResponse.isSuccessful) {
-          this.router.navigate(['..', 'done'], { relativeTo: this.route });
-        }
-      })
-      .catch((err) => {
-        this.waiting = false;
-      });
-  }
+				if (billingResponse.isSuccessful) {
+					this.router.navigate(['..', 'done'], { relativeTo: this.route });
+				}
+			})
+			.catch((err) => {
+				this.waiting = false;
+			});
+	}
 }

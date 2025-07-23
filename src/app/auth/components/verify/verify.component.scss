@@ -1,51 +1,51 @@
 @import 'fonts';
 
 :host {
-  position: relative;
+	position: relative;
 }
 
 form {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 .page-title {
-  font-family: 'UsualLight', sans-serif;
-  font-size: 32px;
-  line-height: 32px;
-  color: white;
-  line-height: 48px;
-  font-weight: 350;
-  margin-bottom: 50px;
-  padding: 0;
-  width: 250px;
-  margin-left: 8px;
+	font-family: 'UsualLight', sans-serif;
+	font-size: 32px;
+	line-height: 32px;
+	color: white;
+	line-height: 48px;
+	font-weight: 350;
+	margin-bottom: 50px;
+	padding: 0;
+	width: 250px;
+	margin-left: 8px;
 }
 
 .verify-text {
-  font-family: 'UsualRegular', sans-serif;
-  font-size: 14px;
-  line-height: 22px;
-  color: white;
-  margin-bottom: 36px;
-  width: 334px;
+	font-family: 'UsualRegular', sans-serif;
+	font-size: 14px;
+	line-height: 22px;
+	color: white;
+	margin-bottom: 36px;
+	width: 334px;
 }
 
 .captcha {
-  text-align: left;
+	text-align: left;
 
-  re-captcha {
-    display: flex;
-    align-items: center;
-  }
+	re-captcha {
+		display: flex;
+		align-items: center;
+	}
 
-  & > p {
-    font-family: 'UsualRegular', sans-serif;
-    color: white;
-    margin-bottom: 32px;
-  }
+	& > p {
+		font-family: 'UsualRegular', sans-serif;
+		color: white;
+		margin-bottom: 32px;
+	}
 }
 
 .input-container {
-  margin-bottom: 32px;
+	margin-bottom: 32px;
 }

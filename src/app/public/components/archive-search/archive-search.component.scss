@@ -3,120 +3,120 @@
 $min-input-width: 18rem;
 
 @keyframes fadein {
-  from {
-    opacity: 0;
-  }
+	from {
+		opacity: 0;
+	}
 
-  to {
-    opacity: 1;
-  }
+	to {
+		opacity: 1;
+	}
 }
 
 :host {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  z-index: 5;
+	display: flex;
+	align-items: center;
+	margin-left: auto;
+	z-index: 5;
 }
 
 form {
-  display: flex;
-  margin: 0 !important;
-  padding: 0;
-  max-width: 700px !important;
-  width: 700px;
+	display: flex;
+	margin: 0 !important;
+	padding: 0;
+	max-width: 700px !important;
+	width: 700px;
 
-  input {
-    background: none;
-    box-shadow: none;
-    border: 0px solid;
-    padding: 0.25rem 0;
-  }
+	input {
+		background: none;
+		box-shadow: none;
+		border: 0px solid;
+		padding: 0.25rem 0;
+	}
 }
 
 .search-box-shadow {
-  display: none;
+	display: none;
 }
 
 .search-box-input {
-  min-width: $min-input-width;
-  position: relative;
-  display: flex;
+	min-width: $min-input-width;
+	position: relative;
+	display: flex;
 
-  .fade-ring-loader {
-    position: absolute;
-    top: 9px;
-    right: 0;
-  }
-  &.gallery {
-    min-width: auto;
-    form {
-      max-width: 100%;
-    }
-    input {
-      &::placeholder {
-        color: $PR-blue;
-      }
-      width: 100%;
-      outline: none;
-      color: $PR-blue;
-      box-shadow: none;
-      border-color: $PR-blue;
-    }
-  }
+	.fade-ring-loader {
+		position: absolute;
+		top: 9px;
+		right: 0;
+	}
+	&.gallery {
+		min-width: auto;
+		form {
+			max-width: 100%;
+		}
+		input {
+			&::placeholder {
+				color: $PR-blue;
+			}
+			width: 100%;
+			outline: none;
+			color: $PR-blue;
+			box-shadow: none;
+			border-color: $PR-blue;
+		}
+	}
 }
 
 @media screen and (max-width: 767px) {
-  .search-box-button:not(.gallery) {
-    display: flex;
-  }
+	.search-box-button:not(.gallery) {
+		display: flex;
+	}
 }
 
 :host.search-box-active {
-  background: $PR-blue;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-  width: auto;
-  z-index: 5;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0px 5px;
+	background: $PR-blue;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100px;
+	width: auto;
+	z-index: 5;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0px 5px;
 
-  @media screen and (min-width: 801px) {
-    width: 800px;
-    margin: 0 auto;
-    left: auto;
-    right: auto;
-  }
+	@media screen and (min-width: 801px) {
+		width: 800px;
+		margin: 0 auto;
+		left: auto;
+		right: auto;
+	}
 
-  .search-box-input {
-    display: block;
-    flex: 1 1 auto;
-    margin-right: 5px;
-  }
+	.search-box-input {
+		display: block;
+		flex: 1 1 auto;
+		margin-right: 5px;
+	}
 
-  .search-box-button {
-    display: flex;
-  }
+	.search-box-button {
+		display: flex;
+	}
 
-  .search-box-button,
-  .search-box-input {
-    animation-name: fadein;
-    animation-duration: 0.35s;
-    animation-timing-function: ease;
-  }
+	.search-box-button,
+	.search-box-input {
+		animation-name: fadein;
+		animation-duration: 0.35s;
+		animation-timing-function: ease;
+	}
 }
 
 .clear-icon {
-  cursor: pointer;
-  margin-top: 5px;
-  margin-left: 5px;
+	cursor: pointer;
+	margin-top: 5px;
+	margin-left: 5px;
 }
 
 .search-icon {
-  margin-right: 5px;
+	margin-right: 5px;
 }

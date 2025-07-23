@@ -1,13 +1,13 @@
 <!-- @format -->
 <div class="announcement" *ngIf="active">
-  <div class="announcement-content">
-    <span class="announcement-text" [innerHTML]="event.message"></span>
-    <div
-      class="dismiss-button"
-      title="Hide this announcement"
-      (click)="dismiss()"
-    >
-      <fa-icon [icon]="['fas', 'window-close']"></fa-icon>
-    </div>
-  </div>
+	<div class="announcement-content">
+		<span class="announcement-text" [innerHTML]="event.message"></span>
+		<div
+			class="dismiss-button"
+			title="Hide this announcement"
+			(click)="dismiss()"
+		>
+			<fa-icon [icon]="['fas', 'window-close']"></fa-icon>
+		</div>
+	</div>
 </div>

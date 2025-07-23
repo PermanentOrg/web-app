@@ -1,16 +1,16 @@
 /* @format */
 import {
-  Component,
-  Inject,
-  ViewChildren,
-  AfterViewInit,
-  OnDestroy,
-  ElementRef,
-  QueryList,
+	Component,
+	Inject,
+	ViewChildren,
+	AfterViewInit,
+	OnDestroy,
+	ElementRef,
+	QueryList,
 } from '@angular/core';
 import {
-  HasSubscriptions,
-  unsubscribeAll,
+	HasSubscriptions,
+	unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { NotificationVOData } from '@models/notification-vo';
@@ -19,46 +19,46 @@ import { NotificationComponent } from '../notification/notification.component';
 import { NotificationService } from '../../services/notification.service';
 
 @Component({
-  selector: 'pr-notification-dialog',
-  templateUrl: './notification-dialog.component.html',
-  styleUrls: ['./notification-dialog.component.scss'],
-  standalone: false,
+	selector: 'pr-notification-dialog',
+	templateUrl: './notification-dialog.component.html',
+	styleUrls: ['./notification-dialog.component.scss'],
+	standalone: false,
 })
 export class NotificationDialogComponent
-  implements AfterViewInit, OnDestroy, HasSubscriptions
+	implements AfterViewInit, OnDestroy, HasSubscriptions
 {
-  @ViewChildren(NotificationComponent)
-  notificationComponents: QueryList<NotificationComponent>;
+	@ViewChildren(NotificationComponent)
+	notificationComponents: QueryList<NotificationComponent>;
 
-  subscriptions: Subscription[] = [];
-  constructor(
-    @Inject(DIALOG_DATA) public data: any,
-    private dialogRef: DialogRef,
-    public notificationService: NotificationService,
-  ) {}
+	subscriptions: Subscription[] = [];
+	constructor(
+		@Inject(DIALOG_DATA) public data: any,
+		private dialogRef: DialogRef,
+		public notificationService: NotificationService,
+	) {}
 
-  ngAfterViewInit(): void {
-    this.markNewAsSeen();
-  }
+	ngAfterViewInit(): void {
+		this.markNewAsSeen();
+	}
 
-  ngOnDestroy(): void {
-    unsubscribeAll(this.subscriptions);
-  }
+	ngOnDestroy(): void {
+		unsubscribeAll(this.subscriptions);
+	}
 
-  onDoneClick() {
-    this.dialogRef.close();
-  }
+	onDoneClick() {
+		this.dialogRef.close();
+	}
 
-  onNotificationClick(notification: NotificationVOData) {
-    this.onDoneClick();
-    this.notificationService.goToNotification(notification);
-  }
+	onNotificationClick(notification: NotificationVOData) {
+		this.onDoneClick();
+		this.notificationService.goToNotification(notification);
+	}
 
-  markNewAsSeen(): void {
-    this.notificationService.markAsSeen();
-  }
+	markNewAsSeen(): void {
+		this.notificationService.markAsSeen();
+	}
 
-  markAllAsRead(): void {
-    this.notificationService.markAll('status.notification.read');
-  }
+	markAllAsRead(): void {
+		this.notificationService.markAll('status.notification.read');
+	}
 }

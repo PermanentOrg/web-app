@@ -21,63 +21,63 @@ import { OrDividerComponent } from './components/or-divider/or-divider.component
 import { AuthGuard } from './guards/auth.guard';
 
 const unauthenticatedRoutes: Routes = [
-  { path: 'login', component: LoginComponent, data: { title: 'Log In' } },
-  {
-    path: 'signup',
-    component: SignupComponent,
-    data: { title: 'Sign Up' },
-    resolve: { shareInviteData: ShareInviteResolveService },
-  },
-  { path: 'mfa', component: MfaComponent, data: { title: 'Verify' } },
-  {
-    path: 'forgot',
-    component: ForgotPasswordComponent,
-    data: { title: 'Forgot Password' },
-  },
-  { path: '**', redirectTo: 'login' },
+	{ path: 'login', component: LoginComponent, data: { title: 'Log In' } },
+	{
+		path: 'signup',
+		component: SignupComponent,
+		data: { title: 'Sign Up' },
+		resolve: { shareInviteData: ShareInviteResolveService },
+	},
+	{ path: 'mfa', component: MfaComponent, data: { title: 'Verify' } },
+	{
+		path: 'forgot',
+		component: ForgotPasswordComponent,
+		data: { title: 'Forgot Password' },
+	},
+	{ path: '**', redirectTo: 'login' },
 ];
 
 const verifyRoutes: Routes = [
-  { path: '', component: VerifyComponent, data: { title: 'Verify' } },
-  {
-    path: ':email/:code',
-    component: VerifyComponent,
-    data: { title: 'Verify' },
-  },
+	{ path: '', component: VerifyComponent, data: { title: 'Verify' } },
+	{
+		path: ':email/:code',
+		component: VerifyComponent,
+		data: { title: 'Verify' },
+	},
 ];
 
 const routes: Routes = [
-  {
-    path: 'verify',
-    component: AuthComponent,
-    children: verifyRoutes,
-  },
-  {
-    path: '',
-    canActivate: [AuthGuard],
-    component: AuthComponent,
-    children: unauthenticatedRoutes,
-  },
+	{
+		path: 'verify',
+		component: AuthComponent,
+		children: verifyRoutes,
+	},
+	{
+		path: '',
+		canActivate: [AuthGuard],
+		component: AuthComponent,
+		children: unauthenticatedRoutes,
+	},
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-    SharedModule,
-    AnnouncementModule,
-    RecaptchaModule,
-    ComponentsModule,
-  ],
-  declarations: [
-    LoginComponent,
-    AuthComponent,
-    MfaComponent,
-    VerifyComponent,
-    SignupComponent,
-    ForgotPasswordComponent,
-    OrDividerComponent,
-    PasswordStrengthComponent,
-  ],
-  providers: [ShareInviteResolveService],
+	imports: [
+		RouterModule.forChild(routes),
+		SharedModule,
+		AnnouncementModule,
+		RecaptchaModule,
+		ComponentsModule,
+	],
+	declarations: [
+		LoginComponent,
+		AuthComponent,
+		MfaComponent,
+		VerifyComponent,
+		SignupComponent,
+		ForgotPasswordComponent,
+		OrDividerComponent,
+		PasswordStrengthComponent,
+	],
+	providers: [ShareInviteResolveService],
 })
 export class AuthRoutingModule {}

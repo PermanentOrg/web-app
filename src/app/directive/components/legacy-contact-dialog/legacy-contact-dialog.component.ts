@@ -5,27 +5,27 @@ import { EventService } from '@shared/services/event/event.service';
 import { DialogState } from '../directive-dialog/directive-dialog.component';
 
 @Component({
-  selector: 'pr-legacy-contact-dialog',
-  templateUrl: './legacy-contact-dialog.component.html',
-  styleUrls: ['./legacy-contact-dialog.component.scss'],
-  standalone: false,
+	selector: 'pr-legacy-contact-dialog',
+	templateUrl: './legacy-contact-dialog.component.html',
+	styleUrls: ['./legacy-contact-dialog.component.scss'],
+	standalone: false,
 })
 export class LegacyContactDialogComponent {
-  constructor(private event: EventService) {
-    this.event.dispatch({
-      entity: 'account',
-      action: 'open_legacy_contact',
-    });
-  }
-  public mode: DialogState = 'display';
-  public legacyContact: LegacyContact;
+	constructor(private event: EventService) {
+		this.event.dispatch({
+			entity: 'account',
+			action: 'open_legacy_contact',
+		});
+	}
+	public mode: DialogState = 'display';
+	public legacyContact: LegacyContact;
 
-  public setLegacyContact(legacyContact: LegacyContact): void {
-    this.legacyContact = Object.assign({}, legacyContact);
-  }
+	public setLegacyContact(legacyContact: LegacyContact): void {
+		this.legacyContact = Object.assign({}, legacyContact);
+	}
 
-  public saveEditedLegacyContact(legacyContact: LegacyContact): void {
-    this.setLegacyContact(legacyContact);
-    this.mode = 'display';
-  }
+	public saveEditedLegacyContact(legacyContact: LegacyContact): void {
+		this.setLegacyContact(legacyContact);
+		this.mode = 'display';
+	}
 }
