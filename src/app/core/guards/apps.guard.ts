@@ -1,46 +1,46 @@
 import { Injectable } from '@angular/core';
 import {
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
+	ActivatedRouteSnapshot,
+	RouterStateSnapshot,
+	Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AccountService } from '@shared/services/account/account.service';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class AppsGuard {
-  constructor(
-    private account: AccountService,
-    private router: Router,
-  ) {}
+	constructor(
+		private account: AccountService,
+		private router: Router,
+	) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    const queryParams = next.queryParams;
+	canActivate(
+		next: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Observable<boolean> | Promise<boolean> | boolean {
+		const queryParams = next.queryParams;
 
-    if (queryParams && queryParams.redirect === 'facebook') {
-      this.router.navigate(['/apps']);
-      return false;
-    } else {
-      return true;
-    }
-  }
+		if (queryParams && queryParams.redirect === 'facebook') {
+			this.router.navigate(['/apps']);
+			return false;
+		} else {
+			return true;
+		}
+	}
 
-  canActivateChild(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    const queryParams = next.queryParams;
+	canActivateChild(
+		next: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Observable<boolean> | Promise<boolean> | boolean {
+		const queryParams = next.queryParams;
 
-    if (queryParams && queryParams.redirect === 'facebook') {
-      this.router.navigate(['/apps']);
-      return false;
-    } else {
-      return true;
-    }
-  }
+		if (queryParams && queryParams.redirect === 'facebook') {
+			this.router.navigate(['/apps']);
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

@@ -5,16 +5,16 @@ import { ApiService } from '@shared/services/api/api.service';
 import { SearchBoxComponent } from './search-box.component';
 
 describe('SearchBoxComponent', () => {
-  let shallow: Shallow<SearchBoxComponent>;
+	let shallow: Shallow<SearchBoxComponent>;
 
-  beforeEach(() => {
-    shallow = new Shallow(SearchBoxComponent, PublicModule);
-    shallow.mock(ApiService, {});
-  });
+	beforeEach(() => {
+		shallow = new Shallow(SearchBoxComponent, PublicModule);
+		shallow.mock(ApiService, {});
+	});
 
-  it('should exist', async () => {
-    const { instance } = await shallow.render();
+	it('should exist', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance).toBeTruthy();
-  });
+		expect(instance).toBeTruthy();
+	});
 });

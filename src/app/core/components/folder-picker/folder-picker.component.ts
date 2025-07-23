@@ -11,232 +11,232 @@ import { MessageService } from '@shared/services/message/message.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 
 export enum FolderPickerOperations {
-  Move = 1,
-  Copy,
-  ChooseRecord,
+	Move = 1,
+	Copy,
+	ChooseRecord,
 }
 
 @Component({
-  selector: 'pr-folder-picker',
-  templateUrl: './folder-picker.component.html',
-  styleUrls: ['./folder-picker.component.scss'],
-  standalone: false,
+	selector: 'pr-folder-picker',
+	templateUrl: './folder-picker.component.html',
+	styleUrls: ['./folder-picker.component.scss'],
+	standalone: false,
 })
 export class FolderPickerComponent implements OnDestroy {
-  public currentFolder: FolderVO;
-  public chooseFolderDeferred: Deferred;
-  public operation: FolderPickerOperations;
-  public operationName: string;
+	public currentFolder: FolderVO;
+	public chooseFolderDeferred: Deferred;
+	public operation: FolderPickerOperations;
+	public operationName: string;
 
-  public savePromise: Promise<any>;
-  public visible: boolean;
-  public waiting: boolean;
-  public saving: boolean;
-  public isRootFolder = true;
-  public allowRecords = false;
+	public savePromise: Promise<any>;
+	public visible: boolean;
+	public waiting: boolean;
+	public saving: boolean;
+	public isRootFolder = true;
+	public allowRecords = false;
 
-  public selectedRecord: ItemVO;
+	public selectedRecord: ItemVO;
 
-  public filterFolderLinkIds: number[];
+	public filterFolderLinkIds: number[];
 
-  private cancelResetTimeout: ReturnType<typeof setTimeout>;
+	private cancelResetTimeout: ReturnType<typeof setTimeout>;
 
-  constructor(
-    private dataService: DataService,
-    private api: ApiService,
-    private message: MessageService,
-    private folderPickerService: FolderPickerService,
-    private prompt: PromptService,
-  ) {
-    this.folderPickerService.registerComponent(this);
-  }
+	constructor(
+		private dataService: DataService,
+		private api: ApiService,
+		private message: MessageService,
+		private folderPickerService: FolderPickerService,
+		private prompt: PromptService,
+	) {
+		this.folderPickerService.registerComponent(this);
+	}
 
-  show(
-    startingFolder: FolderVO,
-    operation: FolderPickerOperations,
-    savePromise?: Promise<any>,
-    filterFolderLinkIds: number[] = null,
-    allowRecords = false,
-  ) {
-    if (this.cancelResetTimeout) {
-      clearTimeout(this.cancelResetTimeout);
-      this.cancelResetTimeout = null;
-    }
-    this.visible = true;
-    this.operation = operation;
-    this.allowRecords = allowRecords;
+	show(
+		startingFolder: FolderVO,
+		operation: FolderPickerOperations,
+		savePromise?: Promise<any>,
+		filterFolderLinkIds: number[] = null,
+		allowRecords = false,
+	) {
+		if (this.cancelResetTimeout) {
+			clearTimeout(this.cancelResetTimeout);
+			this.cancelResetTimeout = null;
+		}
+		this.visible = true;
+		this.operation = operation;
+		this.allowRecords = allowRecords;
 
-    this.savePromise = savePromise;
+		this.savePromise = savePromise;
 
-    this.filterFolderLinkIds = filterFolderLinkIds;
+		this.filterFolderLinkIds = filterFolderLinkIds;
 
-    switch (operation) {
-      case FolderPickerOperations.Move:
-        this.operationName = 'Move';
-        break;
-      case FolderPickerOperations.Copy:
-        this.operationName = 'Copy';
-        break;
-      case FolderPickerOperations.ChooseRecord:
-        this.operationName = 'Choose file';
-        break;
-    }
+		switch (operation) {
+			case FolderPickerOperations.Move:
+				this.operationName = 'Move';
+				break;
+			case FolderPickerOperations.Copy:
+				this.operationName = 'Copy';
+				break;
+			case FolderPickerOperations.ChooseRecord:
+				this.operationName = 'Choose file';
+				break;
+		}
 
-    this.setFolder(startingFolder).then(() => {
-      this.loadCurrentFolderChildData();
-    });
+		this.setFolder(startingFolder).then(() => {
+			this.loadCurrentFolderChildData();
+		});
 
-    this.chooseFolderDeferred = new Deferred();
+		this.chooseFolderDeferred = new Deferred();
 
-    return this.chooseFolderDeferred.promise;
-  }
+		return this.chooseFolderDeferred.promise;
+	}
 
-  onItemClick(item: ItemVO, evt: Event) {
-    if (item instanceof FolderVO) {
-      this.navigate(item);
-    } else {
-      this.showRecord(item);
-    }
+	onItemClick(item: ItemVO, evt: Event) {
+		if (item instanceof FolderVO) {
+			this.navigate(item);
+		} else {
+			this.showRecord(item);
+		}
 
-    evt.stopPropagation();
-    evt.preventDefault();
-    return false;
-  }
+		evt.stopPropagation();
+		evt.preventDefault();
+		return false;
+	}
 
-  async navigate(folder: FolderVO) {
-    await this.setFolder(folder);
-    this.loadCurrentFolderChildData();
-  }
+	async navigate(folder: FolderVO) {
+		await this.setFolder(folder);
+		this.loadCurrentFolderChildData();
+	}
 
-  showRecord(record: RecordVO) {
-    this.selectedRecord = record;
-  }
+	showRecord(record: RecordVO) {
+		this.selectedRecord = record;
+	}
 
-  async setFolder(folder: FolderVO) {
-    this.waiting = true;
-    try {
-      const folderResponse = await this.api.folder
-        .navigate(
-          new FolderVO({
-            folder_linkId: folder.folder_linkId,
-            folderId: folder.folderId,
-            archiveNbr: folder.archiveNbr,
-          }),
-        )
-        .toPromise();
-      this.currentFolder = folderResponse.getFolderVO(true);
-      this.isRootFolder = this.currentFolder.type.includes(
-        'type.folder.root.root',
-      );
-      if (!this.allowRecords) {
-        remove(this.currentFolder.ChildItemVOs, 'isRecord');
-      }
-      if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
-        remove(this.currentFolder.ChildItemVOs, (f: ItemVO) =>
-          this.filterFolderLinkIds.includes(f.folder_linkId),
-        );
-      }
-      remove(this.currentFolder.ChildItemVOs, (item) =>
-        item.type.includes('type.folder.root.app'),
-      );
-      remove(this.currentFolder.ChildItemVOs, (item) =>
-        item.type.includes('type.folder.root.vault'),
-      );
-    } catch (err) {
-      if (err instanceof FolderResponse) {
-        this.message.showError({ message: err.getMessage(), translate: true });
-      } else {
-        throw err;
-      }
-    } finally {
-      this.waiting = false;
-    }
-  }
+	async setFolder(folder: FolderVO) {
+		this.waiting = true;
+		try {
+			const folderResponse = await this.api.folder
+				.navigate(
+					new FolderVO({
+						folder_linkId: folder.folder_linkId,
+						folderId: folder.folderId,
+						archiveNbr: folder.archiveNbr,
+					}),
+				)
+				.toPromise();
+			this.currentFolder = folderResponse.getFolderVO(true);
+			this.isRootFolder = this.currentFolder.type.includes(
+				'type.folder.root.root',
+			);
+			if (!this.allowRecords) {
+				remove(this.currentFolder.ChildItemVOs, 'isRecord');
+			}
+			if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
+				remove(this.currentFolder.ChildItemVOs, (f: ItemVO) =>
+					this.filterFolderLinkIds.includes(f.folder_linkId),
+				);
+			}
+			remove(this.currentFolder.ChildItemVOs, (item) =>
+				item.type.includes('type.folder.root.app'),
+			);
+			remove(this.currentFolder.ChildItemVOs, (item) =>
+				item.type.includes('type.folder.root.vault'),
+			);
+		} catch (err) {
+			if (err instanceof FolderResponse) {
+				this.message.showError({ message: err.getMessage(), translate: true });
+			} else {
+				throw err;
+			}
+		} finally {
+			this.waiting = false;
+		}
+	}
 
-  onBackClick() {
-    if (this.selectedRecord) {
-      this.selectedRecord = null;
-    } else {
-      this.goToParentFolder();
-    }
-  }
+	onBackClick() {
+		if (this.selectedRecord) {
+			this.selectedRecord = null;
+		} else {
+			this.goToParentFolder();
+		}
+	}
 
-  goToParentFolder() {
-    const parentFolder = new FolderVO({
-      folder_linkId: this.currentFolder.parentFolder_linkId,
-      folderId: this.currentFolder.parentFolderId,
-    });
-    return this.setFolder(parentFolder);
-  }
+	goToParentFolder() {
+		const parentFolder = new FolderVO({
+			folder_linkId: this.currentFolder.parentFolder_linkId,
+			folderId: this.currentFolder.parentFolderId,
+		});
+		return this.setFolder(parentFolder);
+	}
 
-  loadCurrentFolderChildData() {
-    return this.dataService.fetchLeanItems(
-      this.currentFolder.ChildItemVOs,
-      this.currentFolder,
-    );
-  }
+	loadCurrentFolderChildData() {
+		return this.dataService.fetchLeanItems(
+			this.currentFolder.ChildItemVOs,
+			this.currentFolder,
+		);
+	}
 
-  chooseFolder() {
-    if (this.shouldConfirmFolderSelection()) {
-      this.prompt
-        .confirm(
-          'Yes',
-          `This folder is publicly accessible by others. Are you sure you would like to ${this.operationName.toLocaleLowerCase()} to this location?`,
-        )
-        .then(() => {
-          this.setChosenFolder();
-        })
-        .catch(() => {
-          // Just exit out of confirm box
-        });
-    } else {
-      this.setChosenFolder();
-    }
-  }
+	chooseFolder() {
+		if (this.shouldConfirmFolderSelection()) {
+			this.prompt
+				.confirm(
+					'Yes',
+					`This folder is publicly accessible by others. Are you sure you would like to ${this.operationName.toLocaleLowerCase()} to this location?`,
+				)
+				.then(() => {
+					this.setChosenFolder();
+				})
+				.catch(() => {
+					// Just exit out of confirm box
+				});
+		} else {
+			this.setChosenFolder();
+		}
+	}
 
-  hide() {
-    this.visible = false;
-    this.selectedRecord = null;
+	hide() {
+		this.visible = false;
+		this.selectedRecord = null;
 
-    this.cancelResetTimeout = setTimeout(() => {
-      this.currentFolder = null;
-      this.chooseFolderDeferred = null;
-      this.isRootFolder = true;
-      this.cancelResetTimeout = null;
-    }, 500);
-  }
+		this.cancelResetTimeout = setTimeout(() => {
+			this.currentFolder = null;
+			this.chooseFolderDeferred = null;
+			this.isRootFolder = true;
+			this.cancelResetTimeout = null;
+		}, 500);
+	}
 
-  ngOnDestroy() {
-    this.folderPickerService.unregisterComponent();
-  }
+	ngOnDestroy() {
+		this.folderPickerService.unregisterComponent();
+	}
 
-  public cannotCopyToFolder(): boolean {
-    return this.isRootFolder || this.currentFolder?.type.includes('root.app');
-  }
+	public cannotCopyToFolder(): boolean {
+		return this.isRootFolder || this.currentFolder?.type.includes('root.app');
+	}
 
-  protected setChosenFolder(): void {
-    if (this.selectedRecord) {
-      this.chooseFolderDeferred.resolve(this.selectedRecord);
-    } else if (this.currentFolder) {
-      this.chooseFolderDeferred.resolve(this.currentFolder);
-    }
-    if (!this.savePromise) {
-      this.hide();
-    } else {
-      this.saving = true;
-      this.savePromise
-        .then(() => {
-          this.saving = false;
-          this.hide();
-        })
-        .catch(() => {
-          this.saving = false;
-          this.hide();
-        });
-    }
-  }
+	protected setChosenFolder(): void {
+		if (this.selectedRecord) {
+			this.chooseFolderDeferred.resolve(this.selectedRecord);
+		} else if (this.currentFolder) {
+			this.chooseFolderDeferred.resolve(this.currentFolder);
+		}
+		if (!this.savePromise) {
+			this.hide();
+		} else {
+			this.saving = true;
+			this.savePromise
+				.then(() => {
+					this.saving = false;
+					this.hide();
+				})
+				.catch(() => {
+					this.saving = false;
+					this.hide();
+				});
+		}
+	}
 
-  protected shouldConfirmFolderSelection(): boolean {
-    return this.currentFolder.type.endsWith('public');
-  }
+	protected shouldConfirmFolderSelection(): boolean {
+		return this.currentFolder.type.endsWith('public');
+	}
 }

@@ -1,132 +1,132 @@
 <!-- @format -->
 <h1 class="page-title" *ngIf="!isForShareInvite">Create your new account</h1>
 <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
-  <h1 class="page-title" *ngIf="isForShareInvite">
-    {{ shareFromName }} has shared <em>{{ shareItem.displayName }}</em> with you
-  </h1>
-  <div *ngIf="showInviteCode" class="invite-code-input input-container">
-    <pr-form-input-glam
-      fieldName="invitation"
-      placeholder="Invitation code (optional)"
-      [control]="signupForm.controls['invitation']"
-      [config]="{
-        autocomplete: 'off',
-        autocorrect: 'off',
-        autocapitalize: 'off',
-        spellcheck: 'off'
-      }"
-      [variant]="'dark'"
-    ></pr-form-input-glam>
-  </div>
-  <div class="name-input input-container">
-    <pr-form-input-glam
-      [variant]="'dark'"
-      fieldName="name"
-      placeholder="Full name"
-      [control]="signupForm.controls['name']"
-      [config]="{
-        autocomplete: 'name',
-        autocorrect: 'off',
-        autocapitalize: 'yes',
-        spellcheck: 'off'
-      }"
-    ></pr-form-input-glam>
-  </div>
-  <div class="email-input input-container">
-    <pr-form-input-glam
-      [variant]="'dark'"
-      fieldName="email"
-      placeholder="Email"
-      [control]="signupForm.controls['email']"
-      type="email"
-      [config]="{
-        autocomplete: 'username',
-        autocorrect: 'off',
-        autocapitalize: 'off',
-        spellcheck: 'off'
-      }"
-    ></pr-form-input-glam>
-  </div>
-  <div class="password-input input-container">
-    <pr-form-input-glam
-      [variant]="'dark'"
-      type="password"
-      fieldName="password"
-      placeholder="Password (min. 8 chars)"
-      [control]="signupForm.controls['password']"
-      [config]="{
-        autocomplete: 'new-password',
-        autocorrect: 'off',
-        autocapitalize: 'off',
-        spellcheck: 'off'
-      }"
-    ></pr-form-input-glam>
-    <pr-password-strength
-      *ngIf="signupForm.controls['password']?.value"
-      [password]="signupForm.controls['password']?.value"
-    ></pr-password-strength>
-  </div>
-  <div class="input-container confirm-password-input">
-    <pr-form-input-glam
-      [variant]="'dark'"
-      type="password"
-      fieldName="confirm"
-      placeholder="Confirm password"
-      [control]="signupForm.controls['confirm']"
-      [config]="{
-        autocomplete: 'new-password',
-        autocorrect: 'off',
-        autocapitalize: 'off',
-        spellcheck: 'off',
-        validateDirty: true
-      }"
-    ></pr-form-input-glam>
-  </div>
-  <div class="auth-options">
-    <div class="checkbox-container">
-      <label class="form-check-label">
-        I agree to receive updates via email
-      </label>
-      <pr-toggle
-        [isChecked]="receiveUpdatesViaEmail"
-        (isCheckedChange)="receiveUpdatesViaEmail = $event"
-      ></pr-toggle>
-    </div>
-    <div class="checkbox-container">
-      <label class="form-check-label" for="terms">
-        I agree to the &nbsp;
-        <a
-          href="https://www.permanent.org/terms/"
-          target="_blank"
-          aria-label="Permanent.org Terms of Service"
-          >Terms of Service</a
-        >
-      </label>
-      <pr-toggle
-        [isChecked]="agreedTerms"
-        (isCheckedChange)="agreedTerms = $event"
-      ></pr-toggle>
-    </div>
-  </div>
-  <div class="buttons">
-    <pr-button
-      [buttonType]="'submit'"
-      [variant]="'secondary'"
-      [size]="'fill'"
-      [icon]="'auth/sign-up'"
-      [orientation]="'right'"
-      [style]="{ justifyContent: 'center' }"
-      [disabled]="waiting || signupForm.invalid || !agreedTerms"
-      >Sign Up</pr-button
-    >
-    <pr-or-divider></pr-or-divider>
-    <pr-button
-      [size]="'fill'"
-      (buttonClick)="navigateToAuth()"
-      [icon]="'auth/back'"
-      [style]="{ justifyContent: 'center' }"
-      >Back to sign in</pr-button
-    >
-  </div>
+	<h1 class="page-title" *ngIf="isForShareInvite">
+		{{ shareFromName }} has shared <em>{{ shareItem.displayName }}</em> with you
+	</h1>
+	<div *ngIf="showInviteCode" class="invite-code-input input-container">
+		<pr-form-input-glam
+			fieldName="invitation"
+			placeholder="Invitation code (optional)"
+			[control]="signupForm.controls['invitation']"
+			[config]="{
+				autocomplete: 'off',
+				autocorrect: 'off',
+				autocapitalize: 'off',
+				spellcheck: 'off'
+			}"
+			[variant]="'dark'"
+		></pr-form-input-glam>
+	</div>
+	<div class="name-input input-container">
+		<pr-form-input-glam
+			[variant]="'dark'"
+			fieldName="name"
+			placeholder="Full name"
+			[control]="signupForm.controls['name']"
+			[config]="{
+				autocomplete: 'name',
+				autocorrect: 'off',
+				autocapitalize: 'yes',
+				spellcheck: 'off'
+			}"
+		></pr-form-input-glam>
+	</div>
+	<div class="email-input input-container">
+		<pr-form-input-glam
+			[variant]="'dark'"
+			fieldName="email"
+			placeholder="Email"
+			[control]="signupForm.controls['email']"
+			type="email"
+			[config]="{
+				autocomplete: 'username',
+				autocorrect: 'off',
+				autocapitalize: 'off',
+				spellcheck: 'off'
+			}"
+		></pr-form-input-glam>
+	</div>
+	<div class="password-input input-container">
+		<pr-form-input-glam
+			[variant]="'dark'"
+			type="password"
+			fieldName="password"
+			placeholder="Password (min. 8 chars)"
+			[control]="signupForm.controls['password']"
+			[config]="{
+				autocomplete: 'new-password',
+				autocorrect: 'off',
+				autocapitalize: 'off',
+				spellcheck: 'off'
+			}"
+		></pr-form-input-glam>
+		<pr-password-strength
+			*ngIf="signupForm.controls['password']?.value"
+			[password]="signupForm.controls['password']?.value"
+		></pr-password-strength>
+	</div>
+	<div class="input-container confirm-password-input">
+		<pr-form-input-glam
+			[variant]="'dark'"
+			type="password"
+			fieldName="confirm"
+			placeholder="Confirm password"
+			[control]="signupForm.controls['confirm']"
+			[config]="{
+				autocomplete: 'new-password',
+				autocorrect: 'off',
+				autocapitalize: 'off',
+				spellcheck: 'off',
+				validateDirty: true
+			}"
+		></pr-form-input-glam>
+	</div>
+	<div class="auth-options">
+		<div class="checkbox-container">
+			<label class="form-check-label">
+				I agree to receive updates via email
+			</label>
+			<pr-toggle
+				[isChecked]="receiveUpdatesViaEmail"
+				(isCheckedChange)="receiveUpdatesViaEmail = $event"
+			></pr-toggle>
+		</div>
+		<div class="checkbox-container">
+			<label class="form-check-label" for="terms">
+				I agree to the &nbsp;
+				<a
+					href="https://www.permanent.org/terms/"
+					target="_blank"
+					aria-label="Permanent.org Terms of Service"
+					>Terms of Service</a
+				>
+			</label>
+			<pr-toggle
+				[isChecked]="agreedTerms"
+				(isCheckedChange)="agreedTerms = $event"
+			></pr-toggle>
+		</div>
+	</div>
+	<div class="buttons">
+		<pr-button
+			[buttonType]="'submit'"
+			[variant]="'secondary'"
+			[size]="'fill'"
+			[icon]="'auth/sign-up'"
+			[orientation]="'right'"
+			[style]="{ justifyContent: 'center' }"
+			[disabled]="waiting || signupForm.invalid || !agreedTerms"
+			>Sign Up</pr-button
+		>
+		<pr-or-divider></pr-or-divider>
+		<pr-button
+			[size]="'fill'"
+			(buttonClick)="navigateToAuth()"
+			[icon]="'auth/back'"
+			[style]="{ justifyContent: 'center' }"
+			>Back to sign in</pr-button
+		>
+	</div>
 </form>
 <pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>

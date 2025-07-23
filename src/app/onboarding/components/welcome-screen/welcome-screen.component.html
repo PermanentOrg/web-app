@@ -1,40 +1,40 @@
 <!-- @format  -->
 <div class="welcome-screen">
-  <div
-    *ngIf="pendingArchives.length > 0"
-    class="welcome-message has-invitations"
-  >
-    <h2>Welcome! Let's join your first archive together.</h2>
-    <p>
-      You’ve been invited to collaborate on an archive as an archive member. A
-      Permanent archive is the collection of digital materials about an
-      individual, family or group, or organizational entity. Get started by
-      accepting an invitation, or by creating a new archive of your own.
-    </p>
+	<div
+		*ngIf="pendingArchives.length > 0"
+		class="welcome-message has-invitations"
+	>
+		<h2>Welcome! Let's join your first archive together.</h2>
+		<p>
+			You’ve been invited to collaborate on an archive as an archive member. A
+			Permanent archive is the collection of digital materials about an
+			individual, family or group, or organizational entity. Get started by
+			accepting an invitation, or by creating a new archive of your own.
+		</p>
 
-    <div class="pending-archive-list" style="margin: 0 auto">
-      <strong>Pending invitations:</strong>
-      <pr-archive-small
-        *ngFor="let archive of pendingArchives"
-        [largeOnDesktop]="true"
-        [archive]="archive"
-        [accessRole]="archive.accessRole"
-        [showAccept]="true"
-        [showAcceptMobile]="true"
-        [showDefault]="false"
-        (acceptClick)="selectPendingArchive(archive)"
-        [showRemove]="false"
-      ></pr-archive-small>
-      <br />
-      <br />
-    </div>
+		<div class="pending-archive-list" style="margin: 0 auto">
+			<strong>Pending invitations:</strong>
+			<pr-archive-small
+				*ngFor="let archive of pendingArchives"
+				[largeOnDesktop]="true"
+				[archive]="archive"
+				[accessRole]="archive.accessRole"
+				[showAccept]="true"
+				[showAcceptMobile]="true"
+				[showDefault]="false"
+				(acceptClick)="selectPendingArchive(archive)"
+				[showRemove]="false"
+			></pr-archive-small>
+			<br />
+			<br />
+		</div>
 
-    <div class="create-archive">
-      <a
-        href="javascript:;"
-        (click)="goToScreen(OnboardingScreen.welcomeScreen)"
-        >Create a new archive</a
-      >
-    </div>
-  </div>
+		<div class="create-archive">
+			<a
+				href="javascript:;"
+				(click)="goToScreen(OnboardingScreen.welcomeScreen)"
+				>Create a new archive</a
+			>
+		</div>
+	</div>
 </div>

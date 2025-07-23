@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AuthRoutingModule } from '@auth/auth.routes';
 
 @NgModule({
-  imports: [AuthRoutingModule],
-  declarations: [],
+	imports: [AuthRoutingModule],
+	declarations: [],
 })
 export class AuthModule {}

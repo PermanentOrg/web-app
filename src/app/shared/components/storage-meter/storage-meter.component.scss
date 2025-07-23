@@ -1,45 +1,45 @@
 @import 'variables';
 
 :host {
-  display: block;
-  color: $body-color;
+	display: block;
+	color: $body-color;
 }
 
 $meter-height: 12px;
 
 .space-meter {
-  height: $meter-height;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 2px;
-  background: rgba($PR-purple, 0.3);
-  &-archive {
-    background: #c8c8c8;
-    border-radius: 0px;
-  }
+	height: $meter-height;
+	width: 100%;
+	overflow: hidden;
+	border-radius: 2px;
+	background: rgba($PR-purple, 0.3);
+	&-archive {
+		background: #c8c8c8;
+		border-radius: 0px;
+	}
 
-  .space-meter-inner {
-    height: $meter-height;
-    background: rgba($PR-purple, 1);
-    width: 100%;
-    transform: translateX(-100%);
-    transition: transform 0.5s $tweaked-ease;
-    &-archive {
-      background: #5261b7;
-    }
-  }
+	.space-meter-inner {
+		height: $meter-height;
+		background: rgba($PR-purple, 1);
+		width: 100%;
+		transform: translateX(-100%);
+		transition: transform 0.5s $tweaked-ease;
+		&-archive {
+			background: #5261b7;
+		}
+	}
 }
 
 .space-title {
-  font-size: $font-size-sm;
-  font-weight: 700;
+	font-size: $font-size-sm;
+	font-weight: 700;
 }
 
 .space-label {
-  font-size: $font-size-sm;
-  text-align: right;
-  font-weight: 500;
-  &-archive {
-    color: white;
-  }
+	font-size: $font-size-sm;
+	text-align: right;
+	font-weight: 500;
+	&-archive {
+		color: white;
+	}
 }

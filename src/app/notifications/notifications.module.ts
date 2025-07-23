@@ -6,9 +6,9 @@ import { NotificationComponent } from './components/notification/notification.co
 import { NotificationDialogComponent } from './components/notification-dialog/notification-dialog.component';
 
 @NgModule({
-  declarations: [NotificationComponent, NotificationDialogComponent],
-  imports: [CommonModule, SharedModule],
-  providers: [NotificationService],
-  exports: [NotificationComponent, NotificationDialogComponent],
+	declarations: [NotificationComponent, NotificationDialogComponent],
+	imports: [CommonModule, SharedModule],
+	providers: [NotificationService],
+	exports: [NotificationComponent, NotificationDialogComponent],
 })
 export class NotificationsModule {}

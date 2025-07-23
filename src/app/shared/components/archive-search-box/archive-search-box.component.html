@@ -1,38 +1,38 @@
 <div class="search-results" [hidden]="resultsCount === null">
-  <div
-    class="archive-result"
-    *ngFor="let archive of searchResults$ | async; let i = index"
-    (click)="onArchiveSelect(archive)"
-    [class.active]="i === activeResultIndex"
-  >
-    <div
-      class="archive-thumb"
-      prBgImage
-      [bgSrc]="archive.thumbURL200"
-      [cover]="true"
-    ></div>
-    <div class="archive-name">The {{ archive.fullName }} Archive</div>
-  </div>
-  <div
-    class="empty-result"
-    *ngIf="!resultsCount && control.valid"
-    (click)="onInvite(control.value)"
-  >
-    Invite {{ control.value }}
-  </div>
-  <div class="empty-result" *ngIf="!resultsCount && control.invalid">
-    No Archives found
-  </div>
+	<div
+		class="archive-result"
+		*ngFor="let archive of searchResults$ | async; let i = index"
+		(click)="onArchiveSelect(archive)"
+		[class.active]="i === activeResultIndex"
+	>
+		<div
+			class="archive-thumb"
+			prBgImage
+			[bgSrc]="archive.thumbURL200"
+			[cover]="true"
+		></div>
+		<div class="archive-name">The {{ archive.fullName }} Archive</div>
+	</div>
+	<div
+		class="empty-result"
+		*ngIf="!resultsCount && control.valid"
+		(click)="onInvite(control.value)"
+	>
+		Invite {{ control.value }}
+	</div>
+	<div class="empty-result" *ngIf="!resultsCount && control.invalid">
+		No Archives found
+	</div>
 </div>
 <div class="search-box">
-  <input
-    type="text"
-    class="form-control"
-    [placeholder]="placeholderText"
-    [formControl]="control"
-    (keydown)="onInputKeydown($event)"
-    (focus)="onFocus()"
-    (blur)="onBlur()"
-    #input
-  />
+	<input
+		type="text"
+		class="form-control"
+		[placeholder]="placeholderText"
+		[formControl]="control"
+		(keydown)="onInputKeydown($event)"
+		(focus)="onFocus()"
+		(blur)="onBlur()"
+		#input
+	/>
 </div>

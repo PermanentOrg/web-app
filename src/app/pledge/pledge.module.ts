@@ -22,31 +22,31 @@ import { MissingPledgeComponent } from './components/missing-pledge/missing-pled
 import { UpdateCardComponent } from './components/update-card/update-card.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule,
-    ComponentsModule,
-    AngularFireModule.initializeApp({
-      ...environment.firebase,
-      apiKey: SecretsService.getStatic('FIREBASE_API_KEY'),
-    }),
-    AngularFireDatabaseModule,
-    PledgeRoutingModule,
-    CountUpModule,
-  ],
-  providers: [PledgeService],
-  declarations: [
-    PledgeComponent,
-    PhaseProgressComponent,
-    NewPledgeComponent,
-    ClaimStorageComponent,
-    ClaimStorageLoginComponent,
-    ClaimDoneComponent,
-    PledgeListComponent,
-    MissingPledgeComponent,
-    UpdateCardComponent,
-  ],
-  exports: [NewPledgeComponent],
+	imports: [
+		CommonModule,
+		SharedModule,
+		RouterModule,
+		ComponentsModule,
+		AngularFireModule.initializeApp({
+			...environment.firebase,
+			apiKey: SecretsService.getStatic('FIREBASE_API_KEY'),
+		}),
+		AngularFireDatabaseModule,
+		PledgeRoutingModule,
+		CountUpModule,
+	],
+	providers: [PledgeService],
+	declarations: [
+		PledgeComponent,
+		PhaseProgressComponent,
+		NewPledgeComponent,
+		ClaimStorageComponent,
+		ClaimStorageLoginComponent,
+		ClaimDoneComponent,
+		PledgeListComponent,
+		MissingPledgeComponent,
+		UpdateCardComponent,
+	],
+	exports: [NewPledgeComponent],
 })
 export class PledgeModule {}

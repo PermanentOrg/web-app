@@ -1,33 +1,33 @@
 @import 'variables';
 
 :host {
-  display: block;
+	display: block;
 }
 
 .panel-subheading {
-  @include tabbedDialogPanelSubheading;
+	@include tabbedDialogPanelSubheading;
 }
 
 .preferences {
-  @include desktop {
-    display: flex;
-    flex-wrap: wrap;
-  }
+	@include desktop {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 
 .preference-group {
-  flex: 0 1 33.3%;
+	flex: 0 1 33.3%;
 }
 
 .preference-group-title {
-  font-weight: $font-weight-bold;
-  padding: $grid-unit * 0.5 0;
+	font-weight: $font-weight-bold;
+	padding: $grid-unit * 0.5 0;
 }
 
 .form-check {
-  margin-bottom: $grid-unit * 0.5;
+	margin-bottom: $grid-unit * 0.5;
 
-  input {
-    cursor: pointer;
-  }
+	input {
+		cursor: pointer;
+	}
 }

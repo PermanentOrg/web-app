@@ -3,38 +3,38 @@
 $padding-x: $navbar-button-icon-padding;
 
 .btn-alternate {
-  color: white;
-  margin-bottom: 0;
-  padding-left: $padding-x;
-  padding-right: $padding-x;
-  display: flex;
-  align-items: center;
+	color: white;
+	margin-bottom: 0;
+	padding-left: $padding-x;
+	padding-right: $padding-x;
+	display: flex;
+	align-items: center;
 
-  i {
-    margin-right: $padding-x;
-    font-size: $mat-icon-sm;
-  }
+	i {
+		margin-right: $padding-x;
+		font-size: $mat-icon-sm;
+	}
 
-  &.disabled {
-  }
+	&.disabled {
+	}
 }
 
 :host.full-width {
-  display: block;
-  width: 100%;
-  flex: 1 1 100%;
+	display: block;
+	width: 100%;
+	flex: 1 1 100%;
 
-  label {
-    width: 100%;
-  }
+	label {
+		width: 100%;
+	}
 }
 
 @include desktop {
-  .btn {
-    height: 2 * $grid-unit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: $font-weight-bold;
-  }
+	.btn {
+		height: 2 * $grid-unit;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: $font-weight-bold;
+	}
 }

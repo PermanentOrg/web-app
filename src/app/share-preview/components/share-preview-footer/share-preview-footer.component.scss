@@ -1,90 +1,90 @@
 @mixin desktop {
-  @media screen and (min-width: 1000px) {
-    @content;
-  }
+	@media screen and (min-width: 1000px) {
+		@content;
+	}
 }
 
 .share-preview-footer {
-  width: 100%;
-  padding-top: 32px;
-  padding-bottom: 43px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.25);
-  background-color: #eaeaea;
-  border-radius: 5px;
+	width: 100%;
+	padding-top: 32px;
+	padding-bottom: 43px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.25);
+	background-color: #eaeaea;
+	border-radius: 5px;
 }
 
 .flex-contents {
-  @include desktop {
-    justify-content: space-evenly;
-    flex-direction: row;
-    text-align: left;
-  }
-  display: flex;
-  margin-left: 0;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
+	@include desktop {
+		justify-content: space-evenly;
+		flex-direction: row;
+		text-align: left;
+	}
+	display: flex;
+	margin-left: 0;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
 
-  .desktop-text {
-    @include desktop {
-      max-width: 52.7%;
-      margin-right: 2%;
-      display: block;
-    }
-    display: none;
-  }
+	.desktop-text {
+		@include desktop {
+			max-width: 52.7%;
+			margin-right: 2%;
+			display: block;
+		}
+		display: none;
+	}
 
-  .mobile-text {
-    @include desktop {
-      display: none;
-    }
+	.mobile-text {
+		@include desktop {
+			display: none;
+		}
 
-    display: block;
-    font-weight: bold;
-    text-align: left;
-    margin-left: 65px;
-    margin-right: 65px;
-  }
+		display: block;
+		font-weight: bold;
+		text-align: left;
+		margin-left: 65px;
+		margin-right: 65px;
+	}
 }
 
 .signup-links {
-  @include desktop {
-    margin-right: 65px;
-  }
-  text-align: center;
+	@include desktop {
+		margin-right: 65px;
+	}
+	text-align: center;
 }
 
 .btn-primary {
-  $bg-color: #5261b7;
-  background-color: $bg-color;
-  border: none;
-  margin-top: 0;
+	$bg-color: #5261b7;
+	background-color: $bg-color;
+	border: none;
+	margin-top: 0;
 
-  &:hover,
-  &:active {
-    background-color: lighten($color: $bg-color, $amount: 10%);
-  }
+	&:hover,
+	&:active {
+		background-color: lighten($color: $bg-color, $amount: 10%);
+	}
 }
 
 .primary-link {
-  @extend .secondary-link;
-  font-weight: bold;
+	@extend .secondary-link;
+	font-weight: bold;
 }
 
 .secondary-link {
-  color: #000;
+	color: #000;
 
-  &:hover,
-  &:active {
-    color: #222;
-  }
+	&:hover,
+	&:active {
+		color: #222;
+	}
 }
 
 .close-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
 }

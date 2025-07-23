@@ -11,74 +11,74 @@ import { LegacyContactDisplayComponent } from './legacy-contact-display.componen
 type Story = StoryObj<LegacyContactDisplayComponent>;
 
 const meta: Meta<LegacyContactDisplayComponent> = {
-  title: 'Legacy Contact Display',
-  component: LegacyContactDisplayComponent,
-  decorators: [
-    moduleMetadata({
-      declarations: [],
-      imports: [DirectiveModule, HttpClientTestingModule],
-      providers: [
-        {
-          provide: AccountService,
-          useClass: MockAccountService,
-        },
-        {
-          provide: ApiService,
-          useClass: MockApiService,
-        },
-      ],
-    }),
-  ],
-  parameters: {
-    viewport: {
-      viewports: INITIAL_VIEWPORTS,
-      defaultViewport: 'archiveSettingsDesktop',
-    },
-  },
+	title: 'Legacy Contact Display',
+	component: LegacyContactDisplayComponent,
+	decorators: [
+		moduleMetadata({
+			declarations: [],
+			imports: [DirectiveModule, HttpClientTestingModule],
+			providers: [
+				{
+					provide: AccountService,
+					useClass: MockAccountService,
+				},
+				{
+					provide: ApiService,
+					useClass: MockApiService,
+				},
+			],
+		}),
+	],
+	parameters: {
+		viewport: {
+			viewports: INITIAL_VIEWPORTS,
+			defaultViewport: 'archiveSettingsDesktop',
+		},
+	},
 };
 export default meta;
 
 interface StoryArgs {
-  name?: string;
-  email?: string;
-  hasLegacyContact?: boolean;
-  throwError?: boolean;
+	name?: string;
+	email?: string;
+	hasLegacyContact?: boolean;
+	throwError?: boolean;
 }
 
 const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => {
-  return {
-    render: () => {
-      MockDirectiveRepo.reset();
-      if (args.hasLegacyContact) {
-        MockDirectiveRepo.legacyContactName = args.name;
-        MockDirectiveRepo.legacyContactEmail = args.email;
-      }
-      MockDirectiveRepo.throwError = !!args.throwError;
-      return {};
-    },
-    moduleMetadata: {
-      providers: [
-        {
-          provide: '__force_rerender_on_propschange__',
-          useValue: JSON.stringify(args),
-        },
-      ],
-    },
-  };
+	return {
+		render: () => {
+			MockDirectiveRepo.reset();
+			if (args.hasLegacyContact) {
+				MockDirectiveRepo.legacyContactName = args.name;
+				MockDirectiveRepo.legacyContactEmail = args.email;
+			}
+			MockDirectiveRepo.throwError = !!args.throwError;
+			return {};
+		},
+		moduleMetadata: {
+			providers: [
+				{
+					provide: '__force_rerender_on_propschange__',
+					useValue: JSON.stringify(args),
+				},
+			],
+		},
+	};
 };
 
 export const Default: Story = StoryTemplate({
-  hasLegacyContact: false,
-  throwError: false,
+	hasLegacyContact: false,
+	throwError: false,
 });
 
 export const WithLegacyContact: Story = StoryTemplate({
-  name: 'Test User',
-  email: 'email@example.com',
-  hasLegacyContact: true,
-  throwError: false,
+	name: 'Test User',
+	email: 'email@example.com',
+	hasLegacyContact: true,
+	throwError: false,
 });
 
 export const ApiError: Story = StoryTemplate({
-  throwError: true,
+	throwError: true,
 });

@@ -3,37 +3,37 @@ import { Injectable, Optional } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
 const MOBILE_USER_AGENT_MATCH =
-  /android|blackberry|iphone|ipod|iemobile|opera mobile|palmos|webos|googlebot-mobile/i;
+	/android|blackberry|iphone|ipod|iemobile|opera mobile|palmos|webos|googlebot-mobile/i;
 const IOS_USER_AGENT_MATCH = /ipad|ipod|iphone/i;
 const ANDROID_USER_AGENT_MATCH = /android/i;
 
 export function isMobileWidth() {
-  return !window.matchMedia('(min-width: 900px)').matches;
+	return !window.matchMedia('(min-width: 900px)').matches;
 }
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class DeviceService {
-  constructor(@Optional() private cookies?: CookieService) {}
+	constructor(@Optional() private cookies?: CookieService) {}
 
-  isMobileWidth() {
-    return isMobileWidth();
-  }
+	isMobileWidth() {
+		return isMobileWidth();
+	}
 
-  isMobile() {
-    return !!navigator.userAgent.match(MOBILE_USER_AGENT_MATCH);
-  }
+	isMobile() {
+		return !!navigator.userAgent.match(MOBILE_USER_AGENT_MATCH);
+	}
 
-  isIos() {
-    return !!navigator.userAgent.match(IOS_USER_AGENT_MATCH);
-  }
+	isIos() {
+		return !!navigator.userAgent.match(IOS_USER_AGENT_MATCH);
+	}
 
-  isAndroid() {
-    return !!navigator.userAgent.match(ANDROID_USER_AGENT_MATCH);
-  }
+	isAndroid() {
+		return !!navigator.userAgent.match(ANDROID_USER_AGENT_MATCH);
+	}
 
-  didOptOut() {
-    return this.cookies?.check('permBetaOptOut');
-  }
+	didOptOut() {
+		return this.cookies?.check('permBetaOptOut');
+	}
 }

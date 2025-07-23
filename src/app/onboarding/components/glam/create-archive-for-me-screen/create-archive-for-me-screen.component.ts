@@ -6,39 +6,39 @@ import { ArchiveVO } from '@models/index';
 import { ArchiveCreateEvent } from '../types/archive-types';
 
 @Component({
-  selector: 'pr-create-archive-for-me-screen',
-  templateUrl: './create-archive-for-me-screen.component.html',
-  styleUrl: './create-archive-for-me-screen.component.scss',
-  standalone: false,
+	selector: 'pr-create-archive-for-me-screen',
+	templateUrl: './create-archive-for-me-screen.component.html',
+	styleUrl: './create-archive-for-me-screen.component.scss',
+	standalone: false,
 })
 export class CreateArchiveForMeScreenComponent {
-  private readonly TYPE = 'type.archive.person';
-  public name = '';
+	private readonly TYPE = 'type.archive.person';
+	public name = '';
 
-  @Output() goBackOutput = new EventEmitter<string>();
-  @Output() continueOutput = new EventEmitter<ArchiveCreateEvent>();
+	@Output() goBackOutput = new EventEmitter<string>();
+	@Output() continueOutput = new EventEmitter<ArchiveCreateEvent>();
 
-  constructor(
-    private account: AccountService,
-    private onboardingService: OnboardingService,
-  ) {
-    this.name = this.account.getAccount().fullName;
-  }
+	constructor(
+		private account: AccountService,
+		private onboardingService: OnboardingService,
+	) {
+		this.name = this.account.getAccount().fullName;
+	}
 
-  public goBack(): void {
-    this.goBackOutput.emit('start');
-  }
+	public goBack(): void {
+		this.goBackOutput.emit('start');
+	}
 
-  public continue(): void {
-    this.onboardingService.registerArchive(
-      new ArchiveVO({ fullName: this.name, accessRole: 'access.role.owner' }),
-    );
-    sessionStorage.setItem('archiveName', this.name);
-    sessionStorage.setItem('archiveType', this.TYPE);
-    this.continueOutput.emit({
-      screen: 'goals',
-      type: this.TYPE,
-      name: this.name,
-    });
-  }
+	public continue(): void {
+		this.onboardingService.registerArchive(
+			new ArchiveVO({ fullName: this.name, accessRole: 'access.role.owner' }),
+		);
+		sessionStorage.setItem('archiveName', this.name);
+		sessionStorage.setItem('archiveType', this.TYPE);
+		this.continueOutput.emit({
+			screen: 'goals',
+			type: this.TYPE,
+			name: this.name,
+		});
+	}
 }

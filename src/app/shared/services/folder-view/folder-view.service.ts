@@ -10,41 +10,41 @@ const VIEW_STORAGE_KEY = 'folderView';
 
 @Injectable()
 export class FolderViewService {
-  folderView: FolderView = FolderView.List;
+	folderView: FolderView = FolderView.List;
 
-  viewChange: EventEmitter<FolderView> = new EventEmitter<FolderView>();
+	viewChange: EventEmitter<FolderView> = new EventEmitter<FolderView>();
 
-  containerFlex = false;
-  containerFlexChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+	containerFlex = false;
+	containerFlexChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  private debug = debug('folderViewService');
-  constructor(private storage: StorageService) {
-    const storedView = storage.session.get(VIEW_STORAGE_KEY);
-    switch (storedView) {
-      case FolderView.Grid:
-      case FolderView.List:
-      case FolderView.Timeline:
-        this.folderView = storedView;
-        break;
-      default:
-        this.folderView = FolderView.List;
-    }
+	private debug = debug('folderViewService');
+	constructor(private storage: StorageService) {
+		const storedView = storage.session.get(VIEW_STORAGE_KEY);
+		switch (storedView) {
+			case FolderView.Grid:
+			case FolderView.List:
+			case FolderView.Timeline:
+				this.folderView = storedView;
+				break;
+			default:
+				this.folderView = FolderView.List;
+		}
 
-    this.debug('init view %o', this.folderView);
+		this.debug('init view %o', this.folderView);
 
-    this.containerFlexChange.subscribe((v) => {
-      this.containerFlex = v;
-    });
+		this.containerFlexChange.subscribe((v) => {
+			this.containerFlex = v;
+		});
 
-    debugSubscribable('viewChange', this.debug, this.viewChange);
-  }
+		debugSubscribable('viewChange', this.debug, this.viewChange);
+	}
 
-  setFolderView(folderView: FolderView, skipSave = false) {
-    this.folderView = folderView;
-    if (!skipSave) {
-      this.storage.session.set(VIEW_STORAGE_KEY, folderView);
-    }
+	setFolderView(folderView: FolderView, skipSave = false) {
+		this.folderView = folderView;
+		if (!skipSave) {
+			this.storage.session.set(VIEW_STORAGE_KEY, folderView);
+		}
 
-    this.viewChange.emit(this.folderView);
-  }
+		this.viewChange.emit(this.folderView);
+	}
 }

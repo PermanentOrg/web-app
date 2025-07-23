@@ -1,80 +1,80 @@
 @import 'variables';
 
 :host {
-  display: block;
-  padding: 0px;
+	display: block;
+	padding: 0px;
 }
 
 @keyframes new-pledge {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 .pledge-list {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
+	display: table;
+	table-layout: fixed;
+	width: 100%;
 }
 
 .pledge-list-wrapper {
-  overflow-y: auto;
-  max-height: calc(100vh - 85px);
+	overflow-y: auto;
+	max-height: calc(100vh - 85px);
 }
 
 .pledge {
-  width: 100%;
-  padding: 10px;
+	width: 100%;
+	padding: 10px;
 
-  &.new {
-    animation: new-pledge 2s ease-in;
-  }
+	&.new {
+		animation: new-pledge 2s ease-in;
+	}
 
-  .amount {
-    font-weight: 700;
-    font-size: 120%;
-  }
+	.amount {
+		font-weight: 700;
+		font-size: 120%;
+	}
 
-  .name {
-    font-weight: 400;
-    max-width: 100%;
-  }
+	.name {
+		font-weight: 400;
+		max-width: 100%;
+	}
 
-  .bottom {
-    color: $gray-700;
-    font-size: 80%;
-  }
+	.bottom {
+		color: $gray-700;
+		font-size: 80%;
+	}
 }
 
 .pledge-list-sort {
-  display: flex;
-  padding: 15px;
-  background: $gray-300;
-  width: 100%;
-  align-items: center;
-  height: 85px;
+	display: flex;
+	padding: 15px;
+	background: $gray-300;
+	width: 100%;
+	align-items: center;
+	height: 85px;
 
-  label {
-    margin-right: 10px;
-    margin-bottom: 0px;
-  }
+	label {
+		margin-right: 10px;
+		margin-bottom: 0px;
+	}
 
-  .pledge-list-sort-option {
-    font-weight: 500;
-    flex: 0 1 auto;
-    text-align: center;
-    cursor: pointer;
-    padding: 0px 10px;
+	.pledge-list-sort-option {
+		font-weight: 500;
+		flex: 0 1 auto;
+		text-align: center;
+		cursor: pointer;
+		padding: 0px 10px;
 
-    &.active {
-      font-weight: 700;
-    }
+		&.active {
+			font-weight: 700;
+		}
 
-    &:not(.active):hover {
-      font-weight: 600;
-    }
-  }
+		&:not(.active):hover {
+			font-weight: 600;
+		}
+	}
 }

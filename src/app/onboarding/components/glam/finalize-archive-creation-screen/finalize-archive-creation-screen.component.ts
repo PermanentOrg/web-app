@@ -4,22 +4,22 @@ import { ArchiveVO } from '@models/index';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 
 @Component({
-  selector: 'pr-finalize-archive-creation-screen',
-  templateUrl: './finalize-archive-creation-screen.component.html',
-  styleUrl: './finalize-archive-creation-screen.component.scss',
-  standalone: false,
+	selector: 'pr-finalize-archive-creation-screen',
+	templateUrl: './finalize-archive-creation-screen.component.html',
+	styleUrl: './finalize-archive-creation-screen.component.scss',
+	standalone: false,
 })
 export class FinalizeArchiveCreationScreenComponent {
-  @Output() finalizeArchiveOutput = new EventEmitter<string>();
-  public archives: ArchiveVO[];
-  public isArchiveSubmitted: boolean = false;
+	@Output() finalizeArchiveOutput = new EventEmitter<string>();
+	public archives: ArchiveVO[];
+	public isArchiveSubmitted: boolean = false;
 
-  constructor(onboardingService: OnboardingService) {
-    this.archives = onboardingService.getFinalArchives();
-  }
+	constructor(onboardingService: OnboardingService) {
+		this.archives = onboardingService.getFinalArchives();
+	}
 
-  finalizeArchive() {
-    this.isArchiveSubmitted = true;
-    this.finalizeArchiveOutput.emit();
-  }
+	finalizeArchive() {
+		this.isArchiveSubmitted = true;
+		this.finalizeArchiveOutput.emit();
+	}
 }

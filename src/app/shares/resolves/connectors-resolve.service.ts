@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
-  Resolve,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
+	Resolve,
+	ActivatedRouteSnapshot,
+	RouterStateSnapshot,
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,37 +16,37 @@ import { ConnectorOverviewVO } from '@root/app/models';
 
 @Injectable()
 export class ConnectorsResolveService implements Resolve<any> {
-  constructor(
-    private api: ApiService,
-    private accountService: AccountService,
-  ) {}
+	constructor(
+		private api: ApiService,
+		private accountService: AccountService,
+	) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<any> | Promise<any> {
-    const archiveId = this.accountService.getArchive().archiveId;
-    const connectors = [
-      new ConnectorOverviewVO({
-        archiveId: archiveId,
-        type: 'type.connector.facebook',
-      }),
-    ];
+	resolve(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Observable<any> | Promise<any> {
+		const archiveId = this.accountService.getArchive().archiveId;
+		const connectors = [
+			new ConnectorOverviewVO({
+				archiveId: archiveId,
+				type: 'type.connector.facebook',
+			}),
+		];
 
-    return this.api.connector
-      .getOverview(connectors)
-      .pipe(
-        map((response: ConnectorResponse) => {
-          if (!response.isSuccessful) {
-            throw response;
-          }
+		return this.api.connector
+			.getOverview(connectors)
+			.pipe(
+				map((response: ConnectorResponse) => {
+					if (!response.isSuccessful) {
+						throw response;
+					}
 
-          return response.getConnectorOverviewVOs();
-        }),
-      )
-      .toPromise()
-      .catch((error) => {
-        throw error;
-      });
-  }
+					return response.getConnectorOverviewVOs();
+				}),
+			)
+			.toPromise()
+			.catch((error) => {
+				throw error;
+			});
+	}
 }

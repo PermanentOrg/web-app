@@ -1,54 +1,54 @@
 <div class="archive-naming">
-  <div>
-    <p>
-      Name your new archive. This is the formal or official name of the person,
-      family, group, or organization the archive represents.
-    </p>
-    <div class="name-archive-input">
-      <p class="the-text">The</p>
-      <pr-form-input-glam
-        type="text"
-        fieldName="archiveName"
-        [variant]="'dark'"
-        [iconPosition]="{ right: '-25px' }"
-        [control]="nameForm.controls['archiveName']"
-        [styling]="{
-          height: '50px',
-          padding: '0px',
-          'padding-left': '80px',
-          'font-size': '24px'
-        }"
-        [hideLabel]="true"
-        placeholder=""
-      ></pr-form-input-glam>
-      <p class="archive-text">Archive</p>
-    </div>
-  </div>
+	<div>
+		<p>
+			Name your new archive. This is the formal or official name of the person,
+			family, group, or organization the archive represents.
+		</p>
+		<div class="name-archive-input">
+			<p class="the-text">The</p>
+			<pr-form-input-glam
+				type="text"
+				fieldName="archiveName"
+				[variant]="'dark'"
+				[iconPosition]="{ right: '-25px' }"
+				[control]="nameForm.controls['archiveName']"
+				[styling]="{
+					height: '50px',
+					padding: '0px',
+					'padding-left': '80px',
+					'font-size': '24px'
+				}"
+				[hideLabel]="true"
+				placeholder=""
+			></pr-form-input-glam>
+			<p class="archive-text">Archive</p>
+		</div>
+	</div>
 
-  <div class="buttons-container">
-    <div class="back-button">
-      <pr-button
-        [orientation]="'right'"
-        (buttonClick)="backToCreate()"
-        [icon]="'onboarding/back'"
-        class="back-button-component"
-        [style]="{ 'justify-content': 'center' }"
-        [size]="'fill'"
-        >Back</pr-button
-      >
-    </div>
-    <div class="next-button">
-      <pr-button
-        [orientation]="'right'"
-        [variant]="'secondary'"
-        [icon]="'onboarding/arrow-right'"
-        [disabled]="!nameForm.valid"
-        (buttonClick)="createArchive()"
-        [size]="'fill'"
-        class="create-archive-button"
-        [style]="{ 'justify-content': 'center' }"
-        >Next</pr-button
-      >
-    </div>
-  </div>
+	<div class="buttons-container">
+		<div class="back-button">
+			<pr-button
+				[orientation]="'right'"
+				(buttonClick)="backToCreate()"
+				[icon]="'onboarding/back'"
+				class="back-button-component"
+				[style]="{ 'justify-content': 'center' }"
+				[size]="'fill'"
+				>Back</pr-button
+			>
+		</div>
+		<div class="next-button">
+			<pr-button
+				[orientation]="'right'"
+				[variant]="'secondary'"
+				[icon]="'onboarding/arrow-right'"
+				[disabled]="!nameForm.valid"
+				(buttonClick)="createArchive()"
+				[size]="'fill'"
+				class="create-archive-button"
+				[style]="{ 'justify-content': 'center' }"
+				>Next</pr-button
+			>
+		</div>
+	</div>
 </div>

@@ -1,133 +1,133 @@
 @import 'variables';
 
 :host {
-  display: block;
+	display: block;
 }
 
 $settings-padding-x: 0;
 
 p {
-  padding: 10px;
+	padding: 10px;
 }
 
 .settings-group {
-  margin-bottom: $grid-unit;
+	margin-bottom: $grid-unit;
 
-  .settings-group-title {
-    font-weight: $font-weight-bold;
-    padding: $grid-unit * 0.5 0;
-  }
+	.settings-group-title {
+		font-weight: $font-weight-bold;
+		padding: $grid-unit * 0.5 0;
+	}
 }
 
 .form-check {
-  font-size: $font-size-sm;
+	font-size: $font-size-sm;
 }
 
 .settings-item {
-  @include desktop {
-    display: flex;
-  }
+	@include desktop {
+		display: flex;
+	}
 
-  & > label {
-    font-weight: $font-weight-bold;
-    padding: $grid-unit * 0.5 0;
-    margin-bottom: 0px;
-    flex: 0 0 12rem;
-    display: flex;
-    align-items: center;
+	& > label {
+		font-weight: $font-weight-bold;
+		padding: $grid-unit * 0.5 0;
+		margin-bottom: 0px;
+		flex: 0 0 12rem;
+		display: flex;
+		align-items: center;
 
-    i {
-      font-size: $mat-icon-sm;
-      margin-left: $grid-unit * 0.5;
-      cursor: pointer;
-    }
-  }
+		i {
+			font-size: $mat-icon-sm;
+			margin-left: $grid-unit * 0.5;
+			cursor: pointer;
+		}
+	}
 
-  .settings-item-content {
-    flex: 1 1 auto;
+	.settings-item-content {
+		flex: 1 1 auto;
 
-    display: flex;
-    align-items: center;
+		display: flex;
+		align-items: center;
 
-    .btn {
-      @include gridHeightButtonSmall;
-      margin: 0;
-      flex: 0 0 auto;
-      width: auto;
-    }
-  }
+		.btn {
+			@include gridHeightButtonSmall;
+			margin: 0;
+			flex: 0 0 auto;
+			width: auto;
+		}
+	}
 
-  @include after($phone) {
-    .settings-item-content {
-      max-width: 15rem;
-    }
+	@include after($phone) {
+		.settings-item-content {
+			max-width: 15rem;
+		}
 
-    &.settings-item-large .settings-item-content {
-      max-width: 30rem;
-    }
-  }
+		&.settings-item-large .settings-item-content {
+			max-width: 30rem;
+		}
+	}
 }
 
 .verified {
-  color: $success;
-  font-size: 16px;
+	color: $success;
+	font-size: 16px;
 }
 
 form {
-  @include tabbedDialogPanelForm;
+	@include tabbedDialogPanelForm;
 }
 
 .panel-title {
-  @include tabbedDialogPanelTitle;
+	@include tabbedDialogPanelTitle;
 }
 
 p {
-  padding: 0;
+	padding: 0;
 }
 
 .button-container {
-  margin-top: 16px;
-  width: fit-content;
-  & > button {
-    margin: 0;
-  }
+	margin-top: 16px;
+	width: fit-content;
+	& > button {
+		margin: 0;
+	}
 }
 
 .enabled-text {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  color: #31a04a;
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 20px;
+	color: #31a04a;
 }
 
 .method {
-  width: 60%;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
+	width: 60%;
+	padding: 20px;
+	display: flex;
+	justify-content: space-between;
 }
 
 .method:first-child:nth-last-child(2) {
-  border-bottom: 0.75px solid #c8c8c8;
+	border-bottom: 0.75px solid #c8c8c8;
 }
 
 .btn-link {
-  color: #018ef4;
-  font-weight: 600;
+	color: #018ef4;
+	font-weight: 600;
 }
 
 select {
-  width: 65%;
-  margin-bottom: 16px;
+	width: 65%;
+	margin-bottom: 16px;
 }
 
 .send-code-button {
-  margin-bottom: 32px;
+	margin-bottom: 32px;
 }
 
 .button-group {
-  display: flex;
-  & > .btn-secondary {
-    margin-left: 20px;
-  }
+	display: flex;
+	& > .btn-secondary {
+		margin-left: 20px;
+	}
 }

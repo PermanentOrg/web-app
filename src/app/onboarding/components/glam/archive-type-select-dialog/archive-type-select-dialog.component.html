@@ -1,30 +1,30 @@
 <div class="archive-type-select-dialog">
-  <div class="header">
-    <div class="bookend"></div>
-    <div class="dialog-label">Archive Type</div>
-    <div class="bookend">
-      <button class="close-button" (click)="closeDialog()">
-        <fa-icon [icon]="close"></fa-icon>
-      </button>
-    </div>
-  </div>
-  <div class="scroll-area">
-    @for (option of options; track option.text) {
-      <button
-        class="archive-type"
-        [id]="option.type.replace(':', '-')"
-        (click)="selectType(option.type)"
-        type="button"
-      >
-        <div class="icon">
-          <pr-archive-type-icon [type]="option.type"></pr-archive-type-icon>
-        </div>
-        <div class="text">
-          <div class="type-name">{{ option.text }}</div>
-          <div class="type-description">{{ descriptions[option.type] }}</div>
-        </div>
-      </button>
-      <hr class="divider" />
-    }
-  </div>
+	<div class="header">
+		<div class="bookend"></div>
+		<div class="dialog-label">Archive Type</div>
+		<div class="bookend">
+			<button class="close-button" (click)="closeDialog()">
+				<fa-icon [icon]="close"></fa-icon>
+			</button>
+		</div>
+	</div>
+	<div class="scroll-area">
+		@for (option of options; track option.text) {
+			<button
+				class="archive-type"
+				[id]="option.type.replace(':', '-')"
+				(click)="selectType(option.type)"
+				type="button"
+			>
+				<div class="icon">
+					<pr-archive-type-icon [type]="option.type"></pr-archive-type-icon>
+				</div>
+				<div class="text">
+					<div class="type-name">{{ option.text }}</div>
+					<div class="type-description">{{ descriptions[option.type] }}</div>
+				</div>
+			</button>
+			<hr class="divider" />
+		}
+	</div>
 </div>

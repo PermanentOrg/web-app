@@ -1,19 +1,19 @@
 <!-- @format  -->
 <div class="banner" *ngIf="bannerService.isVisible" @ngIfSlideUpAnimation>
-  <div class="icon">
-    <i (click)="closeBanner($event)" class="material-icons">close</i>
-  </div>
-  <div class="image"><img class="logo" src="assets/svg/app-icon.svg" /></div>
-  <div class="banner-text-container">
-    <h4>Unlock more with our app.</h4>
-    <p>
-      Experience full functionality – download the Permanent app to enjoy all
-      features seamlessly.
-    </p>
-  </div>
+	<div class="icon">
+		<i (click)="closeBanner($event)" class="material-icons">close</i>
+	</div>
+	<div class="image"><img class="logo" src="assets/svg/app-icon.svg" /></div>
+	<div class="banner-text-container">
+		<h4>Unlock more with our app.</h4>
+		<p>
+			Experience full functionality – download the Permanent app to enjoy all
+			features seamlessly.
+		</p>
+	</div>
 
-  <div class="banner-buttons">
-    <button class="btn btn-primary" (click)="onClickBanner()">Go to App</button>
-    <button class="btn btn-link" (click)="closeBanner($event)">Not now</button>
-  </div>
+	<div class="banner-buttons">
+		<button class="btn btn-primary" (click)="onClickBanner()">Go to App</button>
+		<button class="btn btn-link" (click)="closeBanner($event)">Not now</button>
+	</div>
 </div>

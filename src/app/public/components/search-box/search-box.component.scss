@@ -3,215 +3,215 @@
 $min-input-width: 18rem;
 
 @keyframes fadein {
-  from {
-    opacity: 0;
-  }
+	from {
+		opacity: 0;
+	}
 
-  to {
-    opacity: 1;
-  }
+	to {
+		opacity: 1;
+	}
 }
 
 :host {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  z-index: 5;
+	display: flex;
+	align-items: center;
+	margin-left: auto;
+	z-index: 5;
 }
 
 form {
-  padding: 0;
+	padding: 0;
 
-  input {
-    background: none;
+	input {
+		background: none;
 
-    border: 0px solid;
-    border-bottom: 1px solid $PR-orange;
-    border-radius: 0px;
+		border: 0px solid;
+		border-bottom: 1px solid $PR-orange;
+		border-radius: 0px;
 
-    padding: 0.25rem 0;
+		padding: 0.25rem 0;
 
-    color: white;
-  }
+		color: white;
+	}
 }
 
 .search-box-shadow {
-  display: none;
+	display: none;
 }
 
 .search-box-input {
-  min-width: $min-input-width;
-  position: relative;
+	min-width: $min-input-width;
+	position: relative;
 
-  .fade-ring-loader {
-    position: absolute;
-    top: 9px;
-    right: 0;
-  }
-  &.gallery {
-    min-width: auto;
-    form {
-      max-width: 100%;
-    }
-    input {
-      &::placeholder {
-        color: $PR-blue;
-      }
-      width: 100%;
-      outline: none;
-      color: $PR-blue;
-      box-shadow: none;
-      border-color: $PR-blue;
-    }
-  }
+	.fade-ring-loader {
+		position: absolute;
+		top: 9px;
+		right: 0;
+	}
+	&.gallery {
+		min-width: auto;
+		form {
+			max-width: 100%;
+		}
+		input {
+			&::placeholder {
+				color: $PR-blue;
+			}
+			width: 100%;
+			outline: none;
+			color: $PR-blue;
+			box-shadow: none;
+			border-color: $PR-blue;
+		}
+	}
 }
 
 .search-box-results {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  color: $PR-blue;
-  background: $PR-orange;
-  z-index: 10;
-  padding: 0px 10px 10px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 100%;
+	color: $PR-blue;
+	background: $PR-orange;
+	z-index: 10;
+	padding: 0px 10px 10px;
 
-  box-shadow: $box-shadow;
+	box-shadow: $box-shadow;
 
-  border-bottom-left-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
+	border-bottom-left-radius: 0.25rem;
+	border-bottom-right-radius: 0.25rem;
 
-  max-height: 400px;
-  overflow: hidden;
-  overflow-y: auto;
+	max-height: 400px;
+	overflow: hidden;
+	overflow-y: auto;
 
-  p {
-    margin-bottom: 0;
-  }
+	p {
+		margin-bottom: 0;
+	}
 
-  .search-box-result {
-    margin-left: -10px;
-    margin-right: -10px;
-    padding: 5px 10px;
+	.search-box-result {
+		margin-left: -10px;
+		margin-right: -10px;
+		padding: 5px 10px;
 
-    &.active,
-    &:hover {
-      background: darken($PR-orange, 7%);
-    }
-  }
+		&.active,
+		&:hover {
+			background: darken($PR-orange, 7%);
+		}
+	}
 
-  .search-box-result:last-child {
-    margin-bottom: -10px;
-  }
+	.search-box-result:last-child {
+		margin-bottom: -10px;
+	}
 
-  .search-box-header {
-    font-weight: 700;
-    font-size: 0.7em;
-    text-transform: uppercase;
-    color: $PR-blue;
-    letter-spacing: 0.1em;
-    padding: 5px 10px;
-    margin: 0px -10px 5px;
-  }
+	.search-box-header {
+		font-weight: 700;
+		font-size: 0.7em;
+		text-transform: uppercase;
+		color: $PR-blue;
+		letter-spacing: 0.1em;
+		padding: 5px 10px;
+		margin: 0px -10px 5px;
+	}
 }
 
 .search-box-button {
-  display: none;
-  align-items: center;
+	display: none;
+	align-items: center;
 
-  .btn-wordpress {
-    padding-top: 0;
-    padding-bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 34px;
-  }
+	.btn-wordpress {
+		padding-top: 0;
+		padding-bottom: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 34px;
+	}
 
-  path {
-    fill: $PR-orange;
-  }
+	path {
+		fill: $PR-orange;
+	}
 }
 
 @media screen and (max-width: 767px) {
-  .search-box-button:not(.gallery) {
-    display: flex;
-  }
+	.search-box-button:not(.gallery) {
+		display: flex;
+	}
 
-  .search-box-input:not(.gallery) {
-    display: none;
-  }
+	.search-box-input:not(.gallery) {
+		display: none;
+	}
 }
 
 :host.search-box-active {
-  background: $PR-blue;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-  width: auto;
-  z-index: 5;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0px 5px;
+	background: $PR-blue;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100px;
+	width: auto;
+	z-index: 5;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0px 5px;
 
-  @media screen and (min-width: 801px) {
-    width: 800px;
-    margin: 0 auto;
-    left: auto;
-    right: auto;
-  }
+	@media screen and (min-width: 801px) {
+		width: 800px;
+		margin: 0 auto;
+		left: auto;
+		right: auto;
+	}
 
-  .search-box-input {
-    display: block;
-    flex: 1 1 auto;
-    margin-right: 5px;
-  }
+	.search-box-input {
+		display: block;
+		flex: 1 1 auto;
+		margin-right: 5px;
+	}
 
-  .search-box-button {
-    display: flex;
-  }
+	.search-box-button {
+		display: flex;
+	}
 
-  .search-box-button,
-  .search-box-input {
-    animation-name: fadein;
-    animation-duration: 0.35s;
-    animation-timing-function: ease;
-  }
+	.search-box-button,
+	.search-box-input {
+		animation-name: fadein;
+		animation-duration: 0.35s;
+		animation-timing-function: ease;
+	}
 
-  .search-box-results {
-    position: fixed;
-    top: 100px;
-    left: 0;
-    right: 0;
-    max-height: calc(100vh - 100px);
-    border-radius: 0;
-    overflow: hidden;
-    overflow-y: auto;
-  }
+	.search-box-results {
+		position: fixed;
+		top: 100px;
+		left: 0;
+		right: 0;
+		max-height: calc(100vh - 100px);
+		border-radius: 0;
+		overflow: hidden;
+		overflow-y: auto;
+	}
 
-  .search-box-shadow {
-    position: fixed;
-    display: block;
-    top: 100px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
-  }
+	.search-box-shadow {
+		position: fixed;
+		display: block;
+		top: 100px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.3);
+	}
 }
 
 .form-container {
-  display: flex;
+	display: flex;
 }
 
 .clear-icon {
-  cursor: pointer;
-  margin-top: 5px;
-  margin-left: 5px;
+	cursor: pointer;
+	margin-top: 5px;
+	margin-left: 5px;
 }
 .hide-border {
-  border: none !important;
+	border: none !important;
 }

@@ -1,67 +1,67 @@
 <nav class="navbar navbar-dark nav-mobile">
-  <button class="navbar-toggler" type="button" (click)="showHamburgerMenu()">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <pr-upload-button></pr-upload-button>
-  <button class="right-menu-toggler" type="button" (click)="showRightMenu()">
-    <span class="right-menu-toggler-icon"></span>
-  </button>
+	<button class="navbar-toggler" type="button" (click)="showHamburgerMenu()">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<pr-upload-button></pr-upload-button>
+	<button class="right-menu-toggler" type="button" (click)="showRightMenu()">
+		<span class="right-menu-toggler-icon"></span>
+	</button>
 </nav>
 <nav class="navbar navbar-dark nav-desktop">
-  <pr-global-search-bar></pr-global-search-bar>
-  <div class="nav-buttons">
-    <i
-      class="material-icons"
-      [class.has-badge]="notificationService?.newNotificationCount"
-      (click)="showNotificationMenu()"
-    >
-      notifications
-    </i>
-    <a
-      [routerLink]="[{ outlets: { dialog: ['storage', 'add'] } }]"
-      [ngbTooltip]="'nav.addStorage' | prTooltip"
-    >
-      +
-    </a>
-    <a
-      href="https://desk.zoho.com/portal/permanent/home"
-      target="_blank"
-      [ngbTooltip]="'nav.help' | prTooltip"
-    >
-      ?
-    </a>
-  </div>
-  <pr-account-dropdown></pr-account-dropdown>
+	<pr-global-search-bar></pr-global-search-bar>
+	<div class="nav-buttons">
+		<i
+			class="material-icons"
+			[class.has-badge]="notificationService?.newNotificationCount"
+			(click)="showNotificationMenu()"
+		>
+			notifications
+		</i>
+		<a
+			[routerLink]="[{ outlets: { dialog: ['storage', 'add'] } }]"
+			[ngbTooltip]="'nav.addStorage' | prTooltip"
+		>
+			+
+		</a>
+		<a
+			href="https://desk.zoho.com/portal/permanent/home"
+			target="_blank"
+			[ngbTooltip]="'nav.help' | prTooltip"
+		>
+			?
+		</a>
+	</div>
+	<pr-account-dropdown></pr-account-dropdown>
 </nav>
 <pr-announcement></pr-announcement>
 <pr-android-app-notify></pr-android-app-notify>
 <div class="nav-second-row">
-  <pr-breadcrumbs [darkText]="true" [large]="true"></pr-breadcrumbs>
-  <div class="sidebar-align">
-    <pr-upload-button class="full-width" #uploadButton></pr-upload-button>
-    <div
-      [ngbTooltip]="
-        (rightMenu.allowedActions.createFolder
-          ? 'fileList.actions.newFolder.enabled'
-          : 'fileList.actions.newFolder.disabled'
-        ) | prTooltip
-      "
-      [hidden]="uploadButton.hidden"
-    >
-      <button
-        class="btn btn-primary"
-        (click)="rightMenu.createNewFolder()"
-        [disabled]="!rightMenu.allowedActions.createFolder"
-        *ngIf="
-          rightMenu.currentFolder?.type !== 'type.folder.root.share' &&
-          rightMenu.currentFolder?.type !== 'type.folder.root.app'
-        "
-      >
-        <i class="ion-md-folder"></i>New folder
-      </button>
-    </div>
-    <ng-template [cdkPortalOutlet]></ng-template>
-  </div>
+	<pr-breadcrumbs [darkText]="true" [large]="true"></pr-breadcrumbs>
+	<div class="sidebar-align">
+		<pr-upload-button class="full-width" #uploadButton></pr-upload-button>
+		<div
+			[ngbTooltip]="
+				(rightMenu.allowedActions.createFolder
+					? 'fileList.actions.newFolder.enabled'
+					: 'fileList.actions.newFolder.disabled'
+				) | prTooltip
+			"
+			[hidden]="uploadButton.hidden"
+		>
+			<button
+				class="btn btn-primary"
+				(click)="rightMenu.createNewFolder()"
+				[disabled]="!rightMenu.allowedActions.createFolder"
+				*ngIf="
+					rightMenu.currentFolder?.type !== 'type.folder.root.share' &&
+					rightMenu.currentFolder?.type !== 'type.folder.root.app'
+				"
+			>
+				<i class="ion-md-folder"></i>New folder
+			</button>
+		</div>
+		<ng-template [cdkPortalOutlet]></ng-template>
+	</div>
 </div>
 <pr-right-menu [(isVisible)]="rightMenuVisible" #rightMenu></pr-right-menu>
 <pr-multi-select-status></pr-multi-select-status>
