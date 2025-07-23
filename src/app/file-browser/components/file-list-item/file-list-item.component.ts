@@ -887,7 +887,6 @@ export class FileListItemComponent
       .then(() => {
         setTimeout(() => {
           deferred.resolve();
-          // eslint-disable-next-line max-len
           const message = `${this.item.isFolder ? 'Folder' : 'File'} ${
             this.item.displayName
           } ${
