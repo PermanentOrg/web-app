@@ -1,11 +1,11 @@
 import { globalIgnores } from 'eslint/config';
 import jasmine from 'eslint-plugin-jasmine';
-import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 import js from '@eslint/js';
 import typescriptEslint from 'typescript-eslint';
 import { FlatCompat } from '@eslint/eslintrc';
 import angular from 'angular-eslint';
+import love from 'eslint-config-love';
 
 const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
@@ -20,6 +20,7 @@ export default typescriptEslint.config([
       typescriptEslint.configs.eslintRecommended,
       typescriptEslint.configs.recommendedTypeChecked,
       typescriptEslint.configs.strict,
+      love,
       ...angular.configs.tsRecommended,
     ],
   },
@@ -36,7 +37,6 @@ export default typescriptEslint.config([
   globalIgnores(['projects/**/*']),
   {
     plugins: {
-      import: importPlugin,
       jasmine,
     },
   },
@@ -251,6 +251,51 @@ export default typescriptEslint.config([
       '@angular-eslint/template/no-negated-async': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-this-alias': 'off',
+      '@typescript-eslint/prefer-readonly': 'off',
+      '@typescript-eslint/consistent-type-imports': 'off',
+      '@typescript-eslint/strict-boolean-expressions': 'off',
+      '@typescript-eslint/prefer-nullish-coalescing': 'off',
+      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'off',
+      'promise/avoid-new': 'off',
+      '@typescript-eslint/no-magic-numbers': 'off',
+      '@typescript-eslint/no-unsafe-type-assertion': 'off',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/prefer-destructuring': 'off',
+      '@typescript-eslint/prefer-optional-chain': 'off',
+      '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/init-declarations': 'off',
+      'max-lines': 'off',
+      '@typescript-eslint/init-declarations': 'off',
+      '@typescript-eslint/array-type': 'off',
+      '@typescript-eslint/switch-exhaustiveness-check': 'off',
+      complexity: 'off',
+      '@typescript-eslint/max-params': 'off',
+      '@typescript-eslint/consistent-generic-constructors': 'off',
+      '@typescript-eslint/no-deprecated': 'off',
+      '@typescript-eslint/no-inferrable-types': 'off',
+      '@typescript-eslint/method-signature-style': 'off',
+      '@typescript-eslint/class-methods-use-this': 'off',
+      'max-nested-callbacks': 'off',
+      '@typescript-eslint/promise-function-async': 'off',
+      '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
+      '@typescript-eslint/no-unnecessary-template-expression': 'off',
+      '@typescript-eslint/consistent-indexed-object-style': 'off',
+      '@typescript-eslint/consistent-type-assertions': 'off',
+      '@typescript-eslint/no-unnecessary-type-parameters': 'off',
+      'n/handle-callback-err': 'off',
+      'logical-assignment-operators': 'off',
+      '@typescript-eslint/prefer-regexp-exec': 'off',
+      '@typescript-eslint/no-misused-spread': 'off',
+      '@typescript-eslint/no-unnecessary-type-conversion': 'off',
+      'import/no-duplicates': 'off',
+      'grouped-accessor-pairs': 'off',
+      'max-depth': 'off',
+      '@typescript-eslint/no-unnecessary-type-arguments': 'off',
+      '@typescript-eslint/consistent-type-exports': 'off',
+      'promise/param-names': 'off',
+      'consistent-this': 'off',
+      'eslint-comments/require-description': 'off',
     },
   },
   {
