@@ -1,37 +1,37 @@
 <!-- @format -->
 <div class="panel-title">Redeem Storage Code</div>
 <p>
-  If you have received a storage code, you can redeem it for free storage below.
-  <a
-    href="https://permanent.zohodesk.com/portal/en/kb/articles/redeem-a-storage-code"
-    >Learn More</a
-  >
+	If you have received a storage code, you can redeem it for free storage below.
+	<a
+		href="https://permanent.zohodesk.com/portal/en/kb/articles/redeem-a-storage-code"
+		>Learn More</a
+	>
 </p>
 <form
-  [formGroup]="promoForm"
-  class="dialog-form"
-  (submit)="onPromoFormSubmit(promoForm.value)"
+	[formGroup]="promoForm"
+	class="dialog-form"
+	(submit)="onPromoFormSubmit(promoForm.value)"
 >
-  <div class="dialog-form-field">
-    <label for="promoCode">Storage code</label>
-    <input
-      type="text"
-      class="form-control"
-      id="promoCode"
-      name="name"
-      formControlName="code"
-    />
-  </div>
-  <div class="dialog-form-field">
-    <button class="btn btn-primary" [disabled]="promoForm.invalid || waiting">
-      Redeem
-    </button>
-  </div>
-  <div
-    class="results-message"
-    *ngIf="resultMessage"
-    [class.successful]="resultMessage?.successful"
-  >
-    {{ resultMessage.message | prConstants }}
-  </div>
+	<div class="dialog-form-field">
+		<label for="promoCode">Storage code</label>
+		<input
+			type="text"
+			class="form-control"
+			id="promoCode"
+			name="name"
+			formControlName="code"
+		/>
+	</div>
+	<div class="dialog-form-field">
+		<button class="btn btn-primary" [disabled]="promoForm.invalid || waiting">
+			Redeem
+		</button>
+	</div>
+	<div
+		class="results-message"
+		*ngIf="resultMessage"
+		[class.successful]="resultMessage?.successful"
+	>
+		{{ resultMessage.message | prConstants }}
+	</div>
 </form>

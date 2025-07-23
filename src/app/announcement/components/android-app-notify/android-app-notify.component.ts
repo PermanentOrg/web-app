@@ -1,47 +1,47 @@
 /* @format */
 import { Component, HostListener, ElementRef } from '@angular/core';
 import {
-  adjustLayoutForAnnouncement,
-  resetLayoutForAnnouncement,
+	adjustLayoutForAnnouncement,
+	resetLayoutForAnnouncement,
 } from '../announcement/announcement.component';
 
 export interface BeforeInstallPromptEvent extends Event {
-  userChoice: Promise<'accepted' | 'dismissed'>;
-  prompt(): Promise<void>;
+	userChoice: Promise<'accepted' | 'dismissed'>;
+	prompt(): Promise<void>;
 }
 
 @Component({
-  selector: 'pr-android-app-notify',
-  templateUrl: './android-app-notify.component.html',
-  styleUrls: ['./android-app-notify.component.scss'],
-  standalone: false,
+	selector: 'pr-android-app-notify',
+	templateUrl: './android-app-notify.component.html',
+	styleUrls: ['./android-app-notify.component.scss'],
+	standalone: false,
 })
 export class AndroidAppNotifyComponent {
-  public static readonly storageKey = 'androidAppNotificationDismissed';
-  public active = false;
-  public deferredPrompt: BeforeInstallPromptEvent;
+	public static readonly storageKey = 'androidAppNotificationDismissed';
+	public active = false;
+	public deferredPrompt: BeforeInstallPromptEvent;
 
-  constructor(public elementRef: ElementRef) {}
+	constructor(public elementRef: ElementRef) {}
 
-  @HostListener('window:beforeinstallprompt', ['$event'])
-  public beforeInstallPrompt(event: BeforeInstallPromptEvent) {
-    this.deferredPrompt = event;
-    if (!localStorage.getItem(AndroidAppNotifyComponent.storageKey)) {
-      this.active = true;
-      adjustLayoutForAnnouncement(this);
-    }
-  }
+	@HostListener('window:beforeinstallprompt', ['$event'])
+	public beforeInstallPrompt(event: BeforeInstallPromptEvent) {
+		this.deferredPrompt = event;
+		if (!localStorage.getItem(AndroidAppNotifyComponent.storageKey)) {
+			this.active = true;
+			adjustLayoutForAnnouncement(this);
+		}
+	}
 
-  public showPrompt(): void {
-    this.deferredPrompt.prompt();
-    this.deferredPrompt.userChoice.then(() => {
-      this.active = false;
-    });
-  }
+	public showPrompt(): void {
+		this.deferredPrompt.prompt();
+		this.deferredPrompt.userChoice.then(() => {
+			this.active = false;
+		});
+	}
 
-  public dismiss(): void {
-    this.active = false;
-    localStorage.setItem(AndroidAppNotifyComponent.storageKey, 'true');
-    resetLayoutForAnnouncement();
-  }
+	public dismiss(): void {
+		this.active = false;
+		localStorage.setItem(AndroidAppNotifyComponent.storageKey, 'true');
+		resetLayoutForAnnouncement();
+	}
 }

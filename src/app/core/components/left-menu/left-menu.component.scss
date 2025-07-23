@@ -13,369 +13,369 @@ $archive-options-shadow-spread: $grid-unit * 0.25;
 $archive-options-shadow-offset: 0.5rem;
 
 :host {
-  z-index: $z-index-nav + 1;
+	z-index: $z-index-nav + 1;
 }
 
 .hamburger-menu {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: $left-menu-width;
-  max-width: 80%;
-  transform: translateX(-100%);
-  background-color: $PR-blue;
-  color: white;
-  max-height: 100vh;
-  display: flex;
-  flex-direction: column;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: $left-menu-width;
+	max-width: 80%;
+	transform: translateX(-100%);
+	background-color: $PR-blue;
+	color: white;
+	max-height: 100vh;
+	display: flex;
+	flex-direction: column;
 
-  @include beforeDesktop {
-    width: $left-menu-width + 4 * $grid-unit;
-  }
+	@include beforeDesktop {
+		width: $left-menu-width + 4 * $grid-unit;
+	}
 
-  hr {
-    width: 180px;
-    height: 1px;
-    margin: 0 auto;
-    border-top: solid 1px rgba(255, 255, 255, 0.15);
-  }
+	hr {
+		width: 180px;
+		height: 1px;
+		margin: 0 auto;
+		border-top: solid 1px rgba(255, 255, 255, 0.15);
+	}
 
-  .apps-menu {
-    width: 100%;
-    display: flex;
-    height: 3 * $grid-unit;
-    flex-direction: row;
-    justify-content: space-between;
+	.apps-menu {
+		width: 100%;
+		display: flex;
+		height: 3 * $grid-unit;
+		flex-direction: row;
+		justify-content: space-between;
 
-    .apps-link-main {
-      width: 75%;
-      height: 3 * $grid-unit;
-      display: flex;
-      align-items: center;
+		.apps-link-main {
+			width: 75%;
+			height: 3 * $grid-unit;
+			display: flex;
+			align-items: center;
 
-      i,
-      img.svg-icon {
-        flex: 0 0 $left-menu-icon-width;
-        font-size: $mat-icon;
-        text-align: center;
-      }
+			i,
+			img.svg-icon {
+				flex: 0 0 $left-menu-icon-width;
+				font-size: $mat-icon;
+				text-align: center;
+			}
 
-      span {
-        height: 3 * $grid-unit;
-        flex: 1;
-        display: flex;
-        align-items: center;
-      }
-    }
+			span {
+				height: 3 * $grid-unit;
+				flex: 1;
+				display: flex;
+				align-items: center;
+			}
+		}
 
-    .apps-toggle {
-      padding-right: 12px;
-      margin-right: 20px;
-      height: 3 * $grid-unit;
-      display: flex;
-      align-items: center;
+		.apps-toggle {
+			padding-right: 12px;
+			margin-right: 20px;
+			height: 3 * $grid-unit;
+			display: flex;
+			align-items: center;
 
-      i {
-        font-size: $mat-icon-lg;
-        transition: transform 250ms $tweaked-ease;
-      }
+			i {
+				font-size: $mat-icon-lg;
+				transition: transform 250ms $tweaked-ease;
+			}
 
-      &.reverse {
-        i {
-          transform: rotate(180deg);
-        }
-      }
-    }
-  }
+			&.reverse {
+				i {
+					transform: rotate(180deg);
+				}
+			}
+		}
+	}
 
-  .menu-item {
-    padding: 0px;
-    display: flex;
-    align-items: center;
-    height: 3 * $grid-unit;
-    font-size: $base-size;
-    line-height: $btn-line-height;
-    cursor: pointer;
-    user-select: none;
-    color: white;
-    font-weight: 700;
-    text-decoration: none;
+	.menu-item {
+		padding: 0px;
+		display: flex;
+		align-items: center;
+		height: 3 * $grid-unit;
+		font-size: $base-size;
+		line-height: $btn-line-height;
+		cursor: pointer;
+		user-select: none;
+		color: white;
+		font-weight: 700;
+		text-decoration: none;
 
-    transition: background-color $transition-length * 0.25 ease-in;
+		transition: background-color $transition-length * 0.25 ease-in;
 
-    a {
-      color: white;
-      text-decoration: none;
-    }
+		a {
+			color: white;
+			text-decoration: none;
+		}
 
-    i,
-    img.svg-icon {
-      flex: 0 0 $left-menu-icon-width;
-      font-size: $mat-icon;
-      text-align: center;
-    }
+		i,
+		img.svg-icon {
+			flex: 0 0 $left-menu-icon-width;
+			font-size: $mat-icon;
+			text-align: center;
+		}
 
-    img.svg-icon {
-      height: 1rem;
-    }
+		img.svg-icon {
+			height: 1rem;
+		}
 
-    &:hover {
-      background-color: $hover-color;
-      text-decoration: none;
-      transition: none;
-    }
+		&:hover {
+			background-color: $hover-color;
+			text-decoration: none;
+			transition: none;
+		}
 
-    &.active {
-      background-color: $active-color;
-      transition: none;
-      position: relative;
-    }
+		&.active {
+			background-color: $active-color;
+			transition: none;
+			position: relative;
+		}
 
-    &.drop-target,
-    &.drop-target:hover {
-      background-color: $PR-purple;
-    }
-  }
+		&.drop-target,
+		&.drop-target:hover {
+			background-color: $PR-purple;
+		}
+	}
 
-  .menu-header {
-    padding: 10px;
-    strong {
-      display: block;
-    }
-  }
+	.menu-header {
+		padding: 10px;
+		strong {
+			display: block;
+		}
+	}
 
-  .menu-header-desktop,
-  .archive-options {
-    display: none;
-  }
+	.menu-header-desktop,
+	.archive-options {
+		display: none;
+	}
 
-  .menu-branding {
-    display: none;
-  }
+	.menu-branding {
+		display: none;
+	}
 
-  .menu-scroll {
-    overflow: hidden;
-    overflow-y: auto;
-    flex: 1 1 auto;
-  }
+	.menu-scroll {
+		overflow: hidden;
+		overflow-y: auto;
+		flex: 1 1 auto;
+	}
 
-  pr-beta-toggle {
-    flex: 0 0 auto;
-  }
+	pr-beta-toggle {
+		flex: 0 0 auto;
+	}
 }
 
 .submenu {
-  background: $PR-blue;
+	background: $PR-blue;
 
-  .submenu-item {
-    font-size: $font-size-sm;
-    cursor: pointer;
-    padding: 0 $grid-unit;
-    padding-left: $grid-unit * 1.5;
-    height: 2 * $grid-unit;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    color: white;
-    text-decoration: none;
+	.submenu-item {
+		font-size: $font-size-sm;
+		cursor: pointer;
+		padding: 0 $grid-unit;
+		padding-left: $grid-unit * 1.5;
+		height: 2 * $grid-unit;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		color: white;
+		text-decoration: none;
 
-    & span {
-      margin-left: 1.25rem;
-    }
+		& span {
+			margin-left: 1.25rem;
+		}
 
-    & > img {
-      margin-right: 0.5rem;
-    }
+		& > img {
+			margin-right: 0.5rem;
+		}
 
-    & > img + span {
-      margin-left: 0;
-    }
+		& > img + span {
+			margin-left: 0;
+		}
 
-    &:hover {
-      background: darken($PR-blue, 7%);
-      text-decoration: none;
-    }
-  }
+		&:hover {
+			background: darken($PR-blue, 7%);
+			text-decoration: none;
+		}
+	}
 }
 
 @include desktop {
-  :host {
-    display: flex;
-    flex: 0 0 $left-menu-width;
-    position: relative;
-  }
+	:host {
+		display: flex;
+		flex: 0 0 $left-menu-width;
+		position: relative;
+	}
 
-  .menu-wrapper {
-    position: static;
-    visibility: visible;
-  }
+	.menu-wrapper {
+		position: static;
+		visibility: visible;
+	}
 
-  .hamburger-menu {
-    transform: translateX(0);
-    visibility: visible;
-    max-width: none;
+	.hamburger-menu {
+		transform: translateX(0);
+		visibility: visible;
+		max-width: none;
 
-    .menu-header {
-      display: none;
-    }
+		.menu-header {
+			display: none;
+		}
 
-    .menu-header-desktop {
-      display: flex;
-      padding: 0;
-      position: relative;
-      outline: none !important;
-      background-color: $PR-blue;
-      z-index: 3;
+		.menu-header-desktop {
+			display: flex;
+			padding: 0;
+			position: relative;
+			outline: none !important;
+			background-color: $PR-blue;
+			z-index: 3;
 
-      .archive {
-        flex: 1 1 auto;
-        outline: none !important;
-      }
+			.archive {
+				flex: 1 1 auto;
+				outline: none !important;
+			}
 
-      .archive-thumb {
-        width: 100%;
-        padding-top: 100%;
-      }
+			.archive-thumb {
+				width: 100%;
+				padding-top: 100%;
+			}
 
-      .archive-name-access {
-        padding: 20px;
-      }
+			.archive-name-access {
+				padding: 20px;
+			}
 
-      .archive-name {
-        padding: 0 !important;
-        font-weight: bold;
-        padding: $grid-unit * 0.5;
-        display: -webkit-box;
-        margin: 0 !important;
-        width: 144px;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+			.archive-name {
+				padding: 0 !important;
+				font-weight: bold;
+				padding: $grid-unit * 0.5;
+				display: -webkit-box;
+				margin: 0 !important;
+				width: 144px;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
 
-      .archive-name-expanded {
-        -webkit-line-clamp: initial;
-        -webkit-box-orient: vertical;
-        text-overflow: initial;
-        overflow: auto;
-      }
+			.archive-name-expanded {
+				-webkit-line-clamp: initial;
+				-webkit-box-orient: vertical;
+				text-overflow: initial;
+				overflow: auto;
+			}
 
-      .archive-access {
-        padding: 9px 0;
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        height: $grid-unit;
-        line-height: $grid-unit;
-      }
+			.archive-access {
+				padding: 9px 0;
+				text-transform: uppercase;
+				font-size: 0.7rem;
+				height: $grid-unit;
+				line-height: $grid-unit;
+			}
 
-      .archive-options-toggle {
-        cursor: pointer;
-        height: fit-content;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        user-select: none;
-        text-align: left;
-        i {
-          font-size: $mat-icon-lg;
-          transition: transform 250ms $tweaked-ease;
-        }
+			.archive-options-toggle {
+				cursor: pointer;
+				height: fit-content;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				user-select: none;
+				text-align: left;
+				i {
+					font-size: $mat-icon-lg;
+					transition: transform 250ms $tweaked-ease;
+				}
 
-        &.reverse {
-          i {
-            transform: rotate(180deg);
-          }
-        }
-      }
+				&.reverse {
+					i {
+						transform: rotate(180deg);
+					}
+				}
+			}
 
-      .archive-selector-indicator {
-        flex: 0 0 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        background-color: $PR-blue;
-        transition: background-color $transition-length * 0.25 ease-in;
+			.archive-selector-indicator {
+				flex: 0 0 20px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				background-color: $PR-blue;
+				transition: background-color $transition-length * 0.25 ease-in;
 
-        &:hover {
-          background-color: $hover-color;
-          transition: background-color 0s;
-        }
-      }
-    }
+				&:hover {
+					background-color: $hover-color;
+					transition: background-color 0s;
+				}
+			}
+		}
 
-    .archive-options {
-      display: initial;
-      flex: 0 0 auto;
-      background-color: $PR-blue;
-      hr {
-        margin: $grid-unit * 0.5;
-        border-color: white;
-      }
-      overflow-y: hidden;
-    }
+		.archive-options {
+			display: initial;
+			flex: 0 0 auto;
+			background-color: $PR-blue;
+			hr {
+				margin: $grid-unit * 0.5;
+				border-color: white;
+			}
+			overflow-y: hidden;
+		}
 
-    .archive-options-option {
-      height: 2 * $grid-unit;
-      padding: 0 $grid-unit * 0.5;
-      padding-left: $grid-unit * 1.5;
-      display: flex;
-      align-items: center;
-      font-size: $font-size-sm;
-      user-select: none;
-      color: white;
-      text-decoration: none;
+		.archive-options-option {
+			height: 2 * $grid-unit;
+			padding: 0 $grid-unit * 0.5;
+			padding-left: $grid-unit * 1.5;
+			display: flex;
+			align-items: center;
+			font-size: $font-size-sm;
+			user-select: none;
+			color: white;
+			text-decoration: none;
 
-      &:hover:not(.active) {
-        text-decoration: none;
-        background-color: lighten($PR-blue, 4%);
-      }
+			&:hover:not(.active) {
+				text-decoration: none;
+				background-color: lighten($PR-blue, 4%);
+			}
 
-      &.active {
-        text-decoration: none;
-        background-color: $PR-orange;
-      }
+			&.active {
+				text-decoration: none;
+				background-color: $PR-orange;
+			}
 
-      img {
-        width: 1rem;
-        height: auto;
-        margin-right: 0.5rem;
-      }
-    }
+			img {
+				width: 1rem;
+				height: auto;
+				margin-right: 0.5rem;
+			}
+		}
 
-    .menu-scroll {
-      max-height: calc(100vh - #{$navbar-height-desktop});
-    }
+		.menu-scroll {
+			max-height: calc(100vh - #{$navbar-height-desktop});
+		}
 
-    .menu-branding {
-      padding-left: $grid-unit;
-      height: $navbar-height-desktop;
-      display: flex;
-      flex: 0 0 auto;
-      align-items: center;
-      img {
-        height: auto;
-        width: pxToGrid(160px);
-      }
-    }
-  }
+		.menu-branding {
+			padding-left: $grid-unit;
+			height: $navbar-height-desktop;
+			display: flex;
+			flex: 0 0 auto;
+			align-items: center;
+			img {
+				height: auto;
+				width: pxToGrid(160px);
+			}
+		}
+	}
 
-  .menu-wrapper.visible {
-    left: 0;
-    right: 0;
-    visibility: hidden;
-  }
+	.menu-wrapper.visible {
+		left: 0;
+		right: 0;
+		visibility: hidden;
+	}
 }
 
 @supports (padding-left: env(safe-area-inset-left)) {
-  @include beforeDesktop {
-    .menu.hamburger-menu {
-      --safe-area-inset-left: env(safe-area-inset-left);
-      width: calc(
-        #{$left-menu-width + 4 * $grid-unit} + var(--safe-area-inset-left)
-      ) !important;
-      padding-left: calc(var(--safe-area-inset-left)) !important;
-    }
-  }
+	@include beforeDesktop {
+		.menu.hamburger-menu {
+			--safe-area-inset-left: env(safe-area-inset-left);
+			width: calc(
+				#{$left-menu-width + 4 * $grid-unit} + var(--safe-area-inset-left)
+			) !important;
+			padding-left: calc(var(--safe-area-inset-left)) !important;
+		}
+	}
 }

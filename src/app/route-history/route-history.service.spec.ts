@@ -10,69 +10,69 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { RouteHistoryService } from './route-history.service';
 
 @Component({
-  selector: 'pr-dummy',
-  template: 'test',
-  standalone: false,
+	selector: 'pr-dummy',
+	template: 'test',
+	standalone: false,
 })
 class DummyComponent {}
 
 const testRoutes: Routes = [
-  { path: '', component: DummyComponent },
-  { path: 'home', component: DummyComponent },
-  { path: 'profile', component: DummyComponent },
+	{ path: '', component: DummyComponent },
+	{ path: 'home', component: DummyComponent },
+	{ path: 'profile', component: DummyComponent },
 ];
 
 describe('RouteHistoryService', () => {
-  let service: RouteHistoryService;
-  let router: Router;
+	let service: RouteHistoryService;
+	let router: Router;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(testRoutes)],
-    });
-    service = TestBed.inject(RouteHistoryService);
-    router = TestBed.inject(Router);
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			imports: [RouterTestingModule.withRoutes(testRoutes)],
+		});
+		service = TestBed.inject(RouteHistoryService);
+		router = TestBed.inject(Router);
+	});
 
-  function expectRoutesToBeUndefined(): void {
-    expect(service.currentRoute).toBeUndefined();
-    expect(service.previousRoute).toBeUndefined();
-  }
+	function expectRoutesToBeUndefined(): void {
+		expect(service.currentRoute).toBeUndefined();
+		expect(service.previousRoute).toBeUndefined();
+	}
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+	it('should be created', () => {
+		expect(service).toBeTruthy();
+	});
 
-  it('should provide the current route after navigation', async () => {
-    expectRoutesToBeUndefined();
-    await router.navigate(['/home']);
+	it('should provide the current route after navigation', async () => {
+		expectRoutesToBeUndefined();
+		await router.navigate(['/home']);
 
-    expect(service.currentRoute).toEqual('/home');
-    expect(service.previousRoute).toBeUndefined();
-  });
+		expect(service.currentRoute).toEqual('/home');
+		expect(service.previousRoute).toBeUndefined();
+	});
 
-  it('should provide the previous route after second navigation', async () => {
-    expectRoutesToBeUndefined();
-    await router.navigate(['/home']);
-    await router.navigate(['/profile']);
+	it('should provide the previous route after second navigation', async () => {
+		expectRoutesToBeUndefined();
+		await router.navigate(['/home']);
+		await router.navigate(['/profile']);
 
-    expect(service.currentRoute).toEqual('/profile');
-    expect(service.previousRoute).toEqual('/home');
-  });
+		expect(service.currentRoute).toEqual('/profile');
+		expect(service.previousRoute).toEqual('/home');
+	});
 
-  it('should destroy', async () => {
-    service.ngOnDestroy();
-    await router.navigate(['/home']);
-    await router.navigate(['/profile']);
-    expectRoutesToBeUndefined();
-  });
+	it('should destroy', async () => {
+		service.ngOnDestroy();
+		await router.navigate(['/home']);
+		await router.navigate(['/profile']);
+		expectRoutesToBeUndefined();
+	});
 
-  it('should not record history on popstate', async () => {
-    await router.navigate(['/home']);
-    await router.navigate(['/profile']);
-    (service as any).popstate = true;
-    await router.navigate(['/home']);
+	it('should not record history on popstate', async () => {
+		await router.navigate(['/home']);
+		await router.navigate(['/profile']);
+		(service as any).popstate = true;
+		await router.navigate(['/home']);
 
-    expect(service.previousRoute).toBeUndefined();
-  });
+		expect(service.previousRoute).toBeUndefined();
+	});
 });

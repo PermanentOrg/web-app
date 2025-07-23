@@ -10,18 +10,18 @@ import { FamilySearchImportComponent } from '@apps/components/family-search-impo
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule,
-    AppsRoutingModule,
-    FileBrowserModule,
-  ],
-  declarations: [
-    AppsComponent,
-    ConnectorComponent,
-    FamilySearchImportComponent,
-  ],
-  providers: [],
+	imports: [
+		CommonModule,
+		SharedModule,
+		RouterModule,
+		AppsRoutingModule,
+		FileBrowserModule,
+	],
+	declarations: [
+		AppsComponent,
+		ConnectorComponent,
+		FamilySearchImportComponent,
+	],
+	providers: [],
 })
 export class AppsModule {}

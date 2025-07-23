@@ -1,62 +1,62 @@
 :host {
-  display: block;
-  width: 600px;
-  border-radius: 5px;
-  background-color: white;
+	display: block;
+	width: 600px;
+	border-radius: 5px;
+	background-color: white;
 
-  @media screen and (max-width: 600px) {
-    width: 300px;
-  }
+	@media screen and (max-width: 600px) {
+		width: 300px;
+	}
 }
 
 .dialog-content {
-  border-radius: 5px;
+	border-radius: 5px;
 }
 
 .header {
-  .btn {
-    background: none;
-    outline: none;
-    height: 2.5rem;
-    width: auto;
-    margin: 0;
-    flex: 0 0 auto;
-    color: #646464;
-  }
-  height: 2.5rem;
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  font-size: 1.25rem;
-  padding: 0 1.25rem;
-  padding-right: 0;
+	.btn {
+		background: none;
+		outline: none;
+		height: 2.5rem;
+		width: auto;
+		margin: 0;
+		flex: 0 0 auto;
+		color: #646464;
+	}
+	height: 2.5rem;
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	font-size: 1.25rem;
+	padding: 0 1.25rem;
+	padding-right: 0;
 }
 
 .btn {
-  background-color: #5261b7;
-  width: 16.25rem;
-  padding: 0.65625rem 0.75rem;
-  text-align: center;
-  border: 0rem;
+	background-color: #5261b7;
+	width: 16.25rem;
+	padding: 0.65625rem 0.75rem;
+	text-align: center;
+	border: 0rem;
 }
 
 .dialog-body {
-  .learn-more {
-    left: auto;
-    right: auto;
-    color: #000;
-  }
-  .learn-more.desktop {
-    font-weight: 600;
-  }
-  .login {
-    display: block;
-    left: auto;
-    right: auto;
-    text-align: center;
-    color: #000;
-  }
-  font-size: 1.125rem;
-  padding: 0px 30px 37px 30px;
+	.learn-more {
+		left: auto;
+		right: auto;
+		color: #000;
+	}
+	.learn-more.desktop {
+		font-weight: 600;
+	}
+	.login {
+		display: block;
+		left: auto;
+		right: auto;
+		text-align: center;
+		color: #000;
+	}
+	font-size: 1.125rem;
+	padding: 0px 30px 37px 30px;
 }

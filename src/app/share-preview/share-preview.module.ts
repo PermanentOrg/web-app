@@ -11,17 +11,17 @@ import { CreateAccountDialogComponent } from './components/create-account-dialog
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    SharePreviewRoutingModule,
-    CommonModule,
-    FormsModule,
-    NgbTooltipModule,
-  ],
-  providers: [DataService, FolderViewService],
+	declarations: [],
+	imports: [
+		SharePreviewRoutingModule,
+		CommonModule,
+		FormsModule,
+		NgbTooltipModule,
+	],
+	providers: [DataService, FolderViewService],
 })
 export class SharePreviewModule {
-  constructor(folderView: FolderViewService) {
-    folderView.setFolderView(FolderView.Grid, true);
-  }
+	constructor(folderView: FolderViewService) {
+		folderView.setFolderView(FolderView.Grid, true);
+	}
 }

@@ -1,136 +1,136 @@
 @import 'variables';
 
 .gift-storage {
-  & > form {
-    margin: 0;
-    max-width: 800px;
-  }
+	& > form {
+		margin: 0;
+		max-width: 800px;
+	}
 }
 
 .dialog-form-field {
-  display: flex;
-  margin-bottom: 23px;
+	display: flex;
+	margin-bottom: 23px;
 
-  &-with-error {
-    margin-bottom: 0px;
+	&-with-error {
+		margin-bottom: 0px;
 
-    @include beforeDesktop {
-      margin-bottom: 10px;
-    }
-  }
+		@include beforeDesktop {
+			margin-bottom: 10px;
+		}
+	}
 
-  @include beforeDesktop {
-    flex-direction: column;
+	@include beforeDesktop {
+		flex-direction: column;
 
-    & > div {
-      margin-bottom: 10px;
-    }
-  }
+		& > div {
+			margin-bottom: 10px;
+		}
+	}
 
-  & .text {
-    width: 200px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-  }
-  & .label {
-    font-weight: 700;
-    font-family: 'Open-Sans', sans-serif;
-    margin: 0;
-  }
+	& .text {
+		width: 200px;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+	}
+	& .label {
+		font-weight: 700;
+		font-family: 'Open-Sans', sans-serif;
+		margin: 0;
+	}
 
-  & .label-info {
-    font-family: 'Open Sans';
-    font-style: italic;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-  }
+	& .label-info {
+		font-family: 'Open Sans';
+		font-style: italic;
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 17px;
+	}
 
-  & .optional {
-    width: 100px;
-  }
+	& .optional {
+		width: 100px;
+	}
 
-  & .gigabytes {
-    display: inline-flex;
-    align-items: center;
+	& .gigabytes {
+		display: inline-flex;
+		align-items: center;
 
-    font-family: 'Open Sans';
-    font-style: italic;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 17px;
-    color: $gray-dark;
-    margin-left: 10px;
-    width: 100px;
+		font-family: 'Open Sans';
+		font-style: italic;
+		font-weight: 400;
+		font-size: 16px;
+		line-height: 17px;
+		color: $gray-dark;
+		margin-left: 10px;
+		width: 100px;
 
-    @include beforeDesktop {
-      margin-left: 0;
-      margin-top: 10px;
-    }
-  }
+		@include beforeDesktop {
+			margin-left: 0;
+			margin-top: 10px;
+		}
+	}
 
-  & > .form-control {
-    width: 400px;
-    border: 1px solid $gray-light;
-    border-radius: 6px;
-    height: 42px;
-  }
+	& > .form-control {
+		width: 400px;
+		border: 1px solid $gray-light;
+		border-radius: 6px;
+		height: 42px;
+	}
 
-  &-emails > .form-control {
-    @include beforeDesktop {
-      width: 350px;
-    }
-  }
+	&-emails > .form-control {
+		@include beforeDesktop {
+			width: 350px;
+		}
+	}
 
-  &-amount > .form-control {
-    width: 300px;
-  }
+	&-amount > .form-control {
+		width: 300px;
+	}
 
-  & > .form-control-textarea {
-    height: 150px;
-    resize: none;
-  }
+	& > .form-control-textarea {
+		height: 150px;
+		resize: none;
+	}
 
-  & > .form-control-error {
-    border-color: $red;
-  }
+	& > .form-control-error {
+		border-color: $red;
+	}
 
-  & .btn {
-    width: 200px;
+	& .btn {
+		width: 200px;
 
-    &-disabled {
-      background-color: $gray-light;
-      color: $gray-dark;
-      border-color: $gray-light;
-    }
-  }
+		&-disabled {
+			background-color: $gray-light;
+			color: $gray-dark;
+			border-color: $gray-light;
+		}
+	}
 }
 
 .panel-title {
-  @include tabbedDialogPanelTitle;
+	@include tabbedDialogPanelTitle;
 }
 .input-error {
-  margin-bottom: 1rem;
-  color: $red;
-  font-style: italic;
+	margin-bottom: 1rem;
+	color: $red;
+	font-style: italic;
 }
 .error-message {
-  margin-left: 200px;
-  margin-bottom: 20px;
+	margin-left: 200px;
+	margin-bottom: 20px;
 
-  @include beforeDesktop {
-    margin-left: 0px;
-  }
+	@include beforeDesktop {
+		margin-left: 0px;
+	}
 }
 
 .success-message {
-  font-style: italic;
+	font-style: italic;
 }
 
 .not-integer {
-  display: flex;
-  & > p {
-    margin-bottom: 0px;
-  }
+	display: flex;
+	& > p {
+		margin-bottom: 0px;
+	}
 }

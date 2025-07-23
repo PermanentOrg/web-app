@@ -1,16 +1,16 @@
 <!-- @format -->
 <div
-  class="pr-thumbnail-image"
-  [attr.aria-label]="item | getAltText"
-  [attr.role]="'img'"
-  [ngClass]="{ loaded: thumbLoaded }"
-  [style.backgroundImage]="imageUrl ? 'url(\'' + imageUrl + '\')' : undefined"
-  [hidden]="item?.isFolder || isZip"
+	class="pr-thumbnail-image"
+	[attr.aria-label]="item | getAltText"
+	[attr.role]="'img'"
+	[ngClass]="{ loaded: thumbLoaded }"
+	[style.backgroundImage]="imageUrl ? 'url(\'' + imageUrl + '\')' : undefined"
+	[hidden]="item?.isFolder || isZip"
 ></div>
 <div class="pr-thumbnail-icon" [hidden]="!item?.isFolder">
-  <i class="ion-md-folder"></i>
+	<i class="ion-md-folder"></i>
 </div>
 <div class="pr-thumbnail-icon zip-icon" [hidden]="!isZip">
-  <fa-icon [icon]="['fas', 'file-archive']"></fa-icon>
+	<fa-icon [icon]="['fas', 'file-archive']"></fa-icon>
 </div>
 <div class="pr-thumbnail-placeholder"></div>

@@ -2,12 +2,12 @@ import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 
 export interface HasSubscriptions extends OnDestroy {
-  subscriptions: Subscription[];
+	subscriptions: Subscription[];
 }
 
 export function unsubscribeAll(subscriptions: Subscription[]) {
-  while (subscriptions.length) {
-    const current = subscriptions.pop();
-    current.unsubscribe();
-  }
+	while (subscriptions.length) {
+		const current = subscriptions.pop();
+		current.unsubscribe();
+	}
 }

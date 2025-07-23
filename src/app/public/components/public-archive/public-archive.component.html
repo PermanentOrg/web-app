@@ -1,239 +1,239 @@
 <div
-  class="banner-section"
-  [ngClass]="{ 'banner-section-search-result': query }"
+	class="banner-section"
+	[ngClass]="{ 'banner-section-search-result': query }"
 >
-  <div
-    class="profile-banner"
-    prBgImage
-    [bgSrc]="
-      this.publicRoot?.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null
-    "
-    [class.show-gradient]="!this.publicRoot?.thumbArchiveNbr"
-  ></div>
-  <div
-    class="profile-image-search"
-    [ngClass]="{ 'profile-image-search-archive': !(isViewingProfile$ | async) }"
-  >
-    <div
-      class="profile-photo"
-      prBgImage
-      [bgSrc]="this.archive.thumbURL500"
-    ></div>
-    <div
-      class="profile-about-search"
-      [ngClass]="{
-        'profile-about-search-public-profile': (isViewingProfile$ | async)
-      }"
-    >
-      <div>
-        <div class="profile-name">
-          The {{ this.archive.fullName }} Archive
-          <fa-icon
-            (click)="toggleProfileInformation()"
-            class="icon-expand"
-            [class.reverse]="showProfileInformation"
-            [icon]="['fas', 'chevron-down']"
-            *ngIf="!(isViewingProfile$ | async)"
-          ></fa-icon>
-        </div>
-        <div
-          [ngClass]="{ 'archive-description-show': showProfileInformation }"
-          class="archive-description"
-        >
-          <span
-            *ngIf="
-              hasSingleValueFor('birth_info', 'locnId1') ||
-              hasSingleValueFor('birth_info', 'day1') ||
-              hasSingleValueFor('established_info', 'locnId1') ||
-              hasSingleValueFor('established_info', 'locnId1')
-            "
-            class="profile-data"
-            >{{
-              archive.type === 'type.archive.person' ? 'Born ' : 'Established '
-            }}
-          </span>
-          <ng-container [ngSwitch]="archive.type">
-            <ng-container *ngSwitchCase="'type.archive.person'">
-              <span
-                class="profile-data profile-data-date"
-                *ngIf="hasSingleValueFor('birth_info', 'day1')"
-              >
-                on {{ profileItems.birth_info[0]?.day1 | date }}
-              </span>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              <span
-                class="profile-data profile-data-date"
-                *ngIf="hasSingleValueFor('established_info', 'day1')"
-              >
-                {{ profileItems.established_info[0]?.day1 | date }}
-              </span>
-            </ng-container>
-          </ng-container>
-          <span
-            *ngIf="hasSingleValueFor('birth_info', 'locnId1')"
-            class="profile-data"
-          >
-            in
-          </span>
-          <ng-container [ngSwitch]="archive.type">
-            <ng-container *ngSwitchCase="'type.archive.person'">
-              <span
-                class="profile-data profile-data-date"
-                *ngIf="hasSingleValueFor('birth_info', 'locnId1')"
-              >
-                {{ (profileItems.birth_info[0].LocnVOs[0] | prLocation).full }}
-              </span>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              <span
-                class="profile-data profile-data-date"
-                *ngIf="hasSingleValueFor('established_info', 'locnId1')"
-              >
-                {{
-                  (profileItems.established_info[0].LocnVOs[0] | prLocation)
-                    .full
-                }}
-              </span>
-            </ng-container>
-          </ng-container>
-        </div>
-        <ng-container *ngIf="isViewingProfile$ | async">
-          <div class="profile-info">
-            <div
-              class="profile-blurb"
-              *ngIf="hasSingleValueFor('blurb', 'string1')"
-            >
-              {{ this.profileItems.blurb[0].string1 }}
-            </div>
-            <span
-              class="profile-description"
-              *ngIf="
-                hasSingleValueFor('description', 'textData1') && !showShortText
-              "
-              [innerHTML]="this.description"
-            ></span>
-            <span
-              class="profile-description"
-              *ngIf="
-                hasSingleValueFor('description', 'textData1') && showShortText
-              "
-              [innerHTML]="this.shortText + '...'"
-            ></span>
-            <span
-              *ngIf="this.description.length > 100"
-              class="expand-text"
-              (click)="toggleShowFullText()"
-              >{{ showShortText ? ' See More' : ' See Less' }}
-            </span>
-          </div>
-        </ng-container>
-      </div>
-      <div class="profile-controls">
-        <div>
-          <div class="profile-archive-link">
-            <a
-              class="btn btn-link"
-              [routerLink]="['/p', 'archive', archive.archiveNbr]"
-              [hidden]="!(isViewingProfile$ | async)"
-              (click)="showProfileInformation = false"
-            >
-              View Public Archive
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M14 6.00001L14 2.00001M14 2.00001H9.99999M14 2.00001L8 8M6.66667 2H5.2C4.0799 2 3.51984 2 3.09202 2.21799C2.71569 2.40973 2.40973 2.71569 2.21799 3.09202C2 3.51984 2 4.07989 2 5.2V10.8C2 11.9201 2 12.4802 2.21799 12.908C2.40973 13.2843 2.71569 13.5903 3.09202 13.782C3.51984 14 4.07989 14 5.2 14H10.8C11.9201 14 12.4802 14 12.908 13.782C13.2843 13.5903 13.5903 13.2843 13.782 12.908C14 12.4802 14 11.9201 14 10.8V9.33333"
-                  stroke="url(#paint0_linear_512_9462)"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_512_9462"
-                    x1="2"
-                    y1="2"
-                    x2="2.18164"
-                    y2="14.1763"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stop-color="#131B4A" />
-                    <stop offset="1" stop-color="#364493" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </a>
-            <a
-              class="btn btn-link"
-              [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']"
-              [hidden]="isViewingProfile$ | async"
-              (click)="showProfileInformation = true"
-            >
-              View Public Profile
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M14 6.00001L14 2.00001M14 2.00001H9.99999M14 2.00001L8 8M6.66667 2H5.2C4.0799 2 3.51984 2 3.09202 2.21799C2.71569 2.40973 2.40973 2.71569 2.21799 3.09202C2 3.51984 2 4.07989 2 5.2V10.8C2 11.9201 2 12.4802 2.21799 12.908C2.40973 13.2843 2.71569 13.5903 3.09202 13.782C3.51984 14 4.07989 14 5.2 14H10.8C11.9201 14 12.4802 14 12.908 13.782C13.2843 13.5903 13.5903 13.2843 13.782 12.908C14 12.4802 14 11.9201 14 10.8V9.33333"
-                  stroke="url(#paint0_linear_512_9462)"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_512_9462"
-                    x1="2"
-                    y1="2"
-                    x2="2.18164"
-                    y2="14.1763"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stop-color="#131B4A" />
-                    <stop offset="1" stop-color="#364493" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </a>
-          </div>
-        </div>
-        <div class="search-box-public-archive">
-          <pr-archive-search
-            (search)="onHandleSearch($event)"
-            (searchByTag)="onTagClick($event)"
-          ></pr-archive-search>
-        </div>
-      </div>
-    </div>
-  </div>
-  <hr />
+	<div
+		class="profile-banner"
+		prBgImage
+		[bgSrc]="
+			this.publicRoot?.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null
+		"
+		[class.show-gradient]="!this.publicRoot?.thumbArchiveNbr"
+	></div>
+	<div
+		class="profile-image-search"
+		[ngClass]="{ 'profile-image-search-archive': !(isViewingProfile$ | async) }"
+	>
+		<div
+			class="profile-photo"
+			prBgImage
+			[bgSrc]="this.archive.thumbURL500"
+		></div>
+		<div
+			class="profile-about-search"
+			[ngClass]="{
+				'profile-about-search-public-profile': (isViewingProfile$ | async)
+			}"
+		>
+			<div>
+				<div class="profile-name">
+					The {{ this.archive.fullName }} Archive
+					<fa-icon
+						(click)="toggleProfileInformation()"
+						class="icon-expand"
+						[class.reverse]="showProfileInformation"
+						[icon]="['fas', 'chevron-down']"
+						*ngIf="!(isViewingProfile$ | async)"
+					></fa-icon>
+				</div>
+				<div
+					[ngClass]="{ 'archive-description-show': showProfileInformation }"
+					class="archive-description"
+				>
+					<span
+						*ngIf="
+							hasSingleValueFor('birth_info', 'locnId1') ||
+							hasSingleValueFor('birth_info', 'day1') ||
+							hasSingleValueFor('established_info', 'locnId1') ||
+							hasSingleValueFor('established_info', 'locnId1')
+						"
+						class="profile-data"
+						>{{
+							archive.type === 'type.archive.person' ? 'Born ' : 'Established '
+						}}
+					</span>
+					<ng-container [ngSwitch]="archive.type">
+						<ng-container *ngSwitchCase="'type.archive.person'">
+							<span
+								class="profile-data profile-data-date"
+								*ngIf="hasSingleValueFor('birth_info', 'day1')"
+							>
+								on {{ profileItems.birth_info[0]?.day1 | date }}
+							</span>
+						</ng-container>
+						<ng-container *ngSwitchDefault>
+							<span
+								class="profile-data profile-data-date"
+								*ngIf="hasSingleValueFor('established_info', 'day1')"
+							>
+								{{ profileItems.established_info[0]?.day1 | date }}
+							</span>
+						</ng-container>
+					</ng-container>
+					<span
+						*ngIf="hasSingleValueFor('birth_info', 'locnId1')"
+						class="profile-data"
+					>
+						in
+					</span>
+					<ng-container [ngSwitch]="archive.type">
+						<ng-container *ngSwitchCase="'type.archive.person'">
+							<span
+								class="profile-data profile-data-date"
+								*ngIf="hasSingleValueFor('birth_info', 'locnId1')"
+							>
+								{{ (profileItems.birth_info[0].LocnVOs[0] | prLocation).full }}
+							</span>
+						</ng-container>
+						<ng-container *ngSwitchDefault>
+							<span
+								class="profile-data profile-data-date"
+								*ngIf="hasSingleValueFor('established_info', 'locnId1')"
+							>
+								{{
+									(profileItems.established_info[0].LocnVOs[0] | prLocation)
+										.full
+								}}
+							</span>
+						</ng-container>
+					</ng-container>
+				</div>
+				<ng-container *ngIf="isViewingProfile$ | async">
+					<div class="profile-info">
+						<div
+							class="profile-blurb"
+							*ngIf="hasSingleValueFor('blurb', 'string1')"
+						>
+							{{ this.profileItems.blurb[0].string1 }}
+						</div>
+						<span
+							class="profile-description"
+							*ngIf="
+								hasSingleValueFor('description', 'textData1') && !showShortText
+							"
+							[innerHTML]="this.description"
+						></span>
+						<span
+							class="profile-description"
+							*ngIf="
+								hasSingleValueFor('description', 'textData1') && showShortText
+							"
+							[innerHTML]="this.shortText + '...'"
+						></span>
+						<span
+							*ngIf="this.description.length > 100"
+							class="expand-text"
+							(click)="toggleShowFullText()"
+							>{{ showShortText ? ' See More' : ' See Less' }}
+						</span>
+					</div>
+				</ng-container>
+			</div>
+			<div class="profile-controls">
+				<div>
+					<div class="profile-archive-link">
+						<a
+							class="btn btn-link"
+							[routerLink]="['/p', 'archive', archive.archiveNbr]"
+							[hidden]="!(isViewingProfile$ | async)"
+							(click)="showProfileInformation = false"
+						>
+							View Public Archive
+							<svg
+								width="16"
+								height="16"
+								viewBox="0 0 16 16"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M14 6.00001L14 2.00001M14 2.00001H9.99999M14 2.00001L8 8M6.66667 2H5.2C4.0799 2 3.51984 2 3.09202 2.21799C2.71569 2.40973 2.40973 2.71569 2.21799 3.09202C2 3.51984 2 4.07989 2 5.2V10.8C2 11.9201 2 12.4802 2.21799 12.908C2.40973 13.2843 2.71569 13.5903 3.09202 13.782C3.51984 14 4.07989 14 5.2 14H10.8C11.9201 14 12.4802 14 12.908 13.782C13.2843 13.5903 13.5903 13.2843 13.782 12.908C14 12.4802 14 11.9201 14 10.8V9.33333"
+									stroke="url(#paint0_linear_512_9462)"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+								<defs>
+									<linearGradient
+										id="paint0_linear_512_9462"
+										x1="2"
+										y1="2"
+										x2="2.18164"
+										y2="14.1763"
+										gradientUnits="userSpaceOnUse"
+									>
+										<stop stop-color="#131B4A" />
+										<stop offset="1" stop-color="#364493" />
+									</linearGradient>
+								</defs>
+							</svg>
+						</a>
+						<a
+							class="btn btn-link"
+							[routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']"
+							[hidden]="isViewingProfile$ | async"
+							(click)="showProfileInformation = true"
+						>
+							View Public Profile
+							<svg
+								width="16"
+								height="16"
+								viewBox="0 0 16 16"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M14 6.00001L14 2.00001M14 2.00001H9.99999M14 2.00001L8 8M6.66667 2H5.2C4.0799 2 3.51984 2 3.09202 2.21799C2.71569 2.40973 2.40973 2.71569 2.21799 3.09202C2 3.51984 2 4.07989 2 5.2V10.8C2 11.9201 2 12.4802 2.21799 12.908C2.40973 13.2843 2.71569 13.5903 3.09202 13.782C3.51984 14 4.07989 14 5.2 14H10.8C11.9201 14 12.4802 14 12.908 13.782C13.2843 13.5903 13.5903 13.2843 13.782 12.908C14 12.4802 14 11.9201 14 10.8V9.33333"
+									stroke="url(#paint0_linear_512_9462)"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+								<defs>
+									<linearGradient
+										id="paint0_linear_512_9462"
+										x1="2"
+										y1="2"
+										x2="2.18164"
+										y2="14.1763"
+										gradientUnits="userSpaceOnUse"
+									>
+										<stop stop-color="#131B4A" />
+										<stop offset="1" stop-color="#364493" />
+									</linearGradient>
+								</defs>
+							</svg>
+						</a>
+					</div>
+				</div>
+				<div class="search-box-public-archive">
+					<pr-archive-search
+						(search)="onHandleSearch($event)"
+						(searchByTag)="onTagClick($event)"
+					></pr-archive-search>
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr />
 </div>
 
 <div *ngIf="waiting" class="profile-contents">
-  <div class="profile-container">
-    <pr-breadcrumbs
-      *ngIf="!(isViewingProfile$ | async)"
-      [darkText]="true"
-      [large]="true"
-    ></pr-breadcrumbs>
-    <router-outlet></router-outlet>
-  </div>
-  <div>
-    <pr-public-archive-web-links
-      [description]="description"
-      [emails]="emails"
-      [websites]="websites"
-    ></pr-public-archive-web-links>
-  </div>
+	<div class="profile-container">
+		<pr-breadcrumbs
+			*ngIf="!(isViewingProfile$ | async)"
+			[darkText]="true"
+			[large]="true"
+		></pr-breadcrumbs>
+		<router-outlet></router-outlet>
+	</div>
+	<div>
+		<pr-public-archive-web-links
+			[description]="description"
+			[emails]="emails"
+			[websites]="websites"
+		></pr-public-archive-web-links>
+	</div>
 </div>
 
 <div class="result-rectangle"></div>

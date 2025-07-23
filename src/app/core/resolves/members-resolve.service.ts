@@ -8,26 +8,26 @@ import { AccountVO } from '@models';
 
 @Injectable()
 export class MembersResolveService {
-  constructor(
-    private api: ApiService,
-    private accountService: AccountService,
-  ) {}
+	constructor(
+		private api: ApiService,
+		private accountService: AccountService,
+	) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Promise<any> {
-    return this.api.archive
-      .getMembers(this.accountService.getArchive())
-      .then((response: ArchiveResponse) => {
-        const currentAccount = this.accountService.getAccount();
-        const members = response.getAccountVOs();
-        members.forEach((member: AccountVO) => {
-          if (member.accountId === currentAccount.accountId) {
-            member.isCurrent = true;
-          }
-        });
-        return members;
-      });
-  }
+	resolve(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Promise<any> {
+		return this.api.archive
+			.getMembers(this.accountService.getArchive())
+			.then((response: ArchiveResponse) => {
+				const currentAccount = this.accountService.getAccount();
+				const members = response.getAccountVOs();
+				members.forEach((member: AccountVO) => {
+					if (member.accountId === currentAccount.accountId) {
+						member.isCurrent = true;
+					}
+				});
+				return members;
+			});
+	}
 }

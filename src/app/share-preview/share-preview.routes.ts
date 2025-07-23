@@ -22,105 +22,105 @@ import { RelationshipShareResolveService } from './resolves/relationship-share-r
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 
 const archiveResolve = {
-  archive: PreviewArchiveResolveService,
-  currentFolder: PreviewFolderResolveService,
+	archive: PreviewArchiveResolveService,
+	currentFolder: PreviewFolderResolveService,
 };
 
 const previewResolve = {
-  currentFolder: PreviewResolveService,
+	currentFolder: PreviewResolveService,
 };
 
 const shareResolve = {
-  sharePreviewVO: ShareUrlResolveService,
+	sharePreviewVO: ShareUrlResolveService,
 };
 
 const shareInviteResolve = {
-  sharePreviewVO: InviteShareResolveService,
+	sharePreviewVO: InviteShareResolveService,
 };
 
 const shareRelationshipResolve = {
-  sharePreviewVO: RelationshipShareResolveService,
+	sharePreviewVO: RelationshipShareResolveService,
 };
 
 const sharePreviewChildren = [
-  {
-    path: '',
-    resolve: previewResolve,
-    component: SharePreviewComponent,
-    data: {
-      formDarkBg: true,
-      showFolderDescription: true,
-    },
-    children: [
-      {
-        path: '',
-        data: {
-          noFileListNavigation: true,
-        },
-        component: FileListComponent,
-      },
-      {
-        path: 'view',
-        data: {
-          sharePreviewView: true,
-        },
-        loadChildren: LazyLoadFileBrowserSibling,
-      },
-    ],
-  },
+	{
+		path: '',
+		resolve: previewResolve,
+		component: SharePreviewComponent,
+		data: {
+			formDarkBg: true,
+			showFolderDescription: true,
+		},
+		children: [
+			{
+				path: '',
+				data: {
+					noFileListNavigation: true,
+				},
+				component: FileListComponent,
+			},
+			{
+				path: 'view',
+				data: {
+					sharePreviewView: true,
+				},
+				loadChildren: LazyLoadFileBrowserSibling,
+			},
+		],
+	},
 ];
 export const routes: Routes = [
-  {
-    path: 'error',
-    component: ShareNotFoundComponent,
-  },
-  {
-    path: 'invite/:inviteCode',
-    resolve: shareInviteResolve,
-    data: {
-      noFileListPadding: true,
-    },
-    children: sharePreviewChildren,
-  },
-  {
-    path: 'view/:shareId/:folder_linkId',
-    resolve: shareRelationshipResolve,
-    data: {
-      noFileListPadding: true,
-    },
-    children: sharePreviewChildren,
-  },
-  {
-    path: ':shareToken',
-    resolve: shareResolve,
-    data: {
-      noFileListPadding: true,
-    },
-    children: sharePreviewChildren,
-  },
+	{
+		path: 'error',
+		component: ShareNotFoundComponent,
+	},
+	{
+		path: 'invite/:inviteCode',
+		resolve: shareInviteResolve,
+		data: {
+			noFileListPadding: true,
+		},
+		children: sharePreviewChildren,
+	},
+	{
+		path: 'view/:shareId/:folder_linkId',
+		resolve: shareRelationshipResolve,
+		data: {
+			noFileListPadding: true,
+		},
+		children: sharePreviewChildren,
+	},
+	{
+		path: ':shareToken',
+		resolve: shareResolve,
+		data: {
+			noFileListPadding: true,
+		},
+		children: sharePreviewChildren,
+	},
 ];
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-    SharedModule,
-    CommonModule,
-    FileBrowserComponentsModule,
-    NgbModule,
-    AnnouncementModule,
-  ],
-  declarations: [
-    SharePreviewComponent,
-    ShareNotFoundComponent,
-    CreateAccountDialogComponent,
-    SharePreviewFooterComponent,
-  ],
-  providers: [
-    PreviewResolveService,
-    PreviewArchiveResolveService,
-    PreviewFolderResolveService,
-    ShareUrlResolveService,
-    InviteShareResolveService,
-    RelationshipShareResolveService,
-  ],
+	imports: [
+		RouterModule.forChild(routes),
+		SharedModule,
+		CommonModule,
+		FileBrowserComponentsModule,
+		NgbModule,
+		AnnouncementModule,
+	],
+	declarations: [
+		SharePreviewComponent,
+		ShareNotFoundComponent,
+		CreateAccountDialogComponent,
+		SharePreviewFooterComponent,
+	],
+	providers: [
+		PreviewResolveService,
+		PreviewArchiveResolveService,
+		PreviewFolderResolveService,
+		ShareUrlResolveService,
+		InviteShareResolveService,
+		RelationshipShareResolveService,
+	],
 })
 export class SharePreviewRoutingModule {}

@@ -17,74 +17,74 @@ import { PublicSearchResultsComponent } from './components/public-search-results
 import { PublicTagsResolveService } from './resolves/public-tags-resolve.service';
 
 const publicArchiveResolve = {
-  archive: PublicArchiveResolveService,
-  publicRoot: PublicRootResolveService,
-  tags: PublicTagsResolveService,
-  publicProfileItems: PublicProfileItemsResolveService,
+	archive: PublicArchiveResolveService,
+	publicRoot: PublicRootResolveService,
+	tags: PublicTagsResolveService,
+	publicProfileItems: PublicProfileItemsResolveService,
 };
 
 const publishResolve = {
-  publishedItem: PublishResolveService,
+	publishedItem: PublishResolveService,
 };
 
 export const routes: RoutesWithData = [
-  {
-    path: '',
-    component: PublicComponent,
-    data: {
-      isPublic: true,
-    },
-    children: [
-      {
-        path: 'error',
-        component: ItemNotFoundComponent,
-      },
-      {
-        path: 'archive/:publicArchiveNbr',
-        resolve: publicArchiveResolve,
-        component: PublicArchiveComponent,
-        children: [
-          {
-            path: 'search/:archiveId/:query',
-            component: PublicSearchResultsComponent,
-          },
-          {
-            path: 'search-tag/:archiveId/:tagId/:tagName',
-            component: PublicSearchResultsComponent,
-          },
-          {
-            path: 'profile',
-            component: PublicProfileComponent,
-          },
-          {
-            path: '',
-            loadChildren: LazyLoadFileBrowserSibling,
-            data: {
-              noFileListPadding: true,
-              isPublicArchive: true,
-              checkFolderViewOnNavigate: true,
-              showFolderDescription: true,
-            },
-          },
-        ],
-      },
-      {
-        path: ':publishUrlToken',
-        resolve: publishResolve,
-        children: [],
-      },
-    ],
-  },
+	{
+		path: '',
+		component: PublicComponent,
+		data: {
+			isPublic: true,
+		},
+		children: [
+			{
+				path: 'error',
+				component: ItemNotFoundComponent,
+			},
+			{
+				path: 'archive/:publicArchiveNbr',
+				resolve: publicArchiveResolve,
+				component: PublicArchiveComponent,
+				children: [
+					{
+						path: 'search/:archiveId/:query',
+						component: PublicSearchResultsComponent,
+					},
+					{
+						path: 'search-tag/:archiveId/:tagId/:tagName',
+						component: PublicSearchResultsComponent,
+					},
+					{
+						path: 'profile',
+						component: PublicProfileComponent,
+					},
+					{
+						path: '',
+						loadChildren: LazyLoadFileBrowserSibling,
+						data: {
+							noFileListPadding: true,
+							isPublicArchive: true,
+							checkFolderViewOnNavigate: true,
+							showFolderDescription: true,
+						},
+					},
+				],
+			},
+			{
+				path: ':publishUrlToken',
+				resolve: publishResolve,
+				children: [],
+			},
+		],
+	},
 ];
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  providers: [
-    PublishResolveService,
-    PublishArchiveResolveService,
-    PublicArchiveResolveService,
-    PublicRootResolveService,
-    PublicProfileItemsResolveService,
-    PublicTagsResolveService,
-  ],
+	imports: [RouterModule.forChild(routes)],
+	providers: [
+		PublishResolveService,
+		PublishArchiveResolveService,
+		PublicArchiveResolveService,
+		PublicRootResolveService,
+		PublicProfileItemsResolveService,
+		PublicTagsResolveService,
+	],
 })
 export class PublicRoutingModule {}

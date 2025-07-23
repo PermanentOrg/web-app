@@ -1,48 +1,48 @@
 <!-- @format -->
 <div class="dialog-content">
-  <div class="header">
-    <button class="btn" (click)="onDoneClick()">
-      <i class="material-icons">close</i>
-    </button>
-  </div>
-  <div *ngIf="isPayerDifferentThanLoggedUser" class="content">
-    <p class="popup-text">
-      Are you sure you want to assign yourself as the payer?
-    </p>
-    <ul>
-      <li>
-        When you become the payer of an archive, you will replace any other
-        assigned payer.
-      </li>
-      <li>
-        All materials uploaded to this archive will count against your endowed
-        storage balance, regardless of who uploads it.
-      </li>
-      <li>
-        Only a manager or owner of an archive can assign themself as the payer.
-      </li>
-      <li>Only one payer is allowed per archive.</li>
-    </ul>
-  </div>
-  <div *ngIf="!isPayerDifferentThanLoggedUser" class="content">
-    <p class="popup-text">
-      Are you sure you want to remove yourself as the payer?
-    </p>
-    <ul>
-      <li>
-        When an archive does not have a designated payer, all materials uploaded
-        to that archive will count against the uploading user’s personal storage
-        balance.
-      </li>
-      <li>
-        Only a manager or owner of an archive can assign themself as the payer.
-      </li>
-    </ul>
-  </div>
-  <div class="buttons">
-    <button class="btn" (click)="onDoneClick()">No, cancel</button>
-    <button class="btn btn-primary" (click)="onConfirmClick()">
-      Yes, I’m sure
-    </button>
-  </div>
+	<div class="header">
+		<button class="btn" (click)="onDoneClick()">
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+	<div *ngIf="isPayerDifferentThanLoggedUser" class="content">
+		<p class="popup-text">
+			Are you sure you want to assign yourself as the payer?
+		</p>
+		<ul>
+			<li>
+				When you become the payer of an archive, you will replace any other
+				assigned payer.
+			</li>
+			<li>
+				All materials uploaded to this archive will count against your endowed
+				storage balance, regardless of who uploads it.
+			</li>
+			<li>
+				Only a manager or owner of an archive can assign themself as the payer.
+			</li>
+			<li>Only one payer is allowed per archive.</li>
+		</ul>
+	</div>
+	<div *ngIf="!isPayerDifferentThanLoggedUser" class="content">
+		<p class="popup-text">
+			Are you sure you want to remove yourself as the payer?
+		</p>
+		<ul>
+			<li>
+				When an archive does not have a designated payer, all materials uploaded
+				to that archive will count against the uploading user’s personal storage
+				balance.
+			</li>
+			<li>
+				Only a manager or owner of an archive can assign themself as the payer.
+			</li>
+		</ul>
+	</div>
+	<div class="buttons">
+		<button class="btn" (click)="onDoneClick()">No, cancel</button>
+		<button class="btn btn-primary" (click)="onConfirmClick()">
+			Yes, I’m sure
+		</button>
+	</div>
 </div>

@@ -1,49 +1,49 @@
 @import 'variables';
 
 :host {
-  display: block;
-  height: 100%;
-  flex: 1;
-  max-width: 100%;
+	display: block;
+	height: 100%;
+	flex: 1;
+	max-width: 100%;
 }
 
 .dialog-content {
-  background-color: white;
+	background-color: white;
 }
 
 .share-link-button {
-  padding: 10px;
+	padding: 10px;
 }
 
 .share-item-preview {
-  display: flex;
-  align-items: center;
-  padding: 0px 10px;
-  $preview-height: $file-list-row-height;
+	display: flex;
+	align-items: center;
+	padding: 0px 10px;
+	$preview-height: $file-list-row-height;
 
-  [prBgImage] {
-    height: $preview-height - ($grid-unit * 0.5);
-    width: $preview-height - ($grid-unit * 0.5);
-    flex: 0 0 $preview-height - ($grid-unit * 0.5);
-    margin-right: 5px;
-  }
+	[prBgImage] {
+		height: $preview-height - ($grid-unit * 0.5);
+		width: $preview-height - ($grid-unit * 0.5);
+		flex: 0 0 $preview-height - ($grid-unit * 0.5);
+		margin-right: 5px;
+	}
 
-  .name {
-    flex: 1 1 auto;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+	.name {
+		flex: 1 1 auto;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }
 
 .share-item-members {
-  padding: 0px 10px 10px;
+	padding: 0px 10px 10px;
 
-  pr-archive-small {
-    margin-bottom: 20px;
-  }
+	pr-archive-small {
+		margin-bottom: 20px;
+	}
 }
 
 .share-link {
-  padding: 0px 10px 10px;
+	padding: 0px 10px 10px;
 }

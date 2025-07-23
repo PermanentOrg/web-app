@@ -3,46 +3,46 @@
 @import 'fonts';
 
 :host {
-  position: relative;
+	position: relative;
 }
 
 .login-form {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 .page-title {
-  @include pageTitle;
-  margin-bottom: 16px;
-  @include beforeDesktop {
-    margin-bottom: 10%;
-  }
+	@include pageTitle;
+	margin-bottom: 16px;
+	@include beforeDesktop {
+		margin-bottom: 10%;
+	}
 }
 
 .email-input {
-  margin-bottom: 16px;
+	margin-bottom: 16px;
 }
 
 .auth-options {
-  margin: 32px 0px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	margin: 32px 0px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-  & > a {
-    color: white;
-    font-size: 14px;
-    font-family: 'UsualRegular', sans-serif;
-  }
+	& > a {
+		color: white;
+		font-size: 14px;
+		font-family: 'UsualRegular', sans-serif;
+	}
 }
 
 .forgot-password-button {
-  margin: 32px 0px;
-  display: flex;
-  justify-content: center;
-  & > a {
-    color: white;
-    font-size: 14px;
-    font-family: 'UsualRegular', sans-serif;
-  }
+	margin: 32px 0px;
+	display: flex;
+	justify-content: center;
+	& > a {
+		color: white;
+		font-size: 14px;
+		font-family: 'UsualRegular', sans-serif;
+	}
 }

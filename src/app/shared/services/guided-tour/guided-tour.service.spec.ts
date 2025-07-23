@@ -8,31 +8,31 @@ import { AccountService } from '../account/account.service';
 import { GuidedTourService } from './guided-tour.service';
 
 describe('GuidedTourService', () => {
-  let service: GuidedTourService;
+	let service: GuidedTourService;
 
-  beforeEach(() => {
-    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
-    const mockAccountService = {
-      getAccount: function () {
-        return new AccountVO({
-          accountId: 2,
-        });
-      },
-    };
+	beforeEach(() => {
+		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+		const mockAccountService = {
+			getAccount: function () {
+				return new AccountVO({
+					accountId: 2,
+				});
+			},
+		};
 
-    config.providers.push(
-      {
-        provide: AccountService,
-        useValue: mockAccountService,
-      },
-      ShepherdService,
-    );
-    config.providers.push(GuidedTourService);
-    TestBed.configureTestingModule(config);
-    service = TestBed.inject(GuidedTourService);
-  });
+		config.providers.push(
+			{
+				provide: AccountService,
+				useValue: mockAccountService,
+			},
+			ShepherdService,
+		);
+		config.providers.push(GuidedTourService);
+		TestBed.configureTestingModule(config);
+		service = TestBed.inject(GuidedTourService);
+	});
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+	it('should be created', () => {
+		expect(service).toBeTruthy();
+	});
 });

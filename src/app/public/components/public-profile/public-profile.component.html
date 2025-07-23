@@ -1,33 +1,33 @@
 <ng-container>
-  <div class="profile-section-header">Milestones</div>
-  <div class="profile-section" *ngIf="milestones$ | async as milestones">
-    <small *ngIf="!milestones.length"> No milestones... </small>
-    <div class="profile-repeat-entry" *ngFor="let profileItem of milestones">
-      <div class="profile-group">
-        <div class="profile-field profile-field-title">
-          {{ profileItem.string1 }}
-        </div>
-        <div
-          class="profile-field profile-field-subtitle"
-          *ngIf="profileItem.LocnVOs?.length"
-        >
-          {{ (profileItem.LocnVOs[0] | prLocation).full }}
-        </div>
-        <ng-container *ngIf="profileItem.day1 || profileItem.day2">
-          <div class="profile-field profile-field-date">
-            {{ profileItem.day1 | date }}
-            <span *ngIf="profileItem.day2">
-              - {{ profileItem.day2 | date }}
-            </span>
-          </div>
-        </ng-container>
-        <div
-          class="profile-field profile-field-description"
-          *ngIf="profileItem.string2"
-        >
-          <div [innerHTML]="profileItem.string2 | newlineText"></div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="profile-section-header">Milestones</div>
+	<div class="profile-section" *ngIf="milestones$ | async as milestones">
+		<small *ngIf="!milestones.length"> No milestones... </small>
+		<div class="profile-repeat-entry" *ngFor="let profileItem of milestones">
+			<div class="profile-group">
+				<div class="profile-field profile-field-title">
+					{{ profileItem.string1 }}
+				</div>
+				<div
+					class="profile-field profile-field-subtitle"
+					*ngIf="profileItem.LocnVOs?.length"
+				>
+					{{ (profileItem.LocnVOs[0] | prLocation).full }}
+				</div>
+				<ng-container *ngIf="profileItem.day1 || profileItem.day2">
+					<div class="profile-field profile-field-date">
+						{{ profileItem.day1 | date }}
+						<span *ngIf="profileItem.day2">
+							- {{ profileItem.day2 | date }}
+						</span>
+					</div>
+				</ng-container>
+				<div
+					class="profile-field profile-field-description"
+					*ngIf="profileItem.string2"
+				>
+					<div [innerHTML]="profileItem.string2 | newlineText"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </ng-container>

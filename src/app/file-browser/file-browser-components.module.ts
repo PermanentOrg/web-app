@@ -12,8 +12,8 @@ import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-vi
 import { VideoComponent } from '@shared/components/video/video.component';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import {
-  FontAwesomeModule,
-  FaIconLibrary,
+	FontAwesomeModule,
+	FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 import { FolderViewComponent } from './components/folder-view/folder-view.component';
@@ -30,50 +30,50 @@ import { ShareLinkDropdownComponent } from './components/share-link-dropdown/sha
 import { DownloadButtonComponent } from './components/download-button/download-button.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    SharedModule,
-    GoogleMapsModule,
-    InViewportModule,
-    FontAwesomeModule,
-  ],
-  exports: [
-    FileListComponent,
-    FileListItemComponent,
-    FileViewerComponent,
-    VideoComponent,
-    SidebarComponent,
-    FileListControlsComponent,
-    EditTagsComponent,
-    LocationPickerComponent,
-    SharingDialogComponent,
-    ShareLinkDropdownComponent,
-  ],
-  declarations: [
-    FileListComponent,
-    FileListItemComponent,
-    FileListControlsComponent,
-    FileViewerComponent,
-    FolderViewComponent,
-    VideoComponent,
-    SharingComponent,
-    PublishComponent,
-    FolderDescriptionComponent,
-    SidebarComponent,
-    EditTagsComponent,
-    LocationPickerComponent,
-    SidebarViewOptionComponent,
-    SharingDialogComponent,
-    DownloadButtonComponent,
-    ShareLinkDropdownComponent,
-  ],
+	imports: [
+		CommonModule,
+		RouterModule,
+		SharedModule,
+		GoogleMapsModule,
+		InViewportModule,
+		FontAwesomeModule,
+	],
+	exports: [
+		FileListComponent,
+		FileListItemComponent,
+		FileViewerComponent,
+		VideoComponent,
+		SidebarComponent,
+		FileListControlsComponent,
+		EditTagsComponent,
+		LocationPickerComponent,
+		SharingDialogComponent,
+		ShareLinkDropdownComponent,
+	],
+	declarations: [
+		FileListComponent,
+		FileListItemComponent,
+		FileListControlsComponent,
+		FileViewerComponent,
+		FolderViewComponent,
+		VideoComponent,
+		SharingComponent,
+		PublishComponent,
+		FolderDescriptionComponent,
+		SidebarComponent,
+		EditTagsComponent,
+		LocationPickerComponent,
+		SidebarViewOptionComponent,
+		SharingDialogComponent,
+		DownloadButtonComponent,
+		ShareLinkDropdownComponent,
+	],
 })
 export class FileBrowserComponentsModule {
-  constructor(
-    resolver: ComponentFactoryResolver,
-    private library: FaIconLibrary,
-  ) {
-    library.addIcons(faFileArchive);
-  }
+	constructor(
+		resolver: ComponentFactoryResolver,
+		private library: FaIconLibrary,
+	) {
+		library.addIcons(faFileArchive);
+	}
 }

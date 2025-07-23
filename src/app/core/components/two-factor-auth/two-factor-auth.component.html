@@ -1,127 +1,127 @@
 <!-- @format -->
 <div *ngIf="loading" class="import-spinner">
-  <div class="lds-dual-ring"></div>
+	<div class="lds-dual-ring"></div>
 </div>
 <div class="panel-title">Two-Step Authentication</div>
 <p>
-  Enhance account security by requiring a login authentication code. If both
-  email and SMS text are enabled, it will default to SMS text.
+	Enhance account security by requiring a login authentication code. If both
+	email and SMS text are enabled, it will default to SMS text.
 </p>
 <p class="enabled-text" *ngIf="methods.length">Two-Step Auth is Enabled.</p>
 <div class="methods-table">
-  <div *ngFor="let m of methods" class="method">
-    <div class="details">
-      <p>
-        Method: <b>{{ methodsDictionary[m.method] }}</b>
-      </p>
-      <p>
-        {{ m.method === 'sms' ? 'Phone Number:' : 'Email Address:' }}
-        <b>
-          {{ m.value }}
-        </b>
-      </p>
-    </div>
-    <div class="delete-button">
-      <button (click)="removeMethod(m)" class="btn btn-link">Delete</button>
-    </div>
-  </div>
+	<div *ngFor="let m of methods" class="method">
+		<div class="details">
+			<p>
+				Method: <b>{{ methodsDictionary[m.method] }}</b>
+			</p>
+			<p>
+				{{ m.method === 'sms' ? 'Phone Number:' : 'Email Address:' }}
+				<b>
+					{{ m.value }}
+				</b>
+			</p>
+		</div>
+		<div class="delete-button">
+			<button (click)="removeMethod(m)" class="btn btn-link">Delete</button>
+		</div>
+	</div>
 </div>
 <div class="button-container">
-  <button
-    class="btn btn-primary"
-    [disabled]="methods.length === 2"
-    (click)="turnOn = true"
-    *ngIf="!turnOn && !selectedMethodToDelete"
-  >
-    {{ methods.length ? 'Add Another Method' : 'Turn On' }}
-  </button>
+	<button
+		class="btn btn-primary"
+		[disabled]="methods.length === 2"
+		(click)="turnOn = true"
+		*ngIf="!turnOn && !selectedMethodToDelete"
+	>
+		{{ methods.length ? 'Add Another Method' : 'Turn On' }}
+	</button>
 </div>
 <div *ngIf="turnOn || selectedMethodToDelete">
-  <p *ngIf="!selectedMethodToDelete">
-    1. Please select your preferred two-step method.
-  </p>
-  <select
-    *ngIf="!selectedMethodToDelete"
-    class="form-control"
-    [(ngModel)]="method"
-    (ngModelChange)="updateContactInfoValidators()"
-  >
-    <option value="" disabled selected>Choose a method</option>
-    <option [disabled]="hasMethod('email')" value="email">Email</option>
-    <option [disabled]="hasMethod('sms')" value="sms">SMS</option>
-  </select>
-  <form
-    class="send-code-form"
-    *ngIf="method"
-    [formGroup]="form"
-    (submit)="sendCode(form.value)"
-  >
-    <p *ngIf="!selectedMethodToDelete">
-      2. Enter your contact information for the preferred method below and click
-      the button to send a one-time use code.
-      <span *ngIf="method === 'sms'">
-        At this time, we can only accept North American cell phone numbers for
-        SMS.</span
-      >
-    </p>
-    <p *ngIf="selectedMethodToDelete">
-      To disable two-Step verification, click the button below to send a
-      one-time use code to your device.
-    </p>
-    <div class="input-group-vertical">
-      <pr-form-input
-        type="text"
-        fieldName="{{ method }}"
-        placeholder="{{
-          method === 'sms' ? '(XXX) XXX - XXXX' : 'ex. janedoe123@gmail.com'
-        }}"
-        [control]="form.controls['contactInfo']"
-        [disabled]="!!selectedMethodToDelete"
-      ></pr-form-input>
-      <small *ngIf="form.get('contactInfo').errors?.email" class="text-danger">
-        Please enter a valid email address.
-      </small>
-      <small
-        *ngIf="form.get('contactInfo').errors?.maxlength"
-        class="text-danger"
-      >
-        The number exceeds the maximum length of 11 characters.
-      </small>
-    </div>
-    <div class="send-code-button button-container">
-      <button
-        type="submit"
-        role="button"
-        [disabled]="!form.value.contactInfo || form.get('contactInfo').errors"
-        class="btn btn-primary"
-      >
-        Send Code
-      </button>
-    </div>
-  </form>
-  <div class="code-container" *ngIf="codeSent">
-    <form (submit)="submitData(form.value)">
-      <p>3. Enter the four digit code below</p>
-      <div class="input-group-vertical">
-        <pr-form-input
-          [disabled]="!codeSent"
-          type="text"
-          placeholder="XXXX"
-          [control]="form.controls['code']"
-        ></pr-form-input>
-      </div>
-      <div class="button-container button-group">
-        <button
-          [disabled]="!form.value.code"
-          class="btn btn-primary"
-          type="submit"
-        >
-          {{ selectedMethodToDelete ? 'Delete' : 'Enable' }}
-        </button>
-        <button type="button" class="btn btn-secondary" (click)="cancel()">
-          Cancel
-        </button>
-      </div>
-    </form>
-  </div>
+	<p *ngIf="!selectedMethodToDelete">
+		1. Please select your preferred two-step method.
+	</p>
+	<select
+		*ngIf="!selectedMethodToDelete"
+		class="form-control"
+		[(ngModel)]="method"
+		(ngModelChange)="updateContactInfoValidators()"
+	>
+		<option value="" disabled selected>Choose a method</option>
+		<option [disabled]="hasMethod('email')" value="email">Email</option>
+		<option [disabled]="hasMethod('sms')" value="sms">SMS</option>
+	</select>
+	<form
+		class="send-code-form"
+		*ngIf="method"
+		[formGroup]="form"
+		(submit)="sendCode(form.value)"
+	>
+		<p *ngIf="!selectedMethodToDelete">
+			2. Enter your contact information for the preferred method below and click
+			the button to send a one-time use code.
+			<span *ngIf="method === 'sms'">
+				At this time, we can only accept North American cell phone numbers for
+				SMS.</span
+			>
+		</p>
+		<p *ngIf="selectedMethodToDelete">
+			To disable two-Step verification, click the button below to send a
+			one-time use code to your device.
+		</p>
+		<div class="input-group-vertical">
+			<pr-form-input
+				type="text"
+				fieldName="{{ method }}"
+				placeholder="{{
+					method === 'sms' ? '(XXX) XXX - XXXX' : 'ex. janedoe123@gmail.com'
+				}}"
+				[control]="form.controls['contactInfo']"
+				[disabled]="!!selectedMethodToDelete"
+			></pr-form-input>
+			<small *ngIf="form.get('contactInfo').errors?.email" class="text-danger">
+				Please enter a valid email address.
+			</small>
+			<small
+				*ngIf="form.get('contactInfo').errors?.maxlength"
+				class="text-danger"
+			>
+				The number exceeds the maximum length of 11 characters.
+			</small>
+		</div>
+		<div class="send-code-button button-container">
+			<button
+				type="submit"
+				role="button"
+				[disabled]="!form.value.contactInfo || form.get('contactInfo').errors"
+				class="btn btn-primary"
+			>
+				Send Code
+			</button>
+		</div>
+	</form>
+	<div class="code-container" *ngIf="codeSent">
+		<form (submit)="submitData(form.value)">
+			<p>3. Enter the four digit code below</p>
+			<div class="input-group-vertical">
+				<pr-form-input
+					[disabled]="!codeSent"
+					type="text"
+					placeholder="XXXX"
+					[control]="form.controls['code']"
+				></pr-form-input>
+			</div>
+			<div class="button-container button-group">
+				<button
+					[disabled]="!form.value.code"
+					class="btn btn-primary"
+					type="submit"
+				>
+					{{ selectedMethodToDelete ? 'Delete' : 'Enable' }}
+				</button>
+				<button type="button" class="btn btn-secondary" (click)="cancel()">
+					Cancel
+				</button>
+			</div>
+		</form>
+	</div>
 </div>

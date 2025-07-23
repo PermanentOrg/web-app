@@ -1,10 +1,10 @@
 /* @format */
 export interface ChecklistItem {
-  id: string;
-  title: string;
-  completed: boolean;
+	id: string;
+	title: string;
+	completed: boolean;
 }
 
 export interface ChecklistApiResponse {
-  checklistItems: ChecklistItem[];
+	checklistItems: ChecklistItem[];
 }

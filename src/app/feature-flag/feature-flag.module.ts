@@ -6,12 +6,12 @@ import { FeatureFlagApiService } from './services/feature-flag-api.service';
 import { FeatureFlagService } from './services/feature-flag.service';
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule],
-  providers: [{ provide: FEATURE_FLAG_API, useClass: FeatureFlagApiService }],
+	declarations: [],
+	imports: [CommonModule],
+	providers: [{ provide: FEATURE_FLAG_API, useClass: FeatureFlagApiService }],
 })
 export class FeatureFlagModule {
-  constructor(feature: FeatureFlagService) {
-    feature.fetchFromApi();
-  }
+	constructor(feature: FeatureFlagService) {
+		feature.fetchFromApi();
+	}
 }

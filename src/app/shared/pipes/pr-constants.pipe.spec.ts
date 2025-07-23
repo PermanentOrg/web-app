@@ -4,23 +4,23 @@ import { PrConstantsPipe } from './pr-constants.pipe';
 const prConstants = new PrConstantsService();
 
 describe('PrConstantsPipe', () => {
-  it('create an instance', () => {
-    const pipe = new PrConstantsPipe(prConstants);
+	it('create an instance', () => {
+		const pipe = new PrConstantsPipe(prConstants);
 
-    expect(pipe).toBeTruthy();
-  });
+		expect(pipe).toBeTruthy();
+	});
 
-  it('translates an existing string', () => {
-    const pipe = new PrConstantsPipe(prConstants);
-    const constantString = 'access.role.viewer';
+	it('translates an existing string', () => {
+		const pipe = new PrConstantsPipe(prConstants);
+		const constantString = 'access.role.viewer';
 
-    expect(pipe.transform(constantString)).toEqual('Viewer');
-  });
+		expect(pipe.transform(constantString)).toEqual('Viewer');
+	});
 
-  it('returns string unchanged if missing', () => {
-    const pipe = new PrConstantsPipe(prConstants);
-    const constantString = 'access.role.missing';
+	it('returns string unchanged if missing', () => {
+		const pipe = new PrConstantsPipe(prConstants);
+		const constantString = 'access.role.missing';
 
-    expect(pipe.transform(constantString)).toEqual(constantString);
-  });
+		expect(pipe.transform(constantString)).toEqual(constantString);
+	});
 });
