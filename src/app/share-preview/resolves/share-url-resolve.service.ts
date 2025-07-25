@@ -47,7 +47,7 @@ export class ShareUrlResolveService {
         AccountVO: shareLinkResponse?.creatorAccount,
       };
 
-      if (shareLinkResponse?.accessRestrictions !== 'none') {
+      if (shareLinkResponse?.accessRestrictions === 'account') {
         try {
           await this.api.share.requestShareAccess(token);
         } catch (shareAccessError) {
@@ -112,6 +112,7 @@ export class ShareUrlResolveService {
           ArchiveVO: record?.archive,
         };
       }
+      console.log(response);
 
       return response;
     } catch (error: any) {

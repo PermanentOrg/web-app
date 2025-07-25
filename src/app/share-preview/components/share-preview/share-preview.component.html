@@ -88,18 +88,18 @@
   <div class="no-response">You must be logged in to be able to view.</div>
 }
 
-@if (
+<!-- @if (
   (!sharedFolder() && shareLinkType() === 'approval') ||
   (!sharedFolder() && !shareLinkType())
 ) {
   <div class="no-response">You must wait from approval.</div>
-}
+} -->
 
 <div
   class="share-preview-cover from-bottom"
   [ngClass]="{ 'share-preview-cover-visible': showCover }"
   (click)="toggleCover()"
-  *ngIf="!hasAccess && isLoggedIn"
+  *ngIf="isLoggedIn"
 >
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
     <p *ngIf="!isLoggedIn">
@@ -115,12 +115,13 @@
       >
     </p>
     <p *ngIf="isLoggedIn">
-      <span *ngIf="isLinkShare && !hasRequested"
-        >Request full access from {{ shareAccount?.fullName }}.</span
+      <span *ngIf="isLinkShare"
+        >Request full access from
+        {{ shareAccount?.fullName || shareAccount?.name }}.</span
       >
       <span *ngIf="isLinkShare && hasRequested"
         >Your request is awaiting approval from
-        {{ shareAccount?.fullName }}.</span
+        {{ shareAccount?.fullName || shareAccount?.name }}.</span
       >
       <span *ngIf="isRelationshipShare"
         >To view or edit this content, switch archives or accounts.</span
@@ -143,7 +144,7 @@
                 autocomplete: 'name',
                 autocorrect: 'off',
                 autocapitalize: 'yes',
-                spellcheck: 'off'
+                spellcheck: 'off',
               }"
             ></pr-form-input>
             <pr-form-input
@@ -154,7 +155,7 @@
                 autocomplete: 'email',
                 autocorrect: 'off',
                 autocapitalize: 'off',
-                spellcheck: 'off'
+                spellcheck: 'off',
               }"
             ></pr-form-input>
             <pr-form-input
@@ -166,7 +167,7 @@
                 autocomplete: 'new-password',
                 autocorrect: 'off',
                 autocapitalize: 'off',
-                spellcheck: 'off'
+                spellcheck: 'off',
               }"
             ></pr-form-input>
           </div>
@@ -201,7 +202,7 @@
                 autocomplete: 'name',
                 autocorrect: 'off',
                 autocapitalize: 'yes',
-                spellcheck: 'off'
+                spellcheck: 'off',
               }"
             ></pr-form-input>
             <pr-form-input
@@ -213,7 +214,7 @@
                 autocomplete: 'new-password',
                 autocorrect: 'off',
                 autocapitalize: 'off',
-                spellcheck: 'off'
+                spellcheck: 'off',
               }"
             ></pr-form-input>
           </div>
@@ -240,7 +241,7 @@
                 autocomplete: 'email',
                 autocorrect: 'off',
                 autocapitalize: 'off',
-                spellcheck: 'off'
+                spellcheck: 'off',
               }"
             ></pr-form-input>
             <pr-form-input
@@ -252,7 +253,7 @@
                 autocomplete: 'new-password',
                 autocorrect: 'off',
                 autocapitalize: 'off',
-                spellcheck: 'off'
+                spellcheck: 'off',
               }"
             ></pr-form-input>
           </div>
@@ -303,21 +304,22 @@
 <div
   class="share-preview-footer"
   [ngClass]="{ 'share-preview-footer-visible': !showCover }"
-  *ngIf="!hasAccess && isLoggedIn"
+  *ngIf="isLoggedIn"
 >
   <div class="share-preview-footer-content">
     <span (click)="toggleCover()">
-      <strong *ngIf="isLinkShare && !hasRequested">
+      <strong *ngIf="isLinkShare">
         <ng-container *ngIf="isAutoApprove; else requestFullAccessText">
           Accept and view the share in your archive.
         </ng-container>
         <ng-template #requestFullAccessText>
-          Request full access from {{ shareAccount?.fullName }}.
+          Request full access from
+          {{ shareAccount?.fullName || shareAccount?.name }}.
         </ng-template>
       </strong>
       <strong *ngIf="isLinkShare && hasRequested"
         >Your request is awaiting approval from
-        {{ shareAccount?.fullName }}.</strong
+        {{ shareAccount?.fullName || shareAccount?.name }}.</strong
       >
       <strong *ngIf="isRelationshipShare"
         >Your current archive does not have access to this content. Switch to

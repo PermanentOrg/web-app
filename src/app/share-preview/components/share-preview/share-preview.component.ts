@@ -61,9 +61,11 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.snapshot.data.sharePreviewVO ||
     this.route.snapshot.data.sharePreviewItem;
   shareArchive: ArchiveVO = this.sharePreviewVO?.ArchiveVO;
-  shareAccount =
-    this.sharePreviewVO?.AccountVO ||
-    this.sharePreviewVO?.shareLinkResponse?.creatorAccount;
+  shareAccount: {
+    name?: string;
+    fullName?: string;
+  } = {};
+
   displayName: string =
     this.sharePreviewVO?.FolderVO?.displayName ||
     this.sharePreviewVO?.RecordVO?.displayName ||
@@ -139,10 +141,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
     private dialog: DialogCdkService,
   ) {
     this.shareToken = this.route.snapshot.params.shareToken;
-
-    this.shareAccount =
-      this.sharePreviewVO?.AccountVO ||
-      this.sharePreviewVO?.shareLinkResponse?.creatorAccount;
 
     this.shareLinkType.set(
       this.sharePreviewVO?.shareLinkResponse?.accessRestrictions,
@@ -223,6 +221,10 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
   async ngOnInit() {
     this.checkAccess();
 
+    this.shareAccount =
+      this.sharePreviewVO?.AccountVO ||
+      this.sharePreviewVO?.shareLinkResponse?.creatorAccount;
+
     if (!this.hasAccess) {
       this.sendGaEvent('previewed');
     }
@@ -283,7 +285,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (this.isLinkShare) {
-      this.hasRequested = !!this.sharePreviewVO;
+      this.hasRequested = false;
       this.hasAccess = true;
       this.isAutoApprove = true;
 
@@ -294,6 +296,11 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.sharePreviewVO?.shareLinkResponse?.accessRestrictions === 'none'
       ) {
         this.isAutoApprove = true;
+      } else if (
+        this.sharePreviewVO?.shareLinkResponse?.accessRestrictions ===
+        'approval'
+      ) {
+        this.isAutoApprove = false;
       }
     }
 
