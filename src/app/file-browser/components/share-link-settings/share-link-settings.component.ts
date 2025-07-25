@@ -34,12 +34,6 @@ enum ExpirationDays {
   Year = 365,
 }
 
-type ShareByUrlProps =
-  | 'expirationTimestamp'
-  | 'autoApproveToggle'
-  | 'accessRestrictions'
-  | 'permissionsLevel';
-
 const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
   Expiration,
 ).map((x) => {
@@ -123,14 +117,10 @@ export class ShareLinkSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const accountId = this.account.getAccount().accountId;
-    const archiveNbr = this.account.getArchive().archiveNbr;
-
     const shareLinkUrlPayload = {
       itemType: this.shareLinkResponse?.itemType,
       token: this.shareLinkResponse?.token,
       itemId: this.shareLinkResponse?.itemId,
-      accountId,
     };
 
     this.shareLink = shareUrlBuilder(shareLinkUrlPayload);

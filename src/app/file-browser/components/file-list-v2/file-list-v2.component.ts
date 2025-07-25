@@ -17,6 +17,7 @@ import {
   ViewChild,
   NgZone,
   Renderer2,
+  signal,
 } from '@angular/core';
 import { DOCUMENT, Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -57,6 +58,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { routeHasDialog } from '@shared/utilities/router';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { EventService } from '@shared/services/event/event.service';
+import { Dialog } from '@angular/cdk/dialog';
+import { CreateAccountDialogComponent } from '@share-preview/components/create-account-dialog/create-account-dialog.component';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -72,12 +75,12 @@ const VISIBLE_DEBOUNCE = 250;
 const DRAG_SCROLL_THRESHOLD = 100; // px from top or bottom
 const DRAG_SCROLL_STEP = 20;
 @Component({
-  selector: 'pr-file-list',
-  templateUrl: './file-list.component.html',
-  styleUrls: ['./file-list.component.scss'],
+  selector: 'pr-file-list-v2',
+  templateUrl: './file-list-v2.component.html',
+  styleUrls: ['./file-list-v2.component.scss'],
   animations: [slideUpAnimation, ngIfScaleAnimationDynamic],
 })
-export class FileListComponent
+export class FileListV2Component
   implements
     OnInit,
     AfterViewInit,
@@ -107,6 +110,17 @@ export class FileListComponent
 
   private visibleItemsHandlerDebounced: Function;
   private mouseMoveHandlerThrottled: Function;
+
+  shareAccount = signal<{
+    fullName?: string;
+    name?: string;
+  }>({});
+
+  private parentData = this.route.parent?.snapshot.data;
+  private sharePreviewVO =
+    this.parentData?.sharePreviewItem || this.parentData?.SharePreviewVO;
+
+  createAccountDialogIsOpen = signal(false);
 
   private reinit = false;
   private inFileView = false;
@@ -147,11 +161,16 @@ export class FileListComponent
     public device: DeviceService,
     private ngZone: NgZone,
     private event: EventService,
+    private dialog: Dialog,
   ) {
-    this.currentFolder = this.route.snapshot.data.currentFolder;
+    this.currentFolder = this.route.snapshot.data.sharePreviewItem?.FolderVO;
     // this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
     this.fileListCentered = this.route.snapshot.data.fileListCentered;
     this.showSidebar = this.route.snapshot.data.showSidebar;
+
+    this.shareAccount.set(
+      this.sharePreviewVO?.shareLinkResponse?.creatorAccount,
+    );
 
     if (this.route.snapshot.data.noFileListNavigation) {
       this.allowNavigation = false;
@@ -179,8 +198,8 @@ export class FileListComponent
     this.registerDragServiceHandlers();
 
     const isPrivateRoot =
-      this.currentFolder.type === 'type.folder.root.private';
-    const isPublicRoot = this.currentFolder.type === 'type.folder.root.public';
+      this.currentFolder?.type === 'type.folder.root.private';
+    const isPublicRoot = this.currentFolder?.type === 'type.folder.root.public';
 
     if (isPrivateRoot) {
       this.event.dispatch({
@@ -206,12 +225,12 @@ export class FileListComponent
         const urlParts = url.split('/').slice(0, 3);
         const currentRoot = urlParts.join('/');
         if (currentRoot !== url) {
-          this.router.navigateByUrl(currentRoot);
+          // this.router.navigateByUrl(currentRoot);
         } else {
           const timestamp = Date.now();
           const queryParams: any = {};
           queryParams[timestamp] = '';
-          this.router.navigate(['.'], { queryParams, relativeTo: this.route });
+          // this.router.navigate(['.'], { queryParams, relativeTo: this.route });
         }
       }),
     );
@@ -320,11 +339,11 @@ export class FileListComponent
   }
 
   ngOnInit() {
-    this.currentFolder = this.route.snapshot.data.currentFolder;
+    this.currentFolder = this.route.snapshot.data.sharePreviewItem?.FolderVO;
     this.showSidebar = this.route.snapshot.data.showSidebar;
     this.dataService.setCurrentFolder(this.currentFolder);
 
-    this.isRootFolder = this.currentFolder.type.includes('root');
+    // this.isRootFolder = this.currentFolder.type?.includes('root');
     this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
 
     this.visibleItems.clear();
@@ -348,7 +367,7 @@ export class FileListComponent
     if (queryParams.has('showItem')) {
       const folder_linkId = Number(queryParams.get('showItem'));
       this.location.replaceState(this.router.url.split('?')[0]);
-      const item = find(this.currentFolder.ChildItemVOs, { folder_linkId });
+      const item = find(this.currentFolder?.ChildItemVOs, { folder_linkId });
       this.scrollToItem(item);
       if (!this.device.isMobileWidth()) {
         setTimeout(() => {
@@ -362,6 +381,7 @@ export class FileListComponent
   }
 
   ngOnDestroy() {
+    // this.dataService.setCurrentFolder();
     unsubscribeAll(this.subscriptions);
     if (this.unlistenMouseMove) {
       this.unlistenMouseMove();
@@ -438,6 +458,17 @@ export class FileListComponent
   }
 
   onItemClick(itemClick: ItemClickEvent) {
+    const needsAccountDialog =
+      !this.account.getAccount() &&
+      this.sharePreviewVO?.shareLinkResponse?.accessRestrictions === 'none';
+
+    if (needsAccountDialog) {
+      this.dialog.open(CreateAccountDialogComponent, {
+        data: {
+          sharerName: this.shareAccount().name,
+        },
+      });
+    }
     this.itemClicked.emit(itemClick);
 
     if (!this.showSidebar || !itemClick.selectable) {
@@ -500,6 +531,21 @@ export class FileListComponent
     return (
       event.target === this.document.body && !this.router.url.includes('record')
     );
+  }
+
+  showCreateAccountDialog() {
+    if (!this.createAccountDialogIsOpen()) {
+      const dialogRef = this.dialog.open(CreateAccountDialogComponent, {
+        data: {
+          sharerName: this.shareAccount().fullName || this.shareAccount().name,
+        },
+      });
+      dialogRef.closed?.subscribe(() => {
+        this.createAccountDialogIsOpen.set(false);
+      });
+
+      this.createAccountDialogIsOpen.set(true);
+    }
   }
 
   async loadVisibleItems(animate?: boolean) {

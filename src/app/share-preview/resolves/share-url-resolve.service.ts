@@ -4,12 +4,14 @@ import {
   RouterStateSnapshot,
   Router,
 } from '@angular/router';
+import { cloneDeep } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
 
-import { RecordVO, FolderVO } from '@models';
+import { FolderVO, RecordVO } from '@models';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 
 @Injectable()
 export class ShareUrlResolveService {
@@ -18,27 +20,44 @@ export class ShareUrlResolveService {
     private message: MessageService,
     private router: Router,
     private accountService: AccountService,
+    private shareLinkApi: ShareLinksApiService,
   ) {}
 
-  async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  async resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Promise<any> {
     try {
-      const token = route.queryParams.token;
-      const itemId = route.queryParams.itemId;
-      const itemType = route.queryParams.itemType;
-      let folder = null;
-      let record = null;
-
+      const itemType = route.params['itemType'];
+      const token = route.params['token'];
+      const itemId = route.params['itemId'];
       const headers = { 'X-Permanent-Share-Token': token };
 
-      const response = {};
+      let response = {};
+
+      let folder: any = null;
+      let record: any = null;
+
+      const shareLinkResponseArray =
+        await this.shareLinkApi.getShareLinksByToken([token]);
+      const shareLinkResponse = shareLinkResponseArray[0];
+      response = {
+        ...response,
+        shareLinkResponse,
+        AccountVO: shareLinkResponse?.creatorAccount,
+      };
+
+      if (shareLinkResponse?.accessRestrictions === 'account') {
+        try {
+          await this.api.share.requestShareAccess(token);
+        } catch (shareAccessError) {
+          return response;
+        }
+      }
 
       if (itemType === 'folder') {
-        const folderArray: any = await this.api.folder.get(
-          [
-            new FolderVO({
-              folderId: itemId,
-            }),
-          ],
+        const folderArray = await this.api.folder.get(
+          [new FolderVO({ folderId: itemId })],
           true,
           headers,
         );
@@ -49,35 +68,57 @@ export class ShareUrlResolveService {
           headers,
         );
 
-        const folderResponse = folderArray[0];
-        const folderItems = folderResponse.items[0];
+        const folderItems = folderArray[0]?.items?.[0];
 
         folder = {
           ...folderItems,
+          ChildItemVOs: children.items,
+          pathAsFolder_linkId: [0, 0],
+          pathAsArchiveNbr: ['0000-0000', '0000-0000'],
         };
 
-        folder.ChildItemVOs = children.items;
+        if (folderItems?.paths && folderItems.paths.names) {
+          folder.pathAsText = ['Shares', ...folderItems.paths.names];
+        }
+
+        response = {
+          ...response,
+          FolderVO: folder,
+          ArchiveVO: folder.archive,
+          AccountVO: folder.shareLink?.creatorAccount,
+        };
       } else if (itemType === 'record') {
-        const response = await this.api.record.get(
+        const recordResponse = await this.api.record.get(
           [new RecordVO({ recordId: itemId })],
           true,
           headers,
         );
-        record = response[0];
-      }
+        record = recordResponse?.[0];
 
-      (response as any).FolderVO = folder;
-      (response as any).RecordVO = record;
-      (response as any).ArchiveVO = record ? record.archive : folder.archive;
-      (response as any).AccountVO = record
-        ? record.shareLink?.creatorAccount
-        : folder.shareLink?.creatorAccount;
+        // Wrap record inside a dummy folder structure if needed
+        const dummyFolder = new FolderVO({
+          archiveNbr: record?.archive?.archiveNbr || '0000-0000',
+          pathAsArchiveNbr: ['0000-0000', '0000-0000'],
+          pathAsText: ['Shares', 'Record', record?.displayName],
+          pathAsFolder_linkId: [0, 0],
+        });
+        dummyFolder.ChildItemVOs = [record];
+        dummyFolder.description = record?.description;
+
+        response = {
+          ...response,
+          FolderVO: dummyFolder,
+          RecordVO: record,
+          ArchiveVO: record?.archive,
+        };
+      }
+      console.log(response);
 
       return response;
-    } catch (error) {
+    } catch (error: any) {
       if (error.getMessage) {
         if (error.messageIncludes('warning.auth.mfaToken')) {
-          this.accountService.setRedirect(['/share', route.params.shareToken]);
+          this.accountService.setRedirect(['/share', route.params.token]);
           return this.router.navigate(['/app', 'auth', 'mfa']);
         } else {
           this.message.showError({
