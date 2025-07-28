@@ -30,6 +30,7 @@ import { ProfileService } from '@shared/services/profile/profile.service';
 import { PayerService } from '@shared/services/payer/payer.service';
 import { EventService } from '@shared/services/event/event.service';
 import { GetThumbnail } from '@models/get-thumbnail';
+import { FolderResponse } from '@shared/services/api/folder.repo';
 import { ConnectionsDialogComponent } from '../connections-dialog/connections-dialog.component';
 import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
 import { MyArchivesDialogComponent } from '../my-archives-dialog/my-archives-dialog.component';
@@ -211,9 +212,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 			const apps = find(this.accountService.getRootFolder().ChildItemVOs, {
 				type: 'type.folder.root.app',
 			});
-			const folderResponse = await this.api.folder.getWithChildren([
-				new FolderVO(apps),
-			]);
+			const folderResponse: FolderResponse =
+				await this.api.folder.getWithChildren([new FolderVO(apps)], false);
 			const appsFolder = folderResponse.getFolderVO(true);
 			this.appsSubfolders = appsFolder.ChildItemVOs as FolderVO[];
 		} catch (err) {

@@ -1040,7 +1040,7 @@ export class FileListItemComponent
 			this.folderThumb500 = thumbs.folderThumb500;
 		} else {
 			this.api.folder
-				.getWithChildren([this.item as FolderVO])
+				.getWithChildren([this.item as FolderVO], false)
 				.then((resp) => {
 					if (resp.isSuccessful) {
 						const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;

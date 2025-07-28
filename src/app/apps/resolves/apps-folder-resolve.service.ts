@@ -25,9 +25,10 @@ export class AppsFolderResolveService {
 		const appsFolder = find(this.accountService.getRootFolder().ChildItemVOs, {
 			type: 'type.folder.root.app',
 		});
-		const folderResponse = await this.api.folder.getWithChildren([
-			new FolderVO(appsFolder),
-		]);
+		const folderResponse = await this.api.folder.getWithChildren(
+			[new FolderVO(appsFolder)],
+			false,
+		);
 
 		return folderResponse.getFolderVO(true);
 	}

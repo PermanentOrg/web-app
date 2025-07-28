@@ -17,11 +17,11 @@ type ResponseClass<T> = new (data: any) => T;
 type ResponseType = 'json' | 'text';
 
 interface RequestOptions {
-  csrf?: boolean;
-  authToken?: boolean;
-  useStelaDomain?: boolean;
-  responseType?: ResponseType;
-  headers?: Record<string, any>;
+	csrf?: boolean;
+	authToken?: boolean;
+	useStelaDomain?: boolean;
+	responseType?: ResponseType;
+	headers?: Record<string, any>;
 }
 
 const defaultOptions: RequestOptions = {

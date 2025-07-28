@@ -286,7 +286,7 @@ export class DataService {
 		const promises: Promise<any>[] = [];
 
 		promises.push(
-			records.length ? this.api.record.get(records) : Promise.resolve(),
+			records.length ? this.api.record.get(records, false) : Promise.resolve(),
 		);
 
 		if (!withChildren) {
@@ -296,7 +296,7 @@ export class DataService {
 		} else {
 			promises.push(
 				folders.length
-					? this.api.folder.getWithChildren(folders)
+					? this.api.folder.getWithChildren(folders, false)
 					: Promise.resolve(),
 			);
 		}

@@ -43,42 +43,54 @@ export class FolderRepo extends BaseRepo {
 		});
 	}
 
-  public async getWithChildren(
-    folderVOs: FolderVO[],
-    isV2: boolean = false,
-    optionalHeaders: Record<string, any> = {},
-  ): Promise<FolderResponse | FolderVO> {
-    if (!isV2) {
-      const data = folderVOs.map((folderVO) => {
-        return {
-          FolderVO: {
-            archiveNbr: folderVO.archiveNbr,
-            folder_linkId: folderVO.folder_linkId,
-            folderId: folderVO.folderId,
-          },
-        };
-      });
+	public async getWithChildren(
+		folderVOs: FolderVO[],
+		isV2: false,
+		optionalHeaders?: Record<string, any>,
+	): Promise<FolderResponse>;
 
-      return this.http.sendRequestPromise<FolderResponse>(
-        '/folder/getWithChildren',
-        data,
-        { responseClass: FolderResponse },
-      );
-    } else {
-      const params = {
-        archiveId: folderVOs[0].archiveId,
-        folderId: folderVOs[0].folderId,
-      };
+	public async getWithChildren(
+		folderVOs: FolderVO[],
+		isV2: true,
+		optionalHeaders?: Record<string, any>,
+	): Promise<FolderVO>;
 
-      const resultArray = await firstValueFrom(
-        this.httpV2.get<FolderVO>('/folder/getWithChildren', params, null, {
-          headers: optionalHeaders,
-        }),
-      );
+	public async getWithChildren(
+		folderVOs: FolderVO[],
+		isV2: boolean = false,
+		optionalHeaders: Record<string, any> = {},
+	): Promise<FolderResponse | FolderVO> {
+		if (!isV2) {
+			const data = folderVOs.map((folderVO) => {
+				return {
+					FolderVO: {
+						archiveNbr: folderVO.archiveNbr,
+						folder_linkId: folderVO.folder_linkId,
+						folderId: folderVO.folderId,
+					},
+				};
+			});
 
-      return resultArray[0];
-    }
-  }
+			return this.http.sendRequestPromise<FolderResponse>(
+				'/folder/getWithChildren',
+				data,
+				{ responseClass: FolderResponse },
+			);
+		} else {
+			const params = {
+				archiveId: folderVOs[0].archiveId,
+				folderId: folderVOs[0].folderId,
+			};
+
+			const resultArray = await firstValueFrom(
+				this.httpV2.get<FolderVO>('/folder/getWithChildren', params, null, {
+					headers: optionalHeaders,
+				}),
+			);
+
+			return resultArray[0];
+		}
+	}
 
 	public navigate(folderVO: FolderVO): Observable<FolderResponse> {
 		const response = {

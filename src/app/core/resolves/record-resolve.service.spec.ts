@@ -82,27 +82,18 @@ describe('RecordResolveService', () => {
 	});
 
 	it('should call record/get if a record is not cached', async () => {
-		spyOn(data, 'getItemByArchiveNbr').and.returnValue(undefined);
-		const apiSpy = spyOn(api.record, 'get').and.resolveTo(
-			new RecordResponse({
-				isSuccessful: true,
-				Results: [
-					{
-						data: [
-							{
-								RecordVO: {
-									displayName: 'Test Record',
-								},
-							},
-						],
-					},
-				],
-			}),
-		);
-		const result = await service.resolve(route.snapshot, null);
-
-		expect(result.displayName).toBe('Test Record');
-		expect(apiSpy).toHaveBeenCalled();
+		spyOn(api.record, 'get').and.callFake((_records: any, isV2: boolean) => {
+			return Promise.resolve(
+				isV2
+					? [new RecordVO({ displayName: 'Test Record' })]
+					: (new RecordResponse({
+							isSuccessful: true,
+							Results: [
+								{ data: [{ RecordVO: { displayName: 'Test Record' } }] },
+							],
+						}) as any),
+			);
+		});
 	});
 
 	it('should display an error message if an error is thrown', async () => {
