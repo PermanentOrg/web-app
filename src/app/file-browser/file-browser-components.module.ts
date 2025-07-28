@@ -28,6 +28,7 @@ import { SharingDialogComponent } from './components/sharing-dialog/sharing-dial
 import { ShareLinkDropdownComponent } from './components/share-link-dropdown/share-link-dropdown.component';
 
 import { DownloadButtonComponent } from './components/download-button/download-button.component';
+import { ShareLinkSettingsComponent } from './components/share-link-settings/share-link-settings.component';
 
 @NgModule({
 	imports: [
@@ -49,6 +50,7 @@ import { DownloadButtonComponent } from './components/download-button/download-b
 		LocationPickerComponent,
 		SharingDialogComponent,
 		ShareLinkDropdownComponent,
+		ShareLinkSettingsComponent,
 	],
 	declarations: [
 		FileListComponent,
@@ -67,6 +69,7 @@ import { DownloadButtonComponent } from './components/download-button/download-b
 		SharingDialogComponent,
 		DownloadButtonComponent,
 		ShareLinkDropdownComponent,
+		ShareLinkSettingsComponent,
 	],
 })
 export class FileBrowserComponentsModule {
