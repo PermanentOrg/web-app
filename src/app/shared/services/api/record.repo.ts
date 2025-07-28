@@ -50,6 +50,18 @@ class MultipartUploadUrlsList {
 export class RecordRepo extends BaseRepo {
   public async get(
     recordVOs: RecordVO[],
+    isV2: boolean,
+    optionalHeaders?: Record<string, any>,
+  ): Promise<RecordResponse>;
+
+  public async get(
+    recordVOs: RecordVO[],
+    isV2: boolean,
+    optionalHeaders?: Record<string, any>,
+  ): Promise<RecordVO[]>;
+
+  public async get(
+    recordVOs: RecordVO[],
     isV2: boolean = false,
     optionalHeaders: Record<string, any> = {},
   ): Promise<RecordResponse | RecordVO[]> {

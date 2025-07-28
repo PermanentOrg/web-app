@@ -45,6 +45,18 @@ export class FolderRepo extends BaseRepo {
 
   public async getWithChildren(
     folderVOs: FolderVO[],
+    isV2: false,
+    optionalHeaders?: Record<string, any>,
+  ): Promise<FolderResponse>;
+
+  public async getWithChildren(
+    folderVOs: FolderVO[],
+    isV2: true,
+    optionalHeaders?: Record<string, any>,
+  ): Promise<FolderVO>;
+
+  public async getWithChildren(
+    folderVOs: FolderVO[],
     isV2: boolean = false,
     optionalHeaders: Record<string, any> = {},
   ): Promise<FolderResponse | FolderVO> {
