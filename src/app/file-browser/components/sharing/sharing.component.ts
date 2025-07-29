@@ -69,6 +69,7 @@ const ShareActions: { [key: string]: PromptButton } = {
   selector: 'pr-sharing',
   templateUrl: './sharing.component.html',
   styleUrls: ['./sharing.component.scss'],
+  standalone: false,
 })
 export class SharingComponent implements OnInit {
   public shareItem: RecordVO | FolderVO = null;

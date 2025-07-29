@@ -8,6 +8,7 @@ import { GiftingResponse } from '@shared/services/api/billing.repo';
   selector: 'pr-confirm-gift-dialog',
   templateUrl: './confirm-gift-dialog.component.html',
   styleUrls: ['./confirm-gift-dialog.component.scss'],
+  standalone: false,
 })
 export class ConfirmGiftDialogComponent {
   constructor(

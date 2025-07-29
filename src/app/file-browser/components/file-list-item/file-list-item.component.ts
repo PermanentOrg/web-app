@@ -158,6 +158,7 @@ const DRAG_MIN_Y = 1;
   templateUrl: './file-list-item.component.html',
   styleUrls: ['./file-list-item.component.scss'],
   animations: [ngIfFadeInAnimation],
+  standalone: false,
 })
 export class FileListItemComponent
   implements

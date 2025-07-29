@@ -11,6 +11,7 @@ import {
   selector: 'pr-select-archive-type-screen',
   templateUrl: './select-archive-type-screen.component.html',
   styleUrl: './select-archive-type-screen.component.scss',
+  standalone: false,
 })
 export class SelectArchiveTypeScreenComponent implements OnInit {
   selectedValue = '';

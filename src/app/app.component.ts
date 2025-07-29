@@ -6,6 +6,7 @@ declare var iosInnerHeight: Function;
   selector: 'pr-app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: false,
 })
 export class AppComponent {
   @HostBinding('class.mobile-safari') isMobileSafari = false;

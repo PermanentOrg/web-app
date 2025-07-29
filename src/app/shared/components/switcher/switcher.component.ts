@@ -7,6 +7,7 @@ import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
   selector: 'pr-switcher',
   templateUrl: './switcher.component.html',
   styleUrls: ['./switcher.component.scss'],
+  standalone: false,
 })
 export class SwitcherComponent {
   @Input() isChecked: boolean;

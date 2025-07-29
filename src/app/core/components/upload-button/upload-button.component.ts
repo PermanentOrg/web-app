@@ -27,6 +27,7 @@ import { EventService } from '@shared/services/event/event.service';
   selector: 'pr-upload-button',
   templateUrl: './upload-button.component.html',
   styleUrls: ['./upload-button.component.scss'],
+  standalone: false,
 })
 export class UploadButtonComponent implements OnDestroy, HasSubscriptions {
   private files: File[];

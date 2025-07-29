@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
   selector: 'pr-metadata-add-new-value',
   templateUrl: './add-new-value.component.html',
   styleUrls: ['./add-new-value.component.scss'],
+  standalone: false,
 })
 export class AddNewValueComponent {
   @Input() public dismissEvent: Subject<number>;

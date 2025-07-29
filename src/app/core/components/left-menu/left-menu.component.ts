@@ -40,6 +40,7 @@ import { MembersDialogComponent } from '../members-dialog/members-dialog.compone
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.scss'],
   animations: [ngIfSlideInAnimation, ngIfScaleHeightAnimation],
+  standalone: false,
 })
 export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isVisible = false;

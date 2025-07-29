@@ -12,6 +12,7 @@ import {
   selector: 'pr-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
+  standalone: false,
 })
 export class GalleryComponent implements OnInit {
   public isLoggedIn: boolean;

@@ -3,6 +3,7 @@ import { FolderVO, RecordVO } from '@models';
 
 @Pipe({
   name: 'publicRoute',
+  standalone: false,
 })
 export class PublicRoutePipe implements PipeTransform {
   constructor() {}

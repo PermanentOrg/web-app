@@ -55,6 +55,7 @@ type FileListColumn = 'name' | 'date' | 'type';
   templateUrl: './file-list-controls.component.html',
   styleUrls: ['./file-list-controls.component.scss'],
   animations: [ngIfFadeInAnimation],
+  standalone: false,
 })
 export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
   public isSorting$ = new Subject<boolean>();

@@ -81,6 +81,7 @@ const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
   templateUrl: './timeline-view.component.html',
   styleUrls: ['./timeline-view.component.scss'],
   animations: [slideUpAnimation],
+  standalone: false,
 })
 export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public isNavigating = false;

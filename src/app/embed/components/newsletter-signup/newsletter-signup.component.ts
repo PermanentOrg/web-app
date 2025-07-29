@@ -18,6 +18,7 @@ import { AccountVO } from '@models';
   selector: 'pr-newsletter-signup',
   templateUrl: './newsletter-signup.component.html',
   styleUrls: ['./newsletter-signup.component.scss'],
+  standalone: false,
 })
 export class NewsletterSignupComponent implements OnInit {
   @HostBinding('class.for-light-bg') forLightBg = true;

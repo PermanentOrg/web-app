@@ -15,6 +15,7 @@ import { DeviceService } from '@shared/services/device/device.service';
   selector: 'pr-public',
   templateUrl: './public.component.html',
   styleUrls: ['./public.component.scss'],
+  standalone: false,
 })
 export class PublicComponent implements OnInit, OnDestroy {
   @HostBinding('class.for-record') isRecord: boolean;

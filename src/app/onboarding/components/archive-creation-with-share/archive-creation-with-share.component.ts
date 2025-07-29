@@ -6,6 +6,7 @@ import { ApiService } from '@shared/services/api/api.service';
   selector: 'pr-archive-creation-with-share',
   templateUrl: './archive-creation-with-share.component.html',
   styleUrl: './archive-creation-with-share.component.scss',
+  standalone: false,
 })
 export class ArchiveCreationWithShareComponent implements OnInit {
   public hasShareToken = false;

@@ -10,6 +10,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
   selector: 'pr-archive-type-change-dialog',
   templateUrl: './archive-type-change-dialog.component.html',
   styleUrls: ['./archive-type-change-dialog.component.scss'],
+  standalone: false,
 })
 export class ArchiveTypeChangeDialogComponent {
   archive: ArchiveVO;

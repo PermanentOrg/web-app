@@ -22,6 +22,7 @@ import { matchControlValidator } from '@shared/utilities/forms';
   selector: 'pr-change-password',
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.scss',
+  standalone: false,
 })
 export class ChangePasswordComponent {
   public changePasswordForm: UntypedFormGroup;

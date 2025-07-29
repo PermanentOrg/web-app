@@ -4,6 +4,7 @@ import { ArchiveType } from '@models/archive-vo';
 
 @Pipe({
   name: 'archiveTypeName',
+  standalone: false,
 })
 export class ArchiveTypeNamePipe implements PipeTransform {
   public transform(type: ArchiveType): string {

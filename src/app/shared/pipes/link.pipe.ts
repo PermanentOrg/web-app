@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'link',
+  standalone: false,
 })
 export class LinkPipe implements PipeTransform {
   transform(text: any, ...args: any[]): any {

@@ -9,6 +9,7 @@ import { MessageService } from '@shared/services/message/message.service';
   selector: 'pr-legacy-contact-edit',
   templateUrl: './legacy-contact-edit.component.html',
   styleUrls: ['./legacy-contact-edit.component.scss'],
+  standalone: false,
 })
 export class LegacyContactEditComponent implements OnInit {
   @Input() public legacyContact: LegacyContact;

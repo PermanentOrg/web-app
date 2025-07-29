@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   selector: 'pr-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
+  standalone: false,
 })
 export class AuthComponent {
   constructor() {}

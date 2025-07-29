@@ -30,6 +30,7 @@ const NEW_ONBOARDING_CHANCE = 1;
   selector: 'pr-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
+  standalone: false,
 })
 export class SignupComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;

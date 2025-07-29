@@ -8,6 +8,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
   selector: 'pr-manage-tags',
   templateUrl: './manage-tags.component.html',
   styleUrls: ['./manage-tags.component.scss'],
+  standalone: false,
 })
 export class ManageTagsComponent {
   @Input() tags: TagVO[] = [];

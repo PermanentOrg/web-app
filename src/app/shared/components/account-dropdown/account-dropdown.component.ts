@@ -55,6 +55,7 @@ const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
   templateUrl: './account-dropdown.component.html',
   styleUrls: ['./account-dropdown.component.scss'],
   animations: [dropdownMenuAnimation, ngIfFadeInAnimationSlow],
+  standalone: false,
 })
 export class AccountDropdownComponent
   implements OnInit, OnDestroy, HasSubscriptions

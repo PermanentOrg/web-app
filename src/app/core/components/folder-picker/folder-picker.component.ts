@@ -20,6 +20,7 @@ export enum FolderPickerOperations {
   selector: 'pr-folder-picker',
   templateUrl: './folder-picker.component.html',
   styleUrls: ['./folder-picker.component.scss'],
+  standalone: false,
 })
 export class FolderPickerComponent implements OnDestroy {
   public currentFolder: FolderVO;

@@ -14,6 +14,7 @@ enum PasswordStrength {
   selector: 'pr-password-strength',
   templateUrl: './password-strength.html',
   styleUrls: ['./password-strength.scss'],
+  standalone: false,
 })
 export class PasswordStrengthComponent implements OnChanges {
   @Input() password: string = '';

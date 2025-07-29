@@ -36,6 +36,7 @@ const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
   selector: 'pr-new-archive-form',
   templateUrl: './new-archive-form.component.html',
   styleUrls: ['./new-archive-form.component.scss'],
+  standalone: false,
 })
 export class NewArchiveFormComponent {
   @Input() showRelations: boolean = false;

@@ -30,6 +30,7 @@ const elements = stripe.elements();
   selector: 'pr-new-pledge',
   templateUrl: './new-pledge.component.html',
   styleUrls: ['./new-pledge.component.scss'],
+  standalone: false,
 })
 export class NewPledgeComponent implements OnInit, AfterViewInit {
   @Input() inlineFlow: boolean = false;

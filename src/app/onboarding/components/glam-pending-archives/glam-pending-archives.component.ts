@@ -9,6 +9,7 @@ import { OnboardingService } from '../../services/onboarding.service';
   selector: 'pr-glam-pending-archives',
   templateUrl: './glam-pending-archives.component.html',
   styleUrl: './glam-pending-archives.component.scss',
+  standalone: false,
 })
 export class GlamPendingArchivesComponent {
   @Input() pendingArchives: ArchiveVO[] = [];

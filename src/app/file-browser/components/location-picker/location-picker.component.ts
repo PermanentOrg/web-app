@@ -33,6 +33,7 @@ const DEFAULT_CENTER: google.maps.LatLngLiteral = {
   templateUrl: './location-picker.component.html',
   styleUrls: ['./location-picker.component.scss'],
   animations: [ngIfFadeInAnimation],
+  standalone: false,
 })
 export class LocationPickerComponent implements OnInit, AfterViewInit {
   @Input() item: ItemVO;

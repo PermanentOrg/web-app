@@ -13,6 +13,7 @@ import { Subject } from 'rxjs';
   selector: 'pr-metadata-add-new-category',
   templateUrl: './add-new-category.component.html',
   styleUrls: ['./add-new-category.component.scss'],
+  standalone: false,
 })
 export class AddNewCategoryComponent {
   @Input() public dismissEvent: Subject<number>;

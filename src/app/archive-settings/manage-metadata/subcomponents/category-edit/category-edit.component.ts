@@ -11,6 +11,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
   selector: 'pr-metadata-category-edit',
   templateUrl: './category-edit.component.html',
   styleUrls: ['./category-edit.component.scss'],
+  standalone: false,
 })
 export class CategoryEditComponent {
   @Input() public category: string;

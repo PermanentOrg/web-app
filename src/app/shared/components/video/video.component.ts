@@ -11,6 +11,7 @@ const FADE_IN_DURATION = 0.3;
   selector: 'pr-video',
   templateUrl: './video.component.html',
   styleUrls: ['./video.component.scss'],
+  standalone: false,
 })
 export class VideoComponent implements OnInit {
   @Input() item: RecordVO;

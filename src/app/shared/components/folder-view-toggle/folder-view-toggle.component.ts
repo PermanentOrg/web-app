@@ -20,6 +20,7 @@ interface FolderViewToggleOption {
   selector: 'pr-folder-view-toggle',
   templateUrl: './folder-view-toggle.component.html',
   styleUrls: ['./folder-view-toggle.component.scss'],
+  standalone: false,
 })
 export class FolderViewToggleComponent implements OnDestroy, HasSubscriptions {
   currentFolderView: FolderView;

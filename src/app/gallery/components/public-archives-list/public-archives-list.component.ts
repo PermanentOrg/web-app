@@ -9,6 +9,7 @@ import { MessageService } from '../../../shared/services/message/message.service
   selector: 'pr-public-archives-list',
   templateUrl: './public-archives-list.component.html',
   styleUrls: ['./public-archives-list.component.scss'],
+  standalone: false,
 })
 export class PublicArchivesListComponent implements OnInit {
   public publicArchives: ArchiveVO[] = [];

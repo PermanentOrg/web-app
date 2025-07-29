@@ -23,6 +23,7 @@ moment.updateLocale('en', {
 
 @Pipe({
   name: 'timeAgo',
+  standalone: false,
 })
 export class TimeAgoPipe implements PipeTransform {
   transform(datetime: string): any {

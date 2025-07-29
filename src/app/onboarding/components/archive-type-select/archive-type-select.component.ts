@@ -11,6 +11,7 @@ import { OnboardingTypes } from '../../shared/onboarding-screen';
   selector: 'pr-archive-type-select',
   templateUrl: './archive-type-select.component.html',
   styleUrls: ['./archive-type-select.component.scss'],
+  standalone: false,
 })
 export class ArchiveTypeSelectComponent {
   @Input() selectedValue: string = '';

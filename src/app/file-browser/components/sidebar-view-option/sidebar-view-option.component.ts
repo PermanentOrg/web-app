@@ -11,6 +11,7 @@ type FolderViewImages = {
   selector: 'pr-sidebar-view-option',
   templateUrl: './sidebar-view-option.component.html',
   styleUrls: ['./sidebar-view-option.component.scss'],
+  standalone: false,
 })
 export class SidebarViewOptionComponent {
   @Input() folderView: FolderViewType;

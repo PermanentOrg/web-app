@@ -25,6 +25,7 @@ import { BaseResponse } from '@shared/services/api/base';
   selector: 'pr-right-menu',
   templateUrl: './right-menu.component.html',
   styleUrls: ['./right-menu.component.scss'],
+  standalone: false,
 })
 export class RightMenuComponent implements OnInit {
   @Input() isVisible: boolean;

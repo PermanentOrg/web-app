@@ -5,7 +5,6 @@ import { DialogCdkService } from './dialog-cdk.service';
 
 @Component({
   selector: 'pr-dummy',
-  standalone: true,
   imports: [],
   template: 'Hello world',
 })

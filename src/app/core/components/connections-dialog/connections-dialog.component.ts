@@ -60,6 +60,7 @@ export type ConnectionsTab = 'connections' | 'pending' | 'new';
   templateUrl: './connections-dialog.component.html',
   styleUrls: ['./connections-dialog.component.scss'],
   providers: [DataService],
+  standalone: false,
 })
 export class ConnectionsDialogComponent {
   connections: RelationVO[] = [];

@@ -3,6 +3,7 @@ import { FolderVO, ItemVO, RecordVO, FolderSizeVOData } from '@models';
 
 @Pipe({
   name: 'folderContents',
+  standalone: false,
 })
 export class FolderContentsPipe implements PipeTransform {
   constructor() {}

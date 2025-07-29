@@ -12,6 +12,7 @@ import { Subject, Subscription } from 'rxjs';
   selector: 'pr-metadata-form-edit',
   templateUrl: './form-edit.component.html',
   styleUrls: ['./form-edit.component.scss'],
+  standalone: false,
 })
 export class FormEditComponent implements OnInit, OnDestroy {
   public static nextId = 0;

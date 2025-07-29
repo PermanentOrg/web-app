@@ -14,7 +14,6 @@ import { OnboardingTypes } from '@root/app/onboarding/shared/onboarding-screen';
 
 @Component({
   selector: 'pr-archive-type-icon',
-  standalone: true,
   imports: [FontAwesomeModule],
   templateUrl: './archive-type-icon.component.html',
 })

@@ -11,6 +11,7 @@ import { MessageService } from '@shared/services/message/message.service';
   selector: 'pr-notification-preferences',
   templateUrl: './notification-preferences.component.html',
   styleUrls: ['./notification-preferences.component.scss'],
+  standalone: false,
 })
 export class NotificationPreferencesComponent {
   public account: AccountVO;

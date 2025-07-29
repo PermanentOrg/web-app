@@ -48,6 +48,7 @@ enum FormType {
   selector: 'pr-share-preview',
   templateUrl: './share-preview.component.html',
   styleUrls: ['./share-preview.component.scss'],
+  standalone: false,
 })
 export class SharePreviewComponent implements OnInit, OnDestroy {
   // share data

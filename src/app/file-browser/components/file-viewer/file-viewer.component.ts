@@ -34,6 +34,7 @@ import { TagsService } from '../../../core/services/tags/tags.service';
   templateUrl: './file-viewer.component.html',
   styleUrls: ['./file-viewer.component.scss'],
   providers: [SearchService],
+  standalone: false,
 })
 export class FileViewerComponent implements OnInit, OnDestroy {
   // Record

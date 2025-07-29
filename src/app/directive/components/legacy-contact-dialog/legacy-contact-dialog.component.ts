@@ -8,6 +8,7 @@ import { DialogState } from '../directive-dialog/directive-dialog.component';
   selector: 'pr-legacy-contact-dialog',
   templateUrl: './legacy-contact-dialog.component.html',
   styleUrls: ['./legacy-contact-dialog.component.scss'],
+  standalone: false,
 })
 export class LegacyContactDialogComponent {
   constructor(private event: EventService) {

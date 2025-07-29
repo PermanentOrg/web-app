@@ -13,6 +13,7 @@ import { ScrollSectionDirective } from './scroll-section.directive';
 @Directive({
   selector: '[prScrollNav]',
   exportAs: 'prScrollNav',
+  standalone: false,
 })
 export class ScrollNavDirective implements AfterContentInit {
   @ContentChildren(ScrollSectionDirective, { descendants: true })

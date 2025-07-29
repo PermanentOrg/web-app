@@ -3,6 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'accessRole',
+  standalone: false,
 })
 export class AccessRolePipe implements PipeTransform {
   roles = {

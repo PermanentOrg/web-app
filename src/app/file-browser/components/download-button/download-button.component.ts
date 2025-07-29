@@ -19,6 +19,7 @@ interface Format {
   selector: 'pr-download-button',
   templateUrl: './download-button.component.html',
   styleUrls: ['./download-button.component.scss'],
+  standalone: false,
 })
 export class DownloadButtonComponent {
   @Input() selectedItem;
