@@ -28,6 +28,8 @@ import { SharingDialogComponent } from './components/sharing-dialog/sharing-dial
 import { ShareLinkDropdownComponent } from './components/share-link-dropdown/share-link-dropdown.component';
 
 import { DownloadButtonComponent } from './components/download-button/download-button.component';
+import { FileListV2Component } from './components/file-list-v2/file-list-v2.component';
+import { FileViewerV2Component } from './components/file-viewer-v2/file-viewer-v2.component';
 
 @NgModule({
   imports: [
@@ -40,8 +42,10 @@ import { DownloadButtonComponent } from './components/download-button/download-b
   ],
   exports: [
     FileListComponent,
+    FileListV2Component,
     FileListItemComponent,
     FileViewerComponent,
+    FileViewerV2Component,
     VideoComponent,
     SidebarComponent,
     FileListControlsComponent,
@@ -67,6 +71,8 @@ import { DownloadButtonComponent } from './components/download-button/download-b
     SharingDialogComponent,
     DownloadButtonComponent,
     ShareLinkDropdownComponent,
+    FileListV2Component,
+    FileViewerV2Component,
   ],
 })
 export class FileBrowserComponentsModule {

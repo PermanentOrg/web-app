@@ -15,6 +15,12 @@ export interface TagLinkVOData extends BaseVOData {
   refId?: number;
 }
 
+export interface Tag {
+  id: string;
+  name: string;
+  type: string;
+}
+
 export class TagVO extends BaseVO implements TagVOData {
   public tagId: number;
   public name: string;

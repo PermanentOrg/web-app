@@ -1,1 +1,41 @@
-<p>file-list-v2 works!</p>
+<pr-file-list-controls
+  [hidden]="!showSidebar"
+  (refreshView)="refreshView()"
+  #controls
+></pr-file-list-controls>
+<pr-folder-description
+  [folder]="currentFolder"
+  *ngIf="showFolderDescription && !isRootFolder"
+></pr-folder-description>
+<div
+  class="file-list-scroll"
+  [class.is-sorting]="controls?.isSorting$ | async"
+  #scroll
+>
+  <div
+    class="empty-message"
+    *ngIf="!currentFolder?.ChildItemVOs || !currentFolder?.ChildItemVOs.length"
+  >
+    This folder is empty
+  </div>
+  <pr-file-list-item
+    *ngFor="let item of currentFolder?.ChildItemVOs"
+    [@ngIfScaleAnimationDynamic]="
+      item?.isPendingAction || item?.isNewlyCreated ? 'animate' : 'static'
+    "
+    [item]="item"
+    [folderView]="folderView"
+    [multiSelect]="isMultiSelectEnabled"
+    [allowNavigation]="allowNavigation"
+    [isSelected]="showSidebar ? selectedItems.has(item) : false"
+    [canSelect]="showSidebar"
+    [showFolderThumbnails]="showFolderThumbnails"
+    (itemClicked)="onItemClick($event)"
+    (itemVisible)="onItemVisible($event)"
+    (refreshView)="refreshView()"
+  ></pr-file-list-item>
+</div>
+<pr-sidebar class="adjust-for-announcement" *ngIf="showSidebar"></pr-sidebar>
+<div [@slideUpAnimation]="o.isActivated ? o.activatedRoute : ''">
+  <router-outlet #o="outlet"></router-outlet>
+</div>

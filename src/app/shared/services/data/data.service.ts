@@ -11,6 +11,7 @@ import {
   FolderVOData,
   RecordVOData,
   SortType,
+  Record,
 } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import {
@@ -512,6 +513,32 @@ export class DataService {
       }
 
       return find(fileItem.FileVOs, { format: 'file.format.original' });
+    }
+  }
+
+  public downloadFileV2(item: Record, type?: string): Promise<any> {
+    if (item.files && item.files.length) {
+      downloadFile(item, type);
+      return Promise.resolve();
+    } else {
+      return this.fetchFullItems([item as unknown as ItemVO]).then(() => {
+        downloadFile(item, type);
+      });
+    }
+
+    function downloadFile(fileItem: any, type?: string) {
+      const fileVO = getFile(fileItem, type) as any;
+      const link = document.createElement('a');
+      link.href = fileVO.downloadUrl;
+      link.click();
+    }
+
+    function getFile(fileItem: RecordVO, type?: string) {
+      if (type) {
+        return find(fileItem.files, { type });
+      }
+
+      return find(fileItem.files, { format: 'file.format.original' });
     }
   }
 

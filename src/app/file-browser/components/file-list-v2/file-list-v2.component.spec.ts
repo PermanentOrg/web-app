@@ -78,8 +78,8 @@ describe('FileListV2Component', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, NoopAnimationsModule],
-      declarations: [FileListV2Component, FileListItemComponent, CdkPortal],
+      imports: [RouterTestingModule, NoopAnimationsModule, CdkPortal],
+      declarations: [FileListV2Component, FileListItemComponent],
       providers: [
         { provide: DataService, useValue: dataServiceMock },
         { provide: AccountService, useValue: accountServiceMock },
