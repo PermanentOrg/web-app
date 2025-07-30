@@ -10,8 +10,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { GetAccessFile } from '@models/get-access-file';
-import { RecordVO } from '@models/index';
+import { GetAccessFile, GetAccessFileV2 } from '@models/get-access-file';
+import { Record, RecordVO } from '@models/index';
 import OpenSeaDragon from 'openseadragon';
 import { ZoomEvent, FullScreenEvent } from 'openseadragon';
 
@@ -21,7 +21,7 @@ import { ZoomEvent, FullScreenEvent } from 'openseadragon';
   styleUrl: './zooming-image-viewer.component.scss',
 })
 export class ZoomingImageViewerComponent implements AfterViewInit, OnDestroy {
-  @Input() public item: RecordVO;
+  @Input() public item;
 
   @Output() public disableSwipe = new EventEmitter<boolean>(false);
   @Output() public isFullScreen = new EventEmitter<boolean>(false);
@@ -41,20 +41,25 @@ export class ZoomingImageViewerComponent implements AfterViewInit, OnDestroy {
 
     if (
       viewerDiv &&
-      this.item instanceof RecordVO &&
-      this.item.FileVOs &&
+      (this.item instanceof RecordVO || this.item?.recordId) &&
+      (this.item.FileVOs || this.item.files) &&
       this.item.type === 'type.record.image'
     ) {
-      const fullSizeImage = ZoomingImageViewerComponent.chooseFullSizeImage(
+      const fullSizeImageV1 = ZoomingImageViewerComponent.chooseFullSizeImage(
         this.item,
       );
-      if (fullSizeImage == null) {
+
+      const fullSizeImageV2 = ZoomingImageViewerComponent.chooseFullSizeImageV2(
+        this.item as unknown as Record,
+      );
+
+      if (fullSizeImageV1 == null && fullSizeImageV2 == null) {
         return;
       }
       this.viewer = this.imageViewerFn({
         element: viewerDiv,
         prefixUrl: 'assets/openseadragon/images/',
-        tileSources: { type: 'image', url: fullSizeImage },
+        tileSources: { type: 'image', url: fullSizeImageV1 || fullSizeImageV2 },
         visibilityRatio: 1.0,
         constrainDuringPan: true,
         maxZoomLevel: 10,
@@ -82,6 +87,10 @@ export class ZoomingImageViewerComponent implements AfterViewInit, OnDestroy {
     if (this.viewer) {
       this.viewer.destroy();
     }
+  }
+
+  public static chooseFullSizeImageV2(record: Record) {
+    return GetAccessFileV2(record)?.fileUrl;
   }
 
   public static chooseFullSizeImage(record: RecordVO) {

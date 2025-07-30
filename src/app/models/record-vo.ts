@@ -8,8 +8,8 @@ import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ChildItemData, HasParentFolder } from './folder-vo';
 import { RecordType, FolderLinkType } from './vo-types';
-import { LocnVOData } from './locn-vo';
-import { TagVOData } from './tag-vo';
+import { LocnVOData, Locn } from './locn-vo';
+import { TagVOData, Tag } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
 import { HasThumbnails } from './get-thumbnail';
 import { FileFormat, PermanentFile } from './file-vo';
@@ -236,4 +236,61 @@ export interface RecordVOData extends BaseVOData {
   ShareVOs?: any;
   AccessVO?: any;
   isFolder?: boolean;
+}
+
+export interface Record {
+  recordId?: string;
+  displayName?: string;
+  archiveId?: string;
+  archiveNumber?: string;
+  description?: string | null;
+  publicAt?: string | null;
+  downloadName?: string;
+  uploadFileName?: string;
+  uploadAccountId?: string;
+  uploadPayerAccountId?: string;
+  size?: number;
+  displayDate?: string;
+  fileCreatedAt?: string | null;
+  imageRatio?: number;
+  thumbUrl200?: string;
+  thumbUrl500?: string;
+  thumbUrl1000?: string;
+  thumbUrl2000?: string;
+  status?: string;
+  type?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  altText?: string | null;
+  files?: {
+    size: number;
+    type: string;
+    fileId: string;
+    format: string;
+    fileUrl: string;
+    createdAt: string;
+    updatedAt: string;
+    downloadUrl: string;
+  }[];
+  folderLinkId?: string;
+  folderLinkType?: string;
+  parentFolderId?: string;
+  parentFolderLinkId?: string;
+  parentFolderArchiveNumber?: string;
+  tags?: Tag[];
+  archiveArchiveNumber?: string;
+  location?: Locn;
+  dataStatus?: number;
+  shares?: any | null;
+  archive?: {
+    id: string;
+    archiveNumber: string;
+    name: string;
+  };
+  shareLink?: {
+    creatorAccount: {
+      id: string;
+      name: string;
+    };
+  };
 }

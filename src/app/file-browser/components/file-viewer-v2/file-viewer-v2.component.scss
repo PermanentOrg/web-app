@@ -1,0 +1,311 @@
+@import 'variables';
+
+$toolbar-height: 30px;
+$transition-length: 0.35s;
+$button-size: 2rem;
+:host {
+  @include fullscreenComponent;
+}
+
+.file-viewer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+
+  &.minimal {
+    background-color: black;
+    .file-viewer-close {
+      transform: translateY(-100%);
+    }
+
+    .file-viewer-name {
+      transform: translateY(100%);
+    }
+  }
+
+  transition: background-color $transition-length ease-in-out;
+}
+
+.file-viewer-close {
+  position: absolute;
+  top: 0;
+  height: $toolbar-height;
+  transform: translateY(0);
+  display: flex;
+  align-items: center;
+
+  a {
+    line-height: $toolbar-height;
+    padding: 0px 5px;
+    cursor: pointer;
+    > span {
+      opacity: 0.5;
+    }
+  }
+
+  button.close {
+    border-radius: 50%;
+    background-color: $gray-500;
+    width: $button-size;
+    height: $button-size;
+    line-height: $button-size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.file-viewer-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  white-space: nowrap;
+  height: $toolbar-height;
+  line-height: $toolbar-height;
+  text-align: center;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: translateY(0);
+}
+
+.file-viewer-name,
+.file-viewer-close {
+  transition: transform $transition-length ease-in-out;
+}
+
+.file-viewer-image,
+pr-zooming-image-viewer,
+pr-thumbnail,
+pr-video,
+pr-audio .thumb-preview,
+iframe {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 5px;
+  right: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+
+  &.full {
+    z-index: 1;
+  }
+}
+
+.thumb-target {
+  position: absolute;
+  top: $toolbar-height;
+  bottom: $toolbar-height;
+  left: 0px;
+  right: 0px;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+
+    @media screen and (max-width: 800px) {
+      display: none;
+    }
+  }
+}
+
+.file-viewer-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: $button-size;
+  height: $button-size;
+  border-radius: 50%;
+  background: rgba($gray-500, 0.5);
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 2;
+  color: white;
+  cursor: pointer;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  span {
+    position: relative;
+    top: -2px;
+  }
+
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
+
+  &.file-viewer-control-previous {
+    left: 10px;
+  }
+
+  &.file-viewer-control-next {
+    right: 10px;
+  }
+}
+
+.thumb-wrapper {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+
+  &.prev {
+    transform: translateX(-100%);
+    z-index: 1;
+  }
+
+  &.next {
+    transform: translateX(100%);
+    z-index: 1;
+  }
+
+  &.current {
+    z-index: 2;
+  }
+}
+
+.file-viewer-metadata,
+.file-viewer-metadata-wrapper {
+  display: none;
+}
+
+.editing-date pr-inline-value-edit[type='date'] {
+  left: -20%;
+  top: 3em;
+  margin-bottom: 3em;
+}
+
+.can-edit {
+  pr-tags,
+  .location-container {
+    cursor: pointer;
+  }
+}
+
+// Desktop tweaks
+@media screen and (min-width: 801px) {
+  .thumb-target.thumb-target {
+    right: $metadata-width;
+    overflow: hidden;
+  }
+
+  .file-viewer-metadata-wrapper {
+    top: $toolbar-height;
+    bottom: $toolbar-height;
+    width: $metadata-width;
+    right: 0;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    td:first-child {
+      font-weight: bold;
+    }
+
+    .metadata-table {
+      width: calc($metadata-width - 20px);
+    }
+  }
+
+  .file-viewer-metadata {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: auto 0;
+  }
+
+  .file-viewer-name {
+    display: none;
+  }
+}
+
+.file-viewer-metadata {
+  td {
+    padding: 5px 0;
+    vertical-align: top;
+
+    &:first-child {
+      padding-right: 15px;
+      vertical-align: middle;
+
+      &.top-align {
+        vertical-align: top;
+        padding-top: 0.5rem;
+      }
+    }
+  }
+
+  .file-viewer-description {
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .metadata-item {
+    padding: 5px 10px;
+    label {
+      font-weight: 600;
+      margin-bottom: 0px;
+    }
+
+    .metadata-item-content {
+      $padding-y: 0.25rem;
+      padding: $padding-y 0;
+      min-height: $line-height-base * 1rem + (2 * $padding-y);
+    }
+  }
+}
+
+@supports (padding-left: env(safe-area-inset-left)) {
+  .file-viewer {
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .file-viewer-name {
+    bottom: env(safe-area-inset-bottom);
+  }
+
+  .thumb-target {
+    --safe-area-inset-top: env(safe-area-inset-top);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    top: calc(var(--safe-area-inset-top) + 30px);
+    bottom: calc(var(--safe-area-inset-bottom) + 30px);
+    left: env(safe-area-inset-left);
+    right: env(safe-area-inset-right);
+  }
+}
+
+pr-download-button {
+  margin-top: 1rem;
+}
+
+.title {
+  width: 110px;
+}
+
+.alt-text {
+  font-weight: bold;
+  margin-top: 10px;
+}
