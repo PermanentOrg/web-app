@@ -6,6 +6,7 @@ import {
   ElementRef,
   AfterViewInit,
   HostBinding,
+  ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { getFormInputError } from '@shared/utilities/forms';
@@ -46,6 +47,8 @@ export class FormInputComponent implements OnInit, AfterViewInit {
 
   @HostBinding('class.right-align') rightAlign = false;
   @HostBinding('class.input-vertical') inputVertical = true;
+
+  openStatus = false;
 
   @Input() config: FormInputConfig;
 
@@ -124,5 +127,14 @@ export class FormInputComponent implements OnInit, AfterViewInit {
 
   getOptionTextFromValue(value: string) {
     return find(this.selectOptions, { value })?.text;
+  }
+
+  openSelect() {
+    this.openStatus = !this.openStatus;
+  }
+
+  handleChange() {
+    this.openStatus = false;
+    alert('Element selected... closed');
   }
 }
