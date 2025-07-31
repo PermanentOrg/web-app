@@ -323,6 +323,7 @@ export class FileListComponent
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.showSidebar = this.route.snapshot.data.showSidebar;
     this.dataService.setCurrentFolder(this.currentFolder);
+
     this.isRootFolder = this.currentFolder.type.includes('root');
     this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
 

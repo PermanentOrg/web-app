@@ -40,6 +40,7 @@ import { PublishComponent } from '@fileBrowser/components/publish/publish.compon
 import { EditTagsComponent } from '@fileBrowser/components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
@@ -132,6 +133,7 @@ export class EditService {
     private device: DeviceService,
     private secrets: SecretsService,
     private event: EventService,
+    private shareLinkService: ShareLinksApiService,
   ) {
     this.loadGoogleMapsApi();
   }
@@ -253,6 +255,7 @@ export class EditService {
           const response: ShareResponse = await this.api.share.getShareLink(
             items[0],
           );
+
           actionDeferred.resolve();
           this.dialog.open(SharingComponent, {
             data: {
@@ -526,18 +529,26 @@ export class EditService {
   }
 
   async openShareDialog(item: ItemVO) {
-    const response = await this.api.share.getShareLink(item);
+    const itemType = item.isRecord ? 'record' : 'folder';
+
+    const itemId = item instanceof RecordVO ? item.recordId : item.folderId;
+
+    const response = await this.shareLinkService.generateShareLink({
+      itemId,
+      itemType,
+    });
+
     if (this.device.isMobile()) {
       try {
         this.dialog.open(SharingComponent, {
           panelClass: 'dialog',
-          data: { item, link: response.getShareByUrlVO() },
+          data: { item, shareLinkResponse: response },
         });
       } catch (err) {}
     } else {
       try {
         this.dialog.open(SharingDialogComponent, {
-          data: { item, link: response.getShareByUrlVO() },
+          data: { item, shareLinkResponse: response },
           width: '600px',
           panelClass: 'dialog',
         });
