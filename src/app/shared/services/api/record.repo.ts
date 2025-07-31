@@ -140,8 +140,10 @@ export class RecordRepo extends BaseRepo {
 		uploadId: string,
 		key: string,
 		eTags: string[],
+		archiveId: string,
 	): Promise<RecordVO> {
 		const body = {
+			archiveId,
 			displayName: record.displayName,
 			parentFolderId: record.parentFolderId,
 			uploadFileName: record.uploadFileName,
