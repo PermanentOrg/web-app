@@ -22,6 +22,7 @@ import { NotificationService } from '../../services/notification.service';
   selector: 'pr-notification-dialog',
   templateUrl: './notification-dialog.component.html',
   styleUrls: ['./notification-dialog.component.scss'],
+  standalone: false,
 })
 export class NotificationDialogComponent
   implements AfterViewInit, OnDestroy, HasSubscriptions

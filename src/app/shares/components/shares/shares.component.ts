@@ -41,6 +41,7 @@ import { EventService } from '@shared/services/event/event.service';
   templateUrl: './shares.component.html',
   styleUrls: ['./shares.component.scss'],
   animations: [slideUpAnimation, fadeAnimation, ngIfScaleAnimationDynamic],
+  standalone: false,
 })
 export class SharesComponent
   implements OnInit, OnDestroy, FileListItemParent, HasSubscriptions

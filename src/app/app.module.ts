@@ -4,7 +4,8 @@ import {
   Injectable,
   ErrorHandler,
   Injector,
-  APP_INITIALIZER,
+  inject,
+  provideAppInitializer,
 } from '@angular/core';
 import {
   RouterModule,
@@ -169,12 +170,13 @@ export class PermErrorHandler implements ErrorHandler {
       provide: OverlayContainer,
       useClass: CustomOverlayContainer,
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeAnalytics,
-      deps: [EventService, AnalyticsService],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+      const initializerFn = initializeAnalytics(
+        inject(EventService),
+        inject(AnalyticsService),
+      );
+      return initializerFn();
+    }),
     {
       provide: ErrorHandler,
       useClass: SentryErrorHandler,

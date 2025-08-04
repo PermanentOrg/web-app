@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
   selector: 'pr-folder-view',
   templateUrl: './folder-view.component.html',
   styleUrls: ['./folder-view.component.scss'],
+  standalone: false,
 })
 export class FolderViewComponent implements OnDestroy {
   public currentView: FolderView;

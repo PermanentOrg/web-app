@@ -22,6 +22,7 @@ import { MessageService } from '@shared/services/message/message.service';
   selector: 'pr-claim-storage-login',
   templateUrl: './claim-storage-login.component.html',
   styleUrls: ['./claim-storage-login.component.scss'],
+  standalone: false,
 })
 export class ClaimStorageLoginComponent {
   public waiting = false;

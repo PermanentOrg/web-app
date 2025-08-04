@@ -9,6 +9,7 @@ import { MessageService } from '../../../shared/services/message/message.service
   selector: 'pr-advanced-settings',
   templateUrl: './advanced-settings.component.html',
   styleUrls: ['./advanced-settings.component.scss'],
+  standalone: false,
 })
 export class AdvancedSettingsComponent implements OnInit {
   public allowSFTPDeletion: number;

@@ -16,6 +16,7 @@ import { ConnectorComponent } from './connector.component';
     [connector]="connector"
     [appsFolder]="appsFolder"
   ></pr-connector>`,
+  standalone: false,
 })
 class TestHostComponent {
   @ViewChild(ConnectorComponent) public component: ConnectorComponent;

@@ -16,6 +16,7 @@ import {
   selector: 'pr-verify',
   templateUrl: './verify-embed.component.html',
   styleUrls: ['./verify-embed.component.scss'],
+  standalone: false,
 })
 export class VerifyEmbedComponent {
   verifyForm: UntypedFormGroup;

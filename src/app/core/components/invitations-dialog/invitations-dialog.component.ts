@@ -25,6 +25,7 @@ type InvitationsTab = 'new' | 'pending' | 'accepted';
   selector: 'pr-invitations-dialog',
   templateUrl: './invitations-dialog.component.html',
   styleUrls: ['./invitations-dialog.component.scss'],
+  standalone: false,
 })
 export class InvitationsDialogComponent implements OnInit {
   newInviteForm: UntypedFormGroup;

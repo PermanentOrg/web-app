@@ -5,6 +5,7 @@ import { ItemVO } from '../../models/index';
 @Pipe({
   name: 'getAltText',
   pure: false,
+  standalone: false,
 })
 export class GetAltTextPipe implements PipeTransform {
   transform(value: ItemVO): string {

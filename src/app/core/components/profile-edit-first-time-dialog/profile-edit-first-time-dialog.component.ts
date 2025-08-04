@@ -8,6 +8,7 @@ export const PROFILE_ONBOARDING_COOKIE = 'hasSeenProfileMessage';
   selector: 'pr-profile-edit-first-time-dialog',
   templateUrl: './profile-edit-first-time-dialog.component.html',
   styleUrls: ['./profile-edit-first-time-dialog.component.scss'],
+  standalone: false,
 })
 export class ProfileEditFirstTimeDialogComponent implements OnInit {
   constructor(

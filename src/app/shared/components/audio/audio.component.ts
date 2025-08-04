@@ -7,6 +7,7 @@ import { GetAccessFile } from '@models/get-access-file';
   selector: 'pr-audio',
   templateUrl: './audio.component.html',
   styleUrls: ['./audio.component.scss'],
+  standalone: false,
 })
 export class AudioComponent implements OnChanges {
   @Input() item: RecordVO;

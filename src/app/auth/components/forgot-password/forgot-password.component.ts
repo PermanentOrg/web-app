@@ -13,6 +13,7 @@ import { ApiService } from '@shared/services/api/api.service';
   selector: 'pr-login',
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss'],
+  standalone: false,
 })
 export class ForgotPasswordComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;

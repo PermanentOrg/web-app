@@ -13,6 +13,7 @@ const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
   selector: 'pr-upload-progress',
   templateUrl: './upload-progress.component.html',
   styleUrls: ['./upload-progress.component.scss'],
+  standalone: false,
 })
 export class UploadProgressComponent {
   UploadSessionStatus = UploadSessionStatus;

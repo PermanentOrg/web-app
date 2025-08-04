@@ -17,6 +17,7 @@ interface Method {
   selector: 'pr-two-factor-auth',
   templateUrl: './two-factor-auth.component.html',
   styleUrl: './two-factor-auth.component.scss',
+  standalone: false,
 })
 export class TwoFactorAuthComponent implements OnInit {
   turnOn: boolean = false;

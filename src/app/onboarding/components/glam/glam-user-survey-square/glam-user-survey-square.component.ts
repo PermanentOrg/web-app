@@ -5,6 +5,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'pr-glam-user-survey-square',
   templateUrl: './glam-user-survey-square.component.html',
   styleUrl: './glam-user-survey-square.component.scss',
+  standalone: false,
 })
 export class GlamUserSurveySquareComponent {
   @Input() text: string;

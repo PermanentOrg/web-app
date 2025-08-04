@@ -32,6 +32,7 @@ import { ConfirmGiftDialogComponent } from '../confirm-gift-dialog/confirm-gift-
   selector: 'pr-gift-storage',
   templateUrl: './gift-storage.component.html',
   styleUrls: ['./gift-storage.component.scss'],
+  standalone: false,
 })
 export class GiftStorageComponent implements OnDestroy {
   giftForm: UntypedFormGroup;

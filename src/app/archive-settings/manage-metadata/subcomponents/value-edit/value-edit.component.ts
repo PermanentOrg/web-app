@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
   selector: 'pr-metadata-edit-value[tag]',
   templateUrl: './value-edit.component.html',
   styleUrls: ['./value-edit.component.scss'],
+  standalone: false,
 })
 export class EditValueComponent {
   @Input() public tag: TagVO;

@@ -8,6 +8,7 @@ import { ApiService } from '@shared/services/api/api.service';
   selector: 'pr-legacy-contact-display',
   templateUrl: './legacy-contact-display.component.html',
   styleUrls: ['./legacy-contact-display.component.scss'],
+  standalone: false,
 })
 export class LegacyContactDisplayComponent implements OnInit {
   @Input() public initialLegacyContact: LegacyContact;

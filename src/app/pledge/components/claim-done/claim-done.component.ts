@@ -7,6 +7,7 @@ import { PledgeService } from '@pledge/services/pledge.service';
   selector: 'pr-claim-done',
   templateUrl: './claim-done.component.html',
   styleUrls: ['./claim-done.component.scss'],
+  standalone: false,
 })
 export class ClaimDoneComponent implements OnInit {
   public storageAmount: number;

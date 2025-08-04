@@ -4,6 +4,7 @@ import { TOOLTIPS } from './tooltips';
 
 @Pipe({
   name: 'prTooltip',
+  standalone: false,
 })
 export class TooltipsPipe implements PipeTransform {
   constructor() {}

@@ -3,6 +3,7 @@ import { FolderVO, RecordVO } from '@models';
 
 @Pipe({
   name: 'shareActionLabel',
+  standalone: false,
 })
 export class ShareActionLabelPipe implements PipeTransform {
   constructor() {}

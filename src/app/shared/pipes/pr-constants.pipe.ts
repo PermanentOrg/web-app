@@ -3,6 +3,7 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 
 @Pipe({
   name: 'prConstants',
+  standalone: false,
 })
 export class PrConstantsPipe implements PipeTransform {
   constructor(private prConstants: PrConstantsService) {}

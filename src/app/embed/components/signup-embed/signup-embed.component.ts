@@ -19,6 +19,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   selector: 'pr-signup',
   templateUrl: './signup-embed.component.html',
   styleUrls: ['./signup-embed.component.scss'],
+  standalone: false,
 })
 export class SignupEmbedComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;

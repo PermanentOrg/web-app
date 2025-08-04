@@ -7,6 +7,7 @@ import { OnboardingService } from '@root/app/onboarding/services/onboarding.serv
   selector: 'pr-finalize-archive-creation-screen',
   templateUrl: './finalize-archive-creation-screen.component.html',
   styleUrl: './finalize-archive-creation-screen.component.scss',
+  standalone: false,
 })
 export class FinalizeArchiveCreationScreenComponent {
   @Output() finalizeArchiveOutput = new EventEmitter<string>();

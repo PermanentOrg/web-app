@@ -28,6 +28,7 @@ import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
     </ng-template>
   `,
   animations: [slideUpAnimation],
+  standalone: false,
 })
 export class RoutedDialogWrapperComponent
   implements AfterViewInit, HasSubscriptions, OnDestroy

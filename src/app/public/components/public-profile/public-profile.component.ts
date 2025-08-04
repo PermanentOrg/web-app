@@ -17,6 +17,7 @@ import { concat, orderBy } from 'lodash';
   selector: 'pr-public-profile',
   templateUrl: './public-profile.component.html',
   styleUrls: ['./public-profile.component.scss'],
+  standalone: false,
 })
 export class PublicProfileComponent
   implements OnInit, OnDestroy, HasSubscriptions

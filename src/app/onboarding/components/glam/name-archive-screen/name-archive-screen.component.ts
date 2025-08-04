@@ -20,6 +20,7 @@ import { Subscription } from 'rxjs';
   selector: 'pr-name-archive-screen',
   templateUrl: './name-archive-screen.component.html',
   styleUrl: './name-archive-screen.component.scss',
+  standalone: false,
 })
 export class NameArchiveScreenComponent implements OnInit, OnDestroy {
   public nameForm: UntypedFormGroup;

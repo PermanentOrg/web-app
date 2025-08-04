@@ -3,6 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'prGetFileType',
+  standalone: false,
 })
 export class GetFileTypePipe implements PipeTransform {
   private types = {

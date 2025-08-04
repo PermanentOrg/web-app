@@ -28,6 +28,7 @@ const ANIMATION_DURATION = 1000;
   selector: 'pr-search-box',
   templateUrl: './search-box.component.html',
   styleUrls: ['./search-box.component.scss'],
+  standalone: false,
 })
 export class SearchBoxComponent implements OnInit, AfterViewInit {
   @Input() isPublicGallery = false;

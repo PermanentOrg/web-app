@@ -19,6 +19,7 @@ import { ZoomEvent, FullScreenEvent } from 'openseadragon';
   selector: 'pr-zooming-image-viewer',
   templateUrl: './zooming-image-viewer.component.html',
   styleUrl: './zooming-image-viewer.component.scss',
+  standalone: false,
 })
 export class ZoomingImageViewerComponent implements AfterViewInit, OnDestroy {
   @Input() public item: RecordVO;

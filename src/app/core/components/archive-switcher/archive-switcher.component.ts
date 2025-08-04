@@ -27,6 +27,7 @@ import { DataService } from '@shared/services/data/data.service';
   selector: 'pr-archive-switcher',
   templateUrl: './archive-switcher.component.html',
   styleUrls: ['./archive-switcher.component.scss'],
+  standalone: false,
 })
 export class ArchiveSwitcherComponent implements AfterViewInit {
   public currentArchive: ArchiveVO;

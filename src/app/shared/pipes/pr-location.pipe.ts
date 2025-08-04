@@ -10,6 +10,7 @@ export interface LocnPipeOutput {
 
 @Pipe({
   name: 'prLocation',
+  standalone: false,
 })
 export class PrLocationPipe implements PipeTransform {
   constructor() {}

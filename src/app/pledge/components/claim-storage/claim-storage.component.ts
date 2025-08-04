@@ -19,6 +19,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   selector: 'pr-claim-storage',
   templateUrl: './claim-storage.component.html',
   styleUrls: ['./claim-storage.component.scss'],
+  standalone: false,
 })
 export class ClaimStorageComponent {
   public signupForm: UntypedFormGroup;

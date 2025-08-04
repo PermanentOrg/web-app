@@ -8,6 +8,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
   selector: 'pr-onboarding-glam-header',
   templateUrl: './glam-header.component.html',
   styleUrl: './glam-header.component.scss',
+  standalone: false,
 })
 export class GlamOnboardingHeaderComponent {
   public readonly faArrowRight = faArrowRight;

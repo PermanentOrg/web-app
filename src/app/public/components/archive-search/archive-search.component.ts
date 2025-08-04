@@ -18,6 +18,7 @@ import {
   selector: 'pr-archive-search',
   templateUrl: './archive-search.component.html',
   styleUrls: ['./archive-search.component.scss'],
+  standalone: false,
 })
 export class ArchiveSearchComponent implements OnInit {
   @Output() search = new EventEmitter<string>();

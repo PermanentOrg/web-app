@@ -84,6 +84,7 @@ module.exports = {
           },
         ],
         // Below are rules we want to eventually enable:
+        '@angular-eslint/prefer-standalone': 'off',
         'import/no-cycle': 'off',
         '@angular-eslint/no-output-native': 'off',
         '@angular-eslint/no-output-on-prefix': 'off',

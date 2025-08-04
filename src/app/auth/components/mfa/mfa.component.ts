@@ -19,6 +19,7 @@ import { DeviceService } from '@shared/services/device/device.service';
   selector: 'pr-mfa',
   templateUrl: './mfa.component.html',
   styleUrls: ['./mfa.component.scss'],
+  standalone: false,
 })
 export class MfaComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;

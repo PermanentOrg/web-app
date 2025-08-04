@@ -25,6 +25,7 @@ import {
   selector: 'pr-apps',
   templateUrl: './apps.component.html',
   styleUrls: ['./apps.component.scss'],
+  standalone: false,
 })
 export class AppsComponent
   implements AfterViewInit, OnDestroy, HasSubscriptions

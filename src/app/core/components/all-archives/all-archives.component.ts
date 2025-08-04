@@ -34,6 +34,7 @@ import { CdkPortal } from '@angular/cdk/portal';
   selector: 'pr-all-archives',
   templateUrl: './all-archives.component.html',
   styleUrls: ['./all-archives.component.scss'],
+  standalone: false,
 })
 export class AllArchivesComponent implements AfterViewInit, OnDestroy {
   public currentArchive: ArchiveVO;

@@ -11,6 +11,7 @@ import { DeviceService } from '@shared/services/device/device.service';
   selector: 'pr-transaction-history',
   templateUrl: './transaction-history.component.html',
   styleUrls: ['./transaction-history.component.scss'],
+  standalone: false,
 })
 export class TransactionHistoryComponent implements OnInit {
   currentPage = 1;

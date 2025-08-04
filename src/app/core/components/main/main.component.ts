@@ -50,6 +50,7 @@ import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
   selector: 'pr-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
+  standalone: false,
 })
 export class MainComponent
   implements

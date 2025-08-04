@@ -40,6 +40,7 @@ export const resetLayoutForAnnouncement = () => {
   selector: 'pr-announcement',
   templateUrl: './announcement.component.html',
   styleUrls: ['./announcement.component.scss'],
+  standalone: false,
 })
 export class AnnouncementComponent implements OnInit, AfterViewInit {
   @Input() eventsList: AnnouncementEvent[] = ANNOUNCEMENT_EVENTS;

@@ -59,6 +59,7 @@ const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
   selector: 'pr-my-archives-dialog',
   templateUrl: './my-archives-dialog.component.html',
   styleUrls: ['./my-archives-dialog.component.scss'],
+  standalone: false,
 })
 export class MyArchivesDialogComponent implements OnInit {
   account: AccountVO;
