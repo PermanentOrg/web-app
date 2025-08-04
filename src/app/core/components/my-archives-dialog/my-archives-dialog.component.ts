@@ -6,10 +6,11 @@ import {
   ViewChildren,
   QueryList,
   Inject,
+  inject,
 } from '@angular/core';
 import { ArchiveVO, AccountVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { partition, remove, find, orderBy } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/archive.repo';
@@ -64,8 +65,8 @@ const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
 export class MyArchivesDialogComponent implements OnInit {
   account: AccountVO;
   currentArchive: ArchiveVO;
-  archives: ArchiveVO[];
-  pendingArchives: ArchiveVO[];
+  archives: ArchiveVO[] = [];
+  pendingArchives: ArchiveVO[] = [];
   waiting = false;
 
   archiveTypes = ARCHIVE_TYPES;
@@ -78,6 +79,8 @@ export class MyArchivesDialogComponent implements OnInit {
   @ViewChildren(ArchiveSmallComponent)
   archiveComponents: QueryList<ArchiveSmallComponent>;
 
+  private tabs = ['switch', 'pending', 'new'];
+
   constructor(
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,
@@ -86,6 +89,8 @@ export class MyArchivesDialogComponent implements OnInit {
     private prompt: PromptService,
     private message: MessageService,
     private fb: UntypedFormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.newArchiveForm = this.fb.group({
       fullName: ['', [Validators.required]],
@@ -98,7 +103,9 @@ export class MyArchivesDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.accountService.refreshArchives();
+
     this.account = this.accountService.getAccount();
     this.currentArchive = this.accountService.getArchive();
     [this.pendingArchives, this.archives] = partition(
@@ -107,6 +114,11 @@ export class MyArchivesDialogComponent implements OnInit {
       ),
       { status: 'status.generic.pending' },
     );
+
+    const tab = this.getParams(this.router.routerState.snapshot.root);
+    if (tab.path) {
+      this.setTab(tab.path);
+    }
   }
 
   setTab(tab: MyArchivesTab) {
@@ -117,6 +129,14 @@ export class MyArchivesDialogComponent implements OnInit {
   onDoneClick(): void {
     this.dialogRef.close();
   }
+
+  getParams = (route) => ({
+    ...route.params,
+    ...route.children?.reduce(
+      (acc, child) => ({ ...this.getParams(child), ...acc }),
+      {},
+    ),
+  });
 
   scrollToArchive(archive: ArchiveVO) {
     setTimeout(() => {
