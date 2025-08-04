@@ -8,9 +8,9 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 const settingsTabs = [
   'storage',
-  'account',
+  'email-phone',
   'notification',
-  'billing',
+  'personal-details',
   'legacy-contact',
   'delete',
   'advanced-settings',
@@ -24,7 +24,7 @@ export type SettingsTab = (typeof settingsTabs)[number];
   styleUrls: ['./account-settings-dialog.component.scss'],
 })
 export class AccountSettingsDialogComponent {
-  public activeTab: SettingsTab = 'account';
+  public activeTab: SettingsTab = 'email-phone';
 
   public readonly verifyText = 'DELETE';
   public deleteVerify: string = null;
