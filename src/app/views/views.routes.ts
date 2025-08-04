@@ -33,14 +33,14 @@ export const routes: RoutesWithData = [
 		children: [
 			{
 				path: '',
-                                component: TimelineViewComponent,
-                                resolve: leanFolderResolve,
+				component: TimelineViewComponent,
+				resolve: leanFolderResolve,
 				children: fileListChildRoutes,
 			},
 			{
 				path: ':archiveNbr/:folderLinkId',
-                                component: TimelineViewComponent,
-                                resolve: leanFolderResolve,
+				component: TimelineViewComponent,
+				resolve: leanFolderResolve,
 				children: fileListChildRoutes,
 			},
 		],
@@ -62,12 +62,12 @@ export const routes: RoutesWithData = [
 				component: FileListComponent,
 				resolve: folderResolve,
 				children: [
-                                  {
-                                    path: 'record/:recArchiveNbr',
-                                    component: FileViewerComponent,
-                                    resolve: recordResolve,
-                                  },
-                                ],
+					{
+						path: 'record/:recArchiveNbr',
+						component: FileViewerComponent,
+						resolve: recordResolve,
+					},
+				],
 			},
 		],
 	},

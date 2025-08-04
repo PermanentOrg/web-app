@@ -7,7 +7,7 @@ import {
 	OnDestroy,
 	HostListener,
 	Inject,
-        Optional,
+	Optional,
 } from '@angular/core';
 
 import {
@@ -69,6 +69,7 @@ export interface TimelineDataItemExtended extends DataItem {
 	uuid: string;
 	dataType: 'record' | 'folder' | 'group';
 	item: unknown;
+}
 
 const ZOOM_PERCENTAGE = 1;
 
@@ -82,10 +83,7 @@ const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
 	standalone: false,
 })
 export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
-
 	public isNavigating = false;
-
-	private route: ActivatedRoute;
 
 	private throttledZoomHandler = throttle((evt) => {
 		this.onTimelineZoom();
@@ -115,7 +113,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 	private currentTimespan: TimelineGroupTimespan;
 	public timelineGroups = new Map<TimelineGroupTimespan, DataItem[]>();
 	private timelineItems: DataSet<TimelineDataItemExtended> =
-        	new DataSet<TimelineDataItemExtended>();
+		new DataSet<TimelineDataItemExtended>();
 	private timelineOptions: TimelineOptions = {
 		zoomMin: Minute * 1,
 		showCurrentTime: false,
@@ -156,9 +154,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 	};
 
 	constructor(
+		@Optional() @Inject(DIALOG_DATA) public dialogData: any,
 		@Optional() private dialog: DialogRef,
 		private route: ActivatedRoute,
-		private dataService: DataService,
 		private dataService: DataService,
 		private api: ApiService,
 		private router: Router,
@@ -174,7 +172,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		this.timelineRootFolder = this.route.snapshot.data.currentFolder;
 		this.dataService.setCurrentFolder(this.route.snapshot.data.currentFolder);
-		if (dialogData?.activatedRoute) {	
+		if (dialogData?.activatedRoute) {
 			this.route = dialogData.activatedRoute;
 		}
 	}
