@@ -10,10 +10,10 @@
     <div class="settings-tabs">
       <div
         class="settings-tab"
-        (click)="setTab('account')"
-        [class.active]="activeTab === 'account'"
+        (click)="setTab('email-phone')"
+        [class.active]="activeTab === 'email-phone'"
       >
-        Account Info
+        Email and PHone
         <i
           class="material-icons text-warning"
           *ngIf="accountService.isEmailOrPhoneUnverified()"
@@ -36,10 +36,10 @@
       </div>
       <div
         class="settings-tab"
-        (click)="setTab('billing')"
-        [class.active]="activeTab === 'billing'"
+        (click)="setTab('personal-details')"
+        [class.active]="activeTab === 'personal-details'"
       >
-        Billing Info
+        Personal Details
       </div>
       <div
         class="settings-tab"
@@ -69,9 +69,13 @@
         <pr-advanced-settings
           *ngSwitchCase="'advanced-settings'"
         ></pr-advanced-settings>
-        <pr-account-settings *ngSwitchCase="'account'"></pr-account-settings>
+        <pr-account-settings
+          *ngSwitchCase="'email-phone'"
+        ></pr-account-settings>
         <pr-account-security *ngSwitchCase="'security'"></pr-account-security>
-        <pr-billing-settings *ngSwitchCase="'billing'"></pr-billing-settings>
+        <pr-billing-settings
+          *ngSwitchCase="'personal-details'"
+        ></pr-billing-settings>
         <pr-notification-preferences
           *ngSwitchCase="'notification'"
         ></pr-notification-preferences>
