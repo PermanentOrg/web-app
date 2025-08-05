@@ -48,4 +48,13 @@ export class GlamReasonsScreenComponent implements OnInit {
 		}
 		sessionStorage.setItem('reasons', JSON.stringify(this.selectedReasons));
 	}
+
+	public skipStep(): void {
+		this.selectedReasons = [];
+		sessionStorage.setItem('reasons', JSON.stringify([]));
+		this.reasonsEmit.emit({
+			screen: 'finalize',
+			reasons: [],
+		});
+	}
 }
