@@ -7,6 +7,7 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
 import { fileListChildRoutes } from '@fileBrowser/file-browser.routes';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
+import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { SharedModule } from '@shared/shared.module';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { RoutesWithData } from '../app.routes';
@@ -33,21 +34,23 @@ export const routes: RoutesWithData = [
     children: [
       {
         path: '',
-        component: TimelineViewComponent,
+        component: RoutedDialogWrapperComponent,
+        data: {
+          component: TimelineViewComponent,
+          dialogOptions: { width: '100%', height: 'fullscreen' },
+        },
         resolve: leanFolderResolve,
         children: fileListChildRoutes,
       },
       {
         path: ':archiveNbr/:folderLinkId',
-        component: TimelineViewComponent,
+        component: RoutedDialogWrapperComponent,
+        data: {
+          component: TimelineViewComponent,
+          dialogOptions: { width: '100%', height: 'fullscreen' },
+        },
         resolve: leanFolderResolve,
-        children: [
-          {
-            path: 'record/:recArchiveNbr',
-            component: FileViewerComponent,
-            resolve: recordResolve,
-          },
-        ],
+        children: fileListChildRoutes,
       },
     ],
   },

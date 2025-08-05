@@ -7,7 +7,6 @@ import {
   OnDestroy,
   HostListener,
   Inject,
-  Optional,
 } from '@angular/core';
 
 import {
@@ -18,7 +17,7 @@ import {
   TimelineEventPropertiesResult,
   DataItem,
 } from 'vis-timeline/standalone';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FolderVO,
   RecordVO,
@@ -39,10 +38,12 @@ import {
   debounce,
   countBy,
 } from 'lodash';
+import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 import { Subscription } from 'rxjs';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { slideUpAnimation } from '@shared/animations';
+import { RouteData } from '@root/app/app.routes';
 import {
   TimelineBreadcrumbsComponent,
   TimelineBreadcrumb,
@@ -65,11 +66,11 @@ import {
   dateTypeToNumber,
 } from './timeline-util';
 
-export interface TimelineDataItemExtended extends DataItem {
-  uuid: string;
-  dataType: 'record' | 'folder' | 'group';
-  item: unknown;
+interface VoDataItem extends DataItem {
+  itemVO: ItemVO;
 }
+
+type TimelineItemAny = TimelineItem | TimelineGroup;
 
 const ZOOM_PERCENTAGE = 1;
 
@@ -84,6 +85,8 @@ const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
 })
 export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public isNavigating = false;
+
+  private route: ActivatedRoute;
 
   private throttledZoomHandler = throttle((evt) => {
     this.onTimelineZoom();
@@ -112,9 +115,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public timeline: Timeline;
   private currentTimespan: TimelineGroupTimespan;
   public timelineGroups = new Map<TimelineGroupTimespan, DataItem[]>();
-  private timelineItems: DataSet<TimelineDataItemExtended> =
-    new DataSet<TimelineDataItemExtended>();
-
+  private timelineItems: DataSet<DataItem> = new DataSet();
   private timelineOptions: TimelineOptions = {
     zoomMin: Minute * 1,
     showCurrentTime: false,
@@ -153,17 +154,16 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     },
   };
-
   constructor(
-    @Optional() @Inject(DIALOG_DATA) public dialogData: any,
-    @Optional() private dialog: DialogRef,
-    private route: ActivatedRoute,
+    @Inject(DIALOG_DATA) public dialogData: any,
+    // private route: ActivatedRoute,
     private dataService: DataService,
     private api: ApiService,
     private router: Router,
     private elementRef: ElementRef,
     private fvService: FolderViewService,
     private device: DeviceService,
+    private dialog: DialogRef,
   ) {
     this.currentTimespan = TimelineGroupTimespan.Year;
     this.dataService.showBreadcrumbs = false;
@@ -171,11 +171,10 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataService.publicCta = 'timeline';
     this.fvService.containerFlexChange.emit(true);
 
-    this.timelineRootFolder = this.route.snapshot.data.currentFolder;
-    this.dataService.setCurrentFolder(this.route.snapshot.data.currentFolder);
-    if (dialogData?.activatedRoute) {
-      this.route = dialogData.activatedRoute;
-    }
+    const data = dialogData as RouteData;
+    this.timelineRootFolder = data.currentFolder;
+    this.dataService.setCurrentFolder(data.currentFolder);
+    this.route = dialogData.activatedRoute;
   }
 
   ngOnInit() {
