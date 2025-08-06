@@ -2,12 +2,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  FontAwesomeModule,
-  FaIconLibrary,
+	FontAwesomeModule,
+	FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
 import {
-  faChevronLeft,
-  faExclamationTriangle,
+	faChevronLeft,
+	faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
 import { DirectiveEditComponent } from './components/directive-edit/directive-edit.component';
@@ -18,26 +18,26 @@ import { LegacyContactEditComponent } from './components/legacy-contact-edit/leg
 import { LegacyContactDialogComponent } from './components/legacy-contact-dialog/legacy-contact-dialog.component';
 
 @NgModule({
-  exports: [
-    DirectiveDisplayComponent,
-    DirectiveEditComponent,
-    DirectiveDialogComponent,
-    LegacyContactDisplayComponent,
-    LegacyContactEditComponent,
-    LegacyContactDialogComponent,
-  ],
-  declarations: [
-    DirectiveDisplayComponent,
-    DirectiveEditComponent,
-    DirectiveDialogComponent,
-    LegacyContactDisplayComponent,
-    LegacyContactEditComponent,
-    LegacyContactDialogComponent,
-  ],
-  imports: [CommonModule, FontAwesomeModule, FormsModule],
+	exports: [
+		DirectiveDisplayComponent,
+		DirectiveEditComponent,
+		DirectiveDialogComponent,
+		LegacyContactDisplayComponent,
+		LegacyContactEditComponent,
+		LegacyContactDialogComponent,
+	],
+	declarations: [
+		DirectiveDisplayComponent,
+		DirectiveEditComponent,
+		DirectiveDialogComponent,
+		LegacyContactDisplayComponent,
+		LegacyContactEditComponent,
+		LegacyContactDialogComponent,
+	],
+	imports: [CommonModule, FontAwesomeModule, FormsModule],
 })
 export class DirectiveModule {
-  constructor(private library: FaIconLibrary) {
-    this.library.addIcons(faExclamationTriangle, faChevronLeft);
-  }
+	constructor(private library: FaIconLibrary) {
+		this.library.addIcons(faExclamationTriangle, faChevronLeft);
+	}
 }

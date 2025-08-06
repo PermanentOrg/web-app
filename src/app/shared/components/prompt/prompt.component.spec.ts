@@ -6,22 +6,22 @@ import { FormInputComponent } from '@shared/components/form-input/form-input.com
 import { PromptComponent } from './prompt.component';
 
 describe('PromptComponent', () => {
-  let component: PromptComponent;
-  let fixture: ComponentFixture<PromptComponent>;
+	let component: PromptComponent;
+	let fixture: ComponentFixture<PromptComponent>;
 
-  beforeEach(waitForAsync(() => {
-    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
-    config.declarations = [FormInputComponent, PromptComponent];
-    TestBed.configureTestingModule(config).compileComponents();
-  }));
+	beforeEach(waitForAsync(() => {
+		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+		config.declarations = [FormInputComponent, PromptComponent];
+		TestBed.configureTestingModule(config).compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PromptComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(PromptComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

@@ -1,73 +1,73 @@
 <!-- @format -->
 <form
-  class="login-form"
-  [formGroup]="loginForm"
-  (ngSubmit)="onSubmit(loginForm.value)"
+	class="login-form"
+	[formGroup]="loginForm"
+	(ngSubmit)="onSubmit(loginForm.value)"
 >
-  <h1 class="page-title">Sign in to Permanent</h1>
-  <div class="email-input">
-    <pr-form-input-glam
-      type="email"
-      fieldName="email"
-      [variant]="'dark'"
-      [style]="{ height: '64px' }"
-      placeholder="Email Address"
-      [control]="loginForm.controls['email']"
-      [config]="{
-        autocomplete: 'username',
-        autocorrect: 'off',
-        autocapitalize: 'off',
-        spellcheck: 'off'
-      }"
-    ></pr-form-input-glam>
-  </div>
-  <div class="password-input">
-    <pr-form-input-glam
-      type="password"
-      [variant]="'dark'"
-      fieldName="password"
-      placeholder="Password"
-      [style]="{ height: '64px' }"
-      [control]="loginForm.controls['password']"
-      [config]="{ autocomplete: 'current-password' }"
-    ></pr-form-input-glam>
-  </div>
-  <div class="auth-options">
-    <pr-checkbox
-      [variant]="'secondary'"
-      [isChecked]="rememberMe"
-      (isCheckedChange)="rememberMe = $event"
-      [text]="'Remember me'"
-    ></pr-checkbox>
-  </div>
+	<h1 class="page-title">Sign in to Permanent</h1>
+	<div class="email-input">
+		<pr-form-input-glam
+			type="email"
+			fieldName="email"
+			[variant]="'dark'"
+			[style]="{ height: '64px' }"
+			placeholder="Email Address"
+			[control]="loginForm.controls['email']"
+			[config]="{
+				autocomplete: 'username',
+				autocorrect: 'off',
+				autocapitalize: 'off',
+				spellcheck: 'off'
+			}"
+		></pr-form-input-glam>
+	</div>
+	<div class="password-input">
+		<pr-form-input-glam
+			type="password"
+			[variant]="'dark'"
+			fieldName="password"
+			placeholder="Password"
+			[style]="{ height: '64px' }"
+			[control]="loginForm.controls['password']"
+			[config]="{ autocomplete: 'current-password' }"
+		></pr-form-input-glam>
+	</div>
+	<div class="auth-options">
+		<pr-checkbox
+			[variant]="'secondary'"
+			[isChecked]="rememberMe"
+			(isCheckedChange)="rememberMe = $event"
+			[text]="'Remember me'"
+		></pr-checkbox>
+	</div>
 
-  <div class="auth-buttons">
-    <pr-button
-      [buttonType]="'submit'"
-      [variant]="'secondary'"
-      [size]="'fill'"
-      [icon]="'auth/arrow-right'"
-      [orientation]="'right'"
-      [disabled]="waiting || loginForm.invalid"
-      [style]="{ justifyContent: 'center' }"
-      >Sign in</pr-button
-    >
-    <div class="forgot-password-button">
-      <a [routerLink]="['..', 'forgot']" queryParamsHandling="merge">
-        Forgot password?
-      </a>
-    </div>
-    <pr-or-divider [text]="'NEW TO PERMANENT ?'"></pr-or-divider>
-    <pr-button
-      [buttonType]="'button'"
-      [variant]="'primary'"
-      [size]="'fill'"
-      [orientation]="'right'"
-      (buttonClick)="navigateToRegister()"
-      [icon]="'auth/sign-up-white'"
-      [style]="{ justifyContent: 'center' }"
-      >Sign Up</pr-button
-    >
-  </div>
+	<div class="auth-buttons">
+		<pr-button
+			[buttonType]="'submit'"
+			[variant]="'secondary'"
+			[size]="'fill'"
+			[icon]="'auth/arrow-right'"
+			[orientation]="'right'"
+			[disabled]="waiting || loginForm.invalid"
+			[style]="{ justifyContent: 'center' }"
+			>Sign in</pr-button
+		>
+		<div class="forgot-password-button">
+			<a [routerLink]="['..', 'forgot']" queryParamsHandling="merge">
+				Forgot password?
+			</a>
+		</div>
+		<pr-or-divider [text]="'NEW TO PERMANENT ?'"></pr-or-divider>
+		<pr-button
+			[buttonType]="'button'"
+			[variant]="'primary'"
+			[size]="'fill'"
+			[orientation]="'right'"
+			(buttonClick)="navigateToRegister()"
+			[icon]="'auth/sign-up-white'"
+			[style]="{ justifyContent: 'center' }"
+			>Sign Up</pr-button
+		>
+	</div>
 </form>
 <pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>

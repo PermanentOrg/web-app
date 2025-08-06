@@ -1,90 +1,90 @@
 <!-- @format -->
 @if (isDisplayed) {
-  @if (isOpen) {
-    <div
-      class="user-checklist"
-      role="dialog"
-      aria-labelledby="checklist-title"
-      aria-describedby="checklist-description"
-    >
-      <div class="button-header">
-        <button class="minimize-button" (click)="minimize()">
-          <pr-minimize-icon></pr-minimize-icon>
-        </button>
-      </div>
-      <div class="header">
-        <div id="checklist-title" class="header-title">Getting Started</div>
-        <div id="checklist-description" class="header-description">
-          Let's finish setting up your account
-        </div>
-      </div>
-      <div class="meter">
-        <div
-          class="meter-container"
-          role="meter"
-          aria-labeledby="user-checklist-percentage-value"
-        >
-          <div class="meter-value" [style]="{ width: percentage + '%' }"></div>
-        </div>
-        <span id="user-checklist-percentage-value" class="percent-value"
-          >{{ percentage | number: '1.0-0' }}%</span
-        >
-      </div>
-      <br />
-      <ul>
-        @for (item of items; track item.id) {
-          <li class="task">
-            <pr-task-icon
-              [completed]="item.completed"
-              [icon]="item.id"
-              role="img"
-              [attr.aria-labeledby]="'label-' + item.id"
-            ></pr-task-icon>
-            @if (item.id | taskLink) {
-              @if ((item.id | taskLink).external) {
-                <a
-                  href="{{ (item.id | taskLink).routerLink }}"
-                  target="_blank"
-                  [class]="{ 'task-name': true, completed: item.completed }"
-                  >{{ item.title }}</a
-                >
-              } @else {
-                <a
-                  [routerLink]="(item.id | taskLink).routerLink"
-                  fragment="{{ (item.id | taskLink).fragment }}"
-                  [class]="{ 'task-name': true, completed: item.completed }"
-                  >{{ item.title }}</a
-                >
-              }
-            } @else {
-              <span
-                [id]="'label-' + item.id"
-                [class]="{ 'task-name': true, completed: item.completed }"
-                >{{ item.title }}</span
-              >
-            }
-            <div
-              [class]="{ 'fake-checkbox': true, checked: item.completed }"
-              [ariaLabel]="item.completed ? 'Complete' : 'Incomplete'"
-            >
-              @if (item.completed) {
-                <span class="check" role="presentation">✔</span>
-              }
-            </div>
-          </li>
-        }
-      </ul>
-      <div class="footer">
-        <button class="dont-show-again" (click)="hideChecklistForever()">
-          Don't show me this again
-        </button>
-      </div>
-    </div>
-  } @else {
-    <div class="user-checklist-minimized">
-      <button class="open-button" (click)="open()">
-        <pr-checklist-icon></pr-checklist-icon>
-      </button>
-    </div>
-  }
+	@if (isOpen) {
+		<div
+			class="user-checklist"
+			role="dialog"
+			aria-labelledby="checklist-title"
+			aria-describedby="checklist-description"
+		>
+			<div class="button-header">
+				<button class="minimize-button" (click)="minimize()">
+					<pr-minimize-icon></pr-minimize-icon>
+				</button>
+			</div>
+			<div class="header">
+				<div id="checklist-title" class="header-title">Getting Started</div>
+				<div id="checklist-description" class="header-description">
+					Let's finish setting up your account
+				</div>
+			</div>
+			<div class="meter">
+				<div
+					class="meter-container"
+					role="meter"
+					aria-labeledby="user-checklist-percentage-value"
+				>
+					<div class="meter-value" [style]="{ width: percentage + '%' }"></div>
+				</div>
+				<span id="user-checklist-percentage-value" class="percent-value"
+					>{{ percentage | number: '1.0-0' }}%</span
+				>
+			</div>
+			<br />
+			<ul>
+				@for (item of items; track item.id) {
+					<li class="task">
+						<pr-task-icon
+							[completed]="item.completed"
+							[icon]="item.id"
+							role="img"
+							[attr.aria-labeledby]="'label-' + item.id"
+						></pr-task-icon>
+						@if (item.id | taskLink) {
+							@if ((item.id | taskLink).external) {
+								<a
+									href="{{ (item.id | taskLink).routerLink }}"
+									target="_blank"
+									[class]="{ 'task-name': true, completed: item.completed }"
+									>{{ item.title }}</a
+								>
+							} @else {
+								<a
+									[routerLink]="(item.id | taskLink).routerLink"
+									fragment="{{ (item.id | taskLink).fragment }}"
+									[class]="{ 'task-name': true, completed: item.completed }"
+									>{{ item.title }}</a
+								>
+							}
+						} @else {
+							<span
+								[id]="'label-' + item.id"
+								[class]="{ 'task-name': true, completed: item.completed }"
+								>{{ item.title }}</span
+							>
+						}
+						<div
+							[class]="{ 'fake-checkbox': true, checked: item.completed }"
+							[ariaLabel]="item.completed ? 'Complete' : 'Incomplete'"
+						>
+							@if (item.completed) {
+								<span class="check" role="presentation">✔</span>
+							}
+						</div>
+					</li>
+				}
+			</ul>
+			<div class="footer">
+				<button class="dont-show-again" (click)="hideChecklistForever()">
+					Don't show me this again
+				</button>
+			</div>
+		</div>
+	} @else {
+		<div class="user-checklist-minimized">
+			<button class="open-button" (click)="open()">
+				<pr-checklist-icon></pr-checklist-icon>
+			</button>
+		</div>
+	}
 }

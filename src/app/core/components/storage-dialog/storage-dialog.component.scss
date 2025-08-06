@@ -1,43 +1,43 @@
 @import 'variables';
 
 :host {
-  display: block;
-  width: 100%;
+	display: block;
+	width: 100%;
 }
 
 .header {
-  @include tabbedDialogHeader($PR-purple);
+	@include tabbedDialogHeader($PR-purple);
 }
 
 .content {
-  @include tabbedDialogContent(700px);
+	@include tabbedDialogContent(700px);
 }
 
 .tabs {
-  @include tabbedDialogNav($PR-purple);
+	@include tabbedDialogNav($PR-purple);
 }
 
 .panel {
-  @include tabbedDialogPanel;
+	@include tabbedDialogPanel;
 }
 
 .panel-title {
-  @include tabbedDialogPanelTitle;
+	@include tabbedDialogPanelTitle;
 }
 
 .btn {
-  margin: $grid-unit 0;
-  width: auto;
+	margin: $grid-unit 0;
+	width: auto;
 }
 
 form {
-  @include tabbedDialogPanelForm;
+	@include tabbedDialogPanelForm;
 }
 
 pr-storage-meter {
-  margin: $grid-unit 0;
+	margin: $grid-unit 0;
 }
 
 .nav-to-redeem {
-  margin-top: 20px;
+	margin-top: 20px;
 }

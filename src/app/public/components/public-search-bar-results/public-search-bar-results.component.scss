@@ -1,54 +1,54 @@
 :host {
-  position: absolute;
-  top: 2.5rem;
-  left: -45px;
-  width: 340px;
+	position: absolute;
+	top: 2.5rem;
+	left: -45px;
+	width: 340px;
 }
 
 .public-search-bar-results {
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  padding: 20px;
+	background-color: white;
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	padding: 20px;
 }
 
 .tags {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
+	display: flex;
+	gap: 4px;
+	flex-wrap: wrap;
 }
 
 .tag {
-  background-color: rgba(255, 234, 213, 1);
-  cursor: pointer;
-  padding: 5px;
+	background-color: rgba(255, 234, 213, 1);
+	cursor: pointer;
+	padding: 5px;
 }
 
 .search-results,
 .tag-results {
-  & > p {
-    font-weight: 700;
-  }
+	& > p {
+		font-weight: 700;
+	}
 }
 
 .result-name {
-  margin-left: 10px;
+	margin-left: 10px;
 }
 
 .result {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+	margin-bottom: 10px;
 }
 
 .info {
-  & > img {
-    width: 40px;
-    height: 40px;
-  }
+	& > img {
+		width: 40px;
+		height: 40px;
+	}
 }
 
 .result-type {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }

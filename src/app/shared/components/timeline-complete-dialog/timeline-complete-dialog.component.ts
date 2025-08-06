@@ -8,42 +8,42 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 @Component({
-  selector: 'pr-timeline-complete-dialog',
-  templateUrl: './timeline-complete-dialog.component.html',
-  styleUrls: ['./timeline-complete-dialog.component.scss'],
-  standalone: false,
+	selector: 'pr-timeline-complete-dialog',
+	templateUrl: './timeline-complete-dialog.component.html',
+	styleUrls: ['./timeline-complete-dialog.component.scss'],
+	standalone: false,
 })
 export class TimelineCompleteDialogComponent {
-  public folder: FolderVO;
-  public publicLink: string;
+	public folder: FolderVO;
+	public publicLink: string;
 
-  public linkCopied = false;
-  @ViewChild('publicLinkInput', { static: false }) publicLinkInput: ElementRef;
+	public linkCopied = false;
+	@ViewChild('publicLinkInput', { static: false }) publicLinkInput: ElementRef;
 
-  constructor(
-    private dialogRef: DialogRef,
-    linkPipe: PublicLinkPipe,
-    private ga: GoogleAnalyticsService,
-    @Inject(DIALOG_DATA) public data: any,
-  ) {
-    this.folder = this.data.folder;
-    this.publicLink = linkPipe.transform(this.folder);
-  }
+	constructor(
+		private dialogRef: DialogRef,
+		linkPipe: PublicLinkPipe,
+		private ga: GoogleAnalyticsService,
+		@Inject(DIALOG_DATA) public data: any,
+	) {
+		this.folder = this.data.folder;
+		this.publicLink = linkPipe.transform(this.folder);
+	}
 
-  copyPublicLink() {
-    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.getLink.params);
+	copyPublicLink() {
+		this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.getLink.params);
 
-    const element = this.publicLinkInput.nativeElement as HTMLInputElement;
+		const element = this.publicLinkInput.nativeElement as HTMLInputElement;
 
-    copyFromInputElement(element);
+		copyFromInputElement(element);
 
-    this.linkCopied = true;
-    setTimeout(() => {
-      this.linkCopied = false;
-    }, 5000);
-  }
+		this.linkCopied = true;
+		setTimeout(() => {
+			this.linkCopied = false;
+		}, 5000);
+	}
 
-  close() {
-    this.dialogRef.close();
-  }
+	close() {
+		this.dialogRef.close();
+	}
 }

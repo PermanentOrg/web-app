@@ -2,64 +2,64 @@
 @import 'fonts';
 
 p {
-  color: white;
+	color: white;
 }
 
 .greeting {
-  font-size: 56px;
-  font-family: 'UsualLight', sans-serif;
-  letter-spacing: -2px;
+	font-size: 56px;
+	font-family: 'UsualLight', sans-serif;
+	letter-spacing: -2px;
 }
 
 .bold {
-  font-family: 'UsualMedium', sans-serif;
+	font-family: 'UsualMedium', sans-serif;
 }
 
 .text {
-  font-size: 1rem;
-  font-family: 'UsualRegular', sans-serif;
+	font-size: 1rem;
+	font-family: 'UsualRegular', sans-serif;
 }
 
 .text-container {
-  width: 50%;
+	width: 50%;
 }
 
 .pending-archives {
-  display: flex;
-  justify-content: space-between;
-  gap: 64px;
+	display: flex;
+	justify-content: space-between;
+	gap: 64px;
 
-  @media screen and (max-width: 900px) {
-    flex-direction: column;
-  }
+	@media screen and (max-width: 900px) {
+		flex-direction: column;
+	}
 }
 
 .pending-archives-container {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 70vh;
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 70vh;
 
-  @media screen and (max-width: 900px) {
-    height: 40vh;
-  }
+	@media screen and (max-width: 900px) {
+		height: 40vh;
+	}
 
-  @media screen and (max-width: 517px) {
-    width: auto;
-  }
+	@media screen and (max-width: 517px) {
+		width: auto;
+	}
 }
 
 .buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
 }
 
 .next-button {
-  width: 50%;
+	width: 50%;
 }
 
 .create-button {
-  width: 50%;
+	width: 50%;
 }

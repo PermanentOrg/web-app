@@ -1,52 +1,52 @@
 <!-- @format -->
 <div>
-  <div class="panel-title">Designate a Legacy Contact</div>
-  <p>
-    Who will reach out to Permanent to let us know of your death or permanent
-    incapacitation? This person, your Legacy Contact, will activate your
-    Permanent Legacy Plan. Your Legacy Contact will receive an email with
-    instructions from Permanent, but they are not required to create an account.
-    However, we strongly recommend that you also discuss your Legacy Plan with
-    this person.
-  </p>
-  <div class="legacy-contact-form-section">
-    <label for="legacy-contact-name"
-      ><strong>Legacy Contact Name</strong></label
-    >
-    <input
-      [(ngModel)]="name"
-      class="legacy-contact-name input form-control"
-      id="legacy-contact-name"
-      type="text"
-      [attr.disabled]="waiting || null"
-      required
-      placeholder="Legacy Contact Name"
-    />
-  </div>
-  <div class="legacy-contact-form-section">
-    <label for="legacy-contact-name"
-      ><strong>Legacy Contact Email</strong></label
-    >
-    <input
-      [(ngModel)]="email"
-      class="legacy-contact-email input form-control"
-      type="email"
-      [attr.disabled]="waiting || null"
-      required
-      placeholder="Legacy Contact Email"
-    />
-  </div>
-  <small
-    >Permanent will send an automatic email to your Legacy Contact to inform
-    them that they have been designated to activate your Account Legacy Plan,
-    alongside instructions on how to do so. However, we strongly recommend that
-    you also discuss your Legacy Plan with this person.</small
-  >
-  <button
-    class="save-btn btn btn-primary"
-    [disabled]="waiting || !name || !email || null"
-    (click)="saveLegacyContact()"
-  >
-    Save Legacy Contact
-  </button>
+	<div class="panel-title">Designate a Legacy Contact</div>
+	<p>
+		Who will reach out to Permanent to let us know of your death or permanent
+		incapacitation? This person, your Legacy Contact, will activate your
+		Permanent Legacy Plan. Your Legacy Contact will receive an email with
+		instructions from Permanent, but they are not required to create an account.
+		However, we strongly recommend that you also discuss your Legacy Plan with
+		this person.
+	</p>
+	<div class="legacy-contact-form-section">
+		<label for="legacy-contact-name"
+			><strong>Legacy Contact Name</strong></label
+		>
+		<input
+			[(ngModel)]="name"
+			class="legacy-contact-name input form-control"
+			id="legacy-contact-name"
+			type="text"
+			[attr.disabled]="waiting || null"
+			required
+			placeholder="Legacy Contact Name"
+		/>
+	</div>
+	<div class="legacy-contact-form-section">
+		<label for="legacy-contact-name"
+			><strong>Legacy Contact Email</strong></label
+		>
+		<input
+			[(ngModel)]="email"
+			class="legacy-contact-email input form-control"
+			type="email"
+			[attr.disabled]="waiting || null"
+			required
+			placeholder="Legacy Contact Email"
+		/>
+	</div>
+	<small
+		>Permanent will send an automatic email to your Legacy Contact to inform
+		them that they have been designated to activate your Account Legacy Plan,
+		alongside instructions on how to do so. However, we strongly recommend that
+		you also discuss your Legacy Plan with this person.</small
+	>
+	<button
+		class="save-btn btn btn-primary"
+		[disabled]="waiting || !name || !email || null"
+		(click)="saveLegacyContact()"
+	>
+		Save Legacy Contact
+	</button>
 </div>

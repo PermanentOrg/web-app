@@ -10,50 +10,50 @@ import { ArchiveVO } from '@models';
 
 @Injectable()
 export class RootFolderResolveService {
-  constructor(
-    private api: ApiService,
-    private accountService: AccountService,
-    private messageService: MessageService,
-  ) {}
+	constructor(
+		private api: ApiService,
+		private accountService: AccountService,
+		private messageService: MessageService,
+	) {}
 
-  async resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Promise<any> {
-    // check for targetArchiveNbr parameter and switch archives if possible
-    const targetArchiveNbr = route.queryParams.targetArchiveNbr;
+	async resolve(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Promise<any> {
+		// check for targetArchiveNbr parameter and switch archives if possible
+		const targetArchiveNbr = route.queryParams.targetArchiveNbr;
 
-    if (
-      targetArchiveNbr &&
-      this.accountService.getArchive().archiveNbr !== targetArchiveNbr
-    ) {
-      const archives = await this.accountService.refreshArchives();
-      const targetArchive = find(archives, {
-        archiveNbr: targetArchiveNbr,
-      }) as ArchiveVO;
-      if (targetArchive) {
-        await this.accountService.changeArchive(targetArchive);
-      } else {
-        this.messageService.showMessage({
-          message: `The current account does not have access to the specified archive. Switch accounts to perform this action.`,
-          style: 'info',
-        });
-      }
-    }
+		if (
+			targetArchiveNbr &&
+			this.accountService.getArchive().archiveNbr !== targetArchiveNbr
+		) {
+			const archives = await this.accountService.refreshArchives();
+			const targetArchive = find(archives, {
+				archiveNbr: targetArchiveNbr,
+			}) as ArchiveVO;
+			if (targetArchive) {
+				await this.accountService.changeArchive(targetArchive);
+			} else {
+				this.messageService.showMessage({
+					message: `The current account does not have access to the specified archive. Switch accounts to perform this action.`,
+					style: 'info',
+				});
+			}
+		}
 
-    const currentRoot = this.accountService.getRootFolder();
+		const currentRoot = this.accountService.getRootFolder();
 
-    if (currentRoot) {
-      return currentRoot;
-    }
+		if (currentRoot) {
+			return currentRoot;
+		}
 
-    return this.api.folder.getRoot().then((response: FolderResponse) => {
-      if (!response.isSuccessful) {
-        throw response;
-      }
-      const root = response.getFolderVO();
-      this.accountService.setRootFolder(root);
-      return root;
-    });
-  }
+		return this.api.folder.getRoot().then((response: FolderResponse) => {
+			if (!response.isSuccessful) {
+				throw response;
+			}
+			const root = response.getFolderVO();
+			this.accountService.setRootFolder(root);
+			return root;
+		});
+	}
 }

@@ -1,98 +1,98 @@
 <!-- @format -->
 <div class="settings-item">
-  <label>Full Name</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit
-      [displayValue]="account.fullName"
-      [required]="true"
-      [noScroll]="true"
-      [minLength]="1"
-      (doneEditing)="onSaveInfo('fullName', $event)"
-    ></pr-inline-value-edit>
-  </div>
+	<label>Full Name</label>
+	<div class="settings-item-content">
+		<pr-inline-value-edit
+			[displayValue]="account.fullName"
+			[required]="true"
+			[noScroll]="true"
+			[minLength]="1"
+			(doneEditing)="onSaveInfo('fullName', $event)"
+		></pr-inline-value-edit>
+	</div>
 </div>
 <div class="settings-item">
-  <label>Address Line 1</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit
-      [displayValue]="account.address"
-      [noScroll]="true"
-      [emptyMessage]="'Street Address Line 1'"
-      (doneEditing)="onSaveInfo('address', $event)"
-    ></pr-inline-value-edit>
-  </div>
+	<label>Address Line 1</label>
+	<div class="settings-item-content">
+		<pr-inline-value-edit
+			[displayValue]="account.address"
+			[noScroll]="true"
+			[emptyMessage]="'Street Address Line 1'"
+			(doneEditing)="onSaveInfo('address', $event)"
+		></pr-inline-value-edit>
+	</div>
 </div>
 <div class="settings-item">
-  <label>Address Line 2</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit
-      [displayValue]="account.address2"
-      [noScroll]="true"
-      [emptyMessage]="'Street Address Line 2'"
-      (doneEditing)="onSaveInfo('address2', $event)"
-    ></pr-inline-value-edit>
-  </div>
+	<label>Address Line 2</label>
+	<div class="settings-item-content">
+		<pr-inline-value-edit
+			[displayValue]="account.address2"
+			[noScroll]="true"
+			[emptyMessage]="'Street Address Line 2'"
+			(doneEditing)="onSaveInfo('address2', $event)"
+		></pr-inline-value-edit>
+	</div>
 </div>
 <div class="settings-item">
-  <label>City</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit
-      [displayValue]="account.city"
-      [noScroll]="true"
-      [emptyMessage]="'City'"
-      (doneEditing)="onSaveInfo('city', $event)"
-    ></pr-inline-value-edit>
-  </div>
+	<label>City</label>
+	<div class="settings-item-content">
+		<pr-inline-value-edit
+			[displayValue]="account.city"
+			[noScroll]="true"
+			[emptyMessage]="'City'"
+			(doneEditing)="onSaveInfo('city', $event)"
+		></pr-inline-value-edit>
+	</div>
 </div>
 <ng-container [ngSwitch]="account.country">
-  <div class="settings-item" *ngSwitchCase="'US'">
-    <label>State</label>
-    <div class="settings-item-content">
-      <pr-inline-value-edit
-        [displayValue]="account.state"
-        [noScroll]="true"
-        [emptyMessage]="'Select state'"
-        [type]="'select'"
-        [selectOptions]="states"
-        (doneEditing)="onSaveInfo('state', $event)"
-      ></pr-inline-value-edit>
-    </div>
-  </div>
-  <div class="settings-item" *ngSwitchDefault>
-    <label>Province/Region</label>
-    <div class="settings-item-content">
-      <pr-inline-value-edit
-        [displayValue]="account.state"
-        [noScroll]="true"
-        [emptyMessage]="'Province/Region'"
-        (doneEditing)="onSaveInfo('state', $event)"
-      ></pr-inline-value-edit>
-    </div>
-  </div>
+	<div class="settings-item" *ngSwitchCase="'US'">
+		<label>State</label>
+		<div class="settings-item-content">
+			<pr-inline-value-edit
+				[displayValue]="account.state"
+				[noScroll]="true"
+				[emptyMessage]="'Select state'"
+				[type]="'select'"
+				[selectOptions]="states"
+				(doneEditing)="onSaveInfo('state', $event)"
+			></pr-inline-value-edit>
+		</div>
+	</div>
+	<div class="settings-item" *ngSwitchDefault>
+		<label>Province/Region</label>
+		<div class="settings-item-content">
+			<pr-inline-value-edit
+				[displayValue]="account.state"
+				[noScroll]="true"
+				[emptyMessage]="'Province/Region'"
+				(doneEditing)="onSaveInfo('state', $event)"
+			></pr-inline-value-edit>
+		</div>
+	</div>
 </ng-container>
 
 <div class="settings-item">
-  <label>Postal Code</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit
-      [displayValue]="account.zip"
-      [noScroll]="true"
-      [emptyMessage]="'47685'"
-      (doneEditing)="onSaveInfo('zip', $event)"
-    ></pr-inline-value-edit>
-  </div>
+	<label>Postal Code</label>
+	<div class="settings-item-content">
+		<pr-inline-value-edit
+			[displayValue]="account.zip"
+			[noScroll]="true"
+			[emptyMessage]="'47685'"
+			(doneEditing)="onSaveInfo('zip', $event)"
+		></pr-inline-value-edit>
+	</div>
 </div>
 <div class="settings-item">
-  <label>Country</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit
-      [displayValue]="account.country"
-      [noScroll]="true"
-      [emptyMessage]="'Select country'"
-      [type]="'select'"
-      [saveOnBlur]="false"
-      [selectOptions]="countries"
-      (doneEditing)="onSaveInfo('country', $event)"
-    ></pr-inline-value-edit>
-  </div>
+	<label>Country</label>
+	<div class="settings-item-content">
+		<pr-inline-value-edit
+			[displayValue]="account.country"
+			[noScroll]="true"
+			[emptyMessage]="'Select country'"
+			[type]="'select'"
+			[saveOnBlur]="false"
+			[selectOptions]="countries"
+			(doneEditing)="onSaveInfo('country', $event)"
+		></pr-inline-value-edit>
+	</div>
 </div>

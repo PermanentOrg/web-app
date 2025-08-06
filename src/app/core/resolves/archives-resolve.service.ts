@@ -8,15 +8,15 @@ import { AccountService } from '@shared/services/account/account.service';
 
 @Injectable()
 export class ArchivesResolveService {
-  constructor(
-    private api: ApiService,
-    private accountService: AccountService,
-  ) {}
+	constructor(
+		private api: ApiService,
+		private accountService: AccountService,
+	) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<any> | Promise<any> {
-    return this.accountService.refreshArchives();
-  }
+	resolve(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Observable<any> | Promise<any> {
+		return this.accountService.refreshArchives();
+	}
 }

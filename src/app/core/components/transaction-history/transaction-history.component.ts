@@ -8,50 +8,50 @@ import { chunk } from 'lodash';
 import { DeviceService } from '@shared/services/device/device.service';
 
 @Component({
-  selector: 'pr-transaction-history',
-  templateUrl: './transaction-history.component.html',
-  styleUrls: ['./transaction-history.component.scss'],
-  standalone: false,
+	selector: 'pr-transaction-history',
+	templateUrl: './transaction-history.component.html',
+	styleUrls: ['./transaction-history.component.scss'],
+	standalone: false,
 })
 export class TransactionHistoryComponent implements OnInit {
-  currentPage = 1;
-  pageSize = 10;
-  maxPageCount = 10;
-  ledgerItemCount = 0;
-  ledgerItemPages: LedgerFinancialVOData[][];
-  loading = true;
-  error = false;
-  constructor(
-    private api: ApiService,
-    private account: AccountService,
-    private message: MessageService,
-    private device: DeviceService,
-  ) {
-    if (this.device.isMobileWidth()) {
-      this.maxPageCount = 5;
-    }
-  }
+	currentPage = 1;
+	pageSize = 10;
+	maxPageCount = 10;
+	ledgerItemCount = 0;
+	ledgerItemPages: LedgerFinancialVOData[][];
+	loading = true;
+	error = false;
+	constructor(
+		private api: ApiService,
+		private account: AccountService,
+		private message: MessageService,
+		private device: DeviceService,
+	) {
+		if (this.device.isMobileWidth()) {
+			this.maxPageCount = 5;
+		}
+	}
 
-  ngOnInit() {
-    this.loadTransactionHistory();
-  }
+	ngOnInit() {
+		this.loadTransactionHistory();
+	}
 
-  async loadTransactionHistory() {
-    try {
-      const response = await this.api.billing.getTransactionHistory(
-        this.account.getAccount(),
-      );
-      const ledgerItems = response.getLedgerFinancialVOs().reverse();
-      this.ledgerItemCount = ledgerItems.length;
-      this.ledgerItemPages = chunk(ledgerItems, this.pageSize);
-    } catch (err) {
-      this.message.showError({
-        message: 'There was a problem loading your transaction history.',
-      });
-      this.error = true;
-      throw err;
-    } finally {
-      this.loading = false;
-    }
-  }
+	async loadTransactionHistory() {
+		try {
+			const response = await this.api.billing.getTransactionHistory(
+				this.account.getAccount(),
+			);
+			const ledgerItems = response.getLedgerFinancialVOs().reverse();
+			this.ledgerItemCount = ledgerItems.length;
+			this.ledgerItemPages = chunk(ledgerItems, this.pageSize);
+		} catch (err) {
+			this.message.showError({
+				message: 'There was a problem loading your transaction history.',
+			});
+			this.error = true;
+			throw err;
+		} finally {
+			this.loading = false;
+		}
+	}
 }

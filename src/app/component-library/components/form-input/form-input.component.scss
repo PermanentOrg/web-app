@@ -2,95 +2,95 @@
 @import 'variables';
 
 :host {
-  position: relative;
+	position: relative;
 }
 
 .form-input {
-  border-radius: 12px;
-  font-family: 'UsualRegular', sans-serif;
-  font-size: 14px;
-  line-height: 24px;
-  font-weight: 600;
-  border: 1px solid $form-border;
-  padding: 14px 24px 14px 24px;
-  height: 48px;
+	border-radius: 12px;
+	font-family: 'UsualRegular', sans-serif;
+	font-size: 14px;
+	line-height: 24px;
+	font-weight: 600;
+	border: 1px solid $form-border;
+	padding: 14px 24px 14px 24px;
+	height: 48px;
 
-  &-with-text {
-    padding: 28px 24px 14px 24px;
-  }
+	&-with-text {
+		padding: 28px 24px 14px 24px;
+	}
 
-  &-light.form-input-errors {
-    background-color: $form-background-error;
-    border: 1px solid $form-border-error;
-  }
+	&-light.form-input-errors {
+		background-color: $form-background-error;
+		border: 1px solid $form-border-error;
+	}
 
-  &:focus {
-    box-shadow: none;
-    background-color: $form-background-focus;
-    border: 1px solid $form-border-focus;
-  }
+	&:focus {
+		box-shadow: none;
+		background-color: $form-background-focus;
+		border: 1px solid $form-border-focus;
+	}
 
-  &::placeholder {
-    text-transform: uppercase;
-    font-family: 'UsualRegular', sans-serif;
-    line-height: 16px;
-    letter-spacing: 16%;
-    font-weight: 400;
-    font-size: 10px;
-  }
+	&::placeholder {
+		text-transform: uppercase;
+		font-family: 'UsualRegular', sans-serif;
+		line-height: 16px;
+		letter-spacing: 16%;
+		font-weight: 400;
+		font-size: 10px;
+	}
 
-  &-default {
-    color: $form-default-text-color;
-  }
+	&-default {
+		color: $form-default-text-color;
+	}
 
-  &-dark {
-    background: rgba(255, 255, 255, 0.08);
-    opacity: 0.8;
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    &:focus {
-      background-color: $form-background-dark !important;
-      opacity: 1;
-      border: 1px solid $form-border;
-    }
-    &::placeholder {
-      color: white;
-    }
-  }
+	&-dark {
+		background: rgba(255, 255, 255, 0.08);
+		opacity: 0.8;
+		color: white;
+		border: 1px solid rgba(255, 255, 255, 0.16);
+		&:focus {
+			background-color: $form-background-dark !important;
+			opacity: 1;
+			border: 1px solid $form-border;
+		}
+		&::placeholder {
+			color: white;
+		}
+	}
 }
 
 .input-vertical-label {
-  position: absolute;
-  font-family: 'UsualRegular', sans-serif;
-  font-size: 10px;
-  font-weight: 400;
-  text-transform: uppercase;
-  left: 24px;
-  top: 7px;
-  &-dark {
-    color: $form-label-dark;
-  }
+	position: absolute;
+	font-family: 'UsualRegular', sans-serif;
+	font-size: 10px;
+	font-weight: 400;
+	text-transform: uppercase;
+	left: 24px;
+	top: 7px;
+	&-dark {
+		color: $form-label-dark;
+	}
 }
 
 .hidden {
-  display: none;
+	display: none;
 }
 
 .input-vertical-error {
-  font-family: 'UsualRegular', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: $form-error-red;
-  margin-left: 15px;
-  margin-top: 5px;
+	font-family: 'UsualRegular', sans-serif;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 16px;
+	letter-spacing: 0em;
+	text-align: left;
+	color: $form-error-red;
+	margin-left: 15px;
+	margin-top: 5px;
 }
 
 .error-icon {
-  position: absolute;
-  right: 20px;
-  top: 25%;
-  color: $form-error-red;
+	position: absolute;
+	right: 20px;
+	top: 25%;
+	color: $form-error-red;
 }

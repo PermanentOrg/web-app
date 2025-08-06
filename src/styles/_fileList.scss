@@ -1,63 +1,63 @@
 pr-sidebar {
-  transform: translateX(100%);
+	transform: translateX(100%);
 }
 
 pr-file-list,
 pr-shares {
-  display: block;
-  @include after($tablet-horizontal) {
-    &.show-sidebar {
-      width: calc(100% - #{$sidebar-width});
-      height: calc(100vh - #{$navbar-total-height-desktop});
+	display: block;
+	@include after($tablet-horizontal) {
+		&.show-sidebar {
+			width: calc(100% - #{$sidebar-width});
+			height: calc(100vh - #{$navbar-total-height-desktop});
 
-      pr-sidebar {
-        display: block;
-        transform: translateX(0);
-        transition: transform $menu-transition-length-desktop $tweaked-ease;
-      }
+			pr-sidebar {
+				display: block;
+				transform: translateX(0);
+				transition: transform $menu-transition-length-desktop $tweaked-ease;
+			}
 
-      .file-list-scroll {
-        overflow: hidden;
-        overflow-y: auto;
-        height: calc(
-          100vh - #{$navbar-total-height-desktop + $file-list-controls-height}
-        );
-        max-height: calc(
-          100vh - #{$navbar-total-height-desktop + $file-list-controls-height}
-        );
-        margin-right: -$grid-unit;
-        padding-right: $grid-unit;
-        padding-bottom: $file-list-row-height * 1;
-      }
-    }
+			.file-list-scroll {
+				overflow: hidden;
+				overflow-y: auto;
+				height: calc(
+					100vh - #{$navbar-total-height-desktop + $file-list-controls-height}
+				);
+				max-height: calc(
+					100vh - #{$navbar-total-height-desktop + $file-list-controls-height}
+				);
+				margin-right: -$grid-unit;
+				padding-right: $grid-unit;
+				padding-bottom: $file-list-row-height * 1;
+			}
+		}
 
-    &.grid-view {
-      .file-list-scroll {
-        padding-top: $file-list-grid-gutter;
-        margin: 0 (-$file-list-grid-gutter * 0.5);
-        margin-right: -($file-list-grid-gutter * 0.5);
+		&.grid-view {
+			.file-list-scroll {
+				padding-top: $file-list-grid-gutter;
+				margin: 0 (-$file-list-grid-gutter * 0.5);
+				margin-right: -($file-list-grid-gutter * 0.5);
 
-        @include beforeDesktop {
-          margin: 0 (-$file-list-grid-gutter * 0.5);
-        }
-      }
+				@include beforeDesktop {
+					margin: 0 (-$file-list-grid-gutter * 0.5);
+				}
+			}
 
-      &.show-sidebar .file-list-scroll {
-        margin-right: -$grid-unit;
-        padding-right: $grid-unit - ($file-list-grid-gutter * 0.5);
-      }
+			&.show-sidebar .file-list-scroll {
+				margin-right: -$grid-unit;
+				padding-right: $grid-unit - ($file-list-grid-gutter * 0.5);
+			}
 
-      .file-list-scroll:after {
-        content: '';
-        display: table;
-        clear: both;
-      }
-    }
-  }
+			.file-list-scroll:after {
+				content: '';
+				display: table;
+				clear: both;
+			}
+		}
+	}
 
-  .folder-description {
-    p:last-child {
-      margin-bottom: 0px;
-    }
-  }
+	.folder-description {
+		p:last-child {
+			margin-bottom: 0px;
+		}
+	}
 }

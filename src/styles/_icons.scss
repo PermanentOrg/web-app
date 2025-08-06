@@ -1,24 +1,24 @@
 .ion-custom-folder-move {
-  // .ion-md-arrow-dropright-circle:before + .ion-md-folder
-  @extend .ion-md-folder;
+	// .ion-md-arrow-dropright-circle:before + .ion-md-folder
+	@extend .ion-md-folder;
 
-  &:after {
-    @extend .ion;
-    content: '\f283';
-    color: white;
-  }
+	&:after {
+		@extend .ion;
+		content: '\f283';
+		color: white;
+	}
 }
 
 input.has-ion-search {
-  padding-left: 1.25em;
-  position: relative;
+	padding-left: 1.25em;
+	position: relative;
 
-  &:before {
-    @extend .ion;
-    position: absolute;
-    left: 0;
-    color: white;
-  }
+	&:before {
+		@extend .ion;
+		position: absolute;
+		left: 0;
+		color: white;
+	}
 
-  @extend .ion-md-search;
+	@extend .ion-md-search;
 }

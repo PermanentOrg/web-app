@@ -1,147 +1,147 @@
 @import 'variables';
 
 :host {
-  display: block;
+	display: block;
 }
 
 form {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 button {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .StripeElement {
-  padding: 0.85rem 0.75rem;
-  transition: $input-transition;
-  border: $input-border-width solid $input-border-color;
-  border-top: 0px;
-  border-bottom: 0px;
+	padding: 0.85rem 0.75rem;
+	transition: $input-transition;
+	border: $input-border-width solid $input-border-color;
+	border-top: 0px;
+	border-bottom: 0px;
 }
 
 .StripeElement--focus:not(.ng-invalid) {
-  background-color: darken(white, 3%);
-  border-color: $gray-500;
+	background-color: darken(white, 3%);
+	border-color: $gray-500;
 }
 
 .input-group-vertical {
-  margin: 0px;
-  border-radius: 0.25rem;
-  background-color: white;
-  overflow: hidden;
+	margin: 0px;
+	border-radius: 0.25rem;
+	background-color: white;
+	overflow: hidden;
 }
 
 .input-vertical.checkbox {
-  font-size: 85%;
+	font-size: 85%;
 }
 
 .pledge-buttons {
-  display: flex;
-  overflow: hidden;
-  border-radius: 0.25rem;
+	display: flex;
+	overflow: hidden;
+	border-radius: 0.25rem;
 
-  .pledge-button {
-    padding: 0.85rem 0;
-    line-height: 1.5;
-    flex: 1 1 auto;
-    flex-wrap: wrap;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: $PR-orange;
-    color: white;
-    font-weight: 500;
-    cursor: pointer;
-    user-select: none;
-    transition: $btn-transition;
+	.pledge-button {
+		padding: 0.85rem 0;
+		line-height: 1.5;
+		flex: 1 1 auto;
+		flex-wrap: wrap;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: $PR-orange;
+		color: white;
+		font-weight: 500;
+		cursor: pointer;
+		user-select: none;
+		transition: $btn-transition;
 
-    span {
-      font-weight: 300;
-      font-size: 80%;
-      flex: 0 0 100%;
-      text-align: center;
-      line-height: 1.2;
-    }
+		span {
+			font-weight: 300;
+			font-size: 80%;
+			flex: 0 0 100%;
+			text-align: center;
+			line-height: 1.2;
+		}
 
-    &:hover {
-      transition: $btn-transition;
-      background: darken($PR-orange, 10%);
-    }
+		&:hover {
+			transition: $btn-transition;
+			background: darken($PR-orange, 10%);
+		}
 
-    &.active {
-      transition: 0s all;
-      background: darken($PR-orange, 7%);
-      box-shadow: $btn-active-box-shadow;
-    }
+		&.active {
+			transition: 0s all;
+			background: darken($PR-orange, 7%);
+			box-shadow: $btn-active-box-shadow;
+		}
 
-    &:focus {
-      box-shadow: 0 0 0 $btn-focus-width rgba($PR-orange, 0.5);
-    }
+		&:focus {
+			box-shadow: 0 0 0 $btn-focus-width rgba($PR-orange, 0.5);
+		}
 
-    input {
-      display: inline-block;
-      width: 4em;
-      padding: 0.25rem;
-      &::-webkit-inner-spin-button,
-      &::-webkit-outer-spin-button {
-        appearance: none;
-      }
-    }
+		input {
+			display: inline-block;
+			width: 4em;
+			padding: 0.25rem;
+			&::-webkit-inner-spin-button,
+			&::-webkit-outer-spin-button {
+				appearance: none;
+			}
+		}
 
-    @media screen and (max-width: 767px) {
-      padding: 0.5rem 0;
-    }
+		@media screen and (max-width: 767px) {
+			padding: 0.5rem 0;
+		}
 
-    @media screen and (max-width: 350px) {
-      input {
-        width: 3em;
-      }
-    }
+		@media screen and (max-width: 350px) {
+			input {
+				width: 3em;
+			}
+		}
 
-    @media screen and (max-width: 300px) {
-      input {
-        width: 2em;
-      }
-    }
+		@media screen and (max-width: 300px) {
+			input {
+				width: 2em;
+			}
+		}
 
-    @media screen and (max-width: 250px) {
-      input {
-        width: 1.2em;
-      }
-    }
-  }
+		@media screen and (max-width: 250px) {
+			input {
+				width: 1.2em;
+			}
+		}
+	}
 }
 
 .input-vertical.checkbox {
-  img {
-    height: 20px;
-    float: right;
-  }
+	img {
+		height: 20px;
+		float: right;
+	}
 
-  overflow: hidden;
+	overflow: hidden;
 }
 
 .error {
-  padding-top: $grid-unit * 0.5;
+	padding-top: $grid-unit * 0.5;
 }
 
 .form-check-description {
-  padding: 5px 0 5px 10px;
-  margin-bottom: 0px;
+	padding: 5px 0 5px 10px;
+	margin-bottom: 0px;
 }
 
 .contributors-link {
-  color: white;
-  &:visited {
-    color: white;
-  }
-  &:hover {
-    text-decoration-color: white;
-  }
+	color: white;
+	&:visited {
+		color: white;
+	}
+	&:hover {
+		text-decoration-color: white;
+	}
 }
 
 .form-check-label {
-  width: 65%;
+	width: 65%;
 }

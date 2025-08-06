@@ -4,8 +4,8 @@ import { TagVO, TagVOData } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { FormsModule } from '@angular/forms';
 import {
-  MessageService,
-  MessageDisplayOptions,
+	MessageService,
+	MessageDisplayOptions,
 } from '@shared/services/message/message.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { FormEditComponent } from '../form-edit/form-edit.component';
@@ -14,117 +14,117 @@ import { ManageMetadataModule } from '../../manage-metadata.module';
 import { EditValueComponent } from './value-edit.component';
 
 describe('EditValueComponent', () => {
-  let shallow: Shallow<EditValueComponent>;
-  let deleted: boolean;
-  let updated: boolean;
-  let newTagName: string;
-  let error: boolean;
-  let messageShown: boolean;
-  let rejectDelete: boolean;
+	let shallow: Shallow<EditValueComponent>;
+	let deleted: boolean;
+	let updated: boolean;
+	let newTagName: string;
+	let error: boolean;
+	let messageShown: boolean;
+	let rejectDelete: boolean;
 
-  const defaultRender = async (
-    tag: TagVO = new TagVO({ tagId: 1, name: 'abc:123' }),
-  ) =>
-    await shallow.render(
-      '<pr-metadata-edit-value [tag]="tag"></pr-metadata-edit-value>',
-      {
-        bind: {
-          tag,
-        },
-      },
-    );
+	const defaultRender = async (
+		tag: TagVO = new TagVO({ tagId: 1, name: 'abc:123' }),
+	) =>
+		await shallow.render(
+			'<pr-metadata-edit-value [tag]="tag"></pr-metadata-edit-value>',
+			{
+				bind: {
+					tag,
+				},
+			},
+		);
 
-  beforeEach(() => {
-    updated = false;
-    deleted = false;
-    newTagName = '';
-    error = false;
-    messageShown = false;
-    rejectDelete = false;
+	beforeEach(() => {
+		updated = false;
+		deleted = false;
+		newTagName = '';
+		error = false;
+		messageShown = false;
+		rejectDelete = false;
 
-    shallow = new Shallow(EditValueComponent, ManageMetadataModule)
-      .import(FormsModule)
-      .dontMock(FormEditComponent)
-      .dontMock(MetadataValuePipe)
-      .mock(ApiService, {
-        tag: {
-          delete: async (tag: TagVO) => {
-            if (error) {
-              throw new Error('Test Error');
-            }
-            deleted = true;
-          },
-          update: async (tag: TagVO) => {
-            if (error) {
-              throw new Error('Test Error');
-            }
-            updated = true;
-            newTagName = tag.name;
-          },
-        },
-      })
-      .mock(MessageService, {
-        showError: (message: MessageDisplayOptions) => {
-          messageShown = true;
-        },
-      })
-      .mock(PromptService, {
-        confirm: async () => {
-          if (rejectDelete) {
-            throw new Error('promise rejection');
-          }
-          return true;
-        },
-      });
-  });
+		shallow = new Shallow(EditValueComponent, ManageMetadataModule)
+			.import(FormsModule)
+			.dontMock(FormEditComponent)
+			.dontMock(MetadataValuePipe)
+			.mock(ApiService, {
+				tag: {
+					delete: async (tag: TagVO) => {
+						if (error) {
+							throw new Error('Test Error');
+						}
+						deleted = true;
+					},
+					update: async (tag: TagVO) => {
+						if (error) {
+							throw new Error('Test Error');
+						}
+						updated = true;
+						newTagName = tag.name;
+					},
+				},
+			})
+			.mock(MessageService, {
+				showError: (message: MessageDisplayOptions) => {
+					messageShown = true;
+				},
+			})
+			.mock(PromptService, {
+				confirm: async () => {
+					if (rejectDelete) {
+						throw new Error('promise rejection');
+					}
+					return true;
+				},
+			});
+	});
 
-  it('should create', async () => {
-    const { element } = await defaultRender();
+	it('should create', async () => {
+		const { element } = await defaultRender();
 
-    expect(element).toBeTruthy();
-  });
+		expect(element).toBeTruthy();
+	});
 
-  it('should be able to delete a tag', async () => {
-    const { instance, outputs } = await defaultRender();
-    await instance.delete();
+	it('should be able to delete a tag', async () => {
+		const { instance, outputs } = await defaultRender();
+		await instance.delete();
 
-    expect(deleted).toBeTrue();
-    expect(outputs.refreshTags.emit).toHaveBeenCalled();
-    expect(outputs.deletedTag.emit).toHaveBeenCalled();
-  });
+		expect(deleted).toBeTrue();
+		expect(outputs.refreshTags.emit).toHaveBeenCalled();
+		expect(outputs.deletedTag.emit).toHaveBeenCalled();
+	});
 
-  it('should be able to edit a value', async () => {
-    const { instance, outputs } = await defaultRender();
-    await instance.save('potato');
+	it('should be able to edit a value', async () => {
+		const { instance, outputs } = await defaultRender();
+		await instance.save('potato');
 
-    expect(updated).toBeTrue();
-    expect(newTagName).toBe('abc:potato');
-    expect(outputs.refreshTags.emit).toHaveBeenCalled();
-  });
+		expect(updated).toBeTrue();
+		expect(newTagName).toBe('abc:potato');
+		expect(outputs.refreshTags.emit).toHaveBeenCalled();
+	});
 
-  it('should deal with errors while deleting', async () => {
-    const { instance, outputs } = await defaultRender();
-    error = true;
-    await expectAsync(instance.delete()).toBeRejected();
+	it('should deal with errors while deleting', async () => {
+		const { instance, outputs } = await defaultRender();
+		error = true;
+		await expectAsync(instance.delete()).toBeRejected();
 
-    expect(messageShown).toBeTrue();
-    expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
-  });
+		expect(messageShown).toBeTrue();
+		expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
+	});
 
-  it('should deal with errors while editing', async () => {
-    const { instance, outputs } = await defaultRender();
-    error = true;
-    await expectAsync(instance.save('test')).toBeRejected();
+	it('should deal with errors while editing', async () => {
+		const { instance, outputs } = await defaultRender();
+		error = true;
+		await expectAsync(instance.save('test')).toBeRejected();
 
-    expect(messageShown).toBeTrue();
-    expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
-  });
+		expect(messageShown).toBeTrue();
+		expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
+	});
 
-  it('should not do anything if they cancel out of the deletion confirmation prompt', async () => {
-    rejectDelete = true;
-    const { instance, outputs } = await defaultRender();
-    await instance.delete();
+	it('should not do anything if they cancel out of the deletion confirmation prompt', async () => {
+		rejectDelete = true;
+		const { instance, outputs } = await defaultRender();
+		await instance.delete();
 
-    expect(outputs.deletedTag.emit).not.toHaveBeenCalled();
-  });
+		expect(outputs.deletedTag.emit).not.toHaveBeenCalled();
+	});
 });

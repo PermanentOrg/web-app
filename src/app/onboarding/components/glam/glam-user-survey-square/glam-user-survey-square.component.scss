@@ -1,42 +1,42 @@
 @import 'fonts';
 
 .square {
-  width: 280px;
-  height: 130px;
-  padding: 24px;
-  background-color: rgba(19, 27, 74, 1);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  cursor: pointer;
-  display: flex;
+	width: 280px;
+	height: 130px;
+	padding: 24px;
+	background-color: rgba(19, 27, 74, 1);
+	border-radius: 12px;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	cursor: pointer;
+	display: flex;
 
-  @media screen and (max-width: 770px) {
-    width: 300px;
-  }
+	@media screen and (max-width: 770px) {
+		width: 300px;
+	}
 }
 
 .text {
-  font-family: 'UsualRegular', sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  color: white;
-  margin-left: 24px;
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 0px;
+	font-family: 'UsualRegular', sans-serif;
+	font-size: 18px;
+	font-weight: 400;
+	color: white;
+	margin-left: 24px;
+	margin-left: 10px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 0px;
 }
 
 .selected {
-  background: linear-gradient(
-    to right,
-    rgba(184, 67, 166, 1),
-    rgba(128, 0, 128, 1)
-  );
+	background: linear-gradient(
+		to right,
+		rgba(184, 67, 166, 1),
+		rgba(128, 0, 128, 1)
+	);
 }
 
 .checkbox {
-  margin-top: 6px;
-  display: flex;
-  align-items: center;
+	margin-top: 6px;
+	display: flex;
+	align-items: center;
 }

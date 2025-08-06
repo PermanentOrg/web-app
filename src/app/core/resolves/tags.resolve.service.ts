@@ -6,12 +6,12 @@ import { TagsService } from '@core/services/tags/tags.service';
 
 @Injectable()
 export class TagsResolveService {
-  constructor(private tags: TagsService) {}
+	constructor(private tags: TagsService) {}
 
-  async resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Promise<any> {
-    await this.tags.refreshTags();
-  }
+	async resolve(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot,
+	): Promise<any> {
+		await this.tags.refreshTags();
+	}
 }

@@ -4,8 +4,8 @@ import { V3RootComponent } from './components/v3-root/v3-root.component';
 import { V3RoutingModule } from './v3.routes';
 
 @NgModule({
-  declarations: [V3RootComponent],
-  exports: [V3RootComponent],
-  imports: [CommonModule, V3RoutingModule],
+	declarations: [V3RootComponent],
+	exports: [V3RootComponent],
+	imports: [CommonModule, V3RoutingModule],
 })
 export class V3Module {}

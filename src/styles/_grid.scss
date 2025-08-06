@@ -5,5 +5,5 @@ $grid-unit: 1.25rem;
 $half-unit: $grid-unit * 0.5;
 
 @function pxToGrid($px) {
-  @return math.div($px, $grid-unit-px) * $grid-unit;
+	@return math.div($px, $grid-unit-px) * $grid-unit;
 }

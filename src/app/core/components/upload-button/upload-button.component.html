@@ -1,25 +1,25 @@
 <!-- @format  -->
 <label
-  class="btn btn-alternate"
-  [hidden]="!currentFolder || hidden"
-  [class.full-width]="fullWidth"
-  [class.disabled]="disabled"
-  [ngbTooltip]="
-    (disabled
-      ? 'fileList.actions.upload.disabled'
-      : 'fileList.actions.upload.enabled'
-    ) | prTooltip
-  "
+	class="btn btn-alternate"
+	[hidden]="!currentFolder || hidden"
+	[class.full-width]="fullWidth"
+	[class.disabled]="disabled"
+	[ngbTooltip]="
+		(disabled
+			? 'fileList.actions.upload.disabled'
+			: 'fileList.actions.upload.enabled'
+		) | prTooltip
+	"
 >
-  <i class="material-icons">cloud_upload</i>Upload
-  <input
-    id="uploadFiles"
-    type="file"
-    (click)="filePickerClick()"
-    (change)="onFileChange($event)"
-    multiple="multiple"
-    hidden
-    #fileInput
-    [disabled]="disabled"
-  />
+	<i class="material-icons">cloud_upload</i>Upload
+	<input
+		id="uploadFiles"
+		type="file"
+		(click)="filePickerClick()"
+		(change)="onFileChange($event)"
+		multiple="multiple"
+		hidden
+		#fileInput
+		[disabled]="disabled"
+	/>
 </label>

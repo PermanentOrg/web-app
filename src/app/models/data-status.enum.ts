@@ -1,5 +1,5 @@
 export enum DataStatus {
-  Placeholder,
-  Lean,
-  Full,
+	Placeholder,
+	Lean,
+	Full,
 }

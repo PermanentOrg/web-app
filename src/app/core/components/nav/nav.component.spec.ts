@@ -7,26 +7,26 @@ import { LeftMenuComponent } from '@core/components/left-menu/left-menu.componen
 import { RightMenuComponent } from '../right-menu/right-menu.component';
 
 describe('NavComponent', () => {
-  let component: NavComponent;
-  let fixture: ComponentFixture<NavComponent>;
+	let component: NavComponent;
+	let fixture: ComponentFixture<NavComponent>;
 
-  beforeEach(waitForAsync(() => {
-    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+	beforeEach(waitForAsync(() => {
+		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
-    config.declarations.push(NavComponent);
-    config.declarations.push(LeftMenuComponent);
-    config.declarations.push(RightMenuComponent);
+		config.declarations.push(NavComponent);
+		config.declarations.push(LeftMenuComponent);
+		config.declarations.push(RightMenuComponent);
 
-    TestBed.configureTestingModule(config).compileComponents();
-  }));
+		TestBed.configureTestingModule(config).compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(NavComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(NavComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

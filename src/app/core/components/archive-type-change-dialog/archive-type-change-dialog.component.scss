@@ -1,46 +1,46 @@
 @import 'variables';
 
 :host {
-  display: block;
-  width: 100%;
+	display: block;
+	width: 100%;
 }
 
 .header {
-  @include tabbedDialogHeader;
+	@include tabbedDialogHeader;
 }
 
 .content {
-  @include tabbedDialogContent;
-  flex-direction: column;
+	@include tabbedDialogContent;
+	flex-direction: column;
 }
 
 .tabs {
-  @include tabbedDialogNav;
+	@include tabbedDialogNav;
 }
 
 .panel {
-  @include tabbedDialogPanel;
+	@include tabbedDialogPanel;
 }
 
 .panel-title {
-  @include tabbedDialogPanelTitle;
+	@include tabbedDialogPanelTitle;
 }
 
 form {
-  @include tabbedDialogPanelForm;
-  max-width: 600px;
-  padding-top: 0;
+	@include tabbedDialogPanelForm;
+	max-width: 600px;
+	padding-top: 0;
 }
 
 pr-archive-small {
-  margin-bottom: $grid-unit;
+	margin-bottom: $grid-unit;
 
-  &.waiting {
-    opacity: 0.7;
-  }
+	&.waiting {
+		opacity: 0.7;
+	}
 }
 
 .popup-text {
-  text-align: center;
-  padding: 20px;
+	text-align: center;
+	padding: 20px;
 }

@@ -1,76 +1,76 @@
 <div class="dialog-content">
-  <div class="dialog-body">
-    <div class="page-title break-all">{{ shareItem.displayName }}</div>
-    <div class="page-subheading" *ngIf="shareLink">Share Link</div>
-    <div class="share-link" *ngIf="shareLink">
-      <p>
-        Send this link via text, email, or other message service to invite
-        people to share this content.
-      </p>
-      <input
-        type="text"
-        class="form-control"
-        readonly
-        [value]="shareLink.shareUrl"
-        #shareUrlInput
-      />
-      <button
-        class="btn btn-primary"
-        [disabled]="linkCopied"
-        (click)="copyShareLink()"
-      >
-        {{ linkCopied ? 'Link copied' : 'Copy link' }}
-      </button>
-      <button class="btn btn-primary" (click)="manageShareLink()">
-        Link settings
-      </button>
-      <button class="btn btn-danger" (click)="removeShareLink()">
-        Remove link
-      </button>
-    </div>
-    <div class="share-link-button" *ngIf="!shareLink">
-      <button class="btn btn-primary" (click)="generateShareLink()">
-        Get share link
-      </button>
-    </div>
-    <div
-      class="page-subheading"
-      *ngIf="pendingShares.length && shareItem.accessRole.includes('owner')"
-    >
-      Share Requests
-    </div>
-    <div
-      class="share-item-members"
-      *ngIf="pendingShares.length && shareItem.accessRole.includes('owner')"
-    >
-      <pr-archive-small
-        *ngFor="let shareVo of pendingShares"
-        (click)="onPendingShareClick(shareVo)"
-        [archive]="shareVo.ArchiveVO"
-        [accessRole]="shareVo.accessRole"
-      >
-      </pr-archive-small>
-    </div>
-    <div class="page-subheading">Sharing With</div>
-    <div class="share-item-members">
-      <p *ngIf="!shares.length">This item is not shared with any archives</p>
-      <pr-archive-small
-        *ngFor="let shareVo of shares"
-        (click)="onShareMemberClick(shareVo)"
-        [archive]="shareVo.ArchiveVO"
-        [accessRole]="shareVo.accessRole"
-      >
-      </pr-archive-small>
-    </div>
-  </div>
-  <div class="dialog-footer">
-    <button class="btn btn-secondary" (click)="close()">Done</button>
-    <button
-      class="btn btn-primary"
-      (click)="addShareMember()"
-      [disabled]="loadingRelations"
-    >
-      Add
-    </button>
-  </div>
+	<div class="dialog-body">
+		<div class="page-title break-all">{{ shareItem.displayName }}</div>
+		<div class="page-subheading" *ngIf="shareLink">Share Link</div>
+		<div class="share-link" *ngIf="shareLink">
+			<p>
+				Send this link via text, email, or other message service to invite
+				people to share this content.
+			</p>
+			<input
+				type="text"
+				class="form-control"
+				readonly
+				[value]="shareLink.shareUrl"
+				#shareUrlInput
+			/>
+			<button
+				class="btn btn-primary"
+				[disabled]="linkCopied"
+				(click)="copyShareLink()"
+			>
+				{{ linkCopied ? 'Link copied' : 'Copy link' }}
+			</button>
+			<button class="btn btn-primary" (click)="manageShareLink()">
+				Link settings
+			</button>
+			<button class="btn btn-danger" (click)="removeShareLink()">
+				Remove link
+			</button>
+		</div>
+		<div class="share-link-button" *ngIf="!shareLink">
+			<button class="btn btn-primary" (click)="generateShareLink()">
+				Get share link
+			</button>
+		</div>
+		<div
+			class="page-subheading"
+			*ngIf="pendingShares.length && shareItem.accessRole.includes('owner')"
+		>
+			Share Requests
+		</div>
+		<div
+			class="share-item-members"
+			*ngIf="pendingShares.length && shareItem.accessRole.includes('owner')"
+		>
+			<pr-archive-small
+				*ngFor="let shareVo of pendingShares"
+				(click)="onPendingShareClick(shareVo)"
+				[archive]="shareVo.ArchiveVO"
+				[accessRole]="shareVo.accessRole"
+			>
+			</pr-archive-small>
+		</div>
+		<div class="page-subheading">Sharing With</div>
+		<div class="share-item-members">
+			<p *ngIf="!shares.length">This item is not shared with any archives</p>
+			<pr-archive-small
+				*ngFor="let shareVo of shares"
+				(click)="onShareMemberClick(shareVo)"
+				[archive]="shareVo.ArchiveVO"
+				[accessRole]="shareVo.accessRole"
+			>
+			</pr-archive-small>
+		</div>
+	</div>
+	<div class="dialog-footer">
+		<button class="btn btn-secondary" (click)="close()">Done</button>
+		<button
+			class="btn btn-primary"
+			(click)="addShareMember()"
+			[disabled]="loadingRelations"
+		>
+			Add
+		</button>
+	</div>
 </div>

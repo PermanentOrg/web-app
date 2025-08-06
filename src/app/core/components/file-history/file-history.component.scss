@@ -1,19 +1,19 @@
 @import 'variables';
 
 :host {
-  display: block;
-  width: 100%;
+	display: block;
+	width: 100%;
 }
 
 em {
-  color: $text-muted;
+	color: $text-muted;
 }
 
 ngb-pagination {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 table {
-  font-size: $font-size-sm;
+	font-size: $font-size-sm;
 }

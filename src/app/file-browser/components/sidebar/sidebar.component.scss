@@ -4,128 +4,128 @@ $sidebar-border: $file-list-border;
 $sidebar-thumb-height: 200px;
 
 :host {
-  position: fixed;
-  right: 0;
-  width: $sidebar-width;
-  top: $navbar-total-height-desktop;
-  bottom: 0;
-  border-left: $sidebar-border;
+	position: fixed;
+	right: 0;
+	width: $sidebar-width;
+	top: $navbar-total-height-desktop;
+	bottom: 0;
+	border-left: $sidebar-border;
 }
 
 .sidebar-tabs {
-  display: flex;
-  border-top: $sidebar-border;
+	display: flex;
+	border-top: $sidebar-border;
 
-  .sidebar-tab {
-    flex: 1 1 auto;
-    height: $sidebar-tab-height;
-    line-height: $sidebar-tab-height;
-    text-align: center;
-    border-bottom: $sidebar-border;
-    user-select: none;
+	.sidebar-tab {
+		flex: 1 1 auto;
+		height: $sidebar-tab-height;
+		line-height: $sidebar-tab-height;
+		text-align: center;
+		border-bottom: $sidebar-border;
+		user-select: none;
 
-    &:not(:last-child) {
-      border-right: $sidebar-border;
-    }
+		&:not(:last-child) {
+			border-right: $sidebar-border;
+		}
 
-    &:not(.active):not(.disabled) {
-      cursor: pointer;
-      &:hover {
-        background-color: $gray-100;
-      }
-    }
+		&:not(.active):not(.disabled) {
+			cursor: pointer;
+			&:hover {
+				background-color: $gray-100;
+			}
+		}
 
-    &.active {
-      font-weight: 600;
-      color: $body-color;
-      border-bottom: 1px solid rgba($gray-300, 0);
-    }
+		&.active {
+			font-weight: 600;
+			color: $body-color;
+			border-bottom: 1px solid rgba($gray-300, 0);
+		}
 
-    &.disabled {
-      color: $text-muted;
-      cursor: not-allowed;
-    }
-  }
+		&.disabled {
+			color: $text-muted;
+			cursor: not-allowed;
+		}
+	}
 }
 
 .sidebar-tab-content {
-  padding-top: 5px;
-  max-height: calc(
-    100vh - #{$navbar-total-height-desktop} - #{$sidebar-tab-height}
-  );
-  overflow-y: auto;
-  padding-bottom: 78px;
+	padding-top: 5px;
+	max-height: calc(
+		100vh - #{$navbar-total-height-desktop} - #{$sidebar-tab-height}
+	);
+	overflow-y: auto;
+	padding-bottom: 78px;
 }
 
 .sidebar-item {
-  padding: $grid-unit * 0.5 $grid-unit;
-  label {
-    font-weight: 600;
-    margin-bottom: $grid-unit * 0.5;
-  }
+	padding: $grid-unit * 0.5 $grid-unit;
+	label {
+		font-weight: 600;
+		margin-bottom: $grid-unit * 0.5;
+	}
 
-  .sidebar-item-content {
-    min-height: $line-height-base * 1rem;
+	.sidebar-item-content {
+		min-height: $line-height-base * 1rem;
 
-    &.can-edit {
-      cursor: pointer;
-    }
-  }
+		&.can-edit {
+			cursor: pointer;
+		}
+	}
 
-  .sidebar-item-content-empty {
-    color: $text-muted;
-  }
+	.sidebar-item-content-empty {
+		color: $text-muted;
+	}
 }
 
 .sidebar-detail {
-  font-size: $font-size-sm;
-  display: flex;
-  justify-content: space-between;
+	font-size: $font-size-sm;
+	display: flex;
+	justify-content: space-between;
 }
 
 .sidebar-thumbnail pr-thumbnail {
-  width: 100%;
-  height: $sidebar-thumb-height;
+	width: 100%;
+	height: $sidebar-thumb-height;
 }
 
 .shared-with-archive {
-  display: flex;
-  align-items: center;
-  $thumb-size: 30px;
+	display: flex;
+	align-items: center;
+	$thumb-size: 30px;
 
-  &:not(:last-child) {
-    margin-bottom: 1rem;
-  }
+	&:not(:last-child) {
+		margin-bottom: 1rem;
+	}
 
-  .archive-thumb {
-    width: $thumb-size;
-    height: $thumb-size;
-    flex: 0 0 $thumb-size;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
+	.archive-thumb {
+		width: $thumb-size;
+		height: $thumb-size;
+		flex: 0 0 $thumb-size;
+		border-radius: 50%;
+		margin-right: 10px;
+	}
 
-  .archive-info {
-    flex: 1 1 auto;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+	.archive-info {
+		flex: 1 1 auto;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 
-    .archive-name {
-      max-width: 100%;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+		.archive-name {
+			max-width: 100%;
+			font-weight: 500;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 
-    .archive-role {
-      font-size: $font-size-sm;
-      line-height: 1;
-    }
-  }
+		.archive-role {
+			font-size: $font-size-sm;
+			line-height: 1;
+		}
+	}
 }
 
 .alt-text-tooltip {
-  margin-left: 10px;
+	margin-left: 10px;
 }

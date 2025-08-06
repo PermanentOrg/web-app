@@ -12,243 +12,243 @@ import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
 
 describe('GiftStorageComponent', () => {
-  let shallow: Shallow<GiftStorageComponent>;
-  let messageShown = false;
+	let shallow: Shallow<GiftStorageComponent>;
+	let messageShown = false;
 
-  const mockAccount = new AccountVO({ accountId: 1 });
+	const mockAccount = new AccountVO({ accountId: 1 });
 
-  const mockAccountService = {
-    getAccount: jasmine.createSpy('getAccount').and.returnValue({
-      mockAccount,
-    }),
-    setAccount: jasmine.createSpy('setAccount'),
-  };
+	const mockAccountService = {
+		getAccount: jasmine.createSpy('getAccount').and.returnValue({
+			mockAccount,
+		}),
+		setAccount: jasmine.createSpy('setAccount'),
+	};
 
-  const mockDialog = jasmine.createSpyObj('DialogCdkService', ['open']);
-  mockDialog.open.and.returnValue({
-    closed: of(true),
-  });
+	const mockDialog = jasmine.createSpyObj('DialogCdkService', ['open']);
+	mockDialog.open.and.returnValue({
+		closed: of(true),
+	});
 
-  const mockApiService = {
-    billing: {
-      giftStorage: jasmine.createSpy('giftStorage').and.returnValue(
-        Promise.resolve(
-          new GiftingResponse({
-            storageGifted: 50,
-            giftDelivered: ['test@example.com', 'test1@example.com'],
-            invitationSent: ['test@example.com', 'test2@example.com'],
-            alreadyInvited: [],
-          }),
-        ),
-      ),
-    },
-  };
+	const mockApiService = {
+		billing: {
+			giftStorage: jasmine.createSpy('giftStorage').and.returnValue(
+				Promise.resolve(
+					new GiftingResponse({
+						storageGifted: 50,
+						giftDelivered: ['test@example.com', 'test1@example.com'],
+						invitationSent: ['test@example.com', 'test2@example.com'],
+						alreadyInvited: [],
+					}),
+				),
+			),
+		},
+	};
 
-  beforeEach(() => {
-    shallow = new Shallow(GiftStorageComponent, CoreModule)
-      .provide([HttpClient, HttpHandler])
-      .mock(AccountService, mockAccountService)
-      .mock(MessageService, {
-        showError: () => {
-          messageShown = true;
-        },
-      })
-      .mock(DialogCdkService, mockDialog)
-      .mock(ApiService, mockApiService);
-  });
+	beforeEach(() => {
+		shallow = new Shallow(GiftStorageComponent, CoreModule)
+			.provide([HttpClient, HttpHandler])
+			.mock(AccountService, mockAccountService)
+			.mock(MessageService, {
+				showError: () => {
+					messageShown = true;
+				},
+			})
+			.mock(DialogCdkService, mockDialog)
+			.mock(ApiService, mockApiService);
+	});
 
-  it('should create', async () => {
-    const { instance } = await shallow.render();
+	it('should create', async () => {
+		const { instance } = await shallow.render();
 
-    expect(instance).toBeTruthy();
-  });
+		expect(instance).toBeTruthy();
+	});
 
-  it('enables the "Send Gift Storage" button when the form is valid', async () => {
-    const { find, instance, fixture } = await shallow.render();
+	it('enables the "Send Gift Storage" button when the form is valid', async () => {
+		const { find, instance, fixture } = await shallow.render();
 
-    instance.availableSpace = '10';
+		instance.availableSpace = '10';
 
-    await instance.giftForm.controls.email.setValue('test@example.com');
-    instance.giftForm.controls.amount.setValue('1');
+		await instance.giftForm.controls.email.setValue('test@example.com');
+		instance.giftForm.controls.amount.setValue('1');
 
-    instance.isAsyncValidating = false;
+		instance.isAsyncValidating = false;
 
-    instance.giftForm.updateValueAndValidity();
-    fixture.detectChanges();
-    await fixture.whenStable();
+		instance.giftForm.updateValueAndValidity();
+		fixture.detectChanges();
+		await fixture.whenStable();
 
-    const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
 
-    expect(button.disabled).toBe(false);
-  });
+		expect(button.disabled).toBe(false);
+	});
 
-  it('disables the submit button if at least one email is not valid', async () => {
-    const { find, instance, fixture } = await shallow.render();
+	it('disables the submit button if at least one email is not valid', async () => {
+		const { find, instance, fixture } = await shallow.render();
 
-    instance.availableSpace = '5';
+		instance.availableSpace = '5';
 
-    instance.giftForm.controls.email.setValue('test@example.com, test');
-    instance.giftForm.controls.amount.setValue('1');
+		instance.giftForm.controls.email.setValue('test@example.com, test');
+		instance.giftForm.controls.amount.setValue('1');
 
-    instance.giftForm.updateValueAndValidity();
-    fixture.detectChanges();
+		instance.giftForm.updateValueAndValidity();
+		fixture.detectChanges();
 
-    const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
 
-    expect(button.disabled).toBe(true);
-  });
+		expect(button.disabled).toBe(true);
+	});
 
-  it('disables the submit button if the there is a duplicate email', async () => {
-    const { find, instance, fixture } = await shallow.render();
+	it('disables the submit button if the there is a duplicate email', async () => {
+		const { find, instance, fixture } = await shallow.render();
 
-    instance.availableSpace = '5';
+		instance.availableSpace = '5';
 
-    instance.giftForm.controls.email.setValue(
-      'test@example.com, test@example.com',
-    );
-    instance.giftForm.controls.amount.setValue('1');
+		instance.giftForm.controls.email.setValue(
+			'test@example.com, test@example.com',
+		);
+		instance.giftForm.controls.amount.setValue('1');
 
-    instance.giftForm.updateValueAndValidity();
-    fixture.detectChanges();
+		instance.giftForm.updateValueAndValidity();
+		fixture.detectChanges();
 
-    const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
 
-    expect(button.disabled).toBe(true);
-  });
+		expect(button.disabled).toBe(true);
+	});
 
-  it('disables the submit button if the amount entered exceeds the available amount', async () => {
-    const { find, instance, fixture } = await shallow.render();
+	it('disables the submit button if the amount entered exceeds the available amount', async () => {
+		const { find, instance, fixture } = await shallow.render();
 
-    instance.availableSpace = '5';
+		instance.availableSpace = '5';
 
-    await instance.giftForm.controls.email.setValue('test@example.com');
-    instance.giftForm.controls.amount.setValue('10');
+		await instance.giftForm.controls.email.setValue('test@example.com');
+		instance.giftForm.controls.amount.setValue('10');
 
-    instance.giftForm.updateValueAndValidity();
+		instance.giftForm.updateValueAndValidity();
 
-    fixture.detectChanges();
-    await fixture.whenStable();
+		fixture.detectChanges();
+		await fixture.whenStable();
 
-    const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
 
-    expect(button.disabled).toBe(true);
-  });
+		expect(button.disabled).toBe(true);
+	});
 
-  it('displays the total amount gifted based on the number of emails', async () => {
-    const { instance, fixture } = await shallow.render();
+	it('displays the total amount gifted based on the number of emails', async () => {
+		const { instance, fixture } = await shallow.render();
 
-    instance.availableSpace = '5';
+		instance.availableSpace = '5';
 
-    await instance.giftForm.controls.email.setValue(
-      'test@example.com,test1@example.com',
-    );
-    instance.giftForm.controls.amount.setValue('2');
+		await instance.giftForm.controls.email.setValue(
+			'test@example.com,test1@example.com',
+		);
+		instance.giftForm.controls.amount.setValue('2');
 
-    instance.giftForm.updateValueAndValidity();
+		instance.giftForm.updateValueAndValidity();
 
-    fixture.detectChanges();
-    await fixture.whenStable();
+		fixture.detectChanges();
+		await fixture.whenStable();
 
-    expect(instance.successMessage).toEqual('Total gifted storage: 4 GB');
-  });
+		expect(instance.successMessage).toEqual('Total gifted storage: 4 GB');
+	});
 
-  it('disables the submit button if the amount multiplied by the number of emails exceeds the available amount', async () => {
-    const { find, instance, fixture } = await shallow.render();
+	it('disables the submit button if the amount multiplied by the number of emails exceeds the available amount', async () => {
+		const { find, instance, fixture } = await shallow.render();
 
-    instance.availableSpace = '5';
+		instance.availableSpace = '5';
 
-    await instance.giftForm.controls.email.setValue(
-      'test@example.com,test1@example.com',
-    );
-    instance.giftForm.controls.amount.setValue('4');
+		await instance.giftForm.controls.email.setValue(
+			'test@example.com,test1@example.com',
+		);
+		instance.giftForm.controls.amount.setValue('4');
 
-    instance.giftForm.updateValueAndValidity();
+		instance.giftForm.updateValueAndValidity();
 
-    fixture.detectChanges();
-    await fixture.whenStable();
+		fixture.detectChanges();
+		await fixture.whenStable();
 
-    const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
 
-    expect(button.disabled).toBe(true);
-  });
+		expect(button.disabled).toBe(true);
+	});
 
-  it('parses the email string correctly', async () => {
-    const { instance } = await shallow.render();
+	it('parses the email string correctly', async () => {
+		const { instance } = await shallow.render();
 
-    const result = instance.parseEmailString(
-      'test@example.com, test1@example.com',
-    );
+		const result = instance.parseEmailString(
+			'test@example.com, test1@example.com',
+		);
 
-    expect(result).toEqual(['test@example.com', 'test1@example.com']);
-  });
+		expect(result).toEqual(['test@example.com', 'test1@example.com']);
+	});
 
-  it('returns all the duplicate emails', async (done) => {
-    const { instance } = await shallow.render();
+	it('returns all the duplicate emails', async (done) => {
+		const { instance } = await shallow.render();
 
-    const testEmailString =
-      'test@example.com,test@example.com,test2@example.com';
-    const expectedDuplicates = ['test@example.com'];
+		const testEmailString =
+			'test@example.com,test@example.com,test2@example.com';
+		const expectedDuplicates = ['test@example.com'];
 
-    instance
-      .checkForDuplicateEmails(testEmailString)
-      .subscribe((duplicates) => {
-        expect(duplicates).toEqual(expectedDuplicates);
-        done();
-      });
-  });
+		instance
+			.checkForDuplicateEmails(testEmailString)
+			.subscribe((duplicates) => {
+				expect(duplicates).toEqual(expectedDuplicates);
+				done();
+			});
+	});
 
-  it('calls submitStorageGiftForm when the form is valid', async () => {
-    const { instance } = await shallow.render();
+	it('calls submitStorageGiftForm when the form is valid', async () => {
+		const { instance } = await shallow.render();
 
-    instance.giftForm.controls.email.setValue('test@example.com');
-    instance.giftForm.controls.amount.setValue(5);
-    instance.giftForm.updateValueAndValidity();
+		instance.giftForm.controls.email.setValue('test@example.com');
+		instance.giftForm.controls.amount.setValue(5);
+		instance.giftForm.updateValueAndValidity();
 
-    spyOn(instance, 'submitStorageGiftForm').and.callThrough();
+		spyOn(instance, 'submitStorageGiftForm').and.callThrough();
 
-    instance.submitStorageGiftForm(instance.giftForm.value);
+		instance.submitStorageGiftForm(instance.giftForm.value);
 
-    expect(instance.submitStorageGiftForm).toHaveBeenCalledWith({
-      email: 'test@example.com',
-      amount: 5,
-      message: '',
-    });
-  });
+		expect(instance.submitStorageGiftForm).toHaveBeenCalledWith({
+			email: 'test@example.com',
+			amount: 5,
+			message: '',
+		});
+	});
 
-  it('filters out the duplicates from the giftDelivered and invitationSent of the response', async () => {
-    const { instance, fixture } = await shallow.render();
+	it('filters out the duplicates from the giftDelivered and invitationSent of the response', async () => {
+		const { instance, fixture } = await shallow.render();
 
-    // Simulate setting form values and submission
-    instance.giftForm.controls.email.setValue('test@example.com');
-    instance.giftForm.controls.amount.setValue(5);
-    instance.giftForm.updateValueAndValidity();
+		// Simulate setting form values and submission
+		instance.giftForm.controls.email.setValue('test@example.com');
+		instance.giftForm.controls.amount.setValue(5);
+		instance.giftForm.updateValueAndValidity();
 
-    instance.submitStorageGiftForm(instance.giftForm.value);
+		instance.submitStorageGiftForm(instance.giftForm.value);
 
-    await fixture.whenStable();
+		await fixture.whenStable();
 
-    expect(instance.emailsSentTo).toEqual([
-      'test@example.com',
-      'test2@example.com',
-      'test1@example.com',
-    ]);
-  });
+		expect(instance.emailsSentTo).toEqual([
+			'test@example.com',
+			'test2@example.com',
+			'test1@example.com',
+		]);
+	});
 
-  it('updates account details upon successful gift operation', async () => {
-    const { instance, fixture } = await shallow.render();
+	it('updates account details upon successful gift operation', async () => {
+		const { instance, fixture } = await shallow.render();
 
-    instance.availableSpace = '100'; // 100 GB
+		instance.availableSpace = '100'; // 100 GB
 
-    instance.giftForm.controls.email.setValue('test@example.com');
-    instance.giftForm.controls.amount.setValue('50');
-    instance.giftForm.updateValueAndValidity();
+		instance.giftForm.controls.email.setValue('test@example.com');
+		instance.giftForm.controls.amount.setValue('50');
+		instance.giftForm.updateValueAndValidity();
 
-    instance.submitStorageGiftForm(instance.giftForm.value);
+		instance.submitStorageGiftForm(instance.giftForm.value);
 
-    await fixture.whenStable();
+		await fixture.whenStable();
 
-    // Expect that setAccount was called on the AccountService
-    expect(mockAccountService.setAccount).toHaveBeenCalled();
-    expect(instance.availableSpace).toBe('50.00');
-  });
+		// Expect that setAccount was called on the AccountService
+		expect(mockAccountService.setAccount).toHaveBeenCalled();
+		expect(instance.availableSpace).toBe('50.00');
+	});
 });

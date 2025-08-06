@@ -8,63 +8,63 @@ import { ChecklistApiResponse, ChecklistItem } from '../types/checklist-item';
 import { ChecklistEventObserverService } from './checklist-event-observer.service';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class UserChecklistService implements ChecklistApi, OnDestroy {
-  private recheckArchive = new Subject<void>();
-  private accountSubscription: Subscription;
+	private recheckArchive = new Subject<void>();
+	private accountSubscription: Subscription;
 
-  constructor(
-    private httpv2: HttpV2Service,
-    private account: AccountService,
-    private analyticsObserver: ChecklistEventObserverService,
-  ) {
-    this.accountSubscription = account.archiveChange.subscribe(() => {
-      this.recheckArchive.next();
-    });
-  }
+	constructor(
+		private httpv2: HttpV2Service,
+		private account: AccountService,
+		private analyticsObserver: ChecklistEventObserverService,
+	) {
+		this.accountSubscription = account.archiveChange.subscribe(() => {
+			this.recheckArchive.next();
+		});
+	}
 
-  public ngOnDestroy(): void {
-    this.accountSubscription.unsubscribe();
-  }
+	public ngOnDestroy(): void {
+		this.accountSubscription.unsubscribe();
+	}
 
-  public async getChecklistItems(): Promise<ChecklistItem[]> {
-    return (
-      await firstValueFrom(
-        this.httpv2.get<ChecklistApiResponse>('/v2/event/checklist'),
-      )
-    )[0].checklistItems;
-  }
+	public async getChecklistItems(): Promise<ChecklistItem[]> {
+		return (
+			await firstValueFrom(
+				this.httpv2.get<ChecklistApiResponse>('/v2/event/checklist'),
+			)
+		)[0].checklistItems;
+	}
 
-  public isAccountHidingChecklist(): boolean {
-    return this.account.getAccount()?.hideChecklist ?? true;
-  }
+	public isAccountHidingChecklist(): boolean {
+		return this.account.getAccount()?.hideChecklist ?? true;
+	}
 
-  public isDefaultArchiveOwnedByAccount(): boolean {
-    return (
-      this.account.checkMinimumArchiveAccess(AccessRole.Owner) &&
-      this.isDefaultArchive()
-    );
-  }
+	public isDefaultArchiveOwnedByAccount(): boolean {
+		return (
+			this.account.checkMinimumArchiveAccess(AccessRole.Owner) &&
+			this.isDefaultArchive()
+		);
+	}
 
-  public async setChecklistHidden(): Promise<void> {
-    const updatedAccount = this.account.getAccount();
-    updatedAccount.hideChecklist = true;
-    await this.account.updateAccount(updatedAccount);
-  }
+	public async setChecklistHidden(): Promise<void> {
+		const updatedAccount = this.account.getAccount();
+		updatedAccount.hideChecklist = true;
+		await this.account.updateAccount(updatedAccount);
+	}
 
-  public getArchiveChangedEvent(): Subject<void> {
-    return this.recheckArchive;
-  }
+	public getArchiveChangedEvent(): Subject<void> {
+		return this.recheckArchive;
+	}
 
-  public getRefreshChecklistEvent(): Subject<void> {
-    return this.analyticsObserver.getSubject();
-  }
+	public getRefreshChecklistEvent(): Subject<void> {
+		return this.analyticsObserver.getSubject();
+	}
 
-  private isDefaultArchive(): boolean {
-    return (
-      this.account.getAccount().defaultArchiveId ===
-      this.account.getArchive().archiveId
-    );
-  }
+	private isDefaultArchive(): boolean {
+		return (
+			this.account.getAccount().defaultArchiveId ===
+			this.account.getArchive().archiveId
+		);
+	}
 }

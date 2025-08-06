@@ -1,52 +1,52 @@
 <!-- @format -->
 <div class="finalize-archive">
-  <div class="title-container">
-    <p class="title">Congratulations on your first Archive!</p>
-  </div>
-  <div class="content-container">
-    <div>
-      <p class="get-started-text">
-        Get started by uploading your first files, or learn more about your new
-        archive by
-        <a
-          target="_blank"
-          href="https://permanent.zohodesk.com/portal/en/kb/permanent-legacy-foundation"
-          >viewing our help articles here.</a
-        >
-      </p>
-      <div class="archive-info">
-        @for (archive of archives; track archive.archiveId) {
-          <div class="single-archive">
-            <div>
-              <img
-                src="assets/svg/onboarding/default-archive.svg"
-                alt="Custom Archive Icon"
-              />
-              <p>
-                The <b>{{ archive.fullName }}</b> Archive
-              </p>
-            </div>
-            <div class="square">
-              <span>{{ archive.accessRole | accessRole }}</span>
-            </div>
-          </div>
-        }
-      </div>
-      <hr />
-    </div>
-    <div class="button-container">
-      <div class="button">
-        <pr-button
-          [orientation]="'right'"
-          [variant]="'secondary'"
-          [icon]="'accept'"
-          [size]="'fill'"
-          [disabled]="isArchiveSubmitted"
-          (buttonClick)="finalizeArchive()"
-          [style]="{ justifyContent: 'center' }"
-          >Done</pr-button
-        >
-      </div>
-    </div>
-  </div>
+	<div class="title-container">
+		<p class="title">Congratulations on your first Archive!</p>
+	</div>
+	<div class="content-container">
+		<div>
+			<p class="get-started-text">
+				Get started by uploading your first files, or learn more about your new
+				archive by
+				<a
+					target="_blank"
+					href="https://permanent.zohodesk.com/portal/en/kb/permanent-legacy-foundation"
+					>viewing our help articles here.</a
+				>
+			</p>
+			<div class="archive-info">
+				@for (archive of archives; track archive.archiveId) {
+					<div class="single-archive">
+						<div>
+							<img
+								src="assets/svg/onboarding/default-archive.svg"
+								alt="Custom Archive Icon"
+							/>
+							<p>
+								The <b>{{ archive.fullName }}</b> Archive
+							</p>
+						</div>
+						<div class="square">
+							<span>{{ archive.accessRole | accessRole }}</span>
+						</div>
+					</div>
+				}
+			</div>
+			<hr />
+		</div>
+		<div class="button-container">
+			<div class="button">
+				<pr-button
+					[orientation]="'right'"
+					[variant]="'secondary'"
+					[icon]="'accept'"
+					[size]="'fill'"
+					[disabled]="isArchiveSubmitted"
+					(buttonClick)="finalizeArchive()"
+					[style]="{ justifyContent: 'center' }"
+					>Done</pr-button
+				>
+			</div>
+		</div>
+	</div>
 </div>
