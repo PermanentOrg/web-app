@@ -107,6 +107,8 @@ export class Uploader {
 		item: UploadItem,
 		emitProgress: (n: number) => void,
 	) => {
+		const archiveId = this.account.getArchive().archiveId;
+
 		const size = item.file.size;
 		const { urls, uploadId, key } =
 			await this.api.record.getMultipartUploadURLs(size);
@@ -136,6 +138,7 @@ export class Uploader {
 			uploadId,
 			key,
 			eTags,
+			archiveId,
 		);
 
 		this.event.dispatch({
