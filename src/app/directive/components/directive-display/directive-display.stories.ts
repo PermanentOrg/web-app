@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata } from '@storybook/angular';
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { INITIAL_VIEWPORTS } from 'storybook/viewport';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models/index';
