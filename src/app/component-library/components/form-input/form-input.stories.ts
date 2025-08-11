@@ -5,7 +5,7 @@ import {
 	applicationConfig,
 	moduleMetadata,
 } from '@storybook/angular';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import {
 	FaIconLibrary,
 	FontAwesomeModule,

@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/angular';
 
-import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 
 const customViewports = {
 	archiveSettingsDesktop: {

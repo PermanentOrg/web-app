@@ -1,6 +1,6 @@
 import { Meta, moduleMetadata } from '@storybook/angular';
-import { action } from '@storybook/addon-actions';
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { action } from 'storybook/actions';
+import { INITIAL_VIEWPORTS } from 'storybook/viewport';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ApiService } from '@shared/services/api/api.service';
