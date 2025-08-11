@@ -6,6 +6,7 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "esModuleInterop": true,
+		"skipLibCheck": true,
     "sourceRoot": "/",
     "inlineSources": true,
     "declaration": false,
@@ -78,5 +79,6 @@
   },
   "angularCompilerOptions": {
     "strictTemplates": false
-  }
+  },
+	"exclude": ["node_modules"]
 }
