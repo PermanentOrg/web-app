@@ -14,11 +14,9 @@
 				[class.active]="activeTab === 'account'"
 			>
 				Account Info
-				<i
-					class="material-icons text-warning"
-					*ngIf="accountService.isEmailOrPhoneUnverified()"
-					>report_problem</i
-				>
+				@if (accountService.isEmailOrPhoneUnverified()) {
+					<i class="material-icons text-warning">report_problem</i>
+				}
 			</div>
 			<div
 				class="settings-tab"
@@ -65,20 +63,26 @@
 		</div>
 
 		<div class="settings-panel">
-			<ng-container [ngSwitch]="activeTab">
-				<pr-advanced-settings
-					*ngSwitchCase="'advanced-settings'"
-				></pr-advanced-settings>
-				<pr-account-settings *ngSwitchCase="'account'"></pr-account-settings>
-				<pr-account-security *ngSwitchCase="'security'"></pr-account-security>
-				<pr-billing-settings *ngSwitchCase="'billing'"></pr-billing-settings>
-				<pr-notification-preferences
-					*ngSwitchCase="'notification'"
-				></pr-notification-preferences>
-				<ng-container *ngSwitchCase="'legacy-contact'"
-					><pr-legacy-contact-dialog></pr-legacy-contact-dialog
-				></ng-container>
-				<ng-container *ngSwitchCase="'delete'">
+			@switch (activeTab) {
+				@case ('advanced-settings') {
+					<pr-advanced-settings></pr-advanced-settings>
+				}
+				@case ('account') {
+					<pr-account-settings></pr-account-settings>
+				}
+				@case ('security') {
+					<pr-account-security></pr-account-security>
+				}
+				@case ('billing') {
+					<pr-billing-settings></pr-billing-settings>
+				}
+				@case ('notification') {
+					<pr-notification-preferences></pr-notification-preferences>
+				}
+				@case ('legacy-contact') {
+					<pr-legacy-contact-dialog></pr-legacy-contact-dialog>
+				}
+				@case ('delete') {
 					<div class="panel-title">Delete Account</div>
 					<p>
 						Please note: deleting your account will remove all reference to
@@ -124,8 +128,8 @@
 							</button>
 						</div>
 					</div>
-				</ng-container>
-			</ng-container>
+				}
+			}
 		</div>
 	</div>
 </div>

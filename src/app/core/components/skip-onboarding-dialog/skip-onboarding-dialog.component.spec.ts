@@ -31,19 +31,12 @@ describe('SkipOnboardingDialogComponent', () => {
 
 		config.imports.push(SharedModule);
 		config.declarations.push(SkipOnboardingDialogComponent);
-		config.providers.push({
-			provide: DialogRef,
-			useClass: MockDialogRef,
-		});
+		config.providers.push(
+			{ provide: DialogRef, useClass: MockDialogRef },
+			{ provide: AccountService, useValue: mockAccountService },
+		);
 
 		await TestBed.configureTestingModule(config).compileComponents();
-	});
-
-	beforeEach(async () => {
-		await TestBed.configureTestingModule({
-			declarations: [SkipOnboardingDialogComponent],
-			providers: [{ provide: AccountService, useValue: mockAccountService }],
-		}).compileComponents();
 
 		fixture = TestBed.createComponent(SkipOnboardingDialogComponent);
 		component = fixture.componentInstance;

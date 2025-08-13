@@ -27,11 +27,9 @@
 			Redeem
 		</button>
 	</div>
-	<div
-		class="results-message"
-		*ngIf="resultMessage"
-		[class.successful]="resultMessage?.successful"
-	>
-		{{ resultMessage.message | prConstants }}
-	</div>
+	@if (resultMessage) {
+		<div class="results-message" [class.successful]="resultMessage?.successful">
+			{{ resultMessage.message | prConstants }}
+		</div>
+	}
 </form>

@@ -21,17 +21,17 @@
 	</div>
 	<div class="settings-item">
 		<label>Verification Status</label>
-		<div class="settings-item-content" [ngSwitch]="account.emailStatus">
-			<ng-container *ngSwitchCase="'status.auth.verified'">
-				<span class="verified">Verified</span>
-			</ng-container>
-			<button
-				class="btn btn-primary"
-				*ngSwitchDefault
-				(click)="onValidateEmailClick()"
-			>
-				Verify Email Address
-			</button>
+		<div class="settings-item-content">
+			@switch (account.emailStatus) {
+				@case ('status.auth.verified') {
+					<span class="verified">Verified</span>
+				}
+				@default {
+					<button class="btn btn-primary" (click)="onValidateEmailClick()">
+						Verify Email Address
+					</button>
+				}
+			}
 		</div>
 	</div>
 </div>
@@ -58,18 +58,21 @@
 	</div>
 	<div class="settings-item">
 		<label>Verification Status</label>
-		<div class="settings-item-content" [ngSwitch]="account.phoneStatus">
-			<ng-container *ngSwitchCase="'status.auth.verified'">
-				<span class="verified">Verified</span>
-			</ng-container>
-			<button
-				class="verify-phone-button btn btn-primary"
-				[disabled]="!account.primaryPhone"
-				*ngSwitchDefault
-				(click)="onValidatePhoneClick()"
-			>
-				Verify Phone Number
-			</button>
+		<div class="settings-item-content">
+			@switch (account.phoneStatus) {
+				@case ('status.auth.verified') {
+					<span class="verified">Verified</span>
+				}
+				@default {
+					<button
+						class="verify-phone-button btn btn-primary"
+						[disabled]="!account.primaryPhone"
+						(click)="onValidatePhoneClick()"
+					>
+						Verify Phone Number
+					</button>
+				}
+			}
 		</div>
 	</div>
 </div>

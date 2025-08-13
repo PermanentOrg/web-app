@@ -31,8 +31,8 @@
 			</div>
 		</div>
 		<div class="panel" #panel>
-			<ng-container [ngSwitch]="activeTab">
-				<ng-container *ngSwitchCase="'new'">
+			@switch (activeTab) {
+				@case ('new') {
 					<div class="banner">
 						<div>
 							<div class="banner-heading">Give a gig, get a gig</div>
@@ -76,79 +76,93 @@
 							</button>
 						</div>
 					</form>
-				</ng-container>
-				<ng-container *ngSwitchCase="'pending'">
-					<div *ngIf="pendingInvites.length" class="invitation-list">
-						<div class="list-header">
-							<div class="date">Date Sent</div>
-							<div class="email">Email</div>
-							<div class="name">Name</div>
-							<div class="amount">Amount</div>
-							<div class="actions">&nbsp;</div>
+				}
+				@case ('pending') {
+					@if (pendingInvites.length) {
+						<div class="invitation-list">
+							<div class="list-header">
+								<div class="date">Date Sent</div>
+								<div class="email">Email</div>
+								<div class="name">Name</div>
+								<div class="amount">Amount</div>
+								<div class="actions">&nbsp;</div>
+							</div>
+							@for (invite of pendingInvites; track invite) {
+								<div class="invitation">
+									<div class="date">{{ invite.updatedDT | date }}</div>
+									<div class="email">{{ invite.email }}</div>
+									<div class="name" [hidden]="!invite.fullName">
+										{{ invite.fullName }}
+									</div>
+									<div class="name" [hidden]="invite.fullName">
+										<em>None given</em>
+									</div>
+									@if (!invite.giftSizeInMB) {
+										<div class="amount none">
+											<em>None given</em>
+										</div>
+									}
+									@if (invite.giftSizeInMB) {
+										<div class="amount has-amount">
+											{{ invite.giftSizeInMB / 1024 }} GB
+										</div>
+									}
+									<div class="actions">
+										<button
+											class="btn btn-primary"
+											(click)="resendInvite(invite)"
+											[disabled]="waiting"
+										>
+											Resend
+										</button>
+									</div>
+								</div>
+							}
 						</div>
-						<div class="invitation" *ngFor="let invite of pendingInvites">
-							<div class="date">{{ invite.updatedDT | date }}</div>
-							<div class="email">{{ invite.email }}</div>
-							<div class="name" [hidden]="!invite.fullName">
-								{{ invite.fullName }}
+					}
+					@if (!pendingInvites.length) {
+						<div class="text-muted">No invitations sent</div>
+					}
+				}
+				@case ('accepted') {
+					@if (acceptedInvites.length) {
+						<div class="invitation-list">
+							<div class="list-header">
+								<div class="date">Date Accepted</div>
+								<div class="email">Email</div>
+								<div class="name">Name</div>
+								<div class="amount">Amount</div>
+								<div class="actions">&nbsp;</div>
 							</div>
-							<div class="name" [hidden]="invite.fullName">
-								<em>None given</em>
-							</div>
-							<div class="amount none" *ngIf="!invite.giftSizeInMB">
-								<em>None given</em>
-							</div>
-							<div class="amount has-amount" *ngIf="invite.giftSizeInMB">
-								{{ invite.giftSizeInMB / 1024 }} GB
-							</div>
-							<div class="actions">
-								<button
-									class="btn btn-primary"
-									(click)="resendInvite(invite)"
-									[disabled]="waiting"
-								>
-									Resend
-								</button>
-							</div>
+							@for (invite of acceptedInvites; track invite) {
+								<div class="invitation">
+									<div class="date">{{ invite.updatedDT | date }}</div>
+									<div class="email">{{ invite.email }}</div>
+									<div class="name" [hidden]="!invite.fullName">
+										{{ invite.fullName }}
+									</div>
+									<div class="name" [hidden]="invite.fullName">
+										<em>None given</em>
+									</div>
+									<div class="amount none" [hidden]="invite.giftSizeInMB">
+										<em>None given</em>
+									</div>
+									<div
+										class="amount has-amount"
+										[hidden]="!invite.giftSizeInMB"
+									>
+										{{ invite.giftSizeInMB / 1024 }} GB
+									</div>
+									<div class="actions">&nbsp;</div>
+								</div>
+							}
 						</div>
-					</div>
-					<div *ngIf="!pendingInvites.length" class="text-muted">
-						No invitations sent
-					</div>
-				</ng-container>
-				<ng-container *ngSwitchCase="'accepted'">
-					<div *ngIf="acceptedInvites.length" class="invitation-list">
-						<div class="list-header">
-							<div class="date">Date Accepted</div>
-							<div class="email">Email</div>
-							<div class="name">Name</div>
-							<div class="amount">Amount</div>
-							<div class="actions">&nbsp;</div>
-						</div>
-						<div class="invitation" *ngFor="let invite of acceptedInvites">
-							<div class="date">{{ invite.updatedDT | date }}</div>
-							<div class="email">{{ invite.email }}</div>
-							<div class="name" [hidden]="!invite.fullName">
-								{{ invite.fullName }}
-							</div>
-							<div class="name" [hidden]="invite.fullName">
-								<em>None given</em>
-							</div>
-							<div class="amount none" [hidden]="invite.giftSizeInMB">
-								<em>None given</em>
-							</div>
-							<div class="amount has-amount" [hidden]="!invite.giftSizeInMB">
-								{{ invite.giftSizeInMB / 1024 }} GB
-							</div>
-
-							<div class="actions">&nbsp;</div>
-						</div>
-					</div>
-					<div *ngIf="!acceptedInvites.length" class="text-muted">
-						No invitations accepted
-					</div>
-				</ng-container>
-			</ng-container>
+					}
+					@if (!acceptedInvites.length) {
+						<div class="text-muted">No invitations accepted</div>
+					}
+				}
+			}
 		</div>
 	</div>
 </div>

@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
@@ -14,12 +14,10 @@ describe('BaseRepo', () => {
 		});
 	});
 
-	it('should be initialized with HttpService ', inject(
-		[HttpService],
-		(http: HttpService) => {
-			const authRepo = new BaseRepo(http);
+	it('should be initialized with HttpService ', () => {
+		const http = TestBed.inject(HttpService);
+		const authRepo = new BaseRepo(http);
 
-			expect(authRepo.http).toEqual(jasmine.any(HttpService));
-		},
-	));
+		expect(authRepo.http).toEqual(jasmine.any(HttpService));
+	});
 });

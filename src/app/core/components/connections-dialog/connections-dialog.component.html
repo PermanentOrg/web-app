@@ -24,59 +24,62 @@
 			<div class="dialog-tab" (click)="addRelation()">Add Connection</div>
 		</div>
 		<div class="panel" #panel>
-			<ng-container [ngSwitch]="activeTab">
-				<ng-container *ngSwitchCase="'connections'">
+			@switch (activeTab) {
+				@case ('connections') {
 					<div class="panel-title">Connections</div>
-					<div *ngIf="!connections.length">No connections</div>
+					@if (!connections.length) {
+						<div>No connections</div>
+					}
 					<div class="connections">
-						<pr-archive-small
-							*ngFor="let relation of connections"
-							(archiveClick)="onConnectionClick(relation)"
-							[archive]="relation.RelationArchiveVO"
-							[relation]="relation.type"
-							[largeOnDesktop]="true"
-							[showRemove]="true"
-							(removeClick)="removeRelation(relation)"
-							[showEdit]="true"
-							(editClick)="editRelation(relation)"
-						></pr-archive-small>
+						@for (relation of connections; track relation) {
+							<pr-archive-small
+								(archiveClick)="onConnectionClick(relation)"
+								[archive]="relation.RelationArchiveVO"
+								[relation]="relation.type"
+								[largeOnDesktop]="true"
+								[showRemove]="true"
+								(removeClick)="removeRelation(relation)"
+								[showEdit]="true"
+								(editClick)="editRelation(relation)"
+							></pr-archive-small>
+						}
 					</div>
-				</ng-container>
-				<ng-container *ngSwitchCase="'pending'">
+				}
+				@case ('pending') {
 					<div class="panel-title">Pending Connections</div>
-					<div
-						*ngIf="
-							!connectionRequests.length && !sentConnectionsRequests.length
-						"
-					>
-						No pending connections
-					</div>
+					@if (!connectionRequests.length && !sentConnectionsRequests.length) {
+						<div>No pending connections</div>
+					}
 					<div class="connections">
-						<pr-archive-small
-							*ngFor="let relation of connectionRequests"
-							(archiveClick)="onRelationRequestClick(relation)"
-							[archive]="relation.ArchiveVO"
-							[isPending]="true"
-							[relation]="relation.type"
-							[largeOnDesktop]="true"
-							[showAccept]="true"
-							(acceptClick)="onRelationRequestClick(relation, true)"
-							[showRemove]="true"
-							(removeClick)="removeRelation(relation)"
-						></pr-archive-small>
-						<pr-archive-small
-							*ngFor="let relation of sentConnectionsRequests"
-							(archiveClick)="onSentRelationRequestClick(relation)"
-							[archive]="relation.RelationArchiveVO"
-							[relation]="relation.type"
-							[largeOnDesktop]="true"
-							[showRemove]="true"
-							(removeClick)="removeRelation(relation)"
-						></pr-archive-small>
+						@for (relation of connectionRequests; track relation) {
+							<pr-archive-small
+								(archiveClick)="onRelationRequestClick(relation)"
+								[archive]="relation.ArchiveVO"
+								[isPending]="true"
+								[relation]="relation.type"
+								[largeOnDesktop]="true"
+								[showAccept]="true"
+								(acceptClick)="onRelationRequestClick(relation, true)"
+								[showRemove]="true"
+								(removeClick)="removeRelation(relation)"
+							></pr-archive-small>
+						}
+						@for (relation of sentConnectionsRequests; track relation) {
+							<pr-archive-small
+								(archiveClick)="onSentRelationRequestClick(relation)"
+								[archive]="relation.RelationArchiveVO"
+								[relation]="relation.type"
+								[largeOnDesktop]="true"
+								[showRemove]="true"
+								(removeClick)="removeRelation(relation)"
+							></pr-archive-small>
+						}
 					</div>
-				</ng-container>
-				<ng-container *ngSwitchCase="'new'"> new connection! </ng-container>
-			</ng-container>
+				}
+				@case ('new') {
+					new connection!
+				}
+			}
 		</div>
 	</div>
 </div>

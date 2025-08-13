@@ -6,60 +6,68 @@
 		fade: useFade
 	}"
 >
-	<div
-		class="upload-progress"
-		[ngStyle]="{ transform: getProgressTransform() }"
-		*ngIf="currentItem"
-	></div>
-	<div *ngIf="status === UploadSessionStatus.Start">Connecting...</div>
-	<div *ngIf="status === UploadSessionStatus.CreatingFolders">
-		Preparing folders...
-	</div>
-	<div
-		class="upload"
-		*ngIf="status === UploadSessionStatus.InProgress && currentItem"
-	>
-		<div class="current-file">
-			Uploading {{ currentItem.file.name }} to
-			{{ folderTargetName }}
+	@if (currentItem) {
+		<div
+			class="upload-progress"
+			[ngStyle]="{ transform: getProgressTransform() }"
+		></div>
+	}
+	@if (status === UploadSessionStatus.Start) {
+		<div>Connecting...</div>
+	}
+	@if (status === UploadSessionStatus.CreatingFolders) {
+		<div>Preparing folders...</div>
+	}
+	@if (status === UploadSessionStatus.InProgress && currentItem) {
+		<div class="upload">
+			<div class="current-file">
+				Uploading {{ currentItem.file.name }} to
+				{{ folderTargetName }}
+			</div>
+			<div class="file-count">
+				<strong>{{ fileCount.current }}</strong> of
+				<strong>{{ fileCount.total }}</strong>
+			</div>
 		</div>
-		<div class="file-count">
-			<strong>{{ fileCount.current }}</strong> of
-			<strong>{{ fileCount.total }}</strong>
+	}
+	@if (status === UploadSessionStatus.Done) {
+		<div>
+			<div [hidden]="fileCount.error">
+				<strong>{{ fileCount.completed }}</strong> files uploaded
+			</div>
+			<div [hidden]="!fileCount.error">
+				<strong>{{ fileCount.completed }}</strong> of
+				<strong>{{ fileCount.total }}</strong
+				>files uploaded
+			</div>
 		</div>
-	</div>
-	<div *ngIf="status === UploadSessionStatus.Done">
-		<div [hidden]="fileCount.error">
-			<strong>{{ fileCount.completed }}</strong> files uploaded
+	}
+	@if (status === UploadSessionStatus.DefaultError) {
+		<div class="upload">
+			<div class="message">
+				<strong> Oops, something went wrong! </strong>
+				<br />
+				@if (fileCount.completed) {
+					<span>{{ fileCount.completed }} uploaded, </span>
+				}
+				@if (fileCount.completed < fileCount.total) {
+					<span>{{ fileCount.total - fileCount.completed }} skipped</span>
+				}
+			</div>
 		</div>
-		<div [hidden]="!fileCount.error">
-			<strong>{{ fileCount.completed }}</strong> of
-			<strong>{{ fileCount.total }}</strong
-			>files uploaded
+	}
+	@if (status === UploadSessionStatus.StorageError) {
+		<div class="upload">
+			<div class="message">
+				<strong> Out of storage </strong>
+				<br />
+				@if (fileCount.completed) {
+					<span>{{ fileCount.completed }} uploaded, </span>
+				}
+				@if (fileCount.completed < fileCount.total) {
+					<span>{{ fileCount.total - fileCount.completed }} skipped</span>
+				}
+			</div>
 		</div>
-	</div>
-	<div *ngIf="status === UploadSessionStatus.DefaultError" class="upload">
-		<div class="message">
-			<strong> Oops, something went wrong! </strong>
-			<br />
-			<span *ngIf="fileCount.completed"
-				>{{ fileCount.completed }} uploaded,
-			</span>
-			<span *ngIf="fileCount.completed < fileCount.total"
-				>{{ fileCount.total - fileCount.completed }} skipped</span
-			>
-		</div>
-	</div>
-	<div *ngIf="status === UploadSessionStatus.StorageError" class="upload">
-		<div class="message">
-			<strong> Out of storage </strong>
-			<br />
-			<span *ngIf="fileCount.completed"
-				>{{ fileCount.completed }} uploaded,
-			</span>
-			<span *ngIf="fileCount.completed < fileCount.total"
-				>{{ fileCount.total - fileCount.completed }} skipped</span
-			>
-		</div>
-	</div>
+	}
 </div>

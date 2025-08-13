@@ -6,7 +6,9 @@
 		</div>
 		<div (click)="onClick()" class="alert alert-primary" [ngClass]="style">
 			{{ displayText }}
-			<a *ngIf="externalMessage" [href]="externalUrl">{{ externalMessage }}</a>
+			@if (externalMessage) {
+				<a [href]="externalUrl">{{ externalMessage }}</a>
+			}
 		</div>
 	</div>
 </div>

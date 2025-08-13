@@ -28,106 +28,104 @@
 			<div>
 				<div class="profile-name">
 					The {{ this.archive.fullName }} Archive
-					<fa-icon
-						(click)="toggleProfileInformation()"
-						class="icon-expand"
-						[class.reverse]="showProfileInformation"
-						[icon]="['fas', 'chevron-down']"
-						*ngIf="!(isViewingProfile$ | async)"
-					></fa-icon>
+					@if (!(isViewingProfile$ | async)) {
+						<fa-icon
+							(click)="toggleProfileInformation()"
+							class="icon-expand"
+							[class.reverse]="showProfileInformation"
+							[icon]="['fas', 'chevron-down']"
+						></fa-icon>
+					}
 				</div>
 				<div
 					[ngClass]="{ 'archive-description-show': showProfileInformation }"
 					class="archive-description"
 				>
-					<span
-						*ngIf="
-							hasSingleValueFor('birth_info', 'locnId1') ||
-							hasSingleValueFor('birth_info', 'day1') ||
-							hasSingleValueFor('established_info', 'locnId1') ||
-							hasSingleValueFor('established_info', 'locnId1')
-						"
-						class="profile-data"
-						>{{
-							archive.type === 'type.archive.person' ? 'Born ' : 'Established '
-						}}
-					</span>
-					<ng-container [ngSwitch]="archive.type">
-						<ng-container *ngSwitchCase="'type.archive.person'">
-							<span
-								class="profile-data profile-data-date"
-								*ngIf="hasSingleValueFor('birth_info', 'day1')"
-							>
-								on {{ profileItems.birth_info[0]?.day1 | date }}
-							</span>
-						</ng-container>
-						<ng-container *ngSwitchDefault>
-							<span
-								class="profile-data profile-data-date"
-								*ngIf="hasSingleValueFor('established_info', 'day1')"
-							>
-								{{ profileItems.established_info[0]?.day1 | date }}
-							</span>
-						</ng-container>
-					</ng-container>
-					<span
-						*ngIf="hasSingleValueFor('birth_info', 'locnId1')"
-						class="profile-data"
-					>
-						in
-					</span>
-					<ng-container [ngSwitch]="archive.type">
-						<ng-container *ngSwitchCase="'type.archive.person'">
-							<span
-								class="profile-data profile-data-date"
-								*ngIf="hasSingleValueFor('birth_info', 'locnId1')"
-							>
-								{{ (profileItems.birth_info[0].LocnVOs[0] | prLocation).full }}
-							</span>
-						</ng-container>
-						<ng-container *ngSwitchDefault>
-							<span
-								class="profile-data profile-data-date"
-								*ngIf="hasSingleValueFor('established_info', 'locnId1')"
-							>
-								{{
-									(profileItems.established_info[0].LocnVOs[0] | prLocation)
-										.full
-								}}
-							</span>
-						</ng-container>
-					</ng-container>
-				</div>
-				<ng-container *ngIf="isViewingProfile$ | async">
-					<div class="profile-info">
-						<div
-							class="profile-blurb"
-							*ngIf="hasSingleValueFor('blurb', 'string1')"
-						>
-							{{ this.profileItems.blurb[0].string1 }}
-						</div>
-						<span
-							class="profile-description"
-							*ngIf="
-								hasSingleValueFor('description', 'textData1') && !showShortText
-							"
-							[innerHTML]="this.description"
-						></span>
-						<span
-							class="profile-description"
-							*ngIf="
-								hasSingleValueFor('description', 'textData1') && showShortText
-							"
-							[innerHTML]="this.shortText + '...'"
-						></span>
-						<span
-							*ngIf="this.description.length > 100"
-							class="expand-text"
-							(click)="toggleShowFullText()"
-							>{{ showShortText ? ' See More' : ' See Less' }}
+					@if (
+						hasSingleValueFor('birth_info', 'locnId1') ||
+						hasSingleValueFor('birth_info', 'day1') ||
+						hasSingleValueFor('established_info', 'locnId1') ||
+						hasSingleValueFor('established_info', 'locnId1')
+					) {
+						<span class="profile-data"
+							>{{
+								archive.type === 'type.archive.person'
+									? 'Born '
+									: 'Established '
+							}}
 						</span>
+					}
+					@switch (archive.type) {
+						@case ('type.archive.person') {
+							@if (hasSingleValueFor('birth_info', 'day1')) {
+								<span class="profile-data profile-data-date">
+									on {{ profileItems.birth_info[0]?.day1 | date }}
+								</span>
+							}
+						}
+						@default {
+							@if (hasSingleValueFor('established_info', 'day1')) {
+								<span class="profile-data profile-data-date">
+									{{ profileItems.established_info[0]?.day1 | date }}
+								</span>
+							}
+						}
+					}
+					@if (hasSingleValueFor('birth_info', 'locnId1')) {
+						<span class="profile-data"> in </span>
+					}
+					@switch (archive.type) {
+						@case ('type.archive.person') {
+							@if (hasSingleValueFor('birth_info', 'locnId1')) {
+								<span class="profile-data profile-data-date">
+									{{
+										(profileItems.birth_info[0].LocnVOs[0] | prLocation).full
+									}}
+								</span>
+							}
+						}
+						@default {
+							@if (hasSingleValueFor('established_info', 'locnId1')) {
+								<span class="profile-data profile-data-date">
+									{{
+										(profileItems.established_info[0].LocnVOs[0] | prLocation)
+											.full
+									}}
+								</span>
+							}
+						}
+					}
+				</div>
+				@if (isViewingProfile$ | async) {
+					<div class="profile-info">
+						@if (hasSingleValueFor('blurb', 'string1')) {
+							<div class="profile-blurb">
+								{{ this.profileItems.blurb[0].string1 }}
+							</div>
+						}
+						@if (
+							hasSingleValueFor('description', 'textData1') && !showShortText
+						) {
+							<span
+								class="profile-description"
+								[innerHTML]="this.description"
+							></span>
+						}
+						@if (
+							hasSingleValueFor('description', 'textData1') && showShortText
+						) {
+							<span
+								class="profile-description"
+								[innerHTML]="this.shortText + '...'"
+							></span>
+						}
+						@if (this.description.length > 100) {
+							<span class="expand-text" (click)="toggleShowFullText()"
+								>{{ showShortText ? ' See More' : ' See Less' }}
+							</span>
+						}
 					</div>
-				</ng-container>
+				}
 			</div>
 			<div class="profile-controls">
 				<div>
@@ -218,22 +216,22 @@
 	<hr />
 </div>
 
-<div *ngIf="waiting" class="profile-contents">
-	<div class="profile-container">
-		<pr-breadcrumbs
-			*ngIf="!(isViewingProfile$ | async)"
-			[darkText]="true"
-			[large]="true"
-		></pr-breadcrumbs>
-		<router-outlet></router-outlet>
+@if (waiting) {
+	<div class="profile-contents">
+		<div class="profile-container">
+			@if (!(isViewingProfile$ | async)) {
+				<pr-breadcrumbs [darkText]="true" [large]="true"></pr-breadcrumbs>
+			}
+			<router-outlet></router-outlet>
+		</div>
+		<div>
+			<pr-public-archive-web-links
+				[description]="description"
+				[emails]="emails"
+				[websites]="websites"
+			></pr-public-archive-web-links>
+		</div>
 	</div>
-	<div>
-		<pr-public-archive-web-links
-			[description]="description"
-			[emails]="emails"
-			[websites]="websites"
-		></pr-public-archive-web-links>
-	</div>
-</div>
+}
 
 <div class="result-rectangle"></div>

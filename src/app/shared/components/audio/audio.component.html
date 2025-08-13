@@ -1,8 +1,9 @@
 <!-- @format -->
-<audio
-	[attr.aria-label]="item | getAltText"
-	[attr.role]="'audio'"
-	[src]="audioSrc"
-	*ngIf="item"
-	controls
-></audio>
+@if (item) {
+	<audio
+		[attr.aria-label]="item | getAltText"
+		[attr.role]="'audio'"
+		[src]="audioSrc"
+		controls
+	></audio>
+}

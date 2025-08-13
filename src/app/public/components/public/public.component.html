@@ -7,28 +7,28 @@
 			(searchBarFocusChange)="onSearchBarFocusChange($event)"
 		></pr-search-box>
 		<div class="banner-buttons">
-			<div
-				class="banner-archive-thumb"
-				prBgImage
-				[bgSrc]="archive.thumbURL200"
-				*ngIf="isLoggedIn && archive"
-				(click)="onArchiveThumbClick()"
-				[cover]="true"
-			></div>
-			<button
-				class="btn btn-wordpress banner-button-full-email"
-				*ngIf="isLoggedIn && !archive"
-				(click)="onMyAccountClick()"
-			>
-				My Archive
-			</button>
-			<button
-				class="btn btn-wordpress"
-				(click)="onSignupClick()"
-				*ngIf="!isLoggedIn"
-			>
-				Sign Up
-			</button>
+			@if (isLoggedIn && archive) {
+				<div
+					class="banner-archive-thumb"
+					prBgImage
+					[bgSrc]="archive.thumbURL200"
+					(click)="onArchiveThumbClick()"
+					[cover]="true"
+				></div>
+			}
+			@if (isLoggedIn && !archive) {
+				<button
+					class="btn btn-wordpress banner-button-full-email"
+					(click)="onMyAccountClick()"
+				>
+					My Archive
+				</button>
+			}
+			@if (!isLoggedIn) {
+				<button class="btn btn-wordpress" (click)="onSignupClick()">
+					Sign Up
+				</button>
+			}
 		</div>
 	</div>
 </div>

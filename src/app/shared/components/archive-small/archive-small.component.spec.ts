@@ -13,18 +13,16 @@ describe('ArchiveSmallComponent', () => {
 	let component: ArchiveSmallComponent;
 	let fixture: ComponentFixture<ArchiveSmallComponent>;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
 		config.declarations.push(ArchiveSmallComponent);
 		config.declarations.push(BgImageSrcDirective);
 
 		TestBed.configureTestingModule(config).compileComponents();
-	}));
 
-	beforeEach(() => {
 		const currentArchive = new ArchiveVO(TEST_DATA.archive);
-		const accountService = TestBed.get(AccountService) as AccountService;
+		const accountService = TestBed.inject(AccountService) as AccountService;
 		accountService.setArchive(currentArchive);
 
 		fixture = TestBed.createComponent(ArchiveSmallComponent);
@@ -34,7 +32,7 @@ describe('ArchiveSmallComponent', () => {
 	});
 
 	afterEach(() => {
-		const storage = TestBed.get(StorageService) as StorageService;
+		const storage = TestBed.inject(StorageService) as StorageService;
 		storage.local.clear();
 	});
 

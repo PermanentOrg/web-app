@@ -9,10 +9,12 @@
 		controls
 	></video>
 	<div class="lds-dual-ring loader"></div>
-	<div class="message" *ngIf="isProcessing">
-		This video is processing.
-		<br />
-		<br />
-		Please check back later.
-	</div>
+	@if (isProcessing) {
+		<div class="message">
+			This video is processing.
+			<br />
+			<br />
+			Please check back later.
+		</div>
+	}
 </div>

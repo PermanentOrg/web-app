@@ -1,23 +1,30 @@
 <!-- @format -->
-<h1 class="page-title" *ngIf="!isForShareInvite">Create your new account</h1>
+@if (!isForShareInvite) {
+	<h1 class="page-title">Create your new account</h1>
+}
 <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
-	<h1 class="page-title" *ngIf="isForShareInvite">
-		{{ shareFromName }} has shared <em>{{ shareItem.displayName }}</em> with you
-	</h1>
-	<div *ngIf="showInviteCode" class="invite-code-input input-container">
-		<pr-form-input-glam
-			fieldName="invitation"
-			placeholder="Invitation code (optional)"
-			[control]="signupForm.controls['invitation']"
-			[config]="{
-				autocomplete: 'off',
-				autocorrect: 'off',
-				autocapitalize: 'off',
-				spellcheck: 'off'
-			}"
-			[variant]="'dark'"
-		></pr-form-input-glam>
-	</div>
+	@if (isForShareInvite) {
+		<h1 class="page-title">
+			{{ shareFromName }} has shared <em>{{ shareItem.displayName }}</em> with
+			you
+		</h1>
+	}
+	@if (showInviteCode) {
+		<div class="invite-code-input input-container">
+			<pr-form-input-glam
+				fieldName="invitation"
+				placeholder="Invitation code (optional)"
+				[control]="signupForm.controls['invitation']"
+				[config]="{
+					autocomplete: 'off',
+					autocorrect: 'off',
+					autocapitalize: 'off',
+					spellcheck: 'off'
+				}"
+				[variant]="'dark'"
+			></pr-form-input-glam>
+		</div>
+	}
 	<div class="name-input input-container">
 		<pr-form-input-glam
 			[variant]="'dark'"
@@ -61,10 +68,11 @@
 				spellcheck: 'off'
 			}"
 		></pr-form-input-glam>
-		<pr-password-strength
-			*ngIf="signupForm.controls['password']?.value"
-			[password]="signupForm.controls['password']?.value"
-		></pr-password-strength>
+		@if (signupForm.controls['password']?.value) {
+			<pr-password-strength
+				[password]="signupForm.controls['password']?.value"
+			></pr-password-strength>
+		}
 	</div>
 	<div class="input-container confirm-password-input">
 		<pr-form-input-glam
@@ -129,4 +137,6 @@
 		>
 	</div>
 </form>
-<pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>
+@if (waiting) {
+	<pr-loading-spinner></pr-loading-spinner>
+}

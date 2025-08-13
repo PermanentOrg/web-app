@@ -1,16 +1,21 @@
 <div class="timeline-breadcrumbs" #scrollElem>
-	<div
-		class="breadcrumb"
-		*ngFor="let breadcrumb of breadcrumbs; let last = last"
-	>
-		<a *ngIf="!last" (click)="onBreadcrumbClick(breadcrumb)">
-			{{ breadcrumb.text }}
-		</a>
-		<span class="separator" *ngIf="!last">
-			<i class="ion-md-arrow-dropright"></i>
-		</span>
-		<span class="current" *ngIf="last">
-			{{ breadcrumb.text }}
-		</span>
-	</div>
+	@for (breadcrumb of breadcrumbs; track breadcrumb; let last = $last) {
+		<div class="breadcrumb">
+			@if (!last) {
+				<a (click)="onBreadcrumbClick(breadcrumb)">
+					{{ breadcrumb.text }}
+				</a>
+			}
+			@if (!last) {
+				<span class="separator">
+					<i class="ion-md-arrow-dropright"></i>
+				</span>
+			}
+			@if (last) {
+				<span class="current">
+					{{ breadcrumb.text }}
+				</span>
+			}
+		</div>
+	}
 </div>

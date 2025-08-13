@@ -9,13 +9,11 @@ describe('PromptComponent', () => {
 	let component: PromptComponent;
 	let fixture: ComponentFixture<PromptComponent>;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 		config.declarations = [FormInputComponent, PromptComponent];
 		TestBed.configureTestingModule(config).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(PromptComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

@@ -10,9 +10,7 @@ describe('PublicArchiveWebLinksComponent', () => {
 		await TestBed.configureTestingModule({
 			declarations: [PublicArchiveWebLinksComponent],
 		}).compileComponents();
-	});
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(PublicArchiveWebLinksComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

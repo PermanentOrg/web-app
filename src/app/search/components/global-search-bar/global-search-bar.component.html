@@ -1,8 +1,6 @@
-<div
-	class="screen-cover"
-	*ngIf="showResults || isFocused"
-	(click)="onCoverClick()"
-></div>
+@if (showResults || isFocused) {
+	<div class="screen-cover" (click)="onCoverClick()"></div>
+}
 <input
 	type="text"
 	placeholder="Search this archive"
@@ -12,86 +10,106 @@
 	(keydown)="onInputKeydown($event)"
 />
 <i class="ion-md-search"></i>
-<div class="search-results" *ngIf="showResults">
-	<div class="search-result-group" *ngIf="tagResults?.length">
-		<div class="search-result-group-title">Keywords</div>
-		<div class="search-result-tags">
-			<div
-				class="tag"
-				*ngFor="let tag of tagResults"
-				(click)="onTagResultClick(tag)"
-			>
-				{{ tag.name }}
-			</div>
-		</div>
-	</div>
-	<div class="search-result-group" *ngIf="localResults?.length">
-		<div class="search-result-group-title">In this folder</div>
-		<div
-			class="search-result"
-			*ngFor="
-				let result of localResults;
-				let i = index;
-				trackBy: resultTrackByFn
-			"
-			(click)="onLocalResultClick(result)"
-			[class.selected]="isSelectedResult('local', i)"
-		>
-			<ng-container [ngSwitch]="result.isFolder">
-				<div class="folder-icon" *ngSwitchCase="true">
-					<i class="material-icons">folder</i>
+@if (showResults) {
+	<div class="search-results">
+		@if (tagResults?.length) {
+			<div class="search-result-group">
+				<div class="search-result-group-title">Keywords</div>
+				<div class="search-result-tags">
+					@for (tag of tagResults; track tag) {
+						<div class="tag" (click)="onTagResultClick(tag)">
+							{{ tag.name }}
+						</div>
+					}
 				</div>
-				<div
-					*ngSwitchDefault
-					class="thumbnail"
-					prBgImage
-					[bgSrc]="result.thumbURL200"
-				></div>
-			</ng-container>
-			<div class="name">{{ result.displayName }}</div>
-			<div class="type">{{ result.type | prConstants | titlecase }}</div>
-		</div>
-	</div>
-	<div class="search-result-group" *ngIf="waiting || globalResults">
-		<div class="search-result-group-title">
-			<span>{{ localResults?.length ? 'Everywhere else' : 'Everywhere' }}</span>
-			<div class="fade-ring-loader" *ngIf="waiting"></div>
-		</div>
-		<div class="search-result empty" *ngIf="globalResults?.length === 0">
-			No results
-		</div>
-		<ng-container *ngIf="globalResults?.length">
-			<div
-				class="search-result"
-				*ngFor="
-					let result of globalResults;
-					let i = index;
-					trackBy: resultTrackByFn
-				"
-				(click)="onGlobalResultClick(result)"
-				[class.selected]="isSelectedResult('global', i)"
-			>
-				<ng-container [ngSwitch]="result.isFolder">
-					<div class="folder-icon" *ngSwitchCase="true">
-						<i class="material-icons">folder</i>
-					</div>
+			</div>
+		}
+		@if (localResults?.length) {
+			<div class="search-result-group">
+				<div class="search-result-group-title">In this folder</div>
+				@for (
+					result of localResults;
+					track resultTrackByFn(i, result);
+					let i = $index
+				) {
 					<div
-						*ngSwitchDefault
-						class="thumbnail"
-						prBgImage
-						[bgSrc]="result.thumbURL200"
-					></div>
-				</ng-container>
-				<div class="name">{{ result.displayName }}</div>
-				<div class="location">
-					<i class="material-icons">folder</i>
-					{{ result.parentDisplayName }}
-				</div>
-				<div class="type">{{ result.type | prConstants | titlecase }}</div>
+						class="search-result"
+						(click)="onLocalResultClick(result)"
+						[class.selected]="isSelectedResult('local', i)"
+					>
+						@switch (result.isFolder) {
+							@case (true) {
+								<div class="folder-icon">
+									<i class="material-icons">folder</i>
+								</div>
+							}
+							@default {
+								<div
+									class="thumbnail"
+									prBgImage
+									[bgSrc]="result.thumbURL200"
+								></div>
+							}
+						}
+						<div class="name">{{ result.displayName }}</div>
+						<div class="type">{{ result.type | prConstants | titlecase }}</div>
+					</div>
+				}
 			</div>
-		</ng-container>
+		}
+		@if (waiting || globalResults) {
+			<div class="search-result-group">
+				<div class="search-result-group-title">
+					<span>{{
+						localResults?.length ? 'Everywhere else' : 'Everywhere'
+					}}</span>
+					@if (waiting) {
+						<div class="fade-ring-loader"></div>
+					}
+				</div>
+				@if (globalResults?.length === 0) {
+					<div class="search-result empty">No results</div>
+				}
+				@if (globalResults?.length) {
+					@for (
+						result of globalResults;
+						track resultTrackByFn(i, result);
+						let i = $index
+					) {
+						<div
+							class="search-result"
+							(click)="onGlobalResultClick(result)"
+							[class.selected]="isSelectedResult('global', i)"
+						>
+							@switch (result.isFolder) {
+								@case (true) {
+									<div class="folder-icon">
+										<i class="material-icons">folder</i>
+									</div>
+								}
+								@default {
+									<div
+										class="thumbnail"
+										prBgImage
+										[bgSrc]="result.thumbURL200"
+									></div>
+								}
+							}
+							<div class="name">{{ result.displayName }}</div>
+							<div class="location">
+								<i class="material-icons">folder</i>
+								{{ result.parentDisplayName }}
+							</div>
+							<div class="type">
+								{{ result.type | prConstants | titlecase }}
+							</div>
+						</div>
+					}
+				}
+			</div>
+		}
+		<div class="search-results-all" (click)="onAllResultsClick()">
+			See all results
+		</div>
 	</div>
-	<div class="search-results-all" (click)="onAllResultsClick()">
-		See all results
-	</div>
-</div>
+}

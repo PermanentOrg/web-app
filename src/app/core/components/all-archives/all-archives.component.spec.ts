@@ -19,7 +19,7 @@ describe('AllArchivesComponent', () => {
 	const archives = archiveResponse.getArchiveVOs();
 	const currentArchive = new ArchiveVO(archives.pop());
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
 		config.imports.push(SharedModule);
@@ -36,9 +36,7 @@ describe('AllArchivesComponent', () => {
 			},
 		});
 		TestBed.configureTestingModule(config).compileComponents();
-	}));
 
-	beforeEach(() => {
 		const accountService = TestBed.inject(AccountService) as AccountService;
 		accountService.setArchive(currentArchive);
 

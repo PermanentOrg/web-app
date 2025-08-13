@@ -65,7 +65,7 @@ describe('HttpService', () => {
 		).toBe(0);
 	});
 
-	it('should trigger an event if it receives a 401 response', async (done) => {
+	it('should trigger an event if it receives a 401 response', (done) => {
 		let expirationObserved = false;
 		const subscription = service.tokenExpired.subscribe(() => {
 			expirationObserved = true;

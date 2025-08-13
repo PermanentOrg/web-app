@@ -7,59 +7,67 @@
 		[formControl]="formControl"
 	/>
 	<i class="ion-md-search"></i>
-	<div class="fade-ring-loader" *ngIf="waiting" @ngIfFadeInAnimation></div>
+	@if (waiting) {
+		<div class="fade-ring-loader" @ngIfFadeInAnimation></div>
+	}
 </div>
 <div class="results">
-	<div class="result-group" *ngIf="tagResults?.length">
-		<label>Keywords</label>
-		<div class="tag-results">
-			<div
-				class="tag"
-				*ngFor="let tag of tagResults"
-				(click)="onTagResultClick(tag)"
-				ngbTooltip="Find items with keyword &quot;{{ tag.name }}&quot;"
-			>
-				{{ tag.name }}
+	@if (tagResults?.length) {
+		<div class="result-group">
+			<label>Keywords</label>
+			<div class="tag-results">
+				@for (tag of tagResults; track tag) {
+					<div
+						class="tag"
+						(click)="onTagResultClick(tag)"
+						ngbTooltip="Find items with keyword &quot;{{ tag.name }}&quot;"
+					>
+						{{ tag.name }}
+					</div>
+				}
 			</div>
 		</div>
-	</div>
-	<div
-		class="result-loading"
-		*ngIf="waiting && !(recordResults || folderResults)"
-	>
-		<div class="fade-ring-loader"></div>
-	</div>
-	<div class="result-group" *ngIf="itemResults" @ngIfFadeInAnimation>
-		<label>{{ itemResults.length || 'No' }} results</label>
-		<div class="item-result-list no-scroll">
-			<div
-				class="item-result-wrapper"
-				*ngFor="let item of itemResults; trackBy: resultTrackByFn"
-			>
-				<div
-					class="item-result"
-					ngbTooltip="Go to item {{ item.displayName }}"
-					(click)="onItemResultClick(item)"
-				>
-					<div
-						class="item-thumb"
-						prBgImage
-						[bgSrc]="item.thumbURL200"
-						[cover]="true"
-						*ngIf="item.isRecord"
-					></div>
-					<div class="item-thumb" *ngIf="item.isFolder">
-						<i class="ion-md-folder"></i>
-					</div>
-					<div class="item-info">
-						<div class="item-name">{{ item.displayName }}</div>
-						<div class="item-parent-folder">
-							<i class="ion-md-folder"></i>
-							{{ item.parentDisplayName }}
+	}
+	@if (waiting && !(recordResults || folderResults)) {
+		<div class="result-loading">
+			<div class="fade-ring-loader"></div>
+		</div>
+	}
+	@if (itemResults) {
+		<div class="result-group" @ngIfFadeInAnimation>
+			<label>{{ itemResults.length || 'No' }} results</label>
+			<div class="item-result-list no-scroll">
+				@for (item of itemResults; track resultTrackByFn($index, item)) {
+					<div class="item-result-wrapper">
+						<div
+							class="item-result"
+							ngbTooltip="Go to item {{ item.displayName }}"
+							(click)="onItemResultClick(item)"
+						>
+							@if (item.isRecord) {
+								<div
+									class="item-thumb"
+									prBgImage
+									[bgSrc]="item.thumbURL200"
+									[cover]="true"
+								></div>
+							}
+							@if (item.isFolder) {
+								<div class="item-thumb">
+									<i class="ion-md-folder"></i>
+								</div>
+							}
+							<div class="item-info">
+								<div class="item-name">{{ item.displayName }}</div>
+								<div class="item-parent-folder">
+									<i class="ion-md-folder"></i>
+									{{ item.parentDisplayName }}
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
+				}
 			</div>
 		</div>
-	</div>
+	}
 </div>

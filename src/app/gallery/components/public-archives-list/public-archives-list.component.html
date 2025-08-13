@@ -1,40 +1,44 @@
 <!-- @format  -->
-<div *ngIf="waiting" class="import-spinner">
-	<div class="lds-dual-ring"></div>
-</div>
-<div *ngIf="!waiting" class="public-archives">
-	<h3>My Public Archives</h3>
-	<div
-		*ngIf="publicArchives.length"
-		class="public-archives-list"
-		[ngClass]="{ 'public-archives-list-expanded': expanded }"
-	>
-		<div
-			(click)="goToArchive(archive)"
-			*ngFor="let archive of publicArchives"
-			class="public-archive"
-		>
-			<img [src]="archive.thumbURL200" />
-			<div class="public-archive-info">
-				<span>The {{ archive.fullName }} Archive</span>
-				<span>Access: {{ archive.accessRole | accessRole }}</span>
+@if (waiting) {
+	<div class="import-spinner">
+		<div class="lds-dual-ring"></div>
+	</div>
+}
+@if (!waiting) {
+	<div class="public-archives">
+		<h3>My Public Archives</h3>
+		@if (publicArchives.length) {
+			<div
+				class="public-archives-list"
+				[ngClass]="{ 'public-archives-list-expanded': expanded }"
+			>
+				@for (archive of publicArchives; track archive) {
+					<div (click)="goToArchive(archive)" class="public-archive">
+						<img [src]="archive.thumbURL200" />
+						<div class="public-archive-info">
+							<span>The {{ archive.fullName }} Archive</span>
+							<span>Access: {{ archive.accessRole | accessRole }}</span>
+						</div>
+					</div>
+				}
 			</div>
-		</div>
+		}
+		@if (publicArchives.length) {
+			<span (click)="toggleArchives()" class="see-more">{{
+				!expanded ? 'See more' : 'See less'
+			}}</span>
+		}
+		@if (!publicArchives.length) {
+			<div class="no-archives">
+				<p class="no-archives-text">None of your archives are public.</p>
+				<a
+					class="learn-more"
+					href="https://permanent.zohodesk.com/portal/en/kb/articles/how-to-publish"
+				>
+					Learn how to publish an archive.
+					<fa-icon [icon]="['fas', 'arrow-right']"></fa-icon>
+				</a>
+			</div>
+		}
 	</div>
-	<span
-		(click)="toggleArchives()"
-		class="see-more"
-		*ngIf="publicArchives.length"
-		>{{ !expanded ? 'See more' : 'See less' }}</span
-	>
-	<div class="no-archives" *ngIf="!publicArchives.length">
-		<p class="no-archives-text">None of your archives are public.</p>
-		<a
-			class="learn-more"
-			href="https://permanent.zohodesk.com/portal/en/kb/articles/how-to-publish"
-		>
-			Learn how to publish an archive.
-			<fa-icon [icon]="['fas', 'arrow-right']"></fa-icon>
-		</a>
-	</div>
-</div>
+}

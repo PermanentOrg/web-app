@@ -1,11 +1,8 @@
-<ng-container
-	*ngIf="
-		(currentVerifyFlow === 'phone' || showCaptchaForEmail) &&
-			captchaEnabled &&
-			!captchaPassed;
-		else verifyFormElement
-	"
->
+@if (
+	(currentVerifyFlow === 'phone' || showCaptchaForEmail) &&
+	captchaEnabled &&
+	!captchaPassed
+) {
 	<div class="captcha">
 		<p>
 			Please complete this verification challenge to receive a code on your
@@ -17,8 +14,7 @@
 			(error)="onCaptchaError($event)"
 		></re-captcha>
 	</div>
-</ng-container>
-<ng-template #verifyFormElement>
+} @else {
 	<form [formGroup]="verifyForm" (ngSubmit)="onSubmit(verifyForm.value)">
 		<h1 class="page-title">
 			{{
@@ -28,9 +24,9 @@
 		<p class="verify-text">
 			A verification code has been sent to your
 			{{ currentVerifyFlow === 'email' ? 'email address' : 'mobile device' }}.
-			<span *ngIf="currentVerifyFlow === 'phone'">
-				Permanent only supports US and Canada numbers.
-			</span>
+			@if (currentVerifyFlow === 'phone') {
+				<span> Permanent only supports US and Canada numbers. </span>
+			}
 		</p>
 		<p class="verify-text">Enter it below to continue.</p>
 		<div class="input-container">
@@ -67,5 +63,7 @@
 			>
 		</div>
 	</form>
-</ng-template>
-<pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>
+}
+@if (waiting) {
+	<pr-loading-spinner></pr-loading-spinner>
+}

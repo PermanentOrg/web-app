@@ -49,7 +49,7 @@ describe('AccountSettingsComponent', () => {
 		expect(instance).toBeTruthy();
 	});
 
-	it('can save an account property', async (done) => {
+	it('can save an account property', async () => {
 		const { instance, inject } = await shallow.render();
 
 		const accountService = inject(AccountService);
@@ -58,17 +58,19 @@ describe('AccountSettingsComponent', () => {
 		const successfulMessageSpy = spyOn(inject(MessageService), 'showMessage');
 		const errorMessageSpy = spyOn(inject(MessageService), 'showError');
 
-		instance.onSaveProfileInfo('fullName', 'New Name').finally(() => {
+		try {
+			await instance.onSaveProfileInfo('fullName', 'New Name');
+			await new Promise((r) => setTimeout(r, 0));
+		} finally {
 			expect(setAccountSpy).toHaveBeenCalled();
 			expect(accountUpdateSpy).toHaveBeenCalled();
 			expect(successfulMessageSpy).toHaveBeenCalled();
 			expect(errorMessageSpy).not.toHaveBeenCalled();
 			expect(accountService.getAccount().fullName).toBe('New Name');
-			done();
-		});
+		}
 	});
 
-	it('should reset an account property if an error occurs', async (done) => {
+	it('should reset an account property if an error occurs', async () => {
 		const { instance, inject } = await shallow.render();
 
 		const accountService = inject(AccountService);
@@ -80,14 +82,16 @@ describe('AccountSettingsComponent', () => {
 		const successfulMessageSpy = spyOn(inject(MessageService), 'showMessage');
 		const errorMessageSpy = spyOn(inject(MessageService), 'showError');
 
-		instance.onSaveProfileInfo('fullName', 'New Name').finally(() => {
+		try {
+			await instance.onSaveProfileInfo('fullName', 'New Name');
+			await new Promise((r) => setTimeout(r, 0));
+		} finally {
 			expect(setAccountSpy).not.toHaveBeenCalled();
 			expect(accountUpdateSpy).toHaveBeenCalled();
 			expect(successfulMessageSpy).not.toHaveBeenCalled();
 			expect(errorMessageSpy).toHaveBeenCalled();
 			expect(accountService.getAccount().fullName).toBe('Test User');
-			done();
-		});
+		}
 	});
 
 	it('should disable "Verify Phone Number" button if primaryPhone is empty', async () => {

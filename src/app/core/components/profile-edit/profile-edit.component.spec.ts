@@ -34,7 +34,7 @@ describe('ProfileEditComponent', () => {
 	mockProfileService.fetchProfileItems.and.returnValue(Promise.resolve());
 	mockProfileService.checkProfilePublic.and.returnValue(true);
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		TestBed.configureTestingModule({
 			declarations: [ProfileEditComponent],
 			providers: [
@@ -56,9 +56,7 @@ describe('ProfileEditComponent', () => {
 				{ provide: DialogRef, useValue: mockDialogRef },
 			],
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(ProfileEditComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

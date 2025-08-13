@@ -1,22 +1,20 @@
-<p *ngIf="!existingAccount">
-	You've signed up with <strong>{{ account.primaryEmail }}</strong>
-</p>
-<p *ngIf="existingAccount">
-	You're logged in as <strong>{{ account.primaryEmail }}</strong>
-</p>
-<a
-	href="/app/"
-	class="btn btn-primary"
-	target="_parent"
-	*ngIf="!linkToFacebook"
->
-	Go to my account
-</a>
-<a
-	href="/app/apps?facebook"
-	class="btn btn-primary"
-	target="_parent"
-	*ngIf="linkToFacebook"
->
-	Connect to Facebook
-</a>
+@if (!existingAccount) {
+	<p>
+		You've signed up with <strong>{{ account.primaryEmail }}</strong>
+	</p>
+}
+@if (existingAccount) {
+	<p>
+		You're logged in as <strong>{{ account.primaryEmail }}</strong>
+	</p>
+}
+@if (!linkToFacebook) {
+	<a href="/app/" class="btn btn-primary" target="_parent">
+		Go to my account
+	</a>
+}
+@if (linkToFacebook) {
+	<a href="/app/apps?facebook" class="btn btn-primary" target="_parent">
+		Connect to Facebook
+	</a>
+}

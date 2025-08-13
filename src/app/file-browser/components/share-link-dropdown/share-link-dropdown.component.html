@@ -9,11 +9,15 @@
 		[icon]="chevronIcon"
 	></fa-icon>
 </div>
-<div *ngIf="displayDropdown" class="share-link-options">
-	@for (item of linkTypes; track $index) {
-		<div class="option" (click)="onLinkTypeClick(item.value)">
-			<p>{{ item.text }}</p>
-			<p class="description" *ngIf="item.description">{{ item.description }}</p>
-		</div>
-	}
-</div>
+@if (displayDropdown) {
+	<div class="share-link-options">
+		@for (item of linkTypes; track $index) {
+			<div class="option" (click)="onLinkTypeClick(item.value)">
+				<p>{{ item.text }}</p>
+				@if (item.description) {
+					<p class="description">{{ item.description }}</p>
+				}
+			</div>
+		}
+	</div>
+}
