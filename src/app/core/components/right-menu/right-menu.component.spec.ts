@@ -13,7 +13,7 @@ describe('RightMenuComponent', () => {
 	let fixture: ComponentFixture<RightMenuComponent>;
 	let dataService: DataService;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 		const mockAccountService = {
 			getArchive: function () {
@@ -34,13 +34,11 @@ describe('RightMenuComponent', () => {
 		config.declarations.push(RightMenuComponent);
 
 		TestBed.configureTestingModule(config).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(RightMenuComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
-		dataService = TestBed.get(DataService);
+		dataService = TestBed.inject(DataService);
 		dataService.setCurrentFolder();
 	});
 

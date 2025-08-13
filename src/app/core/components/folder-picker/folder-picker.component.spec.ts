@@ -22,7 +22,7 @@ describe('FolderPickerComponent', () => {
 	let fixture: ComponentFixture<FolderPickerComponent>;
 	let httpMock: HttpTestingController;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
 		config.imports.push(SharedModule);
@@ -34,12 +34,10 @@ describe('FolderPickerComponent', () => {
 		config.providers.push(FolderPickerService);
 
 		TestBed.configureTestingModule(config).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(FolderPickerComponent);
 
-		httpMock = TestBed.get(HttpTestingController);
+		httpMock = TestBed.inject(HttpTestingController);
 
 		component = fixture.componentInstance;
 		fixture.detectChanges();
@@ -52,7 +50,7 @@ describe('FolderPickerComponent', () => {
 	});
 
 	it('should initialize a folder, strip out records, and load lean child folders', async () => {
-		const api = TestBed.get(ApiService) as ApiService;
+		const api = TestBed.inject(ApiService) as ApiService;
 		const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
 		const myFiles = new FolderResponse(navigateMinExpected).getFolderVO();
 

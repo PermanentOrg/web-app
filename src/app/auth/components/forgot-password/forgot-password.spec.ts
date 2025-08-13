@@ -17,8 +17,8 @@ describe('MfaComponent', () => {
 	let component: ForgotPasswordComponent;
 	let fixture: ComponentFixture<ForgotPasswordComponent>;
 
-	beforeEach(waitForAsync(() => {
-		TestBed.configureTestingModule({
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
 			declarations: [ForgotPasswordComponent, LogoComponent],
 			imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
 			providers: [
@@ -28,9 +28,7 @@ describe('MfaComponent', () => {
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(ForgotPasswordComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

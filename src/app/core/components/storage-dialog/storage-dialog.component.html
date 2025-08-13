@@ -45,8 +45,8 @@
 			</div>
 		</div>
 		<div class="panel" #panel>
-			<ng-container [ngSwitch]="activeTab">
-				<ng-container *ngSwitchCase="'add'">
+			@switch (activeTab) {
+				@case ('add') {
 					<div class="panel-title">Add Storage</div>
 					<pr-storage-meter></pr-storage-meter>
 					<p>
@@ -66,22 +66,22 @@
 							Have a code to redeem for free storage? Click here to redeem it.
 						</a>
 					</p>
-				</ng-container>
-				<ng-container *ngSwitchCase="'gift'">
+				}
+				@case ('gift') {
 					<pr-gift-storage></pr-gift-storage>
-				</ng-container>
-				<ng-container *ngSwitchCase="'promo'">
+				}
+				@case ('promo') {
 					<pr-redeem-gift [promoCode]="promoCode"></pr-redeem-gift>
-				</ng-container>
-				<ng-container *ngSwitchCase="'transaction'">
+				}
+				@case ('transaction') {
 					<div class="panel-title">Transaction History</div>
 					<pr-transaction-history></pr-transaction-history>
-				</ng-container>
-				<ng-container *ngSwitchCase="'file'">
+				}
+				@case ('file') {
 					<div class="panel-title">File History</div>
 					<pr-file-history></pr-file-history>
-				</ng-container>
-			</ng-container>
+				}
+			}
 		</div>
 	</div>
 </div>

@@ -1,3 +1,7 @@
-<ng-container [ngSwitch]="currentView" *ngIf="currentView">
-	<pr-file-list *ngSwitchDefault></pr-file-list>
-</ng-container>
+@if (currentView) {
+	@switch (currentView) {
+		@default {
+			<pr-file-list></pr-file-list>
+		}
+	}
+}

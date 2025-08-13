@@ -6,150 +6,144 @@ import { ApiService } from '@shared/services/api/api.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ManageTagsComponent } from './manage-tags.component';
 
+// Keep DummyModule "empty" to avoid extra mocking surfaces.
 @NgModule({
-	declarations: [], // components your module owns.
-	imports: [], // other modules your module needs.
-	providers: [ApiService], // providers available to your module.
-	bootstrap: [], // bootstrap this root component.
+	declarations: [],
+	imports: [],
+	providers: [],
 })
 class DummyModule {}
 
-let throwError: boolean = false;
-let deleted: boolean = false;
-let deletedTag: TagVO;
-let renamed: boolean = false;
-let renamedTag: TagVO;
-const mockApiService = {
-	tag: {
-		delete: async (data: any) => {
-			if (throwError) {
-				throw 'Test Error';
-			}
-			deleted = true;
-			deletedTag = data as TagVO;
-			return {
-				getTagVOData: () => {
-					return data;
-				},
-			};
-		},
-		update: async (data: any) => {
-			if (throwError) {
-				throw 'Test Error';
-			}
-			renamed = true;
-			renamedTag = data as TagVO;
-			return {
-				getTagVOData: () => {
-					return data;
-				},
-			};
-		},
-	},
-};
-let confirm: boolean = true;
-const mockPromptService = {
-	async confirm(): Promise<boolean> {
-		if (confirm) {
-			return Promise.resolve(true);
-		} else {
-			return Promise.reject();
-		}
-	},
-};
-
-describe('ManageTagsComponent #manage-tags', () => {
-	let shallow: Shallow<ManageTagsComponent>;
-	let defaultTags: TagVO[] = [];
-	async function defaultRender(tags: TagVO[] = defaultTags) {
-		return await shallow.render(
-			`<pr-manage-tags [tags]="tags"></pr-manage-tags>`,
-			{
-				bind: {
-					tags,
-				},
-			},
-		);
-	}
-	beforeEach(() => {
-		throwError = false;
-		deleted = false;
-		renamed = false;
-		deletedTag = null;
-		renamedTag = null;
-		confirm = true;
-		defaultTags = [
-			new TagVO({
-				name: 'Tomato',
-				tagId: 2,
-			}),
-			new TagVO({
-				name: 'Potato',
-				tagId: 1,
-			}),
+/**
+ * Build fresh Shallow + mock state for each test.
+ * Nothing persists across tests.
+ */
+function buildHarness(initialTags?: TagVO[]) {
+	// Per-test mutable state lives in this closure:
+	const state = {
+		throwError: false,
+		confirmResult: true,
+		deleted: false as boolean,
+		deletedTag: null as TagVO | null,
+		renamed: false as boolean,
+		renamedTag: null as TagVO | null,
+		tags: initialTags ?? [
+			new TagVO({ name: 'Tomato', tagId: 2 }),
+			new TagVO({ name: 'Potato', tagId: 1 }),
 			new TagVO({
 				name: 'vegetable:potato',
 				tagId: 3,
 				type: 'type.tag.metadata.customField',
 			}),
-		];
-		shallow = new Shallow(ManageTagsComponent, DummyModule)
-			.mock(ApiService, mockApiService)
-			.mock(PromptService, mockPromptService);
-	});
+		],
+	};
 
+	const mockApiService = {
+		tag: {
+			delete: async (data: any) => {
+				if (state.throwError) throw 'Test Error';
+				state.deleted = true;
+				state.deletedTag = data as TagVO;
+				return { getTagVOData: () => data };
+			},
+			update: async (data: any) => {
+				if (state.throwError) throw 'Test Error';
+				state.renamed = true;
+				state.renamedTag = data as TagVO;
+				return { getTagVOData: () => data };
+			},
+		},
+	};
+
+	const mockPromptService = {
+		async confirm(): Promise<boolean> {
+			return state.confirmResult ? Promise.resolve(true) : Promise.reject();
+		},
+	};
+
+	const shallow = new Shallow(ManageTagsComponent, DummyModule)
+		.mock(ApiService, mockApiService)
+		.mock(PromptService, mockPromptService);
+
+	/**
+	 * Convenience renderers that bind tags
+	 */
+	async function render(tags = state.tags) {
+		return await shallow.render(
+			`<pr-manage-tags [tags]="tags"></pr-manage-tags>`,
+			{
+				bind: { tags },
+			},
+		);
+	}
+
+	return { state, render };
+}
+
+describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 	it('should exist', async () => {
-		const { element } = await shallow.render();
+		const { render } = buildHarness();
+		const { element } = await render();
 
 		expect(element).not.toBeNull();
 	});
 
 	it('should have a sorted list of tags', async () => {
-		const { find, element } = await defaultRender();
+		const { render } = buildHarness();
+		const { find } = await render();
 
 		expect(find('.tag').length).toBe(2);
 		expect(find('.tag')[0].nativeElement.textContent).toContain('Potato');
 	});
 
 	it('should have a delete button for each keyword', async () => {
-		const { find, outputs } = await defaultRender();
+		const { render } = buildHarness();
+		const { find, outputs } = await render();
 
 		expect(find('.delete').length).toBeGreaterThan(0);
 		expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
 	});
 
 	it('should be able to delete a keyword', async () => {
-		const { find, fixture, outputs } = await defaultRender();
+		const { state, render } = buildHarness();
+		const { find, fixture, outputs } = await render();
+
 		find('.delete')[0].nativeElement.click();
 		await fixture.whenStable();
 		await fixture.detectChanges();
 
-		expect(deleted).toBeTruthy();
-		expect(deletedTag.name).toBe('Potato');
+		expect(state.deleted).toBeTrue();
+		expect(state.deletedTag!.name).toBe('Potato');
 		expect(outputs.refreshTags.emit).toHaveBeenCalled();
 		expect(find('.tag').length).toBe(1);
 	});
 
 	it('should not delete a keyword if an error happens', async () => {
-		const { element } = await defaultRender();
-		throwError = true;
+		const { state, render } = buildHarness();
+		const { element } = await render();
+		state.throwError = true;
+
 		try {
-			await element.componentInstance.deleteTag(defaultTags[0]);
+			await element.componentInstance.deleteTag(state.tags[0]);
+			fail('expected deleteTag to throw');
 		} catch {
-			// Catch error!
+			// expected
 		} finally {
 			expect(element.componentInstance.getFilteredTags().length).toBe(2);
 		}
 	});
 
 	it('should have edit buttons for each keyword', async () => {
-		const { find } = await defaultRender();
+		const { render } = buildHarness();
+		const { find } = await render();
 
 		expect(find('.edit').length).toBeGreaterThan(0);
 	});
 
 	it('should be able to enter edit mode for a keyword', async () => {
-		const { find, fixture } = await defaultRender();
+		const { render } = buildHarness();
+		const { find, fixture } = await render();
+
 		find('.edit')[0].nativeElement.click();
 		await fixture.detectChanges();
 
@@ -158,28 +152,36 @@ describe('ManageTagsComponent #manage-tags', () => {
 	});
 
 	it('should be able to rename tags', async () => {
-		const { find, fixture, outputs } = await defaultRender();
+		const { state, render } = buildHarness();
+		const { find, fixture, outputs } = await render();
+
 		find('.edit')[0].nativeElement.click();
 		await fixture.detectChanges();
-		find('.tag input').nativeElement.focus();
-		find('.tag input').nativeElement.value = 'Starchy Tuber';
-		find('.tag input').nativeElement.dispatchEvent(new Event('change'));
-		find('.tag input').nativeElement.form.dispatchEvent(new Event('submit'));
+
+		const input = find('.tag input').nativeElement;
+		input.focus();
+		input.value = 'Starchy Tuber';
+		input.dispatchEvent(new Event('change'));
+		input.form.dispatchEvent(new Event('submit'));
 		await fixture.whenStable();
 		await fixture.detectChanges();
 
 		expect(find('.tag input').length).toBe(0);
-		expect(renamed).toBeTruthy();
-		expect(renamedTag.name).toBe('Starchy Tuber');
+		expect(state.renamed).toBeTrue();
+		expect(state.renamedTag!.name).toBe('Starchy Tuber');
 		expect(outputs.refreshTags.emit).toHaveBeenCalled();
 	});
 
 	it('can cancel out of renaming a keyword', async () => {
-		const { find, fixture } = await defaultRender();
+		const { render } = buildHarness();
+		const { find, fixture } = await render();
+
 		find('.edit')[0].nativeElement.click();
 		await fixture.detectChanges();
-		find('.tag input').nativeElement.value = 'Do Not Show Value';
-		find('.tag input').nativeElement.dispatchEvent(new Event('change'));
+
+		const input = find('.tag input').nativeElement;
+		input.value = 'Do Not Show Value';
+		input.dispatchEvent(new Event('change'));
 		find('.cancel').nativeElement.click();
 		await fixture.detectChanges();
 
@@ -190,7 +192,8 @@ describe('ManageTagsComponent #manage-tags', () => {
 	});
 
 	it('should have a null state', async () => {
-		const { find } = await defaultRender([]);
+		const { render } = buildHarness([]);
+		const { find } = await render([]);
 
 		expect(find('.tag').length).toBe(0);
 		expect(find('.tagList').length).toBe(0);
@@ -198,49 +201,56 @@ describe('ManageTagsComponent #manage-tags', () => {
 
 	describe('Keywords filtering', () => {
 		async function testValue(val: string, expectedCount: number) {
-			const { find, fixture } = await defaultRender();
-			find('input.filter').nativeElement.value = val;
-			find('input.filter').nativeElement.dispatchEvent(new Event('change'));
+			const { render } = buildHarness();
+			const { find, fixture } = await render();
+			const input = find('input.filter').nativeElement;
+
+			input.value = val;
+			input.dispatchEvent(new Event('change'));
 			await fixture.detectChanges();
 
 			expect(find('.tag').length).toBe(expectedCount);
 		}
+
 		it('Trimming input', async () => {
-			testValue('  p ', 1);
+			await testValue('  p ', 1);
 		});
 
 		it('Case-insensitivity', async () => {
-			testValue('tOm', 1);
+			await testValue('tOm', 1);
 		});
 
 		it('Searches anywhere in word', async () => {
-			testValue('To', 2);
+			await testValue('To', 2);
 		});
 
 		it('Completely invalid match', async () => {
-			testValue('zzz', 0);
+			await testValue('zzz', 0);
 		});
 
 		it('Null case', async () => {
-			testValue('', 2);
+			await testValue('', 2);
 		});
 	});
 
 	describe('Prompting for deletion', () => {
 		async function testConfirm(clickConfirm: boolean) {
-			const { find, fixture } = await defaultRender();
-			confirm = clickConfirm;
+			const { state, render } = buildHarness();
+			const { find, fixture } = await render();
+
+			state.confirmResult = clickConfirm;
 			find('.delete')[0].nativeElement.click();
 			await fixture.whenStable();
 
-			expect(deleted).toBe(clickConfirm);
+			expect(state.deleted).toBe(clickConfirm);
 		}
+
 		it('should not delete when you cancel out', async () => {
-			testConfirm(false);
+			await testConfirm(false);
 		});
 
 		it('should delete when you click confirm', async () => {
-			testConfirm(true);
+			await testConfirm(true);
 		});
 	});
 });

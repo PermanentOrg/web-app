@@ -62,17 +62,15 @@ describe('Permanent Filesystem (Folder Caching)', () => {
 		expect(folder.displayName).toBe('Cached Value');
 	});
 
-	it('should still fetch and update a folder after retrieving the cached version', async (done) => {
+	it('should still fetch and update a folder after retrieving the cached version', async () => {
 		cache.saveFolder(
 			new FolderVO({ folderId: 0, displayName: 'Cached Value' }),
 		);
 		// Simulate a backend change happening in another window/tab/client/etc.
 		api.addFolder(new FolderVO({ folderId: 0, displayName: 'Updated Value' }));
 		const folder = await fs.getFolder({ folderId: 0 });
+		await new Promise((resolve) => setTimeout(resolve, 0));
 
-		setTimeout(() => {
-			expect(folder.displayName).toBe('Updated Value');
-			done();
-		}, 0);
+		expect(folder.displayName).toBe('Updated Value');
 	});
 });

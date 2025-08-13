@@ -1,24 +1,33 @@
 <!-- @format -->
-<div class="not-empty" *ngIf="tags?.length && !isEditing && canEdit">
-	Click to add
-</div>
+@if (tags?.length && !isEditing && canEdit) {
+	<div class="not-empty">Click to add</div>
+}
 <div class="tags">
-	<div class="empty" *ngIf="!tags?.length">
-		{{ canEdit && !isEditing ? 'Click to add' : 'No keywords' }}
-	</div>
-	<ng-container *ngIf="tags?.length">
-		<div
-			class="tag"
-			*ngFor="let tag of orderedTags; trackBy: tagTrackByFn"
-			[@ngIfScaleAnimationDynamic]="animate ? 'animate' : 'static'"
-		>
-			<p class="keyword" *ngIf="!tag.name.includes(':')">{{ tag.name }}</p>
-			<p class="customMetadataField" *ngIf="tag.name.includes(':')">
-				{{ tag.name.split(':')[0] }}
-			</p>
-			<p class="customMetadataValue" *ngIf="tag.name.includes(':')">
-				{{ tag.name.slice(tag.name.indexOf(':') + 1) }}
-			</p>
+	@if (!tags?.length) {
+		<div class="empty">
+			{{ canEdit && !isEditing ? 'Click to add' : 'No keywords' }}
 		</div>
-	</ng-container>
+	}
+	@if (tags?.length) {
+		@for (tag of orderedTags; track tagTrackByFn($index, tag)) {
+			<div
+				class="tag"
+				[@ngIfScaleAnimationDynamic]="animate ? 'animate' : 'static'"
+			>
+				@if (!tag.name.includes(':')) {
+					<p class="keyword">{{ tag.name }}</p>
+				}
+				@if (tag.name.includes(':')) {
+					<p class="customMetadataField">
+						{{ tag.name.split(':')[0] }}
+					</p>
+				}
+				@if (tag.name.includes(':')) {
+					<p class="customMetadataValue">
+						{{ tag.name.slice(tag.name.indexOf(':') + 1) }}
+					</p>
+				}
+			</div>
+		}
+	}
 </div>

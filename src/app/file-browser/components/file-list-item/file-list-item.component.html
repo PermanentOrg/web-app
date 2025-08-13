@@ -22,41 +22,43 @@
 	[inViewportOptions]="{ threshold: [0], rootMargin: '100px' }"
 >
 	<ng-container>
-		<ng-container *ngIf="item.isFolder">
-			<div class="file-list-item-folder-icon" *ngIf="!inGridView">
-				<i class="material-icons">folder</i>
-			</div>
-			<div
-				prBgImage
-				[bgSrc]="!showFolderIcon() && getThumbnailPath()"
-				[cover]="inGridView"
-				class="file-list-item-folder-icon"
-				*ngIf="inGridView"
-			>
-				<i *ngIf="showFolderIcon()" class="material-icons">{{
-					folderContentsType
-				}}</i>
-			</div>
-		</ng-container>
-		<ng-container *ngIf="!item.isFolder && isZip">
+		@if (item.isFolder) {
+			@if (!inGridView) {
+				<div class="file-list-item-folder-icon">
+					<i class="material-icons">folder</i>
+				</div>
+			}
+			@if (inGridView) {
+				<div
+					prBgImage
+					[bgSrc]="!showFolderIcon() && getThumbnailPath()"
+					[cover]="inGridView"
+					class="file-list-item-folder-icon"
+				>
+					@if (showFolderIcon()) {
+						<i class="material-icons">{{ folderContentsType }}</i>
+					}
+				</div>
+			}
+		}
+		@if (!item.isFolder && isZip) {
 			<div class="file-list-item-folder-icon zip-icon">
 				<fa-icon [icon]="['fas', 'file-archive']"></fa-icon>
 			</div>
-		</ng-container>
-		<div
-			*ngIf="!item.isFolder && !isZip"
-			prBgImage
-			[bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500"
-			[cover]="inGridView"
-		></div>
+		}
+		@if (!item.isFolder && !isZip) {
+			<div
+				prBgImage
+				[bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500"
+				[cover]="inGridView"
+			></div>
+		}
 	</ng-container>
-	<div
-		class="grid-item-type-icon"
-		@ngIfFadeInAnimation
-		*ngIf="inGridView && item.isFolder ? item.view : true"
-	>
-		<i class="material-icons">{{ item | itemTypeIcon: item.view }}</i>
-	</div>
+	@if (inGridView && item.isFolder ? item.view : true) {
+		<div class="grid-item-type-icon" @ngIfFadeInAnimation>
+			<i class="material-icons">{{ item | itemTypeIcon: item.view }}</i>
+		</div>
+	}
 	<div
 		[ngClass]="{ 'name-expanded': isNameHovered && isTextOverflowing }"
 		class="name"
@@ -65,9 +67,9 @@
 			[ngClass]="{ 'public-archive-name-container': isPublicArchive }"
 			class="first-row"
 		>
-			<span class="public-archive-date" *ngIf="isPublicArchive">{{
-				date
-			}}</span>
+			@if (isPublicArchive) {
+				<span class="public-archive-date">{{ date }}</span>
+			}
 			<p
 				#name
 				class="item-name"
@@ -80,53 +82,74 @@
 			>
 				{{ item.displayName }}
 			</p>
-			<i
-				class="ion-md-people"
-				*ngIf="!showAccess && item.ShareVOs?.length"
-				@ngIfFadeInAnimation
-				[ngbTooltip]="'fileList.icons.share' | prTooltip"
-			></i>
+			@if (!showAccess && item.ShareVOs?.length) {
+				<i
+					class="ion-md-people"
+					@ngIfFadeInAnimation
+					[ngbTooltip]="'fileList.icons.share' | prTooltip"
+				></i>
+			}
 		</div>
 		<div class="second-row">
-			<span *ngIf="!showAccess || !item.ShareArchiveVO">
-				{{ item.displayDT | prDate: item.TimezoneVO : 'date' }}
-				<span *ngIf="item.dataStatus > 0" @ngIfFadeInAnimation>{{
-					item.displayDT | prDate: item.TimezoneVO : 'time'
-				}}</span>
-			</span>
-			<span *ngIf="showAccess || item.ShareArchiveVO">
-				Shared by The {{ item.ShareArchiveVO?.fullName }} Archive
-			</span>
+			@if (!showAccess || !item.ShareArchiveVO) {
+				<span>
+					{{ item.displayDT | prDate: item.TimezoneVO : 'date' }}
+					@if (item.dataStatus > 0) {
+						<span @ngIfFadeInAnimation>{{
+							item.displayDT | prDate: item.TimezoneVO : 'time'
+						}}</span>
+					}
+				</span>
+			}
+			@if (showAccess || item.ShareArchiveVO) {
+				<span> Shared by The {{ item.ShareArchiveVO?.fullName }} Archive </span>
+			}
 		</div>
 	</div>
-	<div class="type" *ngIf="!showAccess && !inGridView">
-		{{ item.type | prConstants | titlecase }}
-	</div>
-	<div class="date" *ngIf="!showAccess">
-		<div class="date-top" *ngIf="item.dataStatus > 0" @ngIfFadeInAnimation>
-			{{ item.displayDT | prDate: item.TimezoneVO : 'date' }}
+	@if (!showAccess && !inGridView) {
+		<div class="type">
+			{{ item.type | prConstants | titlecase }}
 		</div>
-		<div class="date-bottom" *ngIf="item.dataStatus > 0" @ngIfFadeInAnimation>
-			{{ item.displayDT | prDate: item.TimezoneVO : 'time' }}
+	}
+	@if (!showAccess) {
+		<div class="date">
+			@if (item.dataStatus > 0) {
+				<div class="date-top" @ngIfFadeInAnimation>
+					{{ item.displayDT | prDate: item.TimezoneVO : 'date' }}
+				</div>
+			}
+			@if (item.dataStatus > 0) {
+				<div class="date-bottom" @ngIfFadeInAnimation>
+					{{ item.displayDT | prDate: item.TimezoneVO : 'time' }}
+				</div>
+			}
 		</div>
-	</div>
-	<div class="access" *ngIf="showAccess && !inGridView">
-		{{ item.accessRole | prConstants | titlecase }}
-	</div>
-	<div class="shared-by" *ngIf="showAccess && !inGridView">
-		<ng-container *ngIf="item.ShareArchiveVO">
-			<div
-				class="archive-thumb"
-				prBgImage
-				[bgSrc]="item.ShareArchiveVO.thumbURL200"
-				[cover]="true"
-			></div>
-			<span>The {{ item.ShareArchiveVO?.fullName }} Archive</span>
-		</ng-container>
-	</div>
-	<div class="actions" *ngIf="allowActions">
-		<button class="right-menu-toggler" (click)="showActions($event)">
-			<span class="right-menu-toggler-icon right-menu-toggler-icon-dark"></span>
-		</button>
-	</div>
+	}
+	@if (showAccess && !inGridView) {
+		<div class="access">
+			{{ item.accessRole | prConstants | titlecase }}
+		</div>
+	}
+	@if (showAccess && !inGridView) {
+		<div class="shared-by">
+			@if (item.ShareArchiveVO) {
+				<div
+					class="archive-thumb"
+					prBgImage
+					[bgSrc]="item.ShareArchiveVO.thumbURL200"
+					[cover]="true"
+				></div>
+				<span>The {{ item.ShareArchiveVO?.fullName }} Archive</span>
+			}
+		</div>
+	}
+	@if (allowActions) {
+		<div class="actions">
+			<button class="right-menu-toggler" (click)="showActions($event)">
+				<span
+					class="right-menu-toggler-icon right-menu-toggler-icon-dark"
+				></span>
+			</button>
+		</div>
+	}
 </div>

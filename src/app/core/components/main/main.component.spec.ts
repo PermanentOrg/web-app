@@ -44,6 +44,7 @@ describe('MainComponent', () => {
 	let mockDragEvents: Subject<DragServiceEvent>;
 
 	async function init(authResponseData = defaultAuthData) {
+		TestBed.resetTestingModule();
 		mockDragEvents = new Subject<DragServiceEvent>();
 		mockDragService = jasmine.createSpyObj('DragService', [
 			'getDestinationFromDropTarget',

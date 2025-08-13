@@ -1,7 +1,8 @@
+import { DOCUMENT } from '@angular/core';
 /* @format */
 import { TestBed } from '@angular/core/testing';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { DOCUMENT } from '@angular/common';
+
 import { CustomOverlayContainer } from './custom-overlay-container';
 
 describe('CustomOverlayContainer', () => {

@@ -6,7 +6,7 @@ describe('IFrameService', () => {
 	beforeEach(() => TestBed.configureTestingModule({}));
 
 	it('should be created', () => {
-		const service: IFrameService = TestBed.get(IFrameService);
+		const service: IFrameService = TestBed.inject(IFrameService);
 
 		expect(service).toBeTruthy();
 	});

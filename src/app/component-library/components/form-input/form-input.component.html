@@ -7,12 +7,13 @@
 >
 	{{ placeholder }}
 </div>
-<fa-icon
-	*ngIf="errors"
-	class="error-icon"
-	[icon]="['fas', 'exclamation-circle']"
-	[style]="iconPosition"
-></fa-icon>
+@if (errors) {
+	<fa-icon
+		class="error-icon"
+		[icon]="['fas', 'exclamation-circle']"
+		[style]="iconPosition"
+	></fa-icon>
+}
 <input
 	[type]="type"
 	class="form-control form-input"

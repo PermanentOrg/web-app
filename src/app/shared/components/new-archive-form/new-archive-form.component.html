@@ -18,37 +18,40 @@
 	</div>
 	<div class="dialog-form-field">
 		<label class="row-label" for="email">Archive Type</label>
-		<div class="form-check" *ngFor="let typeOption of archiveTypes; index as i">
-			<label class="form-check-label">
-				<input
-					type="radio"
-					class="form-check-input"
-					name="type"
-					[(ngModel)]="formData.type"
-					[value]="typeOption.value"
-					[required]="i === 0"
-				/>
-				{{ typeOption.text }}
-			</label>
+		@for (typeOption of archiveTypes; track typeOption; let i = $index) {
+			<div class="form-check">
+				<label class="form-check-label">
+					<input
+						type="radio"
+						class="form-check-input"
+						name="type"
+						[(ngModel)]="formData.type"
+						[value]="typeOption.value"
+						[required]="i === 0"
+					/>
+					{{ typeOption.text }}
+				</label>
+			</div>
+		}
+	</div>
+	@if (showRelations && formData.type === 'type.archive.person') {
+		<div class="dialog-form-field">
+			<label class="row-label" for="relation">Connection</label>
+			<select
+				name="relation"
+				class="form-control"
+				name="relation"
+				[(ngModel)]="formData.relationType"
+			>
+				<option value="" disabled selected>Choose connection (optional)</option>
+				@for (relation of relationTypes; track relation) {
+					<option [value]="relation.value">
+						{{ relation.text }}
+					</option>
+				}
+			</select>
 		</div>
-	</div>
-	<div
-		class="dialog-form-field"
-		*ngIf="showRelations && formData.type === 'type.archive.person'"
-	>
-		<label class="row-label" for="relation">Connection</label>
-		<select
-			name="relation"
-			class="form-control"
-			name="relation"
-			[(ngModel)]="formData.relationType"
-		>
-			<option value="" disabled selected>Choose connection (optional)</option>
-			<option [value]="relation.value" *ngFor="let relation of relationTypes">
-				{{ relation.text }}
-			</option>
-		</select>
-	</div>
+	}
 	<div class="dialog-form-field">
 		<button class="btn btn-primary" type="submit" [disabled]="waiting">
 			Create New Archive

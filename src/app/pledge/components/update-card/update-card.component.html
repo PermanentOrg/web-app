@@ -6,14 +6,20 @@
 	</div>
 </div>
 <div class="container">
-	<p *ngIf="userData === undefined">Loading pledge...</p>
-	<p *ngIf="userData === null">
-		Pledge not found. Please contact
-		<a href="mailto:support@permanent.org">support&#64;permanent.org</a>.
-	</p>
-	<div class="pledge-info" *ngIf="userData?.email">
-		<div class="email">{{ userData.email }}</div>
-	</div>
+	@if (userData === undefined) {
+		<p>Loading pledge...</p>
+	}
+	@if (userData === null) {
+		<p>
+			Pledge not found. Please contact
+			<a href="mailto:support@permanent.org">support&#64;permanent.org</a>.
+		</p>
+	}
+	@if (userData?.email) {
+		<div class="pledge-info">
+			<div class="email">{{ userData.email }}</div>
+		</div>
+	}
 	<div [hidden]="!userData?.email">
 		<p [hidden]="cardSaved">
 			<br />

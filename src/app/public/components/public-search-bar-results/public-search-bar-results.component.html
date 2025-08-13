@@ -1,29 +1,33 @@
 <!-- @format -->
 <div class="public-search-bar-results">
-	<div *ngIf="searchResults.length" class="search-results">
-		<p>Suggested file results:</p>
-		@for (item of searchResults; track $index) {
-			<div (click)="goToFile(item)" class="result">
-				<div class="info">
-					<img [src]="item.thumbURL200" />
-					<span class="result-name">{{ item.displayName }}</span>
-				</div>
-				<div class="result-type">
-					<span>{{ item.type | prGetFileType }}</span>
-				</div>
-			</div>
-		}
-	</div>
-	<div *ngIf="tags.length" class="tag-results">
-		<p>Keywords</p>
-		<div class="tags">
-			@for (item of tags; track $index) {
-				<div (click)="onTagClick(item)" class="tag">
-					<span>{{ item.name }}</span>
+	@if (searchResults.length) {
+		<div class="search-results">
+			<p>Suggested file results:</p>
+			@for (item of searchResults; track $index) {
+				<div (click)="goToFile(item)" class="result">
+					<div class="info">
+						<img [src]="item.thumbURL200" />
+						<span class="result-name">{{ item.displayName }}</span>
+					</div>
+					<div class="result-type">
+						<span>{{ item.type | prGetFileType }}</span>
+					</div>
 				</div>
 			}
 		</div>
-	</div>
+	}
+	@if (tags.length) {
+		<div class="tag-results">
+			<p>Keywords</p>
+			<div class="tags">
+				@for (item of tags; track $index) {
+					<div (click)="onTagClick(item)" class="tag">
+						<span>{{ item.name }}</span>
+					</div>
+				}
+			</div>
+		</div>
+	}
 	<hr />
 	<div class="view-all-results">
 		<div class="button-results">

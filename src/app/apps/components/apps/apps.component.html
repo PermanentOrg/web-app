@@ -8,9 +8,10 @@
 	</div>
 </div>
 <div class="connectors">
-	<pr-connector
-		[connector]="connector"
-		[appsFolder]="appsFolder"
-		*ngFor="let connector of connectors"
-	></pr-connector>
+	@for (connector of connectors; track connector) {
+		<pr-connector
+			[connector]="connector"
+			[appsFolder]="appsFolder"
+		></pr-connector>
+	}
 </div>

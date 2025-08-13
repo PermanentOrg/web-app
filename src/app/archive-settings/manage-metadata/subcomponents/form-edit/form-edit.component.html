@@ -1,25 +1,26 @@
 <div #value class="value">
-	<div class="value-editor" *ngIf="editing; else valueLine">
-		<form (ngSubmit)="saveTag()">
-			<input
-				type="text"
-				name="newValueName"
-				id="newValueName"
-				[(ngModel)]="newValueName"
-				[ngModelOptions]="{ standalone: true }"
-				[placeholder]="displayName"
-				required
-				[disabled]="waiting"
-				(click)="$event.stopPropagation()"
-				(keydown.enter)="saveTag()"
-				(keydown.escape)="reset()"
-				cdkTrapFocusAutoCapture
-				cdkTrapFocus
-				autocomplete="off"
-			/>
-		</form>
-	</div>
-	<ng-template #valueLine>
+	@if (editing) {
+		<div class="value-editor">
+			<form (ngSubmit)="saveTag()">
+				<input
+					type="text"
+					name="newValueName"
+					id="newValueName"
+					[(ngModel)]="newValueName"
+					[ngModelOptions]="{ standalone: true }"
+					[placeholder]="displayName"
+					required
+					[disabled]="waiting"
+					(click)="$event.stopPropagation()"
+					(keydown.enter)="saveTag()"
+					(keydown.escape)="reset()"
+					cdkTrapFocusAutoCapture
+					cdkTrapFocus
+					autocomplete="off"
+				/>
+			</form>
+		</div>
+	} @else {
 		<div
 			class="value-line"
 			(click)="dismissAllEditors($event)"
@@ -30,13 +31,15 @@
 				<fa-icon icon="ellipsis-h"></fa-icon>
 			</div>
 		</div>
-	</ng-template>
-	<div #menu class="edit-delete-menu" *ngIf="menuOpen">
-		<div class="edit" (click)="openEditor($event)">
-			<fa-icon icon="edit"></fa-icon> Edit
+	}
+	@if (menuOpen) {
+		<div #menu class="edit-delete-menu">
+			<div class="edit" (click)="openEditor($event)">
+				<fa-icon icon="edit"></fa-icon> Edit
+			</div>
+			<div class="delete" (click)="deleteTag($event)">
+				<fa-icon icon="trash"></fa-icon> Delete
+			</div>
 		</div>
-		<div class="delete" (click)="deleteTag($event)">
-			<fa-icon icon="trash"></fa-icon> Delete
-		</div>
-	</div>
+	}
 </div>

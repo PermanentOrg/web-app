@@ -1,43 +1,39 @@
-import { TestBed, inject } from '@angular/core/testing';
-import {
-	HttpTestingController,
-	provideHttpClientTesting,
-} from '@angular/common/http/testing';
-import { environment } from '@root/environments/environment';
+// This suite doesn't actually have any tests, but for some reason the setup
+// was causing the test bed to get contaminated.
+// For this reason, I comment it out!  There are other tests
+// fully commented out, and we will be cleaning them up
 
-import { TEST_DATA, TEST_DATA_2 } from '@core/core.module.spec';
-import { HttpService, Observable } from '@shared/services/http/http.service';
-import { FolderRepo, FolderResponse } from '@shared/services/api/folder.repo';
-import {
-	SimpleVO,
-	AccountPasswordVO,
-	AccountVO,
-	ArchiveVO,
-} from '@root/app/models';
-import {
-	provideHttpClient,
-	withInterceptorsFromDi,
-} from '@angular/common/http';
+// import { TestBed } from '@angular/core/testing';
+// import {
+// 	HttpTestingController,
+// 	provideHttpClientTesting,
+// } from '@angular/common/http/testing';
 
-describe('FolderRepo', () => {
-	let repo: FolderRepo;
-	let httpMock: HttpTestingController;
+// import { HttpService } from '@shared/services/http/http.service';
+// import { FolderRepo } from '@shared/services/api/folder.repo';
+// import {
+// 	provideHttpClient,
+// 	withInterceptorsFromDi,
+// } from '@angular/common/http';
 
-	beforeEach(() => {
-		TestBed.configureTestingModule({
-			imports: [],
-			providers: [
-				HttpService,
-				provideHttpClient(withInterceptorsFromDi()),
-				provideHttpClientTesting(),
-			],
-		});
+// describe('FolderRepo', () => {
+// 	let repo: FolderRepo;
+// 	let httpMock: HttpTestingController;
 
-		repo = new FolderRepo(TestBed.get(HttpService));
-		httpMock = TestBed.get(HttpTestingController);
-	});
+// 	beforeEach(() => {
+// 		TestBed.configureTestingModule({
+// 			imports: [],
+// 			providers: [
+// 				HttpService,
+// 				provideHttpClient(withInterceptorsFromDi()),
+// 				provideHttpClientTesting(),
+// 			],
+// 		});
 
-	afterEach(() => {
-		httpMock.verify();
-	});
-});
+// 		httpMock = TestBed.inject(HttpTestingController);
+// 	});
+
+// 	afterEach(() => {
+// 		httpMock.verify();
+// 	});
+// });

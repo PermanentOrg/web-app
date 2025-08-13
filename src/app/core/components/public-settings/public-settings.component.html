@@ -34,28 +34,36 @@
 	</small>
 	<div class="settings-item">
 		<label>Archive Type</label>
-		<label class="text-muted" *ngIf="archive.type === 'type.archive.nonprofit'"
-			>Nonprofit</label
-		>
-		<select
-			[(ngModel)]="archiveType"
-			name="archiveType"
-			id="archiveType"
-			(ngModelChange)="onArchiveTypeChange()"
-			*ngIf="archive.type !== 'type.archive.nonprofit'"
-			class="custom-select"
-		>
-			<option *ngFor="let type of archiveTypes" [ngValue]="type.value">
-				{{ type.name }}
-			</option>
-		</select>
+		@if (archive.type === 'type.archive.nonprofit') {
+			<label class="text-muted">Nonprofit</label>
+		}
+		@if (archive.type !== 'type.archive.nonprofit') {
+			<select
+				[(ngModel)]="archiveType"
+				name="archiveType"
+				id="archiveType"
+				(ngModelChange)="onArchiveTypeChange()"
+				class="custom-select"
+			>
+				@for (type of archiveTypes; track type) {
+					<option [ngValue]="type.value">
+						{{ type.name }}
+					</option>
+				}
+			</select>
+		}
 	</div>
-	<small *ngIf="archive.type !== 'type.archive.nonprofit'" class="text-muted"
-		>The archive type reflects what the archive represents, such as a person, a
-		group or family, or an organization.</small
-	>
-	<small *ngIf="archive.type === 'type.archive.nonprofit'" class="text-muted"
-		>This archive has been designated as a nonprofit archive. If you need to
-		make a change please <a href="{{ supportLink }}">contact support</a></small
-	>
+	@if (archive.type !== 'type.archive.nonprofit') {
+		<small class="text-muted"
+			>The archive type reflects what the archive represents, such as a person,
+			a group or family, or an organization.</small
+		>
+	}
+	@if (archive.type === 'type.archive.nonprofit') {
+		<small class="text-muted"
+			>This archive has been designated as a nonprofit archive. If you need to
+			make a change please
+			<a href="{{ supportLink }}">contact support</a></small
+		>
+	}
 </div>

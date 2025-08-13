@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
 	HttpTestingController,
 	provideHttpClientTesting,
@@ -25,7 +25,9 @@ describe('AuthGuard', () => {
 		});
 	});
 
-	it('should ...', inject([AuthGuard], (guard: AuthGuard) => {
+	it('should create', () => {
+		const guard = TestBed.inject(AuthGuard);
+
 		expect(guard).toBeTruthy();
-	}));
+	});
 });

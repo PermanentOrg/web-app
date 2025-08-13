@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { DatabaseReference } from '@angular/fire/compat/database/interfaces';
 import { merge } from 'lodash';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -10,7 +9,7 @@ import { AccountVO, BillingPaymentVO } from '@models';
 
 @Injectable()
 export class PledgeService {
-	public currentPledge: DatabaseReference;
+	public currentPledge;
 	public currentPledgeData: any | PledgeData = {};
 
 	public pledgesList = this.db.list('/pledges');

@@ -1,7 +1,11 @@
-<em *ngIf="loading"> Loading... </em>
-<ng-container *ngIf="!loading">
-	<p *ngIf="!ledgerItemPages.length">This account has uploaded no files.</p>
-	<ng-container *ngIf="ledgerItemPages?.length">
+@if (loading) {
+	<em> Loading... </em>
+}
+@if (!loading) {
+	@if (!ledgerItemPages.length) {
+		<p>This account has uploaded no files.</p>
+	}
+	@if (ledgerItemPages?.length) {
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -11,11 +15,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let item of ledgerItemPages[currentPage - 1]">
-					<td>{{ item.createdDT | date }}</td>
-					<td>{{ item.spaceDelta | dsFileSize }}</td>
-					<td>{{ item.type | prConstants }}</td>
-				</tr>
+				@for (item of ledgerItemPages[currentPage - 1]; track item) {
+					<tr>
+						<td>{{ item.createdDT | date }}</td>
+						<td>{{ item.spaceDelta | dsFileSize }}</td>
+						<td>{{ item.type | prConstants }}</td>
+					</tr>
+				}
 			</tbody>
 		</table>
 		<ngb-pagination
@@ -27,5 +33,5 @@
 			[ellipses]="false"
 		>
 		</ngb-pagination>
-	</ng-container>
-</ng-container>
+	}
+}

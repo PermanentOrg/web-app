@@ -12,15 +12,13 @@ describe('MessageComponent', () => {
 
 	const testUrl = ['/test'];
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
 		config.declarations.push(MessageComponent);
 
 		TestBed.configureTestingModule(config).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(MessageComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
@@ -37,7 +35,7 @@ describe('MessageComponent', () => {
 	});
 
 	it('should only dismiss when click if no navigation URL given', () => {
-		const router = TestBed.get(Router);
+		const router = TestBed.inject(Router);
 		spyOn(router, 'navigate');
 		spyOn(component, 'dismiss');
 
@@ -52,7 +50,7 @@ describe('MessageComponent', () => {
 	});
 
 	it('should navigate and dismiss when clicked if navigation URL given', () => {
-		const router = TestBed.get(Router);
+		const router = TestBed.inject(Router);
 		spyOn(router, 'navigate');
 		spyOn(component, 'dismiss');
 
@@ -68,7 +66,7 @@ describe('MessageComponent', () => {
 	});
 
 	it('should navigate and dismiss when clicked if navigation URL and param given', () => {
-		const router = TestBed.get(Router);
+		const router = TestBed.inject(Router);
 		spyOn(router, 'navigate');
 		spyOn(component, 'dismiss');
 
