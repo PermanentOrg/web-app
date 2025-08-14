@@ -5,7 +5,7 @@ import {
 	moduleMetadata,
 	StoryObj,
 } from '@storybook/angular';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
