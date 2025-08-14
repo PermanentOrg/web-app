@@ -1,0 +1,260 @@
+@import 'variables';
+
+:host {
+	display: block;
+	width: 100%;
+}
+
+$accessRoleWidth: auto;
+
+select.form-control {
+	width: auto;
+}
+
+.dialog-body {
+	overflow-y: visible !important;
+	background-color: white;
+	border-radius: 0.3rem;
+	box-shadow: 0 0.5rem 1rem #0000004d;
+	&-top {
+		margin-bottom: 10px;
+	}
+
+	.content {
+		padding: 0 $grid-unit $grid-unit;
+	}
+}
+
+.header {
+	@include tabbedDialogHeader(none, $body-color);
+	font-weight: $font-weight-bold;
+}
+
+.header-small {
+	@include tabbedDialogHeader(none, $body-color);
+	font-size: $font-size-base;
+	font-weight: $font-weight-bold;
+}
+
+p {
+	margin-bottom: $grid-unit;
+}
+
+.archive-search {
+	display: flex;
+	position: relative;
+	z-index: 2;
+	align-items: center;
+	> *:not(:last-child) {
+		margin-right: $grid-unit;
+	}
+
+	pr-archive-search-box {
+		flex: 1 1 auto;
+	}
+
+	select {
+		flex: 0 0 $accessRoleWidth;
+		@include gridHeightInput;
+	}
+}
+
+.shares-title,
+.shares-empty {
+	margin-top: $grid-unit * 0.5;
+	height: $grid-unit * 2;
+	display: flex;
+	align-items: center;
+
+	&.shares-title {
+		font-weight: $font-weight-bold;
+	}
+
+	&.shares-empty {
+		color: $text-muted;
+	}
+}
+
+.shares {
+	overflow-y: auto;
+	margin-bottom: $grid-unit;
+	height: $grid-unit * 8;
+
+	max-height: 10vh;
+}
+
+.buttons {
+	display: flex;
+	justify-content: flex-end;
+
+	.btn {
+		@include gridHeightButton;
+		width: auto;
+		margin: 0;
+		margin-left: $grid-unit * 0.5;
+	}
+}
+
+.dialog-form {
+	@include tabbedDialogPanelForm;
+}
+
+.share-archive {
+	display: flex;
+	align-items: center;
+	min-width: 0;
+
+	&:not(:last-child) {
+		margin-bottom: $grid-unit * 0.5;
+	}
+
+	.archive-thumb {
+		height: $grid-unit * 2;
+		flex: 0 0 $grid-unit * 2;
+		margin-right: $grid-unit * 0.5;
+	}
+
+	.archive-name {
+		font-weight: $font-weight-semibold;
+		flex: 1 1 auto;
+
+		.subtitle {
+			font-weight: $font-weight-normal;
+			font-size: $font-size-sm;
+			color: $text-muted;
+		}
+	}
+
+	.archive-actions {
+		flex: 0 0 auto;
+		display: flex;
+		.btn {
+			@include gridHeightButtonSmall;
+			width: 6rem;
+			margin-left: $grid-unit * 0.5;
+		}
+	}
+
+	select {
+		flex: 0 0 $accessRoleWidth;
+		@include gridHeightInputSmall;
+	}
+}
+
+.share-link {
+	display: flex;
+	align-items: center;
+
+	.share-link-container {
+		flex: 1 1 auto;
+		margin-right: $grid-unit;
+	}
+
+	input {
+		@include gridHeightInput;
+	}
+
+	button {
+		@include gridHeightButton;
+		flex: 0 0 6rem;
+		width: auto;
+		justify-content: center;
+	}
+}
+
+.share-link-settings-toggle {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	height: $grid-unit * 2;
+
+	.btn {
+		margin: 0;
+		width: auto;
+	}
+}
+
+.share-link-settings,
+.public-settings {
+	.link-settings-item,
+	.settings-item {
+		display: flex;
+		align-items: center;
+
+		&:not(:first-child) {
+			margin-top: $grid-unit;
+		}
+
+		> label {
+			font-weight: $font-weight-semibold;
+			margin: 0;
+			margin-right: $grid-unit;
+		}
+
+		.form-check {
+			margin-top: 0;
+		}
+
+		select {
+			@include gridHeightInputSmall;
+			margin-left: -$grid-unit * 0.5;
+			margin-right: auto;
+		}
+
+		.btn {
+			@include gridHeightButtonSmall;
+			width: auto;
+			margin: 0;
+		}
+	}
+}
+
+.btn:focus {
+	box-shadow: none;
+	border: none;
+}
+
+.sharing-explanation {
+	margin-top: 10px;
+}
+
+.header-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	& > p {
+		padding: 0 1.25rem;
+	}
+}
+
+.remove-link {
+	padding-right: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+
+	& > .trash-icon {
+		margin-right: 10px;
+		color: red;
+	}
+
+	& > span {
+		color: red;
+	}
+}
+
+.share-link-type-dropdown {
+	display: flex;
+	gap: 2rem;
+	margin-bottom: 1.25rem;
+	& > select {
+		margin-left: 2rem;
+	}
+}
+
+.link-type-text {
+	display: flex;
+	align-items: center;
+}
