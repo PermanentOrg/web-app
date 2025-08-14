@@ -1,5 +1,5 @@
 /* @format */
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
 	HttpTestingController,
 	provideHttpClientTesting,
@@ -32,7 +32,7 @@ describe('IdpUser', () => {
 			TestBed.inject(HttpService),
 			TestBed.inject(HttpV2Service),
 		);
-		httpMock = TestBed.get(HttpTestingController);
+		httpMock = TestBed.inject(HttpTestingController);
 	});
 
 	afterEach(() => {

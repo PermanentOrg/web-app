@@ -29,6 +29,7 @@ describe('VerifyComponent', () => {
 	let accountService: AccountService;
 
 	async function init(authResponseData = defaultAuthData, queryParams = {}) {
+		TestBed.resetTestingModule();
 		const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
 
 		config.declarations.push(VerifyComponent);
@@ -59,8 +60,8 @@ describe('VerifyComponent', () => {
 
 		await TestBed.configureTestingModule(config).compileComponents();
 
-		httpMock = TestBed.get(HttpTestingController);
-		accountService = TestBed.get(AccountService);
+		httpMock = TestBed.inject(HttpTestingController);
+		accountService = TestBed.inject(AccountService);
 
 		const authResponse = new AuthResponse(authResponseData);
 		accountService.setAccount(authResponse.getAccountVO());

@@ -10,16 +10,14 @@
 </div>
 <div class="pledge-list-wrapper">
 	<div class="pledge-list">
-		<div
-			class="pledge"
-			*ngFor="let pledge of pledges$ | async"
-			[ngClass]="{ new: pledge.isNew }"
-		>
-			<div class="amount">
-				{{ pledge.dollarAmount | currency: 'USD' : 'symbol' : '1.0-0' }}
+		@for (pledge of pledges$ | async; track pledge) {
+			<div class="pledge" [ngClass]="{ new: pledge.isNew }">
+				<div class="amount">
+					{{ pledge.dollarAmount | currency: 'USD' : 'symbol' : '1.0-0' }}
+				</div>
+				<div class="name">{{ pledge.name }}</div>
+				<div class="bottom">{{ pledge.timestamp | date: 'shortDate' }}</div>
 			</div>
-			<div class="name">{{ pledge.name }}</div>
-			<div class="bottom">{{ pledge.timestamp | date: 'shortDate' }}</div>
-		</div>
+		}
 	</div>
 </div>

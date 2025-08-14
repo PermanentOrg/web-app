@@ -8,20 +8,23 @@
 				[width]="width"
 				(mapClick)="onMapClick($event)"
 			>
-				<map-marker *ngIf="currentLocation" [position]="currentLocationLatLng">
-				</map-marker>
+				@if (currentLocation) {
+					<map-marker [position]="currentLocationLatLng"> </map-marker>
+				}
 			</google-map>
-			<div class="location-panel" *ngIf="currentLocation" @ngIfFadeInAnimation>
-				<div class="location-info">
-					<ng-container *ngIf="currentLocationDisplay.displayName">
-						<span>{{ currentLocationDisplay.displayName }}</span>
+			@if (currentLocation) {
+				<div class="location-panel" @ngIfFadeInAnimation>
+					<div class="location-info">
+						@if (currentLocationDisplay.displayName) {
+							<span>{{ currentLocationDisplay.displayName }}</span>
+							<br />
+						}
+						<span>{{ currentLocationDisplay.line1 }}</span>
 						<br />
-					</ng-container>
-					<span>{{ currentLocationDisplay.line1 }}</span>
-					<br />
-					<span>{{ currentLocationDisplay.line2 }}</span>
+						<span>{{ currentLocationDisplay.line2 }}</span>
+					</div>
 				</div>
-			</div>
+			}
 			<div class="location-search">
 				<input
 					type="text"
@@ -33,9 +36,9 @@
 		</div>
 	</div>
 	<div class="dialog-footer">
-		<button class="btn btn-secondary" (click)="cancel()" *ngIf="hasChanged">
-			Cancel
-		</button>
+		@if (hasChanged) {
+			<button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+		}
 		<button class="btn btn-primary" (click)="save()">
 			{{ hasChanged ? 'Save' : 'Done' }}
 		</button>

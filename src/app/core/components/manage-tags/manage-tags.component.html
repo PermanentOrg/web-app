@@ -1,58 +1,60 @@
 <div>
-	<div *ngIf="tags.length > 0; else noTags">
-		<p>
-			There are {{ getTagCount() }} keywords defined in the current archive.
-		</p>
-		<input
-			type="text"
-			class="filter"
-			placeholder="Search Keywords..."
-			(change)="filter = $event.target.value"
-			(keyup)="filter = $event.target.value"
-		/>
-		<div
-			class="tagsList"
-			*ngIf="getFilteredTags().length > 0; else noMatchedTags"
-		>
-			<ng-container *ngFor="let tag of getFilteredTags()">
-				<ng-container *ngIf="!isEditingTag(tag); else editMode">
-					<div class="tag-row">
-						<div class="tag-cell">
-							<span class="tag">{{ tag.name }}</span>
-						</div>
-						<i class="edit material-icons" (click)="beginEditingTag(tag)"
-							>edit</i
-						>
-						<i class="delete material-icons" (click)="deleteTag(tag)">delete</i>
-					</div>
-				</ng-container>
-				<ng-template #editMode>
-					<div class="tag-row">
-						<div class="tag-cell">
-							<span class="tag">
-								<form (submit)="saveTag(tag); $event.preventDefault()">
-									<input
-										type="text"
-										class="tag-input"
-										[value]="tag.name"
-										(change)="onTagChange(tag, $event.target.value)"
-									/>
-								</form>
-							</span>
-						</div>
-						<i class="save material-icons" (click)="saveTag(tag)">check</i>
-						<i class="cancel material-icons" (click)="endEditingTag(tag, true)"
-							>close</i
-						>
-					</div>
-				</ng-template>
-			</ng-container>
+	@if (tags.length > 0) {
+		<div>
+			<p>
+				There are {{ getTagCount() }} keywords defined in the current archive.
+			</p>
+			<input
+				type="text"
+				class="filter"
+				placeholder="Search Keywords..."
+				(change)="filter = $event.target.value"
+				(keyup)="filter = $event.target.value"
+			/>
+			@if (getFilteredTags().length > 0) {
+				<div class="tagsList">
+					@for (tag of getFilteredTags(); track tag) {
+						@if (!isEditingTag(tag)) {
+							<div class="tag-row">
+								<div class="tag-cell">
+									<span class="tag">{{ tag.name }}</span>
+								</div>
+								<i class="edit material-icons" (click)="beginEditingTag(tag)"
+									>edit</i
+								>
+								<i class="delete material-icons" (click)="deleteTag(tag)"
+									>delete</i
+								>
+							</div>
+						} @else {
+							<div class="tag-row">
+								<div class="tag-cell">
+									<span class="tag">
+										<form (submit)="saveTag(tag); $event.preventDefault()">
+											<input
+												type="text"
+												class="tag-input"
+												[value]="tag.name"
+												(change)="onTagChange(tag, $event.target.value)"
+											/>
+										</form>
+									</span>
+								</div>
+								<i class="save material-icons" (click)="saveTag(tag)">check</i>
+								<i
+									class="cancel material-icons"
+									(click)="endEditingTag(tag, true)"
+									>close</i
+								>
+							</div>
+						}
+					}
+				</div>
+			} @else {
+				<div>No keywords match your search query.</div>
+			}
 		</div>
-		<ng-template #noMatchedTags>
-			<div>No keywords match your search query.</div>
-		</ng-template>
-	</div>
-	<ng-template #noTags>
+	} @else {
 		There are no keywords used in this Archive.
-	</ng-template>
+	}
 </div>

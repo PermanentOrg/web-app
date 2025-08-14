@@ -17,7 +17,7 @@ describe('MfaComponent', () => {
 	let component: MfaComponent;
 	let fixture: ComponentFixture<MfaComponent>;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		TestBed.configureTestingModule({
 			declarations: [MfaComponent, LogoComponent],
 			imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
@@ -28,9 +28,7 @@ describe('MfaComponent', () => {
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(MfaComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

@@ -11,11 +11,12 @@ import { ConnectorComponent } from './connector.component';
 
 @Component({
 	selector: `pr-test-host-component`,
-	template: `<pr-connector
-		*ngIf="connector"
-		[connector]="connector"
-		[appsFolder]="appsFolder"
-	></pr-connector>`,
+	template: `@if (connector) {
+		<pr-connector
+			[connector]="connector"
+			[appsFolder]="appsFolder"
+		></pr-connector>
+	}`,
 	standalone: false,
 })
 class TestHostComponent {
@@ -34,17 +35,14 @@ describe('ConnectorComponent', () => {
 
 	const currentArchive = new ArchiveVO({ archiveId: 1 });
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
-
 		config.imports.push(SharedModule);
-		config.declarations.push(TestHostComponent);
-		config.declarations.push(ConnectorComponent);
+		config.declarations.push(TestHostComponent, ConnectorComponent);
 
-		TestBed.configureTestingModule(config).compileComponents();
-	}));
+		TestBed.resetTestingModule();
+		await TestBed.configureTestingModule(config).compileComponents();
 
-	beforeEach(() => {
 		const accountService = TestBed.inject(AccountService);
 		accountService.setArchive(currentArchive);
 

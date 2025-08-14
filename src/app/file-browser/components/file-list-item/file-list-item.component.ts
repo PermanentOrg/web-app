@@ -13,6 +13,7 @@ import {
 	Inject,
 	ViewChild,
 	AfterViewInit,
+	DOCUMENT,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { getFormattedDate } from '@shared/utilities/dateTime';
@@ -62,7 +63,7 @@ import {
 	unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
-import { DOCUMENT } from '@angular/common';
+
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { RouteData } from '@root/app/app.routes';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';

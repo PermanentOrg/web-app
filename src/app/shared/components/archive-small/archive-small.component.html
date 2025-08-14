@@ -6,106 +6,117 @@
 		[cover]="true"
 	></div>
 	<div class="archive-name" [ngClass]="{ clickable: clickable }">
-		<span class="archive-current" *ngIf="isCurrent && !clickable">
-			Current Archive<br />
-		</span>
+		@if (isCurrent && !clickable) {
+			<span class="archive-current"> Current Archive<br /> </span>
+		}
 		The {{ archive.fullName }} Archive
-		<span class="archive-switch" *ngIf="isCurrent && clickable && !accessRole">
-			<br />Tap to switch archives
-		</span>
-		<span class="archive-pending" *ngIf="isPending && !relation">
-			<br />Pending archive
-		</span>
-		<span class="archive-pending" *ngIf="isPending && relation">
-			<br />Pending connection
-		</span>
-		<span class="archive-subtitle" *ngIf="relation && !isPending">
-			<br />Relationship to Archive: {{ relationDisplay }}
-		</span>
-		<span class="archive-subtitle" *ngIf="accessRole && !isCurrent">
-			<br />Access: {{ accessRoleDisplay }}
-		</span>
-		<span class="archive-subtitle" *ngIf="clickable && isCurrent">
-			<br />Current Archive
-		</span>
+		@if (isCurrent && clickable && !accessRole) {
+			<span class="archive-switch"> <br />Tap to switch archives </span>
+		}
+		@if (isPending && !relation) {
+			<span class="archive-pending"> <br />Pending archive </span>
+		}
+		@if (isPending && relation) {
+			<span class="archive-pending"> <br />Pending connection </span>
+		}
+		@if (relation && !isPending) {
+			<span class="archive-subtitle">
+				<br />Relationship to Archive: {{ relationDisplay }}
+			</span>
+		}
+		@if (accessRole && !isCurrent) {
+			<span class="archive-subtitle">
+				<br />Access: {{ accessRoleDisplay }}
+			</span>
+		}
+		@if (clickable && isCurrent) {
+			<span class="archive-subtitle"> <br />Current Archive </span>
+		}
 	</div>
-	<div
-		class="archive-default"
-		*ngIf="showDefault && isDefaultArchive()"
-		[ngbTooltip]="'This archive is the default archive for your account.'"
-	>
-		<i class="material-icons">star</i>
-	</div>
-</div>
-<ng-container
-	*ngIf="
-		(largeOnDesktop || showAcceptMobile) &&
-		(showEdit || showRemove || showAccept)
-	"
-	[ngSwitch]="actionsAsDropdown"
->
-	<div
-		class="archive-edit-dropdown hide-mobile"
-		*ngSwitchCase="true"
-		ngbDropdown
-		[placement]="'bottom-right'"
-	>
-		<i class="material-icons" ngbDropdownToggle>more_vert</i>
-		<div ngbDropdownMenu class="dropdown">
-			<a
-				*ngIf="showAccept"
-				(click)="acceptClick.emit($event)"
-				[class.disabled]="archive.isPendingAction"
-			>
-				<i class="material-icons">{{ acceptIcon }}</i>
-				{{ acceptText }}
-			</a>
-			<a
-				*ngIf="showEdit"
-				(click)="editClick.emit($event)"
-				[class.disabled]="archive.isPendingAction"
-			>
-				<i class="material-icons">create</i>
-				Edit
-			</a>
-			<a
-				class="text-danger"
-				*ngIf="showRemove"
-				(click)="removeClick.emit($event)"
-				[class.disabled]="archive.isPendingAction"
-			>
-				<i class="material-icons">{{ removeIcon }}</i>
-				{{ removeText }}
-			</a>
+	@if (showDefault && isDefaultArchive()) {
+		<div
+			class="archive-default"
+			[ngbTooltip]="'This archive is the default archive for your account.'"
+		>
+			<i class="material-icons">star</i>
 		</div>
-	</div>
-	<div
-		[ngClass]="{ 'archive-edit': true, 'hide-mobile': !showAcceptMobile }"
-		*ngSwitchDefault
-	>
-		<button
-			class="btn btn-primary"
-			*ngIf="showAccept"
-			(click)="acceptClick.emit($event)"
-			[disabled]="archive.isPendingAction"
-		>
-			{{ acceptText }}
-		</button>
-		<button
-			class="btn btn-primary"
-			*ngIf="showEdit"
-			(click)="editClick.emit($event)"
-			[disabled]="archive.isPendingAction"
-		>
-			Edit
-		</button>
-		<button
-			class="btn btn-danger"
-			*ngIf="showRemove"
-			(click)="removeClick.emit($event)"
-			[disabled]="archive.isPendingAction"
-		>
-			{{ removeText }}
-		</button>
-	</div>
-</ng-container>
+	}
+</div>
+@if (
+	(largeOnDesktop || showAcceptMobile) && (showEdit || showRemove || showAccept)
+) {
+	@switch (actionsAsDropdown) {
+		@case (true) {
+			<div
+				class="archive-edit-dropdown hide-mobile"
+				ngbDropdown
+				[placement]="'bottom-right'"
+			>
+				<i class="material-icons" ngbDropdownToggle>more_vert</i>
+				<div ngbDropdownMenu class="dropdown">
+					@if (showAccept) {
+						<a
+							(click)="acceptClick.emit($event)"
+							[class.disabled]="archive.isPendingAction"
+						>
+							<i class="material-icons">{{ acceptIcon }}</i>
+							{{ acceptText }}
+						</a>
+					}
+					@if (showEdit) {
+						<a
+							(click)="editClick.emit($event)"
+							[class.disabled]="archive.isPendingAction"
+						>
+							<i class="material-icons">create</i>
+							Edit
+						</a>
+					}
+					@if (showRemove) {
+						<a
+							class="text-danger"
+							(click)="removeClick.emit($event)"
+							[class.disabled]="archive.isPendingAction"
+						>
+							<i class="material-icons">{{ removeIcon }}</i>
+							{{ removeText }}
+						</a>
+					}
+				</div>
+			</div>
+		}
+		@default {
+			<div
+				[ngClass]="{ 'archive-edit': true, 'hide-mobile': !showAcceptMobile }"
+			>
+				@if (showAccept) {
+					<button
+						class="btn btn-primary"
+						(click)="acceptClick.emit($event)"
+						[disabled]="archive.isPendingAction"
+					>
+						{{ acceptText }}
+					</button>
+				}
+				@if (showEdit) {
+					<button
+						class="btn btn-primary"
+						(click)="editClick.emit($event)"
+						[disabled]="archive.isPendingAction"
+					>
+						Edit
+					</button>
+				}
+				@if (showRemove) {
+					<button
+						class="btn btn-danger"
+						(click)="removeClick.emit($event)"
+						[disabled]="archive.isPendingAction"
+					>
+						{{ removeText }}
+					</button>
+				}
+			</div>
+		}
+	}
+}

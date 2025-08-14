@@ -27,7 +27,7 @@ describe('LeftMenuComponent', () => {
 	let accountService: AccountService;
 	let element: HTMLElement;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 		config.declarations.push(LeftMenuComponent);
 		config.declarations.push(ArchiveSmallComponent);
@@ -39,12 +39,10 @@ describe('LeftMenuComponent', () => {
 
 		TestBed.configureTestingModule(config).compileComponents();
 
-		accountService = TestBed.get(AccountService);
+		accountService = TestBed.inject(AccountService);
 		accountService.setAccount(new AccountVO(TEST_DATA.account));
 		accountService.setArchive(new ArchiveVO(TEST_DATA.archive));
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(LeftMenuComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

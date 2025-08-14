@@ -3,18 +3,19 @@
 	[showAccess]="true"
 ></pr-file-list-controls>
 <div class="file-list-scroll">
-	<pr-file-list-item
-		[item]="item"
-		*ngFor="let item of shareItems"
-		[showAccess]="true"
-		[canSelect]="true"
-		[isSelected]="selectedItems.has(item)"
-		(itemClicked)="onItemClick($event)"
-		[@ngIfScaleAnimationDynamic]="item.isPendingAction ? 'animate' : 'static'"
-	></pr-file-list-item>
-	<div class="empty-message" *ngIf="!shareItems?.length">
-		This archive has no shared items
-	</div>
+	@for (item of shareItems; track item) {
+		<pr-file-list-item
+			[item]="item"
+			[showAccess]="true"
+			[canSelect]="true"
+			[isSelected]="selectedItems.has(item)"
+			(itemClicked)="onItemClick($event)"
+			[@ngIfScaleAnimationDynamic]="item.isPendingAction ? 'animate' : 'static'"
+		></pr-file-list-item>
+	}
+	@if (!shareItems?.length) {
+		<div class="empty-message">This archive has no shared items</div>
+	}
 </div>
 <pr-sidebar></pr-sidebar>
 <div

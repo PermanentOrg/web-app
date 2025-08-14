@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PromptService } from '@shared/services/prompt/prompt.service';
 
@@ -9,7 +9,9 @@ describe('PromptService', () => {
 		});
 	});
 
-	it('should be created', inject([PromptService], (service: PromptService) => {
+	it('should be created', () => {
+		const service = TestBed.inject(PromptService);
+
 		expect(service).toBeTruthy();
-	}));
+	});
 });

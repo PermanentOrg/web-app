@@ -1,11 +1,9 @@
-import { TestBed, inject } from '@angular/core/testing';
-import * as Testing from '@root/test/testbedConfig';
+import { TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
 import { AccountService } from '@shared/services/account/account.service';
-import { cloneDeep } from 'lodash';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CookieService } from 'ngx-cookie-service';
@@ -27,10 +25,9 @@ describe('RelationshipService', () => {
 		});
 	});
 
-	it('should be created', inject(
-		[RelationshipService],
-		(service: RelationshipService) => {
-			expect(service).toBeTruthy();
-		},
-	));
+	it('should be created', () => {
+		const service = TestBed.inject(RelationshipService);
+
+		expect(service).toBeTruthy();
+	});
 });

@@ -4,12 +4,13 @@ import {
 	Renderer2,
 	RendererFactory2,
 	NgZone,
+	DOCUMENT,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { throttle, find } from 'lodash';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.component';
-import { DOCUMENT } from '@angular/common';
+
 import gsap from 'gsap';
 import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
 import { PromptService } from '@shared/services/prompt/prompt.service';

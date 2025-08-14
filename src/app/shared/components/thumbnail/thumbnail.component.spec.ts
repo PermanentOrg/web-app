@@ -204,32 +204,27 @@ describe('ThumbnailComponent', () => {
 		expect(instance.getCurrentThumbUrl()).toEqual(image200);
 	});
 
-	it('should show set the background image after it loads', async (done) => {
+	it('should show set the background image after it loads', async () => {
 		const { find, fixture } = await renderWithItem(fullItem);
 
-		setTimeout(() => {
-			fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
 
-			expect(
-				find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
-			).toContain(image200);
-			done();
-		}, 1);
+		expect(
+			find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
+		).toContain(image200);
 	});
 
-	it('should be able to handle an image erroring out', async (done) => {
+	it('should be able to handle an image erroring out', async () => {
 		TestImage.testError = true;
 		const { instance, find, fixture } = await renderWithItem(leanItem);
 
 		instance.item.update(fullItem);
+		await fixture.whenStable();
+		fixture.detectChanges();
 
-		setTimeout(() => {
-			fixture.detectChanges();
-
-			expect(
-				find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
-			).toBe('');
-			done();
-		}, 1);
+		expect(
+			find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
+		).toBe('');
 	});
 });

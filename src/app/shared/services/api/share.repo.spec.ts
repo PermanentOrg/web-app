@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
 	HttpTestingController,
 	provideHttpClientTesting,
@@ -36,8 +36,8 @@ describe('ShareRepo', () => {
 			],
 		});
 
-		repo = new ShareRepo(TestBed.get(HttpService));
-		httpMock = TestBed.get(HttpTestingController);
+		repo = new ShareRepo(TestBed.inject(HttpService));
+		httpMock = TestBed.inject(HttpTestingController);
 	});
 
 	afterEach(() => {

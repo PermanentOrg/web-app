@@ -5,6 +5,7 @@ import {
 	ElementRef,
 	HostBinding,
 	Inject,
+	DOCUMENT,
 } from '@angular/core';
 import { SearchService } from '@search/services/search.service';
 import { ItemVO, RecordVO, TagVOData } from '@models';
@@ -15,7 +16,7 @@ import { UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 import { pipe, of } from 'rxjs';
 import { tap, debounceTime, switchMap, catchError, map } from 'rxjs/operators';
 import { SearchResponse } from '@shared/services/api/index.repo';
-import { DOCUMENT } from '@angular/common';
+
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
 import { remove } from 'lodash';

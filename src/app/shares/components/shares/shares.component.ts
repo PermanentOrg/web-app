@@ -5,6 +5,7 @@ import {
 	OnDestroy,
 	Inject,
 	HostBinding,
+	DOCUMENT,
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { find, remove } from 'lodash';
@@ -15,7 +16,7 @@ import {
 } from '@shared/services/data/data.service';
 import { FolderVO, ArchiveVO, ItemVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
-import { DOCUMENT } from '@angular/common';
+
 import { DeviceService } from '@shared/services/device/device.service';
 import {
 	slideUpAnimation,

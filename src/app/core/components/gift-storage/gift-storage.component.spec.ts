@@ -5,7 +5,8 @@ import { CoreModule } from '@core/core.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { of } from 'rxjs';
+import { of, firstValueFrom } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { GiftingResponse } from '@shared/services/api/billing.repo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountVO } from '../../../models/account-vo';
@@ -182,19 +183,17 @@ describe('GiftStorageComponent', () => {
 		expect(result).toEqual(['test@example.com', 'test1@example.com']);
 	});
 
-	it('returns all the duplicate emails', async (done) => {
+	it('returns all the duplicate emails', async () => {
 		const { instance } = await shallow.render();
 
 		const testEmailString =
 			'test@example.com,test@example.com,test2@example.com';
 		const expectedDuplicates = ['test@example.com'];
+		const duplicates = await firstValueFrom(
+			instance.checkForDuplicateEmails(testEmailString).pipe(take(1)),
+		);
 
-		instance
-			.checkForDuplicateEmails(testEmailString)
-			.subscribe((duplicates) => {
-				expect(duplicates).toEqual(expectedDuplicates);
-				done();
-			});
+		expect(duplicates).toEqual(expectedDuplicates);
 	});
 
 	it('calls submitStorageGiftForm when the form is valid', async () => {

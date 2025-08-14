@@ -1,30 +1,32 @@
-<div #element @banner class="share-preview-footer" *ngIf="visible">
-	<div class="flex-contents">
-		<p class="desktop-text">
-			<strong>Welcome to Permanent.org!</strong> Join {{ accountUserName }}’s
-			shared files by signing up for a free account. Collaborate on archives on
-			Permanent.org, and create and curate your own. Get started today with a
-			free gigabyte of storage and no recurring fees.
-			<a href="https://www.permanent.org" class="primary-link"
-				>Learn more about Permanent</a
-			>
-		</p>
-		<p class="mobile-text">
-			<strong
-				>Get full access to {{ accountUserName }}’s shared item by creating a
-				free account on Permanent.org.</strong
-			>
-		</p>
-		<div class="signup-links">
-			<a href="/app/auth/signup" class="btn btn-primary">Create Account</a>
-			<a href="/app/auth/login" class="secondary-link"
-				>Already have an account?</a
-			>
+@if (visible) {
+	<div #element @banner class="share-preview-footer">
+		<div class="flex-contents">
+			<p class="desktop-text">
+				<strong>Welcome to Permanent.org!</strong> Join {{ accountUserName }}’s
+				shared files by signing up for a free account. Collaborate on archives
+				on Permanent.org, and create and curate your own. Get started today with
+				a free gigabyte of storage and no recurring fees.
+				<a href="https://www.permanent.org" class="primary-link"
+					>Learn more about Permanent</a
+				>
+			</p>
+			<p class="mobile-text">
+				<strong
+					>Get full access to {{ accountUserName }}’s shared item by creating a
+					free account on Permanent.org.</strong
+				>
+			</p>
+			<div class="signup-links">
+				<a href="/app/auth/signup" class="btn btn-primary">Create Account</a>
+				<a href="/app/auth/login" class="secondary-link"
+					>Already have an account?</a
+				>
+			</div>
+		</div>
+		<div class="close-btn">
+			<button class="btn" (click)="close()">
+				<i class="material-icons">close</i>
+			</button>
 		</div>
 	</div>
-	<div class="close-btn">
-		<button class="btn" (click)="close()">
-			<i class="material-icons">close</i>
-		</button>
-	</div>
-</div>
+}

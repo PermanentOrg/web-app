@@ -35,7 +35,7 @@ describe('SignupComponent', () => {
 	let fixture: ComponentFixture<SignupComponent>;
 	let accountService: AccountService;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		TestBed.configureTestingModule({
 			declarations: [SignupComponent, LogoComponent, FormInputComponent],
 			imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
@@ -60,9 +60,7 @@ describe('SignupComponent', () => {
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(SignupComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 import { EditService } from '@core/services/edit/edit.service';
@@ -50,9 +50,11 @@ describe('EditService', () => {
 		service = TestBed.inject(EditService);
 	});
 
-	it('should be created', inject([EditService], (service: EditService) => {
+	it('should be created', () => {
+		const service = TestBed.inject(EditService);
+
 		expect(service).toBeTruthy();
-	}));
+	});
 
 	it('should call update when there are records', async () => {
 		const record = new RecordVO({ recordId: 1, displayName: 'Test' });

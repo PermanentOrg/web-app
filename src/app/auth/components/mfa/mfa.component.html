@@ -28,4 +28,6 @@
 		>Verify Access</pr-button
 	>
 </form>
-<pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>
+@if (waiting) {
+	<pr-loading-spinner></pr-loading-spinner>
+}

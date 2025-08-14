@@ -119,9 +119,7 @@ describe('SharingDialogComponent', () => {
 		).and.returnValue(undefined);
 
 		apiService = TestBed.inject(ApiService);
-	});
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(SharingDialogComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

@@ -18,7 +18,7 @@ describe('ArchivePickerComponent', () => {
 	let component: ArchivePickerComponent;
 	let fixture: ComponentFixture<ArchivePickerComponent>;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		TestBed.configureTestingModule({
 			declarations: [ArchivePickerComponent],
 			imports: [],
@@ -32,9 +32,7 @@ describe('ArchivePickerComponent', () => {
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(ArchivePickerComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

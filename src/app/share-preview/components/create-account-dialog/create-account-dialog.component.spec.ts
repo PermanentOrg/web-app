@@ -50,9 +50,7 @@ describe('CreateAccountDialogComponent', () => {
 			useValue: dialogRefSpy,
 		});
 		await TestBed.configureTestingModule(config).compileComponents();
-	});
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(CreateAccountDialogComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

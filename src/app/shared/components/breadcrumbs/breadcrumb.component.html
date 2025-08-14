@@ -1,9 +1,13 @@
-<a [routerLink]="[breadcrumb.routerPath]" *ngIf="!last">{{
-	breadcrumb.text
-}}</a>
-<span class="separator" *ngIf="!last">
-	<i class="ion-md-arrow-dropright"></i>
-</span>
-<span class="current" *ngIf="last">
-	{{ breadcrumb.text }}
-</span>
+@if (!last) {
+	<a [routerLink]="[breadcrumb.routerPath]">{{ breadcrumb.text }}</a>
+}
+@if (!last) {
+	<span class="separator">
+		<i class="ion-md-arrow-dropright"></i>
+	</span>
+}
+@if (last) {
+	<span class="current">
+		{{ breadcrumb.text }}
+	</span>
+}

@@ -26,7 +26,7 @@ describe('SignupEmbedComponent', () => {
 	let component: SignupEmbedComponent;
 	let fixture: ComponentFixture<SignupEmbedComponent>;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		TestBed.configureTestingModule({
 			declarations: [SignupEmbedComponent, FormInputComponent],
 			imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
@@ -48,12 +48,10 @@ describe('SignupEmbedComponent', () => {
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(SignupEmbedComponent);
 
-		const accountService = TestBed.get(AccountService) as AccountService;
+		const accountService = TestBed.inject(AccountService) as AccountService;
 		accountService.clearAccount();
 		accountService.clearArchive();
 

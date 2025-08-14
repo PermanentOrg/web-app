@@ -10,7 +10,7 @@ describe('NavComponent', () => {
 	let component: NavComponent;
 	let fixture: ComponentFixture<NavComponent>;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
 		config.declarations.push(NavComponent);
@@ -18,9 +18,7 @@ describe('NavComponent', () => {
 		config.declarations.push(RightMenuComponent);
 
 		TestBed.configureTestingModule(config).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(NavComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

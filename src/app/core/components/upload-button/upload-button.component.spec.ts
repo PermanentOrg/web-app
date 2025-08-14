@@ -16,7 +16,7 @@ describe('UploadButtonComponent', () => {
 	let dataService: DataService;
 	let accountService: AccountService;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 		config.declarations.push(UploadButtonComponent);
 		config.imports.push(NgbTooltipModule);
@@ -24,16 +24,14 @@ describe('UploadButtonComponent', () => {
 		providers.push(DataService);
 		providers.push(AccountService);
 		TestBed.configureTestingModule(config).compileComponents();
-	}));
 
-	beforeEach(() => {
-		accountService = TestBed.get(AccountService);
+		accountService = TestBed.inject(AccountService);
 		accountService.setArchive(
 			new ArchiveVO({
 				accessRole: 'access.role.owner',
 			}),
 		);
-		dataService = TestBed.get(DataService);
+		dataService = TestBed.inject(DataService);
 
 		fixture = TestBed.createComponent(UploadButtonComponent);
 		component = fixture.componentInstance;

@@ -1,4 +1,4 @@
-import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
@@ -12,7 +12,7 @@ describe('PrConstantsService', () => {
 			providers: [PrConstantsService],
 		});
 
-		service = TestBed.get(PrConstantsService);
+		service = TestBed.inject(PrConstantsService);
 	});
 
 	it('should be created', () => {

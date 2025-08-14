@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
@@ -15,19 +15,20 @@ describe('ApiService', () => {
 		});
 	});
 
-	it('should be created', inject([ApiService], (service: ApiService) => {
-		expect(service).toBeTruthy();
-	}));
+	it('should be created', () => {
+		const service = TestBed.inject(ApiService);
 
-	it('should have the correct repos attached', inject(
-		[ApiService],
-		(service: ApiService) => {
-			expect(service.account).toEqual(jasmine.any(Repo.AccountRepo));
-			expect(service.archive).toEqual(jasmine.any(Repo.ArchiveRepo));
-			expect(service.auth).toEqual(jasmine.any(Repo.AuthRepo));
-			expect(service.connector).toEqual(jasmine.any(Repo.ConnectorRepo));
-			expect(service.folder).toEqual(jasmine.any(Repo.FolderRepo));
-			expect(service.record).toEqual(jasmine.any(Repo.RecordRepo));
-		},
-	));
+		expect(service).toBeTruthy();
+	});
+
+	it('should have the correct repos attached', () => {
+		const service = TestBed.inject(ApiService);
+
+		expect(service.account).toEqual(jasmine.any(Repo.AccountRepo));
+		expect(service.archive).toEqual(jasmine.any(Repo.ArchiveRepo));
+		expect(service.auth).toEqual(jasmine.any(Repo.AuthRepo));
+		expect(service.connector).toEqual(jasmine.any(Repo.ConnectorRepo));
+		expect(service.folder).toEqual(jasmine.any(Repo.FolderRepo));
+		expect(service.record).toEqual(jasmine.any(Repo.RecordRepo));
+	});
 });
