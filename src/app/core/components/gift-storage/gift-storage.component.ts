@@ -1,4 +1,3 @@
-/* @format */
 import { Component, OnDestroy } from '@angular/core';
 import {
 	UntypedFormGroup,

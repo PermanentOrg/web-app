@@ -1,4 +1,3 @@
-/* @format */
 import { Component, OnInit, Input } from '@angular/core';
 import { FeaturedArchive } from '../../types/featured-archive';
 

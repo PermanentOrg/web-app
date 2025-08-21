@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { partition } from 'lodash';
 import { Subject } from 'rxjs';

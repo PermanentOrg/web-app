@@ -1,4 +1,3 @@
-/* @format */
 import { TestBed } from '@angular/core/testing';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { FeatureFlag } from '../types/feature-flag';

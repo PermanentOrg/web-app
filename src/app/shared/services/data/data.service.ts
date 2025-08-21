@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable, EventEmitter } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { partition, remove, find, findIndex } from 'lodash';

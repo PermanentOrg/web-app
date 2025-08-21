@@ -1,4 +1,3 @@
-/* @format */
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { Shallow } from 'shallow-render';

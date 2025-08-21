@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';

@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { ComponentsModule } from '../../components.module';

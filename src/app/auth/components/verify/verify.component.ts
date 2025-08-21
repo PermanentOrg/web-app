@@ -1,4 +1,3 @@
-/* @format */
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';

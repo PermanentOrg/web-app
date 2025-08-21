@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 
 import { AnnouncementModule } from '@announcement/announcement.module';

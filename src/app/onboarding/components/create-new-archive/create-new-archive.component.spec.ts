@@ -1,4 +1,3 @@
-/* @format */
 import { BehaviorSubject } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { OnboardingModule } from '@onboarding/onboarding.module';

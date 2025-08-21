@@ -1,4 +1,3 @@
-/* @format */
 import { UploadService } from '@core/services/upload/upload.service';
 import { CoreModule } from '@core/core.module';
 import { EventEmitter } from '@angular/core';

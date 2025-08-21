@@ -1,4 +1,3 @@
-/* @format */
 import { GetFileTypePipe } from './get-file-type.pipe';
 
 describe('GetAltTextPipe', () => {

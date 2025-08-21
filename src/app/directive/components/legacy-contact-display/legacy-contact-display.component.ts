@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyContact } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';

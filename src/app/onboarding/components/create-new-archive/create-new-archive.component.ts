@@ -1,4 +1,3 @@
-/* @format */
 import { Observable, Subscription } from 'rxjs';
 import { AccountService } from '@shared/services/account/account.service';
 import {

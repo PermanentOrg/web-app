@@ -1,4 +1,3 @@
-/* @format */
 import { ApiService } from '@shared/services/api/api.service';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { AccountVO, InviteVO } from '@root/app/models';

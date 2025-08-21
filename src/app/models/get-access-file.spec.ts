@@ -1,4 +1,3 @@
-/* @format */
 import { FileFormat, PermanentFile } from './file-vo';
 import { GetAccessFile, HasFiles } from './get-access-file';
 

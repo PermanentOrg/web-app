@@ -1,4 +1,3 @@
-/* @format */
 import { Component, OnInit } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { AccountService } from '../../../shared/services/account/account.service';

@@ -1,4 +1,3 @@
-/* @format */
 import { AccountService } from '@shared/services/account/account.service';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';

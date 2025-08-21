@@ -1,4 +1,3 @@
-/* @format */
 import { HttpClient } from '@angular/common/http';
 import { Shallow } from 'shallow-render';
 import { BillingPaymentVO } from '@models/billing-payment-vo';

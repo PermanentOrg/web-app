@@ -1,4 +1,3 @@
-/* @format */
 import { ApiService } from '@shared/services/api/api.service';
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';

@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import OpenSeadragon from 'openseadragon';
 import { NgModule } from '@angular/core';

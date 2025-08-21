@@ -1,4 +1,3 @@
-/* @format */
 import { AccountVO, ArchiveVO, SimpleVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { firstValueFrom } from 'rxjs';

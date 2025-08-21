@@ -1,4 +1,3 @@
-/* @format */
 import { SharedModule } from '@shared/shared.module';
 import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';

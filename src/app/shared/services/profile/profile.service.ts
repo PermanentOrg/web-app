@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable, Optional } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';

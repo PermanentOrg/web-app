@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TagVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';

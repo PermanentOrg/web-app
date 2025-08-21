@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { ArchiveType } from '@models/archive-vo';
 import { FeaturedArchive } from '../../types/featured-archive';

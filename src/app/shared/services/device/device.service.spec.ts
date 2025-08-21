@@ -1,4 +1,3 @@
-/* @format */
 import { SharedModule } from '@shared/shared.module';
 import { CookieService } from 'ngx-cookie-service';
 import { Shallow } from 'shallow-render';

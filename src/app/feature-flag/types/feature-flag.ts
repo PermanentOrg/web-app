@@ -1,4 +1,3 @@
-/* @format */
 
 export interface FeatureFlag {
 	name: string;

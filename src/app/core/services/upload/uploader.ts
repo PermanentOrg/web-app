@@ -1,4 +1,3 @@
-/* @format */
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';

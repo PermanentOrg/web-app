@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { TagVOData } from '@models/tag-vo';
 import debug from 'debug';

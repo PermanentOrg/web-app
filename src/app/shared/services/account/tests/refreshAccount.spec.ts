@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { AccountVO } from '@models/account-vo';
 import { Observable, Subject } from 'rxjs';

@@ -1,4 +1,3 @@
-/* @format */
 import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';

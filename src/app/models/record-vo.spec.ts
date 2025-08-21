@@ -1,4 +1,3 @@
-/* @format */
 import { DataStatus } from './data-status.enum';
 import { FileFormat } from './file-vo';
 import { RecordVO, ShareVO } from '.';

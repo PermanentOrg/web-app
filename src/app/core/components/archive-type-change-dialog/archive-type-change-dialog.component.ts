@@ -1,4 +1,3 @@
-/* @format */
 import { Observable } from 'rxjs';
 import { ArchiveVO, ArchiveType } from '@models/archive-vo';
 import { Component, Inject } from '@angular/core';

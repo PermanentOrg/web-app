@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ArchiveVO, TagVO, TagVOData } from '@models/index';

@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable, OnDestroy } from '@angular/core';
 import { Event, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';

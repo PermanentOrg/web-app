@@ -1,4 +1,3 @@
-/* @format */
 import { RecordVO, FolderVO, RecordVOData, SimpleVO } from '@root/app/models';
 import {
 	BaseResponse,

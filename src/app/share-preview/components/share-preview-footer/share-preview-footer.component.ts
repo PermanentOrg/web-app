@@ -1,4 +1,3 @@
-/* @format */
 import { transition, trigger, style, animate } from '@angular/animations';
 import {
 	Component,

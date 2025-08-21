@@ -1,4 +1,3 @@
-/* @format */
 import { AccountVO } from '@models/account-vo';
 import { Directive, FolderVO, LegacyContact, RecordVO } from '@models/index';
 import { ProfileItemVOData } from '@models/profile-item-vo';

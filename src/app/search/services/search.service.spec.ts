@@ -1,4 +1,3 @@
-/* @format */
 import { TestBed } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
 import { TagsService } from '@core/services/tags/tags.service';

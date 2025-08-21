@@ -1,4 +1,3 @@
-/* @format */
 import { DebugElement, Type } from '@angular/core';
 import { DirectiveData } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
