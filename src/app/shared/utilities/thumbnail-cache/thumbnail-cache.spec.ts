@@ -99,7 +99,7 @@ describe('ThumbnailCache', () => {
 		it('handles linking another value instead of a string tuple', () => {
 			storage.session.set('folderThumbnailCache', [[1234, 'potato']]);
 			cache = new ThumbnailCache(storage);
-			let thumbz = cache.getThumbnail(folder);
+			const thumbz = cache.getThumbnail(folder);
 
 			expect(thumbz.folderThumb200).toBe('');
 			expect(thumbz.folderThumb500).toBe('');
@@ -113,7 +113,7 @@ describe('ThumbnailCache', () => {
 		it('handles properly casting other values to string if a tuple is provided', () => {
 			storage.session.set('folderThumbnailCache', [[1234, [3.141, {}]]]);
 			cache = new ThumbnailCache(storage);
-			let thumbz = cache.getThumbnail(folder);
+			const thumbz = cache.getThumbnail(folder);
 
 			expect(thumbz.folderThumb200).toBe('3.141');
 			expect(thumbz.folderThumb500).toBe('[object Object]');

@@ -21,7 +21,7 @@ const mockDataService = {
 describe('EditService', () => {
 	let service: EditService;
 	let apiService: jasmine.SpyObj<ApiService>;
-	let messageSent = false;
+	const messageSent = false;
 
 	let accountService: jasmine.SpyObj<AccountService>;
 	beforeEach(() => {

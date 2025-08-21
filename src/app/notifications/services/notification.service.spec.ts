@@ -168,8 +168,6 @@ describe('NotificationService', () => {
 	}));
 
 	it('should mark notifications as seen and update the unread count', fakeAsync(() => {
-		let countBeforeMarkSeen: number;
-
 		loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
 		getNotificationsSpy = spyOn(
@@ -191,7 +189,7 @@ describe('NotificationService', () => {
 		flushMicrotasks();
 
 		expect(service.newNotificationCount).toBeGreaterThan(0);
-		countBeforeMarkSeen = service.newNotificationCount;
+		const countBeforeMarkSeen = service.newNotificationCount;
 
 		service.markAsSeen();
 
@@ -204,8 +202,6 @@ describe('NotificationService', () => {
 	}));
 
 	it('should mark notifications as read and update the unread count', fakeAsync(() => {
-		let countBeforeMarkSeen: number;
-
 		loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
 		getNotificationsSpy = spyOn(
@@ -227,7 +223,7 @@ describe('NotificationService', () => {
 		flushMicrotasks();
 
 		expect(service.newNotificationCount).toBeGreaterThan(0);
-		countBeforeMarkSeen = service.newNotificationCount;
+		const countBeforeMarkSeen = service.newNotificationCount;
 
 		service.markAll('status.notification.read');
 

@@ -74,7 +74,7 @@ export class ArchiveSearchComponent implements OnInit {
 					return this.searchService.parseSearchTerm(term.query);
 				}),
 				tap(([term, tags]) => {
-					let value = term ? term : tags[0]?.name;
+					const value = term ? term : tags[0]?.name;
 					this.filteredTags = this.tags.filter((tag) =>
 						tag.name.toLowerCase().includes(value?.toLowerCase()),
 					);

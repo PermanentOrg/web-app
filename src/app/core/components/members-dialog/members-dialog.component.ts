@@ -203,7 +203,6 @@ export class MembersDialogComponent {
 			return;
 		}
 		const deferred = new Deferred();
-		let member: AccountVO;
 		const emailField: PromptField = {
 			fieldName: 'primaryEmail',
 			placeholder: 'Member email',
@@ -225,7 +224,7 @@ export class MembersDialogComponent {
 			'Add member',
 			deferred.promise,
 		);
-		member = value as AccountVO;
+		const member = value as AccountVO;
 
 		try {
 			let response: ArchiveResponse;
