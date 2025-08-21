@@ -8,8 +8,8 @@ import { map, filter } from 'rxjs/operators';
 import { RouteData } from '@root/app/app.routes';
 
 export const getLastChildRouteDataOperator =
-	() => (source: Observable<RouterEvent>) => {
-		return source.pipe(
+	() => (source: Observable<RouterEvent>) =>
+		source.pipe(
 			filter((x) => x instanceof ActivationEnd && !x.snapshot.firstChild),
 			map((x) => {
 				if (x instanceof ActivationEnd) {
@@ -19,7 +19,6 @@ export const getLastChildRouteDataOperator =
 				}
 			}),
 		);
-	};
 
 export function findRouteData(
 	snapshot: ActivatedRouteSnapshot,

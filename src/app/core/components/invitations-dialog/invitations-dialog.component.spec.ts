@@ -8,11 +8,10 @@ import { AccountService } from '@shared/services/account/account.service';
 import { InvitationsDialogComponent } from './invitations-dialog.component';
 
 const mockAccountService = {
-	getAccount: () => {
-		return new AccountVO({
+	getAccount: () =>
+		new AccountVO({
 			accountId: 1,
-		});
-	},
+		}),
 };
 
 class DialogRefMock {

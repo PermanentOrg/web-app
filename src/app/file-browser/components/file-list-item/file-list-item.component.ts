@@ -1046,9 +1046,9 @@ export class FileListItemComponent
 						const sortedItems = newFolderVO.ChildItemVOs.filter((item) =>
 							item.type.includes('type.record'),
 						);
-						sortedItems.sort((a, b) => {
-							return calculateSortPriority(a) - calculateSortPriority(b);
-						});
+						sortedItems.sort(
+							(a, b) => calculateSortPriority(a) - calculateSortPriority(b),
+						);
 						const thumbnailItem = sortedItems.shift();
 						if (thumbnailItem) {
 							if (sortPriorities.includes(thumbnailItem.type)) {

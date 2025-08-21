@@ -305,9 +305,7 @@ export class AccountService {
 				archive = response.getArchiveVO();
 				this.setArchive(archive);
 			})
-			.then(() => {
-				return this.api.folder.getRoot();
-			})
+			.then(() => this.api.folder.getRoot())
 			.then((response: FolderResponse) => {
 				const root = response.getFolderVO();
 				this.setRootFolder(root);

@@ -27,27 +27,20 @@ const mockApiService = {
 				throw 'Test Error';
 			}
 			return {
-				getArchiveVos: () => {
-					return [];
-				},
+				getArchiveVos: () => [],
 			};
 		},
-		accept: async (data: any) => {
-			return true;
-		},
+		accept: async (data: any) => true,
 		change: async (archive: ArchiveVO) => {},
 	},
 };
 const mockAccountService = {
-	getAccount: () => {
-		return new AccountVO({
+	getAccount: () =>
+		new AccountVO({
 			accountId: 1,
 			fullName: 'Test Account',
-		});
-	},
-	refreshArchives: async () => {
-		return [];
-	},
+		}),
+	refreshArchives: async () => [],
 	setArchive: (archive: ArchiveVO) => {},
 	updateAccount: async () => {},
 	change: async () => {},

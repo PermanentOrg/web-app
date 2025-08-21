@@ -63,8 +63,6 @@ export class LocnResponse extends BaseResponse {
 			return [];
 		}
 
-		return data[0].map((result) => {
-			return result.LocnVO as LocnVOData;
-		});
+		return data[0].map((result) => result.LocnVO as LocnVOData);
 	}
 }

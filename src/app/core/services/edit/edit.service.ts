@@ -283,9 +283,7 @@ export class EditService {
 
 		return this.api.folder
 			.post([newFolder])
-			.then((response: FolderResponse) => {
-				return response.getFolderVO();
-			});
+			.then((response: FolderResponse) => response.getFolderVO());
 	}
 
 	async deleteItems(

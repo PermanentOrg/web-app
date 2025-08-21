@@ -251,9 +251,9 @@ export class ProfileService {
 	}
 
 	async setProfilePublic(setPublic = true) {
-		const allItems = this.getProfileItemsAsArray().filter((i) => {
-			return !ALWAYS_PUBLIC.includes(i.fieldNameUI);
-		});
+		const allItems = this.getProfileItemsAsArray().filter(
+			(i) => !ALWAYS_PUBLIC.includes(i.fieldNameUI),
+		);
 		const originalValues = [];
 
 		const minItems = allItems

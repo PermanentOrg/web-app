@@ -139,11 +139,10 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
 		this.routerListener = this.router.events
 			.pipe(
-				filter((event) => {
-					return (
-						event instanceof NavigationStart || event instanceof NavigationEnd
-					);
-				}),
+				filter(
+					(event) =>
+						event instanceof NavigationStart || event instanceof NavigationEnd,
+				),
 			)
 			.subscribe((event) => {
 				if (event instanceof NavigationStart) {

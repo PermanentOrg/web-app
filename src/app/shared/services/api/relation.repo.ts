@@ -95,11 +95,9 @@ export class RelationResponse extends BaseResponse {
 			return [];
 		}
 
-		const relations = data.map((result) => {
-			return result.map((resultList) => {
-				return new RelationVO(resultList.RelationVO);
-			});
-		});
+		const relations = data.map((result) =>
+			result.map((resultList) => new RelationVO(resultList.RelationVO)),
+		);
 
 		return flatten(relations);
 	}

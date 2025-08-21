@@ -7,17 +7,13 @@ import { ApiService } from '../../../shared/services/api/api.service';
 import { AdvancedSettingsComponent } from './advanced-settings.component';
 
 const mockAccountService = {
-	getAccount: () => {
-		return new AccountVO({ accountId: 1, allowSftpDeletion: true });
-	},
+	getAccount: () => new AccountVO({ accountId: 1, allowSftpDeletion: true }),
 	setAccount: (account: AccountVO) => {},
 };
 
 const mockApiService = {
 	account: {
-		update: (account: AccountVO) => {
-			return Promise.resolve(account);
-		},
+		update: (account: AccountVO) => Promise.resolve(account),
 	},
 };
 

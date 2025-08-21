@@ -56,12 +56,10 @@ export class ArchivePickerComponent {
 	) {
 		this.relations = this.dialogData.relations;
 		this.hideAccessRoleOnInvite = this.dialogData.hideAccessRoleOnInvite;
-		this.relationOptions = this.prConstants.getRelations().map((type) => {
-			return {
-				text: type.name,
-				value: type.type,
-			};
-		});
+		this.relationOptions = this.prConstants.getRelations().map((type) => ({
+			text: type.name,
+			value: type.type,
+		}));
 	}
 
 	searchByEmail() {

@@ -19,9 +19,7 @@ const mockApiService = {
 			created = true;
 			createdArchive = data as ArchiveFormData;
 			return {
-				getArchiveVO: () => {
-					return data;
-				},
+				getArchiveVO: () => data,
 			};
 		},
 	},

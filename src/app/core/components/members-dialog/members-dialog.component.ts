@@ -147,12 +147,9 @@ export class MembersDialogComponent {
 
 		return this.promptService
 			.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
-			.then(() => {
-				return this.api.archive.removeMember(
-					member,
-					this.accountService.getArchive(),
-				);
-			})
+			.then(() =>
+				this.api.archive.removeMember(member, this.accountService.getArchive()),
+			)
 			.then((response: ArchiveResponse) => {
 				this.message.showMessage({
 					message: 'Member removed successfully.',

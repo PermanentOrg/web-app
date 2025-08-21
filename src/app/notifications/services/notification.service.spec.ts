@@ -65,17 +65,13 @@ describe('NotificationService', () => {
 
 		allNotificationsResponse = new NotificationResponse();
 		allNotificationsResponse.setData(
-			allNotificationsData.map((n) => {
-				return { NotificationVO: cloneDeep(n) };
-			}),
+			allNotificationsData.map((n) => ({ NotificationVO: cloneDeep(n) })),
 		);
 		allNotificationsResponse.isSuccessful = true;
 
 		newNotificationsResponse = new NotificationResponse();
 		newNotificationsResponse.setData(
-			newNotificationData.map((n) => {
-				return { NotificationVO: cloneDeep(n) };
-			}),
+			newNotificationData.map((n) => ({ NotificationVO: cloneDeep(n) })),
 		);
 		newNotificationsResponse.isSuccessful = true;
 

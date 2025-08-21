@@ -25,11 +25,9 @@ export class NotificationRepo extends BaseRepo {
 	}
 
 	public update(notifications: NotificationVOData[]) {
-		const data = notifications.map((n) => {
-			return {
-				NotificationVO: n,
-			};
-		});
+		const data = notifications.map((n) => ({
+			NotificationVO: n,
+		}));
 
 		return this.http.sendRequestPromise<NotificationResponse>(
 			'/notification/updateNotification',

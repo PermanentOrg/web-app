@@ -140,18 +140,14 @@ export class ConnectorRepo extends BaseRepo {
 		let data;
 
 		if (personId) {
-			data = archive.map((vo, i) => {
-				return {
-					ArchiveVO: vo,
-					SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] }),
-				};
-			});
+			data = archive.map((vo, i) => ({
+				ArchiveVO: vo,
+				SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] }),
+			}));
 		} else {
-			data = archive.map((vo, i) => {
-				return {
-					ArchiveVO: vo,
-				};
-			});
+			data = archive.map((vo, i) => ({
+				ArchiveVO: vo,
+			}));
 		}
 
 		return this.http.sendRequestPromise<ConnectorResponse>(
@@ -168,11 +164,9 @@ export class ConnectorRepo extends BaseRepo {
 			archive = [archive];
 		}
 
-		const data = archive.map((vo) => {
-			return {
-				ArchiveVO: vo,
-			};
-		});
+		const data = archive.map((vo) => ({
+			ArchiveVO: vo,
+		}));
 
 		return this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemorySyncRequest',
@@ -188,11 +182,9 @@ export class ConnectorRepo extends BaseRepo {
 			archive = [archive];
 		}
 
-		const data = archive.map((vo) => {
-			return {
-				ArchiveVO: vo,
-			};
-		});
+		const data = archive.map((vo) => ({
+			ArchiveVO: vo,
+		}));
 
 		return this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemoryUploadRequest',
@@ -213,12 +205,10 @@ export class ConnectorRepo extends BaseRepo {
 			personId = [personId];
 		}
 
-		const data = archive.map((vo, i) => {
-			return {
-				ArchiveVO: vo,
-				SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] }),
-			};
-		});
+		const data = archive.map((vo, i) => ({
+			ArchiveVO: vo,
+			SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] }),
+		}));
 
 		return this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchFactImportRequest',
@@ -241,8 +231,8 @@ export class ConnectorResponse extends BaseResponse {
 	public getConnectorOverviewVOs() {
 		const data = this.getResultsData();
 
-		return data.map((result) => {
-			return new ConnectorOverviewVO(result[0].ConnectorOverviewVO);
-		});
+		return data.map(
+			(result) => new ConnectorOverviewVO(result[0].ConnectorOverviewVO),
+		);
 	}
 }

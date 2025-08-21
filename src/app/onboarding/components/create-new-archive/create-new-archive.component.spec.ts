@@ -15,11 +15,9 @@ let calledAccept: boolean = false;
 let acceptedArchive: ArchiveVO | undefined;
 const mockApiService = {
 	archive: {
-		create: async (a: ArchiveVO) => {
-			return {
-				getArchiveVO: () => a,
-			};
-		},
+		create: async (a: ArchiveVO) => ({
+			getArchiveVO: () => a,
+		}),
 		accept: async (a: ArchiveVO) => {
 			calledAccept = true;
 			acceptedArchive = a;
@@ -31,9 +29,7 @@ const mockApiService = {
 };
 
 const mockAccountService = {
-	getAccount: () => {
-		return new AccountVO({ accountId: 1 });
-	},
+	getAccount: () => new AccountVO({ accountId: 1 }),
 	createAccountForMe: new BehaviorSubject<{ name: string; action: string }>({
 		name: '',
 		action: '',

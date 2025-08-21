@@ -171,9 +171,7 @@ export class ShareResponse extends BaseResponse {
 				return null;
 			}
 
-			return result.map((resultList) => {
-				return new ArchiveVO(resultList.ArchiveVO);
-			});
+			return result.map((resultList) => new ArchiveVO(resultList.ArchiveVO));
 		});
 
 		return compact(flatten(archives));

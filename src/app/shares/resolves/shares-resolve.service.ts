@@ -26,8 +26,8 @@ export class SharesResolveService {
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Promise<any> {
-		return this.api.share.getShares().then((response: ShareResponse) => {
-			return response.getShareArchiveVOs();
-		});
+		return this.api.share
+			.getShares()
+			.then((response: ShareResponse) => response.getShareArchiveVOs());
 	}
 }

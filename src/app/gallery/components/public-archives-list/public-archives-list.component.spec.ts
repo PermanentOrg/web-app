@@ -20,9 +20,7 @@ describe('PublicArchivesComponent', () => {
 				showError: () => {},
 			})
 			.mock(Router, {
-				navigate: () => {
-					return Promise.resolve(true);
-				},
+				navigate: () => Promise.resolve(true),
 			});
 	});
 

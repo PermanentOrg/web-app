@@ -39,15 +39,13 @@ class MultipartUploadUrlsList {
 
 export class RecordRepo extends BaseRepo {
 	public get(recordVOs: RecordVO[]): Promise<RecordResponse> {
-		const data = recordVOs.map((recordVO) => {
-			return {
-				RecordVO: new RecordVO({
-					folder_linkId: recordVO.folder_linkId,
-					recordId: recordVO.recordId,
-					archiveNbr: recordVO.archiveNbr,
-				}),
-			};
-		});
+		const data = recordVOs.map((recordVO) => ({
+			RecordVO: new RecordVO({
+				folder_linkId: recordVO.folder_linkId,
+				recordId: recordVO.recordId,
+				archiveNbr: recordVO.archiveNbr,
+			}),
+		}));
 
 		return this.http.sendRequestPromise<RecordResponse>('/record/get', data, {
 			responseClass: RecordResponse,
@@ -178,11 +176,9 @@ export class RecordRepo extends BaseRepo {
 	}
 
 	public delete(recordVOs: RecordVO[]): Promise<RecordResponse> {
-		const data = recordVOs.map((recordVO) => {
-			return {
-				RecordVO: new RecordVO(recordVO).getCleanVO(),
-			};
-		});
+		const data = recordVOs.map((recordVO) => ({
+			RecordVO: new RecordVO(recordVO).getCleanVO(),
+		}));
 
 		const cache = this.getThumbnailCache();
 		for (const record of recordVOs) {
@@ -202,14 +198,12 @@ export class RecordRepo extends BaseRepo {
 		recordVOs: RecordVO[],
 		destination: FolderVO,
 	): Promise<RecordResponse> {
-		const data = recordVOs.map((recordVO) => {
-			return {
-				RecordVO: new RecordVO(recordVO).getCleanVO(),
-				FolderDestVO: {
-					folder_linkId: destination.folder_linkId,
-				},
-			};
-		});
+		const data = recordVOs.map((recordVO) => ({
+			RecordVO: new RecordVO(recordVO).getCleanVO(),
+			FolderDestVO: {
+				folder_linkId: destination.folder_linkId,
+			},
+		}));
 
 		if (destination.folder_linkId) {
 			this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
@@ -225,14 +219,12 @@ export class RecordRepo extends BaseRepo {
 		recordVOs: RecordVO[],
 		destination: FolderVO,
 	): Promise<RecordResponse> {
-		const data = recordVOs.map((recordVO) => {
-			return {
-				RecordVO: new RecordVO(recordVO).getCleanVO(),
-				FolderDestVO: {
-					folder_linkId: destination.folder_linkId,
-				},
-			};
-		});
+		const data = recordVOs.map((recordVO) => ({
+			RecordVO: new RecordVO(recordVO).getCleanVO(),
+			FolderDestVO: {
+				folder_linkId: destination.folder_linkId,
+			},
+		}));
 
 		if (destination.folder_linkId) {
 			this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
@@ -263,8 +255,6 @@ export class RecordResponse extends BaseResponse {
 	public getRecordVOs() {
 		const data = this.getResultsData();
 
-		return data.map((result) => {
-			return new RecordVO(result[0].RecordVO);
-		});
+		return data.map((result) => new RecordVO(result[0].RecordVO));
 	}
 }

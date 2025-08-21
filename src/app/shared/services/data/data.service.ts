@@ -189,11 +189,9 @@ export class DataService {
 					});
 					return true;
 				})
-				.map((item) => {
-					return {
-						folder_linkId: item.folder_linkId,
-					};
-				}),
+				.map((item) => ({
+					folder_linkId: item.folder_linkId,
+				})),
 		});
 
 		if (!folder.ChildItemVOs.length) {
@@ -401,9 +399,9 @@ export class DataService {
 				originalItemsById.set(item.folder_linkId, item);
 			}
 
-			const sortedItems: ItemVO[] = updated.map((item) => {
-				return originalItemsById.get(item.folder_linkId);
-			});
+			const sortedItems: ItemVO[] = updated.map((item) =>
+				originalItemsById.get(item.folder_linkId),
+			);
 
 			folder1.ChildItemVOs = sortedItems;
 		} else {
@@ -480,9 +478,7 @@ export class DataService {
 	public getItemsByFolderLinkIds(
 		folder_linkIds: (number | string)[],
 	): Array<RecordVO | FolderVO> {
-		return folder_linkIds.map((id) => {
-			return this.getItemByFolderLinkId(Number(id));
-		});
+		return folder_linkIds.map((id) => this.getItemByFolderLinkId(Number(id)));
 	}
 
 	public downloadFile(item: RecordVO, type?: string): Promise<any> {

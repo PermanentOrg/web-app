@@ -100,14 +100,10 @@ export class TagResponse extends BaseResponse {
 			return [];
 		}
 
-		return data[0].map((result) => {
-			return result.TagVO as TagVOData;
-		});
+		return data[0].map((result) => result.TagVO as TagVOData);
 	}
 
 	public getTagVOs(): TagVO[] {
-		return this.getTagVOsData().map((tag) => {
-			return new TagVO(tag);
-		});
+		return this.getTagVOsData().map((tag) => new TagVO(tag));
 	}
 }

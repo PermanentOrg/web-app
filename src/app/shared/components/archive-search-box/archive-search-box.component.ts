@@ -111,17 +111,19 @@ export class ArchiveSearchBoxComponent implements OnInit {
 							.filter((a) => (this.filterFn ? this.filterFn(a) : true)),
 					);
 				} else if (this.control.valid) {
-					return this.apiService.search.archiveByEmail(term).pipe(
-						map((response) => {
-							return response
-								.getArchiveVOs()
-								.filter(
-									(a) =>
-										a.archiveId !==
-										this.accountService?.getArchive()?.archiveId,
-								);
-						}),
-					);
+					return this.apiService.search
+						.archiveByEmail(term)
+						.pipe(
+							map((response) =>
+								response
+									.getArchiveVOs()
+									.filter(
+										(a) =>
+											a.archiveId !==
+											this.accountService?.getArchive()?.archiveId,
+									),
+							),
+						);
 				} else {
 					return of([]);
 				}

@@ -59,15 +59,16 @@ export class FamilySearchImportComponent {
 		}
 
 		this.stage = 'importing';
-		const archivesToCreate = selected.map((person) => {
-			return new ArchiveVO({
-				fullName: person.display.name,
-				type: 'type.archive.person',
-				relationType: this.getRelationshipFromAncestryNumber(
-					person.display.ascendancyNumber,
-				),
-			});
-		});
+		const archivesToCreate = selected.map(
+			(person) =>
+				new ArchiveVO({
+					fullName: person.display.name,
+					type: 'type.archive.person',
+					relationType: this.getRelationshipFromAncestryNumber(
+						person.display.ascendancyNumber,
+					),
+				}),
+		);
 
 		this.waiting = true;
 

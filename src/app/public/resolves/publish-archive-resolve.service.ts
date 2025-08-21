@@ -24,9 +24,7 @@ export class PublishArchiveResolveService {
 		const archiveNbr = route.parent.data.publishedItem.archiveArchiveNbr;
 		return this.api.archive
 			.get([new ArchiveVO({ archiveId, archiveNbr })])
-			.then((response: ArchiveResponse): ArchiveVO => {
-				return response.getArchiveVO();
-			});
+			.then((response: ArchiveResponse): ArchiveVO => response.getArchiveVO());
 		// return this.api.publish.getResource(route.params.publishUrlToken)
 		//   .then((response: PublishResponse): RecordVO | any => {
 		//     if (response.getRecordVO()) {

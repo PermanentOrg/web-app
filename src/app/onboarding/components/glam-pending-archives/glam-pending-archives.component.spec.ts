@@ -7,11 +7,9 @@ import { OnboardingService } from '../../services/onboarding.service';
 import { GlamPendingArchivesComponent } from './glam-pending-archives.component';
 
 const mockAccountService = {
-	getAccount: () => {
-		return {
-			fullName: 'John Doe',
-		};
-	},
+	getAccount: () => ({
+		fullName: 'John Doe',
+	}),
 };
 
 describe('GlamPendingArchivesComponent', () => {

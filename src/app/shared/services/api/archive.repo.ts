@@ -11,14 +11,12 @@ import { getFirst } from '../http-v2/http-v2.service';
 
 export class ArchiveRepo extends BaseRepo {
 	public get(archives: ArchiveVO[]): Promise<ArchiveResponse> {
-		const data = archives.map((archive) => {
-			return {
-				ArchiveVO: new ArchiveVO({
-					archiveNbr: archive.archiveNbr,
-					archiveId: archive.archiveId,
-				}),
-			};
-		});
+		const data = archives.map((archive) => ({
+			ArchiveVO: new ArchiveVO({
+				archiveNbr: archive.archiveNbr,
+				archiveId: archive.archiveId,
+			}),
+		}));
 
 		return this.http.sendRequestPromise<ArchiveResponse>('/archive/get', data, {
 			responseClass: ArchiveResponse,
@@ -88,9 +86,7 @@ export class ArchiveRepo extends BaseRepo {
 			archive = [archive];
 		}
 
-		const data = archive.map((archiveVo) => {
-			return { ArchiveVO: archiveVo };
-		});
+		const data = archive.map((archiveVo) => ({ ArchiveVO: archiveVo }));
 
 		return this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/post',
@@ -235,11 +231,9 @@ export class ArchiveRepo extends BaseRepo {
 	}
 
 	public addUpdateProfileItems(profileItems: ProfileItemVOData[]) {
-		const data = profileItems.map((i) => {
-			return {
-				Profile_itemVO: i,
-			};
-		});
+		const data = profileItems.map((i) => ({
+			Profile_itemVO: i,
+		}));
 
 		return this.http.sendRequestPromise<ArchiveResponse>(
 			'/profile_item/safeAddUpdate',
@@ -289,31 +283,25 @@ export class ArchiveResponse extends BaseResponse {
 
 	public getArchiveVOs(): ArchiveVO[] {
 		const data = this.getResultsData();
-		const archives = data.map((result) => {
-			return result.map((resultList) => {
-				return new ArchiveVO(resultList.ArchiveVO);
-			});
-		});
+		const archives = data.map((result) =>
+			result.map((resultList) => new ArchiveVO(resultList.ArchiveVO)),
+		);
 
 		return flatten(archives);
 	}
 
 	public getAccountVOs() {
 		const data = this.getResultsData();
-		const accounts = data.map((result) => {
-			return result.map((resultList) => {
-				return new AccountVO(resultList.AccountVO);
-			});
-		});
+		const accounts = data.map((result) =>
+			result.map((resultList) => new AccountVO(resultList.AccountVO)),
+		);
 
 		return flatten(accounts);
 	}
 
 	public getProfileItemVOs() {
 		const data = flatten(this.getResultsData());
-		const profileItems = data.map((result) => {
-			return result.Profile_itemVO;
-		});
+		const profileItems = data.map((result) => result.Profile_itemVO);
 
 		return profileItems as ProfileItemVOData[];
 	}
