@@ -184,8 +184,6 @@ export class AllArchivesComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	async onRemoveClick(archive: ArchiveVO) {}
-
 	onCreateArchiveClick() {
 		const deferred = new Deferred();
 

@@ -411,7 +411,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 					copyFromInputElement(input);
 					deferred.resolve();
 				})
-				.catch(() => {});
+				.catch();
 		}
 	}
 

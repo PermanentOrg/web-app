@@ -134,7 +134,7 @@ export class ConnectionsDialogComponent {
 						break;
 				}
 			})
-			.catch(() => {});
+			.catch();
 	}
 
 	onSentRelationRequestClick(relation: RelationVO) {
@@ -151,7 +151,7 @@ export class ConnectionsDialogComponent {
 						break;
 				}
 			})
-			.catch(() => {});
+			.catch();
 	}
 
 	onRelationRequestClick(relation: RelationVO, skipDecline = false) {
@@ -232,7 +232,7 @@ export class ConnectionsDialogComponent {
 				this.sentConnectionsRequests.push(newRelation);
 				return await this.editRelation(newRelation);
 			})
-			.catch(() => {});
+			.catch();
 	}
 
 	async editRelation(relation: RelationVO) {

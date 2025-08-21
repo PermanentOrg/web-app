@@ -14,7 +14,6 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { AccountService } from '@shared/services/account/account.service';
-import { DragServiceEvent } from '@shared/services/drag/drag.service';
 import {
 	HasSubscriptions,
 	unsubscribeAll,
@@ -117,6 +116,4 @@ export class UploadButtonComponent implements OnDestroy, HasSubscriptions {
 		});
 		return true;
 	}
-
-	onDragServiceEvent(_dragEvent: DragServiceEvent) {}
 }
