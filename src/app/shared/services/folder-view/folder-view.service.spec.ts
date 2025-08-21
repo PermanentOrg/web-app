@@ -8,7 +8,6 @@ import { FolderView } from './folder-view.enum';
 describe('FolderViewService', () => {
 	beforeEach(() => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
-		config.providers;
 		TestBed.configureTestingModule(config);
 	});
 

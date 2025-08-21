@@ -155,7 +155,6 @@ export default typescriptEslint.config([
 			'@typescript-eslint/no-empty-function': 'off',
 			'@typescript-eslint/no-shadow': 'off',
 			'@typescript-eslint/no-throw-literal': 'off',
-			'@typescript-eslint/no-unused-expressions': 'off',
 			'@typescript-eslint/no-use-before-define': 'off',
 			'@typescript-eslint/no-useless-constructor': 'off',
 			'@typescript-eslint/prefer-for-of': 'off',
