@@ -20,12 +20,6 @@ interface FamilySearchPersonI {
 	permExists?: boolean;
 }
 
-interface FamilyMember {
-	name: string;
-	isSelected?: boolean;
-	born?: number;
-}
-
 @Component({
 	selector: 'pr-family-search-import',
 	templateUrl: './family-search-import.component.html',

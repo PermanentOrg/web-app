@@ -1,13 +1,5 @@
-import {
-	AccountVO,
-	AccountPasswordVO,
-	ArchiveVO,
-	AuthVO,
-	ConnectorOverviewVO,
-	SimpleVO,
-} from '@root/app/models';
+import { ArchiveVO, ConnectorOverviewVO, SimpleVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export class ConnectorRepo extends BaseRepo {

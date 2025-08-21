@@ -1,5 +1,4 @@
 import {
-	HttpClient,
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
@@ -42,7 +41,6 @@ class MockSecretService {
 
 describe('HttpV2Service', () => {
 	let service: HttpV2Service;
-	let httpClient: HttpClient;
 	let httpTestingController: HttpTestingController;
 	let storage: StorageService;
 
@@ -60,7 +58,6 @@ describe('HttpV2Service', () => {
 			],
 		});
 		service = TestBed.inject(HttpV2Service);
-		httpClient = TestBed.inject(HttpClient);
 		httpTestingController = TestBed.inject(HttpTestingController);
 		storage = TestBed.inject(StorageService);
 
@@ -268,14 +265,14 @@ describe('HttpV2Service', () => {
 		MockSecretService.stelaDomain = 'https://api.local.permanent.org/api/';
 
 		service.post('/v2/health', {}, HealthResponse).toPromise();
-		const req = httpTestingController.expectOne(
+		httpTestingController.expectOne(
 			'https://api.local.permanent.org/api/v2/health',
 		);
 	});
 
 	it('uses the default api URL if no stela domain is defined', () => {
 		service.post('/v2/health', {}, HealthResponse).toPromise();
-		const req = httpTestingController.expectOne(
+		httpTestingController.expectOne(
 			'https://local.permanent.org/api/v2/health',
 		);
 	});
@@ -286,7 +283,7 @@ describe('HttpV2Service', () => {
 		service
 			.post('/v2/health', {}, HealthResponse, { useStelaDomain: false })
 			.toPromise();
-		const req = httpTestingController.expectOne(
+		httpTestingController.expectOne(
 			'https://local.permanent.org/api/v2/health',
 		);
 	});

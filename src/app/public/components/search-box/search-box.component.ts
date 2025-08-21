@@ -21,8 +21,6 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
-const ANIMATION_DURATION = 1000;
-
 @Component({
 	selector: 'pr-search-box',
 	templateUrl: './search-box.component.html',

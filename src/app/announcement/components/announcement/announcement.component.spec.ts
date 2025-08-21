@@ -89,7 +89,7 @@ describe('AnnouncementComponent', () => {
 	});
 
 	it('should be dismissable', async () => {
-		const { find, fixture, element } = await defaultRender([currentTestEvent]);
+		const { find, fixture } = await defaultRender([currentTestEvent]);
 
 		expect(find('.dismiss-button').length).toBe(1);
 		find('.dismiss-button').nativeElement.click();
@@ -99,7 +99,7 @@ describe('AnnouncementComponent', () => {
 	});
 
 	it('should set dismissed setting in localStorage', async () => {
-		const { find, fixture, instance } = await defaultRender([currentTestEvent]);
+		const { find, fixture } = await defaultRender([currentTestEvent]);
 
 		expect(find('.dismiss-button').length).toBe(1);
 		find('.dismiss-button').nativeElement.click();

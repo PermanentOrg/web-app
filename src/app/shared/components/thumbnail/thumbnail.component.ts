@@ -4,8 +4,6 @@ import {
 	ElementRef,
 	HostListener,
 	DoCheck,
-	Output,
-	EventEmitter,
 	Inject,
 	OnInit,
 } from '@angular/core';

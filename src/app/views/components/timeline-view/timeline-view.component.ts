@@ -18,27 +18,12 @@ import {
 	TimelineEventPropertiesResult,
 	DataItem,
 } from 'vis-timeline/standalone';
-import { ActivatedRoute, Route, Router } from '@angular/router';
-import {
-	FolderVO,
-	RecordVO,
-	ItemVO,
-	TimezoneVO,
-	TimezoneVOData,
-} from '@models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FolderVO, RecordVO, ItemVO, TimezoneVOData } from '@models';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { BasePortalOutlet } from '@angular/cdk/portal';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
-import {
-	remove,
-	find,
-	throttle,
-	minBy,
-	maxBy,
-	debounce,
-	countBy,
-} from 'lodash';
+import { find, throttle, maxBy, debounce, countBy } from 'lodash';
 import { Subscription } from 'rxjs';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { DeviceService } from '@shared/services/device/device.service';
@@ -58,7 +43,6 @@ import {
 	TimelineDataItem,
 	TimelineGroupTimespan,
 	Minute,
-	Year,
 	GroupByTimespan,
 	GetTimespanFromRange,
 	getBestFitTimespanForItems,
@@ -191,8 +175,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.setMaxZoom();
 		this.addPixelMargin();
 		this.timeline.fit();
-
-		const elem = this.elementRef.nativeElement as HTMLDivElement;
 	}
 
 	ngOnDestroy() {
@@ -205,7 +187,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	@HostListener('window:resize', ['$event'])
-	onViewportResize(event) {
+	onViewportResize() {
 		this.debouncedResizeHandler();
 	}
 
@@ -522,8 +504,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	findItemsInRange(start: number, end: number) {
 		const itemIds = [];
-		const startDate = new Date(start); // Convert start to a Date object
-		const endDate = new Date(end); // Convert end to a Date object
 		this.timelineItems.forEach((item) => {
 			const itemStart = dateTypeToNumber(item.start);
 			if (

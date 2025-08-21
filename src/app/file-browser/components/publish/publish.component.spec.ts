@@ -38,7 +38,6 @@ const mockApiService = {
 
 describe('PublishComponent', () => {
 	let shallow: Shallow<PublishComponent>;
-	let messageShown = false;
 
 	beforeEach(() => {
 		shallow = new Shallow(PublishComponent, FileBrowserComponentsModule)
@@ -51,9 +50,7 @@ describe('PublishComponent', () => {
 			.provide(EventService)
 			.dontMock(EventService)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			});
 	});
 

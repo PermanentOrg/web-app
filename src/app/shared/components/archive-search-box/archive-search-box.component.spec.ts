@@ -4,12 +4,7 @@ import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
-import {
-	ComponentFixture,
-	fakeAsync,
-	TestBed,
-	tick,
-} from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ArchiveVO, RelationVO } from '@models';
@@ -192,12 +187,12 @@ describe('ArchiveSearchBoxComponent', () => {
 		const relation2 = new RelationVO({});
 		relation2.RelationArchiveVO = archive2;
 
-		const getAllSpy = spyOn(relationshipService, 'getSync').and.returnValue([
+		spyOn(relationshipService, 'getSync').and.returnValue([
 			relation1,
 			relation2,
 		]);
 
-		const sub = component.searchResults$.subscribe((results) => {});
+		component.searchResults$.subscribe(() => {});
 
 		component.onFocus();
 		tick(500);

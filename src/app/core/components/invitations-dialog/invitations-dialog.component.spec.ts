@@ -29,7 +29,6 @@ const mockApiService = {
 
 describe('InvitationsDialog', () => {
 	let shallow: Shallow<InvitationsDialogComponent>;
-	let messageShown: boolean = false;
 
 	beforeEach(() => {
 		shallow = new Shallow(InvitationsDialogComponent, CoreModule)
@@ -41,9 +40,7 @@ describe('InvitationsDialog', () => {
 			.mock(AccountService, mockAccountService)
 			.mock(ApiService, mockApiService)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			});
 	});
 

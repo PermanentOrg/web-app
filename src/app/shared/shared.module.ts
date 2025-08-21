@@ -5,7 +5,7 @@ import { FormInputComponent } from '@shared/components/form-input/form-input.com
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
-import { RouterModule, Scroll } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import {
 	NgbDatepickerModule,
 	NgbDatepickerConfig,
@@ -21,11 +21,7 @@ import {
 	FontAwesomeModule,
 	FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
-import {
-	faFileArchive,
-	fas,
-	faPenSquare,
-} from '@fortawesome/free-solid-svg-icons';
+import { faFileArchive, faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import OpenSeadragon from 'openseadragon';
 import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';

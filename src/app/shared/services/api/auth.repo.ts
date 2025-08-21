@@ -6,12 +6,7 @@ import {
 	AccountPasswordVOData,
 	SimpleVO,
 } from '@root/app/models';
-import {
-	BaseResponse,
-	BaseRepo,
-	CSRFResponse,
-} from '@shared/services/api/base';
-import { map } from 'rxjs/operators';
+import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { Observable } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
 

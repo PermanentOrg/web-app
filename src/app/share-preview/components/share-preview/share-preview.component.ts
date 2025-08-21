@@ -18,12 +18,8 @@ import {
 } from '@angular/forms';
 
 import { APP_CONFIG } from '@root/app/app.config';
-import {
-	matchControlValidator,
-	trimWhitespace,
-	copyFromInputElement,
-} from '@shared/utilities/forms';
-import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
+import { trimWhitespace, copyFromInputElement } from '@shared/utilities/forms';
+import { AuthResponse } from '@shared/services/api/index.repo';
 import { DeviceService } from '@shared/services/device/device.service';
 import { Subscription, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -554,7 +550,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 			.then(async (response: AuthResponse) => {
 				if (response.needsMFA()) {
 					// send to mfa verification
-					const queryParams = {};
 					if (this.isLinkShare) {
 						this.accountService.setRedirect(['/share', this.shareToken], {
 							queryParams: { requestAccess: true },

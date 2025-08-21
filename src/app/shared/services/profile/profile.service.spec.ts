@@ -55,14 +55,11 @@ class DummyModule {}
 
 describe('ProfileService', () => {
 	let shallow: Shallow<ProfileService>;
-	let messageShown = false;
 
 	beforeEach(() => {
 		shallow = new Shallow(ProfileService, DummyModule)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			})
 			.provideMock({ provide: ApiService, useValue: mockApiService })
 			.provideMock({

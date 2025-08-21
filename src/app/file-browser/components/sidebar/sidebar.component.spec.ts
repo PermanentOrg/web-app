@@ -137,7 +137,7 @@ describe('SidebarComponent', () => {
 	});
 
 	it('should hide the original format for folders', async () => {
-		const { instance, find, fixture } = await shallow.render();
+		const { instance, fixture } = await shallow.render();
 
 		instance.isRecord = false;
 

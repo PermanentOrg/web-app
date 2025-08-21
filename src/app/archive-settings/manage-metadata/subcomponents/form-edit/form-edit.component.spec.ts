@@ -173,7 +173,7 @@ describe('FormEditComponent', () => {
 		subject.subscribe(() => {
 			emitted = true;
 		});
-		const { find, fixture } = await defaultRender();
+		const { find } = await defaultRender();
 		find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 
 		expect(emitted).toBeTrue();

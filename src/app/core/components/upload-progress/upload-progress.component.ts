@@ -6,8 +6,6 @@ import {
 	UploadSessionStatus,
 } from '@core/services/upload/upload.session';
 
-const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
-
 @Component({
 	selector: 'pr-upload-progress',
 	templateUrl: './upload-progress.component.html',

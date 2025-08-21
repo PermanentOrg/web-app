@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { partition, remove, find, findIndex } from 'lodash';
+import { remove, find, findIndex } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 import {
@@ -9,7 +9,6 @@ import {
 	ItemVO,
 	FolderVOData,
 	RecordVOData,
-	SortType,
 } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import {

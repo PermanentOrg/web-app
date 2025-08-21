@@ -1,8 +1,6 @@
 import { Observable } from 'rxjs';
 import {
 	RouterEvent,
-	RoutesRecognized,
-	NavigationEnd,
 	ActivatedRouteSnapshot,
 	ActivationEnd,
 } from '@angular/router';

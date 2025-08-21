@@ -5,8 +5,6 @@ import {
 	AccountVO,
 	ArchiveVO,
 	ItemVO,
-	ShareVO,
-	AccessRole,
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';

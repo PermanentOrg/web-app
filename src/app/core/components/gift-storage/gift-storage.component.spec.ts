@@ -13,7 +13,6 @@ import { GiftStorageComponent } from './gift-storage.component';
 
 describe('GiftStorageComponent', () => {
 	let shallow: Shallow<GiftStorageComponent>;
-	let messageShown = false;
 
 	const mockAccount = new AccountVO({ accountId: 1 });
 
@@ -49,9 +48,7 @@ describe('GiftStorageComponent', () => {
 			.provide([HttpClient, HttpHandler])
 			.mock(AccountService, mockAccountService)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			})
 			.mock(DialogCdkService, mockDialog)
 			.mock(ApiService, mockApiService);

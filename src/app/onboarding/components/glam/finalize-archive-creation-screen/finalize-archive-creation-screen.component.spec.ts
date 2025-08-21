@@ -29,7 +29,7 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
 	it('should display the archive name correctly', async () => {
 		const name = 'John Doe';
 		onboardingService.registerArchive(new ArchiveVO({ fullName: name }));
-		const { fixture, find } = await shallow.render();
+		const { find } = await shallow.render();
 		const archiveNameElement = find('.archive-info p');
 
 		expect(archiveNameElement.nativeElement.textContent).toContain(
@@ -73,7 +73,7 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
 	});
 
 	it('should call finalizeArchive when the Done button is clicked', async () => {
-		const { instance, fixture, find } = await shallow.render();
+		const { instance, find } = await shallow.render();
 		const doneButton = find('pr-button');
 		spyOn(instance, 'finalizeArchive');
 		doneButton.triggerEventHandler('buttonClick', null);

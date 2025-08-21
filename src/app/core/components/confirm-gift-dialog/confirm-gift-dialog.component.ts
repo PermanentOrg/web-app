@@ -1,7 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { BehaviorSubject } from 'rxjs';
-import { GiftingResponse } from '@shared/services/api/billing.repo';
 
 @Component({
 	selector: 'pr-confirm-gift-dialog',

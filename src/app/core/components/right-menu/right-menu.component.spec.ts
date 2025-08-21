@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 
@@ -6,7 +6,6 @@ import { RightMenuComponent } from '@core/components/right-menu/right-menu.compo
 import { FolderVO, ArchiveVO } from '@models';
 import { DataService } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('RightMenuComponent', () => {
 	let component: RightMenuComponent;

@@ -72,7 +72,7 @@ describe('LegacyContactEditComponent', () => {
 	});
 
 	it('should be able to save a legacy contact', async () => {
-		const { instance, find, fixture } = await shallow.render();
+		const { find, fixture } = await shallow.render();
 
 		fillOutForm(find, 'save@example.com', 'Save Test');
 
@@ -111,7 +111,7 @@ describe('LegacyContactEditComponent', () => {
 			name: 'Existing Contact',
 			email: 'existing@example.com',
 		};
-		const { instance, find, fixture } = await shallow.render({
+		const { find, fixture } = await shallow.render({
 			bind: {
 				legacyContact,
 			},
@@ -133,7 +133,7 @@ describe('LegacyContactEditComponent', () => {
 
 	it('should handle API errors on creation', async () => {
 		MockDirectiveRepo.throwError = true;
-		const { instance, find, fixture } = await shallow.render();
+		const { find, fixture } = await shallow.render();
 
 		fillOutForm(find, 'error@example.com', 'Throw Error');
 
@@ -151,7 +151,7 @@ describe('LegacyContactEditComponent', () => {
 			name: 'Test',
 			email: 'test@example.com',
 		};
-		const { instance, find, fixture } = await shallow.render({
+		const { find, fixture } = await shallow.render({
 			bind: {
 				legacyContact,
 			},
@@ -168,7 +168,7 @@ describe('LegacyContactEditComponent', () => {
 	});
 
 	it('should emit an output after saving (creation)', async () => {
-		const { instance, find, fixture, outputs } = await shallow.render();
+		const { find, fixture, outputs } = await shallow.render();
 
 		fillOutForm(find, 'output@example.com', 'Test Output');
 
@@ -180,7 +180,7 @@ describe('LegacyContactEditComponent', () => {
 	});
 
 	it('should emit an output after saving (update)', async () => {
-		const { instance, find, fixture, outputs } = await shallow.render({
+		const { find, fixture, outputs } = await shallow.render({
 			bind: {
 				legacyContact: {
 					id: '1',

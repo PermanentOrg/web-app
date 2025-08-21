@@ -13,13 +13,11 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.c
 
 import gsap from 'gsap';
 import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
-import { PromptService } from '@shared/services/prompt/prompt.service';
 import { MainComponent } from '@core/components/main/main.component';
 import { FolderVO } from '@models';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';
 import { AccountService } from '../account/account.service';
-import { DeviceService } from '../device/device.service';
 import { DataService } from '../data/data.service';
 
 export type DragTargetType = 'folder' | 'record';
@@ -55,7 +53,6 @@ export type DragServiceEvent =
 	| DragServiceStartEndEvent
 	| DragServiceEnterLeaveEvent;
 
-const DRAG_CURSOR_OFFSET_X = 15;
 @Injectable()
 export class DragService {
 	private subject = new Subject<DragServiceEvent>();
@@ -240,7 +237,6 @@ export class DragService {
 	private setCursorPosition(event: MouseEvent) {
 		if (!(this.dragSrc instanceof MainComponent)) {
 			const width = this.dragCursorElement.clientWidth;
-			const height = this.dragCursorElement.clientHeight;
 			const targetX = event.clientX - width / 2;
 			const targetY = event.clientY - 5;
 			this.renderer.setStyle(

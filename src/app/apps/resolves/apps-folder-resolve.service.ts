@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-	ActivatedRouteSnapshot,
-	RouterStateSnapshot,
-	Router,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { find } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
