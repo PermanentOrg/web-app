@@ -30,26 +30,18 @@ const mockPromoData = {
 };
 
 const mockAccountService = {
-	refreshAccount: (): Promise<void> => {
-		return Promise.resolve();
-	},
+	refreshAccount: (): Promise<void> => Promise.resolve(),
 	setAccount: (account: AccountVO): void => {},
-	getAccount: (): AccountVO => {
-		return new AccountVO({ spaceLeft: 10000, spaceTotal: 10000, accountId: 1 });
-	},
+	getAccount: (): AccountVO =>
+		new AccountVO({ spaceLeft: 10000, spaceTotal: 10000, accountId: 1 }),
 	isLoggedIn: (): boolean => true,
 };
 
 const mockPledgeService = {
-	loadPledge: (id): Promise<any> => {
-		return Promise.resolve();
-	},
-	createBillingPaymentVo: (account: AccountVO): BillingPaymentVO => {
-		return new BillingPaymentVO({ spaceAmountInGb: 5 });
-	},
-	linkAccount: (account: AccountVO): Promise<void> => {
-		return Promise.resolve();
-	},
+	loadPledge: (id): Promise<any> => Promise.resolve(),
+	createBillingPaymentVo: (account: AccountVO): BillingPaymentVO =>
+		new BillingPaymentVO({ spaceAmountInGb: 5 }),
+	linkAccount: (account: AccountVO): Promise<void> => Promise.resolve(),
 };
 
 const mockApiService = {
@@ -57,9 +49,8 @@ const mockApiService = {
 		claimPledge: (
 			billingPaymentVO: BillingPaymentVO,
 			pledgeId: string,
-		): Promise<BillingResponse> => {
-			return Promise.resolve(new BillingResponse(mockPromoData));
-		},
+		): Promise<BillingResponse> =>
+			Promise.resolve(new BillingResponse(mockPromoData)),
 	},
 };
 

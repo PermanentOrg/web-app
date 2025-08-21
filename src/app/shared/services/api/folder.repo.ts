@@ -25,15 +25,13 @@ export class FolderRepo extends BaseRepo {
 	}
 
 	public get(folderVOs: FolderVO[]): Promise<FolderResponse> {
-		const data = folderVOs.map((folderVO) => {
-			return {
-				FolderVO: {
-					archiveNbr: folderVO.archiveNbr,
-					folder_linkId: folderVO.folder_linkId,
-					folderId: folderVO.folderId,
-				},
-			};
-		});
+		const data = folderVOs.map((folderVO) => ({
+			FolderVO: {
+				archiveNbr: folderVO.archiveNbr,
+				folder_linkId: folderVO.folder_linkId,
+				folderId: folderVO.folderId,
+			},
+		}));
 
 		return this.http.sendRequestPromise<FolderResponse>('/folder/get', data, {
 			responseClass: FolderResponse,
@@ -41,15 +39,13 @@ export class FolderRepo extends BaseRepo {
 	}
 
 	public getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
-		const data = folderVOs.map((folderVO) => {
-			return {
-				FolderVO: {
-					archiveNbr: folderVO.archiveNbr,
-					folder_linkId: folderVO.folder_linkId,
-					folderId: folderVO.folderId,
-				},
-			};
-		});
+		const data = folderVOs.map((folderVO) => ({
+			FolderVO: {
+				archiveNbr: folderVO.archiveNbr,
+				folder_linkId: folderVO.folder_linkId,
+				folderId: folderVO.folderId,
+			},
+		}));
 
 		return this.http.sendRequestPromise<FolderResponse>(
 			'/folder/getWithChildren',
@@ -90,11 +86,9 @@ export class FolderRepo extends BaseRepo {
 	}
 
 	public getLeanItems(folderVOs: FolderVO[]): Observable<FolderResponse> {
-		const data = folderVOs.map((folderVO) => {
-			return {
-				FolderVO: new FolderVO(folderVO),
-			};
-		});
+		const data = folderVOs.map((folderVO) => ({
+			FolderVO: new FolderVO(folderVO),
+		}));
 
 		return this.http.sendRequest<FolderResponse>('/folder/getLeanItems', data, {
 			responseClass: FolderResponse,
@@ -102,11 +96,9 @@ export class FolderRepo extends BaseRepo {
 	}
 
 	public post(folderVOs: FolderVO[]): Promise<FolderResponse> {
-		const data = folderVOs.map((folderVO) => {
-			return {
-				FolderVO: new FolderVO(folderVO),
-			};
-		});
+		const data = folderVOs.map((folderVO) => ({
+			FolderVO: new FolderVO(folderVO),
+		}));
 
 		return this.http.sendRequestPromise<FolderResponse>('/folder/post', data, {
 			responseClass: FolderResponse,
@@ -170,11 +162,9 @@ export class FolderRepo extends BaseRepo {
 	}
 
 	public delete(folderVOs: FolderVO[]): Promise<FolderResponse> {
-		const data = folderVOs.map((folderVO) => {
-			return {
-				FolderVO: new FolderVO(folderVO),
-			};
-		});
+		const data = folderVOs.map((folderVO) => ({
+			FolderVO: new FolderVO(folderVO),
+		}));
 
 		return this.http.sendRequestPromise<FolderResponse>(
 			'/folder/delete',
@@ -187,14 +177,12 @@ export class FolderRepo extends BaseRepo {
 		folderVOs: FolderVO[],
 		destination: FolderVO,
 	): Promise<FolderResponse> {
-		const data = folderVOs.map((folderVO) => {
-			return {
-				FolderVO: new FolderVO(folderVO),
-				FolderDestVO: {
-					folder_linkId: destination.folder_linkId,
-				},
-			};
-		});
+		const data = folderVOs.map((folderVO) => ({
+			FolderVO: new FolderVO(folderVO),
+			FolderDestVO: {
+				folder_linkId: destination.folder_linkId,
+			},
+		}));
 
 		return this.http.sendRequestPromise<FolderResponse>('/folder/move', data, {
 			responseClass: FolderResponse,
@@ -206,14 +194,12 @@ export class FolderRepo extends BaseRepo {
 		folderVOs: FolderVO[],
 		destination: FolderVO,
 	): Promise<FolderResponse> {
-		const data = folderVOs.map((folderVO) => {
-			return {
-				FolderVO: new FolderVO(folderVO),
-				FolderDestVO: {
-					folder_linkId: destination.folder_linkId,
-				},
-			};
-		});
+		const data = folderVOs.map((folderVO) => ({
+			FolderVO: new FolderVO(folderVO),
+			FolderDestVO: {
+				folder_linkId: destination.folder_linkId,
+			},
+		}));
 
 		return this.http.sendRequestPromise<FolderResponse>('/folder/copy', data, {
 			responseClass: FolderResponse,
@@ -238,14 +224,12 @@ export class FolderRepo extends BaseRepo {
 	}
 
 	public sort(folderVOs: FolderVO[]): Promise<FolderResponse> {
-		const data = folderVOs.map((folderVO) => {
-			return {
-				FolderVO: new FolderVO({
-					folder_linkId: folderVO.folder_linkId,
-					sort: folderVO.sort,
-				}),
-			};
-		});
+		const data = folderVOs.map((folderVO) => ({
+			FolderVO: new FolderVO({
+				folder_linkId: folderVO.folder_linkId,
+				sort: folderVO.sort,
+			}),
+		}));
 
 		return this.http.sendRequestPromise<FolderResponse>('/folder/sort', data, {
 			responseClass: FolderResponse,
@@ -283,8 +267,6 @@ export class FolderResponse extends BaseResponse {
 	public getFolderVOs(initChildren?: boolean) {
 		const data = this.getResultsData();
 
-		return data.map((result) => {
-			return new FolderVO(result[0].FolderVO, initChildren);
-		});
+		return data.map((result) => new FolderVO(result[0].FolderVO, initChildren));
 	}
 }

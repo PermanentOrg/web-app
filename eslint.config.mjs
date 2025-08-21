@@ -84,7 +84,6 @@ export default typescriptEslint.config([
 			'import/no-import-module-exports': 'off',
 			'no-underscore-dangle': 'off',
 			'max-classes-per-file': 'off',
-			'arrow-body-style': 'off',
 			'no-console': [
 				'error',
 				{

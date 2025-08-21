@@ -19,11 +19,12 @@ describe('DeviceService', () => {
 	});
 
 	it('should detect mobile width correctly', async () => {
-		spyOn(window, 'matchMedia').and.callFake((query: string) => {
-			return {
-				matches: query !== '(min-width: 900px)',
-			} as MediaQueryList;
-		});
+		spyOn(window, 'matchMedia').and.callFake(
+			(query: string) =>
+				({
+					matches: query !== '(min-width: 900px)',
+				}) as MediaQueryList,
+		);
 
 		const { instance } = await shallow.createService();
 

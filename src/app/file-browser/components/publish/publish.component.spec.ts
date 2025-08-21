@@ -27,12 +27,9 @@ const mockApiService = {
 		copy: (
 			folderVOs: FolderVO[],
 			destination: FolderVO,
-		): Promise<FolderResponse> => {
-			return Promise.resolve(new FolderResponse({}));
-		},
-		navigateLean: (folder: FolderVO): Observable<FolderResponse> => {
-			return new Observable<FolderResponse>();
-		},
+		): Promise<FolderResponse> => Promise.resolve(new FolderResponse({})),
+		navigateLean: (folder: FolderVO): Observable<FolderResponse> =>
+			new Observable<FolderResponse>(),
 	},
 };
 

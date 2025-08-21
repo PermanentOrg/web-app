@@ -35,9 +35,7 @@ export class RelationshipService {
 
 	get(): Promise<RelationVO[]> {
 		if (!this.relations || this.needsFetch()) {
-			return this.update().then(() => {
-				return this.relations;
-			});
+			return this.update().then(() => this.relations);
 		} else {
 			return Promise.resolve(this.relations);
 		}
@@ -84,9 +82,11 @@ export class RelationshipService {
 	}
 
 	hasRelation(archive: ArchiveVO) {
-		const matchArchive = find(this.relations, (relation: RelationVO) => {
-			return relation.RelationArchiveVO.archiveId === archive.archiveId;
-		});
+		const matchArchive = find(
+			this.relations,
+			(relation: RelationVO) =>
+				relation.RelationArchiveVO.archiveId === archive.archiveId,
+		);
 
 		if (matchArchive) {
 			return true;
@@ -105,8 +105,6 @@ export class RelationshipService {
 	}
 
 	searchRelationsByName(query: string) {
-		return this.fuse.search(query).map((i) => {
-			return i.item as RelationVO;
-		});
+		return this.fuse.search(query).map((i) => i.item as RelationVO);
 	}
 }

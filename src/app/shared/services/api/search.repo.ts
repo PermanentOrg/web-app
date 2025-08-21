@@ -111,11 +111,9 @@ export class SearchResponse extends BaseResponse {
 			return [];
 		}
 
-		const archives = data.map((result) => {
-			return result.map((resultList) => {
-				return new ArchiveVO(resultList.ArchiveVO);
-			});
-		});
+		const archives = data.map((result) =>
+			result.map((resultList) => new ArchiveVO(resultList.ArchiveVO)),
+		);
 
 		return flatten(archives);
 	}
@@ -145,8 +143,6 @@ export class SearchResponse extends BaseResponse {
 			return [];
 		}
 
-		return data[0].map((result) => {
-			return new RecordVO(result.RecordVO);
-		});
+		return data[0].map((result) => new RecordVO(result.RecordVO));
 	}
 }

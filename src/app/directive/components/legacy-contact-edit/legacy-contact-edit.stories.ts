@@ -64,35 +64,33 @@ interface StoryArgs {
 	throwError?: boolean;
 }
 
-const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => {
-	return {
-		render: () => {
-			MockDirectiveRepo.reset();
-			MockDirectiveRepo.throwError = !!args.throwError;
-			if (args.editing) {
-				return {
-					props: {
-						legacyContact: args.legacyContact,
-						savedLegacyContact: savedAction,
-					},
-				};
-			}
+const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => ({
+	render: () => {
+		MockDirectiveRepo.reset();
+		MockDirectiveRepo.throwError = !!args.throwError;
+		if (args.editing) {
 			return {
 				props: {
+					legacyContact: args.legacyContact,
 					savedLegacyContact: savedAction,
 				},
 			};
-		},
-		moduleMetadata: {
-			providers: [
-				{
-					provide: '__force_rerender_on_propschange__',
-					useValue: JSON.stringify(args),
-				},
-			],
-		},
-	};
-};
+		}
+		return {
+			props: {
+				savedLegacyContact: savedAction,
+			},
+		};
+	},
+	moduleMetadata: {
+		providers: [
+			{
+				provide: '__force_rerender_on_propschange__',
+				useValue: JSON.stringify(args),
+			},
+		],
+	},
+});
 
 export const Creating: Story = StoryTemplate({
 	throwError: false,

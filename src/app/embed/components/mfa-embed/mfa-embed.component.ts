@@ -39,9 +39,7 @@ export class MfaEmbedComponent {
 
 		this.accountService
 			.verifyMfa(formValue.token)
-			.then(() => {
-				return this.accountService.switchToDefaultArchive();
-			})
+			.then(() => this.accountService.switchToDefaultArchive())
 			.then((_: ArchiveResponse) => {
 				this.waiting = false;
 				this.iFrame.setParentUrl('/app');

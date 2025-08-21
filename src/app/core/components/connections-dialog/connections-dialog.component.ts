@@ -93,12 +93,10 @@ export class ConnectionsDialogComponent {
 			}
 		});
 
-		this.connectionOptions = this.prConstants.getRelations().map((type) => {
-			return {
-				text: type.name,
-				value: type.type,
-			};
-		});
+		this.connectionOptions = this.prConstants.getRelations().map((type) => ({
+			text: type.name,
+			value: type.type,
+		}));
 
 		if (this.route.snapshot.queryParams.tab) {
 			const tab = this.route.snapshot.queryParams.tab as ConnectionsTab;

@@ -145,9 +145,10 @@ export class ConnectorComponent implements OnInit {
 						placeholder: 'Number of generations',
 						type: 'select',
 						initialValue: generationsToImport.toString(),
-						selectOptions: [1, 2, 3, 4, 5, 6, 7].map((i) => {
-							return { text: i, value: i.toString() };
-						}),
+						selectOptions: [1, 2, 3, 4, 5, 6, 7].map((i) => ({
+							text: i,
+							value: i.toString(),
+						})),
 					},
 				],
 				'How many generations of ancestors would you like to import?',

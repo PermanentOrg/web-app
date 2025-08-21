@@ -202,13 +202,12 @@ export class SharingComponent implements OnInit {
 			};
 
 			if (relations && relations.length) {
-				config.relations = relations.filter((relation) => {
-					return (
+				config.relations = relations.filter(
+					(relation) =>
 						!find(this.shareItem.ShareVOs, {
 							archiveId: relation.RelationArchiveVO.archiveId,
-						}) && relation.status === 'status.generic.ok'
-					);
-				});
+						}) && relation.status === 'status.generic.ok',
+				);
 			}
 
 			return await (

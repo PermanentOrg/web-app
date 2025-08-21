@@ -111,11 +111,9 @@ export class InviteRepo extends BaseRepo {
 	}
 
 	public resendInvites(invites: InviteVO[]) {
-		const data = invites.map((invite) => {
-			return {
-				InviteVO: invite,
-			};
-		});
+		const data = invites.map((invite) => ({
+			InviteVO: invite,
+		}));
 
 		return this.http.sendRequestPromise<InviteResponse>(
 			'/invite/inviteResend',
@@ -137,11 +135,9 @@ export class InviteResponse extends BaseResponse {
 
 	public getInviteVOs() {
 		const data = this.getResultsData();
-		const invites = data.map((result) => {
-			return result.map((resultList) => {
-				return resultList.InviteVO;
-			});
-		});
+		const invites = data.map((result) =>
+			result.map((resultList) => resultList.InviteVO),
+		);
 
 		return flatten(invites);
 	}

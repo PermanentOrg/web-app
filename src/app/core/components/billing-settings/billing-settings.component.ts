@@ -27,19 +27,15 @@ export class BillingSettingsComponent implements OnInit {
 		private event: EventService,
 	) {
 		this.account = this.accountService.getAccount();
-		this.countries = this.prConstants.getCountries().map((c) => {
-			return {
-				text: c.name,
-				value: c.abbrev,
-			};
-		});
+		this.countries = this.prConstants.getCountries().map((c) => ({
+			text: c.name,
+			value: c.abbrev,
+		}));
 		this.states = Object.values(this.prConstants.getStates()).map(
-			(s: string) => {
-				return {
-					text: s,
-					value: s,
-				};
-			},
+			(s: string) => ({
+				text: s,
+				value: s,
+			}),
 		);
 	}
 

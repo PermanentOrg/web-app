@@ -30,8 +30,8 @@ describe('AccountService', () => {
 						createDefaultArchive: boolean,
 						phone?: string,
 						inviteCode?: string,
-					) => {
-						return new Observable((observer) => {
+					) =>
+						new Observable((observer) => {
 							observer.next(
 								new AccountVO({
 									primaryEmail: 'test@permanent.org',
@@ -39,13 +39,12 @@ describe('AccountService', () => {
 								}),
 							);
 							observer.complete();
-						});
-					},
+						}),
 					get: (account: AccountVO) => Promise.reject({}),
 				},
 				auth: {
-					verify: (account, token, type) => {
-						return new Observable((observer) => {
+					verify: (account, token, type) =>
+						new Observable((observer) => {
 							observer.next(
 								new AuthResponse({
 									isSuccessful: true,
@@ -66,15 +65,14 @@ describe('AccountService', () => {
 								}),
 							);
 							observer.complete();
-						});
-					},
+						}),
 					logIn: (
 						email: string,
 						password: string,
 						rememberMe: boolean,
 						keepLoggedIn: boolean,
-					) => {
-						return new Observable((observer) => {
+					) =>
+						new Observable((observer) => {
 							observer.next(
 								new AuthResponse({
 									isSuccessful: true,
@@ -93,8 +91,7 @@ describe('AccountService', () => {
 								}),
 							);
 							observer.complete();
-						});
-					},
+						}),
 				},
 			})
 			.mock(Router, {
@@ -111,9 +108,8 @@ describe('AccountService', () => {
 				},
 			})
 			.mock(UploadService, {
-				uploadFiles: (parentFolder: FolderVO, files: File[]) => {
-					return Promise.resolve(true);
-				},
+				uploadFiles: (parentFolder: FolderVO, files: File[]) =>
+					Promise.resolve(true),
 			})
 			.mock(EditService, {
 				deleteItems: (items: any[]) => Promise.resolve(true),
