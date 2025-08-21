@@ -78,7 +78,6 @@ export default typescriptEslint.config([
 				},
 			],
 
-			'brace-style': ['error', '1tbs'],
 			'import/prefer-default-export': 'off',
 			'import/no-import-module-exports': 'off',
 			'no-underscore-dangle': 'off',
