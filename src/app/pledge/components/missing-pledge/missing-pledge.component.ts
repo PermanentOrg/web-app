@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
 	styleUrls: ['./missing-pledge.component.scss'],
 	standalone: false,
 })
-export class MissingPledgeComponent {
-	constructor() {}
-}
+export class MissingPledgeComponent {}

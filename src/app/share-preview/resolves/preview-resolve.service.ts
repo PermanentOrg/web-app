@@ -52,8 +52,6 @@ const dummyItems = shuffle(
 
 @Injectable()
 export class PreviewResolveService {
-	constructor() {}
-
 	async resolve(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,

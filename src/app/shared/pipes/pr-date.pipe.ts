@@ -26,8 +26,6 @@ export const NG_DATE_FORMAT = {
 	standalone: false,
 })
 export class PrDatePipe implements PipeTransform {
-	constructor() {}
-
 	transform(
 		dtString: string | number,
 		timezoneVO?: TimezoneVOData,

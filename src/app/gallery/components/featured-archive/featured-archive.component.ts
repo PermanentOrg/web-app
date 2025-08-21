@@ -11,8 +11,6 @@ export class FeaturedArchiveComponent implements OnInit {
 	@Input() archive: FeaturedArchive;
 	public classNames: string[] = ['featured-archive'];
 
-	constructor() {}
-
 	async ngOnInit() {
 		this.classNames = this.getClasses();
 	}
