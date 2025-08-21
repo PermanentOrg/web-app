@@ -136,7 +136,6 @@ export default typescriptEslint.config([
 			],
 
 			'@angular-eslint/prefer-standalone': 'off',
-			'import/no-cycle': 'off',
 			'@angular-eslint/no-output-native': 'off',
 			'@angular-eslint/no-output-on-prefix': 'off',
 			'@angular-eslint/use-lifecycle-interface': 'off',
