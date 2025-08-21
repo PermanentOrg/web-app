@@ -1,4 +1,3 @@
-/* @format */
 import { NgModule } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';

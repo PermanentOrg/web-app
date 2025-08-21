@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { ArchiveType } from '@models/archive-vo';
 import {

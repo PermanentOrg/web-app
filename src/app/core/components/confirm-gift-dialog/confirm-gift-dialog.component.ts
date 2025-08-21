@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { BehaviorSubject } from 'rxjs';

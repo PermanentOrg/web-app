@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
 import { DataService } from '@shared/services/data/data.service';

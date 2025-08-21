@@ -1,4 +1,3 @@
-/* @format */
 import { AccessRoleType } from '@models/access-role';
 import { Subject } from 'rxjs';
 import { ChecklistApi } from '../../types/checklist-api';

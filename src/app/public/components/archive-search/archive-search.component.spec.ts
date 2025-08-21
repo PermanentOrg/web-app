@@ -1,4 +1,3 @@
-/* @format */
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {
 	provideHttpClient,

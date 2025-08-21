@@ -1,4 +1,3 @@
-/* @format */
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 

@@ -1,4 +1,3 @@
-/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DataService } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';

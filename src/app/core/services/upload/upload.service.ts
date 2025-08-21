@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
 
 import { remove } from 'lodash';

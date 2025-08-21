@@ -1,4 +1,3 @@
-/* @format */
 import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';

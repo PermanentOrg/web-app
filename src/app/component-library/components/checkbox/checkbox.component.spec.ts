@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { ComponentsModule } from '../../components.module';
 import { CheckboxComponent } from './checkbox.component';

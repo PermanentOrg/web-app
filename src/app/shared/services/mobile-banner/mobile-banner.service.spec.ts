@@ -1,4 +1,3 @@
-/* @format */
 import { DeviceService } from '@shared/services/device/device.service';
 import { CoreModule } from '@core/core.module';
 import { Shallow } from 'shallow-render';

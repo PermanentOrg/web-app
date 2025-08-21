@@ -1,4 +1,3 @@
-/* @format */
 import {
 	InviteVO,
 	RecordVO,

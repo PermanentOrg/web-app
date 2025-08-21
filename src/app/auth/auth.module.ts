@@ -1,4 +1,3 @@
-/* @format */
 import { NgModule } from '@angular/core';
 import { AuthRoutingModule } from '@auth/auth.routes';
 

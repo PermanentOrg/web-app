@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CHECKLIST_API, ChecklistApi } from '../../types/checklist-api';

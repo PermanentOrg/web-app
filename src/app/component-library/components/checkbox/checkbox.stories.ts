@@ -1,4 +1,3 @@
-/* @format */
 import { Meta, StoryObj } from '@storybook/angular';
 import { CheckboxComponent } from './checkbox.component';
 

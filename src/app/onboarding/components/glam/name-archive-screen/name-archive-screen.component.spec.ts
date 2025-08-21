@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';

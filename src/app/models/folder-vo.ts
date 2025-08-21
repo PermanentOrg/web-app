@@ -1,4 +1,3 @@
-/* @format */
 import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';

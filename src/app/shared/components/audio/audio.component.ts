@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Input, OnChanges } from '@angular/core';
 import { RecordVO } from '@models';
 import { GetAccessFile } from '@models/get-access-file';

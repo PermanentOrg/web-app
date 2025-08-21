@@ -1,4 +1,3 @@
-/* @format */
 import { Component, HostBinding, OnDestroy } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { Subscription } from 'rxjs';

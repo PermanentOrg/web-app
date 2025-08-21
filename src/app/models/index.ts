@@ -1,4 +1,3 @@
-/* @format */
 import { RecordVO } from '@models/record-vo';
 import { FolderVO } from '@models/folder-vo';
 

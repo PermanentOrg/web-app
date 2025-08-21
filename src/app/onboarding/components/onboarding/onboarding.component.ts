@@ -1,4 +1,3 @@
-/* @format */
 import { Location } from '@angular/common';
 import {
 	ChangeDetectorRef,

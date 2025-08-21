@@ -1,4 +1,3 @@
-/* @format */
 import { Pipe, PipeTransform } from '@angular/core';
 import { ArchiveType } from '@models/archive-vo';
 

@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 
 @Component({

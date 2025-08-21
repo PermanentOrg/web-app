@@ -1,4 +1,3 @@
-/* @format */
 import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot-password.component';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

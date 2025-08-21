@@ -1,4 +1,3 @@
-/* @format */
 import { Router, ActivatedRoute } from '@angular/router';
 import { SecurityContext } from '@angular/core';
 import { Shallow } from 'shallow-render';

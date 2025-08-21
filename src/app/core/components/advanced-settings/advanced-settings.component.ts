@@ -1,4 +1,3 @@
-/* @format */
 import { AccountVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { Component, OnInit } from '@angular/core';

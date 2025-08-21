@@ -1,4 +1,3 @@
-/* @format */
 import { ComponentFactoryResolver, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {

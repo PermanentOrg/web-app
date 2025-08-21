@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { AuthRoutingModule } from '@auth/auth.routes';
 import { AuthComponent } from './auth.component';

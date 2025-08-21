@@ -1,4 +1,3 @@
-/* @format */
 import { Component } from '@angular/core';
 import { LegacyContact } from '@models/directive';
 import { EventService } from '@shared/services/event/event.service';

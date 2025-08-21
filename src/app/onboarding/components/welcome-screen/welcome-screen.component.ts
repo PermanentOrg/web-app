@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';

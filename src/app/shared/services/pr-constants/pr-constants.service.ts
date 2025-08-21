@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { AccessRole } from '@models/access-role';
 import { ProfileTemplate } from '@models/profile-item-vo';

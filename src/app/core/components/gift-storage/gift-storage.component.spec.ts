@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CoreModule } from '@core/core.module';

@@ -1,4 +1,3 @@
-/* @format */
 import { Component } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadItem } from '@core/services/upload/uploadItem';

@@ -1,4 +1,3 @@
-/* @format */
 import { DebugElement } from '@angular/core';
 import { Shallow } from 'shallow-render';
 import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';

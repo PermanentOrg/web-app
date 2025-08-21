@@ -1,4 +1,3 @@
-/* @format */
 import { Component, HostListener, ElementRef } from '@angular/core';
 import {
 	adjustLayoutForAnnouncement,

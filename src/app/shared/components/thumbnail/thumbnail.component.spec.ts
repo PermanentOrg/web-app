@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { FolderVO, ItemVO, RecordVO } from '@models';

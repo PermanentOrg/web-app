@@ -1,4 +1,3 @@
-/* @format */
 import { Component, OnDestroy } from '@angular/core';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';

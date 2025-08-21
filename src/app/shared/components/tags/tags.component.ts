@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Input, OnChanges, HostBinding } from '@angular/core';
 import { TagVOData } from '@models/tag-vo';
 import { orderBy } from 'lodash';

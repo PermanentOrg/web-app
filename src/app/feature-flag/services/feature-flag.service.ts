@@ -1,4 +1,3 @@
-/* @format */
 import { Inject, Injectable, Optional } from '@angular/core';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { FEATURE_FLAG_API, FeatureFlagApi } from '../types/feature-flag-api';

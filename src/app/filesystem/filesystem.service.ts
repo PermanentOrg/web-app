@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { FolderVO } from '@models/index';
 import { FolderIdentifier } from './types/filesystem-identifier';

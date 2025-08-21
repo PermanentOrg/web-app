@@ -1,4 +1,3 @@
-/* @format */
 import { NgModule } from '@angular/core';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { ArchiveVO, FolderVO } from '@models/index';

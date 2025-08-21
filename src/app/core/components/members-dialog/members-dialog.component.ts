@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Inject } from '@angular/core';
 import {
 	PromptButton,

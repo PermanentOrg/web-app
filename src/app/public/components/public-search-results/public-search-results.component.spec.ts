@@ -1,4 +1,3 @@
-/* @format */
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FolderVO } from '@root/app/models';

@@ -1,4 +1,3 @@
-/* @format */
 import { StoryObj, Meta, moduleMetadata } from '@storybook/angular';
 import { CheckboxComponent } from '@root/app/component-library/components/checkbox/checkbox.component';
 import { GlamUserSurveySquareComponent } from './glam-user-survey-square.component';

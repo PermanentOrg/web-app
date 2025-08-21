@@ -1,4 +1,3 @@
-/* @format */
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import {
 	Router,

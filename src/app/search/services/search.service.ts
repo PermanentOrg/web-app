@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';

@@ -1,4 +1,3 @@
-/* @format */
 import { waitForAsync } from '@angular/core/testing';
 import { PublicModule } from '@public/public.module';
 import { Shallow } from 'shallow-render';

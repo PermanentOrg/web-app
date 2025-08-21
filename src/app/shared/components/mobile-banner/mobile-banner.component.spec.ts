@@ -1,4 +1,3 @@
-/* @format */
 import { SharedModule } from '@shared/shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Shallow } from 'shallow-render';
