@@ -155,7 +155,7 @@ export class DataService {
 		this.debug('hideItemsInCurrentFolder %d removed', itemsInFolder.length);
 	}
 
-	public fetchLeanItems(
+	public async fetchLeanItems(
 		items: Array<ItemVO>,
 		currentFolder?: FolderVO,
 	): Promise<number> {
@@ -196,10 +196,10 @@ export class DataService {
 
 		if (!folder.ChildItemVOs.length) {
 			this.debug('fetchLeanItems all items already fetching');
-			return Promise.resolve(0);
+			return await Promise.resolve(0);
 		}
 
-		return this.api.folder
+		return await this.api.folder
 			.getLeanItems([folder])
 			.pipe(
 				map((response: FolderResponse) => {
@@ -213,7 +213,7 @@ export class DataService {
 				}),
 			)
 			.toPromise()
-			.then((leanItems) => {
+			.then(async (leanItems) => {
 				leanItems.map((leanItem, index) => {
 					const item = this.byFolderLinkId[leanItem.folder_linkId];
 					if (item) {
@@ -244,7 +244,7 @@ export class DataService {
 
 				this.debug('fetchLeanItems %d items fetched', leanItems.length);
 
-				return Promise.resolve(leanItems.length);
+				return await Promise.resolve(leanItems.length);
 			})
 			.catch((response) => {
 				itemRejects.map((reject, index) => {
@@ -256,7 +256,7 @@ export class DataService {
 			});
 	}
 
-	public fetchFullItems(items: Array<ItemVO>, withChildren?: boolean) {
+	public async fetchFullItems(items: Array<ItemVO>, withChildren?: boolean) {
 		this.debug('fetchFullItems %d items requested', items.length);
 
 		const itemResolves = [];
@@ -297,8 +297,8 @@ export class DataService {
 			);
 		}
 
-		return Promise.all(promises)
-			.then((results) => {
+		return await Promise.all(promises)
+			.then(async (results) => {
 				const recordResponse: RecordResponse = results[0];
 				const folderResponse: FolderResponse = results[1];
 
@@ -337,7 +337,7 @@ export class DataService {
 
 				this.debug('fetchFullItems %d items fetched', items.length);
 
-				return Promise.resolve(true);
+				return await Promise.resolve(true);
 			})
 			.catch(() => {
 				itemRejects.map((reject, index) => {
@@ -347,10 +347,10 @@ export class DataService {
 			});
 	}
 
-	public refreshCurrentFolder(sortOnly = false) {
+	public async refreshCurrentFolder(sortOnly = false) {
 		this.debug('refreshCurrentFolder (sortOnly = %o)', sortOnly);
 
-		return this.api.folder
+		return await this.api.folder
 			.navigate(this.currentFolder)
 			.pipe(
 				map((response: FolderResponse) => {
@@ -481,12 +481,12 @@ export class DataService {
 		return folder_linkIds.map((id) => this.getItemByFolderLinkId(Number(id)));
 	}
 
-	public downloadFile(item: RecordVO, type?: string): Promise<any> {
+	public async downloadFile(item: RecordVO, type?: string): Promise<any> {
 		if (item.FileVOs && item.FileVOs.length) {
 			downloadFile(item, type);
-			return Promise.resolve();
+			return await Promise.resolve();
 		} else {
-			return this.fetchFullItems([item]).then(() => {
+			return await this.fetchFullItems([item]).then(() => {
 				downloadFile(item, type);
 			});
 		}
@@ -604,8 +604,8 @@ export class DataService {
 		this.selectedItemsSubject.next(this.selectedItems);
 	}
 
-	fetchSelectedItems() {
-		return this.fetchFullItems(Array.from(this.selectedItems.keys()));
+	async fetchSelectedItems() {
+		return await this.fetchFullItems(Array.from(this.selectedItems.keys()));
 	}
 
 	clickItemsBetweenIndicies(item1Index: number, item2Index: number) {

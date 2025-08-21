@@ -252,7 +252,6 @@ export default typescriptEslint.config([
 			'@typescript-eslint/method-signature-style': 'off',
 			'@typescript-eslint/class-methods-use-this': 'off',
 			'max-nested-callbacks': 'off',
-			'@typescript-eslint/promise-function-async': 'off',
 			'@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
 			'@typescript-eslint/no-unnecessary-template-expression': 'off',
 			'@typescript-eslint/consistent-indexed-object-style': 'off',

@@ -72,7 +72,7 @@ export class LeanFolderResolveService {
 				}),
 			)
 			.toPromise()
-			.catch((response: FolderResponse) => {
+			.catch(async (response: FolderResponse) => {
 				this.message.showError({
 					message: response.getMessage(),
 					translate: true,
@@ -91,7 +91,7 @@ export class LeanFolderResolveService {
 				} else {
 					this.router.navigate(['/private']);
 				}
-				return Promise.reject(false);
+				return await Promise.reject(false);
 			});
 	}
 }

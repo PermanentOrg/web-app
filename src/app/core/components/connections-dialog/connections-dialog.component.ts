@@ -164,11 +164,11 @@ export class ConnectionsDialogComponent {
 				'Accept',
 				skipDecline ? 'Cancel' : 'Decline',
 			)
-			.then((value) => {
+			.then(async (value) => {
 				const relationMyVo = new RelationVO({
 					type: value.relationType,
 				});
-				return this.api.relation
+				return await this.api.relation
 					.accept(relation, relationMyVo)
 					.then((response: RelationResponse) => {
 						this.messageService.showMessage({
@@ -208,18 +208,18 @@ export class ConnectionsDialogComponent {
 			});
 	}
 
-	addRelation() {
+	async addRelation() {
 		const newRelation: RelationVO = new RelationVO({});
 		const config: ArchivePickerComponentConfig = {
 			hideAccessRoleOnInvite: true,
 		};
 
-		return (
+		return await (
 			this.dialog.open(ArchivePickerComponent, {
 				data: config,
 			}) as unknown as Promise<ArchiveVO>
 		)
-			.then((archive: ArchiveVO) => {
+			.then(async (archive: ArchiveVO) => {
 				if (find(this.connections, { relationArchiveId: archive.archiveId })) {
 					return this.messageService.showMessage({
 						message: 'You already have a relationship with this archive.',
@@ -230,35 +230,35 @@ export class ConnectionsDialogComponent {
 				newRelation.relationArchiveId = archive.archiveId;
 				newRelation.RelationArchiveVO = archive;
 				this.sentConnectionsRequests.push(newRelation);
-				return this.editRelation(newRelation);
+				return await this.editRelation(newRelation);
 			})
 			.catch(() => {});
 	}
 
-	editRelation(relation: RelationVO) {
+	async editRelation(relation: RelationVO) {
 		let updatedRelation: RelationVO;
 		const isNewRelation = !relation.relationId;
 		const deferred = new Deferred();
 		const fields: PromptField[] = [RELATIONSHIP_FIELD_INITIAL(relation.type)];
 
-		return this.promptService
+		return await this.promptService
 			.prompt(
 				fields,
 				`Relationship with ${relation.RelationArchiveVO.fullName}`,
 				deferred.promise,
 				'Save',
 			)
-			.then((value) => {
+			.then(async (value) => {
 				updatedRelation = new RelationVO({
 					relationId: relation.relationId,
 					type: value.relationType,
 				});
 
 				if (updatedRelation.relationId) {
-					return this.api.relation.update(updatedRelation);
+					return await this.api.relation.update(updatedRelation);
 				} else {
 					updatedRelation.relationArchiveId = relation.relationArchiveId;
-					return this.api.relation.create(updatedRelation);
+					return await this.api.relation.create(updatedRelation);
 				}
 			})
 			.then((response: RelationResponse) => {

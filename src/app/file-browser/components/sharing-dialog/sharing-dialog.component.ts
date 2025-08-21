@@ -249,15 +249,15 @@ export class SharingDialogComponent implements OnInit {
 		}
 	}
 
-	confirmOwnerAdd(share: ShareVO) {
-		return this.promptService.confirm(
+	async confirmOwnerAdd(share: ShareVO) {
+		return await this.promptService.confirm(
 			'Add owner',
 			`Are you sure you share this item with The ${share.ArchiveVO.fullName} Archive as an owner?`,
 		);
 	}
 
-	confirmRemove(share: ShareVO) {
-		return this.promptService.confirm(
+	async confirmRemove(share: ShareVO) {
+		return await this.promptService.confirm(
 			'Remove',
 			`Are you sure you want to remove The ${share.ArchiveVO.fullName} Archive?`,
 			null,
@@ -265,8 +265,8 @@ export class SharingDialogComponent implements OnInit {
 		);
 	}
 
-	confirmDeny(share: ShareVO) {
-		return this.promptService.confirm(
+	async confirmDeny(share: ShareVO) {
+		return await this.promptService.confirm(
 			'Deny request',
 			`Are you sure you want deny The ${share.ArchiveVO.fullName} Archive access?`,
 			null,

@@ -8,14 +8,14 @@ import { TwoFactorAuthComponent } from './two-factor-auth.component';
 
 const mockApiService = {
 	idpuser: {
-		getTwoFactorMethods: () =>
-			Promise.resolve([
+		getTwoFactorMethods: async () =>
+			await Promise.resolve([
 				{ methodId: 'ABCD', value: 'test@example.com', method: 'mail' },
 			]),
-		disableTwoFactor: (methodId, code) => Promise.resolve(),
-		sendDisableCode: (methodId) => Promise.resolve(),
-		sendEnableCode: (method, value) => Promise.resolve(),
-		enableTwoFactr: (method, value, code) => Promise.resolve(),
+		disableTwoFactor: async (methodId, code) => await Promise.resolve(),
+		sendDisableCode: async (methodId) => await Promise.resolve(),
+		sendEnableCode: async (method, value) => await Promise.resolve(),
+		enableTwoFactr: async (method, value, code) => await Promise.resolve(),
 	},
 };
 

@@ -170,11 +170,11 @@ describe('NotificationService', () => {
 		).and.returnValue(Promise.resolve(allNotificationsResponse));
 
 		updateSpy = spyOn(apiService.notification, 'update').and.callFake(
-			(notifications) => {
+			async (notifications) => {
 				expect(notifications.length).toBe(countBeforeMarkSeen);
 				const response = new NotificationResponse();
 				response.isSuccessful = true;
-				return Promise.resolve(response);
+				return await Promise.resolve(response);
 			},
 		);
 
@@ -204,11 +204,11 @@ describe('NotificationService', () => {
 		).and.returnValue(Promise.resolve(allNotificationsResponse));
 
 		updateSpy = spyOn(apiService.notification, 'update').and.callFake(
-			(notifications) => {
+			async (notifications) => {
 				expect(notifications.length).toBe(allNotificationsData.length);
 				const response = new NotificationResponse();
 				response.isSuccessful = true;
-				return Promise.resolve(response);
+				return await Promise.resolve(response);
 			},
 		);
 

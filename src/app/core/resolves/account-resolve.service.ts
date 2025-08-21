@@ -7,10 +7,10 @@ import { AccountService } from '@shared/services/account/account.service';
 export class AccountResolveService {
 	constructor(private accountService: AccountService) {}
 
-	resolve(
+	async resolve(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Promise<any> {
-		return this.accountService.refreshAccount();
+		return await this.accountService.refreshAccount();
 	}
 }

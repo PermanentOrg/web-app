@@ -31,14 +31,14 @@ export class InviteShareResolveService {
 					throw response;
 				}
 			})
-			.catch((response: InviteResponse) => {
+			.catch(async (response: InviteResponse) => {
 				if (response.getMessage) {
 					this.message.showError({
 						message: response.getMessage(),
 						translate: true,
 					});
 				}
-				return this.router.navigate(['share', 'error']);
+				return await this.router.navigate(['share', 'error']);
 			});
 	}
 }

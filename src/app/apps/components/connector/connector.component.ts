@@ -267,7 +267,7 @@ export class ConnectorComponent implements OnInit {
 		return 'View imported memories and add new memories to upload';
 	}
 
-	connect() {
+	async connect() {
 		const archive = this.account.getArchive();
 
 		this.waiting = true;
@@ -276,7 +276,7 @@ export class ConnectorComponent implements OnInit {
 		const connectRequest = this.api.connector.familysearchConnect(archive);
 
 		if (connectRequest) {
-			return connectRequest
+			return await connectRequest
 				.pipe(
 					map((response: ConnectorResponse) => {
 						this.waiting = false;
@@ -300,7 +300,7 @@ export class ConnectorComponent implements OnInit {
 		}
 	}
 
-	disconnect() {
+	async disconnect() {
 		const archive = this.account.getArchive();
 
 		this.waiting = true;
@@ -309,7 +309,7 @@ export class ConnectorComponent implements OnInit {
 			this.api.connector.familysearchDisconnect(archive);
 
 		if (disconnectRequest) {
-			return disconnectRequest
+			return await disconnectRequest
 				.pipe(
 					map((response: ConnectorResponse) => {
 						this.waiting = false;

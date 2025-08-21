@@ -170,7 +170,7 @@ export class FileListComponent
 		});
 
 		this.visibleItemsHandlerDebounced = debounce(
-			() => this.loadVisibleItems(),
+			async () => await this.loadVisibleItems(),
 			VISIBLE_DEBOUNCE,
 		);
 

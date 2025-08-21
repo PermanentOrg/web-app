@@ -307,9 +307,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	reloadSharePreviewData() {
+	async reloadSharePreviewData() {
 		if (this.isLinkShare) {
-			return this.api.share
+			return await this.api.share
 				.checkShareLink(this.route.snapshot.params.shareToken)
 				.then((linkResponse: ShareResponse): any => {
 					if (linkResponse.isSuccessful) {
@@ -319,7 +319,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 				});
 		} else if (this.isRelationshipShare) {
 			const params = this.route.snapshot.params;
-			return this.api.share
+			return await this.api.share
 				.getShareForPreview(params.shareId, params.folder_linkId)
 				.then((shareResponse: ShareResponse) => {
 					this.sharePreviewVO = shareResponse.getShareVO();
@@ -355,17 +355,17 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		this.scrollHandlerDebounced();
 	}
 
-	onViewShareClick() {
+	async onViewShareClick() {
 		if (this.sharePreviewVO.RecordVO) {
 			if (this.device.isMobile() || !this.device.didOptOut()) {
-				return this.router.navigate(['/shares', 'withme']);
+				return await this.router.navigate(['/shares', 'withme']);
 			} else {
 				window.location.assign(`/app/shares/`);
 			}
 		} else {
 			const folder: FolderVO = this.sharePreviewVO.FolderVO;
 			if (this.device.isMobile() || !this.device.didOptOut()) {
-				return this.router.navigate([
+				return await this.router.navigate([
 					'/shares',
 					'withme',
 					folder.archiveNbr,
@@ -379,14 +379,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	onShareShareClick() {
+	async onShareShareClick() {
 		this.sendGaEvent('reshare');
 		if (!this.isLinkShare && (this.isOriginalOwner || this.canShare)) {
 			const archiveNbr = this.sharePreviewVO.RecordVO
 				? this.sharePreviewVO.RecordVO.archiveNbr
 				: this.sharePreviewVO.FolderVO.archiveNbr;
 			if (this.device.isMobile() || !this.device.didOptOut()) {
-				return this.router.navigate(['/shares'], {
+				return await this.router.navigate(['/shares'], {
 					queryParams: { shareArchiveNbr: archiveNbr },
 				});
 			} else {
@@ -415,8 +415,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	onMyAccountClick() {
-		return this.router.navigate(['/app', 'private']);
+	async onMyAccountClick() {
+		return await this.router.navigate(['/app', 'private']);
 	}
 
 	async onArchiveThumbClick() {
@@ -506,9 +506,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 				formValue.invitation,
 				true,
 			)
-			.then((account: AccountVO) => {
+			.then(async (account: AccountVO) => {
 				this.sendGaEvent('signup');
-				return this.accountService.logIn(
+				return await this.accountService.logIn(
 					formValue.email,
 					formValue.password,
 					true,

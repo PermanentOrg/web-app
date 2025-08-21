@@ -118,7 +118,7 @@ export class ArchiveSwitcherComponent implements AfterViewInit {
 					}
 
 					acceptIfNeeded
-						.then(() => this.accountService.changeArchive(archive))
+						.then(async () => await this.accountService.changeArchive(archive))
 						.then(() => {
 							deferred.resolve();
 							this.router.navigate(['/private']);
@@ -180,7 +180,9 @@ export class ArchiveSwitcherComponent implements AfterViewInit {
 
 		this.prompt
 			.prompt(fields, 'Create new archive', deferred.promise, 'Create archive')
-			.then((value) => this.api.archive.create(new ArchiveVO(value)))
+			.then(
+				async (value) => await this.api.archive.create(new ArchiveVO(value)),
+			)
 			.then((response: ArchiveResponse) => {
 				const newArchive = response.getArchiveVO();
 				this.archives.push(newArchive);

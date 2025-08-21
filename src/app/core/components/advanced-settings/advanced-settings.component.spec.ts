@@ -13,7 +13,7 @@ const mockAccountService = {
 
 const mockApiService = {
 	account: {
-		update: (account: AccountVO) => Promise.resolve(account),
+		update: async (account: AccountVO) => await Promise.resolve(account),
 	},
 };
 

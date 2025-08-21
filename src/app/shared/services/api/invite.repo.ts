@@ -66,7 +66,7 @@ export class InviteRepo extends BaseRepo {
 		return await firstValueFrom(this.httpV2.post('/invite/share', data, null));
 	}
 
-	public getShareInviteInfo(
+	public async getShareInviteInfo(
 		inviteEmail: string,
 		inviteCode: string,
 		shareItemId: number,
@@ -81,41 +81,41 @@ export class InviteRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<InviteResponse>(
+		return await this.http.sendRequestPromise<InviteResponse>(
 			'/invite/getShareInviteInfo',
 			data,
 			{ responseClass: InviteResponse },
 		);
 	}
 
-	public getFullShareInvite(token: string) {
+	public async getFullShareInvite(token: string) {
 		const data = [
 			{
 				token,
 			},
 		];
 
-		return this.http.sendRequestPromise<InviteResponse>(
+		return await this.http.sendRequestPromise<InviteResponse>(
 			'/invite/getFullShareInvite',
 			data,
 			{ responseClass: InviteResponse },
 		);
 	}
 
-	public getInvites() {
-		return this.http.sendRequestPromise<InviteResponse>(
+	public async getInvites() {
+		return await this.http.sendRequestPromise<InviteResponse>(
 			'/invite/getMyInvites',
 			[{}],
 			{ responseClass: InviteResponse },
 		);
 	}
 
-	public resendInvites(invites: InviteVO[]) {
+	public async resendInvites(invites: InviteVO[]) {
 		const data = invites.map((invite) => ({
 			InviteVO: invite,
 		}));
 
-		return this.http.sendRequestPromise<InviteResponse>(
+		return await this.http.sendRequestPromise<InviteResponse>(
 			'/invite/inviteResend',
 			data,
 			{ responseClass: InviteResponse },

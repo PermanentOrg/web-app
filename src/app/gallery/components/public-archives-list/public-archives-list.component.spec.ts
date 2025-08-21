@@ -7,7 +7,7 @@ import { GalleryModule } from '../../gallery.module';
 import { PublicArchivesListComponent } from './public-archives-list.component';
 
 const mockAccountService = {
-	getAllPublicArchives: () => Promise.resolve([]),
+	getAllPublicArchives: async () => await Promise.resolve([]),
 };
 
 describe('PublicArchivesComponent', () => {
@@ -20,7 +20,7 @@ describe('PublicArchivesComponent', () => {
 				showError: () => {},
 			})
 			.mock(Router, {
-				navigate: () => Promise.resolve(true),
+				navigate: async () => await Promise.resolve(true),
 			});
 	});
 

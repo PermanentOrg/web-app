@@ -19,10 +19,10 @@ export class PublishArchiveResolveService {
 		private router: Router,
 	) {}
 
-	resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+	async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 		const archiveId = route.parent.data.publishedItem.archiveId;
 		const archiveNbr = route.parent.data.publishedItem.archiveArchiveNbr;
-		return this.api.archive
+		return await this.api.archive
 			.get([new ArchiveVO({ archiveId, archiveNbr })])
 			.then((response: ArchiveResponse): ArchiveVO => response.getArchiveVO());
 		// return this.api.publish.getResource(route.params.publishUrlToken)

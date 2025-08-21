@@ -33,11 +33,11 @@ export class RelationshipService {
 		});
 	}
 
-	get(): Promise<RelationVO[]> {
+	async get(): Promise<RelationVO[]> {
 		if (!this.relations || this.needsFetch()) {
-			return this.update().then(() => this.relations);
+			return await this.update().then(() => this.relations);
 		} else {
-			return Promise.resolve(this.relations);
+			return await Promise.resolve(this.relations);
 		}
 	}
 
@@ -45,8 +45,8 @@ export class RelationshipService {
 		return this.relations || [];
 	}
 
-	update(): Promise<any> {
-		return this.api.relation
+	async update(): Promise<any> {
+		return await this.api.relation
 			.getAll(this.currentArchive)
 			.then((response: RelationResponse) => {
 				this.lastUpdated = new Date();

@@ -117,9 +117,9 @@ export class FamilySearchImportComponent {
 				this.guidedTour.startTour([
 					{
 						...CreateArchivesComplete,
-						beforeShowPromise: () => {
+						beforeShowPromise: async () => {
 							this.guidedTour.emit(GuidedTourEvent.RequestAccountDropdownOpen);
-							return timeout(500);
+							return await timeout(500);
 						},
 						when: {
 							show: () => {

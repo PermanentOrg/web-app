@@ -69,11 +69,15 @@ describe('EditTagsComponent', () => {
 			.mock(MessageService, { showError: () => {} })
 			.mock(ApiService, {
 				tag: {
-					deleteTagLink: (tag, tagLink) => Promise.resolve(new TagResponse()),
-					create: (tag, tagLink) => Promise.resolve(new TagResponse()),
+					deleteTagLink: async (tag, tagLink) =>
+						await Promise.resolve(new TagResponse()),
+					create: async (tag, tagLink) =>
+						await Promise.resolve(new TagResponse()),
 				},
 			})
-			.mock(DataService, { fetchFullItems: (items) => Promise.resolve([]) })
+			.mock(DataService, {
+				fetchFullItems: async (items) => await Promise.resolve([]),
+			})
 			.mock(
 				DialogCdkService,
 				jasmine.createSpyObj('DialogCdkService', ['open']),

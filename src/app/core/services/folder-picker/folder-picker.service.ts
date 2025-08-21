@@ -25,7 +25,7 @@ export class FolderPickerService {
 		this.component = null;
 	}
 
-	chooseFolder(
+	async chooseFolder(
 		startingFolder: FolderVO,
 		operation: FolderPickerOperations,
 		savePromise?: Promise<any>,
@@ -35,7 +35,7 @@ export class FolderPickerService {
 			throw new Error('FolderPickerService - Folder picker component missing');
 		}
 
-		return this.component.show(
+		return await this.component.show(
 			startingFolder,
 			operation,
 			savePromise,
@@ -43,12 +43,12 @@ export class FolderPickerService {
 		);
 	}
 
-	chooseRecord(startingFolder: FolderVO): Promise<RecordVO> {
+	async chooseRecord(startingFolder: FolderVO): Promise<RecordVO> {
 		if (!this.component) {
 			throw new Error('FolderPickerService - Folder picker component missing');
 		}
 
-		return this.component.show(
+		return await this.component.show(
 			startingFolder,
 			FolderPickerOperations.ChooseRecord,
 			null,

@@ -215,7 +215,7 @@ export class SharingComponent implements OnInit {
 					data: config,
 				}) as unknown as Promise<ArchiveVO>
 			)
-				.then((archive: ArchiveVO) => {
+				.then(async (archive: ArchiveVO) => {
 					const newShareVo = new ShareVO({
 						ArchiveVO: archive,
 						accessRole: 'access.role.viewer',
@@ -225,7 +225,7 @@ export class SharingComponent implements OnInit {
 
 					isExistingRelation = this.relationshipService.hasRelation(archive);
 
-					return this.editShareVo(newShareVo);
+					return await this.editShareVo(newShareVo);
 				})
 				.then(() => {
 					if (isExistingRelation) {
@@ -244,7 +244,7 @@ export class SharingComponent implements OnInit {
 		}
 	}
 
-	editShareVo(shareVo: ShareVO) {
+	async editShareVo(shareVo: ShareVO) {
 		let updatedShareVo: ShareVO;
 		const deferred = new Deferred();
 		const fields: PromptField[] = [
@@ -257,13 +257,13 @@ export class SharingComponent implements OnInit {
 			promptTitle = `Choose ${shareVo.ArchiveVO.fullName} access to ${this.shareItem.displayName}`;
 		}
 
-		return this.promptService
+		return await this.promptService
 			.prompt(fields, promptTitle, deferred.promise, 'Share')
-			.then((value) => {
+			.then(async (value) => {
 				updatedShareVo = new ShareVO(shareVo);
 				updatedShareVo.accessRole = value.accessRole;
 
-				return this.api.share.upsert(updatedShareVo);
+				return await this.api.share.upsert(updatedShareVo);
 			})
 			.then((response: ShareResponse) => {
 				let successMessage = 'Share access saved successfully.';
