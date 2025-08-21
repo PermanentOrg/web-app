@@ -346,9 +346,11 @@ export class FileListComponent
 
 		const queryParams = this.route.snapshot.queryParamMap;
 		if (queryParams.has('showItem')) {
-			const folder_linkId = Number(queryParams.get('showItem'));
+			const folderLinkId = Number(queryParams.get('showItem'));
 			this.location.replaceState(this.router.url.split('?')[0]);
-			const item = find(this.currentFolder.ChildItemVOs, { folder_linkId });
+			const item = find(this.currentFolder.ChildItemVOs, {
+				folder_linkId: folderLinkId,
+			});
 			this.scrollToItem(item);
 			if (!this.device.isMobileWidth()) {
 				setTimeout(() => {
@@ -390,10 +392,10 @@ export class FileListComponent
 
 	scrollToItem(item: ItemVO) {
 		this.debug('scroll to item %o', item);
-		const folder_linkId = item.folder_linkId;
+		const folderLinkId = item.folder_linkId;
 		const listItem = find(
 			this.listItemsQuery.toArray(),
-			(x) => x.item.folder_linkId === folder_linkId,
+			(x) => x.item.folder_linkId === folderLinkId,
 		);
 		if (listItem) {
 			const itemElem = listItem.element.nativeElement as HTMLElement;

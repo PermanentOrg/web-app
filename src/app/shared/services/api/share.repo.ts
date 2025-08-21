@@ -151,11 +151,11 @@ export class ShareRepo extends BaseRepo {
 		);
 	}
 
-	public async getShareForPreview(shareId, folder_linkId) {
+	public async getShareForPreview(shareId, folderLinkId) {
 		const data = {
 			ShareVO: {
 				shareId: parseInt(shareId, 10),
-				folder_linkId: parseInt(folder_linkId, 10),
+				folder_linkId: parseInt(folderLinkId, 10),
 			},
 		};
 

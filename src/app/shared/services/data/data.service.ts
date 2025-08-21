@@ -471,14 +471,14 @@ export class DataService {
 		return this.byArchiveNbr[archiveNbr];
 	}
 
-	public getItemByFolderLinkId(folder_linkId: number): RecordVO | FolderVO {
-		return this.byFolderLinkId[folder_linkId];
+	public getItemByFolderLinkId(folderLinkId: number): RecordVO | FolderVO {
+		return this.byFolderLinkId[folderLinkId];
 	}
 
 	public getItemsByFolderLinkIds(
-		folder_linkIds: (number | string)[],
+		folderLinkIds: (number | string)[],
 	): Array<RecordVO | FolderVO> {
-		return folder_linkIds.map((id) => this.getItemByFolderLinkId(Number(id)));
+		return folderLinkIds.map((id) => this.getItemByFolderLinkId(Number(id)));
 	}
 
 	public async downloadFile(item: RecordVO, type?: string): Promise<any> {
