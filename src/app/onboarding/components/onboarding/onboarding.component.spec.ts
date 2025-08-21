@@ -20,7 +20,7 @@ class NullRoute {
 	};
 }
 
-let throwError: boolean = false;
+const throwError: boolean = false;
 const mockApiService = {
 	archive: {
 		getAllArchives: async (data: any) => {

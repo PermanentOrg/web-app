@@ -199,7 +199,6 @@ export default typescriptEslint.config([
 			'one-var': 'off',
 			'operator-assignment': 'off',
 			'prefer-arrow/prefer-arrow-functions': 'off',
-			'prefer-const': 'off',
 			'prefer-destructuring': 'off',
 			'prefer-exponentiation-operator': 'off',
 			'prefer-object-spread': 'off',

@@ -16,7 +16,7 @@ describe('PublicSearchResultsComponent', () => {
 	let fixture: ComponentFixture<PublicSearchResultsComponent>;
 	let mockRouter: Router;
 	let mockSearchService: SearchService;
-	let mockActivatedRoute = {
+	const mockActivatedRoute = {
 		parent: {},
 	} as any;
 
