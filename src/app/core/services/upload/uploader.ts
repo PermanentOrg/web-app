@@ -76,7 +76,7 @@ export class Uploader {
 			})
 			.forEach(emitUploadProgress);
 
-		return this.registerRecord(item, destinationUrl);
+		return await this.registerRecord(item, destinationUrl);
 	};
 
 	private uploadToMultipartUrl = async (
@@ -169,6 +169,6 @@ export class Uploader {
 
 		emitUploadProgress(1);
 
-		return Promise.resolve();
+		return await Promise.resolve();
 	}
 }

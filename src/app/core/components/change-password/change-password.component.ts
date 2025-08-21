@@ -106,7 +106,7 @@ export class ChangePasswordComponent {
 			initialValue: '',
 			type: 'text',
 		};
-		return this.prompt.prompt(
+		return await this.prompt.prompt(
 			[mfaField],
 			'A verification code has been sent to your email address or phone number. Please enter it below to change your password.',
 		);

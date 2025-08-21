@@ -757,7 +757,7 @@ export class FileListItemComponent
 	async onActionClick(value: ActionType, actionDeferred: Deferred) {
 		switch (value) {
 			case 'delete':
-				return this.deleteItem(actionDeferred.resolve);
+				return await this.deleteItem(actionDeferred.resolve);
 			case 'rename':
 				actionDeferred.resolve();
 				this.promptForUpdate();

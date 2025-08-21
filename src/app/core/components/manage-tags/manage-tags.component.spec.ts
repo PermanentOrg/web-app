@@ -57,7 +57,9 @@ function buildHarness(initialTags?: TagVO[]) {
 
 	const mockPromptService = {
 		async confirm(): Promise<boolean> {
-			return state.confirmResult ? Promise.resolve(true) : Promise.reject();
+			return state.confirmResult
+				? await Promise.resolve(true)
+				: await Promise.reject();
 		},
 	};
 

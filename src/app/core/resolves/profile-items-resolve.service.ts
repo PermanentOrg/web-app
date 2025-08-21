@@ -15,6 +15,6 @@ export class ProfileItemsResolveService {
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Promise<any> {
-		return this.profile.fetchProfileItems();
+		return await this.profile.fetchProfileItems();
 	}
 }

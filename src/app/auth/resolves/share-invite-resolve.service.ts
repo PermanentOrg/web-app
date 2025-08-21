@@ -11,7 +11,7 @@ export class ShareInviteResolveService {
 		state: RouterStateSnapshot,
 	): Promise<any> {
 		if (!route.queryParams.shid) {
-			return Promise.resolve(null);
+			return await Promise.resolve(null);
 		}
 
 		const params = route.queryParams;
@@ -26,7 +26,7 @@ export class ShareInviteResolveService {
 			inviteCode = window.atob(params.inviteCode);
 		}
 
-		return this.apiService.invite
+		return await this.apiService.invite
 			.getShareInviteInfo(email, inviteCode, params.shid, params.tp)
 			.then((response) => {
 				try {

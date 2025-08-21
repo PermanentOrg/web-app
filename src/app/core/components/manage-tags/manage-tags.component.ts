@@ -49,14 +49,14 @@ export class ManageTagsComponent {
 	}
 
 	public async deleteTag(tag: TagVO): Promise<void> {
-		return this.prompt
+		return await this.prompt
 			.confirm(
 				'Delete',
 				'Are you sure you want to delete this keyword from all items in the current archive?',
 			)
 			.then(async () => {
 				this.tags = this.tags.filter((t) => t.tagId !== tag.tagId);
-				return this.api.tag
+				return await this.api.tag
 					.delete(tag)
 					.then(() => {
 						this.refreshTags.emit();

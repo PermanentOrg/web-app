@@ -10,6 +10,8 @@ export class FeaturedArchiveService implements FeaturedArchiveApi {
 	constructor(private http: HttpV2Service) {}
 
 	public async getFeaturedArchiveList() {
-		return this.http.get<FeaturedArchive>('/v2/archive/featured').toPromise();
+		return await this.http
+			.get<FeaturedArchive>('/v2/archive/featured')
+			.toPromise();
 	}
 }
