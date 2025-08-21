@@ -170,7 +170,6 @@ export default typescriptEslint.config([
 			'no-lonely-if': 'off',
 			'no-multi-assign': 'off',
 			'no-param-reassign': 'off',
-			'no-plusplus': 'off',
 			'no-promise-executor-return': 'off',
 			'no-prototype-builtins': 'off',
 			'no-restricted-globals': 'off',
