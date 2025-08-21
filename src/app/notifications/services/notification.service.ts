@@ -212,7 +212,7 @@ export class NotificationService {
 		}
 
 		if (path) {
-			return this.router.navigate(path, { queryParams });
+			return await this.router.navigate(path, { queryParams });
 		}
 	}
 }

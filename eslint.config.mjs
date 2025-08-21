@@ -148,7 +148,6 @@ export default typescriptEslint.config([
 			'@typescript-eslint/no-use-before-define': 'off',
 			'@typescript-eslint/no-useless-constructor': 'off',
 			'@typescript-eslint/prefer-for-of': 'off',
-			'@typescript-eslint/return-await': 'off',
 			'array-callback-return': 'off',
 			'brace-style': 'off',
 			'class-methods-use-this': 'off',

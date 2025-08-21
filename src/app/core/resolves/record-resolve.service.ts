@@ -27,7 +27,7 @@ export class RecordResolveService {
 
 		try {
 			if (localItem && localItem.dataStatus === DataStatus.Full) {
-				return Promise.resolve(localItem as RecordVO);
+				return await Promise.resolve(localItem as RecordVO);
 			} else if (localItem) {
 				await this.dataService.fetchFullItems([localItem]);
 				return localItem as RecordVO;

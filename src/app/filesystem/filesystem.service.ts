@@ -15,6 +15,6 @@ export class FilesystemService {
 	}
 
 	public async getFolder(identifier: FolderIdentifier): Promise<FolderVO> {
-		return this.permanentFilesystem.getFolder(identifier);
+		return await this.permanentFilesystem.getFolder(identifier);
 	}
 }

@@ -512,7 +512,7 @@ export class DataService {
 	}
 
 	public async createZipForDownload(items: ItemVO[]): Promise<any> {
-		return this.api.folder.createZip(items);
+		return await this.api.folder.createZip(items);
 	}
 
 	public selectedItems$() {

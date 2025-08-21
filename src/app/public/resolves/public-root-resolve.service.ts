@@ -24,7 +24,7 @@ export class PublicRootResolveService {
 			this.publicProfile.setPublicRoot(response.getFolderVO());
 			return publicRoot;
 		} catch (err) {
-			return this.router.navigate(['/p', 'error']);
+			return await this.router.navigate(['/p', 'error']);
 		}
 	}
 }

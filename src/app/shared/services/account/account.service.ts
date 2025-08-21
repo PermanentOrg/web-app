@@ -268,7 +268,7 @@ export class AccountService {
 	}
 
 	public async getAllPublicArchives() {
-		return this.api.archive
+		return await this.api.archive
 			.getAllArchives(this.account)
 			.then((response: ArchiveResponse) => {
 				const archives = response.getArchiveVOs();
@@ -564,7 +564,7 @@ export class AccountService {
 		this.storage.session.set(INVITE_KEY, inviteCode);
 
 		try {
-			return this.api.account
+			return await this.api.account
 				.signUp(
 					email,
 					fullName,
@@ -589,7 +589,7 @@ export class AccountService {
 				)
 				.toPromise();
 		} catch (err) {
-			return new Promise((resolve, reject) => reject(err));
+			return await new Promise((resolve, reject) => reject(err));
 		}
 	}
 

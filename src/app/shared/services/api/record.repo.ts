@@ -145,7 +145,7 @@ export class RecordRepo extends BaseRepo {
 			},
 		};
 
-		return getFirst(
+		return await getFirst(
 			this.httpV2.post<RecordVO>('/record/registerRecord', body),
 		).toPromise();
 	}
