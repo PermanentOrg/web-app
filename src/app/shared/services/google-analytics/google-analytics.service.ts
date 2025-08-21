@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-declare var ga: any;
+declare let ga: any;
 
 export interface EventParams {
 	hitType: 'event' | string;

@@ -5,7 +5,7 @@ import { ProfileTemplate } from '@models/profile-item-vo';
 import { orderBy } from 'lodash';
 import { getCodeList, overwrite } from 'country-list';
 
-declare var require: any;
+declare let require: any;
 const SYNC_CONSTANTS = require('../../../../../constants/master_en.json');
 const PROFILE_TEMPLATE = require('../../../../../constants/profile_template.json');
 
