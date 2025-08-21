@@ -182,8 +182,6 @@ export class EditService {
 		};
 	}
 
-	executeClipboard() {}
-
 	promptForAction(items: ItemVO[], actions: PromptButton[] = []) {
 		const actionDeferred = new Deferred();
 
@@ -201,7 +199,7 @@ export class EditService {
 				.then((value: ActionType) => {
 					this.handleAction(items, value, actionDeferred);
 				})
-				.catch((err) => {});
+				.catch();
 		} else {
 			try {
 				this.prompt.confirm(

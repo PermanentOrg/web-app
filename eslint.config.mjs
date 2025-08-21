@@ -69,6 +69,21 @@ export default typescriptEslint.config([
 		},
 	},
 	{
+		files: [
+			'src/**/*.spec.ts',
+			'src/**/test.ts',
+			'src/**/*.stories.ts',
+			'src/**/shared-test-classes.ts',
+			'src/**/shared-mocks.ts',
+		],
+		rules: {
+			// Right now we need to use empty functions for mocks in various
+			// test contexts.  Ideally we would use jasmine spies more elegantly
+			// but that is a separate refactor that will involve care.
+			'@typescript-eslint/no-empty-function': 'off',
+		},
+	},
+	{
 		files: ['**/*.ts'],
 		rules: {
 			'@typescript-eslint/explicit-member-accessibility': [
@@ -131,7 +146,6 @@ export default typescriptEslint.config([
 			'@angular-eslint/no-output-native': 'off',
 			'@angular-eslint/no-output-on-prefix': 'off',
 			'@angular-eslint/use-lifecycle-interface': 'off',
-			'@typescript-eslint/no-empty-function': 'off',
 			'@typescript-eslint/prefer-for-of': 'off',
 			'array-callback-return': 'off',
 			'brace-style': 'off',

@@ -738,7 +738,7 @@ export class FileListItemComponent
 				.then((value: ActionType) => {
 					this.onActionClick(value, actionDeferred);
 				})
-				.catch((err) => {});
+				.catch();
 		} else {
 			try {
 				this.prompt.confirm(
@@ -958,7 +958,7 @@ export class FileListItemComponent
 			.then((values) => {
 				this.saveUpdates(values, updateDeferred);
 			})
-			.catch(() => {});
+			.catch();
 	}
 
 	saveUpdates(changes: RecordVOData | FolderVOData, deferred: Deferred) {
