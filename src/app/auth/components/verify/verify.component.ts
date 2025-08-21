@@ -153,7 +153,7 @@ export class VerifyComponent implements OnInit {
 				this.needsPhone = account.phoneNeedsVerification();
 
 				if (this.needsPhone) {
-					this.verifyForm.controls['token'].setValue('');
+					this.verifyForm.controls.token.setValue('');
 					this.currentVerifyFlow = 'phone';
 				} else {
 					this.finish();

@@ -46,6 +46,6 @@ describe('GlamUserSurveySquareComponent', () => {
 		});
 		const squareElement = find('.square');
 
-		expect(squareElement.classes['selected']).toBeTrue();
+		expect(squareElement.classes.selected).toBeTrue();
 	});
 });

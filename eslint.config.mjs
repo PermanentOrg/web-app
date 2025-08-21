@@ -71,8 +71,6 @@ export default typescriptEslint.config([
 	{
 		files: ['**/*.ts'],
 		rules: {
-			'@typescript-eslint/dot-notation': 'off',
-
 			'@typescript-eslint/explicit-member-accessibility': [
 				'off',
 				{

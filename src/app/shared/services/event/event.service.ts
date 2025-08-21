@@ -29,4 +29,8 @@ export class EventService {
 			this.observers.splice(index, 1);
 		}
 	}
+
+	public getObservers(): EventObserver[] {
+		return this.observers;
+	}
 }

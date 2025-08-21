@@ -26,7 +26,7 @@ describe('EventService', () => {
 
 		instance.addObserver(mockObserver);
 
-		expect(instance['observers']).toContain(mockObserver);
+		expect(instance.getObservers()).toContain(mockObserver);
 	});
 
 	it('should notify all observers', async () => {

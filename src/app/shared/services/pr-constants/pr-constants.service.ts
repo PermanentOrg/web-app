@@ -101,7 +101,7 @@ export class PrConstantsService {
 	}
 
 	public getStates() {
-		return this.constants['us_states'];
+		return this.constants.us_states;
 	}
 
 	public getAccessRoles() {
