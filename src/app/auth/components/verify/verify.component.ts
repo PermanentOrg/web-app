@@ -93,8 +93,8 @@ export class VerifyComponent implements OnInit {
 
 		if (queryParams.email) {
 			// decode the url encoding from the php
-			const query_email = decodeURI(queryParams.email);
-			if (query_email !== account.primaryEmail) {
+			const queryEmail = decodeURI(queryParams.email);
+			if (queryEmail !== account.primaryEmail) {
 				this.message.showError({
 					message: 'Sorry, this verification code does not match your account.',
 					translate: true,
