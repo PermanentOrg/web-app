@@ -79,7 +79,6 @@ export default typescriptEslint.config([
 			],
 
 			'brace-style': ['error', '1tbs'],
-			'id-blacklist': 'off',
 			'id-match': 'off',
 			'import/prefer-default-export': 'off',
 			'import/no-import-module-exports': 'off',
