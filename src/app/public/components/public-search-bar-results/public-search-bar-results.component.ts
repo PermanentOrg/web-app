@@ -16,8 +16,8 @@ export class PublicSearchBarResultsComponent {
 	@Output() tagClickOutput = new EventEmitter<TagVOData[]>();
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
+		public router: Router,
+		public route: ActivatedRoute,
 	) {}
 
 	public viewAllResults(): void {

@@ -18,10 +18,13 @@ class MultipartUploadUrlsList {
 	protected isInstance(obj: unknown): obj is MultipartUploadUrlsList {
 		return (
 			typeof obj === 'object' &&
-			typeof obj['urls'] === 'object' &&
-			typeof obj['urls'].length === 'number' &&
-			typeof obj['uploadId'] === 'string' &&
-			typeof obj['key'] === 'string'
+			'urls' in obj &&
+			obj.urls instanceof Array &&
+			typeof obj.urls.length === 'number' &&
+			'uploadId' in obj &&
+			typeof obj.uploadId === 'string' &&
+			'key' in obj &&
+			typeof obj.key === 'string'
 		);
 	}
 

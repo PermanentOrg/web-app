@@ -136,12 +136,12 @@ export class EditService {
 	}
 
 	loadGoogleMapsApi() {
-		if (window['doNotLoadGoogleMapsAPI']) {
+		if (window.doNotLoadGoogleMapsAPI) {
 			this.debug('Google Maps API disabled in testing environment');
 			return;
 		}
 
-		if (window['google']?.maps) {
+		if (window.google?.maps) {
 			this.debug('Google Maps API already loaded, skipping');
 			this.isGoogleMapsApiLoaded = true;
 			return;

@@ -18,7 +18,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { CountUpDirective } from 'ngx-countup';
 
-window['Stripe'] = () => {
+window.Stripe = () => {
 	return {
 		elements: () => {
 			return {
@@ -38,7 +38,7 @@ window['Stripe'] = () => {
 };
 
 // Disable loading of external Google Maps API
-window['doNotLoadGoogleMapsAPI'] = true;
+window.doNotLoadGoogleMapsAPI = true;
 
 // Disable loading of MixPanel
 

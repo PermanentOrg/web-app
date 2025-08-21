@@ -9,9 +9,9 @@ if (environment.production) {
 }
 
 declare let module: any;
-if (module['hot']) {
-	module['hot'].accept();
-	module['hot'].dispose(() => ɵresetCompiledComponents());
+if (module.hot) {
+	module.hot.accept();
+	module.hot.dispose(() => ɵresetCompiledComponents());
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule);

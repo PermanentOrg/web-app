@@ -111,7 +111,7 @@ export function getFormInputError(formInput: FormInputComponent | FormInput) {
 	if (FORM_ERROR_MESSAGES[formInput.fieldName]) {
 		return FORM_ERROR_MESSAGES[formInput.fieldName][errorName];
 	} else {
-		return FORM_ERROR_MESSAGES['generic'][errorName];
+		return FORM_ERROR_MESSAGES.generic[errorName];
 	}
 }
 

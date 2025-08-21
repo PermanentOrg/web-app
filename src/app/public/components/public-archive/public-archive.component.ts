@@ -69,16 +69,16 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 				.profileItemsDictionary$()
 				.subscribe(
 					(items) =>
-						(this.description = items['description']
-							? items['description'][0].textData1
+						(this.description = items.description
+							? items.description[0].textData1
 							: ''),
 				),
 			this.publicProfile.profileItemsDictionary$().subscribe((items) => {
-				this.emails = items['email']
-					? items['email'].map((item) => item.string1)
+				this.emails = items.email
+					? items.email.map((item) => item.string1)
 					: [];
-				this.websites = items['social_media']
-					? items['social_media'].map((item) => item.string1)
+				this.websites = items.social_media
+					? items.social_media.map((item) => item.string1)
 					: [];
 			}),
 			this.publicProfile.profileItemsDictionary$().subscribe((items) => {

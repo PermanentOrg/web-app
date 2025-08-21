@@ -42,9 +42,9 @@ export class PublicProfileComponent
 		this.milestones$ = this.publicProfile.profileItemsDictionary$().pipe(
 			map((profileItems) => {
 				const milestones = concat(
-					profileItems['job'] || [],
-					profileItems['home'] || [],
-					profileItems['milestone'] || [],
+					profileItems.job || [],
+					profileItems.home || [],
+					profileItems.milestone || [],
 				);
 				return orderBy(milestones, (i) => i.day1, 'desc');
 			}),

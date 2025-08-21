@@ -45,7 +45,7 @@ export class ChangePasswordComponent {
 
 		const verifyPasswordControl = new UntypedFormControl('', [
 			Validators.required,
-			matchControlValidator(this.changePasswordForm.controls['password']),
+			matchControlValidator(this.changePasswordForm.controls.password),
 		]);
 		this.changePasswordForm.addControl('passwordVerify', verifyPasswordControl);
 	}
