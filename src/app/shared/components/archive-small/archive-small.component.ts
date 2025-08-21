@@ -73,9 +73,6 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 			this.isPending = this.archive && this.archive.isPending();
 		}
 
-		if (this.relation) {
-		}
-
 		this.checkArchiveThumbnail();
 	}
 

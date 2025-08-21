@@ -434,8 +434,7 @@ export class SharingComponent implements OnInit {
 				},
 			)
 			.catch((err) => {
-				if (err instanceof ShareResponse) {
-				} else {
+				if (!(err instanceof ShareResponse)) {
 					throw err;
 				}
 			});
