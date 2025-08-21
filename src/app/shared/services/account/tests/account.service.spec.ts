@@ -40,7 +40,7 @@ describe('AccountService', () => {
 							);
 							observer.complete();
 						}),
-					get: (account: AccountVO) => Promise.reject({}),
+					get: async (account: AccountVO) => await Promise.reject({}),
 				},
 				auth: {
 					verify: (account, token, type) =>
@@ -95,7 +95,7 @@ describe('AccountService', () => {
 				},
 			})
 			.mock(Router, {
-				navigate: (route: string[]) => Promise.resolve(true),
+				navigate: async (route: string[]) => await Promise.resolve(true),
 			})
 			.mock(StorageService, {
 				local: {
@@ -108,11 +108,11 @@ describe('AccountService', () => {
 				},
 			})
 			.mock(UploadService, {
-				uploadFiles: (parentFolder: FolderVO, files: File[]) =>
-					Promise.resolve(true),
+				uploadFiles: async (parentFolder: FolderVO, files: File[]) =>
+					await Promise.resolve(true),
 			})
 			.mock(EditService, {
-				deleteItems: (items: any[]) => Promise.resolve(true),
+				deleteItems: async (items: any[]) => await Promise.resolve(true),
 			})
 			.mock(CookieService, { set: (key: string, value: string) => {} });
 	});

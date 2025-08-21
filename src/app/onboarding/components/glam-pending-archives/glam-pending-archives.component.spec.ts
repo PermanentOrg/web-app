@@ -22,7 +22,7 @@ describe('GlamPendingArchivesComponent', () => {
 			.mock(AccountService, mockAccountService)
 			.mock(ApiService, {
 				archive: {
-					accept: (archive: ArchiveVO) => Promise.resolve(),
+					accept: async (archive: ArchiveVO) => await Promise.resolve(),
 				},
 			})
 			.provide({ provide: OnboardingService, useValue: onboardingService })

@@ -3,7 +3,7 @@ import { FolderVO, RecordVO } from '@root/app/models';
 import { PublishIaData } from '@models/publish-ia-vo';
 
 export class PublishRepo extends BaseRepo {
-	public getResource(urlToken: string): Promise<PublishResponse> {
+	public async getResource(urlToken: string): Promise<PublishResponse> {
 		const data = [
 			{
 				PublishurlVO: {
@@ -12,14 +12,14 @@ export class PublishRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<PublishResponse>(
+		return await this.http.sendRequestPromise<PublishResponse>(
 			'/publish/getResource',
 			data,
 			{ responseClass: PublishResponse },
 		);
 	}
 
-	public publishToInternetArchive(
+	public async publishToInternetArchive(
 		publishIa: PublishIaData,
 	): Promise<PublishResponse> {
 		const data = [
@@ -28,14 +28,14 @@ export class PublishRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<PublishResponse>(
+		return await this.http.sendRequestPromise<PublishResponse>(
 			'/publish_ia/publish',
 			data,
 			{ responseClass: PublishResponse },
 		);
 	}
 
-	public getInternetArchiveLink(
+	public async getInternetArchiveLink(
 		publishIa: Pick<PublishIaData, 'folder_linkId'>,
 	): Promise<PublishResponse> {
 		const data = [
@@ -44,7 +44,7 @@ export class PublishRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<PublishResponse>(
+		return await this.http.sendRequestPromise<PublishResponse>(
 			'/publish_ia/getLink',
 			data,
 			{ responseClass: PublishResponse },

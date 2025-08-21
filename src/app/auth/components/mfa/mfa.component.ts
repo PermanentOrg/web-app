@@ -45,7 +45,7 @@ export class MfaComponent {
 
 		this.accountService
 			.verifyMfa(formValue.token, keepLoggedIn)
-			.then(() => this.accountService.switchToDefaultArchive())
+			.then(async () => await this.accountService.switchToDefaultArchive())
 			.then((response: ArchiveResponse) => {
 				this.waiting = false;
 

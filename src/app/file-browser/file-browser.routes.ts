@@ -33,8 +33,8 @@ export const routes: Routes = [
 	},
 	{
 		path: 'view',
-		loadChildren: () =>
-			import('../views/views.module').then((m) => m.ViewsModule),
+		loadChildren: async () =>
+			await import('../views/views.module').then((m) => m.ViewsModule),
 	},
 	{
 		path: ':archiveNbr/:folderLinkId',

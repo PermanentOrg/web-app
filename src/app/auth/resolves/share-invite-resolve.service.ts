@@ -28,12 +28,12 @@ export class ShareInviteResolveService {
 
 		return await this.apiService.invite
 			.getShareInviteInfo(email, inviteCode, params.shid, params.tp)
-			.then((response) => {
+			.then(async (response) => {
 				try {
 					const responseData = response.getResultsData()[0][0];
-					return Promise.resolve(responseData);
+					return await Promise.resolve(responseData);
 				} catch (err) {
-					return Promise.resolve(null);
+					return await Promise.resolve(null);
 				}
 			});
 	}

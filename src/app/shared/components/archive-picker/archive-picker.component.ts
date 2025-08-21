@@ -62,7 +62,7 @@ export class ArchivePickerComponent {
 		}));
 	}
 
-	searchByEmail() {
+	async searchByEmail() {
 		const deferred = new Deferred();
 		const fields: PromptField[] = [
 			{
@@ -81,11 +81,11 @@ export class ArchivePickerComponent {
 
 		this.searchResults = null;
 
-		return this.prompt
+		return await this.prompt
 			.prompt(fields, 'Search by email', deferred.promise, 'Search')
-			.then((value) => {
+			.then(async (value) => {
 				this.searchEmail = value.email;
-				return this.api.search.archiveByEmail(value.email).toPromise();
+				return await this.api.search.archiveByEmail(value.email).toPromise();
 			})
 			.then((response: SearchResponse) => {
 				this.searchResults = response.getArchiveVOs();
@@ -96,7 +96,7 @@ export class ArchivePickerComponent {
 			});
 	}
 
-	sendInvite() {
+	async sendInvite() {
 		const deferred = new Deferred();
 		const fields: PromptField[] = clone(INVITATION_FIELDS(this.searchEmail));
 		const forShare = !!this.dialogData.shareItem;
@@ -105,7 +105,7 @@ export class ArchivePickerComponent {
 			fields.push(ACCESS_ROLE_FIELD);
 		}
 
-		return this.prompt
+		return await this.prompt
 			.prompt(
 				fields,
 				forShare ? 'Invite to share' : 'Send invitation',

@@ -59,24 +59,24 @@ const routes: RoutesWithData = [
 	...customRedirects,
 	{
 		path: 'p',
-		loadChildren: () =>
-			import('./public/public.module').then((m) => m.PublicModule),
+		loadChildren: async () =>
+			await import('./public/public.module').then((m) => m.PublicModule),
 		data: {
 			title: 'Public',
 		},
 	},
 	{
 		path: 'gallery',
-		loadChildren: () =>
-			import('./gallery/gallery.module').then((m) => m.GalleryModule),
+		loadChildren: async () =>
+			await import('./gallery/gallery.module').then((m) => m.GalleryModule),
 		data: {
 			title: 'Public Gallery',
 		},
 	},
 	{
 		path: 'share',
-		loadChildren: () =>
-			import('./share-preview/share-preview.module').then(
+		loadChildren: async () =>
+			await import('./share-preview/share-preview.module').then(
 				(m) => m.SharePreviewModule,
 			),
 		data: {
@@ -95,8 +95,8 @@ const routes: RoutesWithData = [
 			{ path: 'app/reset', redirectTo: 'app/auth/reset', pathMatch: 'full' },
 			{
 				path: 'app/fa-reset',
-				loadChildren: () =>
-					new Promise(() => {
+				loadChildren: async () =>
+					await new Promise(() => {
 						const url = window.location.href;
 						const keyAndTenant = url.split('fa-reset')[1];
 						window.location.href =
@@ -121,36 +121,37 @@ const routes: RoutesWithData = [
 			},
 			{
 				path: 'app/auth',
-				loadChildren: () =>
-					import('./auth/auth.module').then((m) => m.AuthModule),
+				loadChildren: async () =>
+					await import('./auth/auth.module').then((m) => m.AuthModule),
 			},
 			{
 				path: 'app/embed',
-				loadChildren: () =>
-					import('./embed/embed.module').then((m) => m.EmbedModule),
+				loadChildren: async () =>
+					await import('./embed/embed.module').then((m) => m.EmbedModule),
 			},
 			{
 				path: 'app/onboarding',
-				loadChildren: () =>
-					import('./onboarding/onboarding.module').then(
+				loadChildren: async () =>
+					await import('./onboarding/onboarding.module').then(
 						(m) => m.OnboardingModule,
 					),
 			},
 			{
 				path: 'app/pledge',
-				loadChildren: () =>
-					import('./pledge/pledge.module').then((m) => m.PledgeModule),
+				loadChildren: async () =>
+					await import('./pledge/pledge.module').then((m) => m.PledgeModule),
 			},
 			{ path: 'm/embed', redirectTo: 'app/embed' },
 			{ path: 'm/pledge', redirectTo: 'app/pledge' },
 			{
 				path: 'app/v3',
-				loadChildren: () => import('./v3/v3.module').then((m) => m.V3Module),
+				loadChildren: async () =>
+					await import('./v3/v3.module').then((m) => m.V3Module),
 			},
 			{
 				path: '',
-				loadChildren: () =>
-					import('./core/core.module').then((m) => m.CoreModule),
+				loadChildren: async () =>
+					await import('./core/core.module').then((m) => m.CoreModule),
 			},
 			{ path: '**', redirectTo: '', pathMatch: 'full' },
 		],

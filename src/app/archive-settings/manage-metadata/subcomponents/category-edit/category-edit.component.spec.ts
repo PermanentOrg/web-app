@@ -108,7 +108,8 @@ describe('CategoryEditComponent', () => {
 		await instance.delete();
 
 		expect(deletedTags.length).toBe(2);
-		deletedTags.forEach((tag) => expect(tag.name).toContain('test'));
+		await expect(deletedTags[0].name).toContain('test');
+		await expect(deletedTags[1].name).toContain('test');
 		expect(outputs.refreshTags.emit).toHaveBeenCalled();
 		expect(outputs.deletedCategory.emit).toHaveBeenCalledWith('test');
 	});

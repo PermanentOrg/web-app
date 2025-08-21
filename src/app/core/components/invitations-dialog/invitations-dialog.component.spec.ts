@@ -20,8 +20,10 @@ class DialogRefMock {
 
 const mockApiService = {
 	invite: {
-		getInvites(): Promise<InviteVO[]> {
-			return Promise.resolve([new InviteVO({ email: 'testEmail1@test.com' })]);
+		async getInvites(): Promise<InviteVO[]> {
+			return await Promise.resolve([
+				new InviteVO({ email: 'testEmail1@test.com' }),
+			]);
 		},
 	},
 };

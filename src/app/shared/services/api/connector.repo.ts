@@ -27,7 +27,7 @@ export class ConnectorRepo extends BaseRepo {
 		);
 	}
 
-	public familysearchAuthorize(archive: ArchiveVO, code: string) {
+	public async familysearchAuthorize(archive: ArchiveVO, code: string) {
 		const simpleVo = new SimpleVO({
 			key: 'oauthCode',
 			value: code,
@@ -40,7 +40,7 @@ export class ConnectorRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			`/connector/familysearchAuthorize`,
 			data,
 			{ responseClass: ConnectorResponse },
@@ -61,35 +61,35 @@ export class ConnectorRepo extends BaseRepo {
 		);
 	}
 
-	public getFamilysearchUser(archive: ArchiveVO): Promise<any> {
+	public async getFamilysearchUser(archive: ArchiveVO): Promise<any> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchUser',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public getFamilysearchTreeUser(archive: ArchiveVO): Promise<any> {
+	public async getFamilysearchTreeUser(archive: ArchiveVO): Promise<any> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchTreeUser',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public getFamilysearchAncestry(
+	public async getFamilysearchAncestry(
 		archive: ArchiveVO,
 		personId: string,
 	): Promise<any> {
@@ -100,14 +100,14 @@ export class ConnectorRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchAncestry',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public getFamilysearchMemories(
+	public async getFamilysearchMemories(
 		archive: ArchiveVO,
 		personId: string,
 	): Promise<any> {
@@ -118,14 +118,14 @@ export class ConnectorRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchMemories',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public familysearchMemoryImportRequest(
+	public async familysearchMemoryImportRequest(
 		archive: ArchiveVO | ArchiveVO[],
 		personId?: string | string[],
 	): Promise<any> {
@@ -150,14 +150,14 @@ export class ConnectorRepo extends BaseRepo {
 			}));
 		}
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemoryImportRequest',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public familysearchMemorySyncRequest(
+	public async familysearchMemorySyncRequest(
 		archive: ArchiveVO | ArchiveVO[],
 	): Promise<any> {
 		if (!Array.isArray(archive)) {
@@ -168,14 +168,14 @@ export class ConnectorRepo extends BaseRepo {
 			ArchiveVO: vo,
 		}));
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemorySyncRequest',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public familysearchMemoryUploadRequest(
+	public async familysearchMemoryUploadRequest(
 		archive: ArchiveVO | ArchiveVO[],
 	): Promise<any> {
 		if (!Array.isArray(archive)) {
@@ -186,14 +186,14 @@ export class ConnectorRepo extends BaseRepo {
 			ArchiveVO: vo,
 		}));
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemoryUploadRequest',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public familysearchFactImportRequest(
+	public async familysearchFactImportRequest(
 		archive: ArchiveVO | ArchiveVO[],
 		personId: string | string[],
 	): Promise<any> {
@@ -210,7 +210,7 @@ export class ConnectorRepo extends BaseRepo {
 			SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] }),
 		}));
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchFactImportRequest',
 			data,
 			{ responseClass: ConnectorResponse },

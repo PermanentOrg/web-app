@@ -10,7 +10,7 @@ import { ProfileItemVOData } from '@models/profile-item-vo';
 import { getFirst } from '../http-v2/http-v2.service';
 
 export class ArchiveRepo extends BaseRepo {
-	public get(archives: ArchiveVO[]): Promise<ArchiveResponse> {
+	public async get(archives: ArchiveVO[]): Promise<ArchiveResponse> {
 		const data = archives.map((archive) => ({
 			ArchiveVO: new ArchiveVO({
 				archiveNbr: archive.archiveNbr,
@@ -18,12 +18,16 @@ export class ArchiveRepo extends BaseRepo {
 			}),
 		}));
 
-		return this.http.sendRequestPromise<ArchiveResponse>('/archive/get', data, {
-			responseClass: ArchiveResponse,
-		});
+		return await this.http.sendRequestPromise<ArchiveResponse>(
+			'/archive/get',
+			data,
+			{
+				responseClass: ArchiveResponse,
+			},
+		);
 	}
 
-	public getAllArchives(accountVO: AccountVO): Promise<ArchiveResponse> {
+	public async getAllArchives(accountVO: AccountVO): Promise<ArchiveResponse> {
 		const data = [
 			{
 				AccountVO: {
@@ -32,112 +36,114 @@ export class ArchiveRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/getAllArchives',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public change(archive: ArchiveVO): Promise<ArchiveResponse> {
+	public async change(archive: ArchiveVO): Promise<ArchiveResponse> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/change',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public update(archive: ArchiveVO): Promise<ArchiveResponse> {
+	public async update(archive: ArchiveVO): Promise<ArchiveResponse> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/update',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public delete(archive: ArchiveVO): Promise<ArchiveResponse> {
+	public async delete(archive: ArchiveVO): Promise<ArchiveResponse> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/delete',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public create(archive: ArchiveVO | ArchiveVO[]): Promise<ArchiveResponse> {
+	public async create(
+		archive: ArchiveVO | ArchiveVO[],
+	): Promise<ArchiveResponse> {
 		if (!isArray(archive)) {
 			archive = [archive];
 		}
 
 		const data = archive.map((archiveVo) => ({ ArchiveVO: archiveVo }));
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/post',
 			data,
 			{ responseClass: ArchiveResponse, useAuthorizationHeader: true },
 		);
 	}
 
-	public accept(archive: ArchiveVO): Promise<ArchiveResponse> {
+	public async accept(archive: ArchiveVO): Promise<ArchiveResponse> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/accept',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public decline(archive: ArchiveVO): Promise<ArchiveResponse> {
+	public async decline(archive: ArchiveVO): Promise<ArchiveResponse> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/decline',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public getMembers(archive: ArchiveVO): Promise<ArchiveResponse> {
+	public async getMembers(archive: ArchiveVO): Promise<ArchiveResponse> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/getShares',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public addMember(
+	public async addMember(
 		member: AccountVO,
 		archive: ArchiveVO,
 	): Promise<ArchiveResponse> {
@@ -148,14 +154,14 @@ export class ArchiveRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/share',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public transferOwnership(
+	public async transferOwnership(
 		member: AccountVO,
 		archive: ArchiveVO,
 	): Promise<ArchiveResponse> {
@@ -166,14 +172,14 @@ export class ArchiveRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/transferOwnership',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public updateMember(
+	public async updateMember(
 		member: AccountVO,
 		archive: ArchiveVO,
 	): Promise<ArchiveResponse> {
@@ -184,12 +190,12 @@ export class ArchiveRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise('/archive/updateShare', data, {
+		return await this.http.sendRequestPromise('/archive/updateShare', data, {
 			responseClass: ArchiveResponse,
 		});
 	}
 
-	public removeMember(
+	public async removeMember(
 		member: AccountVO,
 		archive: ArchiveVO,
 	): Promise<ArchiveResponse> {
@@ -200,14 +206,16 @@ export class ArchiveRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/unshare',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public getAllProfileItems(archive: ArchiveVO): Promise<ArchiveResponse> {
+	public async getAllProfileItems(
+		archive: ArchiveVO,
+	): Promise<ArchiveResponse> {
 		const data = [
 			{
 				Profile_itemVO: {
@@ -225,47 +233,47 @@ export class ArchiveRepo extends BaseRepo {
 			return;
 		}
 
-		return this.http.sendRequestPromise<ArchiveResponse>(endpoint, data, {
+		return await this.http.sendRequestPromise<ArchiveResponse>(endpoint, data, {
 			responseClass: ArchiveResponse,
 		});
 	}
 
-	public addUpdateProfileItems(profileItems: ProfileItemVOData[]) {
+	public async addUpdateProfileItems(profileItems: ProfileItemVOData[]) {
 		const data = profileItems.map((i) => ({
 			Profile_itemVO: i,
 		}));
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/profile_item/safeAddUpdate',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public deleteProfileItem(profileItem: ProfileItemVOData) {
+	public async deleteProfileItem(profileItem: ProfileItemVOData) {
 		const data = [
 			{
 				Profile_itemVO: profileItem,
 			},
 		];
 
-		return this.http.sendRequestPromise<ArchiveResponse>(
+		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/profile_item/delete',
 			data,
 			{ responseClass: ArchiveResponse },
 		);
 	}
 
-	public getArchiveStorage(archiveId) {
-		return getFirst(
+	public async getArchiveStorage(archiveId) {
+		return await getFirst(
 			this.httpV2.get<AccountStorage>(
 				`v2/archive/${archiveId}/payer-account-storage`,
 			),
 		).toPromise();
 	}
 
-	public getPublicArchiveTags(archiveId: string) {
-		return this.httpV2
+	public async getPublicArchiveTags(archiveId: string) {
+		return await this.httpV2
 			.get<TagVOData>(`v2/archive/${archiveId}/tags/public`)
 			.toPromise();
 	}

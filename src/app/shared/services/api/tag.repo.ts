@@ -2,7 +2,7 @@ import { ArchiveVO, TagVO, TagVOData, TagLinkVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 
 export class TagRepo extends BaseRepo {
-	public create(tag: TagVOData, tagLink: TagLinkVOData) {
+	public async create(tag: TagVOData, tagLink: TagLinkVOData) {
 		const data = [
 			{
 				TagVO: {
@@ -12,12 +12,12 @@ export class TagRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<TagResponse>('/tag/post', data, {
+		return await this.http.sendRequestPromise<TagResponse>('/tag/post', data, {
 			responseClass: TagResponse,
 		});
 	}
 
-	public deleteTagLink(tag: TagVOData, tagLink: TagLinkVOData) {
+	public async deleteTagLink(tag: TagVOData, tagLink: TagLinkVOData) {
 		const data = [
 			{
 				TagVO: tag,
@@ -25,14 +25,14 @@ export class TagRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<TagResponse>(
+		return await this.http.sendRequestPromise<TagResponse>(
 			'/tag/deleteTagLink',
 			data,
 			{ responseClass: TagResponse },
 		);
 	}
 
-	public getTagsByArchive(archive: ArchiveVO): Promise<TagResponse> {
+	public async getTagsByArchive(archive: ArchiveVO): Promise<TagResponse> {
 		const data = [
 			{
 				ArchiveVO: {
@@ -41,14 +41,14 @@ export class TagRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<TagResponse>(
+		return await this.http.sendRequestPromise<TagResponse>(
 			'/tag/getTagsByArchive',
 			data,
 			{ responseClass: TagResponse },
 		);
 	}
 
-	public delete(tag: TagVO | TagVO[]): Promise<TagResponse> {
+	public async delete(tag: TagVO | TagVO[]): Promise<TagResponse> {
 		let data: Array<{ TagVO: TagVO }> = [];
 		if (Array.isArray(tag)) {
 			data = tag.map((t) => ({
@@ -60,12 +60,16 @@ export class TagRepo extends BaseRepo {
 			});
 		}
 
-		return this.http.sendRequestPromise<TagResponse>('/tag/delete', data, {
-			responseClass: TagResponse,
-		});
+		return await this.http.sendRequestPromise<TagResponse>(
+			'/tag/delete',
+			data,
+			{
+				responseClass: TagResponse,
+			},
+		);
 	}
 
-	public update(tag: TagVO | TagVO[]): Promise<TagResponse> {
+	public async update(tag: TagVO | TagVO[]): Promise<TagResponse> {
 		let data: Array<{ TagVO: TagVO }> = [];
 		if (Array.isArray(tag)) {
 			data = tag.map((t) => ({
@@ -77,9 +81,13 @@ export class TagRepo extends BaseRepo {
 			});
 		}
 
-		return this.http.sendRequestPromise<TagResponse>('/tag/updateTag', data, {
-			responseClass: TagResponse,
-		});
+		return await this.http.sendRequestPromise<TagResponse>(
+			'/tag/updateTag',
+			data,
+			{
+				responseClass: TagResponse,
+			},
+		);
 	}
 }
 

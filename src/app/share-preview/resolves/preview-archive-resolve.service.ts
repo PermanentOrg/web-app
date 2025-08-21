@@ -19,10 +19,10 @@ export class PreviewArchiveResolveService {
 		private router: Router,
 	) {}
 
-	resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+	async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 		const archiveId = route.parent.data.previewItem.archiveId;
 		const archiveNbr = route.parent.data.previewItem.archiveArchiveNbr;
-		return this.api.archive
+		return await this.api.archive
 			.get([new ArchiveVO({ archiveId, archiveNbr })])
 			.then((response: ArchiveResponse): ArchiveVO => response.getArchiveVO());
 		// return this.api.publish.getResource(route.params.publishUrlToken)

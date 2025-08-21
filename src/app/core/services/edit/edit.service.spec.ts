@@ -12,8 +12,8 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 const mockDataService = {
-	refreshCurrentFolder: () => Promise.resolve(),
-	downloadFile: () => Promise.resolve(),
+	refreshCurrentFolder: async () => await Promise.resolve(),
+	downloadFile: async () => await Promise.resolve(),
 	hideItemsInCurrentFolder: (items) => {},
 	itemUnshared: (item) => {},
 };

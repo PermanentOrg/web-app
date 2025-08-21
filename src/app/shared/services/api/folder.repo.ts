@@ -18,13 +18,17 @@ const DEFAULT_WHITELIST: (keyof FolderVO)[] = [
 ];
 
 export class FolderRepo extends BaseRepo {
-	public getRoot(): Promise<FolderResponse> {
-		return this.http.sendRequestPromise<FolderResponse>('/folder/getRoot', [], {
-			responseClass: FolderResponse,
-		});
+	public async getRoot(): Promise<FolderResponse> {
+		return await this.http.sendRequestPromise<FolderResponse>(
+			'/folder/getRoot',
+			[],
+			{
+				responseClass: FolderResponse,
+			},
+		);
 	}
 
-	public get(folderVOs: FolderVO[]): Promise<FolderResponse> {
+	public async get(folderVOs: FolderVO[]): Promise<FolderResponse> {
 		const data = folderVOs.map((folderVO) => ({
 			FolderVO: {
 				archiveNbr: folderVO.archiveNbr,
@@ -33,12 +37,16 @@ export class FolderRepo extends BaseRepo {
 			},
 		}));
 
-		return this.http.sendRequestPromise<FolderResponse>('/folder/get', data, {
-			responseClass: FolderResponse,
-		});
+		return await this.http.sendRequestPromise<FolderResponse>(
+			'/folder/get',
+			data,
+			{
+				responseClass: FolderResponse,
+			},
+		);
 	}
 
-	public getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
+	public async getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
 		const data = folderVOs.map((folderVO) => ({
 			FolderVO: {
 				archiveNbr: folderVO.archiveNbr,
@@ -47,7 +55,7 @@ export class FolderRepo extends BaseRepo {
 			},
 		}));
 
-		return this.http.sendRequestPromise<FolderResponse>(
+		return await this.http.sendRequestPromise<FolderResponse>(
 			'/folder/getWithChildren',
 			data,
 			{ responseClass: FolderResponse },
@@ -95,17 +103,21 @@ export class FolderRepo extends BaseRepo {
 		});
 	}
 
-	public post(folderVOs: FolderVO[]): Promise<FolderResponse> {
+	public async post(folderVOs: FolderVO[]): Promise<FolderResponse> {
 		const data = folderVOs.map((folderVO) => ({
 			FolderVO: new FolderVO(folderVO),
 		}));
 
-		return this.http.sendRequestPromise<FolderResponse>('/folder/post', data, {
-			responseClass: FolderResponse,
-		});
+		return await this.http.sendRequestPromise<FolderResponse>(
+			'/folder/post',
+			data,
+			{
+				responseClass: FolderResponse,
+			},
+		);
 	}
 
-	public update(
+	public async update(
 		folderVOs: FolderVO[],
 		whitelist = DEFAULT_WHITELIST,
 	): Promise<FolderResponse> {
@@ -126,14 +138,14 @@ export class FolderRepo extends BaseRepo {
 			};
 		});
 
-		return this.http.sendRequestPromise<FolderResponse>(
+		return await this.http.sendRequestPromise<FolderResponse>(
 			'/folder/update',
 			data,
 			{ responseClass: FolderResponse },
 		);
 	}
 
-	public updateRoot(
+	public async updateRoot(
 		folderVOs: FolderVO[],
 		whitelist = DEFAULT_WHITELIST,
 	): Promise<FolderResponse> {
@@ -154,26 +166,26 @@ export class FolderRepo extends BaseRepo {
 			};
 		});
 
-		return this.http.sendRequestPromise<FolderResponse>(
+		return await this.http.sendRequestPromise<FolderResponse>(
 			'/folder/updateRootColumns',
 			data,
 			{ responseClass: FolderResponse },
 		);
 	}
 
-	public delete(folderVOs: FolderVO[]): Promise<FolderResponse> {
+	public async delete(folderVOs: FolderVO[]): Promise<FolderResponse> {
 		const data = folderVOs.map((folderVO) => ({
 			FolderVO: new FolderVO(folderVO),
 		}));
 
-		return this.http.sendRequestPromise<FolderResponse>(
+		return await this.http.sendRequestPromise<FolderResponse>(
 			'/folder/delete',
 			data,
 			{ responseClass: FolderResponse },
 		);
 	}
 
-	public move(
+	public async move(
 		folderVOs: FolderVO[],
 		destination: FolderVO,
 	): Promise<FolderResponse> {
@@ -184,13 +196,17 @@ export class FolderRepo extends BaseRepo {
 			},
 		}));
 
-		return this.http.sendRequestPromise<FolderResponse>('/folder/move', data, {
-			responseClass: FolderResponse,
-			useAuthorizationHeader: true,
-		});
+		return await this.http.sendRequestPromise<FolderResponse>(
+			'/folder/move',
+			data,
+			{
+				responseClass: FolderResponse,
+				useAuthorizationHeader: true,
+			},
+		);
 	}
 
-	public copy(
+	public async copy(
 		folderVOs: FolderVO[],
 		destination: FolderVO,
 	): Promise<FolderResponse> {
@@ -201,13 +217,17 @@ export class FolderRepo extends BaseRepo {
 			},
 		}));
 
-		return this.http.sendRequestPromise<FolderResponse>('/folder/copy', data, {
-			responseClass: FolderResponse,
-			useAuthorizationHeader: true,
-		});
+		return await this.http.sendRequestPromise<FolderResponse>(
+			'/folder/copy',
+			data,
+			{
+				responseClass: FolderResponse,
+				useAuthorizationHeader: true,
+			},
+		);
 	}
 
-	public getPublicRoot(archiveNbr: string) {
+	public async getPublicRoot(archiveNbr: string) {
 		const data = [
 			{
 				ArchiveVO: {
@@ -216,14 +236,14 @@ export class FolderRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<FolderResponse>(
+		return await this.http.sendRequestPromise<FolderResponse>(
 			'/folder/getPublicRoot',
 			data,
 			{ responseClass: FolderResponse },
 		);
 	}
 
-	public sort(folderVOs: FolderVO[]): Promise<FolderResponse> {
+	public async sort(folderVOs: FolderVO[]): Promise<FolderResponse> {
 		const data = folderVOs.map((folderVO) => ({
 			FolderVO: new FolderVO({
 				folder_linkId: folderVO.folder_linkId,
@@ -231,12 +251,16 @@ export class FolderRepo extends BaseRepo {
 			}),
 		}));
 
-		return this.http.sendRequestPromise<FolderResponse>('/folder/sort', data, {
-			responseClass: FolderResponse,
-		});
+		return await this.http.sendRequestPromise<FolderResponse>(
+			'/folder/sort',
+			data,
+			{
+				responseClass: FolderResponse,
+			},
+		);
 	}
 
-	public createZip(items: ItemVO[]): Promise<FolderResponse> {
+	public async createZip(items: ItemVO[]): Promise<FolderResponse> {
 		const data = [
 			{
 				ZipVO: {
@@ -245,9 +269,13 @@ export class FolderRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<FolderResponse>('/zip/post', data, {
-			responseClass: FolderResponse,
-		});
+		return await this.http.sendRequestPromise<FolderResponse>(
+			'/zip/post',
+			data,
+			{
+				responseClass: FolderResponse,
+			},
+		);
 	}
 }
 

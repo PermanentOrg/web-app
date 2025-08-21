@@ -192,8 +192,8 @@ export class AccountService {
 		}) as FolderVO;
 	}
 
-	public refreshAccount() {
-		return this.api.account
+	public async refreshAccount() {
+		return await this.api.account
 			.get(this.account)
 			.then(async (response: AccountResponse) => {
 				if (!response.isSuccessful) {
@@ -235,12 +235,12 @@ export class AccountService {
 		return firstUrlPiece === 'p' || firstUrlPiece === 'gallery';
 	}
 
-	public refreshArchive() {
+	public async refreshArchive() {
 		if (!this.archive) {
-			return Promise.resolve();
+			return await Promise.resolve();
 		}
 
-		return this.api.archive
+		return await this.api.archive
 			.get([this.archive])
 			.then((response: ArchiveResponse) => {
 				if (!response.isSuccessful) {
@@ -257,8 +257,8 @@ export class AccountService {
 			});
 	}
 
-	public refreshArchives() {
-		return this.api.archive
+	public async refreshArchives() {
+		return await this.api.archive
 			.getAllArchives(this.account)
 			.then((response: ArchiveResponse) => {
 				const archives = response.getArchiveVOs();
@@ -288,24 +288,26 @@ export class AccountService {
 		this.setRootFolder(root);
 	}
 
-	public updateAccount(accountChanges: AccountVO) {
+	public async updateAccount(accountChanges: AccountVO) {
 		const updated = new AccountVO(this.account);
 		updated.update(accountChanges);
 
-		return this.api.account.update(updated).then((newAccount: AccountVO) => {
-			this.account.update(newAccount);
-			this.storage.local.set(ACCOUNT_KEY, this.account);
-		});
+		return await this.api.account
+			.update(updated)
+			.then((newAccount: AccountVO) => {
+				this.account.update(newAccount);
+				this.storage.local.set(ACCOUNT_KEY, this.account);
+			});
 	}
 
-	public changeArchive(archive: ArchiveVO) {
-		return this.api.archive
+	public async changeArchive(archive: ArchiveVO) {
+		return await this.api.archive
 			.change(archive)
 			.then((response: ArchiveResponse) => {
 				archive = response.getArchiveVO();
 				this.setArchive(archive);
 			})
-			.then(() => this.api.folder.getRoot())
+			.then(async () => await this.api.folder.getRoot())
 			.then((response: FolderResponse) => {
 				const root = response.getFolderVO();
 				this.setRootFolder(root);
@@ -314,13 +316,13 @@ export class AccountService {
 			});
 	}
 
-	public checkSession(): Promise<boolean> {
+	public async checkSession(): Promise<boolean> {
 		if (this.skipSessionCheck) {
 			this.skipSessionCheck = false;
-			return Promise.resolve(true);
+			return await Promise.resolve(true);
 		}
 
-		return this.api.auth.isLoggedIn().then((response: AuthResponse) => {
+		return await this.api.auth.isLoggedIn().then((response: AuthResponse) => {
 			if (!response.isSuccessful) {
 				throw response;
 			}
@@ -339,7 +341,7 @@ export class AccountService {
 		);
 	}
 
-	public logIn(
+	public async logIn(
 		email: string,
 		password: string,
 		rememberMe: boolean,
@@ -357,7 +359,7 @@ export class AccountService {
 
 		const currentAccount = this.account;
 
-		return this.api.auth
+		return await this.api.auth
 			.logIn(email, password, rememberMe, keepLoggedIn)
 			.pipe(
 				map((response: AuthResponse) => {
@@ -399,8 +401,10 @@ export class AccountService {
 			.toPromise();
 	}
 
-	public checkForMFAWithLogin(oldPassword: string): Promise<AuthResponse> {
-		return this.api.auth
+	public async checkForMFAWithLogin(
+		oldPassword: string,
+	): Promise<AuthResponse> {
+		return await this.api.auth
 			.logIn(
 				this.account.primaryEmail,
 				oldPassword,
@@ -427,11 +431,11 @@ export class AccountService {
 			.toPromise();
 	}
 
-	public verifyMfa(
+	public async verifyMfa(
 		token: string,
 		keepLoggedIn?: boolean,
 	): Promise<AuthResponse> {
-		return this.api.auth
+		return await this.api.auth
 			.verify(this.account, token, 'type.auth.mfaValidation')
 			.pipe(
 				map((response: AuthResponse) => {
@@ -457,8 +461,8 @@ export class AccountService {
 			.toPromise();
 	}
 
-	public verifyEmail(token: string): Promise<AuthResponse> {
-		return this.api.auth
+	public async verifyEmail(token: string): Promise<AuthResponse> {
+		return await this.api.auth
 			.verify(this.account, token, 'type.auth.email')
 			.pipe(
 				map((response: AuthResponse) => {
@@ -478,8 +482,8 @@ export class AccountService {
 			.toPromise();
 	}
 
-	public verifyPhone(token: string): Promise<AuthResponse> {
-		return this.api.auth
+	public async verifyPhone(token: string): Promise<AuthResponse> {
+		return await this.api.auth
 			.verify(this.account, token, 'type.auth.phone')
 			.pipe(
 				map((response: AuthResponse) => {
@@ -499,16 +503,16 @@ export class AccountService {
 			.toPromise();
 	}
 
-	public resendEmailVerification(): Promise<AuthResponse> {
-		return this.api.auth.resendEmailVerification(this.account);
+	public async resendEmailVerification(): Promise<AuthResponse> {
+		return await this.api.auth.resendEmailVerification(this.account);
 	}
 
-	public resendPhoneVerification(): Promise<AuthResponse> {
-		return this.api.auth.resendPhoneVerification(this.account);
+	public async resendPhoneVerification(): Promise<AuthResponse> {
+		return await this.api.auth.resendPhoneVerification(this.account);
 	}
 
-	public switchToDefaultArchive(): Promise<ArchiveResponse> {
-		return this.api.archive
+	public async switchToDefaultArchive(): Promise<ArchiveResponse> {
+		return await this.api.archive
 			.getAllArchives(this.account)
 			.then((response: ArchiveResponse) => {
 				const archives = response.getArchiveVOs();

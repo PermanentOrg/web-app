@@ -14,13 +14,13 @@ class MockDialogRef {
 
 const mockApiService = {
 	tag: {
-		getTagsByArchive(archive) {
-			return Promise.resolve([]);
+		async getTagsByArchive(archive) {
+			return await Promise.resolve([]);
 		},
 	},
 	archive: {
-		getMembers(archive) {
-			return Promise.resolve(
+		async getMembers(archive) {
+			return await Promise.resolve(
 				new ArchiveResponse({
 					Results: [],
 				}),

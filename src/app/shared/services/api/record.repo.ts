@@ -38,7 +38,7 @@ class MultipartUploadUrlsList {
 }
 
 export class RecordRepo extends BaseRepo {
-	public get(recordVOs: RecordVO[]): Promise<RecordResponse> {
+	public async get(recordVOs: RecordVO[]): Promise<RecordResponse> {
 		const data = recordVOs.map((recordVO) => ({
 			RecordVO: new RecordVO({
 				folder_linkId: recordVO.folder_linkId,
@@ -47,12 +47,16 @@ export class RecordRepo extends BaseRepo {
 			}),
 		}));
 
-		return this.http.sendRequestPromise<RecordResponse>('/record/get', data, {
-			responseClass: RecordResponse,
-		});
+		return await this.http.sendRequestPromise<RecordResponse>(
+			'/record/get',
+			data,
+			{
+				responseClass: RecordResponse,
+			},
+		);
 	}
 
-	public getLean(
+	public async getLean(
 		recordVOs: RecordVO[],
 		whitelist?: string[],
 	): Promise<RecordResponse> {
@@ -64,18 +68,18 @@ export class RecordRepo extends BaseRepo {
 			};
 		});
 
-		return this.http.sendRequestPromise<RecordResponse>(
+		return await this.http.sendRequestPromise<RecordResponse>(
 			'/record/getLean',
 			data,
 			{ responseClass: RecordResponse },
 		);
 	}
 
-	public getPresignedUrl(
+	public async getPresignedUrl(
 		recordVO: RecordVO,
 		fileType: string,
 	): Promise<BaseResponse> {
-		return this.http.sendRequestPromise('/record/getPresignedUrl', [
+		return await this.http.sendRequestPromise('/record/getPresignedUrl', [
 			{
 				RecordVO: recordVO,
 				SimpleVO: {
@@ -109,10 +113,10 @@ export class RecordRepo extends BaseRepo {
 		)[0];
 	}
 
-	public getMultipartUploadURLs(
+	public async getMultipartUploadURLs(
 		size: number,
 	): Promise<MultipartUploadUrlsList> {
-		return getFirst(
+		return await getFirst(
 			this.httpV2.post(
 				'/record/getMultipartUploadUrls',
 				{
@@ -175,7 +179,7 @@ export class RecordRepo extends BaseRepo {
 		};
 	}
 
-	public delete(recordVOs: RecordVO[]): Promise<RecordResponse> {
+	public async delete(recordVOs: RecordVO[]): Promise<RecordResponse> {
 		const data = recordVOs.map((recordVO) => ({
 			RecordVO: new RecordVO(recordVO).getCleanVO(),
 		}));
@@ -187,14 +191,14 @@ export class RecordRepo extends BaseRepo {
 			}
 		}
 
-		return this.http.sendRequestPromise<RecordResponse>(
+		return await this.http.sendRequestPromise<RecordResponse>(
 			'/record/delete',
 			data,
 			{ responseClass: RecordResponse },
 		);
 	}
 
-	public move(
+	public async move(
 		recordVOs: RecordVO[],
 		destination: FolderVO,
 	): Promise<RecordResponse> {
@@ -209,13 +213,17 @@ export class RecordRepo extends BaseRepo {
 			this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
 		}
 
-		return this.http.sendRequestPromise<RecordResponse>('/record/move', data, {
-			responseClass: RecordResponse,
-			useAuthorizationHeader: true,
-		});
+		return await this.http.sendRequestPromise<RecordResponse>(
+			'/record/move',
+			data,
+			{
+				responseClass: RecordResponse,
+				useAuthorizationHeader: true,
+			},
+		);
 	}
 
-	public copy(
+	public async copy(
 		recordVOs: RecordVO[],
 		destination: FolderVO,
 	): Promise<RecordResponse> {
@@ -230,10 +238,14 @@ export class RecordRepo extends BaseRepo {
 			this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
 		}
 
-		return this.http.sendRequestPromise<RecordResponse>('/record/copy', data, {
-			responseClass: RecordResponse,
-			useAuthorizationHeader: true,
-		});
+		return await this.http.sendRequestPromise<RecordResponse>(
+			'/record/copy',
+			data,
+			{
+				responseClass: RecordResponse,
+				useAuthorizationHeader: true,
+			},
+		);
 	}
 
 	private getThumbnailCache(): ThumbnailCache {

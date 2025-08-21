@@ -10,7 +10,10 @@ import { firstValueFrom } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
 
 export class BillingRepo extends BaseRepo {
-	public claimPledge(billingPaymentVO: BillingPaymentVO, pledgeId: string) {
+	public async claimPledge(
+		billingPaymentVO: BillingPaymentVO,
+		pledgeId: string,
+	) {
 		const data = [
 			{
 				BillingPaymentVO: billingPaymentVO,
@@ -21,14 +24,14 @@ export class BillingRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<BillingResponse>(
+		return await this.http.sendRequestPromise<BillingResponse>(
 			'/billing/claimPledge',
 			data,
 			{ responseClass: BillingResponse },
 		);
 	}
 
-	public getFileHistory(account: AccountVO) {
+	public async getFileHistory(account: AccountVO) {
 		const data = [
 			{
 				LedgerNonfinancialVO: {
@@ -36,14 +39,14 @@ export class BillingRepo extends BaseRepo {
 				},
 			},
 		];
-		return this.http.sendRequestPromise<BillingResponse>(
+		return await this.http.sendRequestPromise<BillingResponse>(
 			'/billing/getBillingLedgerNonfinancial',
 			data,
 			{ responseClass: BillingResponse },
 		);
 	}
 
-	public getTransactionHistory(account: AccountVO) {
+	public async getTransactionHistory(account: AccountVO) {
 		const data = [
 			{
 				LedgerFinancialVO: {
@@ -51,7 +54,7 @@ export class BillingRepo extends BaseRepo {
 				},
 			},
 		];
-		return this.http.sendRequestPromise<BillingResponse>(
+		return await this.http.sendRequestPromise<BillingResponse>(
 			'/billing/getBillingLedgerFinancial',
 			data,
 			{ responseClass: BillingResponse },
@@ -72,7 +75,7 @@ export class BillingRepo extends BaseRepo {
 		);
 	}
 
-	public giftStorage(
+	public async giftStorage(
 		recipientEmails: string[],
 		storageAmount: number,
 		note?: string,
@@ -83,7 +86,7 @@ export class BillingRepo extends BaseRepo {
 			...(note ? { note } : {}),
 		};
 
-		return getFirst(
+		return await getFirst(
 			this.httpV2.post('v2/billing/gift', data, GiftingResponse),
 		).toPromise();
 	}

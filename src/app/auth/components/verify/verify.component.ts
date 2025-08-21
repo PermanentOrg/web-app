@@ -118,7 +118,7 @@ export class VerifyComponent implements OnInit {
 		});
 	}
 
-	onSubmit(formValue: any) {
+	async onSubmit(formValue: any) {
 		this.waiting = true;
 
 		let verifyPromise: Promise<AuthResponse>;
@@ -134,7 +134,7 @@ export class VerifyComponent implements OnInit {
 				return;
 		}
 
-		return verifyPromise
+		return await verifyPromise
 			.then((response: AuthResponse) => {
 				if (!response.isSuccessful) {
 					throw response;
@@ -207,8 +207,8 @@ export class VerifyComponent implements OnInit {
 			});
 	}
 
-	finish() {
-		return this.accountService
+	async finish() {
+		return await this.accountService
 			.switchToDefaultArchive()
 			.then((response: ArchiveResponse) => {
 				this.message.showMessage({

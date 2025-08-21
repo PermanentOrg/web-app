@@ -30,7 +30,7 @@ const mockPromoData = {
 };
 
 const mockAccountService = {
-	refreshAccount: (): Promise<void> => Promise.resolve(),
+	refreshAccount: async (): Promise<void> => await Promise.resolve(),
 	setAccount: (account: AccountVO): void => {},
 	getAccount: (): AccountVO =>
 		new AccountVO({ spaceLeft: 10000, spaceTotal: 10000, accountId: 1 }),
@@ -38,19 +38,20 @@ const mockAccountService = {
 };
 
 const mockPledgeService = {
-	loadPledge: (id): Promise<any> => Promise.resolve(),
+	loadPledge: async (id): Promise<any> => await Promise.resolve(),
 	createBillingPaymentVo: (account: AccountVO): BillingPaymentVO =>
 		new BillingPaymentVO({ spaceAmountInGb: 5 }),
-	linkAccount: (account: AccountVO): Promise<void> => Promise.resolve(),
+	linkAccount: async (account: AccountVO): Promise<void> =>
+		await Promise.resolve(),
 };
 
 const mockApiService = {
 	billing: {
-		claimPledge: (
+		claimPledge: async (
 			billingPaymentVO: BillingPaymentVO,
 			pledgeId: string,
 		): Promise<BillingResponse> =>
-			Promise.resolve(new BillingResponse(mockPromoData)),
+			await Promise.resolve(new BillingResponse(mockPromoData)),
 	},
 };
 

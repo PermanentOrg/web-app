@@ -3,7 +3,7 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
 
 export class RelationRepo extends BaseRepo {
-	public getAll(archiveVO: ArchiveVO) {
+	public async getAll(archiveVO: ArchiveVO) {
 		const data = [
 			{
 				RelationVO: {
@@ -12,14 +12,14 @@ export class RelationRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<RelationResponse>(
+		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/getAll',
 			data,
 			{ responseClass: RelationResponse },
 		);
 	}
 
-	public create(relationVO: RelationVO) {
+	public async create(relationVO: RelationVO) {
 		const data = {
 			RelationVO: {
 				relationArchiveId: relationVO.relationArchiveId,
@@ -27,14 +27,14 @@ export class RelationRepo extends BaseRepo {
 			},
 		};
 
-		return this.http.sendRequestPromise<RelationResponse>(
+		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/post',
 			[data],
 			{ responseClass: RelationResponse },
 		);
 	}
 
-	public update(relationVO: RelationVO) {
+	public async update(relationVO: RelationVO) {
 		const data = {
 			RelationVO: {
 				relationId: relationVO.relationId,
@@ -42,14 +42,14 @@ export class RelationRepo extends BaseRepo {
 			},
 		};
 
-		return this.http.sendRequestPromise<RelationResponse>(
+		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/update',
 			[data],
 			{ responseClass: RelationResponse },
 		);
 	}
 
-	public accept(relationVO: RelationVO, relationMyVO: RelationVO) {
+	public async accept(relationVO: RelationVO, relationMyVO: RelationVO) {
 		const data = {
 			RelationVO: {
 				relationId: relationVO.relationId,
@@ -57,21 +57,21 @@ export class RelationRepo extends BaseRepo {
 			RelationMyVO: relationMyVO,
 		};
 
-		return this.http.sendRequestPromise<RelationResponse>(
+		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/acceptRelation',
 			[data],
 			{ responseClass: RelationResponse },
 		);
 	}
 
-	public delete(relationVO: RelationVO) {
+	public async delete(relationVO: RelationVO) {
 		const data = {
 			RelationVO: {
 				relationId: relationVO.relationId,
 			},
 		};
 
-		return this.http.sendRequestPromise<RelationResponse>(
+		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/delete',
 			[data],
 			{ responseClass: RelationResponse },

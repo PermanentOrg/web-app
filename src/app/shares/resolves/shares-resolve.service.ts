@@ -22,11 +22,11 @@ export class SharesResolveService {
 		private router: Router,
 	) {}
 
-	resolve(
+	async resolve(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Promise<any> {
-		return this.api.share
+		return await this.api.share
 			.getShares()
 			.then((response: ShareResponse) => response.getShareArchiveVOs());
 	}
