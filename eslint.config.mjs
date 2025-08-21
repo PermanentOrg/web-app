@@ -158,7 +158,6 @@ export default typescriptEslint.config([
 			'no-continue': 'off',
 			'no-control-regex': 'off',
 			'no-else-return': 'off',
-			'no-empty': 'off',
 			'no-lonely-if': 'off',
 			'no-multi-assign': 'off',
 			'no-param-reassign': 'off',
