@@ -6,8 +6,6 @@ export class SidebarActionPortalService {
 	private outlet: PortalOutlet;
 	private currentPortal: CdkPortal;
 
-	constructor() {}
-
 	provideOutlet(portalOutlet: PortalOutlet) {
 		this.outlet = portalOutlet;
 

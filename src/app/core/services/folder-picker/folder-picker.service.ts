@@ -9,8 +9,6 @@ import { FolderVO, RecordVO } from '@root/app/models';
 export class FolderPickerService {
 	private component: FolderPickerComponent;
 
-	constructor() {}
-
 	registerComponent(toRegister: FolderPickerComponent) {
 		if (this.component) {
 			throw new Error(

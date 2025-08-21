@@ -49,8 +49,6 @@ const dummyItems = blurredPhotos.map((filename, index) => {
 
 @Injectable()
 export class PreviewFolderResolveService {
-	constructor() {}
-
 	resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 		const previewItem = route.parent.data.previewItem as FolderVO;
 

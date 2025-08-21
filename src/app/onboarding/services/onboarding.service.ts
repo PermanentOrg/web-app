@@ -7,8 +7,6 @@ import { ArchiveVO } from '@models/index';
 export class OnboardingService {
 	private onboardedArchives: ArchiveVO[] = [];
 
-	constructor() {}
-
 	public registerArchive(archive: ArchiveVO): void {
 		this.onboardedArchives.push(archive);
 	}

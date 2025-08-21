@@ -12,8 +12,6 @@ export class ScrollService {
 		// this.subject.next(event);
 	}, 64);
 
-	constructor() {}
-
 	scrollEvent(event: Event) {
 		this.throttled(event);
 	}

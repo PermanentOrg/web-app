@@ -22,6 +22,10 @@ export class TagVO extends BaseVO implements TagVOData {
 
 	constructor(data: TagVOData) {
 		super(data);
+		this.tagId = data.tagId;
+		this.name = data.name;
+		this.archiveId = data.archiveId;
+		this.type = data.type;
 	}
 
 	public isCustomMetadata(): boolean {

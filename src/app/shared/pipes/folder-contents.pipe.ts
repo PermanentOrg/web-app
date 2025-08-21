@@ -6,8 +6,6 @@ import { FolderSizeVOData } from '@models';
 	standalone: false,
 })
 export class FolderContentsPipe implements PipeTransform {
-	constructor() {}
-
 	transform(folderSizeVo: FolderSizeVOData, args?: any): string {
 		if (folderSizeVo) {
 			const fileCount = folderSizeVo.allRecordCountShallow;

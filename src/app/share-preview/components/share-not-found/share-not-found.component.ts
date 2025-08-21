@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
 	styleUrls: ['./share-not-found.component.scss'],
 	standalone: false,
 })
-export class ShareNotFoundComponent {
-	constructor() {}
-}
+export class ShareNotFoundComponent {}

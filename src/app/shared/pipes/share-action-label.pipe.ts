@@ -5,8 +5,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 	standalone: false,
 })
 export class ShareActionLabelPipe implements PipeTransform {
-	constructor() {}
-
 	transform(accessRole: string, args?: any): any {
 		switch (accessRole) {
 			case 'access.role.owner':

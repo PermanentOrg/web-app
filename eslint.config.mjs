@@ -132,7 +132,6 @@ export default typescriptEslint.config([
 			'@angular-eslint/no-output-on-prefix': 'off',
 			'@angular-eslint/use-lifecycle-interface': 'off',
 			'@typescript-eslint/no-empty-function': 'off',
-			'@typescript-eslint/no-useless-constructor': 'off',
 			'@typescript-eslint/prefer-for-of': 'off',
 			'array-callback-return': 'off',
 			'brace-style': 'off',

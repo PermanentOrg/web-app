@@ -12,6 +12,4 @@ export class PublicArchiveWebLinksComponent {
 	@Input() description: string = '';
 	@Input() emails: string[] = [];
 	@Input() websites: string[] = [];
-
-	constructor() {}
 }

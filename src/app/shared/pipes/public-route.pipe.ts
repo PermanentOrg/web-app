@@ -6,8 +6,6 @@ import { FolderVO, RecordVO } from '@models';
 	standalone: false,
 })
 export class PublicRoutePipe implements PipeTransform {
-	constructor() {}
-
 	transform(value: RecordVO | FolderVO, _?: any): any[] {
 		const rootArchive = this.getPublicArchiveNbr(value);
 		if (value instanceof RecordVO) {

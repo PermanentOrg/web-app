@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
 	styleUrl: './account-security.component.scss',
 	standalone: false,
 })
-export class AccountSecurityComponent {
-	constructor() {}
-}
+export class AccountSecurityComponent {}

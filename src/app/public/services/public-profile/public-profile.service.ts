@@ -16,8 +16,6 @@ export class PublicProfileService {
 	archiveBs = new BehaviorSubject<ArchiveVO>(null);
 	profileItemsDictionaryBs = new BehaviorSubject<ProfileItemVODictionary>({});
 
-	constructor() {}
-
 	publicRoot$() {
 		return this.publicRootBs.asObservable();
 	}

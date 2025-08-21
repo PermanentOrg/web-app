@@ -14,8 +14,6 @@ export class IFrameService {
 		this.resizeIFrame();
 	}, 64);
 
-	constructor() {}
-
 	setSizeTarget(element: HTMLElement | any) {
 		if (this.isIFrame()) {
 			this.sizeTarget = element;
