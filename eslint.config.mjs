@@ -140,7 +140,6 @@ export default typescriptEslint.config([
 			'@angular-eslint/no-output-on-prefix': 'off',
 			'@angular-eslint/use-lifecycle-interface': 'off',
 			'@typescript-eslint/default-param-last': 'off',
-			'@typescript-eslint/lines-between-class-members': 'off',
 			'@typescript-eslint/member-ordering': 'off',
 			'@typescript-eslint/naming-convention': 'off',
 			'@typescript-eslint/no-empty-function': 'off',
