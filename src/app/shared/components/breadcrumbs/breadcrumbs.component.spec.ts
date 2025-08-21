@@ -14,6 +14,7 @@ describe('BreadcrumbsComponent', () => {
 	let dataService: DataService;
 
 	async function init(currentUrl?: string) {
+		TestBed.resetTestingModule();
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
 		config.declarations.push(BreadcrumbsComponent);

@@ -27,9 +27,7 @@ describe('ConfirmGiftDialogComponent', () => {
 				{ provide: DialogRef, useClass: MockDialogRef },
 			],
 		}).compileComponents();
-	});
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(ConfirmGiftDialogComponent);
 		component = fixture.componentInstance;
 		dialogRef = TestBed.inject(DialogRef) as unknown as MockDialogRef;

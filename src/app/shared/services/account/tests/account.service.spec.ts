@@ -1,6 +1,5 @@
 /* @format */
 import { CookieService } from 'ngx-cookie-service';
-import { TestBed, inject } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { Shallow } from 'shallow-render';
 import { Observable } from 'rxjs';

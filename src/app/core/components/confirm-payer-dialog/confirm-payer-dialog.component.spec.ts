@@ -55,9 +55,7 @@ describe('ConfirmPayerDialogComponent', () => {
 			useClass: MockDialogRef,
 		});
 		await TestBed.configureTestingModule(config).compileComponents();
-	});
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(ConfirmPayerDialogComponent);
 		component = fixture.componentInstance;
 		dialogRef = TestBed.inject(DialogRef) as unknown as MockDialogRef;

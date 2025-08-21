@@ -37,7 +37,7 @@ describe('InlineValueEditComponent', () => {
 
 	const mockDatePicker = {};
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		TestBed.configureTestingModule({
 			declarations: [InlineValueEditComponent],
 			imports: [
@@ -48,9 +48,7 @@ describe('InlineValueEditComponent', () => {
 				SharedModule,
 			],
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(InlineValueEditComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

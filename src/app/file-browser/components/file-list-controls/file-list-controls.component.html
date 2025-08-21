@@ -1,26 +1,28 @@
 <!-- @format -->
 <div class="top-row">
 	<div class="file-list-controls" [class.visible]="this.selectedItems.length">
-		<div
-			class="file-list-control"
-			*ngIf="!isShareRoot"
-			[class.disabled]="!can.delete"
-			(click)="onDeleteClick()"
-			[ngbTooltip]="getTooltipConstantForAction('delete') | prTooltip"
-		>
-			<i class="material-icons">delete</i>
-			<span>Delete</span>
-		</div>
-		<div
-			class="file-list-control"
-			*ngIf="isShareRoot"
-			[class.disabled]="!can.unshare"
-			(click)="onUnshareClick()"
-			[ngbTooltip]="getTooltipConstantForAction('unshare') | prTooltip"
-		>
-			<i class="material-icons">delete</i>
-			<span>Unshare</span>
-		</div>
+		@if (!isShareRoot) {
+			<div
+				class="file-list-control"
+				[class.disabled]="!can.delete"
+				(click)="onDeleteClick()"
+				[ngbTooltip]="getTooltipConstantForAction('delete') | prTooltip"
+			>
+				<i class="material-icons">delete</i>
+				<span>Delete</span>
+			</div>
+		}
+		@if (isShareRoot) {
+			<div
+				class="file-list-control"
+				[class.disabled]="!can.unshare"
+				(click)="onUnshareClick()"
+				[ngbTooltip]="getTooltipConstantForAction('unshare') | prTooltip"
+			>
+				<i class="material-icons">delete</i>
+				<span>Unshare</span>
+			</div>
+		}
 		<div
 			class="file-list-control"
 			[class.disabled]="!can.copy"
@@ -65,26 +67,27 @@
 		>
 			<i (click)="onDownloadClick()" class="material-icons">cloud_download</i>
 			<span (click)="onDownloadClick()">Download</span>
-			<i
-				*ngIf="selectedItems.length === 1 && !selectedItems[0].isFolder"
-				(click)="onDownloadClick()"
-				class="material-icons"
-				>keyboard_arrow_down</i
-			>
-			<div *ngIf="displayDownloadDropdown" class="download-options">
-				<div
-					*ngFor="let item of downloadOptions; let i = index"
-					class="download-option"
-					(click)="onFileTypeClick(item?.name)"
+			@if (selectedItems.length === 1 && !selectedItems[0].isFolder) {
+				<i (click)="onDownloadClick()" class="material-icons"
+					>keyboard_arrow_down</i
 				>
-					<span>{{ i === 0 ? 'Original Format:' : 'Permanent Format:' }}</span>
-					<span>{{
-						item?.extension && item!.extension !== 'null'
-							? '.' + item?.extension
-							: 'unknown'
-					}}</span>
+			}
+			@if (displayDownloadDropdown) {
+				<div class="download-options">
+					@for (item of downloadOptions; track item; let i = $index) {
+						<div class="download-option" (click)="onFileTypeClick(item?.name)">
+							<span>{{
+								i === 0 ? 'Original Format:' : 'Permanent Format:'
+							}}</span>
+							<span>{{
+								item?.extension && item!.extension !== 'null'
+									? '.' + item?.extension
+									: 'unknown'
+							}}</span>
+						</div>
+					}
 				</div>
-			</div>
+			}
 		</div>
 	</div>
 	<div>
@@ -100,8 +103,8 @@
 		'hide-sort': !allowSort
 	}"
 >
-	<ng-container [ngSwitch]="currentFolderView">
-		<ng-container *ngSwitchCase="views.list">
+	@switch (currentFolderView) {
+		@case (views.list) {
 			<div
 				class="name"
 				[class.active-sort]="currentSort === 'name'"
@@ -113,68 +116,79 @@
 					[ngbTooltip]="getTooltipConstantForSort('name') | prTooltip"
 					>Name</span
 				>
-				<span
-					class="save-sort"
-					(click)="saveSort()"
-					*ngIf="canSaveSort"
-					[ngbTooltip]="'fileList.sort.save' | prTooltip"
-					>Save</span
-				>
+				@if (canSaveSort) {
+					<span
+						class="save-sort"
+						(click)="saveSort()"
+						[ngbTooltip]="'fileList.sort.save' | prTooltip"
+						>Save</span
+					>
+				}
 			</div>
-			<div
-				class="type"
-				*ngIf="!showAccess"
-				[class.active-sort]="currentSort === 'type'"
-				[class.sort-desc]="sortDesc"
-			>
-				<span
-					class="col-title"
-					(click)="onSortClick('type')"
-					[ngbTooltip]="getTooltipConstantForSort('type') | prTooltip"
-					>Type</span
+			@if (!showAccess) {
+				<div
+					class="type"
+					[class.active-sort]="currentSort === 'type'"
+					[class.sort-desc]="sortDesc"
 				>
-				<span
-					class="save-sort"
-					(click)="saveSort()"
-					*ngIf="canSaveSort"
-					[ngbTooltip]="'fileList.sort.save' | prTooltip"
-					>Save</span
+					<span
+						class="col-title"
+						(click)="onSortClick('type')"
+						[ngbTooltip]="getTooltipConstantForSort('type') | prTooltip"
+						>Type</span
+					>
+					@if (canSaveSort) {
+						<span
+							class="save-sort"
+							(click)="saveSort()"
+							[ngbTooltip]="'fileList.sort.save' | prTooltip"
+							>Save</span
+						>
+					}
+				</div>
+			}
+			@if (!showAccess) {
+				<div
+					class="date"
+					[class.active-sort]="currentSort === 'date'"
+					[class.sort-desc]="sortDesc"
 				>
-			</div>
-			<div
-				class="date"
-				*ngIf="!showAccess"
-				[class.active-sort]="currentSort === 'date'"
-				[class.sort-desc]="sortDesc"
-			>
-				<span
-					class="col-title"
-					(click)="onSortClick('date')"
-					[ngbTooltip]="getTooltipConstantForSort('date') | prTooltip"
-					>Date</span
-				>
-				<span
-					class="save-sort"
-					(click)="saveSort()"
-					*ngIf="canSaveSort"
-					[ngbTooltip]="'fileList.sort.save' | prTooltip"
-					>Save</span
-				>
-			</div>
-			<div class="access" *ngIf="showAccess">
-				<span class="col-title" [ngbTooltip]="'fileList.col.access' | prTooltip"
-					>Access</span
-				>
-			</div>
-			<div class="shared-by" *ngIf="showAccess">
-				<span
-					class="col-title"
-					[ngbTooltip]="'fileList.col.archive' | prTooltip"
-					>Shared by</span
-				>
-			</div>
-		</ng-container>
-		<ng-container *ngSwitchDefault>
+					<span
+						class="col-title"
+						(click)="onSortClick('date')"
+						[ngbTooltip]="getTooltipConstantForSort('date') | prTooltip"
+						>Date</span
+					>
+					@if (canSaveSort) {
+						<span
+							class="save-sort"
+							(click)="saveSort()"
+							[ngbTooltip]="'fileList.sort.save' | prTooltip"
+							>Save</span
+						>
+					}
+				</div>
+			}
+			@if (showAccess) {
+				<div class="access">
+					<span
+						class="col-title"
+						[ngbTooltip]="'fileList.col.access' | prTooltip"
+						>Access</span
+					>
+				</div>
+			}
+			@if (showAccess) {
+				<div class="shared-by">
+					<span
+						class="col-title"
+						[ngbTooltip]="'fileList.col.archive' | prTooltip"
+						>Shared by</span
+					>
+				</div>
+			}
+		}
+		@default {
 			<div ngbDropdown #dropdown="ngbDropdown">
 				<div
 					class="single-col-sort active-sort"
@@ -215,9 +229,9 @@
 					</div>
 				</div>
 			</div>
-			<span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort"
-				>Save</span
-			>
-		</ng-container>
-	</ng-container>
+			@if (canSaveSort) {
+				<span class="save-sort" (click)="saveSort()">Save</span>
+			}
+		}
+	}
 </div>

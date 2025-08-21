@@ -27,55 +27,61 @@
 	<div class="archive-steward-header">
 		Archive Steward: The {{ archiveName }} Archive
 	</div>
-	<div class="no-plan-warning" *ngIf="noPlan">
-		<div class="warning-icon">
-			<fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+	@if (noPlan) {
+		<div class="no-plan-warning">
+			<div class="warning-icon">
+				<fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+			</div>
+			<div class="text-contents">
+				You must designate a Legacy Contact before you can establish a Legacy
+				Plan for this archive. Go to
+				<a class="breadcrumb-link" href="/app/legacy-contact"
+					>Account Settings &gt; Legacy Planning</a
+				>
+				to designate a Legacy Contact.
+				<a
+					href="https://permanent.zohodesk.com/portal/en/kb/articles/legacy-planning"
+					>Learn more.</a
+				>
+			</div>
 		</div>
-		<div class="text-contents">
-			You must designate a Legacy Contact before you can establish a Legacy Plan
-			for this archive. Go to
-			<a class="breadcrumb-link" href="/app/legacy-contact"
-				>Account Settings &gt; Legacy Planning</a
-			>
-			to designate a Legacy Contact.
-			<a
-				href="https://permanent.zohodesk.com/portal/en/kb/articles/legacy-planning"
-				>Learn more.</a
-			>
-		</div>
-	</div>
+	}
 	<p class="archive-steward-description">
 		The Archive Steward for this archive will receive your note when your Legacy
 		Plan is activated.
 	</p>
-	<div class="error" *ngIf="error">
-		An error occured while trying to find the Archive Steward for the current
-		archive. Please reload the page and try again.
-	</div>
-	<div class="archive-steward-table" *ngIf="!error">
-		<div class="row">
-			<div>Archive Steward email</div>
-			<div
-				[class]="{
-					'archive-steward-email': true,
-					'not-assigned': !directive?.steward?.email
-				}"
-			>
-				{{ directive?.steward?.email ?? 'not assigned' }}
+	@if (error) {
+		<div class="error">
+			An error occured while trying to find the Archive Steward for the current
+			archive. Please reload the page and try again.
+		</div>
+	}
+	@if (!error) {
+		<div class="archive-steward-table">
+			<div class="row">
+				<div>Archive Steward email</div>
+				<div
+					[class]="{
+						'archive-steward-email': true,
+						'not-assigned': !directive?.steward?.email
+					}"
+				>
+					{{ directive?.steward?.email ?? 'not assigned' }}
+				</div>
+			</div>
+			<div class="row">
+				<div>Note to Steward</div>
+				<div
+					[class]="{
+						'archive-steward-note': true,
+						'not-assigned': !directive?.note
+					}"
+				>
+					{{ directive?.note ?? 'none' }}
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div>Note to Steward</div>
-			<div
-				[class]="{
-					'archive-steward-note': true,
-					'not-assigned': !directive?.note
-				}"
-			>
-				{{ directive?.note ?? 'none' }}
-			</div>
-		</div>
-	</div>
+	}
 	<button
 		class="btn btn-primary"
 		[disabled]="error || noPlan"

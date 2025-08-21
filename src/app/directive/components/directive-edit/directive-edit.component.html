@@ -22,9 +22,12 @@
 			placeholder="Archive steward email address"
 		/>
 	</div>
-	<span *ngIf="!accountExists" class="account-not-found"
-		>User not found in Permanent database - invite user to create account</span
-	>
+	@if (!accountExists) {
+		<span class="account-not-found"
+			>User not found in Permanent database - invite user to create
+			account</span
+		>
+	}
 	<p>
 		Your Archive Steward will receive an email with instructions from Permanent,
 		however, we strongly recommend that you also discuss your Legacy Plan with

@@ -1,24 +1,25 @@
 <div class="archive-switcher-wrapper">
 	<div class="archive-list-wrapper">
-		<div
-			class="archive-list"
-			*ngIf="!loadingArchives"
-			[ngClass]="{ switching: waiting }"
-		>
-			<pr-archive-small
-				*ngFor="let archive of archives"
-				[archive]="archive"
-				[accessRole]="archive.accessRole"
-				(click)="onArchiveClick(archive)"
-			>
-			</pr-archive-small>
-			<div *ngIf="!archives.length" class="archives-empty">
-				You have no other archives
+		@if (!loadingArchives) {
+			<div class="archive-list" [ngClass]="{ switching: waiting }">
+				@for (archive of archives; track archive) {
+					<pr-archive-small
+						[archive]="archive"
+						[accessRole]="archive.accessRole"
+						(click)="onArchiveClick(archive)"
+					>
+					</pr-archive-small>
+				}
+				@if (!archives.length) {
+					<div class="archives-empty">You have no other archives</div>
+				}
 			</div>
-		</div>
-		<div class="archive-list" *ngIf="loadingArchives">
-			<div class="lds-dual-ring lds-dual-ring-purple"></div>
-		</div>
+		}
+		@if (loadingArchives) {
+			<div class="archive-list">
+				<div class="lds-dual-ring lds-dual-ring-purple"></div>
+			</div>
+		}
 	</div>
 	<div class="archive-list-button">
 		<button class="btn btn-wordpress" [disabled]="waiting" (click)="close()">

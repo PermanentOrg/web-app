@@ -17,8 +17,9 @@ import {
 	ViewChild,
 	NgZone,
 	Renderer2,
+	DOCUMENT,
 } from '@angular/core';
-import { DOCUMENT, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { UP_ARROW, DOWN_ARROW } from '@angular/cdk/keycodes';
 

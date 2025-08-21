@@ -48,17 +48,18 @@
 			"
 			[hidden]="uploadButton.hidden"
 		>
-			<button
-				class="btn btn-primary"
-				(click)="rightMenu.createNewFolder()"
-				[disabled]="!rightMenu.allowedActions.createFolder"
-				*ngIf="
-					rightMenu.currentFolder?.type !== 'type.folder.root.share' &&
-					rightMenu.currentFolder?.type !== 'type.folder.root.app'
-				"
-			>
-				<i class="ion-md-folder"></i>New folder
-			</button>
+			@if (
+				rightMenu.currentFolder?.type !== 'type.folder.root.share' &&
+				rightMenu.currentFolder?.type !== 'type.folder.root.app'
+			) {
+				<button
+					class="btn btn-primary"
+					(click)="rightMenu.createNewFolder()"
+					[disabled]="!rightMenu.allowedActions.createFolder"
+				>
+					<i class="ion-md-folder"></i>New folder
+				</button>
+			}
 		</div>
 		<ng-template [cdkPortalOutlet]></ng-template>
 	</div>

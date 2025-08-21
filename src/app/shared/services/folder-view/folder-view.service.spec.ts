@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 
@@ -12,23 +12,20 @@ describe('FolderViewService', () => {
 		TestBed.configureTestingModule(config);
 	});
 
-	it('should be created', inject(
-		[FolderViewService],
-		(service: FolderViewService) => {
-			expect(service).toBeTruthy();
-		},
-	));
+	it('should be created', () => {
+		const service = TestBed.inject(FolderViewService);
 
-	it('should emit folder view changes', inject(
-		[FolderViewService],
-		(service: FolderViewService) => {
-			const newFolderView = FolderView.Grid;
+		expect(service).toBeTruthy();
+	});
 
-			service.viewChange.subscribe((folderViewEmitted: FolderView) => {
-				expect(folderViewEmitted).toEqual(newFolderView);
-			});
+	it('should emit folder view changes', () => {
+		const service = TestBed.inject(FolderViewService);
+		const newFolderView = FolderView.Grid;
 
-			service.setFolderView(newFolderView);
-		},
-	));
+		service.viewChange.subscribe((folderViewEmitted: FolderView) => {
+			expect(folderViewEmitted).toEqual(newFolderView);
+		});
+
+		service.setFolderView(newFolderView);
+	});
 });

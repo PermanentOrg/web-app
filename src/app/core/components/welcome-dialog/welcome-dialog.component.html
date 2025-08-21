@@ -10,7 +10,7 @@
 		<p>
 			Your archive is <strong>The {{ archiveName }} Archive.</strong>
 		</p>
-		<ng-container *ngIf="isEarlyBird; else defaultWelcome">
+		@if (isEarlyBird) {
 			<strong class="get-started">Let's Get Started:</strong>
 			<ol>
 				<li>Check your email to redeem free storage.</li>
@@ -23,14 +23,13 @@
 				Learn more about your new archive by viewing our help articles through
 				the "?" button in the lower right hand corner.
 			</p>
-		</ng-container>
-		<ng-template #defaultWelcome>
+		} @else {
 			<p>
 				Get started by uploading your first files, or learn more about your new
 				archive by viewing our help articles through the "?" button in the lower
 				right-hand corner.
 			</p>
-		</ng-template>
+		}
 		<button class="btn btn-primary" (click)="close()">Get Started</button>
 	</div>
 </div>

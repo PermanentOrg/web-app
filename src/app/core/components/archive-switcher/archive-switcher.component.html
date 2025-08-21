@@ -1,16 +1,17 @@
 <div class="archive-list-wrapper">
 	<div class="archive-list">
 		<div class="archive-list-title">Select archive to switch to:</div>
-		<pr-archive-small
-			*ngFor="let archive of archives"
-			[archive]="archive"
-			[accessRole]="archive.accessRole"
-			(click)="archiveClick(archive)"
-		>
-		</pr-archive-small>
-		<div *ngIf="!archives.length" class="archives-empty">
-			You have no other archives
-		</div>
+		@for (archive of archives; track archive) {
+			<pr-archive-small
+				[archive]="archive"
+				[accessRole]="archive.accessRole"
+				(click)="archiveClick(archive)"
+			>
+			</pr-archive-small>
+		}
+		@if (!archives.length) {
+			<div class="archives-empty">You have no other archives</div>
+		}
 	</div>
 </div>
 <div class="archive-list-button">

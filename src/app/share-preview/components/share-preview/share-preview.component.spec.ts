@@ -66,9 +66,7 @@ describe('SharePreviewComponent', () => {
 		dialog = TestBed.inject(DialogCdkService);
 		router = TestBed.inject(Router);
 		spyOn(router, 'navigate');
-	});
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(SharePreviewComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

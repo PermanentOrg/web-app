@@ -3,14 +3,11 @@
 	<a class="logo" href="/">
 		<img class="banner-logo" src="assets/img/logo/sideways_logo.png" />
 	</a>
-	<a
-		[routerLink]="['/app']"
-		class="return-btn btn btn-wordpress"
-		*ngIf="isLoggedIn; else logInButtons"
-	>
-		<div class="return">Return to Archive Manager</div>
-	</a>
-	<ng-template #logInButtons>
+	@if (isLoggedIn) {
+		<a [routerLink]="['/app']" class="return-btn btn btn-wordpress">
+			<div class="return">Return to Archive Manager</div>
+		</a>
+	} @else {
 		<div class="login-buttons">
 			<a [routerLink]="['/app', 'auth', 'signup']" class="loggedout-btn"
 				><div class="signup">Sign Up</div></a
@@ -19,5 +16,5 @@
 				><div class="login">Log In</div></a
 			>
 		</div>
-	</ng-template>
+	}
 </nav>

@@ -1,18 +1,19 @@
 <!-- @format -->
 <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
 	<div class="input-group-vertical">
-		<pr-form-input
-			fieldName="invitation"
-			placeholder="Invitation code (optional)"
-			[control]="signupForm.controls['invitation']"
-			*ngIf="!inviteCode"
-			[config]="{
-				autocomplete: 'off',
-				autocorrect: 'off',
-				autocapitalize: 'off',
-				spellcheck: 'off'
-			}"
-		></pr-form-input>
+		@if (!inviteCode) {
+			<pr-form-input
+				fieldName="invitation"
+				placeholder="Invitation code (optional)"
+				[control]="signupForm.controls['invitation']"
+				[config]="{
+					autocomplete: 'off',
+					autocorrect: 'off',
+					autocapitalize: 'off',
+					spellcheck: 'off'
+				}"
+			></pr-form-input>
+		}
 		<pr-form-input
 			fieldName="name"
 			placeholder="Full name"

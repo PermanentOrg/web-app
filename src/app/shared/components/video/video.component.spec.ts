@@ -10,16 +10,14 @@ describe('VideoComponent', () => {
 	let component: VideoComponent;
 	let fixture: ComponentFixture<VideoComponent>;
 
-	beforeEach(waitForAsync(() => {
+	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
 		config.declarations.push(VideoComponent);
 		config.declarations.push(GetAltTextPipe);
 
 		TestBed.configureTestingModule(config).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(VideoComponent);
 		component = fixture.componentInstance;
 		component.item = new RecordVO({

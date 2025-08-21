@@ -7,8 +7,9 @@ import {
 	Inject,
 	HostListener,
 	Optional,
+	DOCUMENT,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+
 import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'ts-key-enum';
 import Hammer from 'hammerjs';

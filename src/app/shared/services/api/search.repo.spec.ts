@@ -32,7 +32,7 @@ describe('SearchRepo', () => {
 			TestBed.inject(HttpService),
 			TestBed.inject(HttpV2Service),
 		);
-		httpMock = TestBed.get(HttpTestingController);
+		httpMock = TestBed.inject(HttpTestingController);
 	});
 
 	afterEach(() => {

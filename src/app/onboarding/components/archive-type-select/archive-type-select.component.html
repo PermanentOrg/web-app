@@ -1,11 +1,12 @@
 <!-- @format -->
 <div class="archive-type-select">
 	<div class="archive-image">
-		<img
-			*ngIf="selectedValue"
-			[src]="icons[selectedValue.split('+')[0]]"
-			[alt]="altTexts[selectedValue.split('+')[0]]"
-		/>
+		@if (selectedValue) {
+			<img
+				[src]="icons[selectedValue.split('+')[0]]"
+				[alt]="altTexts[selectedValue.split('+')[0]]"
+			/>
+		}
 	</div>
 	<div class="archive-dropdown">
 		<select
@@ -15,12 +16,11 @@
 			(change)="onSelectionChange()"
 		>
 			<option value="" disabled>Select content type</option>
-			<option
-				*ngFor="let option of options"
-				[value]="option.value + '+' + option.type"
-			>
-				{{ option.text }}
-			</option>
+			@for (option of options; track option) {
+				<option [value]="option.value + '+' + option.type">
+					{{ option.text }}
+				</option>
+			}
 		</select>
 		<span class="archive-description">{{
 			descriptions[selectedValue.split('+')[1]]

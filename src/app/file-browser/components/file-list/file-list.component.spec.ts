@@ -92,9 +92,7 @@ describe('FileListComponent', () => {
 				{ provide: EventService, useValue: eventServiceMock },
 			],
 		}).compileComponents();
-	});
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(FileListComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

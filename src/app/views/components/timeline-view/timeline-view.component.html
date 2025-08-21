@@ -28,32 +28,33 @@
 		<span class="timeline-folder-info-name">{{
 			timelineRootFolder.displayName
 		}}</span>
-		<a
-			class="timeline-folder-details-button"
-			*ngIf="
-				timelineRootFolder.description && timelineRootFolder.ChildItemVOs.length
-			"
-			(click)="toggleFolderDetails()"
-			>{{ showFolderDetails ? 'Hide details' : 'Click for details' }}</a
-		>
-		<span
-			class="timeline-folder-details-button"
-			*ngIf="!timelineRootFolder.ChildItemVOs.length"
-			(click)="toggleFolderDetails()"
-			>This folder is empty</span
-		>
+		@if (
+			timelineRootFolder.description && timelineRootFolder.ChildItemVOs.length
+		) {
+			<a
+				class="timeline-folder-details-button"
+				(click)="toggleFolderDetails()"
+				>{{ showFolderDetails ? 'Hide details' : 'Click for details' }}</a
+			>
+		}
+		@if (!timelineRootFolder.ChildItemVOs.length) {
+			<span
+				class="timeline-folder-details-button"
+				(click)="toggleFolderDetails()"
+				>This folder is empty</span
+			>
+		}
 		<span class="timeline-folder-info-date">
 			{{ timelineRootFolder.displayDT | date: 'shortDate'
 			}}{{ timelineRootFolder.displayEndDT ? ' to ' : ''
 			}}{{ timelineRootFolder.displayEndDT | date: 'shortDate' }}
 		</span>
 	</div>
-	<div
-		class="timeline-folder-info-details"
-		*ngIf="timelineRootFolder.description"
-	>
-		<div>About</div>
-		<p [innerHTML]="timelineRootFolder.description"></p>
-	</div>
+	@if (timelineRootFolder.description) {
+		<div class="timeline-folder-info-details">
+			<div>About</div>
+			<p [innerHTML]="timelineRootFolder.description"></p>
+		</div>
+	}
 </div>
 <router-outlet></router-outlet>

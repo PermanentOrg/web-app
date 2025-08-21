@@ -30,31 +30,35 @@
 		In the event of your death or incapacitation, your Legacy Contact can
 		activate your Legacy Plan by reaching out to Permanent.org.
 	</p>
-	<div class="archive-steward-table" *ngIf="!error">
-		<div class="row">
-			<div>Legacy Contact name</div>
-			<div
-				class="legacy-contact-name"
-				[class.not-assigned]="!legacyContact?.name"
-			>
-				{{ legacyContact?.name ?? 'not assigned' }}
+	@if (!error) {
+		<div class="archive-steward-table">
+			<div class="row">
+				<div>Legacy Contact name</div>
+				<div
+					class="legacy-contact-name"
+					[class.not-assigned]="!legacyContact?.name"
+				>
+					{{ legacyContact?.name ?? 'not assigned' }}
+				</div>
+			</div>
+			<div class="row">
+				<div>Legacy Contact email</div>
+				<div
+					class="legacy-contact-email"
+					[class.not-assigned]="!legacyContact?.email"
+				>
+					{{ legacyContact?.email ?? 'not assigned' }}
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div>Legacy Contact email</div>
-			<div
-				class="legacy-contact-email"
-				[class.not-assigned]="!legacyContact?.email"
-			>
-				{{ legacyContact?.email ?? 'not assigned' }}
-			</div>
+	}
+	@if (error) {
+		<div class="error">
+			An error occured while trying to find the current account's Legacy Contact
+			information. Please reload the page and try again. If the problem
+			persists, try logging out and logging in again.
 		</div>
-	</div>
-	<div class="error" *ngIf="error">
-		An error occured while trying to find the current account's Legacy Contact
-		information. Please reload the page and try again. If the problem persists,
-		try logging out and logging in again.
-	</div>
+	}
 	<button class="btn btn-primary" [disabled]="error" (click)="beginEdit.emit()">
 		{{ legacyContact?.email ? 'Edit' : 'Assign' }} Legacy Contact
 	</button>

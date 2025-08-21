@@ -1,13 +1,14 @@
 <!-- @format -->
-<ng-container [ngSwitch]="mode">
-	<pr-directive-display
-		*ngSwitchDefault
-		[checkLegacyContact]="true"
-		[initialDirective]="directive"
-		(loadedDirective)="setSavedDirective($event)"
-		(beginEdit)="switchToEdit($event)"
-	></pr-directive-display>
-	<ng-container *ngSwitchCase="'edit'">
+@switch (mode) {
+	@default {
+		<pr-directive-display
+			[checkLegacyContact]="true"
+			[initialDirective]="directive"
+			(loadedDirective)="setSavedDirective($event)"
+			(beginEdit)="switchToEdit($event)"
+		></pr-directive-display>
+	}
+	@case ('edit') {
 		<a class="edit-close" (click)="mode = 'display'">
 			<fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>
 		</a>
@@ -15,5 +16,5 @@
 			[directive]="directive"
 			(savedDirective)="saveEditedDirective($event)"
 		></pr-directive-edit>
-	</ng-container>
-</ng-container>
+	}
+}

@@ -26,20 +26,24 @@
 			formControlName="query"
 			#searchInput
 		/>
-		<fa-icon
-			(click)="clearForm()"
-			class="clear-icon"
-			*ngIf="searchForm.value.query"
-			[icon]="['fas', 'times-circle']"
-		></fa-icon>
+		@if (searchForm.value.query) {
+			<fa-icon
+				(click)="clearForm()"
+				class="clear-icon"
+				[icon]="['fas', 'times-circle']"
+			></fa-icon>
+		}
 	</form>
-	<pr-public-search-bar-results
-		(search)="onHandleSearch()"
-		*ngIf="searchResults.length || filteredTags.length"
-		[tags]="filteredTags"
-		[searchResults]="searchResults"
-		(tagClickOutput)="onTagClick($event)"
-	/>
+	@if (searchResults.length || filteredTags.length) {
+		<pr-public-search-bar-results
+			(search)="onHandleSearch()"
+			[tags]="filteredTags"
+			[searchResults]="searchResults"
+			(tagClickOutput)="onTagClick($event)"
+		/>
+	}
 </div>
 
-<div class="fade-ring-loader" *ngIf="waiting"></div>
+@if (waiting) {
+	<div class="fade-ring-loader"></div>
+}

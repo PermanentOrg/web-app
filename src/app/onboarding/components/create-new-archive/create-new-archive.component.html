@@ -1,118 +1,122 @@
 <!-- @format -->
 @if (screen !== 'reasons' && screen !== 'goals') {
 	<div class="new-account-screens-container">
-		<pr-archive-creation-start-screen
-			(getStartedOutput)="setScreen('create')"
-			(createArchiveForMeOutput)="makeMyArchive()"
-			*ngIf="screen === 'start' && isGlam"
-		></pr-archive-creation-start-screen>
+		@if (screen === 'start' && isGlam) {
+			<pr-archive-creation-start-screen
+				(getStartedOutput)="setScreen('create')"
+				(createArchiveForMeOutput)="makeMyArchive()"
+			></pr-archive-creation-start-screen>
+		}
 		@if (screen === 'create-archive-for-me' && isGlam) {
 			<pr-create-archive-for-me-screen
 				(goBackOutput)="setScreen($event)"
 				(continueOutput)="navToGoals($event)"
 			></pr-create-archive-for-me-screen>
 		}
-		<div *ngIf="screen === 'create' || screen === 'name-archive'">
-			<h2 *ngIf="!isGlam">
-				Welcome! Let’s create your first archive together.
-			</h2>
-			<div *ngIf="!isGlam" class="welcome-message no-invitations">
-				<p>
-					In order to help you on this journey, we want to learn a little more
-					about you to personalize your experience and make archiving easier.
-					Please answer the following questions:
-				</p>
-				<div class="archive-type">
-					<h3>
-						With my first archive, I plan to capture and preserve material
-						about…
-					</h3>
-					<span class="select-option">
-						Select the option that fits you best.
-					</span>
-					<pr-archive-type-select
-						(valueChange)="onValueChange($event)"
-						[selectedValue]="selectedValue"
-					></pr-archive-type-select>
-				</div>
-				<div class="archive-name-container">
-					<div class="archive-name">
-						<h3>What is your new archive called?</h3>
-						<p>You can always edit your archive's name later.</p>
-						<div class="archive-name-input">
-							<span>The</span>
-							<input
-								[(ngModel)]="name"
-								[placeholder]="'Archive Subject'"
-								[disabled]="!selectedValue"
-								type="text"
-							/>
-							<span>Archive</span>
+		@if (screen === 'create' || screen === 'name-archive') {
+			<div>
+				@if (!isGlam) {
+					<h2>Welcome! Let’s create your first archive together.</h2>
+				}
+				@if (!isGlam) {
+					<div class="welcome-message no-invitations">
+						<p>
+							In order to help you on this journey, we want to learn a little
+							more about you to personalize your experience and make archiving
+							easier. Please answer the following questions:
+						</p>
+						<div class="archive-type">
+							<h3>
+								With my first archive, I plan to capture and preserve material
+								about…
+							</h3>
+							<span class="select-option">
+								Select the option that fits you best.
+							</span>
+							<pr-archive-type-select
+								(valueChange)="onValueChange($event)"
+								[selectedValue]="selectedValue"
+							></pr-archive-type-select>
 						</div>
-						<div *ngIf="!selectedValue" class="disabled-overlay"></div>
+						<div class="archive-name-container">
+							<div class="archive-name">
+								<h3>What is your new archive called?</h3>
+								<p>You can always edit your archive's name later.</p>
+								<div class="archive-name-input">
+									<span>The</span>
+									<input
+										[(ngModel)]="name"
+										[placeholder]="'Archive Subject'"
+										[disabled]="!selectedValue"
+										type="text"
+									/>
+									<span>Archive</span>
+								</div>
+								@if (!selectedValue) {
+									<div class="disabled-overlay"></div>
+								}
+							</div>
+						</div>
+						<div class="buttons">
+							@if (!pendingArchives.length) {
+								<button (click)="makeMyArchive()" class="btn btn-link">
+									Make my archive for me
+								</button>
+							}
+							@if (pendingArchives.length) {
+								<button (click)="goToInvitations()" class="btn btn-link">
+									Go back
+								</button>
+							}
+							@if (pendingArchives.length) {
+								<button (click)="makeMyArchive()" class="btn btn-link">
+									Make my archive for me
+								</button>
+							}
+							<button
+								[class.btn-disabled]="!name"
+								(click)="setScreen('goals')"
+								[disabled]="!name"
+								class="btn btn-primary chart-path"
+							>
+								Next: Chart your path
+							</button>
+						</div>
 					</div>
-				</div>
-				<div class="buttons">
-					<button
-						*ngIf="!pendingArchives.length"
-						(click)="makeMyArchive()"
-						class="btn btn-link"
-					>
-						Make my archive for me
-					</button>
-					<button
-						*ngIf="pendingArchives.length"
-						(click)="goToInvitations()"
-						class="btn btn-link"
-					>
-						Go back
-					</button>
-					<button
-						*ngIf="pendingArchives.length"
-						(click)="makeMyArchive()"
-						class="btn btn-link"
-					>
-						Make my archive for me
-					</button>
-					<button
-						[class.btn-disabled]="!name"
-						(click)="setScreen('goals')"
-						[disabled]="!name"
-						class="btn btn-primary chart-path"
-					>
-						Next: Chart your path
-					</button>
-				</div>
+				}
 			</div>
-		</div>
+		}
 	</div>
-	<div
-		*ngIf="isGlam && (screen === 'create' || screen === 'name-archive')"
-		class="create-new-archive"
-	>
-		<div class="heading-container">
-			<h1 *ngIf="screen === 'create'" class="heading">
-				Create your first <b class="bold">Archive</b>
-			</h1>
-			<h1 *ngIf="screen === 'name-archive'" class="heading">
-				Create your
-				<br />
-				<pr-archive-type-icon [type]="archiveTypeTag" />
-				&nbsp;<b>{{ headerText }}</b> Archive
-			</h1>
+	@if (isGlam && (screen === 'create' || screen === 'name-archive')) {
+		<div class="create-new-archive">
+			<div class="heading-container">
+				@if (screen === 'create') {
+					<h1 class="heading">Create your first <b class="bold">Archive</b></h1>
+				}
+				@if (screen === 'name-archive') {
+					<h1 class="heading">
+						Create your
+						<br />
+						<pr-archive-type-icon [type]="archiveTypeTag" />
+						&nbsp;<b>{{ headerText }}</b> Archive
+					</h1>
+				}
+			</div>
+			@if (screen === 'create') {
+				<pr-select-archive-type-screen
+					(submitEmitter)="handleCreationScreenEvents($event)"
+					[tag]="archiveTypeTag"
+				></pr-select-archive-type-screen>
+			}
+			@if (screen === 'name-archive') {
+				<pr-name-archive-screen
+					(backToCreateEmitter)="setScreen($event)"
+					(archiveCreatedEmitter)="navigateToGoals($event)"
+					[name]="name"
+				></pr-name-archive-screen>
+			}
 		</div>
-		<pr-select-archive-type-screen
-			(submitEmitter)="handleCreationScreenEvents($event)"
-			[tag]="archiveTypeTag"
-			*ngIf="screen === 'create'"
-		></pr-select-archive-type-screen>
-		<pr-name-archive-screen
-			*ngIf="screen === 'name-archive'"
-			(backToCreateEmitter)="setScreen($event)"
-			(archiveCreatedEmitter)="navigateToGoals($event)"
-			[name]="name"
-		></pr-name-archive-screen>
-	</div>
+	}
 }
 @if (screen === 'goals' && isGlam) {
 	<pr-glam-goals-screen
@@ -133,74 +137,81 @@
 		(finalizeArchiveOutput)="onSubmit()"
 	></pr-finalize-archive-creation-screen>
 }
-<div class="goals" *ngIf="screen === 'goals' && !isGlam">
-	<h2>My goal is to...</h2>
-
-	<p class="explanation">
-		This will help us support you as you create your archive. Select all that
-		apply.
-	</p>
-
-	<div class="grid-container">
-		<div
-			(click)="addValues(selectedGoals, goal.tag)"
-			class="grid-item"
-			*ngFor="let goal of goals"
-			[class.grid-item-selected]="selectedGoals.includes(goal.tag)"
-		>
-			<span class="archive-type-description">{{ goal.text }}</span>
+@if (screen === 'goals' && !isGlam) {
+	<div class="goals">
+		<h2>My goal is to...</h2>
+		<p class="explanation">
+			This will help us support you as you create your archive. Select all that
+			apply.
+		</p>
+		<div class="grid-container">
+			@for (goal of goals; track goal) {
+				<div
+					(click)="addValues(selectedGoals, goal.tag)"
+					class="grid-item"
+					[class.grid-item-selected]="selectedGoals.includes(goal.tag)"
+				>
+					<span class="archive-type-description">{{ goal.text }}</span>
+				</div>
+			}
+		</div>
+		<div class="two-buttons">
+			<button
+				class="btn btn-secondary back-button"
+				(click)="setScreen('name-archive')"
+			>
+				Back
+			</button>
+			<button
+				class="btn btn-primary next-button goals-next"
+				[disabled]="!selectedGoals.length"
+				(click)="setScreen('reasons')"
+			>
+				Next: Tell us more
+			</button>
 		</div>
 	</div>
-
-	<div class="two-buttons">
-		<button
-			class="btn btn-secondary back-button"
-			(click)="setScreen('name-archive')"
-		>
-			Back
-		</button>
-		<button
-			class="btn btn-primary next-button goals-next"
-			[disabled]="!selectedGoals.length"
-			(click)="setScreen('reasons')"
-		>
-			Next: Tell us more
-		</button>
-	</div>
-</div>
-<div *ngIf="!isGlam && screen === 'reasons'">
-	<h2>Lastly, we’re curious -- what brought you to Permanent.org?</h2>
-	<p class="explanation">Select all that apply.</p>
-	<div class="grid-container">
-		<div
-			(click)="addValues(selectedReasons, reason.tag)"
-			class="grid-item"
-			*ngFor="let reason of reasons"
-			[class.grid-item-selected]="selectedReasons.includes(reason.tag)"
-		>
-			<span class="archive-type-description">{{ reason.text }}</span>
+}
+@if (!isGlam && screen === 'reasons') {
+	<div>
+		<h2>Lastly, we’re curious -- what brought you to Permanent.org?</h2>
+		<p class="explanation">Select all that apply.</p>
+		<div class="grid-container">
+			@for (reason of reasons; track reason) {
+				<div
+					(click)="addValues(selectedReasons, reason.tag)"
+					class="grid-item"
+					[class.grid-item-selected]="selectedReasons.includes(reason.tag)"
+				>
+					<span class="archive-type-description">{{ reason.text }}</span>
+				</div>
+			}
+		</div>
+		<div class="two-buttons">
+			<button
+				class="btn btn-secondary back-button"
+				(click)="setScreen('goals')"
+			>
+				Back
+			</button>
+			<button
+				(click)="onSubmit()"
+				class="btn btn-primary next-button create-archive"
+				[disabled]="!selectedReasons.length || loading || isArchiveSubmitted"
+			>
+				Create my archive
+			</button>
 		</div>
 	</div>
-
-	<div class="two-buttons">
-		<button class="btn btn-secondary back-button" (click)="setScreen('goals')">
-			Back
-		</button>
+}
+@if (!isGlam && screen !== 'create' && screen !== 'name-archive') {
+	<div>
 		<button
-			(click)="onSubmit()"
-			class="btn btn-primary next-button create-archive"
-			[disabled]="!selectedReasons.length || loading || isArchiveSubmitted"
+			[disabled]="isArchiveSubmitted"
+			(click)="skipStep()"
+			class="btn btn-link skip-step"
 		>
-			Create my archive
+			Skip this step
 		</button>
 	</div>
-</div>
-<div *ngIf="!isGlam && screen !== 'create' && screen !== 'name-archive'">
-	<button
-		[disabled]="isArchiveSubmitted"
-		(click)="skipStep()"
-		class="btn btn-link skip-step"
-	>
-		Skip this step
-	</button>
-</div>
+}

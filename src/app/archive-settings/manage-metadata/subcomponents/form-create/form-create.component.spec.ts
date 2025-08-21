@@ -82,7 +82,7 @@ describe('FormCreateComponent', () => {
 		expect(find('.placeholder-text').length).toBe(1);
 	});
 
-	it('should not close editor if callback promise is rejected', async (done) => {
+	it('should not close editor if callback promise is rejected', async () => {
 		const { instance, find, fixture } = await defaultRender(async (tagName) => {
 			throw new Error();
 		});
@@ -99,10 +99,9 @@ describe('FormCreateComponent', () => {
 		fixture.detectChanges();
 
 		expect(find('input').length).toBe(1);
-		setTimeout(() => {
-			expect(instance.waiting).toBe(false);
-			done();
-		});
+		await new Promise((resolve) => setTimeout(resolve, 1));
+
+		expect(instance.waiting).toBe(false);
 	});
 
 	it('should blank out the form after submitting', async () => {

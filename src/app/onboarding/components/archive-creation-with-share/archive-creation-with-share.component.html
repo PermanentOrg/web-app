@@ -7,8 +7,12 @@
 	</p>
 	<div class="invitation-info">
 		<div class="img-container">
-			<img *ngIf="isFolder" src="assets/svg/onboarding/shared_folder.svg" />
-			<img *ngIf="!isFolder" src="assets/svg/onboarding/shared_record.svg" />
+			@if (isFolder) {
+				<img src="assets/svg/onboarding/shared_folder.svg" />
+			}
+			@if (!isFolder) {
+				<img src="assets/svg/onboarding/shared_record.svg" />
+			}
 		</div>
 		<div class="sharer-info">
 			<p class="shared-item-name">{{ sharedItemName }}</p>

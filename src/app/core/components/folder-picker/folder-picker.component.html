@@ -1,13 +1,11 @@
 <div class="menu-wrapper" [ngClass]="{ visible: visible }">
 	<div class="menu folder-picker">
 		<div class="picker-header">
-			<div
-				class="picker-back"
-				*ngIf="!isRootFolder || selectedRecord"
-				(click)="onBackClick()"
-			>
-				<i class="ion-md-arrow-dropleft"></i> Back
-			</div>
+			@if (!isRootFolder || selectedRecord) {
+				<div class="picker-back" (click)="onBackClick()">
+					<i class="ion-md-arrow-dropleft"></i> Back
+				</div>
+			}
 			<div class="picker-folder-name">
 				{{
 					currentFolder
@@ -17,40 +15,44 @@
 						: 'Loading...'
 				}}
 			</div>
-			<div class="picker-back" *ngIf="!isRootFolder || selectedRecord"></div>
+			@if (!isRootFolder || selectedRecord) {
+				<div class="picker-back"></div>
+			}
 		</div>
-		<div class="picker-contents" *ngIf="!currentFolder"></div>
-		<div
-			class="picker-contents"
-			*ngIf="currentFolder && !selectedRecord"
-			[ngClass]="{ navigating: waiting }"
-		>
-			<div
-				class="picker-row"
-				*ngFor="let item of currentFolder.ChildItemVOs"
-				(click)="onItemClick(item, $event)"
-			>
-				<ng-container [ngSwitch]="item.isFolder">
-					<div class="folder-icon" *ngSwitchCase="true">
-						<i class="material-icons">folder</i>
+		@if (!currentFolder) {
+			<div class="picker-contents"></div>
+		}
+		@if (currentFolder && !selectedRecord) {
+			<div class="picker-contents" [ngClass]="{ navigating: waiting }">
+				@for (item of currentFolder.ChildItemVOs; track item) {
+					<div class="picker-row" (click)="onItemClick(item, $event)">
+						@switch (item.isFolder) {
+							@case (true) {
+								<div class="folder-icon">
+									<i class="material-icons">folder</i>
+								</div>
+							}
+							@default {
+								<div prBgImage [bgSrc]="item.thumbURL200"></div>
+							}
+						}
+						<div class="name">{{ item.displayName }}</div>
 					</div>
-					<div *ngSwitchDefault prBgImage [bgSrc]="item.thumbURL200"></div>
-				</ng-container>
-				<div class="name">{{ item.displayName }}</div>
-			</div>
-
-			<div
-				class="picker-empty"
-				*ngIf="
+				}
+				@if (
 					!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length
-				"
-			>
-				{{ allowRecords ? 'This folder is empty' : 'No subfolders' }}
+				) {
+					<div class="picker-empty">
+						{{ allowRecords ? 'This folder is empty' : 'No subfolders' }}
+					</div>
+				}
 			</div>
-		</div>
-		<div class="picker-contents picker-selected-record" *ngIf="selectedRecord">
-			<div prBgImage [bgSrc]="selectedRecord.thumbURL200"></div>
-		</div>
+		}
+		@if (selectedRecord) {
+			<div class="picker-contents picker-selected-record">
+				<div prBgImage [bgSrc]="selectedRecord.thumbURL200"></div>
+			</div>
+		}
 		<div class="picker-footer">
 			<button class="btn btn-secondary" (click)="hide()" [disabled]="saving">
 				Cancel

@@ -49,9 +49,7 @@ describe('ArchiveSearchComponent', () => {
 			of(new ArchiveVO({ archiveId: '123' })),
 		);
 		searchService.getPublicArchiveTags.and.returnValue(of([]));
-	});
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(ArchiveSearchComponent);
 		component = fixture.componentInstance;
 
