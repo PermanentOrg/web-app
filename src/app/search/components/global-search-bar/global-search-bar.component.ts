@@ -12,7 +12,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ngIfScaleHeightEnterAnimation } from '@shared/animations';
 import { UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
-import { pipe, of } from 'rxjs';
+import { of } from 'rxjs';
 import { tap, debounceTime, switchMap, catchError, map } from 'rxjs/operators';
 import { SearchResponse } from '@shared/services/api/index.repo';
 
@@ -268,8 +268,9 @@ export class GlobalSearchBarComponent {
 	}
 
 	onTagResultClick(tag: TagVOData) {
-		const [searchTerm, tags]: [string, TagVOData[]] =
-			this.searchService.parseSearchTerm(this.formControl.value);
+		const [, tags]: [string, TagVOData[]] = this.searchService.parseSearchTerm(
+			this.formControl.value,
+		);
 
 		// replace any text query with existing tags + clicked tag
 		tags.push(tag);

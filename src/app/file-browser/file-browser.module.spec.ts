@@ -1,5 +1,3 @@
-import { FileBrowserModule } from '@fileBrowser/file-browser.module';
-
 // xdescribe('FileBrowserModule', () => {
 //   let fileBrowserModule: FileBrowserModule;
 

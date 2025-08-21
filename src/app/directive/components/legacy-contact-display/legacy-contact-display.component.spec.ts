@@ -2,7 +2,6 @@ import { ApiService } from '@shared/services/api/api.service';
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { LegacyContact } from '@models/directive';
 import { DirectiveModule } from '../../directive.module';
 import { MockAccountService } from '../directive-display/test-utils';
 import { MockMessageService } from '../directive-edit/test-utils';
@@ -78,7 +77,7 @@ describe('LegacyContactDisplayComponent', () => {
 	});
 
 	it('should emit an event when the edit button is pressed', async () => {
-		const { find, fixture, outputs } = await shallow.render();
+		const { find, outputs } = await shallow.render();
 		find('button').nativeElement.dispatchEvent(new Event('click'));
 
 		expect(outputs.beginEdit.emit).toHaveBeenCalled();

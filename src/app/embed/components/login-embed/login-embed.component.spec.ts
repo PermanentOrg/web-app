@@ -1,10 +1,5 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {
-	FormsModule,
-	ReactiveFormsModule,
-	FormControl,
-	FormGroup,
-} from '@angular/forms';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
@@ -14,7 +9,7 @@ import { LoginEmbedComponent } from '@embed/components/login-embed/login-embed.c
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 import { TEST_DATA } from '@core/core.module.spec';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 import {

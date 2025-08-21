@@ -1,4 +1,4 @@
-import { Injectable, Optional } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
@@ -349,7 +349,7 @@ export class ProfileService {
 
 	async deleteProfileItem(item: ProfileItemVOData) {
 		if (item.profile_itemId) {
-			const response = await this.api.archive.deleteProfileItem(item);
+			await this.api.archive.deleteProfileItem(item);
 		}
 		const fieldNameShort = item.fieldNameUI.split('.')[1] as FieldNameUIShort;
 		const list = this.profileItemDictionary[fieldNameShort];

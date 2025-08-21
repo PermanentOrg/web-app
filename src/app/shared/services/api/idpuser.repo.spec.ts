@@ -47,6 +47,6 @@ describe('IdpUser', () => {
 			expect(response).toEqual(expected);
 		});
 
-		const req = httpMock.expectOne(`${environment.apiUrl}/v2/idpuser`);
+		httpMock.expectOne(`${environment.apiUrl}/v2/idpuser`);
 	});
 });

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { remove } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 import { DataService } from '@shared/services/data/data.service';

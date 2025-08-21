@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '@root/environments/environment';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { EventObserver } from '../event/event.service';
 import { PermanentEvent } from '../event/event-types';

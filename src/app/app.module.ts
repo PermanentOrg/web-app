@@ -42,7 +42,7 @@ import {
 	FontAwesomeModule,
 	FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
-import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+import { faFileArchive } from '@fortawesome/free-solid-svg-icons';
 
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { FormsModule } from '@angular/forms';

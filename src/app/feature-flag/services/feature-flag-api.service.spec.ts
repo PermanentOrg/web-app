@@ -9,7 +9,6 @@ import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
-import { FeatureFlag } from '../types/feature-flag';
 import { FeatureFlagApiService } from './feature-flag-api.service';
 
 describe('FeatureFlagApiService', () => {

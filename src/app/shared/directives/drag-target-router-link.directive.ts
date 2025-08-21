@@ -13,7 +13,6 @@ import {
 	DragTargetDroppableComponent,
 	DragServiceEvent,
 } from '@shared/services/drag/drag.service';
-import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
 

@@ -10,11 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { AccountService } from '@shared/services/account/account.service';
 
-import {
-	ArchiveResponse,
-	ShareResponse,
-} from '@shared/services/api/index.repo';
-import { RecordVO, ArchiveVO, FolderVO } from '@models';
+import { ShareResponse } from '@shared/services/api/index.repo';
 
 @Injectable()
 export class ShareUrlResolveService {

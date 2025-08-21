@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
@@ -177,7 +177,6 @@ describe('ConnectorComponent', () => {
 		const connectorClass = connectorComponentInstance.getConnectorClass(
 			hostComponent.connector.type,
 		);
-		const tooltip = connectorComponentInstance.getTooltip();
 
 		expect(connectorClass).toEqual('connector-familysearch');
 	});

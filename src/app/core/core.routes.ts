@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
 import { MainComponent } from '@core/components/main/main.component';
-
 import { AuthGuard } from '@core/guards/auth.guard';
-
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
@@ -15,7 +12,6 @@ import { GlobalSearchResultsComponent } from '@search/components/global-search-r
 import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { RoutesWithData } from '../app.routes';
 import { RelationshipsResolveService } from './resolves/relationships-resolve.service';
-
 import { MembersResolveService } from './resolves/members-resolve.service';
 import { AccountResolveService } from './resolves/account-resolve.service';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';

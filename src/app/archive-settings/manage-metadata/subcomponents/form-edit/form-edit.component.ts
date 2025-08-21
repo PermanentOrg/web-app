@@ -1,11 +1,4 @@
-import {
-	Component,
-	ElementRef,
-	Input,
-	OnDestroy,
-	OnInit,
-	ViewChild,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
 @Component({

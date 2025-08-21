@@ -133,10 +133,6 @@ describe('GlamPendingArchivesComponent', () => {
 
 	it('should return false when isSelected is called for a non-accepted archive', async () => {
 		const { instance } = await shallow.render();
-		const archive: ArchiveVO = new ArchiveVO({
-			archiveId: 1,
-			fullName: 'Test Archive',
-		});
 
 		expect(instance.isSelected(1)).toBeFalse();
 	});

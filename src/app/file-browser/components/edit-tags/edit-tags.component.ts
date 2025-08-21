@@ -3,7 +3,6 @@ import {
 	OnInit,
 	Input,
 	OnDestroy,
-	OnChanges,
 	DoCheck,
 	HostBinding,
 	ElementRef,
@@ -13,14 +12,13 @@ import {
 import { TagsService } from '@core/services/tags/tags.service';
 import { ItemVO, TagVOData, TagLinkVOData, FolderVO } from '@models';
 import { DataService } from '@shared/services/data/data.service';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {
 	HasSubscriptions,
 	unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { DataStatus } from '@models/data-status.enum';
 import { ApiService } from '@shared/services/api/api.service';
-import { TagResponse } from '@shared/services/api/tag.repo';
 import { BaseResponse } from '@shared/services/api/base';
 import { MessageService } from '@shared/services/message/message.service';
 import { ngIfScaleAnimation } from '@shared/animations';

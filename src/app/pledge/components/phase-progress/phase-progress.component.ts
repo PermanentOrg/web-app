@@ -1,14 +1,4 @@
-import {
-	Component,
-	OnInit,
-	ElementRef,
-	ContentChild,
-	Input,
-	OnChanges,
-	SimpleChanges,
-	HostBinding,
-	AfterViewInit,
-} from '@angular/core';
+import { Component, OnInit, ElementRef, HostBinding } from '@angular/core';
 import ProgressBar from 'progressbar.js';
 
 import { APP_CONFIG } from '@root/app/app.config';

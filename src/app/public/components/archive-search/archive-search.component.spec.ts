@@ -17,7 +17,6 @@ describe('ArchiveSearchComponent', () => {
 	let fixture: ComponentFixture<ArchiveSearchComponent>;
 	let searchService: jasmine.SpyObj<SearchService>;
 	let publicProfileService: jasmine.SpyObj<PublicProfileService>;
-	let router: Router;
 
 	beforeEach(async () => {
 		publicProfileService = jasmine.createSpyObj('PublicProfileService', [

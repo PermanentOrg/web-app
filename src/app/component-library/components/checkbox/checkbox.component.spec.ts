@@ -131,7 +131,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it("should have aria-disabled set to 'true' when disabled", async () => {
-		const { find, instance, fixture } = await shallow.render({
+		const { find, fixture } = await shallow.render({
 			bind: { disabled: true },
 		});
 		fixture.detectChanges();

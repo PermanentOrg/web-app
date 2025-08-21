@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { merge } from 'lodash';
-
-import { AccountService } from '@shared/services/account/account.service';
-
 import { PledgeData } from '@pledge/components/new-pledge/new-pledge.component';
 import { AccountVO, BillingPaymentVO } from '@models';
 

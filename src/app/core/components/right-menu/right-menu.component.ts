@@ -1,18 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
 
 import { DataService } from '@shared/services/data/data.service';
-import { ApiService } from '@shared/services/api/api.service';
 import {
 	PromptService,
 	PromptField,
 } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderVO } from '@root/app/models';
-import { Validators, FormBuilder } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { EditService, ItemActions } from '@core/services/edit/edit.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';

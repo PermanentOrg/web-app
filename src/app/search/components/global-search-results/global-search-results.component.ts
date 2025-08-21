@@ -200,8 +200,9 @@ export class GlobalSearchResultsComponent
 	}
 
 	onTagResultClick(tag: TagVOData) {
-		const [searchTerm, tags]: [string, TagVOData[]] =
-			this.searchService.parseSearchTerm(this.formControl.value);
+		const [, tags]: [string, TagVOData[]] = this.searchService.parseSearchTerm(
+			this.formControl.value,
+		);
 
 		// replace any text query with existing tags + clicked tag
 		tags.push(tag);

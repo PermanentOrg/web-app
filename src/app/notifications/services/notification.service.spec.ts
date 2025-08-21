@@ -51,7 +51,6 @@ describe('NotificationService', () => {
 	let apiService: ApiService;
 
 	let service: NotificationService;
-	let loggedInSpy: jasmine.Spy;
 	let getNotificationsSpy: jasmine.Spy;
 	let getNotificationsSinceSpy: jasmine.Spy;
 	let updateSpy: jasmine.Spy;
@@ -60,7 +59,6 @@ describe('NotificationService', () => {
 	let newNotificationsResponse: NotificationResponse;
 
 	beforeEach(() => {
-		loggedInSpy = null;
 		getNotificationsSinceSpy = null;
 		getNotificationsSpy = null;
 		updateSpy = null;
@@ -96,7 +94,7 @@ describe('NotificationService', () => {
 	});
 
 	it('should be created', () => {
-		loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(false);
+		spyOn(accountService, 'isLoggedIn').and.returnValue(false);
 
 		service = TestBed.inject(NotificationService);
 
@@ -104,7 +102,7 @@ describe('NotificationService', () => {
 	});
 
 	it('should not attempt to load notifications if not logged in', () => {
-		loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(false);
+		spyOn(accountService, 'isLoggedIn').and.returnValue(false);
 		getNotificationsSpy = spyOn(apiService.notification, 'getNotifications');
 
 		service = TestBed.inject(NotificationService);
@@ -115,7 +113,7 @@ describe('NotificationService', () => {
 	});
 
 	it('should load notifications if logged in and set unread count', fakeAsync(() => {
-		loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
+		spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
 		getNotificationsSpy = spyOn(
 			apiService.notification,
@@ -135,7 +133,7 @@ describe('NotificationService', () => {
 	}));
 
 	it('should load new notifications and update the unread count', fakeAsync(() => {
-		loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
+		spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
 		getNotificationsSpy = spyOn(
 			apiService.notification,
@@ -168,7 +166,7 @@ describe('NotificationService', () => {
 	}));
 
 	it('should mark notifications as seen and update the unread count', fakeAsync(() => {
-		loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
+		spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
 		getNotificationsSpy = spyOn(
 			apiService.notification,
@@ -202,7 +200,7 @@ describe('NotificationService', () => {
 	}));
 
 	it('should mark notifications as read and update the unread count', fakeAsync(() => {
-		loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
+		spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
 		getNotificationsSpy = spyOn(
 			apiService.notification,
@@ -223,7 +221,6 @@ describe('NotificationService', () => {
 		flushMicrotasks();
 
 		expect(service.newNotificationCount).toBeGreaterThan(0);
-		const countBeforeMarkSeen = service.newNotificationCount;
 
 		service.markAll('status.notification.read');
 

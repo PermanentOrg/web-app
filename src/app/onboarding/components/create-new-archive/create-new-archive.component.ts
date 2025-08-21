@@ -1,23 +1,11 @@
 import { Observable, Subscription } from 'rxjs';
 import { AccountService } from '@shared/services/account/account.service';
-import {
-	Component,
-	EventEmitter,
-	OnInit,
-	Output,
-	OnDestroy,
-	Input,
-} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { ArchiveType, ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
 import { AccountEventAction } from '@shared/services/event/event-types';
-import {
-	UntypedFormBuilder,
-	UntypedFormGroup,
-	Validators,
-} from '@angular/forms';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';

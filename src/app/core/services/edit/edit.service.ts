@@ -313,8 +313,7 @@ export class EditService {
 		}
 
 		try {
-			const results = await Promise.all(promises);
-			const [folderResponse, recordResponse] = results;
+			await Promise.all(promises);
 			this.dataService.hideItemsInCurrentFolder(items);
 			this.deleteSubject.next();
 		} catch (err) {

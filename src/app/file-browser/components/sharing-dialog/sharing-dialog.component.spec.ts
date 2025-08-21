@@ -9,7 +9,7 @@ import { SharedModule } from '@shared/shared.module';
 import { cloneDeep } from 'lodash';
 import * as Testing from '@root/test/testbedConfig';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { ArchiveVO, ItemVO, RecordVO, ShareVO } from '@models';
+import { ArchiveVO, RecordVO, ShareVO } from '@models';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
@@ -71,11 +71,8 @@ describe('SharingDialogComponent', () => {
 	let relationUpdateSpy;
 
 	let showMessageSpy;
-	let showErrorSpy;
 
 	let apiService: ApiService;
-
-	let dialogData: { item: ItemVO };
 
 	beforeEach(async () => {
 		item = new RecordVO({
@@ -85,11 +82,6 @@ describe('SharingDialogComponent', () => {
 		});
 
 		const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
-
-		dialogData = {
-			item,
-		};
-
 		config.imports.push(SharedModule);
 		config.declarations.push(SharingDialogComponent);
 		config.providers.push({
@@ -113,10 +105,9 @@ describe('SharingDialogComponent', () => {
 			TestBed.inject(MessageService),
 			'showMessage',
 		).and.returnValue(undefined);
-		showErrorSpy = spyOn(
-			TestBed.inject(MessageService),
-			'showError',
-		).and.returnValue(undefined);
+		spyOn(TestBed.inject(MessageService), 'showError').and.returnValue(
+			undefined,
+		);
 
 		apiService = TestBed.inject(ApiService);
 

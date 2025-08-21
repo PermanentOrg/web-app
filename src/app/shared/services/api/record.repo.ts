@@ -1,4 +1,4 @@
-import { RecordVO, FolderVO, RecordVOData, SimpleVO } from '@root/app/models';
+import { RecordVO, FolderVO } from '@root/app/models';
 import {
 	BaseResponse,
 	BaseRepo,
@@ -9,18 +9,6 @@ import { StorageService } from '@shared/services/storage/storage.service';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
 import { firstValueFrom } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
-
-const MIN_WHITELIST: (keyof RecordVO)[] = [
-	'recordId',
-	'archiveNbr',
-	'folder_linkId',
-];
-const DEFAULT_WHITELIST: (keyof RecordVO)[] = [
-	...MIN_WHITELIST,
-	'displayName',
-	'description',
-	'displayDT',
-];
 
 class MultipartUploadUrlsList {
 	public urls: string[] = [];

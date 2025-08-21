@@ -1,6 +1,5 @@
 import { Shallow } from 'shallow-render';
-
-import { TagVO, TagVOData } from '@models/tag-vo';
+import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { FormsModule } from '@angular/forms';
 import {

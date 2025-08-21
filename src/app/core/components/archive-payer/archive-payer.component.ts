@@ -1,5 +1,5 @@
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { PayerService } from '@shared/services/payer/payer.service';

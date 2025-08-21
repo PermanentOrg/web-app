@@ -15,7 +15,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { InviteVOData, InviteVO } from '@models';
 import { InviteResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { partition, filter } from 'lodash';
+import { filter } from 'lodash';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { AccountService } from '@shared/services/account/account.service';
 

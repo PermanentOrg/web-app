@@ -120,7 +120,7 @@ export class MembersDialogComponent {
 				member.accessRole = updatedMember.accessRole;
 				member.status = account.status;
 			} else {
-				const response = await this.api.archive.updateMember(
+				await this.api.archive.updateMember(
 					updatedMember,
 					this.accountService.getArchive(),
 				);

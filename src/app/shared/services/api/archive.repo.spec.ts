@@ -6,17 +6,12 @@ import {
 import { environment } from '@root/environments/environment';
 
 import { TEST_DATA, TEST_DATA_2 } from '@core/core.module.spec';
-import { HttpService, Observable } from '@shared/services/http/http.service';
+import { HttpService } from '@shared/services/http/http.service';
 import {
 	ArchiveRepo,
 	ArchiveResponse,
 } from '@shared/services/api/archive.repo';
-import {
-	SimpleVO,
-	AccountPasswordVO,
-	AccountVO,
-	ArchiveVO,
-} from '@root/app/models';
+import { AccountVO, ArchiveVO } from '@root/app/models';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,

@@ -8,7 +8,6 @@ import { LeftMenuComponent } from '@core/components/left-menu/left-menu.componen
 import { MessageService } from '@shared/services/message/message.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { AccountService } from '@shared/services/account/account.service';
-import { PromptComponent } from '@shared/components/prompt/prompt.component';
 import { MessageComponent } from '@shared/components/message/message.component';
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';

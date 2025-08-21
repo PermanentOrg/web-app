@@ -27,8 +27,6 @@ export class StaticMapComponent implements OnChanges {
 
 	public imageUrl: string;
 
-	private elementSize: number;
-
 	constructor(
 		private elementRef: ElementRef,
 		private secrets: SecretsService,

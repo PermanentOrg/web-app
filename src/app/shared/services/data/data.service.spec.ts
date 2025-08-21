@@ -52,12 +52,10 @@ describe('DataService', () => {
 		service.setCurrentFolder(null);
 
 		expect(service.currentFolder).toBeNull();
-		const subscription = service.currentFolderChange.subscribe(
-			(newFolder: FolderVO) => {
-				expect(newFolder).toEqual(testFolder);
-				expect(service.currentFolder).toEqual(testFolder);
-			},
-		);
+		service.currentFolderChange.subscribe((newFolder: FolderVO) => {
+			expect(newFolder).toEqual(testFolder);
+			expect(service.currentFolder).toEqual(testFolder);
+		});
 		service.setCurrentFolder(testFolder);
 	});
 

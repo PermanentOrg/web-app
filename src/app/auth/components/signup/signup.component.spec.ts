@@ -1,11 +1,5 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {
-	FormsModule,
-	ReactiveFormsModule,
-	FormControl,
-	FormGroup,
-	UntypedFormControl,
-} from '@angular/forms';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
@@ -16,12 +10,8 @@ import { LogoComponent } from '@auth/components/logo/logo.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 import { TEST_DATA } from '@core/core.module.spec';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FORM_ERROR_MESSAGES } from '@shared/utilities/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { CheckboxComponent } from '@root/app/component-library/components/checkbox/checkbox.component';
 import { AccountVO } from '@models/account-vo';
 import { AccountService } from '@shared/services/account/account.service';
 import {

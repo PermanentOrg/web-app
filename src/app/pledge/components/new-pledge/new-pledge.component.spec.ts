@@ -65,7 +65,6 @@ const mockApiService = {
 
 describe('NewPledgeComponent', () => {
 	let shallow: Shallow<NewPledgeComponent>;
-	let messageShown = false;
 
 	beforeEach(() => {
 		shallow = new Shallow(NewPledgeComponent, PledgeModule)
@@ -76,9 +75,7 @@ describe('NewPledgeComponent', () => {
 			.mock(AccountService, mockAccountService)
 			.mock(PledgeService, mockPledgeService)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			})
 			.provide(EventService)
 			.dontMock(EventService);

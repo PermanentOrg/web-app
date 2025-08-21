@@ -4,7 +4,6 @@ import {
 	ViewChildren,
 	AfterViewInit,
 	OnDestroy,
-	ElementRef,
 	QueryList,
 } from '@angular/core';
 import {

@@ -11,7 +11,6 @@ import { of, merge, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
-import { RouteData } from '@root/app/app.routes';
 
 @Component({
 	selector: 'pr-public-archive',
@@ -56,7 +55,6 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
-		const data = this.route.snapshot.data as RouteData;
 		this.subscriptions.push(
 			this.publicProfile
 				.publicRoot$()

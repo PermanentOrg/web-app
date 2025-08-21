@@ -15,7 +15,6 @@ import {
 
 describe('StorageDialogComponent', () => {
 	let shallow: Shallow<RedeemGiftComponent>;
-	let messageShown: boolean = false;
 	let mockAccountService: MockAccountService;
 	let mockApiService: MockApiService;
 	let mockActivatedRoute;
@@ -35,9 +34,7 @@ describe('StorageDialogComponent', () => {
 			.dontMock(AccountService)
 			.dontMock(ApiService)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			})
 			.provide({ provide: AccountService, useValue: mockAccountService })
 			.provide({ provide: ApiService, useValue: mockApiService })

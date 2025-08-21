@@ -1,11 +1,5 @@
-import {
-	Component,
-	OnInit,
-	ViewChild,
-	ElementRef,
-	Inject,
-} from '@angular/core';
-import { RecordVO, FolderVO, ShareVO, ShareByUrlVO, ArchiveVO } from '@models';
+import { Component, ViewChild, ElementRef, Inject } from '@angular/core';
+import { RecordVO, FolderVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { find, maxBy } from 'lodash';
@@ -82,10 +76,7 @@ export class PublishComponent {
 				{ type: 'type.folder.root.public' },
 			) as FolderVO;
 			if (this.sourceItem instanceof FolderVO) {
-				const response = await this.api.folder.copy(
-					[this.sourceItem],
-					publicRoot,
-				);
+				await this.api.folder.copy([this.sourceItem], publicRoot);
 				let tries = 0;
 				while (!this.publicItem && tries++ < 10) {
 					const publicRootResponse = (await this.api.folder

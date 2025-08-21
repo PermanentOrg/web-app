@@ -3,8 +3,6 @@ import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { ComponentsModule } from '../../components.module';
 import { FormInputComponent, FormInputConfig } from './form-input.component';
 
-type AttrOnOff = 'on' | 'off';
-
 describe('FormInputComponent', () => {
 	let shallow: Shallow<FormInputComponent>;
 
@@ -101,7 +99,7 @@ describe('FormInputComponent', () => {
 		const mockControl = new UntypedFormControl('');
 
 		const mockValue = 'test value';
-		const { instance, find } = await shallow.render({
+		const { instance } = await shallow.render({
 			bind: { control: mockControl },
 		});
 

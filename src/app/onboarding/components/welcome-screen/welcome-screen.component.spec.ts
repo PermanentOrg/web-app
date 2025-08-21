@@ -42,7 +42,7 @@ describe('WelcomeScreenComponent #onboarding', () => {
 				fullName: 'Pending Test',
 			}),
 		];
-		const { element, find, outputs } = await defaultRender(pendingArchives);
+		const { element, outputs } = await defaultRender(pendingArchives);
 		element.componentInstance.selectPendingArchive(pendingArchives[0]);
 
 		expect(outputs.selectInvitation.emit).toHaveBeenCalledWith(

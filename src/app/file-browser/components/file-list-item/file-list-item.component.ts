@@ -149,7 +149,6 @@ export interface FileListItemVisibleEvent {
 
 const SINGLE_CLICK_DELAY = 100;
 const DOUBLE_CLICK_TIMEOUT = 350;
-const DOUBLE_CLICK_TIMEOUT_IOS = 1500;
 const MOUSE_DOWN_DRAG_TIMEOUT = 500;
 const DRAG_MIN_Y = 1;
 

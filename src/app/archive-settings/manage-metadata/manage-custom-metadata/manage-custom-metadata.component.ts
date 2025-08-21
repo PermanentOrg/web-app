@@ -7,8 +7,7 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { TagsService } from '@core/services/tags/tags.service';
-import { ApiService } from '@shared/services/api/api.service';
-import { TagVO, TagVOData } from '@models/tag-vo';
+import { TagVO } from '@models/tag-vo';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -83,7 +82,7 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
 
 	public addDeletedTag(tag: TagVO): void {
 		this.deletedTagIds.push(tag.tagId);
-		const [category, value] = tag.name.split(':');
+		const [category] = tag.name.split(':');
 		if (this.tagMap.get(category).length === 1) {
 			this.activeCategory = null;
 		}
@@ -126,7 +125,7 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
 	protected reloadTagMap(): void {
 		for (const tag of this.tagsList) {
 			if (tag.name.includes(':')) {
-				const [category, _value] = tag.name.split(':');
+				const [category] = tag.name.split(':');
 				this.addTagToTagMap(category, tag);
 			}
 		}

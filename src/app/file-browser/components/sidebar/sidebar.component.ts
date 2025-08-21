@@ -1,5 +1,5 @@
 import { RecordVO } from '@root/app/models';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import {
 	HasSubscriptions,

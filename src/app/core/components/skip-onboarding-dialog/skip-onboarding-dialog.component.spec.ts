@@ -17,7 +17,6 @@ class MockDialogRef {
 describe('SkipOnboardingDialogComponent', () => {
 	let component: SkipOnboardingDialogComponent;
 	let fixture: ComponentFixture<SkipOnboardingDialogComponent>;
-	let dialogRef: DialogRef;
 
 	const mockAccountService = {
 		getAccount: jasmine

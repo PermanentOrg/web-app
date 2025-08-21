@@ -8,7 +8,6 @@ import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import {
 	BillingRepo,
-	BillingResponse,
 	ClaimingPromoResponse,
 } from '@shared/services/api/billing.repo';
 import {

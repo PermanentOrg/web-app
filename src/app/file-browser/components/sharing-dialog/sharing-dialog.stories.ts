@@ -5,7 +5,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ArchiveVO, RecordVO, ShareByUrlVO } from '@models/index';
+import { RecordVO } from '@models/index';
 import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';

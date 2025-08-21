@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
-import { ItemVO, TagLinkVOData, TagVOData } from '@models';
+import { ItemVO, TagVOData } from '@models';
 import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { SearchResponse } from '@shared/services/api/index.repo';
