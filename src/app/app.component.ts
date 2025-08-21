@@ -1,6 +1,6 @@
 import { Component, HostBinding } from '@angular/core';
 
-declare var iosInnerHeight: Function;
+declare let iosInnerHeight: Function;
 
 @Component({
 	selector: 'pr-app-root',

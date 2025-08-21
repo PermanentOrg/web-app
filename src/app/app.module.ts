@@ -54,7 +54,7 @@ import { RouteHistoryModule } from './route-history/route-history.module';
 import { CustomOverlayContainer } from './dialog-cdk/custom-overlay-container';
 import { FeatureFlagModule } from './feature-flag/feature-flag.module';
 
-declare var ga: any;
+declare let ga: any;
 
 export function initializeAnalytics(
 	event: EventService,
