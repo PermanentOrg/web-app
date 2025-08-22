@@ -1,6 +1,7 @@
 import {
 	Component,
 	OnInit,
+	OnChanges,
 	Input,
 	ElementRef,
 	AfterViewInit,
@@ -36,7 +37,7 @@ export interface FormInputConfig {
 	styleUrls: ['./form-input.component.scss'],
 	standalone: false,
 })
-export class FormInputComponent implements OnInit, AfterViewInit {
+export class FormInputComponent implements OnInit, OnChanges, AfterViewInit {
 	@Input() type = 'text';
 	@Input() fieldName: string;
 	@Input() placeholder: string;
