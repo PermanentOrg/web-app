@@ -63,7 +63,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	it('should emit a progress bar change event on mount', async () => {
 		const { outputs } = await shallow.render();
 
-		expect(outputs.progress.emit).toHaveBeenCalledWith(0);
+		expect(outputs.progressUpdated.emit).toHaveBeenCalledWith(0);
 	});
 
 	it('the next button should be disabled if no goals have been selected', async () => {

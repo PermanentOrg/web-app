@@ -38,8 +38,8 @@ type NewArchiveScreen =
 export class CreateNewArchiveComponent implements OnInit {
 	@Output() back = new EventEmitter<void>();
 	@Output() createdArchive = new EventEmitter<ArchiveVO>();
-	@Output() error = new EventEmitter<string>();
-	@Output() progress = new EventEmitter<number>();
+	@Output() errorOccurred = new EventEmitter<string>();
+	@Output() progressUpdated = new EventEmitter<number>();
 	@Output() chartPathClicked = new EventEmitter<void>();
 	@Output() backToPendingArchivesOutput = new EventEmitter<void>();
 	@Input() pendingArchives: ArchiveVO[] = [];
@@ -107,11 +107,11 @@ export class CreateNewArchiveComponent implements OnInit {
 
 		if (this.pendingArchive) {
 			this.screen = 'goals';
-			this.progress.emit(1);
+			this.progressUpdated.emit(1);
 		} else {
-			this.progress.emit(0);
+			this.progressUpdated.emit(0);
 		}
-		this.progress.emit(0);
+		this.progressUpdated.emit(0);
 		this.event.dispatch({
 			entity: 'account',
 			action: 'start_onboarding',
@@ -144,10 +144,10 @@ export class CreateNewArchiveComponent implements OnInit {
 		}
 		if (this.screen === 'goals') {
 			this.screen = 'create';
-			this.progress.emit(0);
+			this.progressUpdated.emit(0);
 		} else {
 			this.screen = 'goals';
-			this.progress.emit(1);
+			this.progressUpdated.emit(1);
 		}
 		sessionStorage.setItem('onboardingScreen', this.screen);
 	}
@@ -167,12 +167,12 @@ export class CreateNewArchiveComponent implements OnInit {
 		this.screen = screen;
 		sessionStorage.setItem('onboardingScreen', screen);
 		if (screen === 'reasons') {
-			this.progress.emit(2);
+			this.progressUpdated.emit(2);
 			this.chartPathClicked.emit();
 		} else if (screen === 'goals') {
-			this.progress.emit(1);
+			this.progressUpdated.emit(1);
 		} else {
-			this.progress.emit(0);
+			this.progressUpdated.emit(0);
 		}
 	}
 
@@ -206,7 +206,7 @@ export class CreateNewArchiveComponent implements OnInit {
 					createdArchive = response.getArchiveVO();
 				}
 			} catch (archiveError) {
-				this.error.emit('An error occurred. Please try again.');
+				this.errorOccurred.emit('An error occurred. Please try again.');
 			}
 
 			try {
@@ -220,7 +220,7 @@ export class CreateNewArchiveComponent implements OnInit {
 				this.createdArchive.emit(this.pendingArchive);
 			}
 		} catch (error) {
-			this.error.emit('An error occurred. Please try again.');
+			this.errorOccurred.emit('An error occurred. Please try again.');
 		} finally {
 			this.loading = false;
 		}
@@ -252,7 +252,7 @@ export class CreateNewArchiveComponent implements OnInit {
 						this.archiveTypeTag = OnboardingTypes.myself;
 						this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
 						this.screen = 'goals';
-						this.progress.emit(1);
+						this.progressUpdated.emit(1);
 					}
 				});
 		} else {
@@ -270,7 +270,7 @@ export class CreateNewArchiveComponent implements OnInit {
 		}
 		if (this.screen === 'goals') {
 			this.screen = 'reasons';
-			this.progress.emit(2);
+			this.progressUpdated.emit(2);
 			sessionStorage.setItem('onboardingScreen', this.screen);
 			this.selectedGoals = [];
 		} else if (this.screen === 'reasons') {

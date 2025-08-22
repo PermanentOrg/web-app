@@ -24,12 +24,12 @@ describe('PublicSearchBarResultsComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should emit "search" when viewAllResults is called', () => {
-		spyOn(component.search, 'emit');
+	it('should emit "searchTriggered" when viewAllResults is called', () => {
+		spyOn(component.searchTriggered, 'emit');
 
 		component.viewAllResults();
 
-		expect(component.search.emit).toHaveBeenCalled();
+		expect(component.searchTriggered.emit).toHaveBeenCalled();
 	});
 
 	it('should emit tagClickOutput with the correct tag when onTagClick is called', () => {

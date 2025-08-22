@@ -40,7 +40,7 @@ const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
 export class NewArchiveFormComponent {
 	@Input() showRelations: boolean = false;
 	@Output() success = new EventEmitter<ArchiveVO>();
-	@Output() error = new EventEmitter();
+	@Output() errorOccurred = new EventEmitter();
 	@ViewChild('newArchiveName') fullNameRef: ElementRef<HTMLInputElement>;
 	public archiveTypes = ARCHIVE_TYPES;
 	public relationTypes = RELATION_OPTIONS;
@@ -74,7 +74,7 @@ export class NewArchiveFormComponent {
 			const newArchive = response.getArchiveVO();
 			this.success.emit(newArchive);
 		} catch (err) {
-			this.error.emit(err);
+			this.errorOccurred.emit(err);
 		} finally {
 			this.waiting = false;
 		}
