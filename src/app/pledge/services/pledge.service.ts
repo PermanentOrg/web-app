@@ -18,7 +18,7 @@ export class PledgeService {
 	}
 
 	async loadPledge(pledgeId: string) {
-		this.currentPledge = await this.db.database.ref(`/pledges/${pledgeId}`);
+		this.currentPledge = this.db.database.ref(`/pledges/${pledgeId}`);
 		if (!this.currentPledge) {
 			throw new Error('PledgeService - error loading pledge');
 		}

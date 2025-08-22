@@ -108,7 +108,7 @@ describe('DirectiveEditComponent', () => {
 	});
 
 	it('should be able to have existing directive data passed in', async () => {
-		const directive = await createDirective(
+		const directive = createDirective(
 			'existing@example.com',
 			'already existing directive',
 		);
@@ -123,7 +123,7 @@ describe('DirectiveEditComponent', () => {
 	});
 
 	it('should send an edit call if the directive already exists', async () => {
-		const directive = await createDirective(
+		const directive = createDirective(
 			'existing@example.com',
 			'already existing directive',
 		);
@@ -164,7 +164,7 @@ describe('DirectiveEditComponent', () => {
 
 	it('should handle API errors on editing', async () => {
 		MockDirectiveRepo.failRequest = true;
-		const directive = await createDirective(
+		const directive = createDirective(
 			'existing@example.com',
 			'already existing directive',
 		);
@@ -202,7 +202,7 @@ describe('DirectiveEditComponent', () => {
 	});
 
 	it('should emit an output when a directive is edited', async () => {
-		const directive = await createDirective(
+		const directive = createDirective(
 			'existing@example.com',
 			'already existing directive',
 		);
@@ -267,7 +267,7 @@ describe('DirectiveEditComponent', () => {
 
 	it('should show an error message if a user with the given email does not exist when editing', async () => {
 		MockDirectiveRepo.accountExists = false;
-		const directive = await createDirective(
+		const directive = createDirective(
 			'existing@example.com',
 			'already existing directive',
 		);

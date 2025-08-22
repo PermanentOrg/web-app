@@ -20,7 +20,7 @@ export class ClaimDoneComponent implements OnInit {
 	) {}
 
 	async ngOnInit() {
-		const loggedIn = await this.accountService.isLoggedIn();
+		const loggedIn = this.accountService.isLoggedIn();
 
 		if (!loggedIn && this.pledgeService.currentPledge) {
 			return await this.router.navigate(['..', 'claim'], {

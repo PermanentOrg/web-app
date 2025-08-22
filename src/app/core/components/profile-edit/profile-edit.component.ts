@@ -193,7 +193,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 				}
 			} else {
 				await this.profile.saveProfileItem(item, [valueKey]);
-				await this.trackProfileEdit(item);
+				this.trackProfileEdit(item);
 			}
 			if (refreshArchive) {
 				await this.account.refreshArchive();
@@ -251,7 +251,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
 	async chooseLocationForItem(item: ProfileItemVOData) {
 		try {
-			await this.dialog.open(LocationPickerComponent, {
+			this.dialog.open(LocationPickerComponent, {
 				data: { profileItem: item },
 				height: 'auto',
 				width: '600px',

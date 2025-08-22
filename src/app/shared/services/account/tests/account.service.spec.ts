@@ -170,10 +170,8 @@ describe('AccountService', () => {
 		});
 		instance.setAccount(account);
 
-		await uploadService.uploadFiles(new FolderVO({}), [
-			new File([], 'test.txt'),
-		]);
-		await instance.deductAccountStorage(200);
+		uploadService.uploadFiles(new FolderVO({}), [new File([], 'test.txt')]);
+		instance.deductAccountStorage(200);
 
 		expect(instance.getAccount().spaceLeft).toEqual(99800);
 	});
@@ -198,7 +196,7 @@ describe('AccountService', () => {
 		instance.setAccount(account);
 		await editService.deleteItems(itemsToDelete);
 
-		await instance.deductAccountStorage(-sizeOfItemsToDelete);
+		instance.deductAccountStorage(-sizeOfItemsToDelete);
 
 		expect(instance.getAccount().spaceLeft).toEqual(100400);
 	});
