@@ -243,7 +243,7 @@ export class MainComponent
 			async (progressEvent) => {
 				if (progressEvent.sessionStatus === UploadSessionStatus.Done) {
 					try {
-						await this.dialog.open(TimelineCompleteDialogComponent, {
+						this.dialog.open(TimelineCompleteDialogComponent, {
 							data: { folder: newFolder },
 							height: 'auto',
 						});

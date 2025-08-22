@@ -240,7 +240,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 		});
 		this.pledgeForm.reset();
 
-		const isLoggedIn = await this.accountService.isLoggedIn();
+		const isLoggedIn = this.accountService.isLoggedIn();
 		if (!isLoggedIn) {
 			this.router.navigate(['..', 'claim'], { relativeTo: this.route });
 		} else {

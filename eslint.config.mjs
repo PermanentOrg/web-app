@@ -194,7 +194,6 @@ export default typescriptEslint.config([
 			'@typescript-eslint/no-unsafe-function-type': 'off',
 			'@typescript-eslint/require-await': 'off',
 			'@typescript-eslint/no-empty-object-type': 'off',
-			'@typescript-eslint/await-thenable': 'off',
 			'@typescript-eslint/no-unsafe-member-access': 'off',
 			'@typescript-eslint/no-unsafe-call': 'off',
 			'@typescript-eslint/no-extraneous-class': 'off',
