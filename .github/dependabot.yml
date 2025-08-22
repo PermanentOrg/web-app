@@ -5,6 +5,12 @@ updates:
     schedule:
       interval: "daily"
     groups:
+      storybook:
+        patterns:
+          - "@storybook/*"
+          - "storybook"
+          - "eslint-plugin-storybook"
+          - "@chromatic-com/storybook"
       eslint:
         patterns:
           - "*eslint*"

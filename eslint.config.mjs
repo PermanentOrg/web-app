@@ -296,6 +296,7 @@ export default typescriptEslint.config([
 			'promise/param-names': 'off',
 			'consistent-this': 'off',
 			'eslint-comments/require-description': 'off',
+			'@angular-eslint/prefer-inject': 'off',
 		},
 	},
 	{
