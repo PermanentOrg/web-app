@@ -59,7 +59,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 		find('button').nativeElement.click();
 
 		expect(outputs.success.emit).not.toHaveBeenCalled();
-		expect(outputs.error.emit).not.toHaveBeenCalled();
+		expect(outputs.errorOccurred.emit).not.toHaveBeenCalled();
 	});
 
 	it('should disable button when form is waiting', async () => {
@@ -93,7 +93,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 		expect(createdArchive.fullName).toBe('Test User');
 		expect(createdArchive.type).toBe('type.archive.person');
 		expect(createdArchive.relationType).toBeNull();
-		expect(outputs.error.emit).not.toHaveBeenCalled();
+		expect(outputs.errorOccurred.emit).not.toHaveBeenCalled();
 	});
 
 	it('should output errors if they occur', async () => {
@@ -104,7 +104,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 		find('button').nativeElement.click();
 		await fixture.whenStable();
 
-		expect(outputs.error.emit).toHaveBeenCalled();
+		expect(outputs.errorOccurred.emit).toHaveBeenCalled();
 		expect(outputs.success.emit).not.toHaveBeenCalled();
 	});
 

@@ -20,7 +20,7 @@ import {
 	standalone: false,
 })
 export class ArchiveSearchComponent implements OnInit {
-	@Output() search = new EventEmitter<string>();
+	@Output() searchSubmitted = new EventEmitter<string>();
 	@Output() searchByTag = new EventEmitter<{
 		tagId: number;
 		tagName: string;
@@ -123,7 +123,7 @@ export class ArchiveSearchComponent implements OnInit {
 	}
 
 	public onHandleSearch(): void {
-		this.search.emit(this.searchForm.value.query);
+		this.searchSubmitted.emit(this.searchForm.value.query);
 	}
 
 	public onTagClick(tag: TagVO[]): void {

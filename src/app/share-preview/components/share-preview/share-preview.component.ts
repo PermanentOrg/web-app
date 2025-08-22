@@ -1,4 +1,10 @@
-import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	AfterViewInit,
+	HostListener,
+	OnDestroy,
+} from '@angular/core';
 import {
 	Router,
 	ActivatedRoute,
@@ -45,7 +51,7 @@ enum FormType {
 	styleUrls: ['./share-preview.component.scss'],
 	standalone: false,
 })
-export class SharePreviewComponent implements OnInit, OnDestroy {
+export class SharePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
 	// share data
 	account: AccountVO = this.accountService.getAccount();
 	archive: ArchiveVO = this.accountService.getArchive();

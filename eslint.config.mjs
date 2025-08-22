@@ -86,15 +86,7 @@ export default typescriptEslint.config([
 	{
 		files: ['**/*.ts'],
 		rules: {
-			'@typescript-eslint/explicit-member-accessibility': [
-				'off',
-				{
-					accessibility: 'explicit',
-				},
-			],
-
 			'import/prefer-default-export': 'off',
-			'max-classes-per-file': 'off',
 			'no-console': [
 				'error',
 				{
@@ -143,10 +135,6 @@ export default typescriptEslint.config([
 			],
 
 			'@angular-eslint/prefer-standalone': 'off',
-			'@angular-eslint/no-output-native': 'off',
-			'@angular-eslint/no-output-on-prefix': 'off',
-			'@angular-eslint/use-lifecycle-interface': 'off',
-			'@typescript-eslint/prefer-for-of': 'off',
 			'array-callback-return': 'off',
 			'brace-style': 'off',
 			'class-methods-use-this': 'off',
@@ -205,7 +193,6 @@ export default typescriptEslint.config([
 			'@typescript-eslint/no-unsafe-function-type': 'off',
 			'@typescript-eslint/require-await': 'off',
 			'@typescript-eslint/no-empty-object-type': 'off',
-			'@typescript-eslint/await-thenable': 'off',
 			'@typescript-eslint/no-unsafe-member-access': 'off',
 			'@typescript-eslint/no-unsafe-call': 'off',
 			'@typescript-eslint/no-extraneous-class': 'off',

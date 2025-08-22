@@ -13,13 +13,13 @@ describe('EventService', () => {
 	});
 
 	it('should be created', async () => {
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 
 		expect(instance).toBeTruthy();
 	});
 
 	it('should notify all observers', async () => {
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 		const mockObserver1: EventObserver = {
 			update: jasmine.createSpy('update'),
 		};
@@ -41,7 +41,7 @@ describe('EventService', () => {
 	});
 
 	it('should remove an observer', async () => {
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 		const mockObserver: EventObserver = {
 			update: jasmine.createSpy('update'),
 		};
@@ -57,7 +57,7 @@ describe('EventService', () => {
 	});
 
 	it('should not notify removed observers', async () => {
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 		const mockObserver: EventObserver = {
 			update: jasmine.createSpy('update'),
 		};

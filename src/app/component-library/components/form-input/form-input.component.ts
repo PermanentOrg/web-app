@@ -1,6 +1,7 @@
 import {
 	Component,
 	OnInit,
+	OnChanges,
 	Input,
 	ElementRef,
 	AfterViewInit,
@@ -36,7 +37,7 @@ export interface FormInputConfig {
 	styleUrls: ['./form-input.component.scss'],
 	standalone: false,
 })
-export class FormInputComponent implements OnInit, AfterViewInit {
+export class FormInputComponent implements OnInit, OnChanges, AfterViewInit {
 	@Input() type = 'text';
 	@Input() fieldName: string;
 	@Input() placeholder: string;
@@ -179,8 +180,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
 
 	public getInputErrorFromValue(value: string) {
 		const errorMessages = [];
-		for (let i = 0; i < this.validators.length; i++) {
-			const validator = this.validators[i];
+		for (const validator of this.validators) {
 			let control = null;
 			if (!this.validatorsThatRequireAValue.includes(validator.validation)) {
 				control = new FormControl(value, Validators[validator.validation]);

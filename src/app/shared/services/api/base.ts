@@ -50,8 +50,8 @@ export class BaseResponse {
 	}
 
 	public messageIncludesPhrase(phrase: string): boolean {
-		for (let i = 0; i < this.Results[0].message.length; i++) {
-			if (this.Results[0].message[i].includes(phrase)) {
+		for (const messageItem of this.Results[0].message) {
+			if (messageItem.includes(phrase)) {
 				return true;
 			}
 		}

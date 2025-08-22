@@ -13,7 +13,7 @@ describe('DeviceService', () => {
 	});
 
 	it('should be created', async () => {
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 
 		expect(instance).toBeTruthy();
 	});
@@ -26,7 +26,7 @@ describe('DeviceService', () => {
 				}) as MediaQueryList,
 		);
 
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 
 		expect(instance.isMobileWidth()).toBeTrue();
 	});
@@ -37,7 +37,7 @@ describe('DeviceService', () => {
 			configurable: true,
 		});
 
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 
 		expect(instance.isMobile()).toBeTrue();
 	});
@@ -48,7 +48,7 @@ describe('DeviceService', () => {
 			configurable: true,
 		});
 
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 
 		expect(instance.isIos()).toBeTrue();
 	});
@@ -59,7 +59,7 @@ describe('DeviceService', () => {
 
 		shallow = shallow.mock(CookieService, cookieService);
 
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 
 		expect(instance.didOptOut()).toBeTrue();
 	});

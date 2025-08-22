@@ -12,7 +12,7 @@ export class PublicSearchBarResultsComponent {
 	@Input() searchResults: FolderVO[] | RecordVO[] = [];
 	@Input() tags: TagVOData[] = [];
 
-	@Output() search = new EventEmitter<void>();
+	@Output() searchTriggered = new EventEmitter<void>();
 	@Output() tagClickOutput = new EventEmitter<TagVOData[]>();
 
 	constructor(
@@ -21,7 +21,7 @@ export class PublicSearchBarResultsComponent {
 	) {}
 
 	public viewAllResults(): void {
-		this.search.emit();
+		this.searchTriggered.emit();
 	}
 
 	public onTagClick(tag: TagVOData): void {

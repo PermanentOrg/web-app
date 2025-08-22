@@ -38,7 +38,7 @@ import type { User } from './User';
 					<storybook-button
 						*ngIf="user"
 						size="small"
-						(onClick)="onLogout.emit($event)"
+						(clicked)="logoutClicked.emit($event)"
 						label="Log out"
 					></storybook-button>
 				</div>
@@ -47,7 +47,7 @@ import type { User } from './User';
 						*ngIf="!user"
 						size="small"
 						class="margin-left"
-						(onClick)="onLogin.emit($event)"
+						(clicked)="loginClicked.emit($event)"
 						label="Log in"
 					></storybook-button>
 					<storybook-button
@@ -56,7 +56,7 @@ import type { User } from './User';
 						size="small"
 						primary="true"
 						class="margin-left"
-						(onClick)="onCreateAccount.emit($event)"
+						(clicked)="createAccountClicked.emit($event)"
 						label="Sign up"
 					></storybook-button>
 				</div>
@@ -70,11 +70,11 @@ export default class HeaderComponent {
 	user: User | null = null;
 
 	@Output()
-	onLogin = new EventEmitter<Event>();
+	loginClicked = new EventEmitter<Event>();
 
 	@Output()
-	onLogout = new EventEmitter<Event>();
+	logoutClicked = new EventEmitter<Event>();
 
 	@Output()
-	onCreateAccount = new EventEmitter<Event>();
+	createAccountClicked = new EventEmitter<Event>();
 }
