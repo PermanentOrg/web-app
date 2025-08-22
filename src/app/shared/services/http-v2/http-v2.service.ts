@@ -30,11 +30,7 @@ const defaultOptions: RequestOptions = {
 };
 
 export function getFirst<T>(observable: Observable<T[]>): Observable<T> {
-	return observable.pipe(
-		map((obj) => {
-			return obj[0];
-		}),
-	);
+	return observable.pipe(map((obj) => obj[0]));
 }
 
 @Injectable({

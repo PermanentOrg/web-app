@@ -72,7 +72,7 @@ export class PromptComponent implements OnDestroy {
 		return false;
 	}
 
-	prompt(
+	async prompt(
 		form: UntypedFormGroup,
 		fields: PromptField[],
 		title: string,
@@ -104,7 +104,7 @@ export class PromptComponent implements OnDestroy {
 				doneReject: newDoneReject,
 			});
 
-			return newDonePromise;
+			return await newDonePromise;
 		}
 
 		this.title = title;
@@ -139,7 +139,7 @@ export class PromptComponent implements OnDestroy {
 			}
 		}, 32);
 
-		return this.donePromise;
+		return await this.donePromise;
 	}
 
 	save(event: Event) {
@@ -182,7 +182,7 @@ export class PromptComponent implements OnDestroy {
 		}
 	}
 
-	promptButtons(
+	async promptButtons(
 		buttons: PromptButton[],
 		title: string,
 		savePromise?: Promise<any>,
@@ -209,7 +209,7 @@ export class PromptComponent implements OnDestroy {
 				template: template,
 			});
 
-			return newDonePromise;
+			return await newDonePromise;
 		}
 
 		this.editButtons = buttons;
@@ -232,7 +232,7 @@ export class PromptComponent implements OnDestroy {
 			this.isVisible = true;
 		});
 
-		return this.donePromise;
+		return await this.donePromise;
 	}
 
 	clickButton(button: PromptButton, event: Event) {

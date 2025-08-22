@@ -8,12 +8,12 @@ interface Method {
 }
 
 export class IdPuser extends BaseRepo {
-	public getTwoFactorMethods(): Promise<Method[]> {
-		return firstValueFrom(this.httpV2.get('/v2/idpuser'));
+	public async getTwoFactorMethods(): Promise<Method[]> {
+		return await firstValueFrom(this.httpV2.get('/v2/idpuser'));
 	}
 
-	public sendEnableCode(method: string, value: string) {
-		return firstValueFrom(
+	public async sendEnableCode(method: string, value: string) {
+		return await firstValueFrom(
 			this.httpV2.post(
 				'/v2/idpuser/send-enable-code',
 				{ method, value },
@@ -25,8 +25,8 @@ export class IdPuser extends BaseRepo {
 		);
 	}
 
-	public enableTwoFactor(method: string, value: string, code: string) {
-		return firstValueFrom(
+	public async enableTwoFactor(method: string, value: string, code: string) {
+		return await firstValueFrom(
 			this.httpV2.post(
 				'/v2/idpuser/enable-two-factor',
 				{
@@ -42,8 +42,8 @@ export class IdPuser extends BaseRepo {
 		);
 	}
 
-	public sendDisableCode(methodId: string) {
-		return firstValueFrom(
+	public async sendDisableCode(methodId: string) {
+		return await firstValueFrom(
 			this.httpV2.post(
 				'/v2/idpuser/send-disable-code',
 				{ methodId },
@@ -53,8 +53,8 @@ export class IdPuser extends BaseRepo {
 		);
 	}
 
-	public disableTwoFactor(methodId: string, code: string) {
-		return firstValueFrom(
+	public async disableTwoFactor(methodId: string, code: string) {
+		return await firstValueFrom(
 			this.httpV2.post(
 				'/v2/idpuser/disable-two-factor',
 				{ code, methodId },

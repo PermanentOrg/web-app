@@ -97,9 +97,9 @@ describe('FileViewerComponent', () => {
 			.dontMock(TagsService)
 			.dontMock(PublicProfileService)
 			.mock(Router, {
-				navigate: (route: string[]) => {
+				navigate: async (route: string[]) => {
 					navigatedUrl = route;
-					return Promise.resolve(true);
+					return await Promise.resolve(true);
 				},
 				routerState: {
 					snapshot: {

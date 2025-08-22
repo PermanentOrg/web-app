@@ -249,9 +249,7 @@ const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => {
 		localStorage.removeItem('shareToken');
 	}
 	return {
-		render: () => {
-			return {};
-		},
+		render: () => ({}),
 		moduleMetadata: {
 			providers: [
 				{

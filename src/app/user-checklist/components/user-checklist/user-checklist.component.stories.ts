@@ -40,23 +40,21 @@ type Story = StoryObj<UserChecklistComponent>;
 interface StoryArgs {
 	tasks: ChecklistItem[];
 }
-const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => {
-	return {
-		render: () => {
-			DummyChecklistApi.reset();
-			DummyChecklistApi.items = args.tasks;
-			return {};
-		},
-		moduleMetadata: {
-			providers: [
-				{
-					provide: '__force_rerender_on_propschange__',
-					useValue: JSON.stringify(args),
-				},
-			],
-		},
-	};
-};
+const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => ({
+	render: () => {
+		DummyChecklistApi.reset();
+		DummyChecklistApi.items = args.tasks;
+		return {};
+	},
+	moduleMetadata: {
+		providers: [
+			{
+				provide: '__force_rerender_on_propschange__',
+				useValue: JSON.stringify(args),
+			},
+		],
+	},
+});
 
 export const Default: Story = StoryTemplate({
 	tasks: [

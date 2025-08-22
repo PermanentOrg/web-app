@@ -145,9 +145,10 @@ export class ConnectorComponent implements OnInit {
 						placeholder: 'Number of generations',
 						type: 'select',
 						initialValue: generationsToImport.toString(),
-						selectOptions: [1, 2, 3, 4, 5, 6, 7].map((i) => {
-							return { text: i, value: i.toString() };
-						}),
+						selectOptions: [1, 2, 3, 4, 5, 6, 7].map((i) => ({
+							text: i,
+							value: i.toString(),
+						})),
 					},
 				],
 				'How many generations of ancestors would you like to import?',
@@ -266,7 +267,7 @@ export class ConnectorComponent implements OnInit {
 		return 'View imported memories and add new memories to upload';
 	}
 
-	connect() {
+	async connect() {
 		const archive = this.account.getArchive();
 
 		this.waiting = true;
@@ -275,7 +276,7 @@ export class ConnectorComponent implements OnInit {
 		const connectRequest = this.api.connector.familysearchConnect(archive);
 
 		if (connectRequest) {
-			return connectRequest
+			return await connectRequest
 				.pipe(
 					map((response: ConnectorResponse) => {
 						this.waiting = false;
@@ -299,7 +300,7 @@ export class ConnectorComponent implements OnInit {
 		}
 	}
 
-	disconnect() {
+	async disconnect() {
 		const archive = this.account.getArchive();
 
 		this.waiting = true;
@@ -308,7 +309,7 @@ export class ConnectorComponent implements OnInit {
 			this.api.connector.familysearchDisconnect(archive);
 
 		if (disconnectRequest) {
-			return disconnectRequest
+			return await disconnectRequest
 				.pipe(
 					map((response: ConnectorResponse) => {
 						this.waiting = false;

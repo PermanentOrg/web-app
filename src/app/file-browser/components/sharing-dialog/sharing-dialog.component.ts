@@ -65,12 +65,10 @@ type ShareByUrlProps =
 
 const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
 	Expiration,
-).map((x) => {
-	return {
-		value: x,
-		text: x,
-	};
-});
+).map((x) => ({
+	value: x,
+	text: x,
+}));
 
 @Component({
 	selector: 'pr-sharing-dialog',
@@ -130,12 +128,9 @@ export class SharingDialogComponent implements OnInit {
 
 	@ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
 
-	public archiveFilterFn = (a: ArchiveVO) => {
-		return (
-			!find(this.shares, { archiveId: a.archiveId }) &&
-			!find(this.shares, { archiveId: a.archiveId })
-		);
-	};
+	public archiveFilterFn = (a: ArchiveVO) =>
+		!find(this.shares, { archiveId: a.archiveId }) &&
+		!find(this.shares, { archiveId: a.archiveId });
 	constructor(
 		@Inject(DIALOG_DATA) public data: any,
 		private accountService: AccountService,
@@ -254,15 +249,15 @@ export class SharingDialogComponent implements OnInit {
 		}
 	}
 
-	confirmOwnerAdd(share: ShareVO) {
-		return this.promptService.confirm(
+	async confirmOwnerAdd(share: ShareVO) {
+		return await this.promptService.confirm(
 			'Add owner',
 			`Are you sure you share this item with The ${share.ArchiveVO.fullName} Archive as an owner?`,
 		);
 	}
 
-	confirmRemove(share: ShareVO) {
-		return this.promptService.confirm(
+	async confirmRemove(share: ShareVO) {
+		return await this.promptService.confirm(
 			'Remove',
 			`Are you sure you want to remove The ${share.ArchiveVO.fullName} Archive?`,
 			null,
@@ -270,8 +265,8 @@ export class SharingDialogComponent implements OnInit {
 		);
 	}
 
-	confirmDeny(share: ShareVO) {
-		return this.promptService.confirm(
+	async confirmDeny(share: ShareVO) {
+		return await this.promptService.confirm(
 			'Deny request',
 			`Are you sure you want deny The ${share.ArchiveVO.fullName} Archive access?`,
 			null,

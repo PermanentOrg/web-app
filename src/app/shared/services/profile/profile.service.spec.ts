@@ -15,34 +15,26 @@ const PROFILE_TEMPLATE = require('../../../../../constants/profile_template.json
 
 const mockApiService = {
 	archive: {
-		update: (archive: ArchiveVO) => {
-			return Promise.resolve(new ArchiveResponse({}));
-		},
-		getAllProfileItems: (archive: ArchiveVO) => {
-			return Promise.resolve(new ArchiveResponse({}));
-		},
-		addUpdateProfileItems: (profileItems: ProfileItemVOData[]) => {
-			return Promise.resolve(new ArchiveResponse({}));
-		},
-		deleteProfileItem: (profileItem: ProfileItemVOData) => {
-			return Promise.resolve(new ArchiveResponse({}));
-		},
+		update: async (archive: ArchiveVO) =>
+			await Promise.resolve(new ArchiveResponse({})),
+		getAllProfileItems: async (archive: ArchiveVO) =>
+			await Promise.resolve(new ArchiveResponse({})),
+		addUpdateProfileItems: async (profileItems: ProfileItemVOData[]) =>
+			await Promise.resolve(new ArchiveResponse({})),
+		deleteProfileItem: async (profileItem: ProfileItemVOData) =>
+			await Promise.resolve(new ArchiveResponse({})),
 	},
 };
 const mockConstantsService = {
-	getProfileTemplate: () => {
-		return PROFILE_TEMPLATE;
-	},
+	getProfileTemplate: () => PROFILE_TEMPLATE,
 };
 const mockAccountService = {
-	getArchive: () => {
-		return new ArchiveVO({ archiveId: 1, type: 'archive.type.organization' });
-	},
+	getArchive: () =>
+		new ArchiveVO({ archiveId: 1, type: 'archive.type.organization' }),
 };
 const mockFolderPickerService = {
-	hooseRecord: (startingFolder: FolderVO) => {
-		return Promise.resolve(new RecordVO({}));
-	},
+	hooseRecord: async (startingFolder: FolderVO) =>
+		await Promise.resolve(new RecordVO({})),
 };
 
 @NgModule({

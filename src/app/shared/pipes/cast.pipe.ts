@@ -7,8 +7,6 @@ import { ArchiveVO, FolderVO, ItemVO, RecordVO } from '@models';
 	standalone: false,
 })
 export class FolderCastPipe implements PipeTransform {
-	constructor() {}
-
 	transform(value: ItemVO, args?: any): FolderVO {
 		return value as FolderVO;
 	}
@@ -20,8 +18,6 @@ export class FolderCastPipe implements PipeTransform {
 	standalone: false,
 })
 export class RecordCastPipe implements PipeTransform {
-	constructor() {}
-
 	transform(value: ItemVO, args?: any): RecordVO {
 		return value as RecordVO;
 	}
@@ -33,8 +29,6 @@ export class RecordCastPipe implements PipeTransform {
 	standalone: false,
 })
 export class ArchiveCastPipe implements PipeTransform {
-	constructor() {}
-
 	transform(value: any, args?: any): ArchiveVO {
 		return value as ArchiveVO;
 	}

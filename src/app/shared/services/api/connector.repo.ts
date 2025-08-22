@@ -27,7 +27,7 @@ export class ConnectorRepo extends BaseRepo {
 		);
 	}
 
-	public familysearchAuthorize(archive: ArchiveVO, code: string) {
+	public async familysearchAuthorize(archive: ArchiveVO, code: string) {
 		const simpleVo = new SimpleVO({
 			key: 'oauthCode',
 			value: code,
@@ -40,7 +40,7 @@ export class ConnectorRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			`/connector/familysearchAuthorize`,
 			data,
 			{ responseClass: ConnectorResponse },
@@ -61,35 +61,35 @@ export class ConnectorRepo extends BaseRepo {
 		);
 	}
 
-	public getFamilysearchUser(archive: ArchiveVO): Promise<any> {
+	public async getFamilysearchUser(archive: ArchiveVO): Promise<any> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchUser',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public getFamilysearchTreeUser(archive: ArchiveVO): Promise<any> {
+	public async getFamilysearchTreeUser(archive: ArchiveVO): Promise<any> {
 		const data = [
 			{
 				ArchiveVO: archive,
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchTreeUser',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public getFamilysearchAncestry(
+	public async getFamilysearchAncestry(
 		archive: ArchiveVO,
 		personId: string,
 	): Promise<any> {
@@ -100,14 +100,14 @@ export class ConnectorRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchAncestry',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public getFamilysearchMemories(
+	public async getFamilysearchMemories(
 		archive: ArchiveVO,
 		personId: string,
 	): Promise<any> {
@@ -118,14 +118,14 @@ export class ConnectorRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchMemories',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public familysearchMemoryImportRequest(
+	public async familysearchMemoryImportRequest(
 		archive: ArchiveVO | ArchiveVO[],
 		personId?: string | string[],
 	): Promise<any> {
@@ -140,68 +140,60 @@ export class ConnectorRepo extends BaseRepo {
 		let data;
 
 		if (personId) {
-			data = archive.map((vo, i) => {
-				return {
-					ArchiveVO: vo,
-					SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] }),
-				};
-			});
+			data = archive.map((vo, i) => ({
+				ArchiveVO: vo,
+				SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] }),
+			}));
 		} else {
-			data = archive.map((vo, i) => {
-				return {
-					ArchiveVO: vo,
-				};
-			});
+			data = archive.map((vo, i) => ({
+				ArchiveVO: vo,
+			}));
 		}
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemoryImportRequest',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public familysearchMemorySyncRequest(
+	public async familysearchMemorySyncRequest(
 		archive: ArchiveVO | ArchiveVO[],
 	): Promise<any> {
 		if (!Array.isArray(archive)) {
 			archive = [archive];
 		}
 
-		const data = archive.map((vo) => {
-			return {
-				ArchiveVO: vo,
-			};
-		});
+		const data = archive.map((vo) => ({
+			ArchiveVO: vo,
+		}));
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemorySyncRequest',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public familysearchMemoryUploadRequest(
+	public async familysearchMemoryUploadRequest(
 		archive: ArchiveVO | ArchiveVO[],
 	): Promise<any> {
 		if (!Array.isArray(archive)) {
 			archive = [archive];
 		}
 
-		const data = archive.map((vo) => {
-			return {
-				ArchiveVO: vo,
-			};
-		});
+		const data = archive.map((vo) => ({
+			ArchiveVO: vo,
+		}));
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemoryUploadRequest',
 			data,
 			{ responseClass: ConnectorResponse },
 		);
 	}
 
-	public familysearchFactImportRequest(
+	public async familysearchFactImportRequest(
 		archive: ArchiveVO | ArchiveVO[],
 		personId: string | string[],
 	): Promise<any> {
@@ -213,14 +205,12 @@ export class ConnectorRepo extends BaseRepo {
 			personId = [personId];
 		}
 
-		const data = archive.map((vo, i) => {
-			return {
-				ArchiveVO: vo,
-				SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] }),
-			};
-		});
+		const data = archive.map((vo, i) => ({
+			ArchiveVO: vo,
+			SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] }),
+		}));
 
-		return this.http.sendRequestPromise<ConnectorResponse>(
+		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchFactImportRequest',
 			data,
 			{ responseClass: ConnectorResponse },
@@ -241,8 +231,8 @@ export class ConnectorResponse extends BaseResponse {
 	public getConnectorOverviewVOs() {
 		const data = this.getResultsData();
 
-		return data.map((result) => {
-			return new ConnectorOverviewVO(result[0].ConnectorOverviewVO);
-		});
+		return data.map(
+			(result) => new ConnectorOverviewVO(result[0].ConnectorOverviewVO),
+		);
 	}
 }

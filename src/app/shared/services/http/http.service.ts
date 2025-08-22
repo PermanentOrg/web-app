@@ -62,12 +62,12 @@ export class HttpService {
 			);
 	}
 
-	public sendRequestPromise<T = BaseResponse>(
+	public async sendRequestPromise<T = BaseResponse>(
 		endpoint: string,
 		data: any = [{}],
 		options?: RequestOptions,
 	): Promise<T> {
-		return this.sendRequest(endpoint, data, options)
+		return await this.sendRequest(endpoint, data, options)
 			.pipe(
 				map((response: any | BaseResponse) => {
 					if (!response.isSuccessful) {

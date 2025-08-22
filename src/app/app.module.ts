@@ -80,8 +80,6 @@ if (environment.environment !== 'local') {
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-	constructor() {}
-
 	extractError(error) {
 		// Try to unwrap zone.js error.
 		// https://github.com/angular/angular/blob/master/packages/core/src/util/errors.ts

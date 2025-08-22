@@ -23,9 +23,7 @@ describe('LegacyContactDialogComponent', () => {
 				{
 					provide: AccountService,
 					useValue: {
-						getAccount: () => {
-							return new AccountVO({ accountId: 1 });
-						},
+						getAccount: () => new AccountVO({ accountId: 1 }),
 					},
 				},
 				provideHttpClient(withInterceptorsFromDi()),

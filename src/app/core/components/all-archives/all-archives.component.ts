@@ -64,9 +64,7 @@ export class AllArchivesComponent implements AfterViewInit, OnDestroy {
 
 		const archivesData = this.route.snapshot.data.archives || [];
 		const archives = orderBy(
-			archivesData.map((archiveData) => {
-				return new ArchiveVO(archiveData);
-			}),
+			archivesData.map((archiveData) => new ArchiveVO(archiveData)),
 			'fullName',
 		);
 		const currentArchiveFetched = remove(archives, {
@@ -133,9 +131,7 @@ export class AllArchivesComponent implements AfterViewInit, OnDestroy {
 					}
 
 					acceptIfNeeded
-						.then(() => {
-							return this.accountService.changeArchive(archive);
-						})
+						.then(async () => await this.accountService.changeArchive(archive))
 						.then(() => {
 							deferred.resolve();
 							this.router.navigate(['/private']);
@@ -188,8 +184,6 @@ export class AllArchivesComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	async onRemoveClick(archive: ArchiveVO) {}
-
 	onCreateArchiveClick() {
 		const deferred = new Deferred();
 
@@ -234,9 +228,9 @@ export class AllArchivesComponent implements AfterViewInit, OnDestroy {
 
 		this.prompt
 			.prompt(fields, 'Create new archive', deferred.promise, 'Create archive')
-			.then((value) => {
-				return this.api.archive.create(new ArchiveVO(value));
-			})
+			.then(
+				async (value) => await this.api.archive.create(new ArchiveVO(value)),
+			)
 			.then((response: ArchiveResponse) => {
 				const newArchive = response.getArchiveVO();
 				this.archives.push(newArchive);

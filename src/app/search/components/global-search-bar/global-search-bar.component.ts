@@ -68,9 +68,7 @@ export class GlobalSearchBarComponent {
 	initFormHandler() {
 		this.formControl.valueChanges
 			.pipe(
-				map((term) => {
-					return this.searchService.parseSearchTerm(term);
-				}),
+				map((term) => this.searchService.parseSearchTerm(term)),
 				tap(([term, tags]) => {
 					this.showResults = true;
 					this.updateLocalResults(term as string, tags);
@@ -82,11 +80,7 @@ export class GlobalSearchBarComponent {
 						this.waiting = true;
 						return this.searchService
 							.getResultsInCurrentArchive(term, tags, 10)
-							.pipe(
-								catchError((err) => {
-									return of(err);
-								}),
-							);
+							.pipe(catchError((err) => of(err)));
 					} else {
 						return of(null);
 					}

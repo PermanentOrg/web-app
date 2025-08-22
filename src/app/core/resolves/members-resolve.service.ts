@@ -13,11 +13,11 @@ export class MembersResolveService {
 		private accountService: AccountService,
 	) {}
 
-	resolve(
+	async resolve(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Promise<any> {
-		return this.api.archive
+		return await this.api.archive
 			.getMembers(this.accountService.getArchive())
 			.then((response: ArchiveResponse) => {
 				const currentAccount = this.accountService.getAccount();

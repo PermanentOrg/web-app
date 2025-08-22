@@ -122,9 +122,7 @@ export class GlobalSearchResultsComponent
 	initFormHandler() {
 		this.formControl.valueChanges
 			.pipe(
-				map((term) => {
-					return this.searchService.parseSearchTerm(term);
-				}),
+				map((term) => this.searchService.parseSearchTerm(term)),
 				tap(([term, tags]) => {
 					this.showResults = true;
 					this.updateTagsResults(term as string, tags);
@@ -135,11 +133,7 @@ export class GlobalSearchResultsComponent
 						this.waiting = true;
 						return this.searchService
 							.getResultsInCurrentArchive(term, tags, 1000)
-							.pipe(
-								catchError((err) => {
-									return of(err);
-								}),
-							);
+							.pipe(catchError((err) => of(err)));
 					} else {
 						return of(null);
 					}

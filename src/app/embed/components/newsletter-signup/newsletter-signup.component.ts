@@ -133,15 +133,16 @@ export class NewsletterSignupComponent implements OnInit {
 				formValue.invitation,
 				true,
 			)
-			.then((response: AccountVO) => {
-				return this.accountService
-					.logIn(formValue.email, formValue.password, true, true)
-					.then(() => {
-						this.waiting = false;
-						this.done = true;
-						window.location.assign('/app');
-					});
-			})
+			.then(
+				async (response: AccountVO) =>
+					await this.accountService
+						.logIn(formValue.email, formValue.password, true, true)
+						.then(() => {
+							this.waiting = false;
+							this.done = true;
+							window.location.assign('/app');
+						}),
+			)
 			.catch((err) => {
 				this.message.showError({ message: err.error.message, translate: true });
 				this.waiting = false;

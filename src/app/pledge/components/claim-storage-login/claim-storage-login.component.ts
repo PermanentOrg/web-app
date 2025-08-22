@@ -137,9 +137,7 @@ export class ClaimStorageLoginComponent {
 
 		this.accountService
 			.verifyMfa(formValue.token, formValue.keepLoggedIn)
-			.then(() => {
-				return this.accountService.switchToDefaultArchive();
-			})
+			.then(async () => await this.accountService.switchToDefaultArchive())
 			.then(async (response: ArchiveResponse) => {
 				this.waiting = false;
 				this.message.showMessage({

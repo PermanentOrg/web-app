@@ -12,8 +12,6 @@ class TestImage {
 	public onerror = () => {};
 	private source: string;
 
-	constructor(_w: number, _h: number) {}
-
 	set src(src: string) {
 		this.source = src;
 		if (TestImage.testError) {

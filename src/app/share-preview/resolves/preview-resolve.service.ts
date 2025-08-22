@@ -52,9 +52,7 @@ const dummyItems = shuffle(
 
 @Injectable()
 export class PreviewResolveService {
-	constructor() {}
-
-	resolve(
+	async resolve(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Promise<any> {
@@ -69,7 +67,7 @@ export class PreviewResolveService {
 			// if folder and share preview on, just show the folder after setting the dummy path
 
 			setDummyPathFromDisplayName(sharePreviewVO.FolderVO);
-			return Promise.resolve(new FolderVO(sharePreviewVO.FolderVO, true));
+			return await Promise.resolve(new FolderVO(sharePreviewVO.FolderVO, true));
 		} else if (sharePreviewVO.FolderVO) {
 			// if folder and share preview off, create the dummy folder with preview images
 
@@ -83,7 +81,7 @@ export class PreviewResolveService {
 
 			setDummyPathFromDisplayName(dummyFolder);
 
-			return Promise.resolve(dummyFolder);
+			return await Promise.resolve(dummyFolder);
 		} else {
 			// if record and share preview on, make dummy folder with just the record
 			let record = sharePreviewVO.RecordVO as RecordVO;
@@ -110,7 +108,7 @@ export class PreviewResolveService {
 				pathAsFolder_linkId: [0],
 			});
 
-			return Promise.resolve(dummyRecordFolder);
+			return await Promise.resolve(dummyRecordFolder);
 		}
 	}
 }

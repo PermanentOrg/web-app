@@ -18,8 +18,6 @@ export class WelcomeScreenComponent {
 
 	public OnboardingScreen: typeof OnboardingScreen = OnboardingScreen;
 
-	constructor() {}
-
 	public goToScreen(screen: OnboardingScreen): void {
 		this.nextScreen.emit(screen);
 	}

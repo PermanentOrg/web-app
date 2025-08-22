@@ -48,8 +48,6 @@ export class TwoFactorAuthComponent implements OnInit {
 				this.formatPhoneNumber(value);
 			}
 		});
-
-		this.form.get('code').valueChanges.subscribe(() => {});
 	}
 
 	async ngOnInit() {

@@ -69,6 +69,21 @@ export default typescriptEslint.config([
 		},
 	},
 	{
+		files: [
+			'src/**/*.spec.ts',
+			'src/**/test.ts',
+			'src/**/*.stories.ts',
+			'src/**/shared-test-classes.ts',
+			'src/**/shared-mocks.ts',
+		],
+		rules: {
+			// Right now we need to use empty functions for mocks in various
+			// test contexts.  Ideally we would use jasmine spies more elegantly
+			// but that is a separate refactor that will involve care.
+			'@typescript-eslint/no-empty-function': 'off',
+		},
+	},
+	{
 		files: ['**/*.ts'],
 		rules: {
 			'@typescript-eslint/explicit-member-accessibility': [
@@ -78,13 +93,8 @@ export default typescriptEslint.config([
 				},
 			],
 
-			'brace-style': ['error', '1tbs'],
-			'id-match': 'off',
 			'import/prefer-default-export': 'off',
-			'import/no-import-module-exports': 'off',
-			'no-underscore-dangle': 'off',
 			'max-classes-per-file': 'off',
-			'arrow-body-style': 'off',
 			'no-console': [
 				'error',
 				{
@@ -136,14 +146,6 @@ export default typescriptEslint.config([
 			'@angular-eslint/no-output-native': 'off',
 			'@angular-eslint/no-output-on-prefix': 'off',
 			'@angular-eslint/use-lifecycle-interface': 'off',
-			'@typescript-eslint/default-param-last': 'off',
-			'@typescript-eslint/member-ordering': 'off',
-			'@typescript-eslint/naming-convention': 'off',
-			'@typescript-eslint/no-empty-function': 'off',
-			'@typescript-eslint/no-shadow': 'off',
-			'@typescript-eslint/no-throw-literal': 'off',
-			'@typescript-eslint/no-use-before-define': 'off',
-			'@typescript-eslint/no-useless-constructor': 'off',
 			'@typescript-eslint/prefer-for-of': 'off',
 			'array-callback-return': 'off',
 			'brace-style': 'off',
@@ -163,7 +165,6 @@ export default typescriptEslint.config([
 			'no-continue': 'off',
 			'no-control-regex': 'off',
 			'no-else-return': 'off',
-			'no-empty': 'off',
 			'no-lonely-if': 'off',
 			'no-multi-assign': 'off',
 			'no-param-reassign': 'off',
@@ -257,7 +258,6 @@ export default typescriptEslint.config([
 			'@typescript-eslint/method-signature-style': 'off',
 			'@typescript-eslint/class-methods-use-this': 'off',
 			'max-nested-callbacks': 'off',
-			'@typescript-eslint/promise-function-async': 'off',
 			'@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
 			'@typescript-eslint/no-unnecessary-template-expression': 'off',
 			'@typescript-eslint/consistent-indexed-object-style': 'off',

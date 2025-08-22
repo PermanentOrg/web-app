@@ -2,7 +2,7 @@ import { LocnVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 
 export class LocnRepo extends BaseRepo {
-	public geomapLatLng(lat: number, lng: number) {
+	public async geomapLatLng(lat: number, lng: number) {
 		const vo: LocnVOData = {
 			latitude: lat,
 			longitude: lng,
@@ -14,35 +14,43 @@ export class LocnRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<LocnResponse>(
+		return await this.http.sendRequestPromise<LocnResponse>(
 			'/locn/geomapLatLong',
 			data,
 			{ responseClass: LocnResponse },
 		);
 	}
 
-	public create(locn: LocnVOData) {
+	public async create(locn: LocnVOData) {
 		const data = [
 			{
 				LocnVO: locn,
 			},
 		];
 
-		return this.http.sendRequestPromise<LocnResponse>('/locn/post', data, {
-			responseClass: LocnResponse,
-		});
+		return await this.http.sendRequestPromise<LocnResponse>(
+			'/locn/post',
+			data,
+			{
+				responseClass: LocnResponse,
+			},
+		);
 	}
 
-	public update(locn: LocnVOData) {
+	public async update(locn: LocnVOData) {
 		const data = [
 			{
 				LocnVO: locn,
 			},
 		];
 
-		return this.http.sendRequestPromise<LocnResponse>('/locn/update', data, {
-			responseClass: LocnResponse,
-		});
+		return await this.http.sendRequestPromise<LocnResponse>(
+			'/locn/update',
+			data,
+			{
+				responseClass: LocnResponse,
+			},
+		);
 	}
 }
 
@@ -63,8 +71,6 @@ export class LocnResponse extends BaseResponse {
 			return [];
 		}
 
-		return data[0].map((result) => {
-			return result.LocnVO as LocnVOData;
-		});
+		return data[0].map((result) => result.LocnVO as LocnVOData);
 	}
 }

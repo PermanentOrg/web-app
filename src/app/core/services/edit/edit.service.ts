@@ -167,11 +167,11 @@ export class EditService {
 		}
 	}
 
-	waitForGoogleMapsApi() {
+	async waitForGoogleMapsApi() {
 		if (this.isGoogleMapsApiLoaded) {
-			return Promise.resolve();
+			return await Promise.resolve();
 		} else {
-			return this.googleMapsLoadedDeferred.promise;
+			return await this.googleMapsLoadedDeferred.promise;
 		}
 	}
 
@@ -181,8 +181,6 @@ export class EditService {
 			operation,
 		};
 	}
-
-	executeClipboard() {}
 
 	promptForAction(items: ItemVO[], actions: PromptButton[] = []) {
 		const actionDeferred = new Deferred();
@@ -201,7 +199,7 @@ export class EditService {
 				.then((value: ActionType) => {
 					this.handleAction(items, value, actionDeferred);
 				})
-				.catch((err) => {});
+				.catch();
 		} else {
 			try {
 				this.prompt.confirm(
@@ -271,7 +269,7 @@ export class EditService {
 		}
 	}
 
-	createFolder(
+	async createFolder(
 		folderName: string,
 		parentFolder: FolderVO,
 	): Promise<FolderVO | FolderResponse> {
@@ -281,11 +279,9 @@ export class EditService {
 			displayName: folderName,
 		});
 
-		return this.api.folder
+		return await this.api.folder
 			.post([newFolder])
-			.then((response: FolderResponse) => {
-				return response.getFolderVO();
-			});
+			.then((response: FolderResponse) => response.getFolderVO());
 	}
 
 	async deleteItems(
@@ -356,7 +352,7 @@ export class EditService {
 		}
 	}
 
-	updateItems(
+	async updateItems(
 		items: any[],
 		whitelist?: (keyof ItemVO)[],
 	): Promise<FolderResponse | RecordResponse | any> {
@@ -397,7 +393,7 @@ export class EditService {
 			promises.push(Promise.resolve());
 		}
 
-		return Promise.all(promises).then((results) => {
+		return await Promise.all(promises).then((results) => {
 			const [folderResponse, recordResponse] = results as [
 				FolderResponse,
 				RecordVO[],
@@ -439,7 +435,7 @@ export class EditService {
 		});
 	}
 
-	moveItems(
+	async moveItems(
 		items: ItemVO[],
 		destination: FolderVO,
 	): Promise<FolderResponse | RecordResponse | any> {
@@ -468,7 +464,7 @@ export class EditService {
 			promises.push(Promise.resolve());
 		}
 
-		return Promise.all(promises)
+		return await Promise.all(promises)
 			.then((results) => {
 				this.dataService.hideItemsInCurrentFolder(items);
 				this.event.dispatch({
@@ -483,7 +479,7 @@ export class EditService {
 			});
 	}
 
-	copyItems(
+	async copyItems(
 		items: any[],
 		destination: FolderVO,
 	): Promise<FolderResponse | RecordResponse | any> {
@@ -519,7 +515,7 @@ export class EditService {
 			this.accountService.refreshAccountDebounced();
 		});
 
-		return Promise.all(promises);
+		return await Promise.all(promises);
 	}
 
 	async openShareDialog(item: ItemVO) {
@@ -568,7 +564,7 @@ export class EditService {
 		});
 	}
 
-	public openFolderPicker(
+	public async openFolderPicker(
 		items: ItemVO[],
 		operation: FolderPickerOperations,
 	): Promise<void> {
@@ -583,7 +579,7 @@ export class EditService {
 			}
 		}
 
-		return new Promise<void>((resolve, reject) => {
+		return await new Promise<void>((resolve, reject) => {
 			this.folderPicker
 				.chooseFolder(
 					rootFolder,
@@ -591,12 +587,12 @@ export class EditService {
 					deferred.promise,
 					filterFolderLinkIds,
 				)
-				.then((destination: FolderVO) => {
+				.then(async (destination: FolderVO) => {
 					switch (operation) {
 						case FolderPickerOperations.Copy:
-							return this.copyItems(items, destination);
+							return await this.copyItems(items, destination);
 						case FolderPickerOperations.Move:
-							return this.moveItems(items, destination);
+							return await this.moveItems(items, destination);
 					}
 				})
 				.then(() => {

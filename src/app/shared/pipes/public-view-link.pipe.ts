@@ -9,8 +9,6 @@ const baseUrl = environment.apiUrl.replace('/api', '');
 	standalone: false,
 })
 export class PublicViewLinkPipe implements PipeTransform {
-	constructor() {}
-
 	transform(folder: FolderVO, view: FolderViewType): any {
 		if (!folder.archiveNbr) {
 			return baseUrl;

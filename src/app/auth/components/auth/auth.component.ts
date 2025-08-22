@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
 	styleUrls: ['./auth.component.scss'],
 	standalone: false,
 })
-export class AuthComponent {
-	constructor() {}
-}
+export class AuthComponent {}

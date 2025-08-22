@@ -2,36 +2,34 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { NotificationVOData } from '@models/notification-vo';
 
 export class NotificationRepo extends BaseRepo {
-	public getNotifications(): Promise<NotificationResponse> {
-		return this.http.sendRequestPromise<NotificationResponse>(
+	public async getNotifications(): Promise<NotificationResponse> {
+		return await this.http.sendRequestPromise<NotificationResponse>(
 			'/notification/getMyNotifications',
 			[{}],
 			{ responseClass: NotificationResponse },
 		);
 	}
 
-	public getNotificationsSince(
+	public async getNotificationsSince(
 		lastNotification: NotificationVOData,
 	): Promise<NotificationResponse> {
 		const data = {
 			NotificationVO: lastNotification,
 		};
 
-		return this.http.sendRequestPromise<NotificationResponse>(
+		return await this.http.sendRequestPromise<NotificationResponse>(
 			'/notification/getMyNotificationsSince',
 			[data],
 			{ responseClass: NotificationResponse },
 		);
 	}
 
-	public update(notifications: NotificationVOData[]) {
-		const data = notifications.map((n) => {
-			return {
-				NotificationVO: n,
-			};
-		});
+	public async update(notifications: NotificationVOData[]) {
+		const data = notifications.map((n) => ({
+			NotificationVO: n,
+		}));
 
-		return this.http.sendRequestPromise<NotificationResponse>(
+		return await this.http.sendRequestPromise<NotificationResponse>(
 			'/notification/updateNotification',
 			data,
 			{ responseClass: NotificationResponse },

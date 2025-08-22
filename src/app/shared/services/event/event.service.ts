@@ -11,8 +11,6 @@ export interface EventObserver {
 export class EventService {
 	private observers: EventObserver[] = [];
 
-	constructor() {}
-
 	public addObserver(observer: EventObserver): void {
 		this.observers.push(observer);
 	}

@@ -69,9 +69,7 @@ export class ArchiveSearchComponent implements OnInit {
 		const valueChangesSubscription = this.searchForm?.valueChanges
 			?.pipe(
 				debounceTime(100),
-				map((term) => {
-					return this.searchService.parseSearchTerm(term.query);
-				}),
+				map((term) => this.searchService.parseSearchTerm(term.query)),
 				tap(([term, tags]) => {
 					const value = term ? term : tags[0]?.name;
 					this.filteredTags = this.tags.filter((tag) =>

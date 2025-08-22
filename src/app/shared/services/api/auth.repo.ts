@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
 
 export class AuthRepo extends BaseRepo {
-	public isLoggedIn(): Promise<AuthResponse> {
-		return this.http.sendRequestPromise('/auth/loggedIn', undefined, {
+	public async isLoggedIn(): Promise<AuthResponse> {
+		return await this.http.sendRequestPromise('/auth/loggedIn', undefined, {
 			responseClass: AuthResponse,
 		});
 	}
@@ -74,7 +74,7 @@ export class AuthRepo extends BaseRepo {
 		);
 	}
 
-	public updatePassword(
+	public async updatePassword(
 		account: AccountVO,
 		passwordVo: AccountPasswordVOData,
 		trustToken?: string,
@@ -94,46 +94,46 @@ export class AuthRepo extends BaseRepo {
 				passwordVerify: passwordVo.passwordVerify,
 				trustToken,
 			};
-			return this.httpV2
+			return await this.httpV2
 				.post('/account/changePassword', v2data, null, { csrf: true })
 				.toPromise();
 		}
 
-		return this.http.sendRequestPromise<AuthResponse>(
+		return await this.http.sendRequestPromise<AuthResponse>(
 			'/account/changePassword',
 			data,
 			{ responseClass: AuthResponse },
 		);
 	}
 
-	public resendEmailVerification(accountVO: AccountVO) {
+	public async resendEmailVerification(accountVO: AccountVO) {
 		const account = {
 			primaryEmail: accountVO.primaryEmail,
 			accountId: accountVO.accountId,
 		};
 
-		return this.http.sendRequestPromise<AuthResponse>(
+		return await this.http.sendRequestPromise<AuthResponse>(
 			'/auth/resendMailCreatedAccount',
 			[account],
 			{ responseClass: AuthResponse },
 		);
 	}
 
-	public resendPhoneVerification(accountVO: AccountVO) {
+	public async resendPhoneVerification(accountVO: AccountVO) {
 		const account = {
 			primaryEmail: accountVO.primaryEmail,
 			accountId: accountVO.accountId,
 		};
 
-		return this.http.sendRequestPromise<AuthResponse>(
+		return await this.http.sendRequestPromise<AuthResponse>(
 			'/auth/resendTextCreatedAccount',
 			[account],
 			{ responseClass: AuthResponse },
 		);
 	}
 
-	public getInviteToken() {
-		return getFirst(
+	public async getInviteToken() {
+		return await getFirst(
 			this.httpV2.get<{ token: string }>('v2/account/signup'),
 		).toPromise();
 	}

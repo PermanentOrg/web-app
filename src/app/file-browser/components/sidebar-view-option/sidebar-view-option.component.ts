@@ -23,6 +23,4 @@ export class SidebarViewOptionComponent {
 		'folder.view.grid': 'assets/img/views/grid.png',
 		'folder.view.timeline': 'assets/img/views/timeline.png',
 	};
-
-	constructor() {}
 }

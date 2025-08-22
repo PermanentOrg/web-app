@@ -75,9 +75,8 @@ describe('FolderPickerComponent', () => {
 		expect(
 			some(
 				component.currentFolder.ChildItemVOs as FolderVO[],
-				(childFolder: FolderVO) => {
-					return childFolder.dataStatus === DataStatus.Placeholder;
-				},
+				(childFolder: FolderVO) =>
+					childFolder.dataStatus === DataStatus.Placeholder,
 			),
 		).toBeFalsy();
 	});

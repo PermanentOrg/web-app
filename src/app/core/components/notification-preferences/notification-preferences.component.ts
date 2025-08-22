@@ -26,11 +26,6 @@ export class NotificationPreferencesComponent {
 	}
 
 	async onPreferenceChange(path: string[], value: boolean) {
-		const response = await this.api.account.updateNotificationPreference(
-			path.join('.'),
-			value,
-		);
-		if (response.isSuccessful) {
-		}
+		await this.api.account.updateNotificationPreference(path.join('.'), value);
 	}
 }

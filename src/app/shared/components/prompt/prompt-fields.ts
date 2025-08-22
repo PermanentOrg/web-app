@@ -9,12 +9,10 @@ import { FormInputSelectOption } from '../form-input/form-input.component';
 
 const prConstants: PrConstantsService = new PrConstantsService();
 
-export const RELATION_OPTIONS = prConstants.getRelations().map((type) => {
-	return {
-		text: type.name,
-		value: type.type,
-	};
-});
+export const RELATION_OPTIONS = prConstants.getRelations().map((type) => ({
+	text: type.name,
+	value: type.type,
+}));
 
 export const FOLDER_VIEW_OPTIONS: FormInputSelectOption[] = [
 	{
@@ -78,12 +76,10 @@ export const ACCESS_ROLE_FIELD: PromptField = {
 		autocorrect: 'off',
 		autocapitalize: 'off',
 	},
-	selectOptions: prConstants.getAccessRoles().map((role) => {
-		return {
-			value: role.type as AccessRoleType,
-			text: role.name,
-		};
-	}),
+	selectOptions: prConstants.getAccessRoles().map((role) => ({
+		value: role.type as AccessRoleType,
+		text: role.name,
+	})),
 };
 
 export function ACCESS_ROLE_FIELD_INITIAL(
@@ -105,12 +101,10 @@ export const SHARE_ACCESS_ROLE_FIELD: PromptField = {
 		autocorrect: 'off',
 		autocapitalize: 'off',
 	},
-	selectOptions: prConstants.getShareAccessRoles().map((role) => {
-		return {
-			value: role.type as AccessRoleType,
-			text: role.name,
-		};
-	}),
+	selectOptions: prConstants.getShareAccessRoles().map((role) => ({
+		value: role.type as AccessRoleType,
+		text: role.name,
+	})),
 };
 
 export function SHARE_ACCESS_ROLE_FIELD_INITIAL(

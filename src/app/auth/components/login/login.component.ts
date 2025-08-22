@@ -50,7 +50,7 @@ export class LoginComponent {
 		});
 	}
 
-	onSubmit(formValue: {
+	async onSubmit(formValue: {
 		email: string;
 		password: string;
 		rememberMe: boolean;
@@ -58,7 +58,7 @@ export class LoginComponent {
 	}) {
 		this.waiting = true;
 
-		return this.accountService
+		return await this.accountService
 			.logIn(
 				formValue.email,
 				formValue.password,

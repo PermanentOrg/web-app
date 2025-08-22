@@ -7,8 +7,6 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 	standalone: false,
 })
 export class ItemTypeIconPipe implements PipeTransform {
-	constructor() {}
-
 	transform(item: RecordVO | FolderVO, view?: FolderView): any {
 		if (item instanceof RecordVO) {
 			switch (item.type) {
