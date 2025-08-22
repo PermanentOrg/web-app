@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { LedgerFinancialVOData } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { BillingResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { chunk } from 'lodash';
 import { DeviceService } from '@shared/services/device/device.service';

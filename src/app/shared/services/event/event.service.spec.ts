@@ -1,4 +1,3 @@
-/* @format */
 import { SharedModule } from '@shared/shared.module';
 import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -17,17 +16,6 @@ describe('EventService', () => {
 		const { instance } = await shallow.createService();
 
 		expect(instance).toBeTruthy();
-	});
-
-	it('should add an observer', async () => {
-		const { instance } = await shallow.createService();
-		const mockObserver: EventObserver = {
-			update: async (_: PermanentEvent) => {},
-		};
-
-		instance.addObserver(mockObserver);
-
-		expect(instance['observers']).toContain(mockObserver);
 	});
 
 	it('should notify all observers', async () => {

@@ -1,4 +1,3 @@
-/* @format */
 import { Component, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators } from '@angular/forms';
@@ -51,7 +50,7 @@ export class ArchiveSwitcherComponent implements AfterViewInit {
 		);
 		this.currentArchive = accountService.getArchive();
 
-		const archivesData = this.route.snapshot.data['archives'] || [];
+		const archivesData = this.route.snapshot.data.archives || [];
 		const archives = orderBy(
 			archivesData.map((archiveData) => {
 				return new ArchiveVO(archiveData);

@@ -1,11 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { Shallow } from 'shallow-render';
 import { ApiService } from '@shared/services/api/api.service';
 import { Observable } from 'rxjs';
 import { TagVO, TagVOData } from '@models/tag-vo';
 import { TagsService } from '@core/services/tags/tags.service';
-import { find } from 'lodash';
 import { MetadataValuePipe } from '../pipes/metadata-value.pipe';
 import { ManageMetadataModule } from '../manage-metadata.module';
 import { ManageCustomMetadataComponent } from './manage-custom-metadata.component';

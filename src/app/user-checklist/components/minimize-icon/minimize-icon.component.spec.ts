@@ -1,4 +1,3 @@
-/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MinimizeIconComponent } from './minimize-icon.component';

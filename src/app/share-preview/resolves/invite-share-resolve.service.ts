@@ -21,7 +21,7 @@ export class InviteShareResolveService {
 	) {}
 
 	async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-		return this.api.invite
+		return await this.api.invite
 			.getFullShareInvite(route.params.inviteCode)
 			.then((response: InviteResponse): any => {
 				if (response.isSuccessful) {

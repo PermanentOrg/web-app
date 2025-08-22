@@ -1,4 +1,3 @@
-/* @format */
 import { Meta, StoryObj } from '@storybook/angular';
 import { LoadingSpinnerComponent } from './loading-spinner.component';
 

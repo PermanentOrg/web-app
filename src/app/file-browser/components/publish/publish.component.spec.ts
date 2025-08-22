@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderVO, RecordVO } from '@models/index';
@@ -39,7 +38,6 @@ const mockApiService = {
 
 describe('PublishComponent', () => {
 	let shallow: Shallow<PublishComponent>;
-	let messageShown = false;
 
 	beforeEach(() => {
 		shallow = new Shallow(PublishComponent, FileBrowserComponentsModule)
@@ -52,9 +50,7 @@ describe('PublishComponent', () => {
 			.provide(EventService)
 			.dontMock(EventService)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			});
 	});
 

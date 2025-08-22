@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { HttpService } from '@shared/services/http/http.service';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';

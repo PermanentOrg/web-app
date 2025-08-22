@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { CHECKLIST_API } from '../../types/checklist-api';
 import { ChecklistItem } from '../../types/checklist-item';

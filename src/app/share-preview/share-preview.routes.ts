@@ -1,5 +1,4 @@
-/* @format */
-import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -20,11 +19,6 @@ import { InviteShareResolveService } from './resolves/invite-share-resolve.servi
 import { RelationshipShareResolveService } from './resolves/relationship-share-resolve.service';
 
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
-
-const archiveResolve = {
-	archive: PreviewArchiveResolveService,
-	currentFolder: PreviewFolderResolveService,
-};
 
 const previewResolve = {
 	currentFolder: PreviewResolveService,

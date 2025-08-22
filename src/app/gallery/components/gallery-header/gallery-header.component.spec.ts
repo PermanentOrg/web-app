@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { NgModule } from '@angular/core';
 
@@ -43,7 +42,7 @@ describe('GalleryHeaderComponent', () => {
 	});
 
 	it('should render back button when logged in', async () => {
-		const { find, element, fixture } = await defaultRender();
+		const { find } = await defaultRender();
 
 		expect(find('.return-btn').length).toBeGreaterThan(0);
 	});

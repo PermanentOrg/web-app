@@ -1,4 +1,3 @@
-/* @format */
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { NotificationVOData } from '@models/notification-vo';
 

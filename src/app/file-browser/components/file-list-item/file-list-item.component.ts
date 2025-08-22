@@ -1,4 +1,3 @@
-/* @format */
 import {
 	Component,
 	OnInit,
@@ -150,7 +149,6 @@ export interface FileListItemVisibleEvent {
 
 const SINGLE_CLICK_DELAY = 100;
 const DOUBLE_CLICK_TIMEOUT = 350;
-const DOUBLE_CLICK_TIMEOUT_IOS = 1500;
 const MOUSE_DOWN_DRAG_TIMEOUT = 500;
 const DRAG_MIN_Y = 1;
 
@@ -759,7 +757,7 @@ export class FileListItemComponent
 	async onActionClick(value: ActionType, actionDeferred: Deferred) {
 		switch (value) {
 			case 'delete':
-				return this.deleteItem(actionDeferred.resolve);
+				return await this.deleteItem(actionDeferred.resolve);
 			case 'rename':
 				actionDeferred.resolve();
 				this.promptForUpdate();

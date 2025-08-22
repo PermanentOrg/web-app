@@ -11,10 +11,6 @@ interface NestedEventDict {
 	};
 }
 
-interface SimpleEventDict {
-	[key: string]: EventParams;
-}
-
 export const SHARE_EVENTS: NestedEventDict = {
 	ShareByRelationship: {
 		initiated: {

@@ -1,4 +1,3 @@
-/* @format */
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';

@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { ComponentsModule } from '../../components.module';
 import { CheckboxComponent } from './checkbox.component';
@@ -132,7 +131,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it("should have aria-disabled set to 'true' when disabled", async () => {
-		const { find, instance, fixture } = await shallow.render({
+		const { find, fixture } = await shallow.render({
 			bind: { disabled: true },
 		});
 		fixture.detectChanges();

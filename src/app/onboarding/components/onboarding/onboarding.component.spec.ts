@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { Location } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
@@ -20,7 +19,7 @@ class NullRoute {
 	};
 }
 
-let throwError: boolean = false;
+const throwError: boolean = false;
 const mockApiService = {
 	archive: {
 		getAllArchives: async (data: any) => {

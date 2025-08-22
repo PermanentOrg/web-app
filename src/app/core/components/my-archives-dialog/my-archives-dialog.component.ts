@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { ArchiveVO, AccountVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
-import { Router } from '@angular/router';
 import { partition, remove, find, orderBy } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/archive.repo';
@@ -29,12 +28,6 @@ import {
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 export type MyArchivesTab = 'switch' | 'new' | 'pending';
-
-interface ArchiveFormData {
-	fullName: string;
-	type: ArchiveType;
-	relationType: string;
-}
 
 const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
 	{

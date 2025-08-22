@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-	ActivatedRouteSnapshot,
-	RouterStateSnapshot,
-	Router,
-} from '@angular/router';
-
-import { ApiService } from '@shared/services/api/api.service';
-import { MessageService } from '@shared/services/message/message.service';
-
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { RecordVO, ShareByUrlVO, FolderVO, RecordVOData } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { shuffle, cloneDeep } from 'lodash';

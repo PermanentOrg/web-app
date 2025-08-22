@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Inject } from '@angular/core';
 import {
 	PromptButton,
@@ -121,7 +120,7 @@ export class MembersDialogComponent {
 				member.accessRole = updatedMember.accessRole;
 				member.status = account.status;
 			} else {
-				const response = await this.api.archive.updateMember(
+				await this.api.archive.updateMember(
 					updatedMember,
 					this.accountService.getArchive(),
 				);
@@ -203,7 +202,6 @@ export class MembersDialogComponent {
 			return;
 		}
 		const deferred = new Deferred();
-		let member: AccountVO;
 		const emailField: PromptField = {
 			fieldName: 'primaryEmail',
 			placeholder: 'Member email',
@@ -225,7 +223,7 @@ export class MembersDialogComponent {
 			'Add member',
 			deferred.promise,
 		);
-		member = value as AccountVO;
+		const member = value as AccountVO;
 
 		try {
 			let response: ArchiveResponse;

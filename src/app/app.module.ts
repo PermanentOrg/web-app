@@ -1,4 +1,3 @@
-/* @format */
 import {
 	NgModule,
 	Injectable,
@@ -43,7 +42,7 @@ import {
 	FontAwesomeModule,
 	FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
-import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+import { faFileArchive } from '@fortawesome/free-solid-svg-icons';
 
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { FormsModule } from '@angular/forms';
@@ -54,7 +53,7 @@ import { RouteHistoryModule } from './route-history/route-history.module';
 import { CustomOverlayContainer } from './dialog-cdk/custom-overlay-container';
 import { FeatureFlagModule } from './feature-flag/feature-flag.module';
 
-declare var ga: any;
+declare let ga: any;
 
 export function initializeAnalytics(
 	event: EventService,

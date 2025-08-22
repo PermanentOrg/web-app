@@ -1,11 +1,4 @@
-/* @format */
-import {
-	Component,
-	OnInit,
-	Inject,
-	ViewChild,
-	ElementRef,
-} from '@angular/core';
+import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import {

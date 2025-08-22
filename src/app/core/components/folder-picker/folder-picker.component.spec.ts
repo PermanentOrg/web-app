@@ -1,17 +1,13 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep, some, remove } from 'lodash';
-import { environment } from '@root/environments/environment';
+import { cloneDeep, some } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { SharedModule } from '@shared/shared.module';
 import { FolderVO } from '@root/app/models';
-import {
-	HttpTestingController,
-	TestRequest,
-} from '@angular/common/http/testing';
+import { HttpTestingController } from '@angular/common/http/testing';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { DataStatus } from '@models/data-status.enum';
 import { of } from 'rxjs';
@@ -20,7 +16,6 @@ import { FolderPickerComponent } from './folder-picker.component';
 describe('FolderPickerComponent', () => {
 	let component: FolderPickerComponent;
 	let fixture: ComponentFixture<FolderPickerComponent>;
-	let httpMock: HttpTestingController;
 
 	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -37,7 +32,7 @@ describe('FolderPickerComponent', () => {
 
 		fixture = TestBed.createComponent(FolderPickerComponent);
 
-		httpMock = TestBed.inject(HttpTestingController);
+		TestBed.inject(HttpTestingController);
 
 		component = fixture.componentInstance;
 		fixture.detectChanges();

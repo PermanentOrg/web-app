@@ -1,10 +1,4 @@
-/* @format */
-import {
-	applicationConfig,
-	Meta,
-	moduleMetadata,
-	StoryObj,
-} from '@storybook/angular';
+import { moduleMetadata, StoryObj } from '@storybook/angular';
 import { action } from 'storybook/actions';
 import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';

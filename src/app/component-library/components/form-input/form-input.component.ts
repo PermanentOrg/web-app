@@ -1,4 +1,3 @@
-/* @format */
 import {
 	Component,
 	OnInit,
@@ -78,7 +77,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
 
 	ngOnChanges(changes: SimpleChanges): void {
 		// If debounceTime changes, resubscribe to apply the new debounce time
-		if (changes['debounceTime']) {
+		if (changes.debounceTime) {
 			this.subscribeToValueChanges();
 		}
 	}

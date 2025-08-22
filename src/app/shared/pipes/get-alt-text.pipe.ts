@@ -1,4 +1,3 @@
-/* @format */
 import { Pipe, PipeTransform } from '@angular/core';
 import { ItemVO } from '../../models/index';
 

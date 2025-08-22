@@ -1,4 +1,3 @@
-/* @format */
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { FolderVO, RecordVO } from '@root/app/models';
 import { PublishIaData } from '@models/publish-ia-vo';

@@ -1,4 +1,3 @@
-/* @format */
 import { BehaviorSubject } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { OnboardingModule } from '@onboarding/onboarding.module';
@@ -13,14 +12,10 @@ import { OnboardingService } from '../../services/onboarding.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
 let calledAccept: boolean = false;
-let calledCreate: boolean = false;
-let createdArchive: ArchiveVO | null;
 let acceptedArchive: ArchiveVO | undefined;
 const mockApiService = {
 	archive: {
 		create: async (a: ArchiveVO) => {
-			calledCreate = true;
-			createdArchive = a;
 			return {
 				getArchiveVO: () => a,
 			};
@@ -47,28 +42,10 @@ const mockAccountService = {
 
 let shallow: Shallow<CreateNewArchiveComponent>;
 
-function checkRadio(type: string, find: any): void {
-	const radio = find(`input[value="${type}"]`);
-	radio.triggerEventHandler('change', { target: radio[0].nativeElement });
-}
-
-function clickButton(selector: string, find: any): void {
-	const button = find(selector);
-	button.triggerEventHandler('click', { target: button[0].nativeElement });
-}
-
-function enterText(selector: string, text: string, find: any): void {
-	const box = find(selector);
-	box[0].nativeElement.value = text;
-	box.triggerEventHandler('input', { target: box[0].nativeElement });
-}
-
 describe('CreateNewArchiveComponent #onboarding', () => {
 	let feature: FeatureFlagService;
 	beforeEach(() => {
 		feature = new FeatureFlagService(undefined, new SecretsService());
-		calledCreate = false;
-		createdArchive = null;
 		calledAccept = false;
 		acceptedArchive = null;
 		shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)

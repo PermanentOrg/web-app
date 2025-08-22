@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { OnboardingModule } from '../../../onboarding.module';
 import { reasons } from '../../../shared/onboarding-screen';

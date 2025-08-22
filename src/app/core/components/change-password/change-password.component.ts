@@ -1,4 +1,3 @@
-/* @format */
 import { Component } from '@angular/core';
 import {
 	UntypedFormGroup,
@@ -46,7 +45,7 @@ export class ChangePasswordComponent {
 
 		const verifyPasswordControl = new UntypedFormControl('', [
 			Validators.required,
-			matchControlValidator(this.changePasswordForm.controls['password']),
+			matchControlValidator(this.changePasswordForm.controls.password),
 		]);
 		this.changePasswordForm.addControl('passwordVerify', verifyPasswordControl);
 	}
@@ -107,7 +106,7 @@ export class ChangePasswordComponent {
 			initialValue: '',
 			type: 'text',
 		};
-		return this.prompt.prompt(
+		return await this.prompt.prompt(
 			[mfaField],
 			'A verification code has been sent to your email address or phone number. Please enter it below to change your password.',
 		);

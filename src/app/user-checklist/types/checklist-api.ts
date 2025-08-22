@@ -1,4 +1,3 @@
-/* @format */
 import { InjectionToken } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ChecklistItem } from './checklist-item';

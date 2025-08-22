@@ -1,4 +1,3 @@
-/* @format */
 import PackageJson from '../../package.json';
 import { Environment } from './environment-interface';
 

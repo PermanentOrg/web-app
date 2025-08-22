@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { goals } from '../../../shared/onboarding-screen';
 

@@ -1,4 +1,3 @@
-/* @format */
 import {
 	Component,
 	OnDestroy,
@@ -18,7 +17,7 @@ import {
 import { Subscription, Subject } from 'rxjs';
 import { min } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
-import { ItemVO, AccessRole, SortType, FolderVO, RecordVO } from '@models';
+import { ItemVO, AccessRole, SortType, RecordVO } from '@models';
 import { getAccessAsEnum } from '@models/access-role';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { EditService } from '@core/services/edit/edit.service';

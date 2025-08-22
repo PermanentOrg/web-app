@@ -1,4 +1,3 @@
-/* @format */
 import {
 	ArchiveVO,
 	DirectiveCreateRequest,
@@ -11,7 +10,7 @@ import { BaseRepo } from './base';
 
 export class DirectiveRepo extends BaseRepo {
 	public async get(archive: ArchiveVO): Promise<Directive> {
-		return getFirst(
+		return await getFirst(
 			this.httpV2.get(
 				`/v2/directive/archive/${archive.archiveId}`,
 				{},
@@ -21,7 +20,7 @@ export class DirectiveRepo extends BaseRepo {
 	}
 
 	public async create(directive: DirectiveCreateRequest): Promise<Directive> {
-		return getFirst(
+		return await getFirst(
 			this.httpV2.post('/v2/directive', directive, Directive),
 		).toPromise();
 	}
@@ -34,7 +33,7 @@ export class DirectiveRepo extends BaseRepo {
 		}
 		const data = Object.assign({}, directive);
 		delete data.directiveId;
-		return getFirst(
+		return await getFirst(
 			this.httpV2.put(
 				`/v2/directive/${directive.directiveId}`,
 				data,
@@ -44,7 +43,7 @@ export class DirectiveRepo extends BaseRepo {
 	}
 
 	public async getLegacyContact(): Promise<LegacyContact> {
-		return getFirst(
+		return await getFirst(
 			this.httpV2.get('/v2/legacy-contact', {}, LegacyContactClass),
 		).toPromise();
 	}
@@ -52,7 +51,7 @@ export class DirectiveRepo extends BaseRepo {
 	public async createLegacyContact(
 		legacyContact: LegacyContact,
 	): Promise<LegacyContact> {
-		return getFirst(
+		return await getFirst(
 			this.httpV2.post('/v2/legacy-contact', legacyContact, LegacyContactClass),
 		).toPromise();
 	}
@@ -69,7 +68,7 @@ export class DirectiveRepo extends BaseRepo {
 			name: legacyContact.name,
 			email: legacyContact.email,
 		};
-		return getFirst(
+		return await getFirst(
 			this.httpV2.put(
 				`/v2/legacy-contact/${legacyContact.legacyContactId}`,
 				data,

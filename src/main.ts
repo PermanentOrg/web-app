@@ -8,10 +8,10 @@ if (environment.production) {
 	enableProdMode();
 }
 
-declare var module: any;
-if (module['hot']) {
-	module['hot'].accept();
-	module['hot'].dispose(() => ɵresetCompiledComponents());
+declare let module: any;
+if (module.hot) {
+	module.hot.accept();
+	module.hot.dispose(() => ɵresetCompiledComponents());
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule);

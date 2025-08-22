@@ -1,4 +1,3 @@
-/* @format */
 import { waitForAsync } from '@angular/core/testing';
 import { PublicModule } from '@public/public.module';
 import { Shallow } from 'shallow-render';
@@ -45,7 +44,7 @@ describe('PublicArchiveComponent', () => {
 	});
 
 	it('should give the correct classes when expanding the information', async () => {
-		const { find, fixture, instance } = await shallow.render();
+		const { find, fixture } = await shallow.render();
 		const icon = find('.icon-expand');
 		icon.nativeElement.click();
 

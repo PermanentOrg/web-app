@@ -1,4 +1,3 @@
-/* @format */
 import { BaseVO } from '@models/base-vo';
 import { AccountVOData } from './account-vo';
 import {

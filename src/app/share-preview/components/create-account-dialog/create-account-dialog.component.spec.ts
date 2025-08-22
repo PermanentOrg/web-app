@@ -1,4 +1,3 @@
-/* @format */
 import {
 	ComponentFixture,
 	TestBed,
@@ -11,23 +10,13 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import * as Testing from '@root/test/testbedConfig';
 import { CreateAccountDialogComponent } from './create-account-dialog.component';
 
-class MockDialogRef {
-	close() {}
-}
-
 describe('CreateAccountDialogComponent', () => {
 	let component: CreateAccountDialogComponent;
 	let fixture: ComponentFixture<CreateAccountDialogComponent>;
-	let dialogData: { sharerName: string };
 	let dialogRefSpy: jasmine.SpyObj<DialogRef<CreateAccountDialogComponent>>;
 
 	beforeEach(async () => {
 		const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
-
-		dialogData = {
-			sharerName: 'John Rando',
-		};
-
 		config.imports.push(SharedModule);
 		config.imports.push(
 			RouterTestingModule.withRoutes([

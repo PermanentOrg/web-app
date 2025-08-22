@@ -1,4 +1,3 @@
-/* @format */
 import { DeviceService } from '@shared/services/device/device.service';
 import { Injectable } from '@angular/core';
 

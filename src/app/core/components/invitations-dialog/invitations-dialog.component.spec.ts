@@ -1,4 +1,3 @@
-/* @format */
 import { ApiService } from '@shared/services/api/api.service';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { AccountVO, InviteVO } from '@root/app/models';
@@ -30,7 +29,6 @@ const mockApiService = {
 
 describe('InvitationsDialog', () => {
 	let shallow: Shallow<InvitationsDialogComponent>;
-	let messageShown: boolean = false;
 
 	beforeEach(() => {
 		shallow = new Shallow(InvitationsDialogComponent, CoreModule)
@@ -42,9 +40,7 @@ describe('InvitationsDialog', () => {
 			.mock(AccountService, mockAccountService)
 			.mock(ApiService, mockApiService)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			});
 	});
 

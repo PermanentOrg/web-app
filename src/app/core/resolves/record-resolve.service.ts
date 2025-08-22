@@ -1,17 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import * as _ from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import {
-	FolderResponse,
-	RecordResponse,
-} from '@shared/services/api/index.repo';
+import { RecordResponse } from '@shared/services/api/index.repo';
 import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 
@@ -33,7 +27,7 @@ export class RecordResolveService {
 
 		try {
 			if (localItem && localItem.dataStatus === DataStatus.Full) {
-				return Promise.resolve(localItem as RecordVO);
+				return await Promise.resolve(localItem as RecordVO);
 			} else if (localItem) {
 				await this.dataService.fetchFullItems([localItem]);
 				return localItem as RecordVO;

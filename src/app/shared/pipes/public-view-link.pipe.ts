@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FolderVO, RecordVO, FolderViewType } from '@models';
+import { FolderVO, FolderViewType } from '@models';
 import { environment } from '@root/environments/environment';
 
 const baseUrl = environment.apiUrl.replace('/api', '');

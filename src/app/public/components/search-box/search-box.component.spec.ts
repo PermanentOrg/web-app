@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { PublicModule } from '@public/public.module';
 import { ApiService } from '@shared/services/api/api.service';

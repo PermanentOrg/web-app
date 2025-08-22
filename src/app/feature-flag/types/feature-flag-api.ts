@@ -1,4 +1,3 @@
-/* @format */
 import { InjectionToken } from '@angular/core';
 import { FeatureFlag } from './feature-flag';
 

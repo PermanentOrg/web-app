@@ -1,4 +1,3 @@
-/* @format */
 import { Component, HostBinding } from '@angular/core';
 import {
 	UntypedFormGroup,

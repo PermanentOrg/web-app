@@ -7,7 +7,6 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ArchiveVO } from '@models/index';
-import { Directive } from '@angular/core';
 import { MockAccountService } from '../directive-display/test-utils';
 import { DirectiveModule } from '../../directive.module';
 import { MockDirectiveRepo, createDirective } from './test-utils';

@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
-import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
 	selector: 'pr-archive-creation-start-screen',

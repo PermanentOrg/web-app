@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AccountVO } from '@models/account-vo';
 import { AccountService } from '@shared/services/account/account.service';
-import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { BillingSettingsComponent } from './billing-settings.component';

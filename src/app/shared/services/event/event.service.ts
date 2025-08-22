@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { PermanentEvent } from './event-types';
 

@@ -1,10 +1,8 @@
-/* @format */
 import {
 	ComponentFixture,
 	TestBed,
 	tick,
 	fakeAsync,
-	waitForAsync,
 } from '@angular/core/testing';
 
 import { By } from '@angular/platform-browser';
@@ -34,8 +32,6 @@ describe('InlineValueEditComponent', () => {
 	let fixture: ComponentFixture<InlineValueEditComponent>;
 
 	const TEST_TEXT = 'Test Name';
-
-	const mockDatePicker = {};
 
 	beforeEach(async () => {
 		TestBed.configureTestingModule({

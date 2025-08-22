@@ -200,10 +200,7 @@ export class GlobalSearchResultsComponent
 	}
 
 	onTagResultClick(tag: TagVOData) {
-		let searchTerm: string;
-		let tags: TagVOData[];
-
-		[searchTerm, tags] = this.searchService.parseSearchTerm(
+		const [, tags]: [string, TagVOData[]] = this.searchService.parseSearchTerm(
 			this.formControl.value,
 		);
 

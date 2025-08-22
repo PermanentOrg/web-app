@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 type VARIANT = 'primary' | 'secondary' | 'tertiary' | 'link';

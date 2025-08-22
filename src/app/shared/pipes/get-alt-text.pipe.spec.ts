@@ -1,4 +1,3 @@
-/* @format */
 import { RecordVO } from '@models';
 import { GetAltTextPipe } from './get-alt-text.pipe';
 

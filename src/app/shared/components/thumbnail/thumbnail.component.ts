@@ -1,12 +1,9 @@
-/* @format */
 import {
 	Component,
 	Input,
 	ElementRef,
 	HostListener,
 	DoCheck,
-	Output,
-	EventEmitter,
 	Inject,
 	OnInit,
 } from '@angular/core';

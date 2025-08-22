@@ -1,4 +1,3 @@
-/* @format */
 import { Component } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadItem } from '@core/services/upload/uploadItem';
@@ -6,8 +5,6 @@ import {
 	UploadProgressEvent,
 	UploadSessionStatus,
 } from '@core/services/upload/upload.session';
-
-const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
 
 @Component({
 	selector: 'pr-upload-progress',

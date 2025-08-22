@@ -1,5 +1,4 @@
 import { DOCUMENT } from '@angular/core';
-/* @format */
 import { TestBed } from '@angular/core/testing';
 import { OverlayContainer } from '@angular/cdk/overlay';
 

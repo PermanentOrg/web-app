@@ -1,5 +1,4 @@
-/* @format */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
 import { AccountVO, NotificationPreferencesI } from '@models';

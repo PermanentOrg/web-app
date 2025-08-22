@@ -1,4 +1,3 @@
-/* @format */
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FolderVO } from '@root/app/models';
@@ -16,7 +15,7 @@ describe('PublicSearchResultsComponent', () => {
 	let fixture: ComponentFixture<PublicSearchResultsComponent>;
 	let mockRouter: Router;
 	let mockSearchService: SearchService;
-	let mockActivatedRoute = {
+	const mockActivatedRoute = {
 		parent: {},
 	} as any;
 

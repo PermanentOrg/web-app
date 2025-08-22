@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FolderVO, ItemVO, RecordVO, FolderSizeVOData } from '@models';
+import { FolderSizeVOData } from '@models';
 
 @Pipe({
 	name: 'folderContents',

@@ -1,4 +1,3 @@
-/* @format */
 import { Meta, StoryObj } from '@storybook/angular';
 import { action } from 'storybook/actions';
 import { ToggleComponent } from './toggle.component';

@@ -1,10 +1,4 @@
-import {
-	ComponentFixture,
-	TestBed,
-	tick,
-	waitForAsync,
-	fakeAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 
@@ -25,7 +19,6 @@ describe('LeftMenuComponent', () => {
 	let component: LeftMenuComponent;
 	let fixture: ComponentFixture<LeftMenuComponent>;
 	let accountService: AccountService;
-	let element: HTMLElement;
 
 	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -46,7 +39,6 @@ describe('LeftMenuComponent', () => {
 		fixture = TestBed.createComponent(LeftMenuComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
-		element = fixture.nativeElement;
 	});
 
 	afterEach(() => {

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { action } from 'storybook/actions';
-import { withActions } from 'storybook/actions/decorator';
 import { GlamArchiveTypeSelectComponent } from './archive-type-select.component';
 
 const typeSelected = action('typeSelected');

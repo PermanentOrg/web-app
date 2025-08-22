@@ -6,6 +6,7 @@ import typescriptEslint from 'typescript-eslint';
 import { FlatCompat } from '@eslint/eslintrc';
 import angular from 'angular-eslint';
 import love from 'eslint-config-love';
+import prettier from 'eslint-config-prettier';
 
 const compat = new FlatCompat({
 	recommendedConfig: js.configs.recommended,
@@ -22,6 +23,7 @@ export default typescriptEslint.config([
 			typescriptEslint.configs.strict,
 			love,
 			...angular.configs.tsRecommended,
+			prettier,
 		],
 	},
 	{
@@ -68,19 +70,7 @@ export default typescriptEslint.config([
 	},
 	{
 		files: ['**/*.ts'],
-
-		languageOptions: {
-			parserOptions: {
-				project: ['tsconfig.json'],
-				createDefaultProgram: true,
-			},
-		},
-
-		extends: compat.extends('prettier', 'plugin:prettier/recommended'),
-
 		rules: {
-			'@typescript-eslint/dot-notation': 'off',
-
 			'@typescript-eslint/explicit-member-accessibility': [
 				'off',
 				{
@@ -89,13 +79,12 @@ export default typescriptEslint.config([
 			],
 
 			'brace-style': ['error', '1tbs'],
-			'id-blacklist': 'off',
 			'id-match': 'off',
 			'import/prefer-default-export': 'off',
 			'import/no-import-module-exports': 'off',
 			'no-underscore-dangle': 'off',
 			'max-classes-per-file': 'off',
-
+			'arrow-body-style': 'off',
 			'no-console': [
 				'error',
 				{
@@ -144,23 +133,18 @@ export default typescriptEslint.config([
 			],
 
 			'@angular-eslint/prefer-standalone': 'off',
-			'import/no-cycle': 'off',
 			'@angular-eslint/no-output-native': 'off',
 			'@angular-eslint/no-output-on-prefix': 'off',
 			'@angular-eslint/use-lifecycle-interface': 'off',
 			'@typescript-eslint/default-param-last': 'off',
-			'@typescript-eslint/lines-between-class-members': 'off',
 			'@typescript-eslint/member-ordering': 'off',
 			'@typescript-eslint/naming-convention': 'off',
 			'@typescript-eslint/no-empty-function': 'off',
 			'@typescript-eslint/no-shadow': 'off',
 			'@typescript-eslint/no-throw-literal': 'off',
-			'@typescript-eslint/no-unused-expressions': 'off',
-			'@typescript-eslint/no-unused-vars': 'off',
 			'@typescript-eslint/no-use-before-define': 'off',
 			'@typescript-eslint/no-useless-constructor': 'off',
 			'@typescript-eslint/prefer-for-of': 'off',
-			'@typescript-eslint/return-await': 'off',
 			'array-callback-return': 'off',
 			'brace-style': 'off',
 			'class-methods-use-this': 'off',
@@ -183,7 +167,6 @@ export default typescriptEslint.config([
 			'no-lonely-if': 'off',
 			'no-multi-assign': 'off',
 			'no-param-reassign': 'off',
-			'no-plusplus': 'off',
 			'no-promise-executor-return': 'off',
 			'no-prototype-builtins': 'off',
 			'no-restricted-globals': 'off',
@@ -195,12 +178,10 @@ export default typescriptEslint.config([
 			'no-useless-concat': 'off',
 			'no-useless-escape': 'off',
 			'no-useless-return': 'off',
-			'no-var': 'off',
 			'object-shorthand': 'off',
 			'one-var': 'off',
 			'operator-assignment': 'off',
 			'prefer-arrow/prefer-arrow-functions': 'off',
-			'prefer-const': 'off',
 			'prefer-destructuring': 'off',
 			'prefer-exponentiation-operator': 'off',
 			'prefer-object-spread': 'off',
@@ -211,7 +192,6 @@ export default typescriptEslint.config([
 			'spaced-comment': 'off',
 			'vars-on-top': 'off',
 			yoda: 'off',
-			'prettier/prettier': 'off',
 		},
 	},
 	{

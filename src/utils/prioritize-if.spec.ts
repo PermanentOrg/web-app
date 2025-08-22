@@ -1,4 +1,3 @@
-/* @format */
 import { prioritizeIf } from './prioritize-if';
 
 describe('Utils: prioritizeIf', () => {

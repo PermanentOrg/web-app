@@ -1,4 +1,3 @@
-/* @format */
 import { DebugElement, Type } from '@angular/core';
 import { DirectiveData } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
@@ -6,7 +5,6 @@ import { ApiService } from '@shared/services/api/api.service';
 import { Shallow } from 'shallow-render';
 import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
 import { EventService } from '@shared/services/event/event.service';
-import { PermanentEvent } from '@shared/services/event/event-types';
 import { MessageService } from '@shared/services/message/message.service';
 import { DirectiveModule } from '../../directive.module';
 import { MockAccountService } from '../directive-display/test-utils';
@@ -91,7 +89,7 @@ describe('DirectiveEditComponent', () => {
 	});
 
 	it('should be able to save a new directive', async () => {
-		const { instance, find, fixture } = await shallow.render();
+		const { find, fixture } = await shallow.render();
 
 		fillOutForm(find, 'test@example.com', 'Test Memo');
 
@@ -152,7 +150,7 @@ describe('DirectiveEditComponent', () => {
 
 	it('should handle API errors on creation', async () => {
 		MockDirectiveRepo.failRequest = true;
-		const { instance, find, fixture } = await shallow.render();
+		const { find, fixture } = await shallow.render();
 
 		fillOutForm(find, 'test@example.com', 'Test Memo');
 		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));

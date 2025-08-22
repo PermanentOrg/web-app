@@ -1,4 +1,3 @@
-/* @format */
 import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({

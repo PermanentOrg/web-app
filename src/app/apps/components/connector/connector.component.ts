@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
@@ -12,19 +11,12 @@ import { ConnectorOverviewVO, FolderVO, SimpleVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ConnectorResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import {
-	PromptService,
-	PromptButton,
-} from '@shared/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { ConnectorType } from '@models/connector-overview-vo';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
-import {
-	CreateArchivesComplete,
-	ImportFamilyTree,
-} from '@shared/services/guided-tour/tours/familysearch.tour';
-import { GuidedTourEvent } from '@shared/services/guided-tour/events';
+import { ImportFamilyTree } from '@shared/services/guided-tour/tours/familysearch.tour';
 import { FamilySearchImportComponent } from '../family-search-import/family-search-import.component';
 
 export enum ConnectorImportType {
@@ -89,8 +81,7 @@ export class ConnectorComponent implements OnInit {
 		this.waiting = true;
 		const archive = this.account.getArchive();
 		try {
-			const response =
-				await this.api.connector.familysearchMemoryUploadRequest(archive);
+			await this.api.connector.familysearchMemoryUploadRequest(archive);
 			this.message.showMessage({
 				message:
 					'FamilySearch memory upload started in background. This may take a few moments.',
@@ -109,8 +100,7 @@ export class ConnectorComponent implements OnInit {
 		this.waiting = true;
 		const archive = this.account.getArchive();
 		try {
-			const response =
-				await this.api.connector.familysearchMemoryImportRequest(archive);
+			await this.api.connector.familysearchMemoryImportRequest(archive);
 			this.message.showMessage({
 				message:
 					'FamilySearch memory download started in background. This may take a few moments.',
@@ -129,8 +119,7 @@ export class ConnectorComponent implements OnInit {
 		this.waiting = true;
 		const archive = this.account.getArchive();
 		try {
-			const response =
-				await this.api.connector.familysearchMemorySyncRequest(archive);
+			await this.api.connector.familysearchMemorySyncRequest(archive);
 			this.message.showMessage({
 				message:
 					'FamilySearch sync started in background. This may take a few moments.',

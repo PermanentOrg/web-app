@@ -1,4 +1,3 @@
-/* @format */
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@root/app/models';
 import { CoreModule } from '@core/core.module';

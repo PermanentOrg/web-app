@@ -1,11 +1,9 @@
-/* @format */
 import { Component, HostBinding } from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
 	Validators,
 } from '@angular/forms';
-import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 

@@ -1,4 +1,3 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Shallow } from 'shallow-render';
 import { Subject } from 'rxjs';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';

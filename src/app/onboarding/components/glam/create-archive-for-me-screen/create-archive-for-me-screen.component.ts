@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Output, EventEmitter } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';

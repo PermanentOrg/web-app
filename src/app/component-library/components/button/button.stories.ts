@@ -1,10 +1,4 @@
-/* @format */
-import {
-	componentWrapperDecorator,
-	Meta,
-	moduleMetadata,
-	StoryObj,
-} from '@storybook/angular';
+import { Meta, StoryObj } from '@storybook/angular';
 import { ButtonComponent } from './button.component';
 
 const backgrounds = {

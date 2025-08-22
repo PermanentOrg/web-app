@@ -2,14 +2,12 @@ import {
 	Component,
 	ElementRef,
 	Inject,
-	NgZone,
 	OnInit,
 	ViewChild,
 } from '@angular/core';
 import {
 	UntypedFormBuilder,
 	UntypedFormGroup,
-	NgModel,
 	Validators,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';

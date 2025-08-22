@@ -1,4 +1,3 @@
-/* @format */
 import * as Util from './timeline-util';
 
 describe('Timeline Utilities', () => {

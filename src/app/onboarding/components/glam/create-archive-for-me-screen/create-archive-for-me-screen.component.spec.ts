@@ -1,7 +1,5 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
-import { By } from '@angular/platform-browser';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 import { OnboardingModule } from '../../../onboarding.module';
 import { CreateArchiveForMeScreenComponent } from './create-archive-for-me-screen.component';
@@ -40,7 +38,7 @@ describe('CreateArchiveForMeScreenComponent', () => {
 	});
 
 	it('should emit goBackOutput when the Back button is clicked', async () => {
-		const { fixture, outputs, find } = await shallow.render();
+		const { outputs, find } = await shallow.render();
 		const backButton = find('.back');
 
 		backButton.triggerEventHandler('buttonClick', null);
@@ -49,7 +47,7 @@ describe('CreateArchiveForMeScreenComponent', () => {
 	});
 
 	it('should emit continueOutput with correct payload when the Yes, create archive button is clicked', async () => {
-		const { outputs, fixture, find } = await shallow.render();
+		const { outputs, find } = await shallow.render();
 		const continueButton = find('.continue');
 
 		continueButton.triggerEventHandler('buttonClick', null);

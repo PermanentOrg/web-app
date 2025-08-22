@@ -211,7 +211,7 @@ export class SharingComponent implements OnInit {
 				});
 			}
 
-			return (
+			return await (
 				this.dialog.open(ArchivePickerComponent, {
 					data: config,
 				}) as unknown as Promise<ArchiveVO>

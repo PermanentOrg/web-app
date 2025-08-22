@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
 
 import { remove } from 'lodash';
@@ -20,7 +19,7 @@ import {
 import debug from 'debug';
 import { AccountService } from '@shared/services/account/account.service';
 import { Deferred } from '@root/vendor/deferred';
-import { UploadItem, UploadStatus } from './uploadItem';
+import { UploadStatus } from './uploadItem';
 import { UploadSession, UploadSessionStatus } from './upload.session';
 
 const FILENAME_BLACKLIST = ['.DS_Store'];
@@ -312,7 +311,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 			}
 		}
 
-		for (const [_depth, foldersAtDepth] of pathsByDepth) {
+		for (const [, foldersAtDepth] of pathsByDepth) {
 			// queue uploads for each folder
 			for (const f of foldersAtDepth) {
 				if (files.has(f.path)) {

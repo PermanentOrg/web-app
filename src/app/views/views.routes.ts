@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { LeanFolderResolveService } from '@core/resolves/lean-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';

@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { partition } from 'lodash';
 import { Subject } from 'rxjs';
@@ -137,12 +136,12 @@ export class EditService {
 	}
 
 	loadGoogleMapsApi() {
-		if (window['doNotLoadGoogleMapsAPI']) {
+		if (window.doNotLoadGoogleMapsAPI) {
 			this.debug('Google Maps API disabled in testing environment');
 			return;
 		}
 
-		if (window['google']?.maps) {
+		if (window.google?.maps) {
 			this.debug('Google Maps API already loaded, skipping');
 			this.isGoogleMapsApiLoaded = true;
 			return;
@@ -292,12 +291,12 @@ export class EditService {
 	async deleteItems(
 		items: any[],
 	): Promise<FolderResponse | RecordResponse | any> {
-		let folders: FolderVO[];
-		let records: RecordVO[];
-
 		items.forEach((i) => (i.isPendingAction = true));
 
-		[folders, records] = partition(items, 'isFolder') as any[];
+		const [folders, records] = partition(items, 'isFolder') as [
+			FolderVO[],
+			RecordVO[],
+		];
 
 		const promises: Array<Promise<any>> = [];
 
@@ -314,9 +313,7 @@ export class EditService {
 		}
 
 		try {
-			const results = await Promise.all(promises);
-			let folderResponse, recordResponse;
-			[folderResponse, recordResponse] = results;
+			await Promise.all(promises);
 			this.dataService.hideItemsInCurrentFolder(items);
 			this.deleteSubject.next();
 		} catch (err) {
@@ -401,10 +398,10 @@ export class EditService {
 		}
 
 		return Promise.all(promises).then((results) => {
-			let folderResponse: FolderResponse;
-			let recordResponse: RecordVO[];
-
-			[folderResponse, recordResponse] = results;
+			const [folderResponse, recordResponse] = results as [
+				FolderResponse,
+				RecordVO[],
+			];
 			if (folderResponse) {
 				folderResponse.getFolderVOs().forEach((updatedItem) => {
 					const newData: FolderVOData = {

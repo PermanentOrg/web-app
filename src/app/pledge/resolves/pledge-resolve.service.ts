@@ -12,13 +12,13 @@ export class PledgeResolveService {
 		state: RouterStateSnapshot,
 	): Promise<any> {
 		if (!route.queryParams.pledgeId) {
-			return Promise.resolve(null);
+			return await Promise.resolve(null);
 		}
 
 		try {
 			await this.pledgeService.loadPledge(route.queryParams.pledgeId);
 		} catch (err) {
-			return Promise.resolve(null);
+			return await Promise.resolve(null);
 		}
 	}
 }

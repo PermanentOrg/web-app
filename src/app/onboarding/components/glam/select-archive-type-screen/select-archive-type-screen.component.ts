@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { generateElementText } from '../../../utils/utils';
 import {
