@@ -135,7 +135,6 @@ export default typescriptEslint.config([
 			],
 
 			'@angular-eslint/prefer-standalone': 'off',
-			'@typescript-eslint/prefer-for-of': 'off',
 			'array-callback-return': 'off',
 			'brace-style': 'off',
 			'class-methods-use-this': 'off',

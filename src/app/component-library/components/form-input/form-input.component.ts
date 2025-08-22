@@ -180,8 +180,7 @@ export class FormInputComponent implements OnInit, OnChanges, AfterViewInit {
 
 	public getInputErrorFromValue(value: string) {
 		const errorMessages = [];
-		for (let i = 0; i < this.validators.length; i++) {
-			const validator = this.validators[i];
+		for (const validator of this.validators) {
 			let control = null;
 			if (!this.validatorsThatRequireAValue.includes(validator.validation)) {
 				control = new FormControl(value, Validators[validator.validation]);
