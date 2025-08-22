@@ -38,9 +38,11 @@ export class RecordResolveService {
 				await this.dataService.fetchFullItems([localItem]);
 				return localItem as RecordVO;
 			} else {
-				const response = await this.api.record.get([
-					new RecordVO({ archiveNbr: route.params.recArchiveNbr }),
-				]);
+				const response = await this.api.record.get(
+					[new RecordVO({ archiveNbr: route.params.recArchiveNbr })],
+					false,
+				);
+
 				const record = response.getRecordVO();
 				record.dataStatus = DataStatus.Full;
 				return record;
