@@ -6,9 +6,9 @@ import type { User } from './User';
 	template: `<article>
 		<storybook-header
 			[user]="user"
-			(onLogout)="doLogout()"
-			(onLogin)="doLogin()"
-			(onCreateAccount)="doCreateAccount()"
+			(logoutClicked)="doLogout()"
+			(loginClicked)="doLogin()"
+			(createAccountClicked)="doCreateAccount()"
 		></storybook-header>
 		<section>
 			<h2>Pages in Storybook</h2>
