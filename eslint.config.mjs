@@ -94,7 +94,6 @@ export default typescriptEslint.config([
 			],
 
 			'import/prefer-default-export': 'off',
-			'max-classes-per-file': 'off',
 			'no-console': [
 				'error',
 				{
