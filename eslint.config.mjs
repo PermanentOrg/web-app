@@ -86,13 +86,6 @@ export default typescriptEslint.config([
 	{
 		files: ['**/*.ts'],
 		rules: {
-			'@typescript-eslint/explicit-member-accessibility': [
-				'off',
-				{
-					accessibility: 'explicit',
-				},
-			],
-
 			'import/prefer-default-export': 'off',
 			'no-console': [
 				'error',
