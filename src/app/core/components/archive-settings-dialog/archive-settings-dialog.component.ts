@@ -103,8 +103,8 @@ export class ArchiveSettingsDialogComponent implements OnInit {
 
 	protected bindTagsToArchive(): void {
 		const archiveId = this.account.getArchive()?.archiveId;
-		for (let i = 0; i < this.tags.length; i++) {
-			this.tags[i].archiveId = archiveId;
+		for (const tag of this.tags) {
+			tag.archiveId = archiveId;
 		}
 	}
 }
