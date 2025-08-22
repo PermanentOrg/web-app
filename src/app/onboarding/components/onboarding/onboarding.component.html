@@ -38,8 +38,8 @@
 				<pr-create-new-archive
 					(back)="setScreen(OnboardingScreen.pendingArchives)"
 					(createdArchive)="setNewArchive($event)"
-					(progress)="setProgress($event)"
-					(error)="errorMessage = $event"
+					(progressUpdated)="setProgress($event)"
+					(errorOccurred)="errorMessage = $event"
 					[pendingArchives]="pendingArchives"
 					[pendingArchive]="selectedPendingArchive"
 				></pr-create-new-archive>

@@ -142,7 +142,6 @@ export default typescriptEslint.config([
 			],
 
 			'@angular-eslint/prefer-standalone': 'off',
-			'@angular-eslint/no-output-native': 'off',
 			'@angular-eslint/no-output-on-prefix': 'off',
 			'@angular-eslint/use-lifecycle-interface': 'off',
 			'@typescript-eslint/prefer-for-of': 'off',

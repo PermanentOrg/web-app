@@ -87,13 +87,13 @@ describe('ArchiveSearchComponent', () => {
 		expect(component.tags).toEqual([{ name: 'Tag1', tagId: 1 }]);
 	});
 
-	it('should emit search event on handleSearch', () => {
-		spyOn(component.search, 'emit');
+	it('should emit searchSubmitted event on handleSearch', () => {
+		spyOn(component.searchSubmitted, 'emit');
 		component.searchForm.patchValue({ query: 'test query' });
 
 		component.onHandleSearch();
 
-		expect(component.search.emit).toHaveBeenCalledWith('test query');
+		expect(component.searchSubmitted.emit).toHaveBeenCalledWith('test query');
 	});
 
 	it('should clear the form when clearForm is called', () => {

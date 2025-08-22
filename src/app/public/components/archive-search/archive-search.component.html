@@ -35,7 +35,7 @@
 	</form>
 	@if (searchResults.length || filteredTags.length) {
 		<pr-public-search-bar-results
-			(search)="onHandleSearch()"
+			(searchTriggered)="onHandleSearch()"
 			[tags]="filteredTags"
 			[searchResults]="searchResults"
 			(tagClickOutput)="onTagClick($event)"
