@@ -135,7 +135,7 @@ class LoginTestingHarness {
 	}
 
 	public hasPasswordBeenCleared(): boolean {
-		return this.component.loginForm.value.password.length == 0;
+		return this.component.loginForm.value.password.length === 0;
 	}
 }
 

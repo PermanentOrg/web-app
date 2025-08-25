@@ -54,7 +54,7 @@ export class PrLocationPipe implements PipeTransform {
 		output.line2 = line2.length ? line2.join(', ') : 'Unknown Location';
 		output.full = output.line1 + ', ' + output.line2;
 		if (locnVO.displayName) {
-			if (locnVO.displayName.toLowerCase() != output.line1.toLowerCase()) {
+			if (locnVO.displayName.toLowerCase() !== output.line1.toLowerCase()) {
 				output.displayName = locnVO.displayName;
 				output.full = locnVO.displayName + ', ' + output.full;
 			}
