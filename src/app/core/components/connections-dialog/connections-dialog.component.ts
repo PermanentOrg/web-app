@@ -77,7 +77,7 @@ export class ConnectionsDialogComponent {
 		@Inject(DIALOG_DATA) public data: any,
 		private dialogRef: DialogRef,
 	) {
-		this.data.connections.map((relation: RelationVO) => {
+		this.data.connections.forEach((relation: RelationVO) => {
 			if (relation.status.includes('ok')) {
 				// existing connectionship
 				this.connections.push(relation);

@@ -148,7 +148,7 @@ export class GlobalSearchResultsComponent
 							const records: RecordVO[] = [];
 							const folders: FolderVO[] = [];
 
-							response.getItemVOs().map((i) => {
+							response.getItemVOs().forEach((i) => {
 								if (i instanceof RecordVO) {
 									records.push(i);
 								} else {
