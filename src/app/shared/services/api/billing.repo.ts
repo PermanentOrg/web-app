@@ -129,7 +129,9 @@ export class GiftingResponse {
 
 	constructor(props: Object) {
 		for (const prop in props) {
-			this[prop] = props[prop];
+			if (Object.hasOwn(props, prop)) {
+				this[prop] = props[prop];
+			}
 		}
 	}
 }
@@ -147,7 +149,9 @@ export class ClaimingPromoResponse {
 
 	constructor(props: Object) {
 		for (const prop in props) {
-			this[prop] = props[prop];
+			if (Object.hasOwn(props, prop)) {
+				this[prop] = props[prop];
+			}
 		}
 	}
 }

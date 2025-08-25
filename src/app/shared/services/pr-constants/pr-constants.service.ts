@@ -63,10 +63,12 @@ export class PrConstantsService {
 		]);
 		const countryList = getCodeList();
 		for (const code in countryList) {
-			this.countries.push({
-				name: countryList[code],
-				abbrev: code,
-			});
+			if (Object.hasOwn(countryList, code)) {
+				this.countries.push({
+					name: countryList[code],
+					abbrev: code,
+				});
+			}
 		}
 		this.countries.sort((a, b) => a.name.localeCompare(b.name));
 	}
@@ -78,18 +80,22 @@ export class PrConstantsService {
 	public getRelations() {
 		const relationTypes: { type: string; name: string }[] = [];
 		for (const key in this.constants.relation) {
-			if (key === 'family') {
-				for (const familyKey in this.constants.relation.family) {
+			if (Object.hasOwn(this.constants.relation, key)) {
+				if (key === 'family') {
+					for (const familyKey in this.constants.relation.family) {
+						if (Object.hasOwn(this.constants.relation.family, familyKey)) {
+							relationTypes.push({
+								type: `relation.family.${familyKey}`,
+								name: this.constants.relation.family[familyKey],
+							});
+						}
+					}
+				} else {
 					relationTypes.push({
-						type: `relation.family.${familyKey}`,
-						name: this.constants.relation.family[familyKey],
+						type: `relation.${key}`,
+						name: this.constants.relation[key],
 					});
 				}
-			} else {
-				relationTypes.push({
-					type: `relation.${key}`,
-					name: this.constants.relation[key],
-				});
 			}
 		}
 

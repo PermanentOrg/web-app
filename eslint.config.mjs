@@ -136,7 +136,6 @@ export default typescriptEslint.config([
 
 			'@angular-eslint/prefer-standalone': 'off',
 			'class-methods-use-this': 'off',
-			'guard-for-in': 'off',
 			'jsdoc/newline-after-description': 'off',
 			'new-cap': 'off',
 			'no-await-in-loop': 'off',

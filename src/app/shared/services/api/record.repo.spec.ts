@@ -95,7 +95,9 @@ describe('RecordRepo', () => {
 		expect(req.request.method).toBe('POST');
 		expect(req.request.headers.get('Request-Version')).toBe('2');
 		for (const property in testData) {
-			expect(req.request.body[property]).toBe(testData[property]);
+			if (Object.hasOwn(testData, property)) {
+				expect(req.request.body[property]).toBe(testData[property]);
+			}
 		}
 
 		expect(req.request.body.archiveId).toBe(archiveId);
