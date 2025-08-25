@@ -1,4 +1,3 @@
-/* @format */
 import { TestBed } from '@angular/core/testing';
 import {
 	HttpTestingController,
@@ -9,12 +8,7 @@ import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
 import { AuthRepo, AuthResponse } from '@shared/services/api/auth.repo';
-import {
-	SimpleVO,
-	AccountPasswordVO,
-	AccountVO,
-	ArchiveVO,
-} from '@root/app/models';
+import { SimpleVO, AccountVO, ArchiveVO } from '@root/app/models';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
@@ -86,18 +80,6 @@ describe('AuthRepo', () => {
 	});
 
 	it('should log in', () => {
-		const data = [
-			{
-				AccountPasswordVO: new AccountPasswordVO({
-					password: testUser.password,
-				}),
-				AccountVO: new AccountVO({
-					primaryEmail: testUser.email,
-					rememberMe: testUser.rememberMe,
-				}),
-			},
-		];
-
 		const returnData = [
 			{
 				AccountVO: new AccountVO(testAccount),

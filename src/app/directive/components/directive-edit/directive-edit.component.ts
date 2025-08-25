@@ -1,4 +1,3 @@
-/* @format */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Directive, DirectiveUpdateRequest } from '@models/directive';

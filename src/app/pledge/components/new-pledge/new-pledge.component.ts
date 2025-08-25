@@ -1,4 +1,3 @@
-/* @format */
 import {
 	Component,
 	OnInit,
@@ -23,7 +22,7 @@ import { IFrameService } from '@shared/services/iframe/iframe.service';
 import { HttpClient } from '@angular/common/http';
 import { EventService } from '@shared/services/event/event.service';
 
-const stripe = window['Stripe'](SecretsService.getStatic('STRIPE_API_KEY'));
+const stripe = window.Stripe(SecretsService.getStatic('STRIPE_API_KEY'));
 const elements = stripe.elements();
 
 @Component({

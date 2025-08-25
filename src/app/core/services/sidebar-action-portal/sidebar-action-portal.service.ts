@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-	Portal,
-	TemplatePortal,
-	PortalOutlet,
-	CdkPortal,
-} from '@angular/cdk/portal';
+import { PortalOutlet, CdkPortal } from '@angular/cdk/portal';
 
 @Injectable()
 export class SidebarActionPortalService {

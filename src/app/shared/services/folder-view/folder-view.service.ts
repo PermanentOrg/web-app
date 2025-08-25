@@ -1,6 +1,4 @@
 import { Injectable, EventEmitter } from '@angular/core';
-
-import { FolderVO, RecordVO } from '@root/app/models';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';

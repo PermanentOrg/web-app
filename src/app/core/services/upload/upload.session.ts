@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable, EventEmitter } from '@angular/core';
 import { BaseResponse } from '@shared/services/api/base';
 import { FolderVO } from '@root/app/models';

@@ -1,11 +1,10 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { AccessRole } from '@models/access-role';
 import { ProfileTemplate } from '@models/profile-item-vo';
 import { orderBy } from 'lodash';
 import { getCodeList, overwrite } from 'country-list';
 
-declare var require: any;
+declare let require: any;
 const SYNC_CONSTANTS = require('../../../../../constants/master_en.json');
 const PROFILE_TEMPLATE = require('../../../../../constants/profile_template.json');
 
@@ -102,7 +101,7 @@ export class PrConstantsService {
 	}
 
 	public getStates() {
-		return this.constants['us_states'];
+		return this.constants.us_states;
 	}
 
 	public getAccessRoles() {

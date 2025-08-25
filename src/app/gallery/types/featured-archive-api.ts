@@ -1,4 +1,3 @@
-/* @format */
 import { InjectionToken } from '@angular/core';
 import { FeaturedArchive } from './featured-archive';
 

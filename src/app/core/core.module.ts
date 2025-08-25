@@ -1,15 +1,12 @@
-/* @format */
-import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreRoutingModule } from '@core/core.routes';
 import { SharedModule } from '@shared/shared.module';
-import { DataService } from '@shared/services/data/data.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadSession } from '@core/services/upload/upload.session';
 import { Uploader } from '@core/services/upload/uploader';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
-
 import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';

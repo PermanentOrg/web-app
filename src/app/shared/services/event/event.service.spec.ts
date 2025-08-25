@@ -1,4 +1,3 @@
-/* @format */
 import { SharedModule } from '@shared/shared.module';
 import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -27,7 +26,7 @@ describe('EventService', () => {
 
 		instance.addObserver(mockObserver);
 
-		expect(instance['observers']).toContain(mockObserver);
+		expect(instance.getObservers()).toContain(mockObserver);
 	});
 
 	it('should notify all observers', async () => {

@@ -1,5 +1,3 @@
-import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
-
 import { Shallow } from 'shallow-render';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
@@ -17,11 +15,6 @@ describe('AddNewCategoryComponent', () => {
 	let messageShown = false;
 	let acceptPrompt = true;
 	let firstValueName: string;
-
-	const defaultRender = async () =>
-		await shallow.render(
-			'<pr-metadata-add-new-value></pr-metadata-add-new-value>',
-		);
 
 	beforeEach(async () => {
 		createdTag = null;

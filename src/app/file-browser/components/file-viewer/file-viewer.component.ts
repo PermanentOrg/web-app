@@ -1,4 +1,3 @@
-/* @format */
 import {
 	Component,
 	OnInit,
@@ -14,7 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'ts-key-enum';
 import Hammer from 'hammerjs';
 import { gsap } from 'gsap';
-import { filter, findIndex, find } from 'lodash';
+import { filter, findIndex } from 'lodash';
 import { RecordVO, ItemVO, TagVOData, AccessRole } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';

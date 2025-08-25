@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FolderVO, RecordVO, TagVOData } from '@models/index';
@@ -17,8 +16,8 @@ export class PublicSearchBarResultsComponent {
 	@Output() tagClickOutput = new EventEmitter<TagVOData[]>();
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
+		public router: Router,
+		public route: ActivatedRoute,
 	) {}
 
 	public viewAllResults(): void {

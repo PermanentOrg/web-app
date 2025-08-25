@@ -1,5 +1,4 @@
-/* @format */
-import { ComponentFactoryResolver, NgModule, Optional } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
 	FontAwesomeModule,
@@ -8,7 +7,6 @@ import {
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { SharedModule } from '@shared/shared.module';
 import { CoreModule } from '@core/core.module';
-import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
 import { ComponentsModule } from '../component-library/components.module';
 import { FeatureFlagModule } from '../feature-flag/feature-flag.module';

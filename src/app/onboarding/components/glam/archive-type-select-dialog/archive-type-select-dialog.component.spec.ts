@@ -1,4 +1,4 @@
-import { DialogCloseOptions, DialogRef } from '@angular/cdk/dialog';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Shallow } from 'shallow-render';
 import { archiveOptions } from '../types/archive-types';
 import { ArchiveTypeSelectDialogComponent } from './archive-type-select-dialog.component';

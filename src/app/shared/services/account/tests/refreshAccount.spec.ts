@@ -1,7 +1,6 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { AccountVO } from '@models/account-vo';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { AppModule } from '@root/app/app.module';
 import { ApiService } from '@shared/services/api/api.service';

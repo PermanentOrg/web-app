@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ArchiveVO, TagVO, TagVOData } from '@models/index';
@@ -74,7 +73,7 @@ export class ArchiveSearchComponent implements OnInit {
 					return this.searchService.parseSearchTerm(term.query);
 				}),
 				tap(([term, tags]) => {
-					let value = term ? term : tags[0]?.name;
+					const value = term ? term : tags[0]?.name;
 					this.filteredTags = this.tags.filter((tag) =>
 						tag.name.toLowerCase().includes(value?.toLowerCase()),
 					);

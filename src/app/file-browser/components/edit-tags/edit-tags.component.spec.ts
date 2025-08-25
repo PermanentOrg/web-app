@@ -1,7 +1,6 @@
-/* @format */
 import { waitForAsync } from '@angular/core/testing';
 import { Shallow } from 'shallow-render';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 
 import { ItemVO, TagVOData, RecordVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';

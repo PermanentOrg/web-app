@@ -1,6 +1,5 @@
-/* @format */
 import { Injectable, EventEmitter } from '@angular/core';
-import { map, min } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { find, debounce } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -22,10 +21,8 @@ import {
 import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import * as Sentry from '@sentry/browser';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { EventService } from '../event/event.service';
-import { AnalyticsService } from '../analytics/analytics.service';
 import { HttpService } from '../http/http.service';
 
 const ACCOUNT_KEY = 'account';
@@ -271,7 +268,7 @@ export class AccountService {
 	}
 
 	public async getAllPublicArchives() {
-		return this.api.archive
+		return await this.api.archive
 			.getAllArchives(this.account)
 			.then((response: ArchiveResponse) => {
 				const archives = response.getArchiveVOs();
@@ -567,7 +564,7 @@ export class AccountService {
 		this.storage.session.set(INVITE_KEY, inviteCode);
 
 		try {
-			return this.api.account
+			return await this.api.account
 				.signUp(
 					email,
 					fullName,
@@ -592,7 +589,7 @@ export class AccountService {
 				)
 				.toPromise();
 		} catch (err) {
-			return new Promise((resolve, reject) => reject(err));
+			return await new Promise((resolve, reject) => reject(err));
 		}
 	}
 

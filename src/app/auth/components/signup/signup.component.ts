@@ -1,4 +1,3 @@
-/* @format */
 import { Component, HostBinding } from '@angular/core';
 import {
 	UntypedFormGroup,
@@ -112,7 +111,7 @@ export class SignupComponent {
 		});
 		const confirmPasswordControl = new UntypedFormControl('', [
 			Validators.required,
-			matchControlValidator(this.signupForm.controls['password']),
+			matchControlValidator(this.signupForm.controls.password),
 		]);
 		this.signupForm.addControl('confirm', confirmPasswordControl);
 	}

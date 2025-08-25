@@ -13,7 +13,7 @@ import { UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 
-const stripe = window['Stripe'](SecretsService.getStatic('STRIPE_API_KEY'));
+const stripe = window.Stripe(SecretsService.getStatic('STRIPE_API_KEY'));
 const elements = stripe.elements();
 
 @Component({

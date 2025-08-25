@@ -1,13 +1,9 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as _ from 'lodash';
-
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-
 import { ConnectorResponse } from '@shared/services/api/index.repo';
 import { ConnectorOverviewVO } from '@root/app/models';
 

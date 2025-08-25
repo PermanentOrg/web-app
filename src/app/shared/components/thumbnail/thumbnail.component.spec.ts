@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { FolderVO, ItemVO, RecordVO } from '@models';
@@ -155,7 +154,7 @@ describe('ThumbnailComponent', () => {
 
 	it('should use the maximum image size if there is no bigger thumbnail', async () => {
 		window.devicePixelRatio = 10000;
-		const { instance, fixture } = await renderWithItem(fullItem, 10000);
+		const { instance } = await renderWithItem(fullItem, 10000);
 
 		expect(instance.getTargetThumbWidth()).toEqual(2000);
 		expect(instance.getCurrentThumbUrl()).toEqual(image2000);

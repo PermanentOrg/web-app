@@ -1,4 +1,3 @@
-/* @format */
 import { Component } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router, ActivatedRoute } from '@angular/router';

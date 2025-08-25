@@ -1,7 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FolderViewType, ItemVO, FolderVO } from '@models';
-import { Router } from '@angular/router';
-import { environment } from '@root/environments/environment';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FolderViewType, FolderVO } from '@models';
 
 type FolderViewImages = {
 	[Type in FolderViewType]?: string;

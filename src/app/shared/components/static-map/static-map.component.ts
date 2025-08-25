@@ -1,4 +1,3 @@
-/* @format */
 import {
 	Component,
 	ElementRef,
@@ -27,8 +26,6 @@ export class StaticMapComponent implements OnChanges {
 	@Input() location: LocnVOData;
 
 	public imageUrl: string;
-
-	private elementSize: number;
 
 	constructor(
 		private elementRef: ElementRef,

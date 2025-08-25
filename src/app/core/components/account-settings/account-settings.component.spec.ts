@@ -103,7 +103,7 @@ describe('AccountSettingsComponent', () => {
 
 		const button = find('.verify-phone-button');
 
-		expect(button.properties['disabled']).toBeTrue();
+		expect(button.properties.disabled).toBeTrue();
 	});
 
 	it('should enable "Verify Phone Number" button if primaryPhone exists', async () => {
@@ -115,6 +115,6 @@ describe('AccountSettingsComponent', () => {
 
 		const button = find('.verify-phone-button');
 
-		expect(button.properties['disabled']).toBeFalse();
+		expect(button.properties.disabled).toBeFalse();
 	});
 });

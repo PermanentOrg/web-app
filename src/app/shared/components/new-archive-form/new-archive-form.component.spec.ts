@@ -29,7 +29,6 @@ const mockApiService = {
 
 describe('NewArchiveFormComponent #onboarding', () => {
 	let shallow: Shallow<NewArchiveFormComponent>;
-	let expectedApiVal: ArchiveFormData;
 	function fillOutForm(find: (a: string) => any) {
 		const input = find('#newArchiveName');
 		input.nativeElement.value = 'Test User';
@@ -56,7 +55,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 	});
 
 	it('should not submit when form is invalid', async () => {
-		const { find, fixture, outputs } = await shallow.render();
+		const { find, outputs } = await shallow.render();
 
 		expect(find('button').nativeElement.disabled).toBeFalsy();
 		find('button').nativeElement.click();

@@ -23,9 +23,11 @@ export class ClaimDoneComponent implements OnInit {
 		const loggedIn = await this.accountService.isLoggedIn();
 
 		if (!loggedIn && this.pledgeService.currentPledge) {
-			return this.router.navigate(['..', 'claim'], { relativeTo: this.route });
+			return await this.router.navigate(['..', 'claim'], {
+				relativeTo: this.route,
+			});
 		} else if (!this.pledgeService.currentPledge) {
-			return this.router.navigate(['..'], { relativeTo: this.route });
+			return await this.router.navigate(['..'], { relativeTo: this.route });
 		}
 
 		this.storageAmount = Math.floor(

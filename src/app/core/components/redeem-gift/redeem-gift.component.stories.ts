@@ -1,4 +1,3 @@
-/* @format */
 import { moduleMetadata, type Meta, type StoryObj } from '@storybook/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountService } from '@shared/services/account/account.service';

@@ -1,5 +1,4 @@
-/* @format */
-import { RecordVO, FolderVO, RecordVOData, SimpleVO } from '@root/app/models';
+import { RecordVO, FolderVO } from '@root/app/models';
 import {
 	BaseResponse,
 	BaseRepo,
@@ -11,18 +10,6 @@ import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cach
 import { firstValueFrom } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
 
-const MIN_WHITELIST: (keyof RecordVO)[] = [
-	'recordId',
-	'archiveNbr',
-	'folder_linkId',
-];
-const DEFAULT_WHITELIST: (keyof RecordVO)[] = [
-	...MIN_WHITELIST,
-	'displayName',
-	'description',
-	'displayDT',
-];
-
 class MultipartUploadUrlsList {
 	public urls: string[] = [];
 	public uploadId: string;
@@ -31,10 +18,13 @@ class MultipartUploadUrlsList {
 	protected isInstance(obj: unknown): obj is MultipartUploadUrlsList {
 		return (
 			typeof obj === 'object' &&
-			typeof obj['urls'] === 'object' &&
-			typeof obj['urls'].length === 'number' &&
-			typeof obj['uploadId'] === 'string' &&
-			typeof obj['key'] === 'string'
+			'urls' in obj &&
+			obj.urls instanceof Array &&
+			typeof obj.urls.length === 'number' &&
+			'uploadId' in obj &&
+			typeof obj.uploadId === 'string' &&
+			'key' in obj &&
+			typeof obj.key === 'string'
 		);
 	}
 
@@ -158,7 +148,7 @@ export class RecordRepo extends BaseRepo {
 			},
 		};
 
-		return getFirst(
+		return await getFirst(
 			this.httpV2.post<RecordVO>('/record/registerRecord', body),
 		).toPromise();
 	}

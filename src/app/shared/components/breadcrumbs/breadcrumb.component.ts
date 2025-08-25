@@ -2,7 +2,6 @@ import {
 	Component,
 	OnInit,
 	OnDestroy,
-	ViewEncapsulation,
 	Input,
 	HostListener,
 	HostBinding,

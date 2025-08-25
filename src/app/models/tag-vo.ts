@@ -1,4 +1,3 @@
-/* @format */
 import { BaseVO, BaseVOData } from './base-vo';
 
 export interface TagVOData extends BaseVOData {

@@ -1,4 +1,3 @@
-/* @format */
 import { FolderVO, RecordVO } from '@models';
 import { PublicLinkPipe } from './public-link.pipe';
 import { PublicRoutePipe } from './public-route.pipe';

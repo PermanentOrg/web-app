@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Inject } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models';

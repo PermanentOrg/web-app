@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { EditService } from '@core/services/edit/edit.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { ArchiveVO, FolderVO, RecordVO, RecordVOData } from '@models/index';
+import { ArchiveVO, RecordVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { RecordRepo } from '@shared/services/api/record.repo';
 import { MessageService } from '@shared/services/message/message.service';
@@ -21,8 +21,6 @@ const mockDataService = {
 describe('EditService', () => {
 	let service: EditService;
 	let apiService: jasmine.SpyObj<ApiService>;
-	let messageSent = false;
-
 	let accountService: jasmine.SpyObj<AccountService>;
 	beforeEach(() => {
 		apiService = jasmine.createSpyObj('ApiService', ['record']);

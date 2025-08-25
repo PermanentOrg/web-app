@@ -1,4 +1,3 @@
-/* @format */
 import { NgModule } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
@@ -333,7 +332,7 @@ describe('LoginComponent', () => {
 	});
 
 	it('should display the loading spinner', async () => {
-		const { inject, instance, fixture } = await shallow.render();
+		const { instance, fixture } = await shallow.render();
 
 		instance.waiting = true;
 		fixture.detectChanges();

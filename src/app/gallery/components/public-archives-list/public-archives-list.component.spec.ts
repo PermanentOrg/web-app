@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -13,15 +12,12 @@ const mockAccountService = {
 
 describe('PublicArchivesComponent', () => {
 	let shallow: Shallow<PublicArchivesListComponent>;
-	let messageShown = false;
 
 	beforeEach(async () => {
 		shallow = new Shallow(PublicArchivesListComponent, GalleryModule)
 			.mock(AccountService, mockAccountService)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			})
 			.mock(Router, {
 				navigate: () => {

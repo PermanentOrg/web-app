@@ -1,4 +1,3 @@
-/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';

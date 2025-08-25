@@ -1,6 +1,4 @@
-/* @format */
 import { TestBed } from '@angular/core/testing';
-import { Subscription } from 'rxjs';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,

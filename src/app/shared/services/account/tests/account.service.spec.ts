@@ -1,4 +1,3 @@
-/* @format */
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { Shallow } from 'shallow-render';
@@ -7,7 +6,7 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { AuthResponse } from '@shared/services/api/index.repo';
-import { AccountVO, ArchiveVO, FolderVO, RecordVO } from '@root/app/models';
+import { AccountVO, FolderVO, RecordVO } from '@root/app/models';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { HttpService } from '@shared/services/http/http.service';
 import { AppModule } from '../../../../app.module';
@@ -130,7 +129,7 @@ describe('AccountService', () => {
 
 	it('should make the correct API calls during signUp', async () => {
 		const { instance, inject } = shallow.createService();
-		const apiService = inject(ApiService);
+		inject(ApiService);
 		const account = await instance.signUp(
 			'test@permanent.org',
 			'Test User',
@@ -148,7 +147,7 @@ describe('AccountService', () => {
 
 	it('should pass along errors encountered during signUp', async () => {
 		const { instance, inject } = shallow.createService();
-		const apiService = inject(ApiService);
+		inject(ApiService);
 		const expectedError = 'Out of cheese error. Redo from start';
 		try {
 			await instance.signUp(

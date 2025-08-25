@@ -1,4 +1,3 @@
-/* @format */
 import {
 	trigger,
 	animate,
@@ -8,23 +7,6 @@ import {
 	state,
 } from '@angular/animations';
 
-const animationLength = 750;
-
-const FULLSCREEN = {
-	position: 'fixed',
-	top: 0,
-	left: 0,
-	right: 0,
-	bottom: 0,
-	'z-index': 10,
-};
-
-const EASE_IN_QUART = 'cubic-bezier(0.5, 0, 0.75, 0)';
-const EASE_OUT_QUART = 'cubic-bezier(0.25, 1, 0.5, 1)';
-const EASE_IN_SINE = 'cubic-bezier(0.12, 0, 0.39, 0)';
-const EASE_OUT_SINE = 'cubic-bezier(0.61, 1, 0.88, 1)';
-
-const TAYLOR = 'cubic-bezier(.77, 0, .175, 1)';
 export const TWEAKED = 'cubic-bezier(.63,.01,.3,1)';
 const slideUpAnimationLength = 500;
 

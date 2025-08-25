@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Input, OnChanges } from '@angular/core';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { passwordStrength } from 'check-password-strength';

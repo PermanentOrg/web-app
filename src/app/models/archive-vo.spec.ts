@@ -1,4 +1,3 @@
-/* @format */
 import { DataStatus } from './data-status.enum';
 import { ArchiveVO, FolderVO, RecordVO } from '.';
 

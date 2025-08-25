@@ -13,9 +13,6 @@ export class BaseResponse {
 	public Results: any[];
 	public csrf: string;
 
-	private createdDT: Date;
-	private updatedDT: Date;
-
 	constructor(response?: any) {
 		if (!response) {
 			return;

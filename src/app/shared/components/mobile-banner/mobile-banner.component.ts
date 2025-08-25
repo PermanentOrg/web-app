@@ -1,4 +1,3 @@
-/* @format */
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ngIfSlideUpAnimation } from '@shared/animations';
 import { Component } from '@angular/core';

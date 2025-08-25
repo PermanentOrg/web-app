@@ -1,7 +1,4 @@
 import { BaseVOData } from './base-vo';
-import { ArchiveVO } from './archive-vo';
-import { FolderVO } from './folder-vo';
-import { RecordVO } from './record-vo';
 
 export type NotificationStatus =
 	| 'status.notification.new'

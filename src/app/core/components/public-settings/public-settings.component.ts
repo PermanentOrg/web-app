@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Input, OnInit } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';

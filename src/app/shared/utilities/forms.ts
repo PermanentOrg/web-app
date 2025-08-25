@@ -1,11 +1,4 @@
-/* @format */
-import {
-	UntypedFormGroup,
-	FormControl,
-	AbstractControl,
-	ValidationErrors,
-	ValidatorFn,
-} from '@angular/forms';
+import { UntypedFormGroup, AbstractControl, ValidatorFn } from '@angular/forms';
 import { APP_CONFIG } from '@root/app/app.config';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { FormInputComponent as FormInput } from '@root/app/component-library/components/form-input/form-input.component';
@@ -118,7 +111,7 @@ export function getFormInputError(formInput: FormInputComponent | FormInput) {
 	if (FORM_ERROR_MESSAGES[formInput.fieldName]) {
 		return FORM_ERROR_MESSAGES[formInput.fieldName][errorName];
 	} else {
-		return FORM_ERROR_MESSAGES['generic'][errorName];
+		return FORM_ERROR_MESSAGES.generic[errorName];
 	}
 }
 

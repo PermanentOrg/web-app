@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Inject, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { EventService } from '@shared/services/event/event.service';

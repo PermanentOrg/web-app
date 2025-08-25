@@ -1,4 +1,4 @@
-import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { DirectiveData, DirectiveCreateRequest } from '@models/directive';
 import { MockDirectiveRepo as DirectiveGetRepo } from '../directive-display/test-utils';
 

@@ -1,11 +1,10 @@
-/* @format */
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
-import { RouterModule, Routes, Route } from '@angular/router';
+import { RouterModule, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { SecretsService } from '@shared/services/secrets/secrets.service';

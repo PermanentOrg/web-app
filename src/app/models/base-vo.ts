@@ -1,6 +1,5 @@
 import { RecordVOData } from '@models/record-vo';
 import { FolderVOData } from '@models/folder-vo';
-import { formatDateISOString } from '@shared/utilities/dateTime';
 
 export class BaseVO {
 	public dataWhitelist: string[];

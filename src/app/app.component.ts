@@ -1,6 +1,6 @@
 import { Component, HostBinding } from '@angular/core';
 
-declare var iosInnerHeight: Function;
+declare let iosInnerHeight: Function;
 
 @Component({
 	selector: 'pr-app-root',
@@ -15,7 +15,7 @@ export class AppComponent {
 	constructor() {
 		const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
 		const iPhone =
-			/iPad|iPhone|iPod/.test(navigator.userAgent) && !window['MSStream'];
+			/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 		this.isMobileSafari = isSafari && iPhone;
 		this.isMenuBarShowing = window.innerHeight !== iosInnerHeight();
 

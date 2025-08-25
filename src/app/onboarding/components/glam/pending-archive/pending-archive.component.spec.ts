@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { OnboardingModule } from '@root/app/onboarding/onboarding.module';
 import { ArchiveVO } from '@models/index';

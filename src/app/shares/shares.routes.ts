@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { SharesComponent } from '@shares/components/shares/shares.component';
 import { SharesResolveService } from '@shares/resolves/shares-resolve.service';

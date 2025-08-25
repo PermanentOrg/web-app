@@ -1,4 +1,4 @@
-import { NgModule, ComponentFactoryResolver } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';

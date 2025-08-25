@@ -1,4 +1,3 @@
-/* @format */
 import {
 	ComponentFixture,
 	TestBed,
@@ -20,24 +19,11 @@ describe('ConfirmPayerDialogComponent', () => {
 	let dialogRef: MockDialogRef;
 	let cancelAccountPayerSet: jasmine.Spy;
 	let handleAccountInfoChange: jasmine.Spy;
-	let dialogData: {
-		archiveId: number;
-		isPayerDifferentThanLoggedUser: boolean;
-		handleAccountInfoChange: () => void;
-		cancelAccountPayerSet: () => void;
-	};
 
 	beforeEach(async () => {
 		handleAccountInfoChange = jasmine.createSpy('handleAccountInfoChange');
 		cancelAccountPayerSet = jasmine.createSpy('cancelAccountPayerSet');
 		const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
-
-		dialogData = {
-			archiveId: 1,
-			isPayerDifferentThanLoggedUser: false,
-			handleAccountInfoChange: () => {},
-			cancelAccountPayerSet: () => {},
-		};
 
 		config.imports.push(SharedModule);
 		config.declarations.push(ConfirmPayerDialogComponent);

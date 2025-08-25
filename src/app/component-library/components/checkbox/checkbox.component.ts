@@ -1,4 +1,3 @@
-/* @format */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 type Value = string | number | boolean;

@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '@core/core.module';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';

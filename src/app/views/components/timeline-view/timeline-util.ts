@@ -54,7 +54,6 @@ function getEvenSpreadItems(items: any[], count = 4) {
 	spread.push(items[0]);
 
 	const middleCount = count - 2;
-	const middleLength = length - 2;
 	const step = length / (count - 1);
 
 	let current = 0;

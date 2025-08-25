@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { By } from '@angular/platform-browser';
 import { OnboardingModule } from '../../../onboarding.module';
@@ -22,16 +21,16 @@ describe('SelectArchiveTypeScreenComponent', () => {
 
 		expect(instance.selectedValue).toBe('');
 		expect(instance.buttonText).toBe('a Personal');
-		expect(instance['headerText']).toBe('');
-		expect(instance['tag']).toBe('');
-		expect(instance['type']).toBe('');
+		expect(instance.headerText).toBe('');
+		expect(instance.tag).toBe('');
+		expect(instance.type).toBe('');
 	});
 
 	it('should emit navigation event when navigate is called with start', async () => {
 		const { instance, outputs } = await shallow.render();
-		instance['type'] = 'mockType';
-		instance['tag'] = 'mockTag';
-		instance['headerText'] = 'mockHeaderText';
+		instance.type = 'mockType';
+		instance.tag = 'mockTag';
+		instance.headerText = 'mockHeaderText';
 		instance.navigate('start');
 
 		expect(outputs.submitEmitter.emit).toHaveBeenCalledWith({
@@ -44,9 +43,9 @@ describe('SelectArchiveTypeScreenComponent', () => {
 
 	it('should emit submit event when navigate is called with other screen', async () => {
 		const { instance, outputs } = await shallow.render();
-		instance['type'] = 'mockType';
-		instance['tag'] = 'mockTag';
-		instance['headerText'] = 'mockHeaderText';
+		instance.type = 'mockType';
+		instance.tag = 'mockTag';
+		instance.headerText = 'mockHeaderText';
 
 		instance.navigate('name-archive');
 

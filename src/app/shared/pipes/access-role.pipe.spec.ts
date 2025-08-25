@@ -1,4 +1,3 @@
-/* @format */
 import { AccessRolePipe } from './access-role.pipe';
 
 describe('GetAltTextPipe', () => {

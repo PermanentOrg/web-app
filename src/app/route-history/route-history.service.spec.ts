@@ -1,4 +1,3 @@
-/* @format */
 /*
 These tests were adapted from the tests of the ngx-route-history package:
 https://github.com/andrewatwood/ngx-route-history/blob/master/tests/services/route-history.service.spec.ts

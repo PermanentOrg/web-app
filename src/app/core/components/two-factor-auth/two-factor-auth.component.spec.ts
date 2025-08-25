@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 
 import { CoreModule } from '@core/core.module';
@@ -22,15 +21,11 @@ const mockApiService = {
 
 describe('TwoFactorAuthComponent', () => {
 	let shallow: Shallow<TwoFactorAuthComponent>;
-	let messageShown: boolean = false;
 
 	beforeEach(async () => {
-		messageShown = false;
 		shallow = new Shallow(TwoFactorAuthComponent, CoreModule)
 			.mock(MessageService, {
-				showError: () => {
-					messageShown = true;
-				},
+				showError: () => {},
 			})
 			.mock(ApiService, mockApiService)
 			.import(HttpClientTestingModule);

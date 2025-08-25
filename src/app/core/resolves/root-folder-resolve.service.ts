@@ -47,7 +47,7 @@ export class RootFolderResolveService {
 			return currentRoot;
 		}
 
-		return this.api.folder.getRoot().then((response: FolderResponse) => {
+		return await this.api.folder.getRoot().then((response: FolderResponse) => {
 			if (!response.isSuccessful) {
 				throw response;
 			}

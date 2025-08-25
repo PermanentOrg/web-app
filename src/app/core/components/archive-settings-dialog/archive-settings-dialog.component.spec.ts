@@ -41,7 +41,6 @@ const mockAccountService = {
 
 describe('ArchiveSettingsDialogComponent', () => {
 	let shallow: Shallow<ArchiveSettingsDialogComponent>;
-	let dialogRef: MockDialogRef;
 
 	beforeEach(() => {
 		shallow = new Shallow(ArchiveSettingsDialogComponent, CoreModule)

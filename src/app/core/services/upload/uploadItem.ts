@@ -1,6 +1,4 @@
-import { EventEmitter } from '@angular/core';
-
-import { FolderVO, RecordVO, RecordVOData } from '@root/app/models';
+import { FolderVO, RecordVO } from '@root/app/models';
 
 export enum UploadStatus {
 	Init,

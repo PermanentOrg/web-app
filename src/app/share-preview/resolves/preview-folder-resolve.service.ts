@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-	ActivatedRouteSnapshot,
-	RouterStateSnapshot,
-	Router,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { FolderVO, RecordVO, RecordVOData } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 

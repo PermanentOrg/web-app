@@ -1,4 +1,3 @@
-/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
@@ -43,7 +42,7 @@ describe('PublicSearchBarResultsComponent', () => {
 	});
 
 	it('should navigate to folder route when goToFile is called with a public folder', () => {
-		const routerSpy = spyOn(component['router'], 'navigate');
+		const routerSpy = spyOn(component.router, 'navigate');
 		const testItem = {
 			type: 'type.folder.public',
 			archiveNbr: 123,
@@ -53,12 +52,12 @@ describe('PublicSearchBarResultsComponent', () => {
 		component.goToFile(new FolderVO(testItem));
 
 		expect(routerSpy).toHaveBeenCalledWith([123, 456], {
-			relativeTo: component['route'],
+			relativeTo: component.route,
 		});
 	});
 
 	it('should navigate to record route when goToFile is called with a record item', () => {
-		const routerSpy = spyOn(component['router'], 'navigate');
+		const routerSpy = spyOn(component.router, 'navigate');
 		const testItem = {
 			type: 'type.record.image',
 			parentArchiveNbr: '789',
@@ -68,7 +67,7 @@ describe('PublicSearchBarResultsComponent', () => {
 		component.goToFile(new RecordVO(testItem));
 
 		expect(routerSpy).toHaveBeenCalledWith(['789', '20'], {
-			relativeTo: component['route'],
+			relativeTo: component.route,
 		});
 	});
 

@@ -1,4 +1,3 @@
-/* @format */
 import { Shallow } from 'shallow-render';
 import { SharedModule } from '@shared/shared.module';
 import { ButtonComponent } from './button.component';

@@ -1,4 +1,4 @@
-import { NgModule, ComponentFactoryResolver, OnDestroy } from '@angular/core';
+import { NgModule, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { GoogleMapsModule } from '@angular/google-maps';
@@ -15,7 +15,7 @@ import {
 	FontAwesomeModule,
 	FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
-import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+import { faFileArchive } from '@fortawesome/free-solid-svg-icons';
 import { FolderViewComponent } from './components/folder-view/folder-view.component';
 import { PublishComponent } from './components/publish/publish.component';
 import { FolderDescriptionComponent } from './components/folder-description/folder-description.component';

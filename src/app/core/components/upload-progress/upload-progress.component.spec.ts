@@ -1,4 +1,3 @@
-/* @format */
 import { UploadService } from '@core/services/upload/upload.service';
 import { CoreModule } from '@core/core.module';
 import { EventEmitter } from '@angular/core';
@@ -50,7 +49,7 @@ describe('UploadProgressComponent', () => {
 	});
 
 	it('should display the correct file name and the folder when dragging the file into a folder', async () => {
-		const { find, instance, fixture } = await shallow.render();
+		const { find, fixture } = await shallow.render();
 
 		const mockContent = new Uint8Array(10000);
 		const progressEvent = {
@@ -82,7 +81,7 @@ describe('UploadProgressComponent', () => {
 	});
 
 	it('should display the correct file name, the target folder and the current folder when dragging a file  nested into a folder over a folder', async () => {
-		const { find, instance, fixture } = await shallow.render();
+		const { find, fixture } = await shallow.render();
 
 		const mockContent = new Uint8Array(10000);
 		const progressEvent = {

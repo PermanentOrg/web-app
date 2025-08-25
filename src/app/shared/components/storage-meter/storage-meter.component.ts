@@ -5,8 +5,7 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { Subscription } from 'rxjs';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
-import { AccountVO, ArchiveVO, FolderVO } from '@models';
-import { UploadSessionStatus } from '@core/services/upload/upload.session';
+import { AccountVO } from '@models';
 import { ApiService } from '../../services/api/api.service';
 
 @Component({
@@ -22,9 +21,6 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
 	animate = false;
 	private archiveSpaceLeft: number = 0;
 	private archiveSpaceTotal: number = 0;
-
-	private accountChangeSubscription: Subscription;
-	private deleteSubscription: Subscription;
 
 	accountSpaceTotal: number = 0;
 	accountSpaceLeft: number = 0;

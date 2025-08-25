@@ -1,4 +1,3 @@
-/* @format */
 import { ArchiveType } from '@models/archive-vo';
 import { ArchiveTypeNamePipe } from './archive-type-name.pipe';
 

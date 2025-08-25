@@ -6,7 +6,7 @@ import {
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
-import { InviteRepo, InviteResponse } from '@shared/services/api/invite.repo';
+import { InviteRepo } from '@shared/services/api/invite.repo';
 import {
 	AccessRole,
 	AccountVO,

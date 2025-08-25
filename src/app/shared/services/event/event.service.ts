@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable } from '@angular/core';
 import { PermanentEvent } from './event-types';
 
@@ -29,5 +28,9 @@ export class EventService {
 		if (index > -1) {
 			this.observers.splice(index, 1);
 		}
+	}
+
+	public getObservers(): EventObserver[] {
+		return this.observers;
 	}
 }

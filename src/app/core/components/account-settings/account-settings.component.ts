@@ -1,9 +1,7 @@
-/* @format */
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
-import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';

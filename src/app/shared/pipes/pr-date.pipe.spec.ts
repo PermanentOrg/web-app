@@ -1,5 +1,3 @@
-import { TimezoneVOData, TimezoneVO } from '@models';
-import { formatDateISOString } from '@shared/utilities/dateTime';
 import { PrDatePipe } from './pr-date.pipe';
 
 describe('PrDatePipe', () => {

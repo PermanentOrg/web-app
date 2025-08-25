@@ -1,11 +1,9 @@
-/* @format */
 import {
 	Component,
 	Inject,
 	ViewChildren,
 	AfterViewInit,
 	OnDestroy,
-	ElementRef,
 	QueryList,
 } from '@angular/core';
 import {

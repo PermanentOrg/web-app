@@ -1,7 +1,7 @@
 import { fakeAsync, tick } from '@angular/core/testing';
 import { ArchiveVO, FolderVO } from '@models';
 import { ProfileItemVOData } from '@models/profile-item-vo';
-import { first, skip, take } from 'rxjs/operators';
+import { first, skip } from 'rxjs/operators';
 import { PublicProfileService } from './public-profile.service';
 
 describe('PublicProfileService', () => {

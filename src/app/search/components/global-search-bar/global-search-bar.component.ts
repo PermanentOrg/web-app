@@ -1,4 +1,3 @@
-/* @format */
 import {
 	Component,
 	ViewChild,
@@ -13,7 +12,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ngIfScaleHeightEnterAnimation } from '@shared/animations';
 import { UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
-import { pipe, of } from 'rxjs';
+import { of } from 'rxjs';
 import { tap, debounceTime, switchMap, catchError, map } from 'rxjs/operators';
 import { SearchResponse } from '@shared/services/api/index.repo';
 
@@ -269,10 +268,7 @@ export class GlobalSearchBarComponent {
 	}
 
 	onTagResultClick(tag: TagVOData) {
-		let searchTerm: string;
-		let tags: TagVOData[];
-
-		[searchTerm, tags] = this.searchService.parseSearchTerm(
+		const [, tags]: [string, TagVOData[]] = this.searchService.parseSearchTerm(
 			this.formControl.value,
 		);
 

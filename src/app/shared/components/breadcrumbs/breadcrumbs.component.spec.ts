@@ -4,7 +4,6 @@ import { cloneDeep } from 'lodash';
 
 import { BreadcrumbsComponent } from '@shared/components/breadcrumbs/breadcrumbs.component';
 import { DataService } from '@shared/services/data/data.service';
-import { CoreModule } from '@core/core.module';
 import { Router } from '@angular/router';
 import { FolderVO } from '@root/app/models';
 

@@ -1,4 +1,3 @@
-/* @format */
 import {
 	fakeAsync,
 	ComponentFixture,
@@ -33,7 +32,7 @@ describe('SharePreviewComponent', () => {
 		config.imports.push(RouterTestingModule);
 		config.declarations.push(SharePreviewComponent);
 
-		let mockRoute = new ActivatedRoute();
+		const mockRoute = new ActivatedRoute();
 		mockRoute.snapshot = new ActivatedRouteSnapshot();
 		mockRoute.snapshot.data = {
 			sharePreviewVO: {
@@ -47,13 +46,13 @@ describe('SharePreviewComponent', () => {
 		mockRoute.snapshot.params = { shareToken: 'test' };
 		mockRoute.snapshot.queryParams = { requestAccess: 'test' };
 
-		let firstChild = new ActivatedRouteSnapshot();
+		const firstChild = new ActivatedRouteSnapshot();
 		firstChild.data = { sharePreviewView: {} };
 		spyOnProperty(mockRoute.snapshot, 'firstChild', 'get').and.returnValue(
 			firstChild,
 		);
 
-		let parent = new ActivatedRoute();
+		const parent = new ActivatedRoute();
 		spyOnProperty(mockRoute, 'parent', 'get').and.returnValue(parent);
 
 		config.providers.push({

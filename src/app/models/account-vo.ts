@@ -1,4 +1,3 @@
-/* @format */
 import { BaseVO, BaseVOData } from '@models/base-vo';
 import { AccessRoleType } from './access-role';
 

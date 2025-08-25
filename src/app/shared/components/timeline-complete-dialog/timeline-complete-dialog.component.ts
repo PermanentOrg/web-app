@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
 import { FolderVO } from '@models';
 import { copyFromInputElement } from '@shared/utilities/forms';
