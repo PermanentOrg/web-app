@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
 	styleUrls: ['./logo.component.scss'],
 	standalone: false,
 })
-export class LogoComponent {
-	constructor() {}
-}
+export class LogoComponent {}

@@ -508,7 +508,7 @@ export class FileListItemComponent
 		this.goToItem();
 	}
 
-	goToItem() {
+	async goToItem() {
 		if (!this.allowNavigation) {
 			return false;
 		}
@@ -525,7 +525,7 @@ export class FileListItemComponent
 				this.dataService.fetchLeanItems([this.item]);
 			}
 
-			return this.item.fetched.then((fetched) => {
+			return await this.item.fetched.then((fetched) => {
 				this.goToItem();
 			});
 		}
@@ -738,7 +738,7 @@ export class FileListItemComponent
 				.then((value: ActionType) => {
 					this.onActionClick(value, actionDeferred);
 				})
-				.catch((err) => {});
+				.catch();
 		} else {
 			try {
 				this.prompt.confirm(
@@ -817,9 +817,9 @@ export class FileListItemComponent
 		event.stopPropagation();
 	}
 
-	deleteItem(resolve: Function) {
+	async deleteItem(resolve: Function) {
 		const size = this.getFileOrFolderSize();
-		return this.edit
+		return await this.edit
 			.deleteItems([this.item])
 			.then(() => {
 				this.accountService.deductAccountStorage(-size);
@@ -844,12 +844,12 @@ export class FileListItemComponent
 		return size;
 	}
 
-	moveItem(destination: FolderVO) {
-		return this.edit.moveItems([this.item], destination);
+	async moveItem(destination: FolderVO) {
+		return await this.edit.moveItems([this.item], destination);
 	}
 
-	copyItem(destination: FolderVO) {
-		return this.edit.copyItems([this.item], destination);
+	async copyItem(destination: FolderVO) {
+		return await this.edit.copyItems([this.item], destination);
 	}
 
 	async unshareItem() {
@@ -875,12 +875,12 @@ export class FileListItemComponent
 
 		this.folderPicker
 			.chooseFolder(rootFolder, operation, deferred.promise)
-			.then((destination: FolderVO) => {
+			.then(async (destination: FolderVO) => {
 				switch (operation) {
 					case FolderPickerOperations.Copy:
-						return this.copyItem(destination);
+						return await this.copyItem(destination);
 					case FolderPickerOperations.Move:
-						return this.moveItem(destination);
+						return await this.moveItem(destination);
 				}
 			})
 			.then(() => {
@@ -958,7 +958,7 @@ export class FileListItemComponent
 			.then((values) => {
 				this.saveUpdates(values, updateDeferred);
 			})
-			.catch(() => {});
+			.catch();
 	}
 
 	saveUpdates(changes: RecordVOData | FolderVOData, deferred: Deferred) {
@@ -1046,9 +1046,9 @@ export class FileListItemComponent
 						const sortedItems = newFolderVO.ChildItemVOs.filter((item) =>
 							item.type.includes('type.record'),
 						);
-						sortedItems.sort((a, b) => {
-							return calculateSortPriority(a) - calculateSortPriority(b);
-						});
+						sortedItems.sort(
+							(a, b) => calculateSortPriority(a) - calculateSortPriority(b),
+						);
 						const thumbnailItem = sortedItems.shift();
 						if (thumbnailItem) {
 							if (sortPriorities.includes(thumbnailItem.type)) {

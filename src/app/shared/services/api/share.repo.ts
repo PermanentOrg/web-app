@@ -9,37 +9,41 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, compact } from 'lodash';
 
 export class ShareRepo extends BaseRepo {
-	public getShares() {
-		return this.http.sendRequestPromise<ShareResponse>('/share/getShares', [], {
-			responseClass: ShareResponse,
-		});
+	public async getShares() {
+		return await this.http.sendRequestPromise<ShareResponse>(
+			'/share/getShares',
+			[],
+			{
+				responseClass: ShareResponse,
+			},
+		);
 	}
 
-	public update(share: ShareVO) {
+	public async update(share: ShareVO) {
 		const data = {
 			ShareVO: share,
 		};
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/update',
 			[data],
 			{ responseClass: ShareResponse },
 		);
 	}
 
-	public upsert(share: ShareVO) {
+	public async upsert(share: ShareVO) {
 		const data = {
 			ShareVO: share,
 		};
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/upsert',
 			[data],
 			{ responseClass: ShareResponse },
 		);
 	}
 
-	public remove(share: ShareVO) {
+	public async remove(share: ShareVO) {
 		const data = {
 			ShareVO: {
 				shareId: share.shareId,
@@ -48,14 +52,14 @@ export class ShareRepo extends BaseRepo {
 			},
 		};
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/delete',
 			[data],
 			{ responseClass: ShareResponse },
 		);
 	}
 
-	public generateShareLink(item: RecordVO | FolderVO) {
+	public async generateShareLink(item: RecordVO | FolderVO) {
 		const data: any = {};
 
 		if (item.isRecord) {
@@ -68,14 +72,14 @@ export class ShareRepo extends BaseRepo {
 			};
 		}
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/generateShareLink',
 			[data],
 			{ responseClass: ShareResponse },
 		);
 	}
 
-	public getShareLink(item: RecordVO | FolderVO) {
+	public async getShareLink(item: RecordVO | FolderVO) {
 		const data: any = {};
 
 		if (item.isRecord) {
@@ -88,74 +92,74 @@ export class ShareRepo extends BaseRepo {
 			};
 		}
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/getLink',
 			[data],
 			{ responseClass: ShareResponse },
 		);
 	}
 
-	public checkShareLink(urlToken: string) {
+	public async checkShareLink(urlToken: string) {
 		const data = {
 			Shareby_urlVO: {
 				urlToken,
 			},
 		};
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/checkShareLink',
 			[data],
 			{ responseClass: ShareResponse },
 		);
 	}
 
-	public updateShareLink(vo: ShareByUrlVO) {
+	public async updateShareLink(vo: ShareByUrlVO) {
 		const data = {
 			Shareby_urlVO: vo,
 		};
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/updateShareLink',
 			[data],
 			{ responseClass: ShareResponse },
 		);
 	}
 
-	public removeShareLink(vo: ShareByUrlVO) {
+	public async removeShareLink(vo: ShareByUrlVO) {
 		const data = {
 			Shareby_urlVO: vo,
 		};
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/dropShareLink',
 			[data],
 			{ responseClass: ShareResponse },
 		);
 	}
 
-	public requestShareAccess(urlToken: string) {
+	public async requestShareAccess(urlToken: string) {
 		const data = {
 			Shareby_urlVO: {
 				urlToken,
 			},
 		};
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/requestShareAccess',
 			[data],
 			{ responseClass: ShareResponse },
 		);
 	}
 
-	public getShareForPreview(shareId, folder_linkId) {
+	public async getShareForPreview(shareId, folderLinkId) {
 		const data = {
 			ShareVO: {
 				shareId: parseInt(shareId, 10),
-				folder_linkId: parseInt(folder_linkId, 10),
+				folder_linkId: parseInt(folderLinkId, 10),
 			},
 		};
 
-		return this.http.sendRequestPromise<ShareResponse>(
+		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/getShareForPreview',
 			[data],
 			{ responseClass: ShareResponse },
@@ -171,9 +175,7 @@ export class ShareResponse extends BaseResponse {
 				return null;
 			}
 
-			return result.map((resultList) => {
-				return new ArchiveVO(resultList.ArchiveVO);
-			});
+			return result.map((resultList) => new ArchiveVO(resultList.ArchiveVO));
 		});
 
 		return compact(flatten(archives));

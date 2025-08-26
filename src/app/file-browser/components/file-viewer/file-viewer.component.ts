@@ -264,17 +264,13 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		if (!evt.isFinal) {
 			// follow pointer for panning
 			gsap.set(queuedThumbs, {
-				x: (index, target) => {
-					return evt.deltaX + getOrder(target) * this.screenWidth;
-				},
+				x: (index, target) => evt.deltaX + getOrder(target) * this.screenWidth,
 			});
 		} else if (!(fastEnough || farEnough) || !canNavigate) {
 			// reset to center, not fast enough or far enough
 			gsap.to(queuedThumbs, {
 				duration: 0.5,
-				x: (index, target) => {
-					return getOrder(target) * this.screenWidth;
-				},
+				x: (index, target) => getOrder(target) * this.screenWidth,
 				ease: 'Power4.easeOut',
 			} as any);
 		} else {
@@ -286,9 +282,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			this.disableSwipes = true;
 			gsap.to(queuedThumbs, {
 				duration: 0.5,
-				x: (index, target) => {
-					return (getOrder(target) + offset) * this.screenWidth;
-				},
+				x: (index, target) => (getOrder(target) + offset) * this.screenWidth,
 				ease: 'Power4.easeOut',
 				onComplete: () => {
 					this.incrementCurrentRecord(previous);

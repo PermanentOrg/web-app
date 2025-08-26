@@ -40,8 +40,8 @@ export const routes: RoutesWithData = [
 	},
 	{
 		path: ':archiveNbr/:folderLinkId',
-		loadChildren: () =>
-			import('../file-browser/file-browser.module').then(
+		loadChildren: async () =>
+			await import('../file-browser/file-browser.module').then(
 				(m) => m.FileBrowserModule,
 			),
 	},

@@ -92,7 +92,7 @@ export class FolderResolveService {
 				}
 				return folder;
 			})
-			.catch((response: FolderResponse) => {
+			.catch(async (response: FolderResponse) => {
 				this.message.showError({
 					message: response.getMessage(),
 					translate: true,
@@ -111,7 +111,7 @@ export class FolderResolveService {
 				} else {
 					this.router.navigate(['/private']);
 				}
-				return Promise.reject(false);
+				return await Promise.reject(false);
 			});
 	}
 }

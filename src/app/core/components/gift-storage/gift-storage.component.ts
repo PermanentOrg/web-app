@@ -212,12 +212,12 @@ export class GiftStorageComponent implements OnDestroy {
 			this.isAsyncValidating = true;
 
 			return timer(1000).pipe(
-				switchMap(() => {
-					return forkJoin({
+				switchMap(() =>
+					forkJoin({
 						invalidEmails: this.validateEmails(control.value),
 						duplicateEmails: this.checkForDuplicateEmails(control.value),
-					});
-				}),
+					}),
+				),
 				map(({ invalidEmails, duplicateEmails }) => {
 					this.emailValidationErrors = invalidEmails || [];
 					this.duplicateEmails = duplicateEmails || [];

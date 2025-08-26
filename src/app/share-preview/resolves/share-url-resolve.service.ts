@@ -22,8 +22,8 @@ export class ShareUrlResolveService {
 		private accountService: AccountService,
 	) {}
 
-	resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-		return this.api.share
+	async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+		return await this.api.share
 			.checkShareLink(route.params.shareToken)
 			.then((response: ShareResponse): any => {
 				if (response.isSuccessful) {
@@ -34,14 +34,14 @@ export class ShareUrlResolveService {
 					throw response;
 				}
 			})
-			.catch((response: ShareResponse) => {
+			.catch(async (response: ShareResponse) => {
 				if (response.getMessage) {
 					if (response.messageIncludes('warning.auth.mfaToken')) {
 						this.accountService.setRedirect([
 							'/share',
 							route.params.shareToken,
 						]);
-						return this.router.navigate(['/app', 'auth', 'mfa']);
+						return await this.router.navigate(['/app', 'auth', 'mfa']);
 					} else {
 						this.message.showError({
 							message: response.getMessage(),
@@ -49,7 +49,7 @@ export class ShareUrlResolveService {
 						});
 					}
 				}
-				return this.router.navigate(['share', 'error']);
+				return await this.router.navigate(['share', 'error']);
 			});
 	}
 }

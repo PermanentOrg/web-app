@@ -85,9 +85,8 @@ export class AppsComponent
 			const connectorComponents = this.connectorComponents.toArray();
 			const fbConnectorComponent = find(
 				connectorComponents,
-				(comp: ConnectorComponent) => {
-					return comp.connector.type === 'type.connector.facebook';
-				},
+				(comp: ConnectorComponent) =>
+					comp.connector.type === 'type.connector.facebook',
 			);
 			fbConnectorComponent.connect();
 		}
@@ -96,9 +95,8 @@ export class AppsComponent
 			const connectorComponents = this.connectorComponents.toArray();
 			const fsConnectorComponent = find(
 				connectorComponents,
-				(comp: ConnectorComponent) => {
-					return comp.connector.type === 'type.connector.familysearch';
-				},
+				(comp: ConnectorComponent) =>
+					comp.connector.type === 'type.connector.familysearch',
 			);
 			setTimeout(() => {
 				fsConnectorComponent.authorize(queryParams.code);

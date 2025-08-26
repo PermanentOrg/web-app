@@ -16,11 +16,11 @@ export class AuthGuard {
 		private router: Router,
 	) {}
 
-	canActivate(
+	async canActivate(
 		next: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Promise<any> {
-		return this.account
+		return await this.account
 			.checkSession()
 			.then((isSessionValid: boolean) => {
 				if (isSessionValid && this.account.isLoggedIn()) {

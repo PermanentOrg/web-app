@@ -218,7 +218,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 			await Promise.all(filePromises);
 		}
 
-		function readDirectory(directory): Promise<any[]> {
+		async function readDirectory(directory): Promise<any[]> {
 			const dirReader = directory.createReader();
 			let e = [];
 
@@ -236,7 +236,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
 			getEntries();
 
-			return deferred.promise;
+			return await deferred.promise;
 		}
 	}
 

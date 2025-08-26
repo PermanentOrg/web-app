@@ -30,10 +30,20 @@ export class ConnectorOverviewVO extends BaseVO {
 	public errorCount;
 	public type: ConnectorType;
 	public status;
-
 	public ConnectorFamilysearchVO;
 
 	constructor(voData: ConnectorOverviewVOData) {
 		super(voData);
+		this.connector_overviewId = voData.connector_overviewId;
+		this.archiveId = voData.archiveId;
+		this.lastExecuteDT = voData.lastExecuteDT;
+		this.token = voData.token;
+		this.userId = voData.userId;
+		this.currentState = voData.currentState;
+		this.checkpointDT = voData.checkpointDT;
+		this.errorCount = voData.errorCount;
+		this.type = voData.type;
+		this.status = voData.status;
+		this.ConnectorFamilysearchVO = voData.ConnectorFamilysearchVO;
 	}
 }

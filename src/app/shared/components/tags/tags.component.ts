@@ -20,8 +20,6 @@ export class TagsComponent implements OnChanges {
 
 	orderedTags: TagVOData[] = [];
 
-	constructor() {}
-
 	ngOnChanges() {
 		if (!this.tags?.length) {
 			this.orderedTags = [];

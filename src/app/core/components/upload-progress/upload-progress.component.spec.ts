@@ -17,12 +17,8 @@ class MockUploadSession {
 const mockUploadService = {
 	registerComponent: () => {},
 	uploadSession: new MockUploadSession(),
-	getTargetFolderId: () => {
-		return 10;
-	},
-	getTargetFolderName: () => {
-		return 'testfolder';
-	},
+	getTargetFolderId: () => 10,
+	getTargetFolderName: () => 'testfolder',
 };
 
 describe('UploadProgressComponent', () => {

@@ -254,11 +254,11 @@ export class EditTagsComponent
 	}
 
 	filterTagsByType(tags: TagVOData[]): TagVOData[] {
-		return tags.filter((tag) => {
-			return this.tagType === 'keyword'
+		return tags.filter((tag) =>
+			this.tagType === 'keyword'
 				? !tag.type.includes('type.tag.metadata')
-				: tag.type.includes('type.tag.metadata');
-		});
+				: tag.type.includes('type.tag.metadata'),
+		);
 	}
 
 	isNewTagInputValid(tagInput: string): boolean {

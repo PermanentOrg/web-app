@@ -71,7 +71,7 @@ export class PromptService {
 		this.debug('component unregistered');
 	}
 
-	prompt(
+	async prompt(
 		fields: PromptField[],
 		title: string,
 		savePromise?: Promise<any>,
@@ -92,7 +92,7 @@ export class PromptService {
 			];
 		}
 
-		return this.component.prompt(
+		return await this.component.prompt(
 			this.fb.group(formConfig),
 			fields,
 			title,
@@ -106,7 +106,7 @@ export class PromptService {
 		);
 	}
 
-	promptButtons(
+	async promptButtons(
 		buttons: PromptButton[],
 		title: string,
 		savePromise?: Promise<any>,
@@ -116,7 +116,7 @@ export class PromptService {
 			throw new Error('PromptService - Missing prompt component');
 		}
 
-		return this.component.promptButtons(
+		return await this.component.promptButtons(
 			buttons,
 			title,
 			savePromise,
@@ -127,7 +127,7 @@ export class PromptService {
 		);
 	}
 
-	confirm(
+	async confirm(
 		confirmText: string = 'OK',
 		title: string,
 		savePromise?: Promise<any>,
@@ -147,34 +147,34 @@ export class PromptService {
 			},
 		];
 
-		return this.promptButtons(
+		return await this.promptButtons(
 			confirmButtons,
 			title,
 			savePromise,
 			template,
-		).then((value: string) => {
+		).then(async (value: string) => {
 			if (value === 'confirm') {
-				return Promise.resolve(true);
+				return await Promise.resolve(true);
 			} else {
-				return Promise.reject(false);
+				return await Promise.reject(false);
 			}
 		});
 	}
 
-	confirmBoolean(
+	async confirmBoolean(
 		confirmText: string = 'OK',
 		title: string,
 		savePromise?: Promise<any>,
 		confirmButtonClass?: string,
 		template?: string,
 	) {
-		return this.confirm(
+		return await this.confirm(
 			confirmText,
 			title,
 			savePromise,
 			confirmButtonClass,
 			template,
-		).catch((err) => Promise.resolve(false));
+		).catch(async (err) => await Promise.resolve(false));
 	}
 
 	getInput(fieldName: string) {

@@ -53,8 +53,8 @@ export const routes: RoutesWithData = [
 			},
 			{
 				path: 'private',
-				loadChildren: () =>
-					import('../file-browser/file-browser.module').then(
+				loadChildren: async () =>
+					await import('../file-browser/file-browser.module').then(
 						(m) => m.FileBrowserModule,
 					),
 				data: {
@@ -65,8 +65,8 @@ export const routes: RoutesWithData = [
 			},
 			{
 				path: 'public',
-				loadChildren: () =>
-					import('../file-browser/file-browser.module').then(
+				loadChildren: async () =>
+					await import('../file-browser/file-browser.module').then(
 						(m) => m.FileBrowserModule,
 					),
 				data: {
@@ -77,8 +77,8 @@ export const routes: RoutesWithData = [
 			},
 			{
 				path: 'apps',
-				loadChildren: () =>
-					import('../apps/apps.module').then((m) => m.AppsModule),
+				loadChildren: async () =>
+					await import('../apps/apps.module').then((m) => m.AppsModule),
 				data: { title: 'Apps', showSidebar: true },
 			},
 			{
@@ -89,8 +89,8 @@ export const routes: RoutesWithData = [
 			},
 			{
 				path: 'shares',
-				loadChildren: () =>
-					import('../shares/shares.module').then((m) => m.SharesModule),
+				loadChildren: async () =>
+					await import('../shares/shares.module').then((m) => m.SharesModule),
 				data: { title: 'Shares', showSidebar: true },
 			},
 			{

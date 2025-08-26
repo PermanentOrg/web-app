@@ -13,8 +13,6 @@ export interface LocnPipeOutput {
 	standalone: false,
 })
 export class PrLocationPipe implements PipeTransform {
-	constructor() {}
-
 	transform(locnVO: LocnVOData): LocnPipeOutput {
 		if (!locnVO) {
 			return null;

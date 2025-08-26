@@ -18,24 +18,18 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { CountUpDirective } from 'ngx-countup';
 
-window.Stripe = () => {
-	return {
-		elements: () => {
-			return {
-				create: (card, options) => {},
-			};
+window.Stripe = () => ({
+	elements: () => ({
+		create: (card, options) => {},
+	}),
+	createToken: async (element, options) => ({
+		token: {
+			id: '0',
+			address_zip: '12345',
 		},
-		createToken: async (element, options) => {
-			return {
-				token: {
-					id: '0',
-					address_zip: '12345',
-				},
-				error: false,
-			};
-		},
-	};
-};
+		error: false,
+	}),
+});
 
 // Disable loading of external Google Maps API
 window.doNotLoadGoogleMapsAPI = true;

@@ -18,8 +18,6 @@ export class FormCreateComponent implements OnInit, OnDestroy {
 
 	protected closeWindowSub: Subscription;
 
-	constructor() {}
-
 	ngOnInit(): void {
 		this.closeWindowSub = this.closeWindowEvent?.subscribe(() => {
 			if (!this.waiting) {

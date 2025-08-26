@@ -15,9 +15,9 @@ describe('NameArchiveScreenComponent', () => {
 			.provide(OnboardingService)
 			.dontMock(OnboardingService);
 
-		spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
-			return mockSessionStorage[key] || null;
-		});
+		spyOn(sessionStorage, 'getItem').and.callFake(
+			(key: string) => mockSessionStorage[key] || null,
+		);
 		spyOn(sessionStorage, 'setItem').and.callFake(
 			(key: string, value: string) => {
 				mockSessionStorage[key] = value;

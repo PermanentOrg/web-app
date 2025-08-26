@@ -141,7 +141,7 @@ export class RightMenuComponent implements OnInit {
 		this.dataService.setMultiSelect(false);
 	}
 
-	createNewFolder() {
+	async createNewFolder() {
 		let createResolve, createReject;
 
 		const fields: PromptField[] = [
@@ -163,7 +163,7 @@ export class RightMenuComponent implements OnInit {
 			createReject = reject;
 		});
 
-		return this.prompt
+		return await this.prompt
 			.prompt(fields, 'Create new folder', createPromise, 'Create folder')
 			.then((value: any) => {
 				this.edit

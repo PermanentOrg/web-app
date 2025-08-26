@@ -139,20 +139,21 @@ export class MembersDialogComponent {
 		}
 	}
 
-	removeMember(member: AccountVO) {
+	async removeMember(member: AccountVO) {
 		const deferred = new Deferred();
 		const confirmTitle = `Remove ${member.fullName}'s access to The ${
 			this.accountService.getArchive().fullName
 		} Archive?`;
 
-		return this.promptService
+		return await this.promptService
 			.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
-			.then(() => {
-				return this.api.archive.removeMember(
-					member,
-					this.accountService.getArchive(),
-				);
-			})
+			.then(
+				async () =>
+					await this.api.archive.removeMember(
+						member,
+						this.accountService.getArchive(),
+					),
+			)
 			.then((response: ArchiveResponse) => {
 				this.message.showMessage({
 					message: 'Member removed successfully.',
@@ -266,8 +267,8 @@ export class MembersDialogComponent {
 		return 'members.' + accessRole.split('.').pop();
 	}
 
-	confirmOwnershipTransfer() {
-		return this.promptService.confirm(
+	async confirmOwnershipTransfer() {
+		return await this.promptService.confirm(
 			'Transfer ownership',
 			'Permanent Archives can only have one owner at a time. Once this is complete, your role will be changed to Manager',
 		);
@@ -292,9 +293,9 @@ export class MembersDialogComponent {
 
 		this.promptService
 			.prompt(fields, title, deferred.promise, 'Invite')
-			.then((value: any) => {
+			.then(async (value: any) => {
 				member.fullName = value.fullName;
-				return this.api.invite.sendMemberInvite(
+				return await this.api.invite.sendMemberInvite(
 					member,
 					this.accountService.getArchive(),
 				);

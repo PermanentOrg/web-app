@@ -251,11 +251,11 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 		return locn;
 
 		function getComponentName(
-			address_components: google.maps.GeocoderAddressComponent[],
+			addressComponents: google.maps.GeocoderAddressComponent[],
 			type,
 			getShortName = true,
 		) {
-			const component = find(address_components, (c) => c.types.includes(type));
+			const component = find(addressComponents, (c) => c.types.includes(type));
 			return component
 				? component[getShortName ? 'short_name' : 'long_name']
 				: null;

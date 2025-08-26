@@ -50,7 +50,7 @@ export class FolderPickerComponent implements OnDestroy {
 		this.folderPickerService.registerComponent(this);
 	}
 
-	show(
+	async show(
 		startingFolder: FolderVO,
 		operation: FolderPickerOperations,
 		savePromise?: Promise<any>,
@@ -87,7 +87,7 @@ export class FolderPickerComponent implements OnDestroy {
 
 		this.chooseFolderDeferred = new Deferred();
 
-		return this.chooseFolderDeferred.promise;
+		return await this.chooseFolderDeferred.promise;
 	}
 
 	onItemClick(item: ItemVO, evt: Event) {
@@ -160,16 +160,16 @@ export class FolderPickerComponent implements OnDestroy {
 		}
 	}
 
-	goToParentFolder() {
+	async goToParentFolder() {
 		const parentFolder = new FolderVO({
 			folder_linkId: this.currentFolder.parentFolder_linkId,
 			folderId: this.currentFolder.parentFolderId,
 		});
-		return this.setFolder(parentFolder);
+		return await this.setFolder(parentFolder);
 	}
 
-	loadCurrentFolderChildData() {
-		return this.dataService.fetchLeanItems(
+	async loadCurrentFolderChildData() {
+		return await this.dataService.fetchLeanItems(
 			this.currentFolder.ChildItemVOs,
 			this.currentFolder,
 		);

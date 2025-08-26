@@ -560,9 +560,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 			}
 		} else {
 			const groups = this.timelineGroups.get(breadcrumb.timespan);
-			const group = find(groups, (g: TimelineGroup | TimelineItem) => {
-				return g.dataType === 'group' && g.content === breadcrumb.text;
-			});
+			const group = find(
+				groups,
+				(g: TimelineGroup | TimelineItem) =>
+					g.dataType === 'group' && g.content === breadcrumb.text,
+			);
 			this.onGroupClick(group as TimelineGroup);
 		}
 	}

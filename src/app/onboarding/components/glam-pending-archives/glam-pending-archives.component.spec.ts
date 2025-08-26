@@ -7,11 +7,9 @@ import { OnboardingService } from '../../services/onboarding.service';
 import { GlamPendingArchivesComponent } from './glam-pending-archives.component';
 
 const mockAccountService = {
-	getAccount: () => {
-		return {
-			fullName: 'John Doe',
-		};
-	},
+	getAccount: () => ({
+		fullName: 'John Doe',
+	}),
 };
 
 describe('GlamPendingArchivesComponent', () => {
@@ -24,7 +22,7 @@ describe('GlamPendingArchivesComponent', () => {
 			.mock(AccountService, mockAccountService)
 			.mock(ApiService, {
 				archive: {
-					accept: (archive: ArchiveVO) => Promise.resolve(),
+					accept: async (archive: ArchiveVO) => await Promise.resolve(),
 				},
 			})
 			.provide({ provide: OnboardingService, useValue: onboardingService })

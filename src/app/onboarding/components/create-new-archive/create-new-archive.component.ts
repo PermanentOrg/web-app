@@ -297,9 +297,8 @@ export class CreateNewArchiveComponent implements OnInit {
 		}
 	}
 
-	public getArchiveType = (type: string): string => {
-		return archiveOptions.find((val) => val.type === type).text;
-	};
+	public getArchiveType = (type: string): string =>
+		archiveOptions.find((val) => val.type === type).text;
 
 	public navigate(event): void {
 		this.screen = event;

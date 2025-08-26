@@ -332,14 +332,14 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 		) {
 			try {
 				this.edit.deleteItems(this.selectedItems);
-				const sizeOfDeletedFiles = this.selectedItems.reduce((acc, item) => {
-					return (
+				const sizeOfDeletedFiles = this.selectedItems.reduce(
+					(acc, item) =>
 						acc +
 						(item instanceof RecordVO
 							? item.size
-							: item.FolderSizeVO.allFileSizeDeep)
-					);
-				}, 0);
+							: item.FolderSizeVO.allFileSizeDeep),
+					0,
+				);
 				this.account.deductAccountStorage(-sizeOfDeletedFiles);
 			} catch (err) {
 				if (err instanceof BaseResponse) {

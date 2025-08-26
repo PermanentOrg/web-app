@@ -24,15 +24,12 @@ class MockDialogRef {
 
 const mockApiService = {
 	folder: {
-		copy: (
+		copy: async (
 			folderVOs: FolderVO[],
 			destination: FolderVO,
-		): Promise<FolderResponse> => {
-			return Promise.resolve(new FolderResponse({}));
-		},
-		navigateLean: (folder: FolderVO): Observable<FolderResponse> => {
-			return new Observable<FolderResponse>();
-		},
+		): Promise<FolderResponse> => await Promise.resolve(new FolderResponse({})),
+		navigateLean: (folder: FolderVO): Observable<FolderResponse> =>
+			new Observable<FolderResponse>(),
 	},
 };
 

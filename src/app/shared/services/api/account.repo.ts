@@ -7,12 +7,12 @@ type AccountUpdateRequest = Pick<AccountVO, 'primaryEmail'> & {
 	postalCode?: string;
 } & Partial<AccountVO>;
 export class AccountRepo extends BaseRepo {
-	public get(accountVO: AccountVO) {
+	public async get(accountVO: AccountVO) {
 		const account = {
 			accountId: accountVO.accountId,
 		};
 
-		return this.http.sendRequestPromise<AccountResponse>(
+		return await this.http.sendRequestPromise<AccountResponse>(
 			'/account/get',
 			[account],
 			{ responseClass: AccountResponse },
@@ -63,7 +63,7 @@ export class AccountRepo extends BaseRepo {
 		)[0];
 	}
 
-	public delete(accountVO: AccountVO) {
+	public async delete(accountVO: AccountVO) {
 		const clone = new AccountVO(accountVO);
 		delete clone.notificationPreferences;
 
@@ -73,29 +73,32 @@ export class AccountRepo extends BaseRepo {
 			},
 		];
 
-		return this.http.sendRequestPromise<AccountResponse>(
+		return await this.http.sendRequestPromise<AccountResponse>(
 			'/account/delete',
 			data,
 			{ responseClass: AccountResponse },
 		);
 	}
 
-	public updateNotificationPreference(preferencePath: string, value: boolean) {
+	public async updateNotificationPreference(
+		preferencePath: string,
+		value: boolean,
+	) {
 		const data = [
 			{
 				SimpleVO: new SimpleVO({ key: preferencePath, value }),
 			},
 		];
 
-		return this.http.sendRequestPromise<AccountResponse>(
+		return await this.http.sendRequestPromise<AccountResponse>(
 			'/account/updatePreference',
 			data,
 			{ responseClass: AccountResponse },
 		);
 	}
 
-	public updateAccountTags(addTags: string[], removeTags: string[]) {
-		return this.httpV2
+	public async updateAccountTags(addTags: string[], removeTags: string[]) {
+		return await this.httpV2
 			.put<{}>(`/v2/account/tags`, { addTags, removeTags }, null)
 			.toPromise();
 	}

@@ -45,27 +45,25 @@ interface StoryArgs {
 	throwError?: boolean;
 }
 
-const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => {
-	return {
-		render: () => {
-			MockDirectiveRepo.reset();
-			if (args.hasLegacyContact) {
-				MockDirectiveRepo.legacyContactName = args.name;
-				MockDirectiveRepo.legacyContactEmail = args.email;
-			}
-			MockDirectiveRepo.throwError = !!args.throwError;
-			return {};
-		},
-		moduleMetadata: {
-			providers: [
-				{
-					provide: '__force_rerender_on_propschange__',
-					useValue: JSON.stringify(args),
-				},
-			],
-		},
-	};
-};
+const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => ({
+	render: () => {
+		MockDirectiveRepo.reset();
+		if (args.hasLegacyContact) {
+			MockDirectiveRepo.legacyContactName = args.name;
+			MockDirectiveRepo.legacyContactEmail = args.email;
+		}
+		MockDirectiveRepo.throwError = !!args.throwError;
+		return {};
+	},
+	moduleMetadata: {
+		providers: [
+			{
+				provide: '__force_rerender_on_propschange__',
+				useValue: JSON.stringify(args),
+			},
+		],
+	},
+});
 
 export const Default: Story = StoryTemplate({
 	hasLegacyContact: false,

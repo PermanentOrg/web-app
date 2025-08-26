@@ -39,9 +39,7 @@ export class VerifyEmbedComponent {
 
 		this.accountService
 			.verifyEmail(formValue.token)
-			.then(() => {
-				return this.accountService.switchToDefaultArchive();
-			})
+			.then(async () => await this.accountService.switchToDefaultArchive())
 			.then((_: ArchiveResponse) => {
 				this.waiting = false;
 				this.router.navigate(['..', 'done'], { relativeTo: this.route });

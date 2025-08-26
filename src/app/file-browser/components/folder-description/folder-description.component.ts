@@ -9,6 +9,4 @@ import { FolderVO } from '@models';
 })
 export class FolderDescriptionComponent {
 	@Input() folder: FolderVO;
-
-	constructor() {}
 }

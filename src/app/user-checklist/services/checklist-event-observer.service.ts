@@ -10,8 +10,6 @@ export class ChecklistEventObserverService implements EventObserver {
 	private subject = new Subject<void>();
 	private delayMs: number = 1000;
 
-	constructor() {}
-
 	public async update(_: PermanentEvent): Promise<void> {
 		setTimeout(() => {
 			this.subject.next();

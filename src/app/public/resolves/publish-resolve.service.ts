@@ -19,11 +19,11 @@ export class PublishResolveService {
 		private router: Router,
 	) {}
 
-	resolve(
+	async resolve(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Promise<any> {
-		return this.api.publish
+		return await this.api.publish
 			.getResource(route.params.publishUrlToken)
 			.then((response: PublishResponse): RecordVO | any => {
 				const item = response.getRecordVO() || response.getFolderVO();
@@ -43,14 +43,14 @@ export class PublishResolveService {
 					throw response;
 				}
 			})
-			.catch((response: PublishResponse) => {
+			.catch(async (response: PublishResponse) => {
 				if (response.getMessage) {
 					this.message.showError({
 						message: response.getMessage(),
 						translate: true,
 					});
 				}
-				return this.router.navigate(['p', 'error']);
+				return await this.router.navigate(['p', 'error']);
 			});
 	}
 }
