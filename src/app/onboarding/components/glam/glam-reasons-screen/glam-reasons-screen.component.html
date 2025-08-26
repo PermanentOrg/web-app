@@ -20,25 +20,38 @@
 		}
 	</div>
 	<div class="buttons">
-		<div class="back-button">
+		<div class="skip-step-button">
 			<pr-button
-				(buttonClick)="backToGoals()"
+				(buttonClick)="skipStep()"
+				[icon]="'onboarding/back-reverse'"
+				[orientation]="'right'"
+				[style]="{ 'justify-content': 'center', border: 'none' }"
 				[size]="'fill'"
-				[icon]="'onboarding/back'"
-				[style]="{ 'justify-content': 'center' }"
-				>Back</pr-button
+				>Skip this step</pr-button
 			>
 		</div>
-		<div class="next-button">
-			<pr-button
-				(buttonClick)="finalizeArchive()"
-				[orientation]="'right'"
-				[icon]="'onboarding/arrow-right'"
-				[size]="'fill'"
-				[variant]="'secondary'"
-				[style]="{ 'justify-content': 'center' }"
-				>Next</pr-button
-			>
+		<div class="action-buttons">
+			<div class="back-button">
+				<pr-button
+					(buttonClick)="backToGoals()"
+					[size]="'fill'"
+					[icon]="'onboarding/back'"
+					[style]="{ 'justify-content': 'center' }"
+					>Back</pr-button
+				>
+			</div>
+			<div class="next-button">
+				<pr-button
+					(buttonClick)="finalizeArchive()"
+					[orientation]="'right'"
+					[icon]="'onboarding/arrow-right'"
+					[size]="'fill'"
+					[variant]="'secondary'"
+					[style]="{ 'justify-content': 'center' }"
+					[disabled]="!selectedReasons.length"
+					>Next</pr-button
+				>
+			</div>
 		</div>
 	</div>
 </div>

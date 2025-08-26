@@ -49,4 +49,13 @@ export class GlamGoalsScreenComponent implements OnInit {
 		}
 		sessionStorage.setItem('goals', JSON.stringify(this.selectedGoals));
 	}
+
+	public skipStep(): void {
+		this.selectedGoals = [];
+		sessionStorage.setItem('goals', JSON.stringify([]));
+		this.goalsOutput.emit({
+			screen: 'reasons',
+			goals: [],
+		});
+	}
 }

@@ -88,4 +88,29 @@ describe('GlamGoalsScreenComponent', () => {
 			goals: ['Mock Goal', goal],
 		});
 	});
+
+	it('should clear selectedGoals and update sessionStorage when skipStep is called', async () => {
+		const { instance } = await shallow.render();
+
+		expect(instance.selectedGoals).toEqual(['Mock Goal']);
+
+		instance.skipStep();
+
+		expect(instance.selectedGoals).toEqual([]);
+		expect(sessionStorage.setItem).toHaveBeenCalledWith(
+			'goals',
+			JSON.stringify([]),
+		);
+	});
+
+	it('should emit goalsOutput with empty goals when skipStep is called', async () => {
+		const { instance, outputs } = await shallow.render();
+
+		instance.skipStep();
+
+		expect(outputs.goalsOutput.emit).toHaveBeenCalledWith({
+			screen: 'reasons',
+			goals: [],
+		});
+	});
 });
