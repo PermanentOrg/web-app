@@ -12,7 +12,7 @@
     "secrets.ts"
   ],
   "include": [
-    "/src/**/*.d.ts"
+    "**/*.d.ts"
   ],
   "exclude": [
     "**/*.stories.*"
