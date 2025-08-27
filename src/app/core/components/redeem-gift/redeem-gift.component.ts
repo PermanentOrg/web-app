@@ -83,7 +83,7 @@ export class RedeemGiftComponent implements OnInit {
 		const promo = response;
 		const bytes = promo.sizeInMB * (1024 * 1024);
 
-		if (spaceBeforeRefresh == spaceAfterRefresh) {
+		if (spaceBeforeRefresh === spaceAfterRefresh) {
 			this.account.addStorageBytes(bytes);
 		}
 

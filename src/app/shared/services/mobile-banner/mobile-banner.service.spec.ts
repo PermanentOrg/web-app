@@ -24,7 +24,7 @@ describe('BannerService', () => {
 		});
 
 		it('should be visible on Android', async () => {
-			const { instance } = await shallow.createService();
+			const { instance } = shallow.createService();
 
 			expect(instance.isVisible).toBeTrue();
 
@@ -41,7 +41,7 @@ describe('BannerService', () => {
 		});
 
 		it('should be visible on iOS', async () => {
-			const { instance } = await shallow.createService();
+			const { instance } = shallow.createService();
 
 			expect(instance.isVisible).toBeTrue();
 

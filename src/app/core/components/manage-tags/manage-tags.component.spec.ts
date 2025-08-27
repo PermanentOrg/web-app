@@ -112,7 +112,7 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 
 		find('.delete')[0].nativeElement.click();
 		await fixture.whenStable();
-		await fixture.detectChanges();
+		fixture.detectChanges();
 
 		expect(state.deleted).toBeTrue();
 		expect(state.deletedTag!.name).toBe('Potato');
@@ -147,7 +147,7 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 		const { find, fixture } = await render();
 
 		find('.edit')[0].nativeElement.click();
-		await fixture.detectChanges();
+		fixture.detectChanges();
 
 		expect(find('.tag input').length).toBe(1);
 		expect(find('.tag input').nativeElement.value).toBe('Potato');
@@ -158,7 +158,7 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 		const { find, fixture, outputs } = await render();
 
 		find('.edit')[0].nativeElement.click();
-		await fixture.detectChanges();
+		fixture.detectChanges();
 
 		const input = find('.tag input').nativeElement;
 		input.focus();
@@ -166,7 +166,7 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 		input.dispatchEvent(new Event('change'));
 		input.form.dispatchEvent(new Event('submit'));
 		await fixture.whenStable();
-		await fixture.detectChanges();
+		fixture.detectChanges();
 
 		expect(find('.tag input').length).toBe(0);
 		expect(state.renamed).toBeTrue();
@@ -179,13 +179,13 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 		const { find, fixture } = await render();
 
 		find('.edit')[0].nativeElement.click();
-		await fixture.detectChanges();
+		fixture.detectChanges();
 
 		const input = find('.tag input').nativeElement;
 		input.value = 'Do Not Show Value';
 		input.dispatchEvent(new Event('change'));
 		find('.cancel').nativeElement.click();
-		await fixture.detectChanges();
+		fixture.detectChanges();
 
 		expect(find('.cancel').length).toBe(0);
 		expect(find('.tag')[0].nativeElement.textContent).not.toContain(
@@ -209,7 +209,7 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 
 			input.value = val;
 			input.dispatchEvent(new Event('change'));
-			await fixture.detectChanges();
+			fixture.detectChanges();
 
 			expect(find('.tag').length).toBe(expectedCount);
 		}

@@ -169,7 +169,7 @@ export class DataService {
 			currentFolder = this.currentFolder;
 		} else {
 			handleItemRegistration = true;
-			items.map((item) => {
+			items.forEach((item) => {
 				this.registerItem(item);
 			});
 		}
@@ -214,7 +214,7 @@ export class DataService {
 			)
 			.toPromise()
 			.then(async (leanItems) => {
-				leanItems.map((leanItem, index) => {
+				leanItems.forEach((leanItem, index) => {
 					const item = this.byFolderLinkId[leanItem.folder_linkId];
 					if (item) {
 						this.byArchiveNbr[leanItem.archiveNbr] = item;
@@ -237,7 +237,7 @@ export class DataService {
 				});
 
 				if (handleItemRegistration) {
-					items.map((item) => {
+					items.forEach((item) => {
 						this.unregisterItem(item);
 					});
 				}
@@ -247,7 +247,7 @@ export class DataService {
 				return await Promise.resolve(leanItems.length);
 			})
 			.catch((response) => {
-				itemRejects.map((reject, index) => {
+				itemRejects.forEach((reject, index) => {
 					items[index].isFetching = false;
 					items[index].fetched = null;
 					reject();
@@ -329,7 +329,7 @@ export class DataService {
 					this.tags.checkTagsOnItem(folders[i]);
 				}
 
-				itemResolves.map((resolve, index) => {
+				itemResolves.forEach((resolve, index) => {
 					items[index].fetched = null;
 					this.byArchiveNbr[items[index].archiveNbr] = items[index];
 					resolve();
@@ -340,7 +340,7 @@ export class DataService {
 				return await Promise.resolve(true);
 			})
 			.catch(() => {
-				itemRejects.map((reject, index) => {
+				itemRejects.forEach((reject, index) => {
 					items[index].fetched = null;
 					reject();
 				});

@@ -86,7 +86,7 @@ describe('DataService', () => {
 		});
 
 		service.fetchLeanItems(currentFolder.ChildItemVOs).then(() => {
-			currentFolder.ChildItemVOs.map((item) => {
+			currentFolder.ChildItemVOs.forEach((item) => {
 				expect(item.dataStatus).toEqual(DataStatus.Lean);
 			});
 		});
@@ -125,7 +125,7 @@ describe('DataService', () => {
 		const records = currentFolder.ChildItemVOs.filter((item) => item.isRecord);
 
 		service.fetchFullItems(records).then(() => {
-			records.map((item) => {
+			records.forEach((item) => {
 				expect(item.dataStatus).toEqual(DataStatus.Full);
 			});
 		});
@@ -175,7 +175,7 @@ describe('DataService', () => {
 		});
 
 		service.fetchLeanItems(currentFolder.ChildItemVOs).then(() => {
-			currentFolder.ChildItemVOs.map((item) => {
+			currentFolder.ChildItemVOs.forEach((item) => {
 				expect(service.getThumbRefreshQueue()).not.toContain(item);
 			});
 		});

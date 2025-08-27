@@ -172,7 +172,7 @@ export class ConnectorComponent implements OnInit {
 		);
 
 		try {
-			await this.dialog.open(FamilySearchImportComponent, { data });
+			this.dialog.open(FamilySearchImportComponent, { data });
 		} catch (err) {}
 	}
 

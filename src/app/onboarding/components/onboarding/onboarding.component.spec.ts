@@ -126,7 +126,7 @@ describe('OnboardingComponent #onboarding', () => {
 
 		const { instance, find, fixture, element } = await shallow.render();
 
-		await instance.ngOnInit();
+		instance.ngOnInit();
 
 		if (instance.pendingArchives.length > 0) {
 			expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
@@ -177,7 +177,7 @@ describe('OnboardingComponent #onboarding', () => {
 
 		const { instance } = await shallow.render();
 
-		await instance.ngOnInit();
+		instance.ngOnInit();
 
 		if (instance.pendingArchives.length > 0) {
 			expect(instance.screen).toBe(OnboardingScreen.pendingArchives);

@@ -67,7 +67,7 @@ describe('ProfileService', () => {
 	});
 
 	it('should exist', async () => {
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 
 		expect(instance).toBeTruthy();
 	});
@@ -118,7 +118,7 @@ describe('ProfileService', () => {
 				},
 			],
 		};
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 		(instance as any).profileItemDictionary = mockDictionary;
 
 		const progress = instance.calculateProfileProgress();
@@ -173,7 +173,7 @@ describe('ProfileService', () => {
 				},
 			],
 		};
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 		(instance as any).profileItemDictionary = mockDictionary;
 
 		const progress = instance.calculateProfileProgress();
@@ -183,7 +183,7 @@ describe('ProfileService', () => {
 
 	it('should return 0 when no fields have any values', async () => {
 		const mockDictionary = {};
-		const { instance } = await shallow.createService();
+		const { instance } = shallow.createService();
 		(instance as any).profileItemDictionary = mockDictionary;
 
 		const progress = instance.calculateProfileProgress();

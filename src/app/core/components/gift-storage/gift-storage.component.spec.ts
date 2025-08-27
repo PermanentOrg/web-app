@@ -65,7 +65,7 @@ describe('GiftStorageComponent', () => {
 
 		instance.availableSpace = '10';
 
-		await instance.giftForm.controls.email.setValue('test@example.com');
+		instance.giftForm.controls.email.setValue('test@example.com');
 		instance.giftForm.controls.amount.setValue('1');
 
 		instance.isAsyncValidating = false;
@@ -118,7 +118,7 @@ describe('GiftStorageComponent', () => {
 
 		instance.availableSpace = '5';
 
-		await instance.giftForm.controls.email.setValue('test@example.com');
+		instance.giftForm.controls.email.setValue('test@example.com');
 		instance.giftForm.controls.amount.setValue('10');
 
 		instance.giftForm.updateValueAndValidity();
@@ -136,7 +136,7 @@ describe('GiftStorageComponent', () => {
 
 		instance.availableSpace = '5';
 
-		await instance.giftForm.controls.email.setValue(
+		instance.giftForm.controls.email.setValue(
 			'test@example.com,test1@example.com',
 		);
 		instance.giftForm.controls.amount.setValue('2');
@@ -154,7 +154,7 @@ describe('GiftStorageComponent', () => {
 
 		instance.availableSpace = '5';
 
-		await instance.giftForm.controls.email.setValue(
+		instance.giftForm.controls.email.setValue(
 			'test@example.com,test1@example.com',
 		);
 		instance.giftForm.controls.amount.setValue('4');

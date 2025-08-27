@@ -91,7 +91,7 @@ export class UserChecklistComponent implements OnInit, OnDestroy {
 					// fail silently and let the finally block hide the component
 				})
 				.finally(() => {
-					if (this.items.length == 0) {
+					if (this.items.length === 0) {
 						this.isDisplayed = false;
 					}
 				});

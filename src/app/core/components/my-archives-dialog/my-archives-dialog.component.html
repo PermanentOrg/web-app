@@ -82,7 +82,7 @@
 					<pr-new-archive-form
 						[showRelations]="true"
 						(success)="onNewArchiveFormSubmit($event)"
-						(error)="onNewArchiveFormFailure($event)"
+						(errorOccurred)="onNewArchiveFormFailure($event)"
 					></pr-new-archive-form>
 				}
 			}
