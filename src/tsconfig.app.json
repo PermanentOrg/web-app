@@ -1,20 +1,10 @@
 {
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../out-tsc/app",
-    "types": [
-      "node"
-    ]
-  },
-  "files": [
-    "main.ts",
-    "polyfills.ts",
-    "secrets.ts"
-  ],
-  "include": [
-    "**/*.d.ts"
-  ],
-  "exclude": [
-    "**/*.stories.*"
-  ]
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../out-tsc/app",
+		"types": ["node"]
+	},
+	"files": ["main.ts", "polyfills.ts", "secrets.ts"],
+	"include": ["**/*.d.ts"],
+	"exclude": ["**/*.stories.*"]
 }

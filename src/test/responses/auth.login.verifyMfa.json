@@ -1,25 +1,20 @@
 {
-  "Results": [
-    {
-      "data": null,
-      "message": [
-        "warning.auth.mfaToken",
-        "email"
-      ],
-      "status": false,
-      "resultDT": "2018-07-19T19:07:27.000000",
-      "createdDT": null,
-      "updatedDT": null
-    }
-  ],
-  "isSuccessful": false,
-  "actionFailKeys": [
-    0
-  ],
-  "isSystemUp": true,
-  "systemMessage": "Everything is A-OK",
-  "csrf": "b6e1a7f546006d1b1f893a55930e041c",
-  "vaultExpirationTime": "2018-07-18T19:02:14.000000",
-  "createdDT": null,
-  "updatedDT": null
+	"Results": [
+		{
+			"data": null,
+			"message": ["warning.auth.mfaToken", "email"],
+			"status": false,
+			"resultDT": "2018-07-19T19:07:27.000000",
+			"createdDT": null,
+			"updatedDT": null
+		}
+	],
+	"isSuccessful": false,
+	"actionFailKeys": [0],
+	"isSystemUp": true,
+	"systemMessage": "Everything is A-OK",
+	"csrf": "b6e1a7f546006d1b1f893a55930e041c",
+	"vaultExpirationTime": "2018-07-18T19:02:14.000000",
+	"createdDT": null,
+	"updatedDT": null
 }

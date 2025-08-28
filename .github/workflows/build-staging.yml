@@ -2,7 +2,7 @@ name: Staging build and upload
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
   workflow_dispatch:
 
@@ -19,26 +19,26 @@ jobs:
       fusionauth-host: ${{ secrets.FUSIONAUTH_HOST_DEV }}
       fontawesome-token: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
     with:
-      build-command: "build:staging"
-      artifact-name: "staging"
+      build-command: 'build:staging'
+      artifact-name: 'staging'
 
   build-storybook:
     uses: ./.github/workflows/build-storybook.yml
     secrets: inherit
     with:
-      artifact-name: "staging"
+      artifact-name: 'staging'
 
   upload-sourcemaps:
     needs: build
     uses: ./.github/workflows/upload-sourcemaps.yml
     secrets: inherit
     with:
-      artifact-name: "staging"
+      artifact-name: 'staging'
 
   upload-code:
     needs: [build, build-storybook]
     uses: ./.github/workflows/upload-code.yml
     secrets: inherit
     with:
-      artifact-name: "staging"
-      s3-destination: "s3://permanent-repos/staging/mdot.tar.gz"
+      artifact-name: 'staging'
+      s3-destination: 's3://permanent-repos/staging/mdot.tar.gz'

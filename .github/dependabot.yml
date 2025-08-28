@@ -1,24 +1,24 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "daily"
+      interval: 'daily'
     groups:
       storybook:
         patterns:
-          - "@storybook/*"
-          - "storybook"
-          - "eslint-plugin-storybook"
-          - "@chromatic-com/storybook"
+          - '@storybook/*'
+          - 'storybook'
+          - 'eslint-plugin-storybook'
+          - '@chromatic-com/storybook'
       eslint:
         patterns:
-          - "*eslint*"
+          - '*eslint*'
     ignore:
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
 
-  - package-ecosystem: "github-actions"
-    directory: ".github/workflows"
+  - package-ecosystem: 'github-actions'
+    directory: '.github/workflows'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'

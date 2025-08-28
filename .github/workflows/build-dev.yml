@@ -2,7 +2,7 @@ name: Dev build and deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
   workflow_dispatch:
 
@@ -19,29 +19,29 @@ jobs:
       fusionauth-host: ${{ secrets.FUSIONAUTH_HOST_DEV }}
       fontawesome-token: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
     with:
-      build-command: "build:dev"
-      artifact-name: "dev"
+      build-command: 'build:dev'
+      artifact-name: 'dev'
 
   build-storybook:
     uses: ./.github/workflows/build-storybook.yml
     secrets: inherit
     with:
-      artifact-name: "dev"
+      artifact-name: 'dev'
 
   upload-sourcemaps:
     needs: build
     uses: ./.github/workflows/upload-sourcemaps.yml
     secrets: inherit
     with:
-      artifact-name: "dev"
+      artifact-name: 'dev'
 
   upload-code:
     needs: [build, build-storybook]
     uses: ./.github/workflows/upload-code.yml
     secrets: inherit
     with:
-      artifact-name: "dev"
-      s3-destination: "s3://permanent-repos/dev/mdot.tar.gz"
+      artifact-name: 'dev'
+      s3-destination: 's3://permanent-repos/dev/mdot.tar.gz'
 
   deploy:
     needs: [upload-code, upload-sourcemaps]

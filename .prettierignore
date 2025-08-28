@@ -1,8 +1,1 @@
-*.json
-*.webmanifest
-*.yml
-node_modules
-test-reports
-dist
-index.html
 src/styles/vendor

@@ -12,7 +12,7 @@ on:
         type: string
 
 jobs:
-   upload-code:
+  upload-code:
     runs-on: ubuntu-latest
     steps:
       - name: Download dist

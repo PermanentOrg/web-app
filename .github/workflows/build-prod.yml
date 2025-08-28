@@ -2,7 +2,7 @@ name: Prod build and upload
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -18,26 +18,26 @@ jobs:
       mixpanel-token: ${{ secrets.MIXPANEL_TOKEN_PROD }}
       fontawesome-token: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
     with:
-      build-command: "build"
-      artifact-name: "prod"
+      build-command: 'build'
+      artifact-name: 'prod'
 
   build-storybook:
     uses: ./.github/workflows/build-storybook.yml
     secrets: inherit
     with:
-      artifact-name: "prod"
+      artifact-name: 'prod'
 
   upload-sourcemaps:
     needs: build
     uses: ./.github/workflows/upload-sourcemaps.yml
     secrets: inherit
     with:
-      artifact-name: "prod"
+      artifact-name: 'prod'
 
   upload-code:
     needs: [build, build-storybook]
     uses: ./.github/workflows/upload-code.yml
     secrets: inherit
     with:
-      artifact-name: "prod"
-      s3-destination: "s3://permanent-repos/prod/mdot.tar.gz"
+      artifact-name: 'prod'
+      s3-destination: 's3://permanent-repos/prod/mdot.tar.gz'

@@ -3,28 +3,28 @@ on:
   workflow_call:
     secrets:
       google-api-key:
-        description: "Google API key"
+        description: 'Google API key'
         required: true
       firebase-api-key:
-        description: "Firebase API key"
+        description: 'Firebase API key'
         required: true
       stripe-api-key:
-        description: "Stripe API key"
+        description: 'Stripe API key'
         required: true
       recaptcha-api-key:
-        description: "Recaptcha API key"
+        description: 'Recaptcha API key'
         required: true
       stela-domain:
-        description: "Domain to route Stela requests to"
+        description: 'Domain to route Stela requests to'
         required: true
       mixpanel-token:
-        description: "Mixpanel API key"
+        description: 'Mixpanel API key'
         required: true
       fusionauth-host:
-        description: "FusionAuth host"
+        description: 'FusionAuth host'
         required: false
       fontawesome-token:
-        description: "FontAwesome package token"
+        description: 'FontAwesome package token'
         required: true
     inputs:
       build-command:
