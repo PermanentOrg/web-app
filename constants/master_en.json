@@ -1,1112 +1,1112 @@
 {
-  "access": {
-    "role": {
-      "admin": "Admin",
-      "contributor": "Contributor",
-      "curator": "Curator",
-      "manager": "Manager",
-      "owner": "Owner",
-      "viewer": "Viewer",
-      "editor": "Editor"
-    }
-  },
-  "activity": {
-    "grouping": {
-      "account": "Account",
-      "archive": "Archive",
-      "auth": "Authorization",
-      "contact": "Contact",
-      "daemon": "Daemon",
-      "download": "Download",
-      "invite": "Invite",
-      "locn": "Location",
-      "private": "Private",
-      "relation": "Relation",
-      "share": "Share",
-      "tag": "Keyword",
-      "task": "Task",
-      "unit_test": "UnitTest"
-    }
-  },
-  "connector": {
-    "current_state": {
-      "idle": "Waiting to run again",
-      "running": "Running right now",
-      "error": "Errored out"
-    }
-  },
-  "error": {
-    "api": {
-      "dev_only": "This endpoint is still in development",
-      "invalid_request": "The data passed in was invalid",
-      "limit_exceeded": "API Rate limit exceeded.",
-      "mobile_only": "This endpoint is for mobile only",
-      "no_key": "No API key found in request."
-    },
-    "access": {
-      "role_invald": "This access role is invalid",
-      "lookup": "Access lookup failed."
-    },
-    "account": {
-      "lookup": "Account not found",
-      "same_account": "The archive you want to transfer is already yours."
-    },
-    "account_allocation": {
-      "lookup": "Data lookup failed (AL)"
-    },
-    "account_archive": {
-      "lookup": "Data lookup failed (AA)"
-    },
-    "account_password": {
-      "lookup": "Data lookup failed (AP)"
-    },
-    "account_space": {
-      "lookup": "Data lookup failed (AS)"
-    },
-    "account_token": {
-      "lookup": "Data lookup failed (AT)"
-    },
-    "archive": {
-      "lookup": "Archive lookup failed",
-      "not_public": "This archive is not publicly accessible."
-    },
-    "archive_nbr": {
-      "lookup": "Data lookup failed (AN)"
-    },
-    "auth": {
-      "lookup": "Data lookup failed (AU)"
-    },
-    "bad": {
-      "request": "Request failed"
-    },
-    "base_queue": {
-      "lookup": "Data lookup failed (BQ)"
-    },
-    "billing": {
-      "receipt": {
-        "generation": "Receipt generation failed."
-      },
-      "stripe": {
-        "card_decline": "The requested payment method was declined.",
-        "card_expired": "Your card has expired.",
-        "failure": "Sorry, we were unable to process your payment. Please check all entered information and try again later."
-      },
-      "pledge": {
-        "already_claimed": "This donation has already been claimed",
-        "lookup": "Donation not found",
-        "update": "This donation could not be updated"
-      }
-    },
-    "connector": {
-      "connection_error": "Unable to connect to that account",
-      "facebook_response": "Facebook error",
-      "facebook_sdk": "Facebook error",
-      "familysearch_response": "FamilySearch error",
-      "lookup": "Data lookup failed (CO)"
-    },
-    "contact": {
-      "lookup": "Contact not found"
-    },
-    "daemon": {
-      "queue_delete": "The queue failed on a deleting an item from itself.",
-      "queue_non_complete": "The queue didn't complete the action in the requisite number of tries."
-    },
-    "file": {
-      "lookup": "File not found",
-      "conversion_failed": "The system was unable to convert the file!"
-    },
-    "folder": {
-      "lookup": "Folder not found",
-      "lookup_root": "Root folder not found",
-      "move_break_link": "Cannot complete this move as it would break the folder linking.",
-      "no_link_share": "You cannot link to a share",
-      "no_link_exists": "This folder does not have a link in that location.",
-      "no_link_root": "You cannot link a root folder",
-      "no_unlink_lib": "You cannot unlink folders in the private.",
-      "no_unlink_root": "You cannot unlink a root folder",
-      "no_update_root": "You cannot update root folders",
-      "not_public": "This folder is not publicly accessible."
-    },
-    "folder_link": {
-      "lookup": "Data lookup failed (FL)"
-    },
-    "generic": {
-      "create_fail": "Sorry for the inconvenience, the action could not be completed please try again.",
-      "exclusivity_fail": "There was more than 1 item identified so the action requested could not be completed",
-      "hard_delete_fail": "Sorry for the inconvenience, the action could not be completed please try again.",
-      "internal": "Sorry for the inconvenience, the action could not be completed please try again.",
-      "invalid_csrf": "We apologize for the inconvenience but our system could not verify all of the necessary information we need to keep your connection secure. You may need to log out, delete your cookies, and clear your cache.",
-      "orphaning_fail": "Sorry for the inconvenience, the action could not be completed please try again.",
-      "no_action_permission": "You do not have permission to perform this action. Please contact the owner to ask for permission. If you are the file owner and are getting this message, please contact Support and let us know.",
-      "no_archive_selected": "Please select a permanent archive and then retry",
-      "no_object_permission": "You do not have permission to access this item. Please contact the owner to ask for permission. If you are the file owner and are getting this message, please contact Support and let us know.",
-      "soft_delete_fail": "We could not delete the item you selected. Please try again or contact Support.",
-      "update_fail": "We could not update the item you selected. Please try again or contact Support."
-    },
-    "getting": {
-      "presigned": {
-        "url": "The upload could not be started"
-      }
-    },
-    "imagick": {
-      "read_image_blob": "The image format wasn't something we expected"
-    },
-    "invite": {
-      "already_invited": "This email address has already been invited. Thank you for sharing interest.",
-      "already_registered": "This email is already associated with an account and doesn't require an invitation.",
-      "lookup": "Invite could not be found",
-      "not_authorized": "Not Authorized"
-    },
-    "locn": {
-      "lookup": "Location not found"
-    },
-    "notification": {
-      "lookup": "Notification not found"
-    },
-    "preference": {
-      "lookup": "Preference not found"
-    },
-    "profile_item": {
-      "lookup": "Profile Item not found",
-      "no_delete": "You are not allowed to delete this profile item"
-    },
-    "relation": {
-      "lookup": "Relation not found"
-    },
-    "pr": {
-      "duplicate_share": "This account already has access to the Permanent Archive",
-      "no_link": "This account does not have access to the requested Permanent Archive",
-      "no_share_owner": "You cannot share ownership of a Permanent Archive",
-      "update_share_owner": "You cannot change the access level of the Permanent Archive owner",
-      "pending_owner": "There is already a pending owner for this Permanent Archive"
-    },
-    "record": {
-      "dest_invalid": "You can only upload files to Private or Vault.",
-      "empty_dest": "Please choose a destination for the copy of this item.",
-      "file_invalid": "This file appears to be invald and cannot be processed.",
-      "last_lib_link": "This is the only link to the file in Private. You cannot unlink all instances of this file in Private.",
-      "last_link": "This is the only link to the file and cannot be unlinked. You can delete the file if you wish to remove it.",
-      "link_dest_exists": "This file is already linked in that location.",
-      "lookup": "File not found",
-      "no_link_exists": "This file does not have a link in that location.",
-      "not_in_lib": "This file is not in Private so the requested action cannot be completed.",
-      "not_public": "This file is not publicly accessible."
-    },
-    "record_file": {
-      "lookup": "Data lookup failed (RF)"
-    },
-    "session": {
-      "lookup": "Data lookup failed (SE)",
-      "expired": "The Session has expired, please log in."
-    },
-    "simple": {
-      "lookup": "Data lookup failed (SI)"
-    },
-    "share": {
-      "lookup": "Data lookup failed (SH)",
-      "already_exists": "A share for this item and archive already exists",
-      "no_create": "You do not have permission to share this item"
-    },
-    "stripe": {
-      "lookup": "Data lookup failed (ST)"
-    },
-    "system": {
-      "mysql": ""
-    },
-    "tag": {
-      "lookup": "Keyword not found"
-    },
-    "task_singleton": {
-      "lookup": "Data lookup failed (TS)"
-    },
-    "task_throttle": {
-      "lookup": "Data lookup failed (TT)"
-    },
-    "text_data": {
-      "lookup": "Data lookup failed (TD)"
-    },
-    "third_party": {
-      "google_over_query_limit": "Google is experiencing high volume"
-    },
-    "timezone": {
-      "lookup": "TimeZone not found"
-    },
-    "upload": {
-      "md5_check_failed": "Item not found"
-    },
-    "validate": {
-      "destination_url": "Invalid upload destination URL"
-    },
-    "zip": {
-      "missing_items": "No items to be zipped were included in the request.",
-      "lookup": "No matching zip could be found.",
-      "invalid_archive": "The item you requested to be zipped is not in your archive."
-    }
-  },
-  "file": {
-    "format": {
-      "original": "original",
-      "converted": "converted",
-      "1920x1080": "1920x1080"
-    }
-  },
-  "folder": {
-    "view": {
-      "grid": "Grid",
-      "tile": "Tile",
-      "list": "List",
-      "slideshow": "Slideshow",
-      "timeline": "Timeline",
-      "map": "Map",
-      "storyslider": "Story Slider",
-      "storyscroll": "Story Scroll",
-      "date": "Group by Day",
-      "mosaic": "Mosaic",
-      "storysimple": "Story Simple",
-      "gliding": "Gliding",
-      "collage": "Collage",
-      "collagedetail": "Collage Detail",
-      "table": "Table",
-      "gallery": "Gallery",
-      "found": "Found"
-    }
-  },
-  "geomap": {
-    "address": "Request in address form",
-    "latlong": "Request in latitude and longitude form"
-  },
-  "organization": {
-    "name": "Permanent Legacy Foundation",
-    "slogan": "Preserving your digital Legacy"
-  },
-  "pages": {
-    "apps": {
-      "description": "Welcome to apps section. This is where you can manage all the 3rd party apps you have connected with."
-    },
-    "private": {
-      "description": "Welcome to My Files, a place to organize all the files you have uploaded. If you would like to share something with someone, you can do it by selecting that item and choosing the desired user and their access permission."
-    },
-    "public": {
-      "description": "This is your Public folder. Place files and information in this folder that you would want everyone in the world to be able to see for eternity. Do not put information here that you do not want publicly available right away. Tell your life story. Add the things you would like to share and preserve."
-    },
-    "shares": {
-      "description": "Welcome to your archive shared section. This is where you can share files and folders between archives.You can create shared folders that allow multiple people to own, contribute and curate together."
-    }
-  },
-  "process": {
-    "thumbnail_redo_before": "Need to regenerate thumbnail before work",
-    "thumbnail_redo_during": "Need to regenerate thumbnail during work",
-    "thumbnail_redo_after": "Need to regenerate thumbnail after work"
-  },
-  "profile": {
-    "basic": "Basic",
-    "birth_info": "Birth Info",
-    "blurb": "Blurb",
-    "closure_info": "Closure Info",
-    "death_info": "Death Info",
-    "description": "Description",
-    "established_info": "Established Info",
-    "email": "Email",
-    "gender": "Gender",
-    "home": "Home",
-    "job": "Job",
-    "location": "Location",
-    "phone_nbr": "Phone #",
-    "social_media": "Social Media",
-    "timezone": "Timezone"
-  },
-  "record": {
-    "encryption": {
-      "client_side": "File was encrypted on the client",
-      "none": "File is unencrypted "
-    }
-  },
-  "relation": {
-    "family": {
-      "aunt": "Aunt",
-      "boyfriend": "Boyfriend",
-      "brother": "Brother",
-      "brother_in_law": "Brother-in-Law",
-      "cousin": "Cousin",
-      "daughter": "Daughter",
-      "daughter_in_law": "Daughter-in-Law",
-      "ex_husband": "Ex-Husband",
-      "ex_spouse": "Ex-Spouse",
-      "ex_wife": "Ex-Wife",
-      "father": "Father",
-      "father_in_law": "Father-in-Law",
-      "foster_child": "Foster Child",
-      "foster_parent": "Foster Parent",
-      "girlfriend": "Girlfriend",
-      "granddaughter": "Granddaughter",
-      "grandfather": "Grandfather",
-      "grandmother": "Grandmother",
-      "grandparent": "Grandparent",
-      "grandson": "Grandson",
-      "husband": "Husband",
-      "legal_guardian": "Legal Guardian",
-      "life_partner": "Life Partner",
-      "mother": "Mother",
-      "mother_in_law": "Mother-in-Law",
-      "nephew": "Nephew",
-      "niece": "Niece",
-      "parent": "Parent",
-      "partner": "Partner",
-      "sibling": "Sibling",
-      "sister": "Sister",
-      "sister_in_law": "Sister-in-Law",
-      "son": "Son",
-      "son_in_law": "Son-in-Law",
-      "spouse": "Spouse",
-      "stepbrother": "Stepbrother",
-      "stepdaughter": "Stepdaughter",
-      "stepfather": "Stepfather",
-      "stepmother": "Stepmother",
-      "stepsister": "Stepsister",
-      "stepson": "Stepson",
-      "uncle": "Uncle",
-      "wife": "Wife"
-    },
-    "other": "Other",
-    "acquaintance": "Acquaintance",
-    "associate": "Associate",
-    "advisor": "Advisor",
-    "board_member": "Board Member",
-    "business_partner": "Business Partner",
-    "colleague": "Colleague",
-    "community_member": "Community Member",
-    "contractor": "Contractor",
-    "coworker": "Coworker",
-    "customer": "Customer",
-    "director": "Director",
-    "fan": "Fan",
-    "friend": "Friend",
-    "member": "Member",
-    "neighbor": "Neighbor",
-    "parent_company": "Parent Company",
-    "professional_connection": "Professional Connection",
-    "subsidiary": "Subsidiary",
-    "supplier": "Supplier",
-    "supporter": "Supporter",
-    "volunteer": "Volunteer",
-    "family_member": "Group Member",
-    "employee": "Employee",
-    "employer": "Employer",
-    "owner": "Owner",
-    "executive": "Executive"
-  },
-  "report": {
-    "action": {
-      "md5": "Running the bit checker for md5 inconsistencies"
-    }
-  },
-  "simplevo": {
-    "key": {
-      "auth_url": "Authorization URL",
-      "count": "Count"
-    }
-  },
-  "status": {
-    "archive": {
-      "gen_avatar": "The avatar is being generated"
-    },
-    "auth": {
-      "ok": "Your account has been verified.",
-      "need_email_and_phone": "We haven't received both your email and phone verification. We need you to verify both before you can login. Click here to resend validation. ",
-      "need_email": "We haven't received your email verification. We need you to verify your email before you can login. Click here to resend validation.",
-      "need_phone": "We haven't received your phone number verification. We need you to verify your phone number before you can login. Click here to resend validation.",
-      "verified": "We have verified your contact information.",
-      "unverified": "We need to verify your contact information.",
-      "none": "No verification is necessary"
-    },
-    "account_space": {
-      "positive": "Positive balance.",
-      "negative": "Negative balance. "
-    },
-    "account_allocation": {
-      "accepted": "Transfer completed space went to toAccount.",
-      "cancelled": "Transfer cancelled space went back to original account.",
-      "expired": "Transfer expired space went back to original account. ",
-      "in_progress": "Transfer waiting to be completed."
-    },
-    "billing_transfer": {
-      "ownership_accept": "Transfer ownership of Account was accepted",
-      "ownership_in_progress": "Transfer ownership of Account was started",
-      "ownership_revoke": "Transfer ownership of Account was revoked"
-    },
-    "connector": {
-      "connected": "Connected",
-      "disconnected": "Disconnected",
-      "not_setup": "Not setup yet",
-      "unknown": "Unknown at this time"
-    },
-    "contact": {
-      "accepted": "Accepted",
-      "confirmed": "Confirmed",
-      "pending": "Request Sent",
-      "rejected": "Declined",
-      "revoked": "Contact was revoked"
-    },
-    "folder": {
-      "genthumb": "The folder thumbnail is regenerating",
-      "new": "The folder is new and needs to be processed",
-      "moving": "This folder or some of it's contents are being moved and cannot be accessed until the move is completed.",
-      "copying": "This folder or some of it's contents are being copied and cannot be access until the copy is completed."
-    },
-    "generic": {
-      "declined": "This item has been declined.",
-      "deleted": "This thing is deleted.",
-      "error": "This item has an error, seek administrator help.",
-      "invited": "This came from an invitation",
-      "ok": "Everything is normal.",
-      "orphaned": "This thing has been orphaned",
-      "pending": "This item is pending something.",
-      "undefined": "An undefined status, probably a bad thing.",
-      "manual_review": "This item needs to be investigated manually to determine what is wrong."
-    },
-    "invite": {
-      "accepted": "Accepted",
-      "pending": "Invitation Sent",
-      "rejected": "Declined",
-      "revoked": "Invite was revoked"
-    },
-    "notification": {
-      "emailed": "This notification was emailed.",
-      "error": "There was an error during directive processing.",
-      "new": "This notification just came into being.",
-      "read": "This notification has read.",
-      "seen": "This notification was seen."
-    },
-    "promo": {
-      "valid": "This notification was emailed.",
-      "invalid": "There was an error during directive processing."
-    },
-    "record": {
-      "needs_processing": "This file needs image processing and conversion",
-      "new": "This is a new file that needs to be processed",
-      "only_meta": "Only meta data set at this point needs image.",
-      "overwrite": "Going to replace the file with something else.",
-      "processing": "This file is being processed",
-      "reprocessing": "Record is being reprocessed",
-      "converting": "This file is being converted",
-      "needs_converting": "This file needs to be converted",
-      "queued": "This file has been queued for processing",
-      "uploading": "This file is in the process of being uploaded",
-      "uploaded": "This file has been uploaded but needs to be processed",
-      "needs_thumb": "The file needs to have it's thumbnail generated",
-      "moving": "This file is being moved and cannot be accessed until the move is completed.",
-      "copying": "This file is being copied and cannot be accessed until the copy is completed."
-    },
-    "report": {
-      "error": "There was an error during processing.",
-      "processed": "This report has been processed.",
-      "queued": "This report is ready to be processed.",
-      "unprocessed": "This report needs to be processed."
-    },
-    "timezone": {
-      "ok": "The timezone is valid",
-      "deprecated": "The timezone is no longer used"
-    },
-    "zip": {
-      "new": "New Zip, needs to be processed",
-      "processing": "Processing the zip",
-      "ok": "Zip is OK, ready to be downloaded",
-      "removed": "Zip file was removed from the system"
-    }
-  },
-  "sort": {
-    "display_date_asc": "Sort by date, ascending order - oldest date first.",
-    "display_date_desc": "Sort by date, descending order - most recent date first.",
-    "created_date_asc": "Sort by the date the item was uploaded, ascending order - oldest date first.",
-    "created_date_desc": "Sort by the date the item was uploaded, descending order - most recent date first.",
-    "alphabetical_asc": "Sort alphabetically A to Z based on the name of the items.",
-    "alphabetical_desc": "Sort alphabetically Z to A based on the name of the items.",
-    "type_asc": "Sort type alphabetically A to Z.",
-    "type_desc": "Sort type alphatecially Z to A.",
-    "position_asc": "Sort by position numerically lowest to highest",
-    "position_desc": "Sort by position numerically highest to lowest"
-  },
-  "summary": {
-    "count_archive_total_records": "",
-    "count_archive_total_record_audio": "",
-    "count_archive_total_record_document": "",
-    "count_archive_total_record_image": "",
-    "count_archive_total_record_video": "",
-    "count_total_public_records": "",
-    "count_archive_public_record_audio": "",
-    "count_archive_public_record_document": "",
-    "count_archive_public_record_image": "",
-    "count_archive_public_record_video": "",
-    "count_archive_event_one_day": "",
-    "count_archive_event_range": "",
-    "count_archive_relation_have": "",
-    "count_archive_relation_pending_in": "",
-    "count_archive_relation_pending_out": "",
-    "count_archive_activity_profile_view_total": "",
-    "count_archive_activity_profile_view_unique": "",
-    "count_account_archive": "",
-    "counts_archive_folder_tag": "",
-    "counts_archive_record_tag": "",
-    "sum_archive_total_record_audio_size": "",
-    "sum_archive_total_record_document_size": "",
-    "sum_archive_total_record_image_size": "",
-    "sum_archive_total_record_video_size": "",
-    "who_archive_activity_profile_view_last": "",
-    "when_archive_first_event": "",
-    "when_archive_last_event": "",
-    "when_account_archive_last_access": ""
-  },
-  "type": {
-    "access": {
-      "share": "Share Access"
-    },
-    "account": {
-      "admin": "An admin account archive",
-      "standard": "A regular account archive",
-      "test": "A test account archive"
-    },
-    "account_allocation": {
-      "ownership": "Allocation needed because of transfer ownership of Account"
-    },
-    "amazon": {
-      "folder": "Folder",
-      "record": "Record"
-    },
-    "archive": {
-      "organization": "Organization",
-      "person": "Person",
-      "family": "Group",
-      "nonprofit": "Nonprofit"
-    },
-    "auth": {
-      "created_account_email": "A MFA Token for Account Creation sent by email",
-      "created_account_text": "A MFA Token for Account Creation sent by text",
-      "email": "Email validation",
-      "keep_logged_in": "Keep me logged in checked",
-      "password": "A MFA Token Password",
-      "perm_session": "Permanent.org session token",
-      "phone": "Phone validation",
-      "remember_me": "Remember me checked",
-      "session": "Current user session",
-      "signup": "A MFA token for signup",
-      "mfa": "Multi Factor Authentication",
-      "mfaValidation": "Multi Factor Authentication validation"
-    },
-    "billing": {
-      "transfer": {
-        "account_to_creditcard": "Refund",
-        "creditcard_to_account": "Purchase",
-        "pledge_to_account": "Donation",
-        "account_to_pledge": "Donation failed",
-        "ownership": "Transfer ownership of Account was started"
-      },
-      "file_delete": "File Deleted",
-      "file_upload": "File Uploaded",
-      "file_copy": "File Copied",
-      "gift": {
-        "account_to_account": "Gift from account to account",
-        "invite_accepted_from": "Sent invitation accepted",
-        "invite_accepted_to": "Invitation accepted",
-        "promo_code": "Gift code entered",
-        "system_to_account": "Gift from system to account",
-        "purchase": "Gift purchase",
-        "received": "Gift received"
-      }
-    },
-    "board_member": {
-      "artist_board": "Artist Board",
-      "author_board": "Author Board",
-      "academic_board": "Academic Board",
-      "corporate_legacy_board": "Corporate Legacy Board",
-      "digital_format_board": "Digital Format Board",
-      "disambiguation_and_search_board": "Disambiguation and Search Board",
-      "education_board": "Education Board",
-      "endowment_board": "Endowment Board",
-      "estate_board": "Estate Board",
-      "ethics_board": "Ethics Board",
-      "family_board": "Family Board",
-      "genealogy_board": "Genealogy Board",
-      "governing_board": "Governing Board",
-      "history_board": "History Board",
-      "image_board": "Image Board",
-      "international_board": "International Board",
-      "journalism_board": "Journalism Board",
-      "legal_board": "Legal Board",
-      "library_board": "Library Board",
-      "museum_board": "Museum Board",
-      "narrative_board": "Narrative Board",
-      "non_profit_legacy": "Non-profit Legacy",
-      "outreach_board": "Outreach Board",
-      "personal_digital_archiving_board": "Personal Digital Archiving Board",
-      "personal_historian_board": "Personal Historian Board",
-      "photography_board": "Photography Board",
-      "preservation_board": "Preservation Board",
-      "security_board": "Security Board",
-      "story_capture_board": "Story Capture Board",
-      "technology_board": "Technology Board",
-      "veterans_board": "Veterans Board"
-    },
-    "connector": {
-      "facebook": "Facebook",
-      "familysearch": "FamilySearch"
-    },
-    "contact": {
-      "board_member": "Board Member",
-      "founding": "Founding Supporter",
-      "site_request": "Access was requested from the site",
-      "site_request_ios": "Access was requested from the iOS app"
-    },
-    "daemon": {
-      "facebook_retrieve_tagged": "Facebook retrieve tagged",
-      "system_exception": "System Exception reporting"
-    },
-    "email": {
-      "home": "Home email address",
-      "invite": "Invite email address",
-      "other": "Other email address",
-      "primary": "Primary email address",
-      "work": "Work email address"
-    },
-    "event": {
-      "point": "A single point event",
-      "span": "An event that spans multiple points in time"
-    },
-    "file": {
-      "archive": {
-        "zip": "Zip",
-        "7zip": "7-Zip"
-      },
-      "audio": {
-        "aac": "Advanced Audio Coding",
-        "aiff": "Audio Interchange File Format",
-        "flac": "Free Lossless Audio Codec",
-        "mp3": "MPEG Audio Layer III",
-        "m4a": "MPEG-4 Audio",
-        "ogg": "Ogg Vorbis",
-        "wav": "Waveform Audio File Format",
-        "wma": "Windows Media Audio"
-      },
-      "document": {
-        "doc": "Microsoft Word",
-        "docx": "Microsoft Word",
-        "eml": "Email Message",
-        "html": "Hyper Text Markup Language",
-        "htm": "Hyper Text Markup",
-        "odt": "Open Document",
-        "rtf": "Rich Text File",
-        "txt": "Text"
-      },
-      "image": {
-        "bmp": "Bitmap Image Format",
-        "gif": "Graphics Interchange Format",
-        "jpeg": "Joint Photographic Experts Group",
-        "jpg": "Joint Photographic Experts Group",
-        "png": "Portable Network Graphics",
-        "tif": "Tagged Image File Format",
-        "tiff": "Tagged Image File Format",
-        "heic": "High Efficiency Image Coding",
-        "heif": "High Efficiency Image Format"
-      },
-      "pdf": {
-        "pdf": "Portable Document Format",
-        "pdfa": "Portable Document Format A-3"
-      },
-      "presentation": {
-        "key": "Keynote Presentation",
-        "odp": "Open Presentation",
-        "ppt": "Microsoft PowerPoint",
-        "pptx": "Microsoft PowerPoint"
-      },
-      "spreadsheet": {
-        "csv": "Comma Separated Values",
-        "ods": "Open Spreadsheet",
-        "xls": "Microsoft Excel",
-        "xlsx": "Microsoft Excel"
-      },
-      "unknown": {
-        "null": "Unknown"
-      },
-      "video": {
-        "avi": "Audio Video Interleave",
-        "mov": "QuickTime File Format",
-        "mp4": "MPEG-4 Part 14, <Video standard>",
-        "ogv": "Theora",
-        "webm": "A webm file",
-        "wmv": "Windows Media Video",
-        "3gp": "A 3gp file",
-        "3g2": "A 3g2 file",
-        "m4v": "A M4V video file",
-        "mkv": "A Matroska Multimedia Container file",
-        "mpg": "A MPEG-2 File",
-        "mpeg": "A MPEG-2 File"
-      }
-    },
-    "folder": {
-      "app": "folder",
-      "private": "folder",
-      "public": "folder",
-      "share": "share",
-      "root": {
-        "app": "folder",
-        "private": "folder",
-        "public": "folder",
-        "root": "root folder"
-      }
-    },
-    "folder_link": {
-      "app": "folder",
-      "private": "folder",
-      "public": "folder",
-      "share": "share",
-      "root": {
-        "app": "folder",
-        "private": "folder",
-        "public": "folder",
-        "root": "root folder",
-        "share": "share"
-      }
-    },
-    "generic": {
-      "error": "An entry that has an error and requires administrator attention",
-      "placeholder": "A type we know this isn't set right, but that's ok",
-      "undefined": "An entry that has no set type"
-    },
-    "invite": {
-      "archive": "Invite because we want to share a archive",
-      "invite_code": "Regular account creation using provided invite code",
-      "invite_early_access": "Invitation to site by user for early access",
-      "relationship": "Invite because of a relationship",
-      "share": "Invite because of a share",
-      "site_request": "Invite was requested from the site"
-    },
-    "locn": {
-      "coord": "GeoLookup Coordinates",
-      "hand": "Hand entered",
-      "place": "GeoLookup Place"
-    },
-    "notification": {
-      "pa_response_non_transfer": "pa response non-transfer",
-      "cleanup_bad_upload": "Cleanup bad upload",
-      "facebook_everything_retrieval_success": "Import 'Everything' from Facebook complete",
-      "facebook_everything_retrieval_failure": "Import 'Everything' from Facebook did not complete",
-      "facebook_everything_retrieval_out_of_space": "Import 'Everything' from Facebook did not complete because your account ran out of space",
-      "facebook_permanent_retrieval_success": "Import '#permanent' from Facebook complete",
-      "facebook_permanent_retrieval_failure": "Import '#permanent' from Facebook did not complete",
-      "facebook_permanent_retrieval_out_of_space": "Import '#permanent' from Facebook did not complete because your account ran out of space",
-      "pa_access_change": "PA Access Change",
-      "pa_response": "PA Response",
-      "pa_share": "PA Share",
-      "pa_transfer": "PA Transfer",
-      "relationship_accept": "Relationship Accepted",
-      "relationship_reject": "Relationship Rejected",
-      "relationship_request": "Relationship Request",
-      "share": "Share",
-      "zip": "Zip"
-    },
-    "profile_item": {
-      "basic": "Basic",
-      "birth_info": "Birth Info",
-      "blurb": "Blurb",
-      "closure_info": "Closure Info",
-      "death_info": "Death Info",
-      "description": "Description",
-      "established_info": "Established Info",
-      "email": "Email",
-      "gender": "Gender",
-      "home": "Home",
-      "job": "Job",
-      "location": "Location",
-      "phone_nbr": "Phone #",
-      "social_media": "Social Media",
-      "timezone": "Timezone"
-    },
-    "record": {
-      "archive": "archive",
-      "audio": "audio",
-      "document": "document",
-      "experience": "event",
-      "folder": "Folder",
-      "image": "image",
-      "pdf": "PDF",
-      "presentation": "presentation",
-      "reference": "Reference",
-      "spreadsheet": "spreadsheet",
-      "unknown": "unknown",
-      "video": "video"
-    },
-    "report": {
-      "cloud_file_missing": "Went to get a cloud file that should have been there",
-      "md5_mismatch": "MD5 validate failed"
-    },
-    "share": {
-      "folder": "Folder",
-      "record": "Record"
-    },
-    "tag_link": {
-      "people": "People",
-      "place": "Place",
-      "thing": "Thing"
-    },
-    "task_singleton": {
-      "folder_size_recalc": "Folder Size Recalc",
-      "thumbnail_folder": "Thumbnail folder",
-      "thumbnail_record": "Thumbnail record"
-    },
-    "task_throttle": {
-      "facebook_retrieve_tagged": "Facebook retrieve tagged",
-      "facebook_retrieve_everything": "Facebook retrieve everything"
-    },
-    "text_data": {
-      "folder": {
-        "private_note": "Private Note"
-      },
-      "profile_item": {
-        "value": "Value"
-      },
-      "record": {
-        "exif": "Exif Image Data",
-        "iptc": "IPTC Image Data",
-        "private_note": "Private Note"
-      },
-      "video": {
-        "media_info": "MediaInfo Data"
-      }
-    },
-    "timezone": {
-      "google": "The timezone was retrieved from the Google API",
-      "permanent": "The timezone was created by Permanent.org"
-    },
-    "thumbnail": {
-      "grid": "Grid",
-      "tile": "Tile",
-      "list": "List",
-      "slideshow": "Slideshow",
-      "timeline": "Timeline",
-      "date": "Date",
-      "map": "Map",
-      "storyslider": "Story Slider",
-      "storysimple": "Story Simple",
-      "storyscroll": "Story Scroll",
-      "mosaic": "Mosaic",
-      "folder": "Folder",
-      "user": "User",
-      "list_mask": "Internal Use",
-      "overflow": "Internal Use",
-      "overlay": "Internal Use"
-    },
-    "ui": {
-      "avatar": "Avatar",
-      "datetime": "Date",
-      "day": "Day",
-      "email": "Email",
-      "locn": "Location",
-      "pa_nbr": "PA#",
-      "phone": "Phone",
-      "string": "String",
-      "textdata": "TextData",
-      "thumbnail": "Thumbnail",
-      "timezone": "Timezone",
-      "url": "URL"
-    }
-  },
-  "us_states": {
-    "alabama": "Alabama",
-    "alaska": "Alaska",
-    "arizona": "Arizona",
-    "arkansas": "Arkansas",
-    "california": "California",
-    "colorado": "Colorado",
-    "connecticut": "Connecticut",
-    "delaware": "Delaware",
-    "district_of_columbia": "District of Columbia",
-    "florida": "Florida",
-    "georgia": "Georgia",
-    "hawaii": "Hawaii",
-    "idaho": "Idaho",
-    "illinois": "Illinois",
-    "indiana": "Indiana",
-    "iowa": "Iowa",
-    "kansas": "Kansas",
-    "kentucky": "Kentucky",
-    "louisiana": "Louisiana",
-    "maine": "Maine",
-    "maryland": "Maryland",
-    "massachusetts": "Massachusetts",
-    "michigan": "Michigan",
-    "minnesota": "Minnesota",
-    "mississippi": "Mississippi",
-    "missouri": "Missouri",
-    "montana": "Montana",
-    "nebraska": "Nebraska",
-    "nevada": "Nevada",
-    "new_hampshire": "New Hampshire",
-    "new_jersey": "New Jersey",
-    "new_mexico": "New Mexico",
-    "new_york": "New York",
-    "north_carolina": "North Carolina",
-    "north_dakota": "North Dakota",
-    "ohio": "Ohio",
-    "oklahoma": "Oklahoma",
-    "oregon": "Oregon",
-    "pennsylvania": "Pennsylvania",
-    "rhode_island": "Rhode Island",
-    "south_carolina": "South Carolina",
-    "south_dakota": "South Dakota",
-    "tennessee": "Tennessee",
-    "texas": "Texas",
-    "utah": "Utah",
-    "vermont": "Vermont",
-    "virginia": "Virginia",
-    "washington": "Washington",
-    "washington_dc": "Washington, DC",
-    "west_virginia": "West Virginia",
-    "wisconsin": "Wisconsin",
-    "wyoming": "Wyoming"
-  },
-  "warning": {
-    "archive": {
-      "no_email_found": "No Permanent Archive with that email address was found",
-      "no_remove_access_active": "Can not remove there access of active Permanent Archive.",
-      "no_remove_access_owner": "The owner can not remove there access."
-    },
-    "auth": {
-      "access_denied": "You do not have sufficient privileges to perform this action or access this item.",
-      "already_verified": "This account has already been verified",
-      "bad_old_password": "Old password entered is incorrect. Please try again.",
-      "email_unregistered": "Email given wasn't found in the email table",
-      "invalid_credentials": "The username/password combination were invalid",
-      "keep_logged_in_token_unknown": "Couldn't preform auto login.  Enter your credentials manually",
-      "no_invite_found": "Couldn't find a valid invitation for this email address",
-      "no_local_storage": "Your browser does not support local storage. Permanent.org uses local storage to provide information about your account. You are probably seeing this because you are using private browsing mode. Please disable private browsing mode for the best permanent.org experience.",
-      "remember_me_token_unknown": "Couldn't preform auto login. Enter you credentials manually",
-      "token_does_not_match": "The verification code entered is not valid. Please re-enter verification code.",
-      "token_expired": "The verification code entered is no longer valid. Please re-enter verification code.",
-      "validation_not_complete": "We haven't received a validation for your contact information. Click here to resend validation.",
-      "mfaToken": "This browser or device is not recognized, please validate your identity using your email or mobile phone."
-    },
-    "billing": {
-      "stripe": {
-        "duplicate_nickname": "You already have a card with that nickname. Please use a different nickname",
-        "validation": {
-          "insufficient_space": "Not enough space available for transfer.",
-          "not_decimal": "Monetary amounts must include a decimal."
-        }
-      }
-    },
-    "connector": {
-      "modify": "Not allowed to modify the connector folders",
-      "running_to_long": "Something seems to have gone haywire awhile back so keep running",
-      "not_setup": "The App needs to be 'Connected' again."
-    },
-    "financial": {
-      "account": {
-        "no_space_left": "You do not have enough storage available. Please add more storage then try again."
-      }
-    },
-    "folder": {
-      "circular_link": "Cannot perform action as it will result in a circular reference",
-      "copy_dest_same": "Folders cannot be copied to the same location",
-      "copy_status": "The folder cannot be copied at the moment, please try again in a few minutes.",
-      "last_link": "This is the only link to the folder and cannot be unlinked. You can delete the folder if you wish to remove it.",
-      "link_dest_exists": "This folder is already linked in that location",
-      "link_dest_same": "Folders cannot be linked to the same location",
-      "link_dest_type": "You can only link folders to shares and public.",
-      "link_link": "You cannot link an already linked folder",
-      "move_destination_same": "Folders cannot be moved to the same place as they came from - please move somewhere else or cancel.",
-      "move_status": "The folder cannot be moved at the moment, please try again in a few minutes.",
-      "move_different_archive": "You are not allowed to move folders out of the owner's archive"
-    },
-    "generic": {
-      "account_not_logged_in": "You are not logged in. Please log in and try again.",
-      "no_object_permission": "You do not have permission to perform the previous action. Please contact the owner to ask for permission. If you are the file owner and are getting this message, please contact support and let us know."
-    },
-    "geomap": {
-      "address_failed": "We could not find this address",
-      "lat_long_failed": "We could not find this location"
-    },
-    "item": {
-      "lookup": "The item you were looking for could not be found in the system"
-    },
-    "invite": {
-      "expired": "The invite has expired"
-    },
-    "notification": {
-      "error_status": "This notification is in an error status and can't be processed"
-    },
-    "profile_creation": {
-      "creation_format": "Please enter the date using correct format. The correct format is: YYYY-MM-DD",
-      "duplicate_email": "The email address you entered is already in use. Each account must have a unique email address.",
-      "duplicate_phone_nbr": "The phone number you entered is already in use. Each account must have a unique phone number.",
-      "duplicate_url": "The URL you entered is already in use. Each URL must be unique so that there is no confusion about permanent archives.  Please enter a different URL.",
-      "email_format": "Please enter a valid email address.",
-      "expiration_format": "Please enter the date using correct format. The correct format is: YYYY-MM-DD",
-      "home_format": "Please enter a valid phone number.",
-      "mobile_format": "Please enter a valid phone number.",
-      "url_name_required": "Please enter a URL for the Public Profile.",
-      "work_format": "Please enter a valid phone number.",
-      "zip_format": "Zip code is required."
-    },
-    "promo": {
-      "already_used": "The gift code was already used for this account",
-      "expired": "The gift code entered is expired.",
-      "not_found": "The gift code entered is not valid.",
-      "used_up": "The gift code entered is used up."
-    },
-    "record": {
-      "copy_dest_same": "Files cannot be copied to the same location.",
-      "copy_status": "The file cannot be copied at the moment, please try again in a few minutes.",
-      "move_status": "The file cannot be moved at the moment, please try again in a few minutes.",
-      "move_destination_same": "Files cannot be moved to the same place as they came from - please move somewhere else or cancel.",
-      "lookup": "The file cannot be found in the system.",
-      "already_deleted": "This file is already deleted.",
-      "move_different_archive": "You are not allowed to move files out of the owner's archive"
-    },
-    "registration": {
-      "duplicate_email": "The email address you entered is already in use.  Each account must have a unique email address.",
-      "duplicate_phone_nbr": "The phone number you entered is already in use.  Each account must have a unique phone number.",
-      "email_format": "Please enter a valid email address.  Valid email addresses are in the format: name@domain.ext",
-      "email_required": "Email address is required to complete this entry.",
-      "full_name": "Full name is required to complete this entry.",
-      "invite_code": "Please enter a valid invitation code",
-      "password_complexity": "Passwords must be at least 8 characters long.",
-      "password_match": "Passwords must match.",
-      "password_required": "Password is required.",
-      "phone_nbr_required": "Phone Number is required.",
-      "terms_check": "Please accept the Terms of Service to continue."
-    },
-    "search": {
-      "no_query": "Please enter a value to search for."
-    },
-    "share": {
-      "already_shared": "This folder has already been shared with that Permanent Archive.",
-      "delete_owner": "You cannot delete a share that has multiple owners.",
-      "dest_not_a_share": "You cannot share to a non share folder",
-      "no_existing_share": "This user does not have a access to this share.",
-      "no_link": "You cannot link a share",
-      "no_share_self": "You cannot share an item with yourself",
-      "root_folder": "You cannot modify root folders.",
-      "unshare_owner": "Shares with more than one owner cannot be unshared. You can make a copy of this share and make it your own.  You can also take yourself off the share list for this folder.",
-      "update_owner": "You cannot change the access level of a share owner"
-    },
-    "signin": {
-      "unknown": "Looks like either your email address or password were incorrect. Please try again."
-    },
-    "timezone": {
-      "google_lookup": "Google API lookup returned nothing",
-      "timezone_lookup": "This timezone was not found in timezone"
-    },
-    "validation": {
-      "date": "Please enter a valid date.",
-      "date_backwards": "Start date cannot be after end date. Please re-enter date information.",
-      "date_in_past": "Date entered can't be in the past.",
-      "empty": "Some required fields were not filled in. Please fill in all required fields.",
-      "folder_parent": "A folder cannot be a child of itself. Please move to a different location.",
-      "extension_no_match_content": "The file extension does not match the content.",
-      "phone": "Please enter a valid phone number.",
-      "value_negative": "This cannot be a negative value"
-    },
-    "verification": {
-      "duplicate_relationship": "This permanent archive already has an assigned relationship to your permanent archive. Each permanent archive can only have one relationship with another permanent archive."
-    }
-  }
+	"access": {
+		"role": {
+			"admin": "Admin",
+			"contributor": "Contributor",
+			"curator": "Curator",
+			"manager": "Manager",
+			"owner": "Owner",
+			"viewer": "Viewer",
+			"editor": "Editor"
+		}
+	},
+	"activity": {
+		"grouping": {
+			"account": "Account",
+			"archive": "Archive",
+			"auth": "Authorization",
+			"contact": "Contact",
+			"daemon": "Daemon",
+			"download": "Download",
+			"invite": "Invite",
+			"locn": "Location",
+			"private": "Private",
+			"relation": "Relation",
+			"share": "Share",
+			"tag": "Keyword",
+			"task": "Task",
+			"unit_test": "UnitTest"
+		}
+	},
+	"connector": {
+		"current_state": {
+			"idle": "Waiting to run again",
+			"running": "Running right now",
+			"error": "Errored out"
+		}
+	},
+	"error": {
+		"api": {
+			"dev_only": "This endpoint is still in development",
+			"invalid_request": "The data passed in was invalid",
+			"limit_exceeded": "API Rate limit exceeded.",
+			"mobile_only": "This endpoint is for mobile only",
+			"no_key": "No API key found in request."
+		},
+		"access": {
+			"role_invald": "This access role is invalid",
+			"lookup": "Access lookup failed."
+		},
+		"account": {
+			"lookup": "Account not found",
+			"same_account": "The archive you want to transfer is already yours."
+		},
+		"account_allocation": {
+			"lookup": "Data lookup failed (AL)"
+		},
+		"account_archive": {
+			"lookup": "Data lookup failed (AA)"
+		},
+		"account_password": {
+			"lookup": "Data lookup failed (AP)"
+		},
+		"account_space": {
+			"lookup": "Data lookup failed (AS)"
+		},
+		"account_token": {
+			"lookup": "Data lookup failed (AT)"
+		},
+		"archive": {
+			"lookup": "Archive lookup failed",
+			"not_public": "This archive is not publicly accessible."
+		},
+		"archive_nbr": {
+			"lookup": "Data lookup failed (AN)"
+		},
+		"auth": {
+			"lookup": "Data lookup failed (AU)"
+		},
+		"bad": {
+			"request": "Request failed"
+		},
+		"base_queue": {
+			"lookup": "Data lookup failed (BQ)"
+		},
+		"billing": {
+			"receipt": {
+				"generation": "Receipt generation failed."
+			},
+			"stripe": {
+				"card_decline": "The requested payment method was declined.",
+				"card_expired": "Your card has expired.",
+				"failure": "Sorry, we were unable to process your payment. Please check all entered information and try again later."
+			},
+			"pledge": {
+				"already_claimed": "This donation has already been claimed",
+				"lookup": "Donation not found",
+				"update": "This donation could not be updated"
+			}
+		},
+		"connector": {
+			"connection_error": "Unable to connect to that account",
+			"facebook_response": "Facebook error",
+			"facebook_sdk": "Facebook error",
+			"familysearch_response": "FamilySearch error",
+			"lookup": "Data lookup failed (CO)"
+		},
+		"contact": {
+			"lookup": "Contact not found"
+		},
+		"daemon": {
+			"queue_delete": "The queue failed on a deleting an item from itself.",
+			"queue_non_complete": "The queue didn't complete the action in the requisite number of tries."
+		},
+		"file": {
+			"lookup": "File not found",
+			"conversion_failed": "The system was unable to convert the file!"
+		},
+		"folder": {
+			"lookup": "Folder not found",
+			"lookup_root": "Root folder not found",
+			"move_break_link": "Cannot complete this move as it would break the folder linking.",
+			"no_link_share": "You cannot link to a share",
+			"no_link_exists": "This folder does not have a link in that location.",
+			"no_link_root": "You cannot link a root folder",
+			"no_unlink_lib": "You cannot unlink folders in the private.",
+			"no_unlink_root": "You cannot unlink a root folder",
+			"no_update_root": "You cannot update root folders",
+			"not_public": "This folder is not publicly accessible."
+		},
+		"folder_link": {
+			"lookup": "Data lookup failed (FL)"
+		},
+		"generic": {
+			"create_fail": "Sorry for the inconvenience, the action could not be completed please try again.",
+			"exclusivity_fail": "There was more than 1 item identified so the action requested could not be completed",
+			"hard_delete_fail": "Sorry for the inconvenience, the action could not be completed please try again.",
+			"internal": "Sorry for the inconvenience, the action could not be completed please try again.",
+			"invalid_csrf": "We apologize for the inconvenience but our system could not verify all of the necessary information we need to keep your connection secure. You may need to log out, delete your cookies, and clear your cache.",
+			"orphaning_fail": "Sorry for the inconvenience, the action could not be completed please try again.",
+			"no_action_permission": "You do not have permission to perform this action. Please contact the owner to ask for permission. If you are the file owner and are getting this message, please contact Support and let us know.",
+			"no_archive_selected": "Please select a permanent archive and then retry",
+			"no_object_permission": "You do not have permission to access this item. Please contact the owner to ask for permission. If you are the file owner and are getting this message, please contact Support and let us know.",
+			"soft_delete_fail": "We could not delete the item you selected. Please try again or contact Support.",
+			"update_fail": "We could not update the item you selected. Please try again or contact Support."
+		},
+		"getting": {
+			"presigned": {
+				"url": "The upload could not be started"
+			}
+		},
+		"imagick": {
+			"read_image_blob": "The image format wasn't something we expected"
+		},
+		"invite": {
+			"already_invited": "This email address has already been invited. Thank you for sharing interest.",
+			"already_registered": "This email is already associated with an account and doesn't require an invitation.",
+			"lookup": "Invite could not be found",
+			"not_authorized": "Not Authorized"
+		},
+		"locn": {
+			"lookup": "Location not found"
+		},
+		"notification": {
+			"lookup": "Notification not found"
+		},
+		"preference": {
+			"lookup": "Preference not found"
+		},
+		"profile_item": {
+			"lookup": "Profile Item not found",
+			"no_delete": "You are not allowed to delete this profile item"
+		},
+		"relation": {
+			"lookup": "Relation not found"
+		},
+		"pr": {
+			"duplicate_share": "This account already has access to the Permanent Archive",
+			"no_link": "This account does not have access to the requested Permanent Archive",
+			"no_share_owner": "You cannot share ownership of a Permanent Archive",
+			"update_share_owner": "You cannot change the access level of the Permanent Archive owner",
+			"pending_owner": "There is already a pending owner for this Permanent Archive"
+		},
+		"record": {
+			"dest_invalid": "You can only upload files to Private or Vault.",
+			"empty_dest": "Please choose a destination for the copy of this item.",
+			"file_invalid": "This file appears to be invald and cannot be processed.",
+			"last_lib_link": "This is the only link to the file in Private. You cannot unlink all instances of this file in Private.",
+			"last_link": "This is the only link to the file and cannot be unlinked. You can delete the file if you wish to remove it.",
+			"link_dest_exists": "This file is already linked in that location.",
+			"lookup": "File not found",
+			"no_link_exists": "This file does not have a link in that location.",
+			"not_in_lib": "This file is not in Private so the requested action cannot be completed.",
+			"not_public": "This file is not publicly accessible."
+		},
+		"record_file": {
+			"lookup": "Data lookup failed (RF)"
+		},
+		"session": {
+			"lookup": "Data lookup failed (SE)",
+			"expired": "The Session has expired, please log in."
+		},
+		"simple": {
+			"lookup": "Data lookup failed (SI)"
+		},
+		"share": {
+			"lookup": "Data lookup failed (SH)",
+			"already_exists": "A share for this item and archive already exists",
+			"no_create": "You do not have permission to share this item"
+		},
+		"stripe": {
+			"lookup": "Data lookup failed (ST)"
+		},
+		"system": {
+			"mysql": ""
+		},
+		"tag": {
+			"lookup": "Keyword not found"
+		},
+		"task_singleton": {
+			"lookup": "Data lookup failed (TS)"
+		},
+		"task_throttle": {
+			"lookup": "Data lookup failed (TT)"
+		},
+		"text_data": {
+			"lookup": "Data lookup failed (TD)"
+		},
+		"third_party": {
+			"google_over_query_limit": "Google is experiencing high volume"
+		},
+		"timezone": {
+			"lookup": "TimeZone not found"
+		},
+		"upload": {
+			"md5_check_failed": "Item not found"
+		},
+		"validate": {
+			"destination_url": "Invalid upload destination URL"
+		},
+		"zip": {
+			"missing_items": "No items to be zipped were included in the request.",
+			"lookup": "No matching zip could be found.",
+			"invalid_archive": "The item you requested to be zipped is not in your archive."
+		}
+	},
+	"file": {
+		"format": {
+			"original": "original",
+			"converted": "converted",
+			"1920x1080": "1920x1080"
+		}
+	},
+	"folder": {
+		"view": {
+			"grid": "Grid",
+			"tile": "Tile",
+			"list": "List",
+			"slideshow": "Slideshow",
+			"timeline": "Timeline",
+			"map": "Map",
+			"storyslider": "Story Slider",
+			"storyscroll": "Story Scroll",
+			"date": "Group by Day",
+			"mosaic": "Mosaic",
+			"storysimple": "Story Simple",
+			"gliding": "Gliding",
+			"collage": "Collage",
+			"collagedetail": "Collage Detail",
+			"table": "Table",
+			"gallery": "Gallery",
+			"found": "Found"
+		}
+	},
+	"geomap": {
+		"address": "Request in address form",
+		"latlong": "Request in latitude and longitude form"
+	},
+	"organization": {
+		"name": "Permanent Legacy Foundation",
+		"slogan": "Preserving your digital Legacy"
+	},
+	"pages": {
+		"apps": {
+			"description": "Welcome to apps section. This is where you can manage all the 3rd party apps you have connected with."
+		},
+		"private": {
+			"description": "Welcome to My Files, a place to organize all the files you have uploaded. If you would like to share something with someone, you can do it by selecting that item and choosing the desired user and their access permission."
+		},
+		"public": {
+			"description": "This is your Public folder. Place files and information in this folder that you would want everyone in the world to be able to see for eternity. Do not put information here that you do not want publicly available right away. Tell your life story. Add the things you would like to share and preserve."
+		},
+		"shares": {
+			"description": "Welcome to your archive shared section. This is where you can share files and folders between archives.You can create shared folders that allow multiple people to own, contribute and curate together."
+		}
+	},
+	"process": {
+		"thumbnail_redo_before": "Need to regenerate thumbnail before work",
+		"thumbnail_redo_during": "Need to regenerate thumbnail during work",
+		"thumbnail_redo_after": "Need to regenerate thumbnail after work"
+	},
+	"profile": {
+		"basic": "Basic",
+		"birth_info": "Birth Info",
+		"blurb": "Blurb",
+		"closure_info": "Closure Info",
+		"death_info": "Death Info",
+		"description": "Description",
+		"established_info": "Established Info",
+		"email": "Email",
+		"gender": "Gender",
+		"home": "Home",
+		"job": "Job",
+		"location": "Location",
+		"phone_nbr": "Phone #",
+		"social_media": "Social Media",
+		"timezone": "Timezone"
+	},
+	"record": {
+		"encryption": {
+			"client_side": "File was encrypted on the client",
+			"none": "File is unencrypted "
+		}
+	},
+	"relation": {
+		"family": {
+			"aunt": "Aunt",
+			"boyfriend": "Boyfriend",
+			"brother": "Brother",
+			"brother_in_law": "Brother-in-Law",
+			"cousin": "Cousin",
+			"daughter": "Daughter",
+			"daughter_in_law": "Daughter-in-Law",
+			"ex_husband": "Ex-Husband",
+			"ex_spouse": "Ex-Spouse",
+			"ex_wife": "Ex-Wife",
+			"father": "Father",
+			"father_in_law": "Father-in-Law",
+			"foster_child": "Foster Child",
+			"foster_parent": "Foster Parent",
+			"girlfriend": "Girlfriend",
+			"granddaughter": "Granddaughter",
+			"grandfather": "Grandfather",
+			"grandmother": "Grandmother",
+			"grandparent": "Grandparent",
+			"grandson": "Grandson",
+			"husband": "Husband",
+			"legal_guardian": "Legal Guardian",
+			"life_partner": "Life Partner",
+			"mother": "Mother",
+			"mother_in_law": "Mother-in-Law",
+			"nephew": "Nephew",
+			"niece": "Niece",
+			"parent": "Parent",
+			"partner": "Partner",
+			"sibling": "Sibling",
+			"sister": "Sister",
+			"sister_in_law": "Sister-in-Law",
+			"son": "Son",
+			"son_in_law": "Son-in-Law",
+			"spouse": "Spouse",
+			"stepbrother": "Stepbrother",
+			"stepdaughter": "Stepdaughter",
+			"stepfather": "Stepfather",
+			"stepmother": "Stepmother",
+			"stepsister": "Stepsister",
+			"stepson": "Stepson",
+			"uncle": "Uncle",
+			"wife": "Wife"
+		},
+		"other": "Other",
+		"acquaintance": "Acquaintance",
+		"associate": "Associate",
+		"advisor": "Advisor",
+		"board_member": "Board Member",
+		"business_partner": "Business Partner",
+		"colleague": "Colleague",
+		"community_member": "Community Member",
+		"contractor": "Contractor",
+		"coworker": "Coworker",
+		"customer": "Customer",
+		"director": "Director",
+		"fan": "Fan",
+		"friend": "Friend",
+		"member": "Member",
+		"neighbor": "Neighbor",
+		"parent_company": "Parent Company",
+		"professional_connection": "Professional Connection",
+		"subsidiary": "Subsidiary",
+		"supplier": "Supplier",
+		"supporter": "Supporter",
+		"volunteer": "Volunteer",
+		"family_member": "Group Member",
+		"employee": "Employee",
+		"employer": "Employer",
+		"owner": "Owner",
+		"executive": "Executive"
+	},
+	"report": {
+		"action": {
+			"md5": "Running the bit checker for md5 inconsistencies"
+		}
+	},
+	"simplevo": {
+		"key": {
+			"auth_url": "Authorization URL",
+			"count": "Count"
+		}
+	},
+	"status": {
+		"archive": {
+			"gen_avatar": "The avatar is being generated"
+		},
+		"auth": {
+			"ok": "Your account has been verified.",
+			"need_email_and_phone": "We haven't received both your email and phone verification. We need you to verify both before you can login. Click here to resend validation. ",
+			"need_email": "We haven't received your email verification. We need you to verify your email before you can login. Click here to resend validation.",
+			"need_phone": "We haven't received your phone number verification. We need you to verify your phone number before you can login. Click here to resend validation.",
+			"verified": "We have verified your contact information.",
+			"unverified": "We need to verify your contact information.",
+			"none": "No verification is necessary"
+		},
+		"account_space": {
+			"positive": "Positive balance.",
+			"negative": "Negative balance. "
+		},
+		"account_allocation": {
+			"accepted": "Transfer completed space went to toAccount.",
+			"cancelled": "Transfer cancelled space went back to original account.",
+			"expired": "Transfer expired space went back to original account. ",
+			"in_progress": "Transfer waiting to be completed."
+		},
+		"billing_transfer": {
+			"ownership_accept": "Transfer ownership of Account was accepted",
+			"ownership_in_progress": "Transfer ownership of Account was started",
+			"ownership_revoke": "Transfer ownership of Account was revoked"
+		},
+		"connector": {
+			"connected": "Connected",
+			"disconnected": "Disconnected",
+			"not_setup": "Not setup yet",
+			"unknown": "Unknown at this time"
+		},
+		"contact": {
+			"accepted": "Accepted",
+			"confirmed": "Confirmed",
+			"pending": "Request Sent",
+			"rejected": "Declined",
+			"revoked": "Contact was revoked"
+		},
+		"folder": {
+			"genthumb": "The folder thumbnail is regenerating",
+			"new": "The folder is new and needs to be processed",
+			"moving": "This folder or some of it's contents are being moved and cannot be accessed until the move is completed.",
+			"copying": "This folder or some of it's contents are being copied and cannot be access until the copy is completed."
+		},
+		"generic": {
+			"declined": "This item has been declined.",
+			"deleted": "This thing is deleted.",
+			"error": "This item has an error, seek administrator help.",
+			"invited": "This came from an invitation",
+			"ok": "Everything is normal.",
+			"orphaned": "This thing has been orphaned",
+			"pending": "This item is pending something.",
+			"undefined": "An undefined status, probably a bad thing.",
+			"manual_review": "This item needs to be investigated manually to determine what is wrong."
+		},
+		"invite": {
+			"accepted": "Accepted",
+			"pending": "Invitation Sent",
+			"rejected": "Declined",
+			"revoked": "Invite was revoked"
+		},
+		"notification": {
+			"emailed": "This notification was emailed.",
+			"error": "There was an error during directive processing.",
+			"new": "This notification just came into being.",
+			"read": "This notification has read.",
+			"seen": "This notification was seen."
+		},
+		"promo": {
+			"valid": "This notification was emailed.",
+			"invalid": "There was an error during directive processing."
+		},
+		"record": {
+			"needs_processing": "This file needs image processing and conversion",
+			"new": "This is a new file that needs to be processed",
+			"only_meta": "Only meta data set at this point needs image.",
+			"overwrite": "Going to replace the file with something else.",
+			"processing": "This file is being processed",
+			"reprocessing": "Record is being reprocessed",
+			"converting": "This file is being converted",
+			"needs_converting": "This file needs to be converted",
+			"queued": "This file has been queued for processing",
+			"uploading": "This file is in the process of being uploaded",
+			"uploaded": "This file has been uploaded but needs to be processed",
+			"needs_thumb": "The file needs to have it's thumbnail generated",
+			"moving": "This file is being moved and cannot be accessed until the move is completed.",
+			"copying": "This file is being copied and cannot be accessed until the copy is completed."
+		},
+		"report": {
+			"error": "There was an error during processing.",
+			"processed": "This report has been processed.",
+			"queued": "This report is ready to be processed.",
+			"unprocessed": "This report needs to be processed."
+		},
+		"timezone": {
+			"ok": "The timezone is valid",
+			"deprecated": "The timezone is no longer used"
+		},
+		"zip": {
+			"new": "New Zip, needs to be processed",
+			"processing": "Processing the zip",
+			"ok": "Zip is OK, ready to be downloaded",
+			"removed": "Zip file was removed from the system"
+		}
+	},
+	"sort": {
+		"display_date_asc": "Sort by date, ascending order - oldest date first.",
+		"display_date_desc": "Sort by date, descending order - most recent date first.",
+		"created_date_asc": "Sort by the date the item was uploaded, ascending order - oldest date first.",
+		"created_date_desc": "Sort by the date the item was uploaded, descending order - most recent date first.",
+		"alphabetical_asc": "Sort alphabetically A to Z based on the name of the items.",
+		"alphabetical_desc": "Sort alphabetically Z to A based on the name of the items.",
+		"type_asc": "Sort type alphabetically A to Z.",
+		"type_desc": "Sort type alphatecially Z to A.",
+		"position_asc": "Sort by position numerically lowest to highest",
+		"position_desc": "Sort by position numerically highest to lowest"
+	},
+	"summary": {
+		"count_archive_total_records": "",
+		"count_archive_total_record_audio": "",
+		"count_archive_total_record_document": "",
+		"count_archive_total_record_image": "",
+		"count_archive_total_record_video": "",
+		"count_total_public_records": "",
+		"count_archive_public_record_audio": "",
+		"count_archive_public_record_document": "",
+		"count_archive_public_record_image": "",
+		"count_archive_public_record_video": "",
+		"count_archive_event_one_day": "",
+		"count_archive_event_range": "",
+		"count_archive_relation_have": "",
+		"count_archive_relation_pending_in": "",
+		"count_archive_relation_pending_out": "",
+		"count_archive_activity_profile_view_total": "",
+		"count_archive_activity_profile_view_unique": "",
+		"count_account_archive": "",
+		"counts_archive_folder_tag": "",
+		"counts_archive_record_tag": "",
+		"sum_archive_total_record_audio_size": "",
+		"sum_archive_total_record_document_size": "",
+		"sum_archive_total_record_image_size": "",
+		"sum_archive_total_record_video_size": "",
+		"who_archive_activity_profile_view_last": "",
+		"when_archive_first_event": "",
+		"when_archive_last_event": "",
+		"when_account_archive_last_access": ""
+	},
+	"type": {
+		"access": {
+			"share": "Share Access"
+		},
+		"account": {
+			"admin": "An admin account archive",
+			"standard": "A regular account archive",
+			"test": "A test account archive"
+		},
+		"account_allocation": {
+			"ownership": "Allocation needed because of transfer ownership of Account"
+		},
+		"amazon": {
+			"folder": "Folder",
+			"record": "Record"
+		},
+		"archive": {
+			"organization": "Organization",
+			"person": "Person",
+			"family": "Group",
+			"nonprofit": "Nonprofit"
+		},
+		"auth": {
+			"created_account_email": "A MFA Token for Account Creation sent by email",
+			"created_account_text": "A MFA Token for Account Creation sent by text",
+			"email": "Email validation",
+			"keep_logged_in": "Keep me logged in checked",
+			"password": "A MFA Token Password",
+			"perm_session": "Permanent.org session token",
+			"phone": "Phone validation",
+			"remember_me": "Remember me checked",
+			"session": "Current user session",
+			"signup": "A MFA token for signup",
+			"mfa": "Multi Factor Authentication",
+			"mfaValidation": "Multi Factor Authentication validation"
+		},
+		"billing": {
+			"transfer": {
+				"account_to_creditcard": "Refund",
+				"creditcard_to_account": "Purchase",
+				"pledge_to_account": "Donation",
+				"account_to_pledge": "Donation failed",
+				"ownership": "Transfer ownership of Account was started"
+			},
+			"file_delete": "File Deleted",
+			"file_upload": "File Uploaded",
+			"file_copy": "File Copied",
+			"gift": {
+				"account_to_account": "Gift from account to account",
+				"invite_accepted_from": "Sent invitation accepted",
+				"invite_accepted_to": "Invitation accepted",
+				"promo_code": "Gift code entered",
+				"system_to_account": "Gift from system to account",
+				"purchase": "Gift purchase",
+				"received": "Gift received"
+			}
+		},
+		"board_member": {
+			"artist_board": "Artist Board",
+			"author_board": "Author Board",
+			"academic_board": "Academic Board",
+			"corporate_legacy_board": "Corporate Legacy Board",
+			"digital_format_board": "Digital Format Board",
+			"disambiguation_and_search_board": "Disambiguation and Search Board",
+			"education_board": "Education Board",
+			"endowment_board": "Endowment Board",
+			"estate_board": "Estate Board",
+			"ethics_board": "Ethics Board",
+			"family_board": "Family Board",
+			"genealogy_board": "Genealogy Board",
+			"governing_board": "Governing Board",
+			"history_board": "History Board",
+			"image_board": "Image Board",
+			"international_board": "International Board",
+			"journalism_board": "Journalism Board",
+			"legal_board": "Legal Board",
+			"library_board": "Library Board",
+			"museum_board": "Museum Board",
+			"narrative_board": "Narrative Board",
+			"non_profit_legacy": "Non-profit Legacy",
+			"outreach_board": "Outreach Board",
+			"personal_digital_archiving_board": "Personal Digital Archiving Board",
+			"personal_historian_board": "Personal Historian Board",
+			"photography_board": "Photography Board",
+			"preservation_board": "Preservation Board",
+			"security_board": "Security Board",
+			"story_capture_board": "Story Capture Board",
+			"technology_board": "Technology Board",
+			"veterans_board": "Veterans Board"
+		},
+		"connector": {
+			"facebook": "Facebook",
+			"familysearch": "FamilySearch"
+		},
+		"contact": {
+			"board_member": "Board Member",
+			"founding": "Founding Supporter",
+			"site_request": "Access was requested from the site",
+			"site_request_ios": "Access was requested from the iOS app"
+		},
+		"daemon": {
+			"facebook_retrieve_tagged": "Facebook retrieve tagged",
+			"system_exception": "System Exception reporting"
+		},
+		"email": {
+			"home": "Home email address",
+			"invite": "Invite email address",
+			"other": "Other email address",
+			"primary": "Primary email address",
+			"work": "Work email address"
+		},
+		"event": {
+			"point": "A single point event",
+			"span": "An event that spans multiple points in time"
+		},
+		"file": {
+			"archive": {
+				"zip": "Zip",
+				"7zip": "7-Zip"
+			},
+			"audio": {
+				"aac": "Advanced Audio Coding",
+				"aiff": "Audio Interchange File Format",
+				"flac": "Free Lossless Audio Codec",
+				"mp3": "MPEG Audio Layer III",
+				"m4a": "MPEG-4 Audio",
+				"ogg": "Ogg Vorbis",
+				"wav": "Waveform Audio File Format",
+				"wma": "Windows Media Audio"
+			},
+			"document": {
+				"doc": "Microsoft Word",
+				"docx": "Microsoft Word",
+				"eml": "Email Message",
+				"html": "Hyper Text Markup Language",
+				"htm": "Hyper Text Markup",
+				"odt": "Open Document",
+				"rtf": "Rich Text File",
+				"txt": "Text"
+			},
+			"image": {
+				"bmp": "Bitmap Image Format",
+				"gif": "Graphics Interchange Format",
+				"jpeg": "Joint Photographic Experts Group",
+				"jpg": "Joint Photographic Experts Group",
+				"png": "Portable Network Graphics",
+				"tif": "Tagged Image File Format",
+				"tiff": "Tagged Image File Format",
+				"heic": "High Efficiency Image Coding",
+				"heif": "High Efficiency Image Format"
+			},
+			"pdf": {
+				"pdf": "Portable Document Format",
+				"pdfa": "Portable Document Format A-3"
+			},
+			"presentation": {
+				"key": "Keynote Presentation",
+				"odp": "Open Presentation",
+				"ppt": "Microsoft PowerPoint",
+				"pptx": "Microsoft PowerPoint"
+			},
+			"spreadsheet": {
+				"csv": "Comma Separated Values",
+				"ods": "Open Spreadsheet",
+				"xls": "Microsoft Excel",
+				"xlsx": "Microsoft Excel"
+			},
+			"unknown": {
+				"null": "Unknown"
+			},
+			"video": {
+				"avi": "Audio Video Interleave",
+				"mov": "QuickTime File Format",
+				"mp4": "MPEG-4 Part 14, <Video standard>",
+				"ogv": "Theora",
+				"webm": "A webm file",
+				"wmv": "Windows Media Video",
+				"3gp": "A 3gp file",
+				"3g2": "A 3g2 file",
+				"m4v": "A M4V video file",
+				"mkv": "A Matroska Multimedia Container file",
+				"mpg": "A MPEG-2 File",
+				"mpeg": "A MPEG-2 File"
+			}
+		},
+		"folder": {
+			"app": "folder",
+			"private": "folder",
+			"public": "folder",
+			"share": "share",
+			"root": {
+				"app": "folder",
+				"private": "folder",
+				"public": "folder",
+				"root": "root folder"
+			}
+		},
+		"folder_link": {
+			"app": "folder",
+			"private": "folder",
+			"public": "folder",
+			"share": "share",
+			"root": {
+				"app": "folder",
+				"private": "folder",
+				"public": "folder",
+				"root": "root folder",
+				"share": "share"
+			}
+		},
+		"generic": {
+			"error": "An entry that has an error and requires administrator attention",
+			"placeholder": "A type we know this isn't set right, but that's ok",
+			"undefined": "An entry that has no set type"
+		},
+		"invite": {
+			"archive": "Invite because we want to share a archive",
+			"invite_code": "Regular account creation using provided invite code",
+			"invite_early_access": "Invitation to site by user for early access",
+			"relationship": "Invite because of a relationship",
+			"share": "Invite because of a share",
+			"site_request": "Invite was requested from the site"
+		},
+		"locn": {
+			"coord": "GeoLookup Coordinates",
+			"hand": "Hand entered",
+			"place": "GeoLookup Place"
+		},
+		"notification": {
+			"pa_response_non_transfer": "pa response non-transfer",
+			"cleanup_bad_upload": "Cleanup bad upload",
+			"facebook_everything_retrieval_success": "Import 'Everything' from Facebook complete",
+			"facebook_everything_retrieval_failure": "Import 'Everything' from Facebook did not complete",
+			"facebook_everything_retrieval_out_of_space": "Import 'Everything' from Facebook did not complete because your account ran out of space",
+			"facebook_permanent_retrieval_success": "Import '#permanent' from Facebook complete",
+			"facebook_permanent_retrieval_failure": "Import '#permanent' from Facebook did not complete",
+			"facebook_permanent_retrieval_out_of_space": "Import '#permanent' from Facebook did not complete because your account ran out of space",
+			"pa_access_change": "PA Access Change",
+			"pa_response": "PA Response",
+			"pa_share": "PA Share",
+			"pa_transfer": "PA Transfer",
+			"relationship_accept": "Relationship Accepted",
+			"relationship_reject": "Relationship Rejected",
+			"relationship_request": "Relationship Request",
+			"share": "Share",
+			"zip": "Zip"
+		},
+		"profile_item": {
+			"basic": "Basic",
+			"birth_info": "Birth Info",
+			"blurb": "Blurb",
+			"closure_info": "Closure Info",
+			"death_info": "Death Info",
+			"description": "Description",
+			"established_info": "Established Info",
+			"email": "Email",
+			"gender": "Gender",
+			"home": "Home",
+			"job": "Job",
+			"location": "Location",
+			"phone_nbr": "Phone #",
+			"social_media": "Social Media",
+			"timezone": "Timezone"
+		},
+		"record": {
+			"archive": "archive",
+			"audio": "audio",
+			"document": "document",
+			"experience": "event",
+			"folder": "Folder",
+			"image": "image",
+			"pdf": "PDF",
+			"presentation": "presentation",
+			"reference": "Reference",
+			"spreadsheet": "spreadsheet",
+			"unknown": "unknown",
+			"video": "video"
+		},
+		"report": {
+			"cloud_file_missing": "Went to get a cloud file that should have been there",
+			"md5_mismatch": "MD5 validate failed"
+		},
+		"share": {
+			"folder": "Folder",
+			"record": "Record"
+		},
+		"tag_link": {
+			"people": "People",
+			"place": "Place",
+			"thing": "Thing"
+		},
+		"task_singleton": {
+			"folder_size_recalc": "Folder Size Recalc",
+			"thumbnail_folder": "Thumbnail folder",
+			"thumbnail_record": "Thumbnail record"
+		},
+		"task_throttle": {
+			"facebook_retrieve_tagged": "Facebook retrieve tagged",
+			"facebook_retrieve_everything": "Facebook retrieve everything"
+		},
+		"text_data": {
+			"folder": {
+				"private_note": "Private Note"
+			},
+			"profile_item": {
+				"value": "Value"
+			},
+			"record": {
+				"exif": "Exif Image Data",
+				"iptc": "IPTC Image Data",
+				"private_note": "Private Note"
+			},
+			"video": {
+				"media_info": "MediaInfo Data"
+			}
+		},
+		"timezone": {
+			"google": "The timezone was retrieved from the Google API",
+			"permanent": "The timezone was created by Permanent.org"
+		},
+		"thumbnail": {
+			"grid": "Grid",
+			"tile": "Tile",
+			"list": "List",
+			"slideshow": "Slideshow",
+			"timeline": "Timeline",
+			"date": "Date",
+			"map": "Map",
+			"storyslider": "Story Slider",
+			"storysimple": "Story Simple",
+			"storyscroll": "Story Scroll",
+			"mosaic": "Mosaic",
+			"folder": "Folder",
+			"user": "User",
+			"list_mask": "Internal Use",
+			"overflow": "Internal Use",
+			"overlay": "Internal Use"
+		},
+		"ui": {
+			"avatar": "Avatar",
+			"datetime": "Date",
+			"day": "Day",
+			"email": "Email",
+			"locn": "Location",
+			"pa_nbr": "PA#",
+			"phone": "Phone",
+			"string": "String",
+			"textdata": "TextData",
+			"thumbnail": "Thumbnail",
+			"timezone": "Timezone",
+			"url": "URL"
+		}
+	},
+	"us_states": {
+		"alabama": "Alabama",
+		"alaska": "Alaska",
+		"arizona": "Arizona",
+		"arkansas": "Arkansas",
+		"california": "California",
+		"colorado": "Colorado",
+		"connecticut": "Connecticut",
+		"delaware": "Delaware",
+		"district_of_columbia": "District of Columbia",
+		"florida": "Florida",
+		"georgia": "Georgia",
+		"hawaii": "Hawaii",
+		"idaho": "Idaho",
+		"illinois": "Illinois",
+		"indiana": "Indiana",
+		"iowa": "Iowa",
+		"kansas": "Kansas",
+		"kentucky": "Kentucky",
+		"louisiana": "Louisiana",
+		"maine": "Maine",
+		"maryland": "Maryland",
+		"massachusetts": "Massachusetts",
+		"michigan": "Michigan",
+		"minnesota": "Minnesota",
+		"mississippi": "Mississippi",
+		"missouri": "Missouri",
+		"montana": "Montana",
+		"nebraska": "Nebraska",
+		"nevada": "Nevada",
+		"new_hampshire": "New Hampshire",
+		"new_jersey": "New Jersey",
+		"new_mexico": "New Mexico",
+		"new_york": "New York",
+		"north_carolina": "North Carolina",
+		"north_dakota": "North Dakota",
+		"ohio": "Ohio",
+		"oklahoma": "Oklahoma",
+		"oregon": "Oregon",
+		"pennsylvania": "Pennsylvania",
+		"rhode_island": "Rhode Island",
+		"south_carolina": "South Carolina",
+		"south_dakota": "South Dakota",
+		"tennessee": "Tennessee",
+		"texas": "Texas",
+		"utah": "Utah",
+		"vermont": "Vermont",
+		"virginia": "Virginia",
+		"washington": "Washington",
+		"washington_dc": "Washington, DC",
+		"west_virginia": "West Virginia",
+		"wisconsin": "Wisconsin",
+		"wyoming": "Wyoming"
+	},
+	"warning": {
+		"archive": {
+			"no_email_found": "No Permanent Archive with that email address was found",
+			"no_remove_access_active": "Can not remove there access of active Permanent Archive.",
+			"no_remove_access_owner": "The owner can not remove there access."
+		},
+		"auth": {
+			"access_denied": "You do not have sufficient privileges to perform this action or access this item.",
+			"already_verified": "This account has already been verified",
+			"bad_old_password": "Old password entered is incorrect. Please try again.",
+			"email_unregistered": "Email given wasn't found in the email table",
+			"invalid_credentials": "The username/password combination were invalid",
+			"keep_logged_in_token_unknown": "Couldn't preform auto login.  Enter your credentials manually",
+			"no_invite_found": "Couldn't find a valid invitation for this email address",
+			"no_local_storage": "Your browser does not support local storage. Permanent.org uses local storage to provide information about your account. You are probably seeing this because you are using private browsing mode. Please disable private browsing mode for the best permanent.org experience.",
+			"remember_me_token_unknown": "Couldn't preform auto login. Enter you credentials manually",
+			"token_does_not_match": "The verification code entered is not valid. Please re-enter verification code.",
+			"token_expired": "The verification code entered is no longer valid. Please re-enter verification code.",
+			"validation_not_complete": "We haven't received a validation for your contact information. Click here to resend validation.",
+			"mfaToken": "This browser or device is not recognized, please validate your identity using your email or mobile phone."
+		},
+		"billing": {
+			"stripe": {
+				"duplicate_nickname": "You already have a card with that nickname. Please use a different nickname",
+				"validation": {
+					"insufficient_space": "Not enough space available for transfer.",
+					"not_decimal": "Monetary amounts must include a decimal."
+				}
+			}
+		},
+		"connector": {
+			"modify": "Not allowed to modify the connector folders",
+			"running_to_long": "Something seems to have gone haywire awhile back so keep running",
+			"not_setup": "The App needs to be 'Connected' again."
+		},
+		"financial": {
+			"account": {
+				"no_space_left": "You do not have enough storage available. Please add more storage then try again."
+			}
+		},
+		"folder": {
+			"circular_link": "Cannot perform action as it will result in a circular reference",
+			"copy_dest_same": "Folders cannot be copied to the same location",
+			"copy_status": "The folder cannot be copied at the moment, please try again in a few minutes.",
+			"last_link": "This is the only link to the folder and cannot be unlinked. You can delete the folder if you wish to remove it.",
+			"link_dest_exists": "This folder is already linked in that location",
+			"link_dest_same": "Folders cannot be linked to the same location",
+			"link_dest_type": "You can only link folders to shares and public.",
+			"link_link": "You cannot link an already linked folder",
+			"move_destination_same": "Folders cannot be moved to the same place as they came from - please move somewhere else or cancel.",
+			"move_status": "The folder cannot be moved at the moment, please try again in a few minutes.",
+			"move_different_archive": "You are not allowed to move folders out of the owner's archive"
+		},
+		"generic": {
+			"account_not_logged_in": "You are not logged in. Please log in and try again.",
+			"no_object_permission": "You do not have permission to perform the previous action. Please contact the owner to ask for permission. If you are the file owner and are getting this message, please contact support and let us know."
+		},
+		"geomap": {
+			"address_failed": "We could not find this address",
+			"lat_long_failed": "We could not find this location"
+		},
+		"item": {
+			"lookup": "The item you were looking for could not be found in the system"
+		},
+		"invite": {
+			"expired": "The invite has expired"
+		},
+		"notification": {
+			"error_status": "This notification is in an error status and can't be processed"
+		},
+		"profile_creation": {
+			"creation_format": "Please enter the date using correct format. The correct format is: YYYY-MM-DD",
+			"duplicate_email": "The email address you entered is already in use. Each account must have a unique email address.",
+			"duplicate_phone_nbr": "The phone number you entered is already in use. Each account must have a unique phone number.",
+			"duplicate_url": "The URL you entered is already in use. Each URL must be unique so that there is no confusion about permanent archives.  Please enter a different URL.",
+			"email_format": "Please enter a valid email address.",
+			"expiration_format": "Please enter the date using correct format. The correct format is: YYYY-MM-DD",
+			"home_format": "Please enter a valid phone number.",
+			"mobile_format": "Please enter a valid phone number.",
+			"url_name_required": "Please enter a URL for the Public Profile.",
+			"work_format": "Please enter a valid phone number.",
+			"zip_format": "Zip code is required."
+		},
+		"promo": {
+			"already_used": "The gift code was already used for this account",
+			"expired": "The gift code entered is expired.",
+			"not_found": "The gift code entered is not valid.",
+			"used_up": "The gift code entered is used up."
+		},
+		"record": {
+			"copy_dest_same": "Files cannot be copied to the same location.",
+			"copy_status": "The file cannot be copied at the moment, please try again in a few minutes.",
+			"move_status": "The file cannot be moved at the moment, please try again in a few minutes.",
+			"move_destination_same": "Files cannot be moved to the same place as they came from - please move somewhere else or cancel.",
+			"lookup": "The file cannot be found in the system.",
+			"already_deleted": "This file is already deleted.",
+			"move_different_archive": "You are not allowed to move files out of the owner's archive"
+		},
+		"registration": {
+			"duplicate_email": "The email address you entered is already in use.  Each account must have a unique email address.",
+			"duplicate_phone_nbr": "The phone number you entered is already in use.  Each account must have a unique phone number.",
+			"email_format": "Please enter a valid email address.  Valid email addresses are in the format: name@domain.ext",
+			"email_required": "Email address is required to complete this entry.",
+			"full_name": "Full name is required to complete this entry.",
+			"invite_code": "Please enter a valid invitation code",
+			"password_complexity": "Passwords must be at least 8 characters long.",
+			"password_match": "Passwords must match.",
+			"password_required": "Password is required.",
+			"phone_nbr_required": "Phone Number is required.",
+			"terms_check": "Please accept the Terms of Service to continue."
+		},
+		"search": {
+			"no_query": "Please enter a value to search for."
+		},
+		"share": {
+			"already_shared": "This folder has already been shared with that Permanent Archive.",
+			"delete_owner": "You cannot delete a share that has multiple owners.",
+			"dest_not_a_share": "You cannot share to a non share folder",
+			"no_existing_share": "This user does not have a access to this share.",
+			"no_link": "You cannot link a share",
+			"no_share_self": "You cannot share an item with yourself",
+			"root_folder": "You cannot modify root folders.",
+			"unshare_owner": "Shares with more than one owner cannot be unshared. You can make a copy of this share and make it your own.  You can also take yourself off the share list for this folder.",
+			"update_owner": "You cannot change the access level of a share owner"
+		},
+		"signin": {
+			"unknown": "Looks like either your email address or password were incorrect. Please try again."
+		},
+		"timezone": {
+			"google_lookup": "Google API lookup returned nothing",
+			"timezone_lookup": "This timezone was not found in timezone"
+		},
+		"validation": {
+			"date": "Please enter a valid date.",
+			"date_backwards": "Start date cannot be after end date. Please re-enter date information.",
+			"date_in_past": "Date entered can't be in the past.",
+			"empty": "Some required fields were not filled in. Please fill in all required fields.",
+			"folder_parent": "A folder cannot be a child of itself. Please move to a different location.",
+			"extension_no_match_content": "The file extension does not match the content.",
+			"phone": "Please enter a valid phone number.",
+			"value_negative": "This cannot be a negative value"
+		},
+		"verification": {
+			"duplicate_relationship": "This permanent archive already has an assigned relationship to your permanent archive. Each permanent archive can only have one relationship with another permanent archive."
+		}
+	}
 }

@@ -1,57 +1,55 @@
 {
-  "Results": [
-    {
-      "data": [
-        {
-          "AccountVO": {
-            "accountId": 9022,
-            "primaryEmail": "aatwood+6309@permanent.org",
-            "fullName": "Test Account",
-            "address": null,
-            "address2": null,
-            "country": null,
-            "city": null,
-            "state": null,
-            "zip": null,
-            "primaryPhone": null,
-            "defaultArchiveId": 9175,
-            "status": "status.auth.ok",
-            "type": "type.account.standard",
-            "emailStatus": "status.auth.verified",
-            "phoneStatus": "status.auth.unverified",
-            "agreed": null,
-            "optIn": null,
-            "emailArray": null,
-            "inviteCode": null,
-            "rememberMe": null,
-            "keepLoggedIn": null,
-            "accessRole": null,
-            "spaceTotal": 104857600,
-            "spaceLeft": 104857600,
-            "fileTotal": null,
-            "fileLeft": 100000,
-            "changePrimaryEmail": null,
-            "changePrimaryPhone": null,
-            "createdDT": "2018-09-21T18:06:43.000000",
-            "updatedDT": "2018-09-24T18:06:00.000000"
-          }
-        }
-      ],
-      "message": [
-        "Verify successful."
-      ],
-      "status": true,
-      "resultDT": "2018-09-24T18:06:00.000000",
-      "createdDT": null,
-      "updatedDT": null
-    }
-  ],
-  "isSuccessful": true,
-  "actionFailKeys": [],
-  "isSystemUp": true,
-  "systemMessage": "Everything is A-OK",
-  "csrf": "e13798a549b28805f1c285f5aff953fa",
-  "vaultExpirationTime": "2018-09-23T18:05:40.000000",
-  "createdDT": null,
-  "updatedDT": null
+	"Results": [
+		{
+			"data": [
+				{
+					"AccountVO": {
+						"accountId": 9022,
+						"primaryEmail": "aatwood+6309@permanent.org",
+						"fullName": "Test Account",
+						"address": null,
+						"address2": null,
+						"country": null,
+						"city": null,
+						"state": null,
+						"zip": null,
+						"primaryPhone": null,
+						"defaultArchiveId": 9175,
+						"status": "status.auth.ok",
+						"type": "type.account.standard",
+						"emailStatus": "status.auth.verified",
+						"phoneStatus": "status.auth.unverified",
+						"agreed": null,
+						"optIn": null,
+						"emailArray": null,
+						"inviteCode": null,
+						"rememberMe": null,
+						"keepLoggedIn": null,
+						"accessRole": null,
+						"spaceTotal": 104857600,
+						"spaceLeft": 104857600,
+						"fileTotal": null,
+						"fileLeft": 100000,
+						"changePrimaryEmail": null,
+						"changePrimaryPhone": null,
+						"createdDT": "2018-09-21T18:06:43.000000",
+						"updatedDT": "2018-09-24T18:06:00.000000"
+					}
+				}
+			],
+			"message": ["Verify successful."],
+			"status": true,
+			"resultDT": "2018-09-24T18:06:00.000000",
+			"createdDT": null,
+			"updatedDT": null
+		}
+	],
+	"isSuccessful": true,
+	"actionFailKeys": [],
+	"isSystemUp": true,
+	"systemMessage": "Everything is A-OK",
+	"csrf": "e13798a549b28805f1c285f5aff953fa",
+	"vaultExpirationTime": "2018-09-23T18:05:40.000000",
+	"createdDT": null,
+	"updatedDT": null
 }

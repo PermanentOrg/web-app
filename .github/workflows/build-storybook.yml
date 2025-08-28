@@ -29,9 +29,9 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook
         env:
-          GOOGLE_API_KEY: "-"
-          FIREBASE_API_KEY: "-"
-          STRIPE_API_KEY: "-"
+          GOOGLE_API_KEY: '-'
+          FIREBASE_API_KEY: '-'
+          STRIPE_API_KEY: '-'
 
       - name: Archive `storybook-static`
         uses: actions/upload-artifact@v4

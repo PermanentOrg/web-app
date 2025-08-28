@@ -1,24 +1,20 @@
 {
-  "Results": [
-    {
-      "data": null,
-      "message": [
-        "warning.registration.duplicate_email"
-      ],
-      "status": false,
-      "resultDT": "2018-07-16T21:43:17.000000",
-      "createdDT": null,
-      "updatedDT": null
-    }
-  ],
-  "isSuccessful": false,
-  "actionFailKeys": [
-    0
-  ],
-  "isSystemUp": true,
-  "systemMessage": "Everything is A-OK",
-  "csrf": "e6c76bbd6468142cc4bca7e9ddcf12b4",
-  "vaultExpirationTime": "2018-07-15T21:28:07.000000",
-  "createdDT": null,
-  "updatedDT": null
+	"Results": [
+		{
+			"data": null,
+			"message": ["warning.registration.duplicate_email"],
+			"status": false,
+			"resultDT": "2018-07-16T21:43:17.000000",
+			"createdDT": null,
+			"updatedDT": null
+		}
+	],
+	"isSuccessful": false,
+	"actionFailKeys": [0],
+	"isSystemUp": true,
+	"systemMessage": "Everything is A-OK",
+	"csrf": "e6c76bbd6468142cc4bca7e9ddcf12b4",
+	"vaultExpirationTime": "2018-07-15T21:28:07.000000",
+	"createdDT": null,
+	"updatedDT": null
 }
