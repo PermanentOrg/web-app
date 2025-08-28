@@ -7,7 +7,7 @@
 	"scripts": {
 		"secrets": "node load-secrets.js",
 		"dev": "npm run secrets && node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --configuration=local",
-		"dev:docker": "npm run secrets && node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --configuration=local-docker --host 0.0.0.0 --disable-host-check",
+		"dev:docker": "npm run secrets && node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --configuration=local-docker --host 0.0.0.0",
 		"build": "npm run secrets && ng build --aot --optimization --configuration production",
 		"build:local": "npm run secrets && ng build --aot --configuration=local",
 		"build:dev": "npm run secrets && ng build --aot --optimization --configuration=development",
