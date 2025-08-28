@@ -20,6 +20,7 @@ interface RequestOptions {
 	authToken?: boolean;
 	useStelaDomain?: boolean;
 	responseType?: ResponseType;
+	headers?: Record<string, any>;
 }
 
 const defaultOptions: RequestOptions = {

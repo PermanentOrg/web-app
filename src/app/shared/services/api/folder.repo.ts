@@ -1,6 +1,6 @@
 import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
 
 const MIN_WHITELIST: (keyof FolderVO)[] = [
@@ -46,20 +46,34 @@ export class FolderRepo extends BaseRepo {
 		);
 	}
 
-	public async getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
-		const data = folderVOs.map((folderVO) => ({
-			FolderVO: {
-				archiveNbr: folderVO.archiveNbr,
-				folder_linkId: folderVO.folder_linkId,
-				folderId: folderVO.folderId,
-			},
-		}));
-
-		return await this.http.sendRequestPromise<FolderResponse>(
+	public async getWithChildren(
+		folderVOs: FolderVO[],
+		optionalHeaders: Record<string, unknown> = {},
+	): Promise<FolderResponse> {
+		const params = {
+			archiveId: folderVOs[0].archiveId,
+			folderId: folderVOs[0].folderId,
+		};
+		const response = this.httpV2.get<FolderVO>(
 			'/folder/getWithChildren',
-			data,
-			{ responseClass: FolderResponse },
+			params,
+			null,
+			{
+				headers: optionalHeaders,
+			},
 		);
+		const folderVos = await firstValueFrom(response);
+
+		// We need the `Results` to look the way v1 results look.
+		const simulatedV1FolderResponseResults = [
+			folderVos.map((folderVo) => [{ FolderVO: folderVo }]),
+		];
+		const folderResponse = new FolderResponse({
+			isSuccessful: true,
+			isSystemUp: true,
+			Results: simulatedV1FolderResponseResults,
+		});
+		return folderResponse;
 	}
 
 	public navigate(folderVO: FolderVO): Observable<FolderResponse> {

@@ -38,22 +38,31 @@ class MultipartUploadUrlsList {
 }
 
 export class RecordRepo extends BaseRepo {
-	public async get(recordVOs: RecordVO[]): Promise<RecordResponse> {
-		const data = recordVOs.map((recordVO) => ({
-			RecordVO: new RecordVO({
-				folder_linkId: recordVO.folder_linkId,
-				recordId: recordVO.recordId,
-				archiveNbr: recordVO.archiveNbr,
+	public async get(
+		recordVOs: RecordVO[],
+		optionalHeaders: Record<string, unknown> = {},
+	): Promise<RecordResponse> {
+		const recordIds = recordVOs.map((record: RecordVO) => record.recordId);
+		const data = {
+			recordIds,
+		};
+		const recordVos = await firstValueFrom(
+			this.httpV2.get<RecordVO>('v2/record', data, null, {
+				headers: optionalHeaders,
 			}),
-		}));
-
-		return await this.http.sendRequestPromise<RecordResponse>(
-			'/record/get',
-			data,
-			{
-				responseClass: RecordResponse,
-			},
 		);
+
+		// We need the `Results` to look the way v1 results look.
+		const simulatedV1RecordResponseResults = [
+			recordVos.map((recordVo) => [{ RecordVO: recordVo }]),
+		];
+
+		const recordResponse = new RecordResponse({
+			isSuccessful: true,
+			isSystemUp: true,
+			Results: simulatedV1RecordResponseResults,
+		});
+		return recordResponse;
 	}
 
 	public async getLean(
