@@ -37,7 +37,7 @@
 		"@angular/core": "20.1.6",
 		"@angular/fire": "^20.0.1",
 		"@angular/forms": "20.1.6",
-		"@angular/google-maps": "^19.2.19",
+		"@angular/google-maps": "^20.2.1",
 		"@angular/localize": "20.1.6",
 		"@angular/platform-browser": "20.1.6",
 		"@angular/platform-browser-dynamic": "20.1.6",
