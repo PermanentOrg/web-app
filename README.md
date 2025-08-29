@@ -19,7 +19,7 @@ You need access to FontAwesome Pro packages to install dependencies.
 1. Add your FontAwesome token to `.env`:
 
 ```env
-FONTAWESOME_PACKAGE_TOKEN=your_token_here
+export FONTAWESOME_PACKAGE_TOKEN=your_token_here
 ```
 
 Then run the app using `npm run dev` to point the dev server against your `local.permanent.org` VM accessible at `https://ng.permanent.org:4200`
