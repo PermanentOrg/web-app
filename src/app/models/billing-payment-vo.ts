@@ -15,13 +15,14 @@ export class BillingPaymentVO extends BaseVO {
 	constructor(voData: BillingPaymentVOData) {
 		super(voData);
 		this.accountIdThatPaid = voData.accountIdThatPaid;
-		this.currency = voData.currency;
+		this.currency = voData.currency ?? this.currency;
 		this.donationAmount = voData.donationAmount;
 		this.donationMatchAmount = voData.donationMatchAmount;
 		this.monetaryAmount = voData.monetaryAmount;
 		this.receiptEmail = voData.receiptEmail;
 		this.refIdToIncrease = voData.refIdToIncrease;
-		this.refTableToIncrease = voData.refTableToIncrease;
+		this.refTableToIncrease =
+			voData.refTableToIncrease ?? this.refTableToIncrease;
 		this.spaceAmountInGb = voData.spaceAmountInGb;
 		this.storageAmount = voData.storageAmount;
 	}
