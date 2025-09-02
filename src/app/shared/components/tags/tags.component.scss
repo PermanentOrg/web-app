@@ -31,28 +31,22 @@ $gutter-size: 0.25rem;
 		.customMetadataValue {
 			border-radius: 0.5rem;
 			padding: 0.5rem 0.5rem;
-			overflow-wrap: break-word;
 			hyphens: auto;
 			margin-bottom: 0;
 		}
 		.keyword {
 			background: rgba($PR-purple, 0.2);
+			max-width: 13rem;
 		}
 		.customMetadataField {
-			float: left;
-			padding: 0 0.5rem;
 			border-radius: 0.5rem 0rem 0rem 0.5rem;
-			color: #ffffff;
-			background: #5261b7;
+			color: $white;
+			background: $PR-blue-light;
 			max-width: 6.5rem;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
 		}
 		.customMetadataValue {
-			float: left;
 			border-radius: 0rem 0.5rem 0.5rem 0rem;
-			background: rgba(#5261b7, 0.2);
+			background: rgba($PR-blue-light, 0.2);
 			max-width: 6.5rem;
 			margin-right: 0.25em;
 		}

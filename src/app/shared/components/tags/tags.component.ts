@@ -19,6 +19,7 @@ export class TagsComponent implements OnChanges {
 	@Input() isDialog = false;
 
 	orderedTags: TagVOData[] = [];
+	hoveredMetadataId = null;
 
 	ngOnChanges() {
 		if (!this.tags?.length) {
