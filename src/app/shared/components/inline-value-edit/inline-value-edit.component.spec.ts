@@ -15,7 +15,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '@shared/shared.module';
 
-import { moment } from 'vis-timeline/standalone';
+import moment from 'moment';
 import { RecordVO, RecordVOData } from '@models';
 import {
 	getOffsetMomentFromDTString,

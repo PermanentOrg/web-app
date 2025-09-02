@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { getUtcMomentFromDTString } from '@shared/utilities/dateTime';
-import { moment } from 'vis-timeline/standalone';
+import moment from 'moment';
 
 moment.updateLocale('en', {
 	relativeTime: {

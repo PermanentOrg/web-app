@@ -17,7 +17,7 @@ import {
 	NgbDatepicker,
 	NgbDateStruct,
 } from '@ng-bootstrap/ng-bootstrap';
-import { moment } from 'vis-timeline/standalone';
+import moment from 'moment';
 import { ItemVO } from '@models';
 import {
 	applyTimezoneOffset,
