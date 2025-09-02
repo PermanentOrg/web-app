@@ -17,6 +17,7 @@ export class TagsComponent implements OnChanges {
 	@Input() isEditing = false;
 	@Input() animate = false;
 	@Input() isDialog = false;
+	@Input() hoveredMetadataId = null; 
 
 	orderedTags: TagVOData[] = [];
 
