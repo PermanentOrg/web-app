@@ -1,4 +1,4 @@
-import { moment } from 'vis-timeline/standalone';
+import moment from 'moment';
 import { TimezoneVOData } from '@models/timezone-vo';
 
 export function momentFormatNum(
