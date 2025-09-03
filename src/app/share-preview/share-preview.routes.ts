@@ -7,6 +7,8 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
+import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
 import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
@@ -90,7 +92,16 @@ export const routes: Routes = [
 		data: {
 			noFileListPadding: true,
 		},
-		children: sharePreviewChildren,
+		children: [
+			...sharePreviewChildren,
+			{
+				path: 'record/:recArchiveNbr',
+				component: FileViewerComponent,
+				resolve: {
+					currentRecord: RecordResolveService,
+				},
+			},
+		],
 	},
 ];
 @NgModule({
