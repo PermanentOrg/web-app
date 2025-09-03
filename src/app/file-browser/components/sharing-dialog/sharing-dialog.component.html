@@ -465,4 +465,9 @@
 			</div>
 		</div>
 	}
+	<pr-share-link-settings
+		[shareItem]="shareItem"
+		[shareLink]="shareLink"
+		*ngIf="canShare"
+	></pr-share-link-settings>
 </div>
