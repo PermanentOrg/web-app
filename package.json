@@ -87,7 +87,7 @@
 		"shallow-render": "^20.0.0",
 		"time-ago-pipe": "^1.3.2",
 		"ts-key-enum": "^2.0.2",
-		"vis-data": "^7.1.6",
+		"vis-data": "^8.0.1",
 		"vis-timeline": "^7.7.2",
 		"vis-util": "^5.0.3",
 		"xss": "^1.0.14",
