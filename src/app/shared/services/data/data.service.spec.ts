@@ -74,7 +74,7 @@ describe('DataService', () => {
 		).toBeUndefined();
 	});
 
-	it('should fetch lean data for placeholder items', () => {
+	it('should fetch lean data for placeholder items', (done) => {
 		const service = TestBed.inject(DataService);
 		const httpMock = TestBed.inject(HttpTestingController);
 		const navigateResponse = new FolderResponse(navigateMinData);
@@ -85,17 +85,21 @@ describe('DataService', () => {
 			service.registerItem(item);
 		});
 
-		service.fetchLeanItems(currentFolder.ChildItemVOs).then(() => {
-			currentFolder.ChildItemVOs.forEach((item) => {
-				expect(item.dataStatus).toEqual(DataStatus.Lean);
-			});
-		});
+		service
+			.fetchLeanItems(currentFolder.ChildItemVOs)
+			.then(() => {
+				currentFolder.ChildItemVOs.forEach((item) => {
+					expect(item.dataStatus).toEqual(DataStatus.Lean);
+				});
+				done();
+			})
+			.catch(done.fail);
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/folder/getLeanItems`);
 		req.flush(getLeanItemsData);
 	});
 
-	it('should handle an empty array when fetching lean data', () => {
+	it('should handle an empty array when fetching lean data', (done) => {
 		const service = TestBed.inject(DataService);
 		const navigateResponse = new FolderResponse(navigateMinData);
 		const currentFolder = navigateResponse.getFolderVO(true);
@@ -105,13 +109,14 @@ describe('DataService', () => {
 			.fetchLeanItems([])
 			.then((count) => {
 				expect(count).toBe(0);
+				done();
 			})
 			.catch(() => {
 				fail();
 			});
 	});
 
-	it('should fetch full data for placeholder items', () => {
+	it('should fetch full data for placeholder items', (done) => {
 		const service = TestBed.inject(DataService);
 		const httpMock = TestBed.inject(HttpTestingController);
 		const navigateResponse = new FolderResponse(navigateMinData);
@@ -124,28 +129,30 @@ describe('DataService', () => {
 
 		const records = currentFolder.ChildItemVOs.filter((item) => item.isRecord);
 
-		service.fetchFullItems(records).then(() => {
-			records.forEach((item) => {
-				expect(item.dataStatus).toEqual(DataStatus.Full);
-			});
-		});
+		service
+			.fetchFullItems(records)
+			.then(() => {
+				records.forEach((item) => {
+					expect(item.dataStatus).toEqual(DataStatus.Full);
+				});
+				done();
+			})
+			.catch(done.fail);
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/record/get`);
 		req.flush(getFullRecordsData);
 	});
 
-	it('should handle an empty array when fetching full data', () => {
+	it('should handle an empty array when fetching full data', async () => {
 		const service = TestBed.inject(DataService);
 		const navigateResponse = new FolderResponse(navigateMinData);
 		const currentFolder = navigateResponse.getFolderVO(true);
 		service.setCurrentFolder(currentFolder);
 
-		service.fetchFullItems([]).catch(() => {
-			fail();
-		});
+		await service.fetchFullItems([]);
 	});
 
-	it('should refresh the current folder with latest data', () => {
+	it('should refresh the current folder with latest data', (done) => {
 		const service = TestBed.inject(DataService);
 		const httpMock = TestBed.inject(HttpTestingController);
 		const navigateResponse = new FolderResponse(navigateMinData);
@@ -155,15 +162,19 @@ describe('DataService', () => {
 		currentFolder.ChildItemVOs = [];
 		service.setCurrentFolder(currentFolder);
 
-		service.refreshCurrentFolder().then(() => {
-			expect(currentFolder.ChildItemVOs.length).toBe(childItemCount);
-		});
+		service
+			.refreshCurrentFolder()
+			.then(() => {
+				expect(currentFolder.ChildItemVOs.length).toBe(childItemCount);
+				done();
+			})
+			.catch(done.fail);
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/folder/navigateMin`);
 		req.flush(navigateMinData);
 	});
 
-	it('should add items to thumbRefreshQueue that meet the criteria', () => {
+	it('should add items to thumbRefreshQueue that meet the criteria', (done) => {
 		const service = TestBed.inject(DataService);
 		const httpMock = TestBed.inject(HttpTestingController);
 		const navigateResponse = new FolderResponse(navigateMinData);
@@ -174,11 +185,15 @@ describe('DataService', () => {
 			service.registerItem(item);
 		});
 
-		service.fetchLeanItems(currentFolder.ChildItemVOs).then(() => {
-			currentFolder.ChildItemVOs.forEach((item) => {
-				expect(service.getThumbRefreshQueue()).not.toContain(item);
-			});
-		});
+		service
+			.fetchLeanItems(currentFolder.ChildItemVOs)
+			.then(() => {
+				currentFolder.ChildItemVOs.forEach((item) => {
+					expect(service.getThumbRefreshQueue()).not.toContain(item);
+				});
+				done();
+			})
+			.catch(done.fail);
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/folder/getLeanItems`);
 		req.flush(getLeanItemsData);
