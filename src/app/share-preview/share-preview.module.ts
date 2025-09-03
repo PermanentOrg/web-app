@@ -5,6 +5,9 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { EditService } from '@core/services/edit/edit.service';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { SharePreviewRoutingModule } from './share-preview.routes';
 
 @NgModule({
@@ -15,7 +18,13 @@ import { SharePreviewRoutingModule } from './share-preview.routes';
 		FormsModule,
 		NgbTooltipModule,
 	],
-	providers: [DataService, FolderViewService],
+	providers: [
+		DataService,
+		FolderViewService,
+		RecordResolveService,
+		EditService,
+		FolderPickerService,
+	],
 })
 export class SharePreviewModule {
 	constructor(folderView: FolderViewService) {

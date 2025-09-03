@@ -258,6 +258,7 @@ export class FileListItemComponent
 		if (this.router.routerState.snapshot.url.includes('/share/')) {
 			this.allowActions = false;
 			this.isInSharePreview = true;
+			this.canSelect = true;
 		}
 
 		if (this.router.routerState.snapshot.url.includes('/apps')) {
