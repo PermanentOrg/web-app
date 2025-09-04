@@ -30,62 +30,58 @@
 			</div>
 		</div>
 		<div class="panel" #panel>
-			@switch (activeTab) {
-				@case ('switch') {
-					<div class="panel-title">({{ archives.length }}) Archives</div>
-					@for (archive of archives; track archive) {
-						<pr-archive-small
-							(archiveClick)="onArchiveClick(archive)"
-							[clickable]="true"
-							[showAccept]="account.defaultArchiveId !== archive.archiveId"
-							acceptText="Make Default"
-							acceptIcon="star"
-							(acceptClick)="onArchiveMakeDefaultClick(archive)"
-							[showRemove]="
-								archive.accessRole.includes('owner') &&
-								currentArchive.archiveId !== archive.archiveId &&
-								account.defaultArchiveId !== archive.archiveId &&
-								archives.length > 1
-							"
-							removeText="Delete Archive"
-							(removeClick)="onArchiveDeleteClick(archive)"
-							[largeOnDesktop]="true"
-							[archive]="archive"
-							[actionsAsDropdown]="true"
-							[accessRole]="archive.accessRole"
-							[class.waiting]="archive.isPendingAction"
-						></pr-archive-small>
-					}
-				}
-				@case ('pending') {
+			<ng-container [ngSwitch]="activeTab">
+				<ng-container *ngSwitchCase="'switch'">
+					<div class="panel-title">({{ archives?.length }}) Archives</div>
+					<pr-archive-small
+						*ngFor="let archive of archives"
+						(archiveClick)="onArchiveClick(archive)"
+						[clickable]="true"
+						[showAccept]="account.defaultArchiveId !== archive.archiveId"
+						acceptText="Make Default"
+						acceptIcon="star"
+						(acceptClick)="onArchiveMakeDefaultClick(archive)"
+						[showRemove]="
+							archive.accessRole.includes('owner') &&
+							currentArchive.archiveId !== archive.archiveId &&
+							account.defaultArchiveId !== archive.archiveId &&
+							archives?.length > 1
+						"
+						removeText="Delete Archive"
+						(removeClick)="onArchiveDeleteClick(archive)"
+						[largeOnDesktop]="true"
+						[archive]="archive"
+						[actionsAsDropdown]="true"
+						[accessRole]="archive.accessRole"
+						[class.waiting]="archive.isPendingAction"
+					></pr-archive-small>
+				</ng-container>
+				<ng-container *ngSwitchCase="'pending'">
 					<div class="panel-title">
-						({{ pendingArchives.length }}) Pending Archives
+						({{ pendingArchives?.length }}) Pending Archives
 					</div>
-					@if (!pendingArchives.length) {
-						<div>No pending archives</div>
-					}
-					@for (archive of pendingArchives; track archive) {
-						<pr-archive-small
-							[largeOnDesktop]="true"
-							[archive]="archive"
-							[accessRole]="archive.accessRole"
-							[showAccept]="true"
-							(acceptClick)="acceptPendingArchive(archive)"
-							[showRemove]="true"
-							removeText="Decline"
-							(removeClick)="declinePendingArchive(archive)"
-						>
-						</pr-archive-small>
-					}
-				}
-				@case ('new') {
+					<div *ngIf="!pendingArchives?.length">No pending archives</div>
+					<pr-archive-small
+						*ngFor="let archive of pendingArchives"
+						[largeOnDesktop]="true"
+						[archive]="archive"
+						[accessRole]="archive.accessRole"
+						[showAccept]="true"
+						(acceptClick)="acceptPendingArchive(archive)"
+						[showRemove]="true"
+						removeText="Decline"
+						(removeClick)="declinePendingArchive(archive)"
+					>
+					</pr-archive-small>
+				</ng-container>
+				<ng-container *ngSwitchCase="'new'">
 					<pr-new-archive-form
 						[showRelations]="true"
 						(success)="onNewArchiveFormSubmit($event)"
-						(errorOccurred)="onNewArchiveFormFailure($event)"
+						(error)="onNewArchiveFormFailure($event)"
 					></pr-new-archive-form>
-				}
-			}
+				</ng-container>
+			</ng-container>
 		</div>
 	</div>
 </div>

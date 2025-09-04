@@ -26,7 +26,20 @@ export class AuthGuard {
 		| Promise<boolean | UrlTree>
 		| boolean
 		| UrlTree {
+		const queryParams = route.queryParamMap;
+
+		const inviteCode = queryParams.get('inviteCode');
+		const fullName = queryParams.get('fullName');
+		const primaryEmail = queryParams.get('primaryEmail');
+		const isInviteSignup = inviteCode && fullName && primaryEmail;
+
 		if (this.account.getAccount()?.accountId) {
+			if (state.url.includes('/signup') && isInviteSignup) {
+				return this.router.createUrlTree([
+					'/app',
+					{ outlets: { primary: 'private', dialog: 'archives/pending' } },
+				]);
+			}
 			return this.account.hasOwnArchives().then((hasArchives) => {
 				if (hasArchives) {
 					return this.router.parseUrl('/app/private');
