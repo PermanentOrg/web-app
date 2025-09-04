@@ -1,19 +1,46 @@
 <pr-announcement></pr-announcement>
 <div class="auth-root">
 	<div class="auth-container">
-		<div class="image">
-			<div class="testimony">
-				<p class="text">
-					At Permanent, we’re committed to helping communities preserve their
-					legacies. <b>Byte4Byte</b> is our storage grant program for nonprofits
-					that provides free, permanent storage to help you protect the stories
-					and movements shaping your community. Keep history accessible for
-					generations.
+		<div class="legacy-lab-container">
+			<div class="legacy-lab-testimony">
+				<div class="legacy-lab-header">
+					<h1 class="legacy-lab-header-title">Legacy Lab</h1>
+					<h2 class="legacy-lab-header-sub-title">Begins October 6th</h2>
+				</div>
+				<p class="legacy-lab-text">
+					At Permanent, we believe in the power of preserving your story. Join
+					Legacy Lab, a free four-week course where you'll create a lasting
+					archive and learn through:
 				</p>
-				<br />
-				<a class="link" href="https://www.permanent.org/byte4byte/"
-					>Learn more about Byte4Byte</a
-				>
+				<ul class="legacy-lab-list">
+					<li>
+						<fa-icon
+							class="legacy-lab-list-icon"
+							[icon]="listCheckIcon"
+						></fa-icon
+						>Daily Tasks
+					</li>
+					<li>
+						<fa-icon
+							class="legacy-lab-list-icon"
+							[icon]="circleVideoIcon"
+						></fa-icon
+						>Video Tutorials
+					</li>
+					<li>
+						<fa-icon
+							class="legacy-lab-list-icon"
+							[icon]="userGroupSimpleIcon"
+						></fa-icon
+						>Peer Support through Community Groups
+					</li>
+				</ul>
+				<button (click)="openLegacyLab()" class="legacy-lab-button">
+					Sign Up for Legacy Lab Today!<fa-icon
+						class="legacy-lab-button-icon"
+						[icon]="leafOakIcon"
+					></fa-icon>
+				</button>
 			</div>
 		</div>
 		<div class="auth">
