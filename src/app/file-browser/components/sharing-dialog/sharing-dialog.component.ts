@@ -12,7 +12,8 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
-import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO } from '@models';
+import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO, RecordVO } from '@models';
+import { ShareLink } from '@root/app/share-links/models/share-link';
 import { AccessRoleType } from '@models/access-role';
 import { sortShareVOs } from '@models/share-vo';
 import { Deferred } from '@root/vendor/deferred';
@@ -24,6 +25,7 @@ import {
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 import { InviteResponse } from '@shared/services/api/index.repo';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { EVENTS } from '@shared/services/google-analytics/events';
@@ -58,10 +60,12 @@ enum ExpirationDays {
 }
 
 type ShareByUrlProps =
+        | 'accessRestrictions'
 	| 'defaultAccessRole'
 	| 'expiresDT'
 	| 'autoApproveToggle'
-	| 'previewToggle';
+	| 'expirationTimestamp'
+	| 'permissionsLevel';
 
 const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
 	Expiration,
@@ -86,9 +90,9 @@ export class SharingDialogComponent implements OnInit {
 	public shares: ShareVO[] = [];
 	public pendingShares: ShareVO[] = [];
 
-	public shareLink: ShareByUrlVO = null;
+    public shareLink: ShareByUrlVO = null;
+    public newShareLink: ShareLink = null;
 
-	public previewToggle: 0 | 1 = 1;
 	public autoApproveToggle: 0 | 1 = 1;
 	public expiration: Expiration;
 	public linkDefaultAccessRole: AccessRoleType = 'access.role.viewer';
@@ -97,7 +101,7 @@ export class SharingDialogComponent implements OnInit {
 	public linkCopied = false;
 	public showLinkSettings = false;
 
-	public linkType = 'private';
+	public linkType = 'public';
 
 	public trashIcon = faTrash;
 
@@ -124,7 +128,7 @@ export class SharingDialogComponent implements OnInit {
 		},
 	];
 
-	public displayDropdown = false;
+	public displayDropdown = true;
 
 	@ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
 
@@ -138,6 +142,7 @@ export class SharingDialogComponent implements OnInit {
 		private promptService: PromptService,
 		private fb: UntypedFormBuilder,
 		private api: ApiService,
+		private shareApi: ShareLinksApiService,
 		private messageService: MessageService,
 		private relationshipService: RelationshipService,
 		private ga: GoogleAnalyticsService,
@@ -153,7 +158,7 @@ export class SharingDialogComponent implements OnInit {
 
 		this.shareItem = this.data.item as ItemVO;
 
-		this.displayDropdown = feature.isEnabled('unlisted-share');
+		this.displayDropdown = true;
 	}
 
 	ngOnInit(): void {
@@ -172,11 +177,39 @@ export class SharingDialogComponent implements OnInit {
 
 		this.relationshipService.update();
 
-		this.shareLink = this.data.link;
+	    this.shareLink = this.data.link;
+	    
+	    this.newShareLink = this.data.newShare;
+
 		this.setShareLinkFormValue();
 
 		this.checkQueryParams();
 	}
+
+    calculateAccessRestrictions(linkType: string, autoApprove: number): string {
+	if (linkType == 'public') {
+	    return 'none';
+	}
+	if (autoApprove == 1) {
+	    return 'account';
+	} else {
+	    return 'approval';
+	}
+    }
+    accessRoleToPermissionsLevel(accessRole: AccessRoleType): string {
+	switch (accessRole) {
+	    case 'access.role.editor':
+		return 'editor';
+	    case 'access.role.contributor':
+		return 'contributor';
+	    case 'access.role.manager':
+		return 'manager';
+	    case 'access.role.owner':
+		return 'owner';
+	    default:
+		return 'viewer';
+	}
+    }
 
 	checkQueryParams() {
 		if (this.route.snapshot) {
@@ -455,7 +488,6 @@ export class SharingDialogComponent implements OnInit {
 
 	setShareLinkFormValue(): void {
 		if (this.shareLink) {
-			this.previewToggle = this.shareLink.previewToggle;
 			this.autoApproveToggle = this.shareLink.autoApproveToggle || 0;
 			this.expiration = this.getExpirationFromExpiresDT(
 				this.shareLink.expiresDT,
@@ -475,7 +507,6 @@ export class SharingDialogComponent implements OnInit {
 				}
 			});
 		} else {
-			this.previewToggle = 1;
 			this.autoApproveToggle = 1;
 			this.expiration = Expiration.Never;
 			this.expirationOptions = EXPIRATION_OPTIONS;
@@ -484,11 +515,10 @@ export class SharingDialogComponent implements OnInit {
 
 	async generateShareLink() {
 		this.updatingLink = true;
-		try {
+	    try {
 			const response = await this.api.share.generateShareLink(this.shareItem);
 			this.shareLink = response.getShareByUrlVO();
 			this.shareLink.autoApproveToggle = this.autoApproveToggle || 0;
-			this.shareLink.previewToggle = this.previewToggle || 0;
 			await this.api.share.updateShareLink(this.shareLink);
 			this.setShareLinkFormValue();
 			this.showLinkSettings = true;
@@ -539,13 +569,30 @@ export class SharingDialogComponent implements OnInit {
 		}
 	}
 
-	async onShareLinkPropChange(propName: ShareByUrlProps, value: any) {
-		this.updatingLink = true;
-		try {
-			const update = new ShareByUrlVO(this.shareLink);
-			update[propName] = value;
-			await this.api.share.updateShareLink(update);
-			this.shareLink[propName] = update[propName];
+    async onShareLinkPropChange(propName: ShareByUrlProps, value: any) {
+	this.updatingLink = true;
+	let update: Partial<ShareLink> = {};
+
+	    try {
+		if (propName == 'accessRestrictions') {
+		    value = this.calculateAccessRestrictions(value, this.autoApproveToggle);
+		    update = { 'accessRestrictions': value, 'permissionsLevel': 'viewer' };
+		} else if (propName == 'autoApproveToggle') {
+		    propName = 'accessRestrictions';
+		    value = this.calculateAccessRestrictions(this.linkType, value);
+		    update = { 'accessRestrictions': value };
+		}
+		if (propName == 'expiresDT') {
+		    const conversion = this.getExpirationFromExpiresDT(value);
+		    value = this.getExpiresDTFromExpiration(conversion);
+		    update = { 'expirationTimestamp': value };
+		}
+		if (propName == 'defaultAccessRole') {
+		    value = this.accessRoleToPermissionsLevel(value);
+		    update = { 'permissionsLevel': value };
+		}
+		await this.shareApi.updateShareLink(this.newShareLink.id, update);
+		this.newShareLink[propName] = update[propName];
 		} catch (err) {
 			if (err instanceof ShareResponse) {
 				this.messageService.showError({
