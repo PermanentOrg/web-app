@@ -58,6 +58,7 @@ enum ExpirationDays {
 }
 
 type ShareByUrlProps =
+        | 'linkType'
 	| 'defaultAccessRole'
 	| 'expiresDT'
 	| 'autoApproveToggle'
@@ -124,7 +125,7 @@ export class SharingDialogComponent implements OnInit {
 		},
 	];
 
-	public displayDropdown = false;
+	public displayDropdown = true;
 
 	@ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
 
@@ -153,7 +154,7 @@ export class SharingDialogComponent implements OnInit {
 
 		this.shareItem = this.data.item as ItemVO;
 
-		this.displayDropdown = feature.isEnabled('unlisted-share');
+		this.displayDropdown = true;
 	}
 
 	ngOnInit(): void {
