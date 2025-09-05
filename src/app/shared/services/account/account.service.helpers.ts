@@ -10,7 +10,7 @@ interface SavePropertyOnAccountServices {
 	apiService: ApiService;
 }
 
-interface AccountChange {
+export interface AccountChange {
 	prop: keyof AccountVO;
 	value: string;
 }
@@ -24,6 +24,10 @@ export async function savePropertyOnAccount(
 	const updateData = {
 		primaryEmail: account.primaryEmail,
 		[change.prop]: change.value,
+		phoneStatus:
+			change.prop === 'primaryPhone' && change.value === ''
+				? 'status.auth.unverified'
+				: account.phoneStatus,
 	};
 	account.update(updateData);
 	try {
