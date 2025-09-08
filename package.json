@@ -62,7 +62,7 @@
 		"country-list": "^2.4.1",
 		"date-fns": "^4.1.0",
 		"debug": "4.4.1",
-		"firebase": "^12.1.0",
+		"firebase": "^12.2.1",
 		"firebase-functions": "^3.6.0",
 		"fuse.js": "^6.6.2",
 		"gsap": "^3.6.0",
