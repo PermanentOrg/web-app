@@ -103,7 +103,7 @@
 		"@es-joy/jsdoccomment": "^0.52.0",
 		"@eslint/compat": "^1.3.2",
 		"@eslint/eslintrc": "^3.3.1",
-		"@eslint/js": "^9.34.0",
+		"@eslint/js": "^9.35.0",
 		"@storybook/addon-docs": "9.1.4",
 		"@storybook/addon-links": "9.1.4",
 		"@storybook/angular": "9.1.4",
@@ -116,14 +116,14 @@
 		"@types/webpack-env": "^1.18.8",
 		"angular-eslint": "^20.2.0",
 		"dotenv": "^8.2.0",
-		"eslint": "^9.34.0",
-		"eslint-config-love": "^122.0.0",
+		"eslint": "^9.35.0",
+		"eslint-config-love": "^123.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-jasmine": "^4.2.2",
-		"eslint-plugin-jsdoc": "^54.3.1",
+		"eslint-plugin-jsdoc": "^55.0.0",
 		"eslint-plugin-prefer-arrow": "^1.2.2",
 		"eslint-plugin-prettier": "^5.5.4",
-		"eslint-plugin-storybook": "^9.1.4",
+		"eslint-plugin-storybook": "^9.1.5",
 		"globals": "^16.3.0",
 		"jasmine-bamboo-reporter": "0.0.2",
 		"jasmine-core": "^5.9.0",
@@ -145,6 +145,6 @@
 		"ts-node": "^10.9.1",
 		"tslib": "^2.0.0",
 		"typescript": "5.8.3",
-		"typescript-eslint": "^8.42.0"
+		"typescript-eslint": "^8.43.0"
 	}
 }
