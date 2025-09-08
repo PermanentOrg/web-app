@@ -11,18 +11,32 @@
 		@for (tag of orderedTags; track tagTrackByFn($index, tag)) {
 			<div
 				class="tag"
+				(mouseenter)="hoveredMetadataId = tag.tagId"
+				(mouseleave)="hoveredMetadataId = null"
 				[@ngIfScaleAnimationDynamic]="animate ? 'animate' : 'static'"
 			>
 				@if (!tag.name.includes(':')) {
-					<p class="keyword">{{ tag.name }}</p>
+					<p
+						class="keyword truncatedText"
+						[class.fullText]="hoveredMetadataId === tag.tagId"
+					>
+						{{ tag.name }}
+					</p>
 				}
+
 				@if (tag.name.includes(':')) {
-					<p class="customMetadataField">
+					<p
+						class="customMetadataField truncatedText"
+						[class.fullText]="hoveredMetadataId === tag.tagId"
+					>
 						{{ tag.name.split(':')[0] }}
 					</p>
 				}
 				@if (tag.name.includes(':')) {
-					<p class="customMetadataValue">
+					<p
+						class="customMetadataValue truncatedText"
+						[class.fullText]="hoveredMetadataId === tag.tagId"
+					>
 						{{ tag.name.slice(tag.name.indexOf(':') + 1) }}
 					</p>
 				}

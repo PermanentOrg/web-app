@@ -389,3 +389,18 @@ $drag-outline-border: 5px;
 #zohohc-asap-web-launcherbox:hover {
 	opacity: 1;
 }
+
+.truncatedText {
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.fullText {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	display: flex;
+	align-items: center;
+}
