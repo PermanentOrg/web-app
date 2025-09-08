@@ -18,6 +18,8 @@ updates:
       eslint:
         patterns:
           - '*eslint*'
+        exclude-patterns:
+          - 'eslint-plugin-storybook'
       vis:
         patterns:
           - 'vis-*'
