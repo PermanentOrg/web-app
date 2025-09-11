@@ -1,4 +1,5 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Validators } from '@angular/forms';
 
 import { remove, orderBy } from 'lodash';
@@ -20,7 +21,6 @@ import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { RELATIONSHIP_FIELD } from '@shared/components/prompt/prompt-fields';
 import { DataService } from '@shared/services/data/data.service';
-import { Router } from '@angular/router';
 
 @Component({
 	selector: 'pr-archive-switcher',
@@ -28,21 +28,19 @@ import { Router } from '@angular/router';
 	styleUrls: ['./archive-switcher.component.scss'],
 	standalone: false,
 })
-export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
+export class ArchiveSwitcherComponent implements AfterViewInit {
 	public currentArchive: ArchiveVO;
-	public archives: ArchiveVO[] = [];
-	public archivesLoading = true;
+	public archives: ArchiveVO[];
 	constructor(
 		private accountService: AccountService,
 		private api: ApiService,
 		private data: DataService,
 		private prConstants: PrConstantsService,
+		private route: ActivatedRoute,
 		private prompt: PromptService,
 		private message: MessageService,
 		private router: Router,
-	) {}
-
-	async ngOnInit() {
+	) {
 		this.data.setCurrentFolder(
 			new FolderVO({
 				displayName: 'Archives',
@@ -50,9 +48,9 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 				type: 'page',
 			}),
 		);
-		this.currentArchive = this.accountService.getArchive();
+		this.currentArchive = accountService.getArchive();
 
-		const archivesData = await this.accountService.refreshArchives();
+		const archivesData = this.route.snapshot.data.archives || [];
 		const archives = orderBy(
 			archivesData.map((archiveData) => new ArchiveVO(archiveData)),
 			'fullName',
@@ -65,7 +63,6 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 		this.accountService.setArchive(this.currentArchive);
 
 		this.archives = archives as ArchiveVO[];
-		this.archivesLoading = false;
 	}
 
 	ngAfterViewInit() {

@@ -11,7 +11,6 @@ import { ButtonComponent } from './components/button/button.component';
 import { ToggleComponent } from './components/toggle/toggle.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
-import { BasicLoadingSpinnerComponent } from './components/basic-loading-spinner/basic-loading-spinner.component';
 
 @NgModule({
 	declarations: [
@@ -20,7 +19,6 @@ import { BasicLoadingSpinnerComponent } from './components/basic-loading-spinner
 		ButtonComponent,
 		CheckboxComponent,
 		LoadingSpinnerComponent,
-		BasicLoadingSpinnerComponent,
 	],
 	imports: [CommonModule, FontAwesomeModule, FormsModule, ReactiveFormsModule],
 	exports: [
@@ -29,7 +27,6 @@ import { BasicLoadingSpinnerComponent } from './components/basic-loading-spinner
 		ButtonComponent,
 		CheckboxComponent,
 		LoadingSpinnerComponent,
-		BasicLoadingSpinnerComponent,
 	],
 })
 export class ComponentsModule {

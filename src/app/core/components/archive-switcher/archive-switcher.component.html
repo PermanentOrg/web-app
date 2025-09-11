@@ -9,11 +9,8 @@
 			>
 			</pr-archive-small>
 		}
-		@if (!archivesLoading && !archives.length) {
+		@if (!archives.length) {
 			<div class="archives-empty">You have no other archives</div>
-		}
-		@if (archivesLoading) {
-			<pr-basic-loading-spinner></pr-basic-loading-spinner>
 		}
 	</div>
 </div>
