@@ -1,0 +1,29 @@
+.outer-circle {
+	animation: spin-outer 2s linear infinite;
+	transform-origin: 50% 50%; /* Center the rotation */
+	transform-box: fill-box;
+}
+
+.inner-circle {
+	animation: spin-inner 2s linear infinite;
+	transform-origin: 50% 50%; /* Center the rotation */
+	transform-box: fill-box;
+}
+
+@keyframes spin-outer {
+	0% {
+		transform: scale(1.4) rotate(300deg);
+	}
+	100% {
+		transform: scale(1.4) rotate(660deg);
+	}
+}
+
+@keyframes spin-inner {
+	0% {
+		transform: scale(0.9) translate(-0.5px, 6.5px) rotate(45deg);
+	}
+	100% {
+		transform: scale(0.9) translate(-0.5px, 6px) rotate(-315deg);
+	}
+}

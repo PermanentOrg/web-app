@@ -1,12 +1,12 @@
 import { Shallow } from 'shallow-render';
-import { SharedModule } from '@shared/shared.module';
+import { ComponentsModule } from '../../components.module';
 import { ButtonComponent } from './button.component';
 
 describe('ButtonComponent', () => {
 	let shallow: Shallow<ButtonComponent>;
 
 	beforeEach(async () => {
-		shallow = new Shallow(ButtonComponent, SharedModule);
+		shallow = new Shallow(ButtonComponent, ComponentsModule);
 	});
 
 	it('should create', async () => {
