@@ -29,7 +29,6 @@ import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage
 import { DirectiveModule } from '../directive/directive.module';
 import { FilesystemModule } from '../filesystem/filesystem.module';
 import { UserChecklistModule } from '../user-checklist/user-checklist.module';
-import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
 import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
 import { EditService } from './services/edit/edit.service';
 import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
@@ -90,7 +89,6 @@ import { RedeemGiftComponent } from './components/redeem-gift/redeem-gift.compon
 		RightMenuComponent,
 		UploadProgressComponent,
 		UploadButtonComponent,
-		ArchiveSwitcherComponent,
 		FolderPickerComponent,
 		MultiSelectStatusComponent,
 		AccountSettingsComponent,
