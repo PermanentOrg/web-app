@@ -12,7 +12,8 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
-import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO } from '@models';
+import { ShareVO, ItemVO, ArchiveVO, InviteVO } from '@models';
+import { ShareLink } from '@root/app/share-links/models/share-link';
 import { AccessRoleType } from '@models/access-role';
 import { sortShareVOs } from '@models/share-vo';
 import { Deferred } from '@root/vendor/deferred';
@@ -24,6 +25,7 @@ import {
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 import { InviteResponse } from '@shared/services/api/index.repo';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { EVENTS } from '@shared/services/google-analytics/events';
@@ -58,11 +60,10 @@ enum ExpirationDays {
 }
 
 type ShareByUrlProps =
-        | 'linkType'
+	| 'linkType'
 	| 'defaultAccessRole'
 	| 'expiresDT'
-	| 'autoApproveToggle'
-	| 'previewToggle';
+	| 'autoApproveToggle';
 
 const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
 	Expiration,
@@ -87,9 +88,8 @@ export class SharingDialogComponent implements OnInit {
 	public shares: ShareVO[] = [];
 	public pendingShares: ShareVO[] = [];
 
-	public shareLink: ShareByUrlVO = null;
+	public shareLink: ShareLink = null;
 
-	public previewToggle: 0 | 1 = 1;
 	public autoApproveToggle: 0 | 1 = 1;
 	public expiration: Expiration;
 	public linkDefaultAccessRole: AccessRoleType = 'access.role.viewer';
@@ -139,6 +139,7 @@ export class SharingDialogComponent implements OnInit {
 		private promptService: PromptService,
 		private fb: UntypedFormBuilder,
 		private api: ApiService,
+		private shareApi: ShareLinksApiService,
 		private messageService: MessageService,
 		private relationshipService: RelationshipService,
 		private ga: GoogleAnalyticsService,
@@ -173,6 +174,7 @@ export class SharingDialogComponent implements OnInit {
 
 		this.relationshipService.update();
 
+		// not sure what this is going to do
 		this.shareLink = this.data.link;
 		this.setShareLinkFormValue();
 
@@ -338,6 +340,7 @@ export class SharingDialogComponent implements OnInit {
 				await this.confirmOwnerAdd(share);
 			}
 			this.shares = sortShareVOs(this.shares);
+			// TODO: need to send a ShareLink instead of a ShareVO here
 			await this.api.share.upsert(share);
 			this.originalRoles.set(share.shareId, share.accessRole);
 		} catch (err) {
@@ -423,7 +426,7 @@ export class SharingDialogComponent implements OnInit {
 
 		const diff = differenceInHours(
 			new Date(expiresDT),
-			new Date(this.shareLink.createdDT),
+			new Date(this.shareLink.createdAt),
 		);
 
 		if (diff <= 24 * ExpirationDays.Day) {
@@ -444,24 +447,22 @@ export class SharingDialogComponent implements OnInit {
 			case Expiration.Never:
 				return null;
 			case Expiration.Day:
-				return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 1));
+				return getSQLDateTime(addDays(new Date(this.shareLink.createdAt), 1));
 			case Expiration.Week:
-				return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 7));
+				return getSQLDateTime(addDays(new Date(this.shareLink.createdAt), 7));
 			case Expiration.Month:
-				return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 30));
+				return getSQLDateTime(addDays(new Date(this.shareLink.createdAt), 30));
 			case Expiration.Year:
-				return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 365));
+				return getSQLDateTime(addDays(new Date(this.shareLink.createdAt), 365));
 		}
 	}
 
 	setShareLinkFormValue(): void {
 		if (this.shareLink) {
-			this.previewToggle = this.shareLink.previewToggle;
-			this.autoApproveToggle = this.shareLink.autoApproveToggle || 0;
-			this.expiration = this.getExpirationFromExpiresDT(
-				this.shareLink.expiresDT,
-			);
-			this.linkDefaultAccessRole = this.shareLink.defaultAccessRole;
+			// TODO: maybe a conversion between the normal
+			// strings in share-link models and the abnormal old
+			// ones? 
+			//this.newAccessRole = this.shareLink.permissionsLevel;
 			this.expirationOptions = EXPIRATION_OPTIONS.filter((expiration) => {
 				switch (expiration.value) {
 					case Expiration.Never:
@@ -476,21 +477,34 @@ export class SharingDialogComponent implements OnInit {
 				}
 			});
 		} else {
-			this.previewToggle = 1;
 			this.autoApproveToggle = 1;
 			this.expiration = Expiration.Never;
 			this.expirationOptions = EXPIRATION_OPTIONS;
 		}
 	}
 
+	itemTypeHelper(ItemVO: item): string {
+		if (item.isRecord) {
+			return 'record';
+		}
+		return 'folder';
+	}
+
 	async generateShareLink() {
 		this.updatingLink = true;
 		try {
-			const response = await this.api.share.generateShareLink(this.shareItem);
-			this.shareLink = response.getShareByUrlVO();
+			// TODO: unfortunately I don't know how we're
+			// going to know what the type of the item is
+			// Ah. an ItemVO is just a RecordVO or a FolderVO,
+			// each of which has an `isRecord` and
+			// `isFolder` property
+			this.itemType = itemTypeHelper(this.shareItem);
+			this.shareLink = await this.shareApi.generateShareLink({
+				this.shareItem,
+				this.itemType,
+			});
 			this.shareLink.autoApproveToggle = this.autoApproveToggle || 0;
-			this.shareLink.previewToggle = this.previewToggle || 0;
-			await this.api.share.updateShareLink(this.shareLink);
+			await this.shareApi.updateShareLink(this.shareLink);
 			this.setShareLinkFormValue();
 			this.showLinkSettings = true;
 			this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
@@ -527,7 +541,7 @@ export class SharingDialogComponent implements OnInit {
 				'btn-danger',
 			);
 
-			await this.api.share.removeShareLink(this.shareLink);
+			await this.shareApi.deleteShareLink(this.shareLink.id);
 			this.shareLink = null;
 			this.setShareLinkFormValue();
 			deferred.resolve();
@@ -543,9 +557,10 @@ export class SharingDialogComponent implements OnInit {
 	async onShareLinkPropChange(propName: ShareByUrlProps, value: any) {
 		this.updatingLink = true;
 		try {
-			const update = new ShareByUrlVO(this.shareLink);
+			const update = new ShareLink(this.shareLink);
+			// TODO: is this going to work at all?
 			update[propName] = value;
-			await this.api.share.updateShareLink(update);
+			await this.shareApi.updateShareLink(update);
 			this.shareLink[propName] = update[propName];
 		} catch (err) {
 			if (err instanceof ShareResponse) {
