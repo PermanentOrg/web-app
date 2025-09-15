@@ -52,7 +52,7 @@ class MultipartUploadUrlsList {
 // to simply use what stela provides, but there is work to be done regarding
 // overall type safety in this code base before we want to take that project
 // on.
-interface StelaTag {
+export interface StelaTag {
 	id: string;
 	name: string;
 	type: string;
@@ -67,8 +67,8 @@ interface StelaFile {
 	updatedAt: string;
 	downloadUrl: string;
 }
-interface StelaLocation {
-	id: number;
+export interface StelaLocation {
+	id: string;
 	streetNumber: string;
 	streetName: string;
 	locality: string;
@@ -85,17 +85,17 @@ interface StelaArchive {
 	archiveNumber: string;
 	name: string;
 }
-interface StelaShare {
+export interface StelaShare {
 	id: string;
 	status: ShareStatus;
 	accessRole: AccessRoleType;
 	archive: {
-		id: number;
-		name: string;
+		id: string;
 		thumbUrl200: string;
+		name: string;
 	};
 }
-type StelaRecord = Omit<RecordVO, 'files'> & {
+export type StelaRecord = Omit<RecordVO, 'files'> & {
 	tags: Array<StelaTag>;
 	archiveNumber: string;
 	displayDate: string;
@@ -122,7 +122,10 @@ const resolveTagName = (tag: StelaTag): string => {
 	return tag.name;
 };
 
-const convertStelaTagToTagVO = (stelaTag: StelaTag, archiveId: string): TagVO =>
+export const convertStelaTagToTagVO = (
+	stelaTag: StelaTag,
+	archiveId: string,
+): TagVO =>
 	new TagVO({
 		tagId: Number.parseInt(stelaTag.id),
 		name: resolveTagName(stelaTag),
@@ -138,7 +141,7 @@ const convertStelaFileToPermanentFile = (
 	downloadURL: stelaFile.downloadUrl,
 });
 
-const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
+export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 	new ShareVO({
 		shareId: stelaShare.id,
 		status: stelaShare.status,
@@ -150,17 +153,19 @@ const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 		},
 	});
 
-const convertStelaLocationToLocnVOData = (
+export const convertStelaLocationToLocnVOData = (
 	stelaLocation: StelaLocation,
 ): LocnVOData =>
 	stelaLocation.id
 		? {
 				...stelaLocation,
-				locnId: stelaLocation.id,
+				locnId: Number.parseInt(stelaLocation.id, 10),
 			}
 		: null;
 
-const convertStelaRecordToRecordVO = (stelaRecord: StelaRecord): RecordVO =>
+export const convertStelaRecordToRecordVO = (
+	stelaRecord: StelaRecord,
+): RecordVO =>
 	new RecordVO({
 		...stelaRecord,
 		TagVOs: stelaRecord.tags.map((stelaTag) =>
