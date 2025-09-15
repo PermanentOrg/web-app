@@ -338,7 +338,7 @@ export class DataService {
 
 				return await Promise.resolve(true);
 			})
-			.catch((e) => {
+			.catch(() => {
 				itemRejects.forEach((reject, index) => {
 					items[index].fetched = null;
 					reject();
