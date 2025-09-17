@@ -90,4 +90,29 @@ describe('GlamReasonsScreenComponent', () => {
 			reasons: ['Mock Reason', reason],
 		});
 	});
+
+	it('should clear selectedReasons and update sessionStorage when skipStep is called', async () => {
+		const { instance } = await shallow.render();
+
+		expect(instance.selectedReasons).toEqual(['Mock Reason']);
+
+		instance.skipStep();
+
+		expect(instance.selectedReasons).toEqual([]);
+		expect(sessionStorage.setItem).toHaveBeenCalledWith(
+			'reasons',
+			JSON.stringify([]),
+		);
+	});
+
+	it('should emit reasonOutput with empty reasons when skipStep is called', async () => {
+		const { instance, outputs } = await shallow.render();
+
+		instance.skipStep();
+
+		expect(outputs.reasonsEmit.emit).toHaveBeenCalledWith({
+			screen: 'finalize',
+			reasons: [],
+		});
+	});
 });
