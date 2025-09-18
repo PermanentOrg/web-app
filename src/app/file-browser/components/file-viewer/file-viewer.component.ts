@@ -8,6 +8,7 @@ import {
 	Optional,
 	DOCUMENT,
 } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'ts-key-enum';
@@ -74,6 +75,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	public editingDate: boolean = false;
 	private bodyScrollTop: number;
 	private tagSubscription: Subscription;
+	private isUnlistedShare = true;
+
+	public accessRestrictions: any;
 
 	constructor(
 		private router: Router,
@@ -85,6 +89,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		private accountService: AccountService,
 		private editService: EditService,
 		private tagsService: TagsService,
+		private location: Location,
 		@Optional() private publicProfile: PublicProfileService,
 	) {
 		// store current scroll position in file list
@@ -122,7 +127,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			});
 		}
 
-		this.canEdit =
+		this.canEdit = this.router.routerState.snapshot.url.includes('/share/') ? false : 
 			this.accountService.checkMinimumAccess(
 				this.currentRecord.accessRole,
 				AccessRole.Editor,
@@ -367,7 +372,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	close() {
-		this.router.navigate(['.'], { relativeTo: this.route.parent });
+		this.location.back();
+		if(this.isUnlistedShare) {
+			this.location.back();
+		}
 	}
 
 	public async onFinishEditing(
