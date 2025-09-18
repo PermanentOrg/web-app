@@ -11,8 +11,12 @@ import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-vi
 import { VideoComponent } from '@shared/components/video/video.component';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
+import { EditService } from '@core/services/edit/edit.service';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { ShareLinksApiService } from '../share-links/services/share-links-api.service';
 
 @NgModule({
+	providers: [EditService, FolderPickerService, ShareLinksApiService],
 	imports: [
 		CommonModule,
 		RouterModule,
