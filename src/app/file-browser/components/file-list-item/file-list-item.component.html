@@ -1,6 +1,7 @@
 <div
 	class="file-list-item"
 	(click)="onItemClick($event)"
+	(dblclick)="showUnlistedPreview($event)"
 	[ngClass]="{
 		'grid-view': inGridView,
 		selected: isSelected,
