@@ -80,9 +80,9 @@
 	border-radius: 1em;
 	margin-left: 20px;
 
-@media screen and (max-width: 1440px) {
-  background-image: none;
-}
+	@media screen and (max-width: 1440px) {
+		background-image: none;
+	}
 
 	@include beforeDesktop {
 		display: none;
