@@ -80,6 +80,10 @@
 	border-radius: 1em;
 	margin-left: 20px;
 
+@media screen and (max-width: 1440px) {
+  background-image: none;
+}
+
 	@include beforeDesktop {
 		display: none;
 	}
@@ -97,12 +101,8 @@
 		letter-spacing: 0%;
 		font-style: regular;
 
-		@media screen and (min-width: 1024px) and (max-width: 1279px) {
-			right: 30%;
-		}
-
-		@media screen and (max-width: 1279px) {
-			top: 80px;
+		@media screen and (max-width: 1440px) {
+			right: 8%;
 		}
 
 		.legacy-lab-header {
