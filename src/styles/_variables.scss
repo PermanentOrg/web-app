@@ -102,6 +102,11 @@ $form-label-dark: rgba(255, 255, 255, 0.64);
 $form-error-red: rgba(240, 68, 56, 1);
 
 $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
+$linear-gradient-background-orange-purple: linear-gradient(
+	90deg,
+	$PR-orange 0%,
+	$PR-purple 100%
+);
 
 @mixin public-centered {
 	max-width: $public-max-width;
