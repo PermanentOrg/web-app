@@ -71,6 +71,7 @@ import { ItemClickEvent } from '../file-list/file-list.component';
 import { SharingComponent } from '../sharing/sharing.component';
 import { PublishComponent } from '../publish/publish.component';
 import { EditTagsComponent } from '../edit-tags/edit-tags.component';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
 	Rename: {
@@ -220,7 +221,7 @@ export class FileListItemComponent
 	private mouseDownDragTimeout: ReturnType<typeof setTimeout>;
 	private waitingForDoubleClick = false;
 	private touchStartEvent: TouchEvent;
-	private isUnlistedShare = true;
+	private isUnlistedShare = false;
 
 	subscriptions: Subscription[] = [];
 
@@ -240,11 +241,14 @@ export class FileListItemComponent
 		@Optional() private drag: DragService,
 		private storage: StorageService,
 		@Inject(DOCUMENT) private document: Document,
+		private shareLinksService: ShareLinksService,
 	) {}
 
-	ngOnInit() {
+	async ngOnInit() {
 		const date = new Date(this.item.displayDT);
 		this.date = getFormattedDate(date);
+
+		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 
 		this.dataService.registerItem(this.item);
 		if (this.item.type.includes('app')) {
