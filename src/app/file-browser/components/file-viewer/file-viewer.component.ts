@@ -29,6 +29,8 @@ import { ZoomingImageViewerComponent } from '@shared/components/zooming-image-vi
 import { FileFormat } from '@models/file-vo';
 import { GetAccessFile } from '@models/get-access-file';
 import { TagsService } from '../../../core/services/tags/tags.service';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { RecordResolveService } from '@core/resolves/record-resolve.service';
 
 @Component({
 	selector: 'pr-file-viewer',
@@ -90,7 +92,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		private editService: EditService,
 		private tagsService: TagsService,
 		private location: Location,
-		@Optional() private publicProfile: PublicProfileService,
+		@Optional() publicProfile: PublicProfileService,
+		private shareLinksService: ShareLinksService,
+		private recordResolveService: RecordResolveService,
 	) {
 		// store current scroll position in file list
 		this.bodyScrollTop = window.scrollY;
@@ -145,7 +149,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			});
 	}
 
-	ngOnInit() {
+	async ngOnInit() {
+
+
+	const smth = await this.recordResolveService.resolve(this.route.snapshot, null);
+	this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+
 		this.initRecord();
 
 		// disable scrolling file list in background
