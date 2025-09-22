@@ -36,7 +36,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
-import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -52,7 +52,7 @@ enum FormType {
 	styleUrls: ['./share-preview.component.scss'],
 	standalone: false,
 })
-export class SharePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SharePreviewComponent implements OnInit, OnDestroy {
 	// share data
 	account: AccountVO = this.accountService.getAccount();
 	archive: ArchiveVO = this.accountService.getArchive();
@@ -106,7 +106,7 @@ export class SharePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	public hideBannerSubject: Subject<void> = new Subject<void>();
 	public hideBannerObservable = this.hideBannerSubject.asObservable();
-	public isUnlistedShare = true;
+	public isUnlistedShare = false;
 
 	constructor(
 		private router: Router,
@@ -119,7 +119,7 @@ export class SharePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
 		private prompt: PromptService,
 		private ga: GoogleAnalyticsService,
 		private dialog: DialogCdkService,
-		private shareLinksApiService: ShareLinksApiService,
+		private shareLinksService: ShareLinksService,
 	) {
 		this.shareToken = this.route.snapshot.params.shareToken;
 
@@ -194,12 +194,19 @@ export class SharePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	async ngOnInit() {
 
-		const test = await this.shareLinksApiService.getShareLinksByToken([this.shareToken]);
+		this.shareLinksService.currentShareToken = this.shareToken;
+		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 		
 		this.checkAccess();
 
 		if (!this.hasAccess) {
 			this.sendGaEvent('previewed');
+		}
+
+		if (!this.isLoggedIn) {
+			setTimeout(() => {
+				this.showCreateAccountDialog();
+			}, 1000);
 		}
 
 		if (!this.accountService.isLoggedIn()) {
@@ -233,15 +240,10 @@ export class SharePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
-	async ngAfterViewInit() {
-		if (!this.isLoggedIn) {
-			setTimeout(() => {
-				this.showCreateAccountDialog();
-			}, 1000);
-		}
-	}
-
 	ngOnDestroy(): void {
+
+		this.shareLinksService.currentShareToken = undefined;
+
 		this.routerListener.unsubscribe();
 		this.accountListener.unsubscribe();
 		this.archiveListener.unsubscribe();
