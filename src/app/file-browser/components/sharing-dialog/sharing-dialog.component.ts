@@ -60,11 +60,10 @@ enum ExpirationDays {
 }
 
 type ShareByUrlProps =
-        | 'linkType'
+        | 'accessRestrictions'
 	| 'defaultAccessRole'
 	| 'expiresDT'
-	| 'autoApproveToggle'
-	| 'previewToggle';
+	| 'autoApproveToggle';
 
 const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
 	Expiration,
@@ -177,8 +176,6 @@ export class SharingDialogComponent implements OnInit {
 
 		this.relationshipService.update();
 
-	    console.log('What does the link look like?');
-	    console.log(this.data.link);
 	    this.shareLink = this.data.link;
 	    this.translateToNewShareLink();
 
@@ -207,16 +204,22 @@ export class SharingDialogComponent implements OnInit {
 	    this.newShareLink.itemId = this.shareItem.folderId;
 	    this.newShareLink.itemType = 'folder';
 	}
-	if (this.data.link.accessRestrictions) {
-	    this.newShareLink.accessRestrictions = this.data.link.accessRestrictions;
-	}
-	else if (this.data.link.autoApproveToggle == 1) {
-	    this.newShareLink.accessRestrictions = 'account';
-	} else {
-	    this.newShareLink.accessRestrictions = 'approval';
-	}
+	this.newShareLink.accessRestrictions = this.calculateAccessRestrictions(
+	    this.data.link.accessRestrictions,
+	    this.data.link.autoApproveToggle
+	);
     }
 
+    calculateAccessRestrictions(linkType: string, autoApprove: number) {
+	if (linkType == 'public') {
+	    return 'none';
+	}
+	if (autoApprove == 1) {
+	    return 'account';
+	} else {
+	    return 'approval';
+	}
+    }
     accessRoleToPermissionsLevel() {
 	switch (this.linkDefaultAccessRole) {
 	    case 'access.role.viewer':
@@ -538,7 +541,9 @@ export class SharingDialogComponent implements OnInit {
 
 	async generateShareLink() {
 		this.updatingLink = true;
-		try {
+	    try {
+		console.log('What does the share item look like?');
+		console.log(this.shareItem);
 			const response = await this.api.share.generateShareLink(this.shareItem);
 			this.shareLink = response.getShareByUrlVO();
 			this.shareLink.autoApproveToggle = this.autoApproveToggle || 0;
@@ -596,6 +601,12 @@ export class SharingDialogComponent implements OnInit {
 	async onShareLinkPropChange(propName: ShareByUrlProps, value: any) {
 		this.updatingLink = true;
 	    try {
+		if (propName == 'accessRestrictions') {
+		    value = this.calculateAccessRestrictions(value, this.autoApproveToggle);
+		} else if (propName == 'autoApproveToggle') {
+		    propName = 'accessRestrictions';
+		    value = this.calculateAccessRestrictions(this.linkType, value);
+		}
 		const update: Partial<ShareLink> = {};
 		update[propName] = value;
 		await this.shareApi.updateShareLink(this.newShareLink.id, update);
