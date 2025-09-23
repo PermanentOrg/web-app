@@ -91,7 +91,6 @@ export class SharingDialogComponent implements OnInit {
     public shareLink: ShareByUrlVO = null;
     public newShareLink: ShareLink = null;
 
-	public previewToggle: 0 | 1 = 1;
 	public autoApproveToggle: 0 | 1 = 1;
 	public expiration: Expiration;
 	public linkDefaultAccessRole: AccessRoleType = 'access.role.viewer';
@@ -512,7 +511,6 @@ export class SharingDialogComponent implements OnInit {
 
 	setShareLinkFormValue(): void {
 		if (this.shareLink) {
-			this.previewToggle = this.shareLink.previewToggle;
 			this.autoApproveToggle = this.shareLink.autoApproveToggle || 0;
 			this.expiration = this.getExpirationFromExpiresDT(
 				this.shareLink.expiresDT,
@@ -532,7 +530,6 @@ export class SharingDialogComponent implements OnInit {
 				}
 			});
 		} else {
-			this.previewToggle = 1;
 			this.autoApproveToggle = 1;
 			this.expiration = Expiration.Never;
 			this.expirationOptions = EXPIRATION_OPTIONS;
@@ -547,7 +544,6 @@ export class SharingDialogComponent implements OnInit {
 			const response = await this.api.share.generateShareLink(this.shareItem);
 			this.shareLink = response.getShareByUrlVO();
 			this.shareLink.autoApproveToggle = this.autoApproveToggle || 0;
-			this.shareLink.previewToggle = this.previewToggle || 0;
 			await this.api.share.updateShareLink(this.shareLink);
 			this.setShareLinkFormValue();
 			this.showLinkSettings = true;
