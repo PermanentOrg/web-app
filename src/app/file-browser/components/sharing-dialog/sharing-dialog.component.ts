@@ -12,7 +12,8 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
-import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO } from '@models';
+import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO, RecordVO } from '@models';
+import { ShareLink } from '@root/app/share-links/models/share-link';
 import { AccessRoleType } from '@models/access-role';
 import { sortShareVOs } from '@models/share-vo';
 import { Deferred } from '@root/vendor/deferred';
@@ -24,6 +25,7 @@ import {
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 import { InviteResponse } from '@shared/services/api/index.repo';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { EVENTS } from '@shared/services/google-analytics/events';
@@ -87,7 +89,8 @@ export class SharingDialogComponent implements OnInit {
 	public shares: ShareVO[] = [];
 	public pendingShares: ShareVO[] = [];
 
-	public shareLink: ShareByUrlVO = null;
+    public shareLink: ShareByUrlVO = null;
+    public newShareLink: ShareLink = null;
 
 	public previewToggle: 0 | 1 = 1;
 	public autoApproveToggle: 0 | 1 = 1;
@@ -139,6 +142,7 @@ export class SharingDialogComponent implements OnInit {
 		private promptService: PromptService,
 		private fb: UntypedFormBuilder,
 		private api: ApiService,
+		private shareApi: ShareLinksApiService,
 		private messageService: MessageService,
 		private relationshipService: RelationshipService,
 		private ga: GoogleAnalyticsService,
@@ -173,11 +177,60 @@ export class SharingDialogComponent implements OnInit {
 
 		this.relationshipService.update();
 
-		this.shareLink = this.data.link;
+	    console.log('What does the link look like?');
+	    console.log(this.data.link);
+	    this.shareLink = this.data.link;
+	    this.translateToNewShareLink();
+
 		this.setShareLinkFormValue();
 
 		this.checkQueryParams();
 	}
+
+    translateToNewShareLink() {
+	this.newShareLink = {
+	    id: this.data.link.shareby_urlId,
+	    token: this.data.link.urlToken,
+	    itemId: '',
+	    itemType: 'record',
+	    permissionsLevel: this.accessRoleToPermissionsLevel(),
+	    accessRestrictions: 'account',
+	    maxUses: 1000000,
+	    usesExpended: this.data.link.uses,
+	    createdAt: this.data.link.createdDT,
+	    updatedAt: this.data.link.updatedDT,
+	};
+	if (this.shareItem instanceof RecordVO) {
+	    this.newShareLink.itemId = this.shareItem.recordId;
+	    this.newShareLink.itemType = 'record';
+	} else {
+	    this.newShareLink.itemId = this.shareItem.folderId;
+	    this.newShareLink.itemType = 'folder';
+	}
+	if (this.data.link.accessRestrictions) {
+	    this.newShareLink.accessRestrictions = this.data.link.accessRestrictions;
+	}
+	else if (this.data.link.autoApproveToggle == 1) {
+	    this.newShareLink.accessRestrictions = 'account';
+	} else {
+	    this.newShareLink.accessRestrictions = 'approval';
+	}
+    }
+
+    accessRoleToPermissionsLevel() {
+	switch (this.linkDefaultAccessRole) {
+	    case 'access.role.viewer':
+		return 'viewer';
+	    case 'access.role.editor':
+		return 'editor';
+	    case 'access.role.contributor':
+		return 'contributor';
+	    case 'access.role.manager':
+		return 'manager';
+	    case 'access.role.owner':
+		return 'owner';
+	}
+    }
 
 	checkQueryParams() {
 		if (this.route.snapshot) {
@@ -542,11 +595,11 @@ export class SharingDialogComponent implements OnInit {
 
 	async onShareLinkPropChange(propName: ShareByUrlProps, value: any) {
 		this.updatingLink = true;
-		try {
-			const update = new ShareByUrlVO(this.shareLink);
-			update[propName] = value;
-			await this.api.share.updateShareLink(update);
-			this.shareLink[propName] = update[propName];
+	    try {
+		const update: Partial<ShareLink> = {};
+		update[propName] = value;
+		await this.shareApi.updateShareLink(this.newShareLink.id, update);
+		this.newShareLink[propName] = update[propName];
 		} catch (err) {
 			if (err instanceof ShareResponse) {
 				this.messageService.showError({
