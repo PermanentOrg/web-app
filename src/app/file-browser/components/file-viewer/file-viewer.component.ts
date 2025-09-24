@@ -31,6 +31,7 @@ import { GetAccessFile } from '@models/get-access-file';
 import { TagsService } from '../../../core/services/tags/tags.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { RecordApiService } from '@root/app/data-access-v2/record/record-api.service';
 
 @Component({
 	selector: 'pr-file-viewer',
@@ -95,6 +96,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		@Optional() publicProfile: PublicProfileService,
 		private shareLinksService: ShareLinksService,
 		private recordResolveService: RecordResolveService,
+		private recordApiService: RecordApiService,
 	) {
 		// store current scroll position in file list
 		this.bodyScrollTop = window.scrollY;
@@ -152,7 +154,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	async ngOnInit() {
 
 
-	const smth = await this.recordResolveService.resolve(this.route.snapshot, null);
+	const smth = await this.recordApiService.getRecordbyId(this.currentRecord.recordId);
 	this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 
 		this.initRecord();
