@@ -296,7 +296,6 @@ export class DataService {
 					: Promise.resolve(),
 			);
 		}
-
 		return await Promise.all(promises)
 			.then(async (results) => {
 				const recordResponse: RecordResponse = results[0];
@@ -339,7 +338,7 @@ export class DataService {
 
 				return await Promise.resolve(true);
 			})
-			.catch(() => {
+			.catch((e) => {
 				itemRejects.forEach((reject, index) => {
 					items[index].fetched = null;
 					reject();
