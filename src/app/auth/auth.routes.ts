@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { RecaptchaModule } from 'ng-recaptcha-2';
 
@@ -62,6 +63,7 @@ const routes: Routes = [
 @NgModule({
 	imports: [
 		RouterModule.forChild(routes),
+		FontAwesomeModule,
 		SharedModule,
 		AnnouncementModule,
 		RecaptchaModule,
