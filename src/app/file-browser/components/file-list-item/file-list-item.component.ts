@@ -71,6 +71,7 @@ import { ItemClickEvent } from '../file-list/file-list.component';
 import { SharingComponent } from '../sharing/sharing.component';
 import { PublishComponent } from '../publish/publish.component';
 import { EditTagsComponent } from '../edit-tags/edit-tags.component';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
 	Rename: {
@@ -220,6 +221,7 @@ export class FileListItemComponent
 	private mouseDownDragTimeout: ReturnType<typeof setTimeout>;
 	private waitingForDoubleClick = false;
 	private touchStartEvent: TouchEvent;
+	private isUnlistedShare = false;
 
 	subscriptions: Subscription[] = [];
 
@@ -239,11 +241,14 @@ export class FileListItemComponent
 		@Optional() private drag: DragService,
 		private storage: StorageService,
 		@Inject(DOCUMENT) private document: Document,
+		private shareLinksService: ShareLinksService,
 	) {}
 
-	ngOnInit() {
+	async ngOnInit() {
 		const date = new Date(this.item.displayDT);
 		this.date = getFormattedDate(date);
+
+		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 
 		this.dataService.registerItem(this.item);
 		if (this.item.type.includes('app')) {
@@ -486,7 +491,22 @@ export class FileListItemComponent
 		}
 	}
 
+	showUnlistedPreview() {
+		if(this.router.routerState.snapshot.url.includes('/share/')) {
+			this.goToItem();
+			// this.itemClicked.emit({
+			// 	item: this.item,
+			// 	event: event as MouseEvent,
+			// 	selectable: false,
+			// });
+			return;
+		}
+	}
+
 	onItemClick(event: MouseEvent) {
+		if(this.router.routerState.snapshot.url.includes('/share/')) {
+			return;
+		}
 		if (this.device.isMobileWidth() || !this.canSelect) {
 			this.goToItem();
 			this.itemClicked.emit({
@@ -509,7 +529,7 @@ export class FileListItemComponent
 	}
 
 	async goToItem() {
-		if (!this.allowNavigation) {
+		if (!this.allowNavigation && !this.router.routerState.snapshot.url.includes('/share/')) {
 			return false;
 		}
 
@@ -519,16 +539,16 @@ export class FileListItemComponent
 			return;
 		}
 
-		if (this.item.dataStatus < DataStatus.Lean) {
-			this.dataService.beginPreparingForNavigate();
-			if (!this.item.isFetching) {
-				this.dataService.fetchLeanItems([this.item]);
-			}
+		// if (this.item.dataStatus < DataStatus.Lean) {
+		// 	this.dataService.beginPreparingForNavigate();
+		// 	if (!this.item.isFetching) {
+		// 		this.dataService.fetchLeanItems([this.item]);
+		// 	}
 
-			return await this.item.fetched.then((fetched) => {
-				this.goToItem();
-			});
-		}
+		// 	return await this.item.fetched.then((fetched) => {
+		// 		this.goToItem();
+		// 	});
+		// }
 
 		let rootUrl;
 
@@ -577,6 +597,10 @@ export class FileListItemComponent
 			this.dataService.currentFolder.type === 'type.folder.root.share'
 		) {
 			this.router.navigate(['/shares/record', this.item.archiveNbr]);
+		} else if(this.isUnlistedShare) {
+			this.router.navigate(['view/record', this.item.archiveNbr], {
+				relativeTo: this.route,
+			});
 		} else {
 			this.router.navigate(['record', this.item.archiveNbr], {
 				relativeTo: this.route,
