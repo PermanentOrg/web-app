@@ -169,7 +169,10 @@ export class FolderRepo extends BaseRepo {
 		);
 	}
 
-	private async getStelaFolder(folderVO: FolderVO, shareToken: string = null): Promise<StelaFolder> {
+	private async getStelaFolder(
+		folderVO: FolderVO,
+		shareToken: string = null,
+	): Promise<StelaFolder> {
 		const queryData = {
 			folderIds: [folderVO.folderId],
 		};
@@ -182,7 +185,7 @@ export class FolderRepo extends BaseRepo {
 					{
 						authToken: false,
 						shareToken,
-					}
+					},
 				),
 			)
 		)[0];
@@ -202,20 +205,24 @@ export class FolderRepo extends BaseRepo {
 					`v2/folder/${folderVO.folderId}/children`,
 					queryData,
 					null,
-					{authToken: false,
-						shareToken,
-					}
+					{ authToken: false, shareToken },
 				),
 			)
 		)[0];
 		return childrenResponse.items;
 	}
 
-	public async getWithChildren(folderVOs: FolderVO[], shareToken: string = null): Promise<FolderResponse> {
+	public async getWithChildren(
+		folderVOs: FolderVO[],
+		shareToken: string = null,
+	): Promise<FolderResponse> {
 		// Stela has two separate endpoints -- one for loading the folder, one for loading the children.
 		const requests = folderVOs.map(async (folderVO) => {
 			const stelaFolder = await this.getStelaFolder(folderVO, shareToken);
-			const stelaFolderChildren = await this.getStelaFolderChildren(folderVO, shareToken);
+			const stelaFolderChildren = await this.getStelaFolderChildren(
+				folderVO,
+				shareToken,
+			);
 			return {
 				...stelaFolder,
 				children: stelaFolderChildren,

@@ -210,7 +210,7 @@ export class HttpV2Service {
 		if (this.authToken && options.authToken) {
 			headers = headers.append('Authorization', `Bearer ${this.authToken}`);
 		}
-		if(options.shareToken) {
+		if (options.shareToken) {
 			headers = headers.append('X-Permanent-Share-Token', options.shareToken);
 		}
 		return {

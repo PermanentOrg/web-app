@@ -121,7 +121,10 @@ export const resolveTagName = (tag: StelaTag): string => {
 	return tag.name;
 };
 
-export const convertStelaTagToTagVO = (stelaTag: StelaTag, archiveId: string): TagVO =>
+export const convertStelaTagToTagVO = (
+	stelaTag: StelaTag,
+	archiveId: string,
+): TagVO =>
 	new TagVO({
 		tagId: Number.parseInt(stelaTag.id),
 		name: resolveTagName(stelaTag),
@@ -160,7 +163,9 @@ export const convertStelaLocationToLocnVOData = (
 			}
 		: null;
 
-export const convertStelaRecordToRecordVO = (stelaRecord: StelaRecord): RecordVO =>
+export const convertStelaRecordToRecordVO = (
+	stelaRecord: StelaRecord,
+): RecordVO =>
 	new RecordVO({
 		...stelaRecord,
 		TagVOs: (stelaRecord.tags ?? []).map((stelaTag) =>
@@ -246,12 +251,18 @@ export class RecordRepo extends BaseRepo {
 		return recordResponse;
 	}
 
-		public async getWithShareTokenAuth(recordIds: string[], shareToken: string | null = null): Promise<RecordResponse> {
+	public async getWithShareTokenAuth(
+		recordIds: string[],
+		shareToken: string | null = null,
+	): Promise<RecordResponse> {
 		const data = {
 			recordIds,
 		};
 		const stelaRecords = await firstValueFrom(
-			this.httpV2.get<StelaRecord>('v2/record', data, null, { authToken: false, shareToken }),
+			this.httpV2.get<StelaRecord>('v2/record', data, null, {
+				authToken: false,
+				shareToken,
+			}),
 		);
 
 		// We need the `Results` to look the way v1 results look, for now.
