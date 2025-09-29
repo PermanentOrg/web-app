@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ShareLinksApiService } from './share-links-api.service';
+import { ShareLink } from '../models/share-link';
 
 @Injectable({
 	providedIn: 'root',
@@ -7,6 +8,7 @@ import { ShareLinksApiService } from './share-links-api.service';
 export class ShareLinksService {
 
 	private _currentShareToken = '';
+	private _shareLinks: ShareLink[] = undefined;
 
 	constructor(
 			private shareLinksApiService: ShareLinksApiService) {
@@ -25,9 +27,11 @@ export class ShareLinksService {
 		if(!this._currentShareToken) {
 			return false;
 		}
-		const shareLinks = await this.shareLinksApiService.getShareLinksByToken([this._currentShareToken]);
-		if(shareLinks && shareLinks.length) {
-			return shareLinks[0].accessRestrictions === 'none';
+		if(!this._shareLinks) {
+			this._shareLinks = await this.shareLinksApiService.getShareLinksByToken([this._currentShareToken]);
+		}
+		if(this._shareLinks && this._shareLinks.length) {
+			return this._shareLinks[0].accessRestrictions === 'none';
 		} else {
 			return false;
 		}

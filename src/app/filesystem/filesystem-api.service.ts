@@ -10,17 +10,27 @@ import {
 	RecordIdentifier,
 } from './types/filesystem-identifier';
 import { ArchiveIdentifier } from './types/archive-identifier';
+import { ShareLinksService } from '../share-links/services/share-links.service';
+import { FolderResponse } from '@shared/services/api/folder.repo';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class FilesystemApiService implements FilesystemApi {
-	constructor(private api: ApiService) {}
+	constructor(private api: ApiService,
+		private shareLinksService: ShareLinksService,
+	) {}
 
 	public async navigate(folder: FolderIdentifier): Promise<FolderVO> {
-		const response = await firstValueFrom(
+		const isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+		let response: FolderResponse = null;
+		if(isUnlistedShare) {
+			response = await this.api.folder.getWithChildren([new FolderVO(folder)], this.shareLinksService.currentShareToken);
+		} else {
+		response = await firstValueFrom(
 			this.api.folder.navigateLean(new FolderVO(folder)),
 		);
+		}
 		if (!response.isSuccessful) {
 			throw response;
 		}

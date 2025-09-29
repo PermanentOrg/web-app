@@ -26,14 +26,14 @@ export class ShareLinksApiService {
 		const response = await firstValueFrom(
 			this.http.get<{ items: ShareLink[]}>(
 				'v2/share-links',
-				{ shareTokens },
+				{ shareTokens: shareTokens },
 				null,
 				{
 					authToken: false,
 				}
 			),
 		);
-		return response[0].items.map((item) => ({ ...item, accessRestrictions: 'none' }));
+		return response[0].items;
 	}
 
 	public async generateShareLink({
