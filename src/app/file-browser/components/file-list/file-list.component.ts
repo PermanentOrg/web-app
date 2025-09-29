@@ -529,7 +529,7 @@ export class FileListComponent
 
 		let itemsToFetch = visibleListItems.map((c) => c.item);
 		const isUnlistedShare = await this.shareLinksService.isUnlistedShare();
-		if(isUnlistedShare) {
+		if (isUnlistedShare) {
 			itemsToFetch = [];
 		}
 		if (itemsToFetch.length) {
