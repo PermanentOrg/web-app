@@ -98,7 +98,7 @@
 		"@angular/compiler-cli": "20.3.2",
 		"@angular/language-service": "20.3.2",
 		"@chromatic-com/storybook": "^4.1.1",
-		"@es-joy/jsdoccomment": "^0.52.0",
+		"@es-joy/jsdoccomment": "^0.64.0",
 		"@eslint/compat": "^1.4.0",
 		"@eslint/eslintrc": "^3.3.1",
 		"@eslint/js": "^9.36.0",
