@@ -80,7 +80,6 @@ describe('SharePreviewComponent', () => {
 		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
 
 		component.isLoggedIn = false;
-		component.ngAfterViewInit();
 		tick(1005);
 
 		expect(dialogSpy).toHaveBeenCalled();
@@ -90,7 +89,6 @@ describe('SharePreviewComponent', () => {
 		const dialogSpy = spyOn(dialog, 'open');
 
 		component.isLoggedIn = true;
-		component.ngAfterViewInit();
 		tick(1005);
 
 		expect(dialogSpy).not.toHaveBeenCalled();

@@ -8,7 +8,6 @@ import {
 	Optional,
 	DOCUMENT,
 } from '@angular/core';
-import { Location } from '@angular/common';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'ts-key-enum';
@@ -28,9 +27,9 @@ import { SearchService } from '@search/services/search.service';
 import { ZoomingImageViewerComponent } from '@shared/components/zooming-image-viewer/zooming-image-viewer.component';
 import { FileFormat } from '@models/file-vo';
 import { GetAccessFile } from '@models/get-access-file';
-import { TagsService } from '../../../core/services/tags/tags.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
 	selector: 'pr-file-viewer',
@@ -91,7 +90,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		private accountService: AccountService,
 		private editService: EditService,
 		private tagsService: TagsService,
-		private location: Location,
 		@Optional() publicProfile: PublicProfileService,
 		private shareLinksService: ShareLinksService,
 		private api: ApiService,
@@ -119,11 +117,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			});
 		}
 
-		this.canEdit = this.router.routerState.snapshot.url.includes('/share/') ? false : 
-			this.accountService.checkMinimumAccess(
-				this.currentRecord.accessRole,
-				AccessRole.Editor,
-			) && !route.snapshot.data?.isPublicArchive;
+		this.canEdit = this.isUnlistedShare
+			? false
+			: this.accountService.checkMinimumAccess(
+					this.currentRecord.accessRole,
+					AccessRole.Editor,
+				) && !route.snapshot.data?.isPublicArchive;
 
 		this.tagSubscription = this.tagsService
 			.getItemTags$()
@@ -138,13 +137,15 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	async ngOnInit() {
+		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 
-	this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
-
-	if(this.isUnlistedShare) {
-		const response = await this.api.record.getWithShareTokenAuth([this.currentRecord.recordId], this.shareLinksService.currentShareToken);
-		this.setRecordsToPreview(response.getRecordVO());
-	}
+		if (this.isUnlistedShare) {
+			const response = await this.api.record.getWithShareTokenAuth(
+				[this.currentRecord.recordId],
+				this.shareLinksService.currentShareToken,
+			);
+			this.setRecordsToPreview(response.getRecordVO());
+		}
 
 		this.initRecord();
 
@@ -176,19 +177,19 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	private setRecordsToPreview(resolvedRecord: RecordVO) {
-			this.records = filter(
-				this.dataService.currentFolder.ChildItemVOs,
-				'isRecord',
-			) as RecordVO[];
-			this.currentIndex = findIndex(this.records, {
-				folder_linkId: resolvedRecord.folder_linkId,
-			});
-			this.currentRecord = this.records[this.currentIndex];
-			if (resolvedRecord !== this.currentRecord) {
-				this.currentRecord.update(resolvedRecord);
-			}
+		this.records = filter(
+			this.dataService.currentFolder.ChildItemVOs,
+			'isRecord',
+		) as RecordVO[];
+		this.currentIndex = findIndex(this.records, {
+			folder_linkId: resolvedRecord.folder_linkId,
+		});
+		this.currentRecord = this.records[this.currentIndex];
+		if (resolvedRecord !== this.currentRecord) {
+			this.currentRecord.update(resolvedRecord);
+		}
 
-			this.loadQueuedItems();
+		this.loadQueuedItems();
 	}
 
 	@HostListener('window:resize', [])
@@ -388,8 +389,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	close() {
-		if(this.isUnlistedShare) {
-		this.router.navigate([`/share/${this.shareLinksService.currentShareToken}`]);
+		if (this.isUnlistedShare) {
+			this.router.navigate([
+				`/share/${this.shareLinksService.currentShareToken}`,
+			]);
 		} else {
 			this.router.navigate(['.'], { relativeTo: this.route.parent });
 		}

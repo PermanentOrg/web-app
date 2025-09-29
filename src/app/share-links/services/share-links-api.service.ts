@@ -11,7 +11,7 @@ export class ShareLinksApiService {
 
 	public async getShareLinksById(shareLinkIds: number[]): Promise<ShareLink[]> {
 		const response = await firstValueFrom(
-			this.http.get<{ items: ShareLink[]}>(
+			this.http.get<{ items: ShareLink[] }>(
 				'v2/share-links',
 				{ shareLinkIds },
 				null,
@@ -24,13 +24,13 @@ export class ShareLinksApiService {
 		shareTokens: string[],
 	): Promise<ShareLink[]> {
 		const response = await firstValueFrom(
-			this.http.get<{ items: ShareLink[]}>(
+			this.http.get<{ items: ShareLink[] }>(
 				'v2/share-links',
 				{ shareTokens: shareTokens },
 				null,
 				{
 					authToken: false,
-				}
+				},
 			),
 		);
 		return response[0].items;

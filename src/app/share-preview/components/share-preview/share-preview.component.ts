@@ -1,10 +1,4 @@
-import {
-	Component,
-	OnInit,
-	AfterViewInit,
-	HostListener,
-	OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import {
 	Router,
 	ActivatedRoute,
@@ -35,8 +29,8 @@ import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -193,10 +187,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	}
 
 	async ngOnInit() {
-
 		this.shareLinksService.currentShareToken = this.shareToken;
 		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
-		
+
 		this.checkAccess();
 
 		if (!this.hasAccess) {
@@ -241,7 +234,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-
 		this.shareLinksService.currentShareToken = undefined;
 
 		this.routerListener.unsubscribe();
