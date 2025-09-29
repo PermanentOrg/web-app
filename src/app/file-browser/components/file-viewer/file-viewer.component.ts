@@ -30,8 +30,7 @@ import { FileFormat } from '@models/file-vo';
 import { GetAccessFile } from '@models/get-access-file';
 import { TagsService } from '../../../core/services/tags/tags.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
-import { RecordResolveService } from '@core/resolves/record-resolve.service';
-import { RecordApiService } from '@root/app/data-access-v2/record/record-api.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
 	selector: 'pr-file-viewer',
@@ -95,8 +94,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		private location: Location,
 		@Optional() publicProfile: PublicProfileService,
 		private shareLinksService: ShareLinksService,
-		private recordResolveService: RecordResolveService,
-		private recordApiService: RecordApiService,
+		private api: ApiService,
 	) {
 		// store current scroll position in file list
 		this.bodyScrollTop = window.scrollY;
@@ -108,19 +106,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			this.records = [this.currentRecord];
 			this.currentIndex = 0;
 		} else {
-			this.records = filter(
-				this.dataService.currentFolder.ChildItemVOs,
-				'isRecord',
-			) as RecordVO[];
-			this.currentIndex = findIndex(this.records, {
-				folder_linkId: resolvedRecord.folder_linkId,
-			});
-			this.currentRecord = this.records[this.currentIndex];
-			if (resolvedRecord !== this.currentRecord) {
-				this.currentRecord.update(resolvedRecord);
-			}
-
-			this.loadQueuedItems();
+			this.setRecordsToPreview(resolvedRecord);
 		}
 
 		if (route.snapshot.data?.isPublicArchive) {
@@ -153,9 +139,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
 	async ngOnInit() {
 
-
-	const smth = await this.recordApiService.getRecordbyId(this.currentRecord.recordId);
 	this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+
+	if(this.isUnlistedShare) {
+		const response = await this.api.record.getWithShareTokenAuth([this.currentRecord.recordId], this.shareLinksService.currentShareToken);
+		this.setRecordsToPreview(response.getRecordVO());
+	}
 
 		this.initRecord();
 
@@ -184,6 +173,22 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			window.scrollTo(0, this.bodyScrollTop);
 		});
 		this.tagSubscription.unsubscribe();
+	}
+
+	private setRecordsToPreview(resolvedRecord: RecordVO) {
+			this.records = filter(
+				this.dataService.currentFolder.ChildItemVOs,
+				'isRecord',
+			) as RecordVO[];
+			this.currentIndex = findIndex(this.records, {
+				folder_linkId: resolvedRecord.folder_linkId,
+			});
+			this.currentRecord = this.records[this.currentIndex];
+			if (resolvedRecord !== this.currentRecord) {
+				this.currentRecord.update(resolvedRecord);
+			}
+
+			this.loadQueuedItems();
 	}
 
 	@HostListener('window:resize', [])
@@ -383,9 +388,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	close() {
-		this.location.back();
 		if(this.isUnlistedShare) {
-			this.location.back();
+		this.router.navigate([`/share/${this.shareLinksService.currentShareToken}`]);
+		} else {
+			this.router.navigate(['.'], { relativeTo: this.route.parent });
 		}
 	}
 

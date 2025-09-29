@@ -16,7 +16,6 @@ import { StorageService } from '@shared/services/storage/storage.service';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
 import { firstValueFrom } from 'rxjs';
 import { FileFormat, PermanentFile } from '@models/file-vo';
-import { ShareStatus } from '@models/share-vo';
 import { AccessRoleType } from '@models/access-role';
 import { getFirst } from '../http-v2/http-v2.service';
 
@@ -52,12 +51,12 @@ class MultipartUploadUrlsList {
 // to simply use what stela provides, but there is work to be done regarding
 // overall type safety in this code base before we want to take that project
 // on.
-interface StelaTag {
+export interface StelaTag {
 	id: string;
 	name: string;
 	type: string;
 }
-interface StelaFile {
+export interface StelaFile {
 	size: number;
 	type: string;
 	fileId: string;
@@ -67,7 +66,7 @@ interface StelaFile {
 	updatedAt: string;
 	downloadUrl: string;
 }
-interface StelaLocation {
+export interface StelaLocation {
 	id: string;
 	streetNumber: string;
 	streetName: string;
@@ -80,14 +79,14 @@ interface StelaLocation {
 	countryCode: string;
 	displayName: string | null;
 }
-interface StelaArchive {
+export interface StelaArchive {
 	id: string;
 	archiveNumber: string;
 	name: string;
 }
-interface StelaShare {
+export interface StelaShare {
 	id: string;
-	status: ShareStatus;
+	status: any;
 	accessRole: AccessRoleType;
 	archive: {
 		id: string;
@@ -95,8 +94,8 @@ interface StelaShare {
 		thumbUrl200: string;
 	};
 }
-type StelaRecord = Omit<RecordVO, 'files'> & {
-	tags: Array<StelaTag> | null;
+export type StelaRecord = Omit<RecordVO, 'files'> & {
+	tags: Array<StelaTag>;
 	archiveNumber: string;
 	displayDate: string;
 	folderLinkId: string;
@@ -114,7 +113,7 @@ type StelaRecord = Omit<RecordVO, 'files'> & {
 	shares: Array<StelaShare> | null;
 };
 
-const resolveTagName = (tag: StelaTag): string => {
+export const resolveTagName = (tag: StelaTag): string => {
 	if (tag.type?.includes('type.tag.metadata')) {
 		const customMetadataType = tag.type.split('.').pop();
 		return `${customMetadataType}:${tag.name}`;
@@ -122,7 +121,7 @@ const resolveTagName = (tag: StelaTag): string => {
 	return tag.name;
 };
 
-const convertStelaTagToTagVO = (stelaTag: StelaTag, archiveId: string): TagVO =>
+export const convertStelaTagToTagVO = (stelaTag: StelaTag, archiveId: string): TagVO =>
 	new TagVO({
 		tagId: Number.parseInt(stelaTag.id),
 		name: resolveTagName(stelaTag),
@@ -130,7 +129,7 @@ const convertStelaTagToTagVO = (stelaTag: StelaTag, archiveId: string): TagVO =>
 		archiveId: Number.parseInt(archiveId, 10),
 	});
 
-const convertStelaFileToPermanentFile = (
+export const convertStelaFileToPermanentFile = (
 	stelaFile: StelaFile,
 ): PermanentFile => ({
 	...stelaFile,
@@ -139,7 +138,7 @@ const convertStelaFileToPermanentFile = (
 	downloadURL: stelaFile.downloadUrl,
 });
 
-const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
+export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 	new ShareVO({
 		shareId: stelaShare.id,
 		status: stelaShare.status,
@@ -151,7 +150,7 @@ const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 		},
 	});
 
-const convertStelaLocationToLocnVOData = (
+export const convertStelaLocationToLocnVOData = (
 	stelaLocation: StelaLocation,
 ): LocnVOData =>
 	stelaLocation.id
@@ -161,7 +160,7 @@ const convertStelaLocationToLocnVOData = (
 			}
 		: null;
 
-const convertStelaRecordToRecordVO = (stelaRecord: StelaRecord): RecordVO =>
+export const convertStelaRecordToRecordVO = (stelaRecord: StelaRecord): RecordVO =>
 	new RecordVO({
 		...stelaRecord,
 		TagVOs: (stelaRecord.tags ?? []).map((stelaTag) =>
@@ -222,6 +221,37 @@ export class RecordRepo extends BaseRepo {
 		};
 		const stelaRecords = await firstValueFrom(
 			this.httpV2.get<StelaRecord>('v2/record', data),
+		);
+
+		// We need the `Results` to look the way v1 results look, for now.
+		const simulatedV1RecordResponseResults = stelaRecords.map(
+			(stelaRecord) => ({
+				data: [
+					{
+						RecordVO: convertStelaRecordToRecordVO(stelaRecord),
+					},
+				],
+				message: ['Record retrieved'],
+				status: true,
+				resultDT: new Date().toISOString(),
+				createdDT: null,
+				updatedDT: null,
+			}),
+		);
+		const recordResponse = new RecordResponse({
+			isSuccessful: true,
+			isSystemUp: true,
+			Results: simulatedV1RecordResponseResults,
+		});
+		return recordResponse;
+	}
+
+		public async getWithShareTokenAuth(recordIds: string[], shareToken: string | null = null): Promise<RecordResponse> {
+		const data = {
+			recordIds,
+		};
+		const stelaRecords = await firstValueFrom(
+			this.httpV2.get<StelaRecord>('v2/record', data, null, { authToken: false, shareToken }),
 		);
 
 		// We need the `Results` to look the way v1 results look, for now.
