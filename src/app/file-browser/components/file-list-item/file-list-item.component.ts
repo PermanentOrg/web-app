@@ -493,12 +493,10 @@ export class FileListItemComponent
 
 	showUnlistedPreview() {
 		if(this.router.routerState.snapshot.url.includes('/share/')) {
+			if(this.item.isFolder) {
+				return;
+			}
 			this.goToItem();
-			// this.itemClicked.emit({
-			// 	item: this.item,
-			// 	event: event as MouseEvent,
-			// 	selectable: false,
-			// });
 			return;
 		}
 	}
