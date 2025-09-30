@@ -1,4 +1,11 @@
-import { RecordVO, FolderVO } from '@root/app/models';
+import {
+	RecordVO,
+	FolderVO,
+	TagVO,
+	FolderLinkType,
+	ShareVO,
+	LocnVOData,
+} from '@root/app/models';
 import {
 	BaseResponse,
 	BaseRepo,
@@ -8,6 +15,9 @@ import {
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
 import { firstValueFrom } from 'rxjs';
+import { FileFormat, PermanentFile } from '@models/file-vo';
+import { ShareStatus } from '@models/share-vo';
+import { AccessRoleType } from '@models/access-role';
 import { getFirst } from '../http-v2/http-v2.service';
 
 class MultipartUploadUrlsList {
@@ -37,23 +47,204 @@ class MultipartUploadUrlsList {
 	}
 }
 
-export class RecordRepo extends BaseRepo {
-	public async get(recordVOs: RecordVO[]): Promise<RecordResponse> {
-		const data = recordVOs.map((recordVO) => ({
-			RecordVO: new RecordVO({
-				folder_linkId: recordVO.folder_linkId,
-				recordId: recordVO.recordId,
-				archiveNbr: recordVO.archiveNbr,
-			}),
-		}));
+// These types are here so we can shim stela responses to the format expected
+// by our components.  Eventually we will want to refactor those components
+// to simply use what stela provides, but there is work to be done regarding
+// overall type safety in this code base before we want to take that project
+// on.
+interface StelaTag {
+	id: string;
+	name: string;
+	type: string;
+}
+interface StelaFile {
+	size: number;
+	type: string;
+	fileId: string;
+	format: FileFormat;
+	fileUrl: string;
+	createdAt: string;
+	updatedAt: string;
+	downloadUrl: string;
+}
+interface StelaLocation {
+	id: string;
+	streetNumber: string;
+	streetName: string;
+	locality: string;
+	county: string;
+	state: string;
+	latitude: number;
+	longitude: number;
+	country: string;
+	countryCode: string;
+	displayName: string | null;
+}
+interface StelaArchive {
+	id: string;
+	archiveNumber: string;
+	name: string;
+}
+interface StelaShare {
+	id: string;
+	status: ShareStatus;
+	accessRole: AccessRoleType;
+	archive: {
+		id: string;
+		name: string;
+		thumbUrl200: string;
+	};
+}
+type StelaRecord = Omit<RecordVO, 'files'> & {
+	tags: Array<StelaTag> | null;
+	archiveNumber: string;
+	displayDate: string;
+	folderLinkId: string;
+	folderLinkType: FolderLinkType;
+	parentFolderLinkId: string;
+	thumbUrl200: string;
+	thumbUrl500: string;
+	thumbUrl1000: string;
+	thumbUrl2000: string;
+	location: StelaLocation | null;
+	files: Array<StelaFile>;
+	createdAt: string;
+	updatedAt: string;
+	archive: StelaArchive;
+	shares: Array<StelaShare> | null;
+};
 
-		return await this.http.sendRequestPromise<RecordResponse>(
+const resolveTagName = (tag: StelaTag): string => {
+	if (tag.type?.includes('type.tag.metadata')) {
+		const customMetadataType = tag.type.split('.').pop();
+		return `${customMetadataType}:${tag.name}`;
+	}
+	return tag.name;
+};
+
+const convertStelaTagToTagVO = (stelaTag: StelaTag, archiveId: string): TagVO =>
+	new TagVO({
+		tagId: Number.parseInt(stelaTag.id),
+		name: resolveTagName(stelaTag),
+		type: stelaTag.type,
+		archiveId: Number.parseInt(archiveId, 10),
+	});
+
+const convertStelaFileToPermanentFile = (
+	stelaFile: StelaFile,
+): PermanentFile => ({
+	...stelaFile,
+	fileId: Number.parseInt(stelaFile.fileId, 10),
+	fileURL: stelaFile.fileUrl,
+	downloadURL: stelaFile.downloadUrl,
+});
+
+const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
+	new ShareVO({
+		shareId: stelaShare.id,
+		status: stelaShare.status,
+		accessRole: stelaShare.accessRole,
+		ArchiveVO: {
+			archiveId: stelaShare.archive.id,
+			fullName: stelaShare.archive.name,
+			thumbURL200: stelaShare.archive.thumbUrl200,
+		},
+	});
+
+const convertStelaLocationToLocnVOData = (
+	stelaLocation: StelaLocation,
+): LocnVOData =>
+	stelaLocation.id
+		? {
+				...stelaLocation,
+				locnId: Number.parseInt(stelaLocation.id, 10),
+			}
+		: null;
+
+const convertStelaRecordToRecordVO = (stelaRecord: StelaRecord): RecordVO =>
+	new RecordVO({
+		...stelaRecord,
+		TagVOs: (stelaRecord.tags ?? []).map((stelaTag) =>
+			convertStelaTagToTagVO(stelaTag, stelaRecord.archiveId),
+		),
+		archiveNbr: stelaRecord.archiveNumber,
+		displayDT: stelaRecord.displayDate,
+		folder_linkId: Number.parseInt(stelaRecord.folderLinkId, 10),
+		folder_linkType: stelaRecord.folderLinkType,
+		LocnVO: convertStelaLocationToLocnVOData(stelaRecord.location),
+		FileVOs: stelaRecord.files.map(convertStelaFileToPermanentFile),
+		createdDT: stelaRecord.createdAt,
+		updatedDT: stelaRecord.updatedAt,
+		locnId: stelaRecord.location?.id || null,
+		parentFolder_linkId: stelaRecord.parentFolderLinkId,
+		TextDataVOs: [],
+		ArchiveVOs: [],
+		timeZoneId: 88, // Hard coded for now
+		TimezoneVO: {
+			timeZoneId: 88,
+			displayName: 'Central Time',
+			timeZonePlace: 'America/Chicago',
+			stdName: 'Central Standard Time',
+			stdAbbrev: 'CST',
+			stdOffset: '-06:00',
+			dstName: 'Central Daylight Time',
+			dstAbbrev: 'CDT',
+			dstOffset: '-05:00',
+		},
+		ShareVOs: (stelaRecord.shares ?? []).map(convertStelaSharetoShareVO),
+	});
+
+export class RecordRepo extends BaseRepo {
+	private async getRecordIdByArchiveNbr(archiveNbr: string): Promise<number> {
+		const recordResponse = await this.http.sendRequestPromise<RecordResponse>(
 			'/record/get',
-			data,
+			[{ RecordVO: new RecordVO({ archiveNbr }) }],
 			{
 				responseClass: RecordResponse,
 			},
 		);
+		const recordVo = recordResponse.getRecordVO();
+		return recordVo.recordId;
+	}
+	public async get(recordVOs: RecordVO[]): Promise<RecordResponse> {
+		const recordIds = await Promise.all(
+			// There are some flows (e.g. published records) where only the archiveNbr is known.
+			// In those cases, we need to look up the recordId first since stela API has phased
+			// out archiveNbr.
+			recordVOs.map(
+				async (record: RecordVO): Promise<number> =>
+					record.recordId ??
+					(await this.getRecordIdByArchiveNbr(record.archiveNbr)),
+			),
+		);
+		const data = {
+			recordIds,
+		};
+		const stelaRecords = await firstValueFrom(
+			this.httpV2.get<StelaRecord>('v2/record', data),
+		);
+
+		// We need the `Results` to look the way v1 results look, for now.
+		const simulatedV1RecordResponseResults = stelaRecords.map(
+			(stelaRecord) => ({
+				data: [
+					{
+						RecordVO: convertStelaRecordToRecordVO(stelaRecord),
+					},
+				],
+				message: ['Record retrieved'],
+				status: true,
+				resultDT: new Date().toISOString(),
+				createdDT: null,
+				updatedDT: null,
+			}),
+		);
+		const recordResponse = new RecordResponse({
+			isSuccessful: true,
+			isSystemUp: true,
+			Results: simulatedV1RecordResponseResults,
+		});
+		return recordResponse;
 	}
 
 	public async getLean(
