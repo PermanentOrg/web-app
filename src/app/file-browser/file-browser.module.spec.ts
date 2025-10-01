@@ -1,11 +1,13 @@
-// xdescribe('FileBrowserModule', () => {
-//   let fileBrowserModule: FileBrowserModule;
+import { FileBrowserModule } from './file-browser.module';
 
-//   beforeEach(() => {
-//     fileBrowserModule = new FileBrowserModule();
-//   });
+describe('FileBrowserModule', () => {
+	let fileBrowserModule: FileBrowserModule;
 
-//   it('should create an instance', () => {
-//     expect(fileBrowserModule).toBeTruthy();
-//   });
-// });
+	beforeEach(() => {
+		fileBrowserModule = new FileBrowserModule();
+	});
+
+	it('should create an instance', () => {
+		expect(fileBrowserModule).toBeTruthy();
+	});
+});

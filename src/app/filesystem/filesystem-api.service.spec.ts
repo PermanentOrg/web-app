@@ -3,26 +3,74 @@ import {
 	HttpTestingController,
 	provideHttpClientTesting,
 } from '@angular/common/http/testing';
-import { environment } from '@root/environments/environment';
-import { FolderResponse } from '@shared/services/api/folder.repo';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
+import { FolderResponse } from '@shared/services/api/folder.repo';
+import { FolderVO } from '@models/index';
+import { DataStatus } from '@models/data-status.enum';
+import { ApiService } from '@shared/services/api/api.service';
+import { ShareLinksService } from '../share-links/services/share-links.service';
 import { FilesystemApiService } from './filesystem-api.service';
+
+const folderId = 42;
+const mockResponse = new FolderResponse({
+	isSuccessful: true,
+	Results: [
+		{
+			data: [
+				{
+					FolderVO: {
+						folderId,
+						displayName: 'Unlisted Folder',
+						ChildItemVOs: [],
+					},
+				},
+			],
+		},
+	],
+});
+
+const mockApiService = {
+	folder: {
+		getWithChildren: jasmine
+			.createSpy('getWithChildren')
+			.and.returnValue(Promise.resolve(mockResponse)),
+		navigateLean: jasmine.createSpy('navigateLean').and.returnValue(
+			// simulate observable for firstValueFrom
+			{
+				toPromise: async () =>
+					await Promise.resolve({
+						isSuccessful: true,
+						getFolderVO: () => ({ id: 'mock-folder', name: 'Mock Folder' }),
+					}),
+			},
+		),
+	},
+};
 
 describe('FilesystemApiService', () => {
 	let service: FilesystemApiService;
 	let http: HttpTestingController;
+	let shareLinksServiceSpy: jasmine.SpyObj<ShareLinksService>;
 
 	beforeEach(() => {
+		shareLinksServiceSpy = jasmine.createSpyObj('ShareLinksService', [
+			'isUnlistedShare',
+			'currentShareToken',
+		]);
+
 		TestBed.configureTestingModule({
-			imports: [],
 			providers: [
 				provideHttpClient(withInterceptorsFromDi()),
 				provideHttpClientTesting(),
+				FilesystemApiService,
+				{ provide: ShareLinksService, useValue: shareLinksServiceSpy },
+				{ provide: ApiService, useValue: mockApiService },
 			],
 		});
+
 		service = TestBed.inject(FilesystemApiService);
 		http = TestBed.inject(HttpTestingController);
 	});
@@ -31,60 +79,36 @@ describe('FilesystemApiService', () => {
 		expect(service).toBeTruthy();
 	});
 
-	it('should be able to navigate', (done) => {
-		service
-			.navigate({ folderId: 0 })
-			.then((folder) => {
-				expect(folder.displayName).toBe('Unit Test');
-			})
-			.catch((response) => {
-				fail(response);
-			})
-			.finally(() => {
-				done();
-			});
+	it('should navigate using getWithChildren when in unlisted share', async () => {
+		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(true);
+		shareLinksServiceSpy.currentShareToken = 'mock-token';
 
-		const req = http.expectOne(`${environment.apiUrl}/folder/navigateLean`);
+		const apiService = TestBed.inject(ApiService);
 
-		req.flush({
-			isSuccessful: true,
-			Results: [
-				{
-					data: [
-						{
-							FolderVO: {
-								folderId: 0,
-								displayName: 'Unit Test',
-								ChildItemVOs: [],
-							},
-						},
-					],
-				},
-			],
-		});
+		const folder = await service.navigate({ folderId });
 
-		http.verify();
+		expect(apiService.folder.getWithChildren).toHaveBeenCalledWith(
+			[jasmine.any(FolderVO)],
+			'mock-token',
+		);
+
+		expect(folder.folderId).toBe(folderId);
+		expect(folder.displayName).toBe('Unlisted Folder');
+		expect(folder.dataStatus).toBe(DataStatus.Lean);
 	});
 
-	it('will throw the invalid folder response for a failed request', (done) => {
-		service
-			.navigate({ folderId: 0 })
-			.then(() => {
-				fail('Expected a rejected promise, but it resolved instead');
-			})
-			.catch((response: FolderResponse) => {
-				expect(response.getMessage()).toBe('Unit Test Error');
-			})
-			.finally(() => {
-				done();
-			});
+	it('should throw FolderResponse error if response is unsuccessful', async () => {
+		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
+		mockApiService.folder.navigateLean.and.resolveTo({ isSuccessful: false });
 
-		const req = http.expectOne(`${environment.apiUrl}/folder/navigateLean`);
+		const promise = service.navigate({ folderId: 0 });
 
-		req.flush({
-			isSuccessful: false,
-			message: 'Unit Test Error',
-		});
+		try {
+			await promise;
+			fail('Expected promise to reject');
+		} catch (error) {
+			expect(error).toBeDefined();
+		}
 
 		http.verify();
 	});

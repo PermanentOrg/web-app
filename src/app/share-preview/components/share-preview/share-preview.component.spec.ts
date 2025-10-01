@@ -17,8 +17,47 @@ import { cloneDeep } from 'lodash';
 import { SharedModule } from '@shared/shared.module';
 import * as Testing from '@root/test/testbedConfig';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { RecordVO } from '@root/app/models';
+import { AccountVO, ArchiveVO, RecordVO } from '@root/app/models';
+import { AuthResponse } from '@shared/services/api/auth.repo';
+import { Subject } from 'rxjs';
+import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 import { SharePreviewComponent } from './share-preview.component';
+
+export const mockAccountService = jasmine.createSpyObj('AccountService', [
+	'getAccount',
+	'getArchive',
+	'isLoggedIn',
+	'signUp',
+	'logIn',
+	'refreshArchives',
+	'getArchives',
+	'changeArchive',
+	'promptForArchiveChange',
+	'setRedirect',
+]);
+
+// Provide default return values
+const defaultAccount = new AccountVO({ primaryEmail: 'test@example.com' });
+const defaultArchive = new ArchiveVO({ archiveId: 123 });
+
+mockAccountService.getAccount.and.returnValue(defaultAccount);
+mockAccountService.getArchive.and.returnValue(defaultArchive);
+mockAccountService.isLoggedIn.and.returnValue(true);
+mockAccountService.signUp.and.returnValue(Promise.resolve(defaultAccount));
+
+const authResponse = new AuthResponse({});
+authResponse.needsMFA = () => false;
+mockAccountService.logIn.and.returnValue(Promise.resolve(authResponse));
+
+mockAccountService.refreshArchives.and.returnValue(Promise.resolve());
+mockAccountService.getArchives.and.returnValue([defaultArchive]);
+mockAccountService.changeArchive.and.returnValue(Promise.resolve());
+mockAccountService.promptForArchiveChange.and.returnValue(Promise.resolve());
+mockAccountService.setRedirect.and.stub();
+
+// Subjects for subscriptions
+mockAccountService.archiveChange = new Subject<ArchiveVO>();
+mockAccountService.accountChange = new Subject<AccountVO>();
 
 describe('SharePreviewComponent', () => {
 	let component: SharePreviewComponent;
@@ -28,8 +67,7 @@ describe('SharePreviewComponent', () => {
 
 	beforeEach(async () => {
 		const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
-		config.imports.push(SharedModule);
-		config.imports.push(RouterTestingModule);
+		config.imports.push(SharedModule, RouterTestingModule);
 		config.declarations.push(SharePreviewComponent);
 
 		const mockRoute = new ActivatedRoute();
@@ -37,11 +75,11 @@ describe('SharePreviewComponent', () => {
 		mockRoute.snapshot.data = {
 			sharePreviewVO: {
 				ArchiveVO: {},
-				AccountVO: {},
+				AccountVO: { fullName: 'Sharer Name' },
 				ShareVO: { accessRole: 'viewer', status: 'pending' },
 				status: 'pending',
 			},
-			currentFolder: { displayName: 'test' },
+			currentFolder: { displayName: 'test', archiveId: 123 },
 		};
 		mockRoute.snapshot.params = { shareToken: 'test' };
 		mockRoute.snapshot.queryParams = { requestAccess: 'test' };
@@ -75,19 +113,30 @@ describe('SharePreviewComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should open dialog shortly after loading if user logged out', fakeAsync(() => {
+	it('should open dialog shortly after loading if user is logged out', fakeAsync(() => {
 		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
 		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
 
 		component.isLoggedIn = false;
+		component.showCreateAccountDialog();
 		tick(1005);
 
-		expect(dialogSpy).toHaveBeenCalled();
+		expect(dialogSpy).toHaveBeenCalledWith(CreateAccountDialogComponent, {
+			data: { sharerName: 'Sharer Name' },
+		});
 	}));
 
-	it('should not open dialog shortly after loading if user logged in', fakeAsync(() => {
+	it('should not open dialog if already open', () => {
 		const dialogSpy = spyOn(dialog, 'open');
+		component.createAccountDialogIsOpen = true;
 
+		component.showCreateAccountDialog();
+
+		expect(dialogSpy).not.toHaveBeenCalled();
+	});
+
+	it('should not open dialog shortly after loading if user is logged in', fakeAsync(() => {
+		const dialogSpy = spyOn(dialog, 'open');
 		component.isLoggedIn = true;
 		tick(1005);
 
@@ -107,6 +156,60 @@ describe('SharePreviewComponent', () => {
 		});
 		tick();
 
-		expect(dialogSpy).toHaveBeenCalled();
+		expect(dialogSpy).toHaveBeenCalledWith(CreateAccountDialogComponent, {
+			data: { sharerName: 'Sharer Name' },
+		});
 	}));
+
+	it('should unsubscribe from item clicks', () => {
+		const mockFileList = { itemClicked: new EventEmitter<any>() };
+		component.subscribeToItemClicks(mockFileList);
+		const unsubscribeSpy = spyOn(
+			component.fileListClickListener,
+			'unsubscribe',
+		);
+		component.unsubscribeFromItemClicks();
+
+		expect(unsubscribeSpy).toHaveBeenCalled();
+	});
+
+	it('should toggle cover visibility', () => {
+		component.showCover = false;
+		component.toggleCover();
+
+		expect(component.showCover).toBeTrue();
+
+		component.toggleCover();
+
+		expect(component.showCover).toBeFalse();
+	});
+
+	it('should dispatch banner close', () => {
+		const spy = jasmine.createSpy();
+		component.hideBannerObservable.subscribe(spy);
+		component.dispatchBannerClose();
+
+		expect(spy).toHaveBeenCalled();
+	});
+
+	it('should stop event propagation', () => {
+		const event = jasmine.createSpyObj('Event', ['stopPropagation']);
+		component.stopPropagation(event);
+
+		expect(event.stopPropagation).toHaveBeenCalled();
+	});
+
+	it('should navigate to auth login if relationship share', () => {
+		component.isRelationshipShare = true;
+		component.navToAuth();
+
+		expect(router.navigate).toHaveBeenCalledWith(['/app', 'auth', 'login']);
+	});
+
+	it('should navigate to auth signup if not relationship share', () => {
+		component.isRelationshipShare = false;
+		component.navToAuth();
+
+		expect(router.navigate).toHaveBeenCalledWith(['/app', 'auth', 'signup']);
+	});
 });
