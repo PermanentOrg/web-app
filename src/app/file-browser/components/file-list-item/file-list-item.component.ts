@@ -204,6 +204,7 @@ export class FileListItemComponent
 	public canEdit = true;
 	public isZip = false;
 	public date: string = '';
+	public isUnlistedShare = false;
 
 	private folderThumb200: string;
 	private folderThumb500: string;
@@ -221,7 +222,6 @@ export class FileListItemComponent
 	private mouseDownDragTimeout: ReturnType<typeof setTimeout>;
 	private waitingForDoubleClick = false;
 	private touchStartEvent: TouchEvent;
-	private isUnlistedShare = false;
 
 	subscriptions: Subscription[] = [];
 
