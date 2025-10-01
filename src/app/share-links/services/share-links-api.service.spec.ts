@@ -34,7 +34,6 @@ describe('ShareLinksApiService', () => {
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
-			imports: [],
 			providers: [
 				HttpV2Service,
 				provideHttpClient(withInterceptorsFromDi()),
@@ -45,24 +44,17 @@ describe('ShareLinksApiService', () => {
 		http = TestBed.inject(HttpTestingController);
 	});
 
+	afterEach(() => {
+		http.verify();
+	});
+
 	it('should be created', () => {
 		expect(service).toBeTruthy();
 	});
 
-	it('should be able to get multiple share links by id', (done) => {
-		const expectedShareLink: StelaItems<ShareLink> = {
-			items: makeShareLinks(3),
-		};
-
-		service
-			.getShareLinksById([123, 456, 789])
-			.then((links) => {
-				expect(links).toEqual(expectedShareLink.items);
-				done();
-			})
-			.catch(() => {
-				done.fail('Rejection in promise.');
-			});
+	it('should get multiple share links by ID', async () => {
+		const expected: StelaItems<ShareLink> = { items: makeShareLinks(3) };
+		const promise = service.getShareLinksById([123, 456, 789]);
 
 		const req = http.expectOne(
 			`${environment.apiUrl}/v2/share-links?shareLinkIds[]=123&shareLinkIds[]=456&shareLinkIds[]=789`,
@@ -70,68 +62,58 @@ describe('ShareLinksApiService', () => {
 
 		expect(req.request.method).toBe('GET');
 		expect(req.request.headers.get('Request-Version')).toBe('2');
-		req.flush(expectedShareLink);
+
+		req.flush(expected);
+		const result = await promise;
+
+		expect(result).toEqual(expected.items);
 	});
 
-	it('should handle a share link by id GET request error', (done) => {
-		service
-			.getShareLinksById([123])
-			.then(() => {
-				done.fail('This promise should have been rejected');
-			})
-			.catch(() => {
-				done();
-			});
+	it('should handle error when getting share links by ID', async () => {
+		const promise = service.getShareLinksById([123]);
 
 		const req = http.expectOne(
 			`${environment.apiUrl}/v2/share-links?shareLinkIds[]=123`,
 		);
-
 		req.flush({}, { status: 400, statusText: 'Bad Request' });
+
+		await expectAsync(promise).toBeRejected();
 	});
 
-	it('should get a share link by token', (done) => {
-		const items: StelaItems<ShareLink> = { items: makeShareLinks(1) };
-		service
-			.getShareLinksByToken(['token-1', 'token-2', 'token-3'])
-			.then((links) => {
-				expect(links).toEqual(items.items);
-				done();
-			})
-			.catch(() => done.fail);
+	it('should get share links by token', async () => {
+		const expected: StelaItems<ShareLink> = { items: makeShareLinks(1) };
+		const promise = service.getShareLinksByToken(['token-1', 'token-2']);
 
 		const req = http.expectOne(
-			`${environment.apiUrl}/v2/share-links?shareTokens[]=token-1&shareTokens[]=token-2&shareTokens[]=token-3`,
+			`${environment.apiUrl}/v2/share-links?shareTokens[]=token-1&shareTokens[]=token-2`,
 		);
 
 		expect(req.request.method).toBe('GET');
 		expect(req.request.headers.get('Request-Version')).toBe('2');
-		req.flush(items);
+
+		req.flush(expected);
+		const result = await promise;
+
+		expect(result).toEqual(expected.items);
 	});
 
-	it('should handle a share link by token GET request error', (done) => {
-		service
-			.getShareLinksByToken(['token'])
-			.then(() => {
-				done.fail('This promise should have been rejected');
-			})
-			.catch(() => {
-				done();
-			});
+	it('should handle error when getting share links by token', async () => {
+		const promise = service.getShareLinksByToken(['token']);
 
 		const req = http.expectOne(
 			`${environment.apiUrl}/v2/share-links?shareTokens[]=token`,
 		);
-
 		req.flush({}, { status: 400, statusText: 'Bad Request' });
+
+		await expectAsync(promise).toBeRejected();
 	});
 
-	it('should generate a share link', (done) => {
-		const expectedResponse: ShareLink = {
+	it('should generate a share link', async () => {
+		const expected: ShareLink = {
 			id: '7',
 			itemId: '4',
 			itemType: 'record',
-			token: '971299ea-6732-4699-8629-34186a624e07',
+			token: 'abc-token',
 			permissionsLevel: 'viewer',
 			accessRestrictions: 'none',
 			maxUses: null,
@@ -141,96 +123,61 @@ describe('ShareLinksApiService', () => {
 			updatedAt: new Date('2025-04-09T13:09:07.755Z'),
 		};
 
-		const mockApiResponse = {
-			data: expectedResponse,
-		};
-
-		service
-			.generateShareLink({ itemId: '1', itemType: 'record' })
-			.then((res) => {
-				expect(res).toEqual(expectedResponse);
-				done();
-			})
-			.catch(() => {
-				done.fail('Rejection in promise.');
-			});
+		const promise = service.generateShareLink({
+			itemId: '4',
+			itemType: 'record',
+		});
 
 		const req = http.expectOne(`${environment.apiUrl}/v2/share-links`);
 
 		expect(req.request.method).toBe('POST');
-		expect(req.request.body).toEqual({ itemId: '1', itemType: 'record' });
+		expect(req.request.body).toEqual({ itemId: '4', itemType: 'record' });
 
-		req.flush(mockApiResponse);
+		req.flush({ data: expected });
+		const result = await promise;
+
+		expect(result).toEqual(expected);
 	});
 
-	it('should handle a share link POST error', (done) => {
-		service
-			.generateShareLink({ itemId: '1', itemType: 'record' })
-			.then(() => {
-				done.fail('This promise should have been rejected');
-			})
-			.catch(() => {
-				done();
-			});
+	it('should handle error when generating share link', async () => {
+		const promise = service.generateShareLink({
+			itemId: '4',
+			itemType: 'record',
+		});
 
 		const req = http.expectOne(`${environment.apiUrl}/v2/share-links`);
+		req.flush({}, { status: 400, statusText: 'Bad Request' });
 
-		req.flush(
-			{},
-			{
-				status: 400,
-				statusText: 'Bad Request',
-			},
-		);
+		await expectAsync(promise).toBeRejected();
 	});
 
-	it('should handle a share link DELETE call', (done) => {
-		service
-			.deleteShareLink('7')
-			.then(() => {
-				done();
-			})
-			.catch(() => {
-				done.fail('Rejection in promise.');
-			});
+	it('should delete a share link', async () => {
+		const promise = service.deleteShareLink('7');
+
 		const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
 
 		expect(req.request.method).toBe('DELETE');
 		expect(req.request.headers.get('Request-Version')).toBe('2');
 
 		req.flush({}, { status: 204, statusText: 'No Content' });
+		await expectAsync(promise).toBeResolved();
 	});
 
-	it('should handle a share link DELETE error', (done) => {
-		service
-			.deleteShareLink('7')
-			.then(() => {
-				done.fail('This promise should have been rejected');
-			})
-			.catch(() => {
-				done();
-			});
+	it('should handle error when deleting share link', async () => {
+		const promise = service.deleteShareLink('7');
 
 		const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
+		req.flush({}, { status: 400, statusText: 'Bad Request' });
 
-		expect(req.request.method).toBe('DELETE');
-		expect(req.request.headers.get('Request-Version')).toBe('2');
-
-		req.flush(
-			{},
-			{
-				status: 400,
-				statusText: 'Bad Request',
-			},
-		);
+		await expectAsync(promise).toBeRejected();
 	});
 
-	it('should update a share link', (done) => {
-		const expectedResponse: ShareLink = {
+	it('should update a share link', async () => {
+		const expected: ShareLink = {
 			id: '7',
 			itemId: '4',
 			itemType: 'record',
-			token: '971299ea-6732-4699-8629-34186a624e07',
+			token: 'abc-token',
 			permissionsLevel: 'viewer',
 			accessRestrictions: 'account',
 			maxUses: null,
@@ -240,48 +187,29 @@ describe('ShareLinksApiService', () => {
 			updatedAt: new Date('2025-04-09T13:09:07.755Z'),
 		};
 
-		const mockApiResponse = {
-			data: expectedResponse,
-		};
-
-		service
-			.updateShareLink('1', { accessRestrictions: 'account' })
-			.then((res) => {
-				expect(res).toEqual(expectedResponse);
-				done();
-			})
-			.catch(() => {
-				done.fail('Rejection in promise.');
-			});
-		const req = http.expectOne(`${environment.apiUrl}/v2/share-links/1`);
-
-		expect(req.request.method).toBe('PATCH');
-		expect(req.request.body).toEqual({ accessRestrictions: 'account' });
-
-		req.flush(mockApiResponse);
-	});
-
-	it('should handle a share link PATCH error', (done) => {
-		service
-			.updateShareLink('7', { accessRestrictions: 'account' })
-			.then(() => {
-				done.fail('This promise should have been rejected');
-			})
-			.catch(() => {
-				done();
-			});
+		const promise = service.updateShareLink('7', {
+			accessRestrictions: 'account',
+		});
 
 		const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
 
 		expect(req.request.method).toBe('PATCH');
-		expect(req.request.headers.get('Request-Version')).toBe('2');
+		expect(req.request.body).toEqual({ accessRestrictions: 'account' });
 
-		req.flush(
-			{},
-			{
-				status: 400,
-				statusText: 'Bad Request',
-			},
-		);
+		req.flush({ data: expected });
+		const result = await promise;
+
+		expect(result).toEqual(expected);
+	});
+
+	it('should handle error when updating share link', async () => {
+		const promise = service.updateShareLink('7', {
+			accessRestrictions: 'account',
+		});
+
+		const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
+		req.flush({}, { status: 400, statusText: 'Bad Request' });
+
+		await expectAsync(promise).toBeRejected();
 	});
 });

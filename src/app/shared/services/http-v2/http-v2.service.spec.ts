@@ -333,4 +333,35 @@ describe('HttpV2Service', () => {
 
 		req.flush('OK', { status: 200, statusText: 'OK' });
 	});
+
+	it('should add X-Permanent-Share-Token header in POST request', () => {
+		service
+			.post('/api/v2/health', {}, null, { shareToken: 'abc123' })
+			.toPromise();
+
+		const req = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
+		expect(req.request.headers.get('X-Permanent-Share-Token')).toBe('abc123');
+		req.flush({ status: 'available' });
+	});
+
+	it('should add X-Permanent-Share-Token header in GET request', () => {
+		service
+			.get('/api/v2/health', {}, null, { shareToken: 'xyz789' })
+			.toPromise();
+
+		const req = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
+		expect(req.request.headers.get('X-Permanent-Share-Token')).toBe('xyz789');
+		req.flush({ status: 'available' });
+	});
+
+	it('should not include X-Permanent-Share-Token header if shareToken is null', () => {
+		service.get('/api/v2/health', {}, null, { shareToken: null }).toPromise();
+
+		const req = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
+		expect(req.request.headers.has('X-Permanent-Share-Token')).toBeFalse();
+		req.flush({ status: 'available' });
+	});
 });
