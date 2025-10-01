@@ -18,7 +18,7 @@ export class ShareLinksApiService {
 				null,
 			),
 		);
-		return response[0].items;
+		return response.items[0];
 	}
 
 	public async getShareLinksByToken(

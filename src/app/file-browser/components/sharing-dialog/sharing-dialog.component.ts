@@ -63,7 +63,8 @@ type ShareByUrlProps =
         | 'accessRestrictions'
 	| 'defaultAccessRole'
 	| 'expiresDT'
-	| 'autoApproveToggle';
+	| 'autoApproveToggle'
+	| 'expirationTimestamp';
 
 const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
 	Expiration,
@@ -176,38 +177,13 @@ export class SharingDialogComponent implements OnInit {
 		this.relationshipService.update();
 
 	    this.shareLink = this.data.link;
-	    this.translateToNewShareLink();
+	    
+	    this.newShareLink = this.data.newShare;
 
 		this.setShareLinkFormValue();
 
 		this.checkQueryParams();
 	}
-
-    translateToNewShareLink() {
-	this.newShareLink = {
-	    id: this.data.link.shareby_urlId,
-	    token: this.data.link.urlToken,
-	    itemId: '',
-	    itemType: 'record',
-	    permissionsLevel: this.accessRoleToPermissionsLevel(),
-	    accessRestrictions: 'account',
-	    maxUses: 1000000,
-	    usesExpended: this.data.link.uses,
-	    createdAt: this.data.link.createdDT,
-	    updatedAt: this.data.link.updatedDT,
-	};
-	if (this.shareItem instanceof RecordVO) {
-	    this.newShareLink.itemId = this.shareItem.recordId;
-	    this.newShareLink.itemType = 'record';
-	} else {
-	    this.newShareLink.itemId = this.shareItem.folderId;
-	    this.newShareLink.itemType = 'folder';
-	}
-	this.newShareLink.accessRestrictions = this.calculateAccessRestrictions(
-	    this.data.link.accessRestrictions,
-	    this.data.link.autoApproveToggle
-	);
-    }
 
     calculateAccessRestrictions(linkType: string, autoApprove: number) {
 	if (linkType == 'public') {
@@ -539,8 +515,6 @@ export class SharingDialogComponent implements OnInit {
 	async generateShareLink() {
 		this.updatingLink = true;
 	    try {
-		console.log('What does the share item look like?');
-		console.log(this.shareItem);
 			const response = await this.api.share.generateShareLink(this.shareItem);
 			this.shareLink = response.getShareByUrlVO();
 			this.shareLink.autoApproveToggle = this.autoApproveToggle || 0;
@@ -602,6 +576,10 @@ export class SharingDialogComponent implements OnInit {
 		} else if (propName == 'autoApproveToggle') {
 		    propName = 'accessRestrictions';
 		    value = this.calculateAccessRestrictions(this.linkType, value);
+		}
+		if (propName == 'expiresDT') {
+		    propName = 'expirationTimestamp';
+		    value = new Date(value);
 		}
 		const update: Partial<ShareLink> = {};
 		update[propName] = value;
