@@ -327,7 +327,7 @@
 	</div>
 </div>
 <pr-share-preview-footer
-	*ngIf="!isLoggedIn"
+	*ngIf="!isLoggedIn && !isUnlistedShare"
 	[accountUserName]="shareAccount.fullName"
 	[closeEvent]="hideBannerObservable"
 ></pr-share-preview-footer>
