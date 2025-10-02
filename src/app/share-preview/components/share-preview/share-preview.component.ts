@@ -196,7 +196,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 			this.sendGaEvent('previewed');
 		}
 
-		if (!this.isLoggedIn) {
+		if (!this.isLoggedIn && !this.isUnlistedShare) {
 			setTimeout(() => {
 				this.showCreateAccountDialog();
 			}, 1000);
