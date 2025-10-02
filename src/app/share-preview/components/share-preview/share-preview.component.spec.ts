@@ -20,6 +20,7 @@ import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { AccountVO, ArchiveVO, RecordVO } from '@root/app/models';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { Subject } from 'rxjs';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 import { SharePreviewComponent } from './share-preview.component';
 
@@ -58,6 +59,11 @@ mockAccountService.setRedirect.and.stub();
 // Subjects for subscriptions
 mockAccountService.archiveChange = new Subject<ArchiveVO>();
 mockAccountService.accountChange = new Subject<AccountVO>();
+
+const mockShareLinksService = {
+	currentShareToken: null,
+	isUnlistedShare: () => true,
+};
 
 describe('SharePreviewComponent', () => {
 	let component: SharePreviewComponent;
@@ -98,6 +104,11 @@ describe('SharePreviewComponent', () => {
 			useValue: mockRoute,
 		});
 
+		config.providers.push({
+			provide: ShareLinksService,
+			useValue: mockShareLinksService,
+		});
+
 		await TestBed.configureTestingModule(config).compileComponents();
 
 		dialog = TestBed.inject(DialogCdkService);
@@ -112,6 +123,16 @@ describe('SharePreviewComponent', () => {
 	it('should create', () => {
 		expect(component).toBeTruthy();
 	});
+
+	it('should mark it as unlisted share if restrictions are none', fakeAsync(() => {
+		spyOn(mockShareLinksService, 'isUnlistedShare').and.returnValue(true);
+		component.ngOnInit();
+
+		expect(mockShareLinksService.isUnlistedShare).toHaveBeenCalled();
+		tick(1005);
+
+		expect(component.isUnlistedShare).toEqual(true);
+	}));
 
 	it('should open dialog shortly after loading if user is logged out', fakeAsync(() => {
 		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
@@ -134,6 +155,14 @@ describe('SharePreviewComponent', () => {
 
 		expect(dialogSpy).not.toHaveBeenCalled();
 	});
+
+	it('should not open dialog shortly after loading if share is unlisted', fakeAsync(() => {
+		const dialogSpy = spyOn(dialog, 'open');
+		component.isUnlistedShare = true;
+		tick(1005);
+
+		expect(dialogSpy).not.toHaveBeenCalled();
+	}));
 
 	it('should not open dialog shortly after loading if user is logged in', fakeAsync(() => {
 		const dialogSpy = spyOn(dialog, 'open');
