@@ -24,6 +24,7 @@ import {
 import { faFileArchive, faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import OpenSeadragon from 'openseadragon';
 import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
+import { ComponentsModule } from '../component-library/components.module';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { FileSizePipe } from './pipes/filesize.pipe';
@@ -68,6 +69,7 @@ import { AccessRolePipe } from './pipes/access-role.pipe';
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
 import { ZoomingImageViewerComponent } from './components/zooming-image-viewer/zooming-image-viewer.component';
 import { GetFileTypePipe } from './pipes/get-file-type.pipe';
+import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
 
 @NgModule({
 	imports: [
@@ -81,6 +83,7 @@ import { GetFileTypePipe } from './pipes/get-file-type.pipe';
 		NgbDropdownModule,
 		NgbPaginationModule,
 		FontAwesomeModule,
+		ComponentsModule,
 	],
 	exports: [
 		CommonModule,
@@ -91,6 +94,7 @@ import { GetFileTypePipe } from './pipes/get-file-type.pipe';
 		BgImageSrcDirective,
 		ArchiveSmallComponent,
 		ArchivePickerComponent,
+		ArchiveSwitcherComponent,
 		TimelineCompleteDialogComponent,
 		BreadcrumbComponent,
 		BreadcrumbsComponent,
@@ -146,6 +150,7 @@ import { GetFileTypePipe } from './pipes/get-file-type.pipe';
 		PromptComponent,
 		ArchiveSmallComponent,
 		ArchivePickerComponent,
+		ArchiveSwitcherComponent,
 		BreadcrumbComponent,
 		BreadcrumbsComponent,
 		FileSizePipe,

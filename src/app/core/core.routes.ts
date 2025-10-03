@@ -7,7 +7,7 @@ import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.ser
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { ArchivesResolveService } from '@core/resolves/archives-resolve.service';
 import { SharedModule } from '@shared/shared.module';
-import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
+import { ArchiveSwitcherComponent } from '@shared/components/archive-switcher/archive-switcher.component';
 import { GlobalSearchResultsComponent } from '@search/components/global-search-results/global-search-results.component';
 import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { RoutesWithData } from '../app.routes';
