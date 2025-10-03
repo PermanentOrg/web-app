@@ -9,6 +9,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { TagsService } from '@core/services/tags/tags.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
 import { FileViewerComponent } from './file-viewer.component';
@@ -94,6 +95,7 @@ describe('FileViewerComponent', () => {
 		openedDialogs = [];
 		downloaded = false;
 		shallow = new Shallow(FileViewerComponent, FileBrowserComponentsModule)
+			.import(HttpClientTestingModule)
 			.dontMock(TagsService)
 			.dontMock(PublicProfileService)
 			.mock(Router, {
@@ -415,6 +417,7 @@ describe('FileViewerComponent', () => {
 		it('can open the location dialog with edit permissions', async () => {
 			setAccess(true);
 			const { fixture, instance } = await defaultRender();
+			instance.canEdit = true;
 			instance.onLocationClick();
 			await fixture.whenStable();
 
@@ -433,6 +436,7 @@ describe('FileViewerComponent', () => {
 		it('can open the tags dialog with edit permissions', async () => {
 			setAccess(true);
 			const { fixture, instance } = await defaultRender();
+			instance.canEdit = true;
 			instance.onTagsClick('keyword');
 			await fixture.whenStable();
 
