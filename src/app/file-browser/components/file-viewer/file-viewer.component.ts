@@ -27,6 +27,8 @@ import { SearchService } from '@search/services/search.service';
 import { ZoomingImageViewerComponent } from '@shared/components/zooming-image-viewer/zooming-image-viewer.component';
 import { FileFormat } from '@models/file-vo';
 import { GetAccessFile } from '@models/get-access-file';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { ApiService } from '@shared/services/api/api.service';
 import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
@@ -74,6 +76,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	public editingDate: boolean = false;
 	private bodyScrollTop: number;
 	private tagSubscription: Subscription;
+	private isUnlistedShare = true;
+
+	public accessRestrictions: any;
 
 	constructor(
 		private router: Router,
@@ -85,7 +90,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		private accountService: AccountService,
 		private editService: EditService,
 		private tagsService: TagsService,
-		@Optional() private publicProfile: PublicProfileService,
+		@Optional() publicProfile: PublicProfileService,
+		private shareLinksService: ShareLinksService,
+		private api: ApiService,
 	) {
 		// store current scroll position in file list
 		this.bodyScrollTop = window.scrollY;
@@ -97,19 +104,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			this.records = [this.currentRecord];
 			this.currentIndex = 0;
 		} else {
-			this.records = filter(
-				this.dataService.currentFolder.ChildItemVOs,
-				'isRecord',
-			) as RecordVO[];
-			this.currentIndex = findIndex(this.records, {
-				folder_linkId: resolvedRecord.folder_linkId,
-			});
-			this.currentRecord = this.records[this.currentIndex];
-			if (resolvedRecord !== this.currentRecord) {
-				this.currentRecord.update(resolvedRecord);
-			}
-
-			this.loadQueuedItems();
+			this.setRecordsToPreview(resolvedRecord);
 		}
 
 		if (route.snapshot.data?.isPublicArchive) {
@@ -122,11 +117,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			});
 		}
 
-		this.canEdit =
-			this.accountService.checkMinimumAccess(
-				this.currentRecord.accessRole,
-				AccessRole.Editor,
-			) && !route.snapshot.data?.isPublicArchive;
+		this.canEdit = this.isUnlistedShare
+			? false
+			: this.accountService.checkMinimumAccess(
+					this.currentRecord.accessRole,
+					AccessRole.Editor,
+				) && !route.snapshot.data?.isPublicArchive;
 
 		this.tagSubscription = this.tagsService
 			.getItemTags$()
@@ -140,7 +136,17 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			});
 	}
 
-	ngOnInit() {
+	async ngOnInit() {
+		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+
+		if (this.isUnlistedShare) {
+			const response = await this.api.record.getWithShareTokenAuth(
+				[this.currentRecord.recordId],
+				this.shareLinksService.currentShareToken,
+			);
+			this.setRecordsToPreview(response.getRecordVO());
+		}
+
 		this.initRecord();
 
 		// disable scrolling file list in background
@@ -168,6 +174,22 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			window.scrollTo(0, this.bodyScrollTop);
 		});
 		this.tagSubscription.unsubscribe();
+	}
+
+	private setRecordsToPreview(resolvedRecord: RecordVO) {
+		this.records = filter(
+			this.dataService.currentFolder.ChildItemVOs,
+			'isRecord',
+		) as RecordVO[];
+		this.currentIndex = findIndex(this.records, {
+			folder_linkId: resolvedRecord.folder_linkId,
+		});
+		this.currentRecord = this.records[this.currentIndex];
+		if (resolvedRecord !== this.currentRecord) {
+			this.currentRecord.update(resolvedRecord);
+		}
+
+		this.loadQueuedItems();
 	}
 
 	@HostListener('window:resize', [])
@@ -367,7 +389,13 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	close() {
-		this.router.navigate(['.'], { relativeTo: this.route.parent });
+		if (this.isUnlistedShare) {
+			this.router.navigate([
+				`/share/${this.shareLinksService.currentShareToken}`,
+			]);
+		} else {
+			this.router.navigate(['.'], { relativeTo: this.route.parent });
+		}
 	}
 
 	public async onFinishEditing(
