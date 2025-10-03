@@ -19,6 +19,7 @@ import { FileFormat, PermanentFile } from '@models/file-vo';
 import { ShareStatus } from '@models/share-vo';
 import { AccessRoleType } from '@models/access-role';
 import { getFirst } from '../http-v2/http-v2.service';
+import { CENTRAL_TIMEZONE_VO } from './folder.repo';
 
 class MultipartUploadUrlsList {
 	public urls: string[] = [];
@@ -52,7 +53,7 @@ class MultipartUploadUrlsList {
 // to simply use what stela provides, but there is work to be done regarding
 // overall type safety in this code base before we want to take that project
 // on.
-interface StelaTag {
+export interface StelaTag {
 	id: string;
 	name: string;
 	type: string;
@@ -67,7 +68,7 @@ interface StelaFile {
 	updatedAt: string;
 	downloadUrl: string;
 }
-interface StelaLocation {
+export interface StelaLocation {
 	id: string;
 	streetNumber: string;
 	streetName: string;
@@ -85,7 +86,7 @@ interface StelaArchive {
 	archiveNumber: string;
 	name: string;
 }
-interface StelaShare {
+export interface StelaShare {
 	id: string;
 	status: ShareStatus;
 	accessRole: AccessRoleType;
@@ -95,7 +96,7 @@ interface StelaShare {
 		thumbUrl200: string;
 	};
 }
-type StelaRecord = Omit<RecordVO, 'files'> & {
+export type StelaRecord = Omit<RecordVO, 'files'> & {
 	tags: Array<StelaTag> | null;
 	archiveNumber: string;
 	displayDate: string;
@@ -122,7 +123,10 @@ const resolveTagName = (tag: StelaTag): string => {
 	return tag.name;
 };
 
-const convertStelaTagToTagVO = (stelaTag: StelaTag, archiveId: string): TagVO =>
+export const convertStelaTagToTagVO = (
+	stelaTag: StelaTag,
+	archiveId: string,
+): TagVO =>
 	new TagVO({
 		tagId: Number.parseInt(stelaTag.id),
 		name: resolveTagName(stelaTag),
@@ -139,7 +143,7 @@ const convertStelaFileToPermanentFile = (
 	downloadURL: stelaFile.downloadUrl,
 });
 
-const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
+export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 	new ShareVO({
 		shareId: stelaShare.id,
 		status: stelaShare.status,
@@ -151,7 +155,7 @@ const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 		},
 	});
 
-const convertStelaLocationToLocnVOData = (
+export const convertStelaLocationToLocnVOData = (
 	stelaLocation: StelaLocation,
 ): LocnVOData =>
 	stelaLocation.id
@@ -161,7 +165,9 @@ const convertStelaLocationToLocnVOData = (
 			}
 		: null;
 
-const convertStelaRecordToRecordVO = (stelaRecord: StelaRecord): RecordVO =>
+export const convertStelaRecordToRecordVO = (
+	stelaRecord: StelaRecord,
+): RecordVO =>
 	new RecordVO({
 		...stelaRecord,
 		TagVOs: (stelaRecord.tags ?? []).map((stelaTag) =>
@@ -179,18 +185,8 @@ const convertStelaRecordToRecordVO = (stelaRecord: StelaRecord): RecordVO =>
 		parentFolder_linkId: stelaRecord.parentFolderLinkId,
 		TextDataVOs: [],
 		ArchiveVOs: [],
-		timeZoneId: 88, // Hard coded for now
-		TimezoneVO: {
-			timeZoneId: 88,
-			displayName: 'Central Time',
-			timeZonePlace: 'America/Chicago',
-			stdName: 'Central Standard Time',
-			stdAbbrev: 'CST',
-			stdOffset: '-06:00',
-			dstName: 'Central Daylight Time',
-			dstAbbrev: 'CDT',
-			dstOffset: '-05:00',
-		},
+		timeZoneId: CENTRAL_TIMEZONE_VO.timeZoneId,
+		TimezoneVO: CENTRAL_TIMEZONE_VO,
 		ShareVOs: (stelaRecord.shares ?? []).map(convertStelaSharetoShareVO),
 	});
 

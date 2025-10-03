@@ -1,7 +1,17 @@
 import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
+import {
+	convertStelaLocationToLocnVOData,
+	convertStelaRecordToRecordVO,
+	convertStelaSharetoShareVO,
+	convertStelaTagToTagVO,
+	StelaLocation,
+	StelaShare,
+	StelaTag,
+	type StelaRecord,
+} from './record.repo';
 
 const MIN_WHITELIST: (keyof FolderVO)[] = [
 	'folderId',
@@ -16,6 +26,119 @@ const DEFAULT_WHITELIST: (keyof FolderVO)[] = [
 	'displayEndDT',
 	'view',
 ];
+
+// This is hard coded for now as we transition away from the PHP backend.
+// In future we hope to remove the need for time zone objects entirely.
+export const CENTRAL_TIMEZONE_VO = {
+	timeZoneId: 88,
+	displayName: 'Central Time',
+	timeZonePlace: 'America/Chicago',
+	stdName: 'Central Standard Time',
+	stdAbbrev: 'CST',
+	stdOffset: '-06:00',
+	dstName: 'Central Daylight Time',
+	dstAbbrev: 'CDT',
+	dstOffset: '-05:00',
+};
+
+interface StelaFolder {
+	folderId: string;
+	size: number;
+	location: StelaLocation;
+	parentFolder: {
+		id: string;
+	};
+	shares: Array<StelaShare>;
+	tags: Array<StelaTag>;
+	archive: {
+		id: string;
+		name: string;
+	};
+	createdAt: string;
+	updatedAt: string;
+	description: string;
+	displayTimestamp: string;
+	displayEndTimestamp: string;
+	displayName: string;
+	downloadName: string;
+	imageRatio: number;
+	paths: {
+		names: string[];
+	};
+	publicAt: string;
+	sort: string;
+	thumbnailUrls: {
+		'200': string;
+		'256': string;
+		'500': string;
+		'1000': string;
+		'2000': string;
+	};
+	type: string;
+	status: string;
+	view: string;
+	children?: StelaFolderChild[];
+}
+
+interface PagedStelaResponse<T> {
+	items: Array<T>;
+}
+
+type StelaFolderChild = StelaFolder | StelaRecord;
+
+const isStelaRecord = (child: StelaFolderChild): child is StelaRecord =>
+	child && 'recordId' in child;
+
+const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
+	stelaFolder.children ??= [];
+	const childFolderVOs = stelaFolder.children
+		.filter((child): child is StelaFolder => !isStelaRecord(child))
+		.map(convertStelaFolderToFolderVO);
+	const childRecordVOs = stelaFolder.children
+		.filter(isStelaRecord)
+		.map(convertStelaRecordToRecordVO);
+	return new FolderVO({
+		...stelaFolder,
+		folderId: stelaFolder.folderId,
+		archiveId: stelaFolder.archive.id,
+		displayName: stelaFolder.displayName,
+		displayDT: stelaFolder.displayTimestamp,
+		displayEndDT: stelaFolder.displayEndTimestamp,
+		derivedDT: stelaFolder.displayTimestamp,
+		derivedEndDT: stelaFolder.displayEndTimestamp,
+		note: '',
+		description: stelaFolder.description,
+		sort: stelaFolder.sort,
+		locnId: stelaFolder.location.id,
+		timeZoneId: 88, // Hard coded for now
+		view: stelaFolder.view,
+		imageRatio: stelaFolder.imageRatio,
+		type: stelaFolder.type,
+		thumbStatus: stelaFolder.status,
+		thumbURL200: stelaFolder.thumbnailUrls['200'],
+		thumbURL500: stelaFolder.thumbnailUrls['500'],
+		thumbURL1000: stelaFolder.thumbnailUrls['1000'],
+		thumbURL2000: stelaFolder.thumbnailUrls['2000'],
+		thumbDT: stelaFolder.displayTimestamp,
+		thumbnail256: stelaFolder.thumbnailUrls['256'],
+		thumbnail256CloudPath: stelaFolder.thumbnailUrls['256'],
+		status: stelaFolder.status,
+		publicDT: stelaFolder.publicAt,
+		parentFolderId: stelaFolder.parentFolder.id,
+		pathAsText: stelaFolder.paths.names,
+		ParentFolderVOs: [new FolderVO({ folderId: stelaFolder.parentFolder.id })],
+		ChildFolderVOs: childFolderVOs,
+		RecordVOs: childRecordVOs,
+		LocnVO: convertStelaLocationToLocnVOData(stelaFolder.location),
+		TimezoneVO: CENTRAL_TIMEZONE_VO,
+		TagVOs: (stelaFolder.tags ?? []).map((stelaTag) =>
+			convertStelaTagToTagVO(stelaTag, stelaFolder.archive.id),
+		),
+		ChildItemVOs: [...childRecordVOs, ...childFolderVOs],
+		ShareVOs: (stelaFolder.shares ?? []).map(convertStelaSharetoShareVO),
+		isFolder: true,
+	});
+};
 
 export class FolderRepo extends BaseRepo {
 	public async getRoot(): Promise<FolderResponse> {
@@ -46,20 +169,73 @@ export class FolderRepo extends BaseRepo {
 		);
 	}
 
-	public async getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
-		const data = folderVOs.map((folderVO) => ({
-			FolderVO: {
-				archiveNbr: folderVO.archiveNbr,
-				folder_linkId: folderVO.folder_linkId,
-				folderId: folderVO.folderId,
-			},
-		}));
+	private async getStelaFolder(folderVO: FolderVO): Promise<StelaFolder> {
+		const queryData = {
+			folderIds: [folderVO.folderId],
+		};
+		const folderResponse = (
+			await firstValueFrom(
+				this.httpV2.get<PagedStelaResponse<StelaFolder>>(
+					`v2/folder`,
+					queryData,
+				),
+			)
+		)[0];
+		return folderResponse.items[0];
+	}
 
-		return await this.http.sendRequestPromise<FolderResponse>(
-			'/folder/getWithChildren',
-			data,
-			{ responseClass: FolderResponse },
+	private async getStelaFolderChildren(
+		folderVO: FolderVO,
+	): Promise<StelaFolderChild[]> {
+		const queryData = {
+			pageSize: 99999999, // We want all results in one request
+		};
+		const childrenResponse = (
+			await firstValueFrom(
+				this.httpV2.get<PagedStelaResponse<StelaFolderChild>>(
+					`v2/folder/${folderVO.folderId}/children`,
+					queryData,
+				),
+			)
+		)[0];
+		return childrenResponse.items;
+	}
+
+	public async getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
+		// Stela has two separate endpoints -- one for loading the folder, one for loading the children.
+		const requests = folderVOs.map(async (folderVO) => {
+			const stelaFolder = await this.getStelaFolder(folderVO);
+			const stelaFolderChildren = await this.getStelaFolderChildren(folderVO);
+			return {
+				...stelaFolder,
+				children: stelaFolderChildren,
+			};
+		});
+
+		const stelaFolders = (await Promise.all(requests)).flat();
+
+		// We need the `Results` to look the way v1 results look, for now.
+		const simulatedV1FolderResponseResults = stelaFolders.map(
+			(stelaFolder) => ({
+				data: [
+					{
+						FolderVO: convertStelaFolderToFolderVO(stelaFolder),
+					},
+				],
+				message: ['Folder retrieved'],
+				status: true,
+				resultDT: new Date().toISOString(),
+				createdDT: null,
+				updatedDT: null,
+			}),
 		);
+
+		const folderResponse = new FolderResponse({
+			isSuccessful: true,
+			isSystemUp: true,
+			Results: simulatedV1FolderResponseResults,
+		});
+		return folderResponse;
 	}
 
 	public navigate(folderVO: FolderVO): Observable<FolderResponse> {
