@@ -494,10 +494,6 @@ export class FileListItemComponent
 
 	onItemClick(event: MouseEvent) {
 		if (this.isUnlistedShare) {
-			//TO DO: make preview for folder --> story PER-10314
-			if (this.item.isFolder) {
-				return;
-			}
 			this.goToItem();
 			return;
 		}
@@ -575,9 +571,12 @@ export class FileListItemComponent
 				});
 			}
 			if (this.isInSharePreview || this.isInPublicArchive) {
-				this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {
-					relativeTo: this.route.parent,
-				});
+				this.router.navigate(
+					['view', this.item.archiveNbr, this.item.folder_linkId],
+					{
+						relativeTo: this.route.parent,
+					},
+				);
 			} else {
 				this.router.navigate([
 					rootUrl,

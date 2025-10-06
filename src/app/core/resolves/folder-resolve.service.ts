@@ -15,6 +15,7 @@ import { FolderVO } from '@root/app/models';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { findRouteData } from '@shared/utilities/router';
 import { FilesystemService } from '@root/app/filesystem/filesystem.service';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
 @Injectable()
 export class FolderResolveService {
@@ -23,6 +24,7 @@ export class FolderResolveService {
 		private message: MessageService,
 		private router: Router,
 		private filesystem: FilesystemService,
+		private shareLinksService: ShareLinksService,
 	) {}
 
 	resolve(
@@ -31,7 +33,13 @@ export class FolderResolveService {
 	): Observable<any> | Promise<any> {
 		let targetFolder: FolderVO;
 
-		if (route.params.archiveNbr && route.params.folderLinkId) {
+		const isUnlistedShare = this.shareLinksService.isUnlistedShare();
+
+		if (
+			!isUnlistedShare &&
+			route.params.archiveNbr &&
+			route.params.folderLinkId
+		) {
 			targetFolder = new FolderVO({
 				archiveNbr: route.params.archiveNbr,
 				folder_linkId: route.params.folderLinkId,
