@@ -1,12 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import {
-	HttpTestingController,
-	provideHttpClientTesting,
-} from '@angular/common/http/testing';
-import {
-	provideHttpClient,
-	withInterceptorsFromDi,
-} from '@angular/common/http';
 import { FolderResponse } from '@shared/services/api/folder.repo';
 import { FolderVO } from '@models/index';
 import { DataStatus } from '@models/data-status.enum';
@@ -52,7 +44,6 @@ const mockApiService = {
 
 describe('FilesystemApiService', () => {
 	let service: FilesystemApiService;
-	let http: HttpTestingController;
 	let shareLinksServiceSpy: jasmine.SpyObj<ShareLinksService>;
 
 	beforeEach(() => {
@@ -63,8 +54,6 @@ describe('FilesystemApiService', () => {
 
 		TestBed.configureTestingModule({
 			providers: [
-				provideHttpClient(withInterceptorsFromDi()),
-				provideHttpClientTesting(),
 				FilesystemApiService,
 				{ provide: ShareLinksService, useValue: shareLinksServiceSpy },
 				{ provide: ApiService, useValue: mockApiService },
@@ -72,7 +61,6 @@ describe('FilesystemApiService', () => {
 		});
 
 		service = TestBed.inject(FilesystemApiService);
-		http = TestBed.inject(HttpTestingController);
 	});
 
 	it('should be created', () => {
@@ -81,6 +69,12 @@ describe('FilesystemApiService', () => {
 
 	it('should navigate using navigateLean', async () => {
 		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
+		mockApiService.folder.navigateLean.and.returnValue(
+			of({
+				isSuccessful: true,
+				getFolderVO: () => mockFolderVO,
+			}),
+		);
 
 		const folder = await service.navigate({ folderId });
 
@@ -111,7 +105,9 @@ describe('FilesystemApiService', () => {
 
 	it('should throw FolderResponse error if response is unsuccessful', async () => {
 		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
-		mockApiService.folder.navigateLean.and.resolveTo({ isSuccessful: false });
+		mockApiService.folder.navigateLean.and.resolveTo(
+			of({ isSuccessful: false }),
+		);
 
 		const promise = service.navigate({ folderId: 0 });
 
@@ -121,7 +117,5 @@ describe('FilesystemApiService', () => {
 		} catch (error) {
 			expect(error).toBeDefined();
 		}
-
-		http.verify();
 	});
 });
