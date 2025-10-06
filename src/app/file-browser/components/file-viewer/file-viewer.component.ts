@@ -78,8 +78,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	private tagSubscription: Subscription;
 	private isUnlistedShare = true;
 
-	public accessRestrictions: any;
-
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
@@ -117,13 +115,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			});
 		}
 
-		this.canEdit = this.isUnlistedShare
-			? false
-			: this.accountService.checkMinimumAccess(
-					this.currentRecord.accessRole,
-					AccessRole.Editor,
-				) && !route.snapshot.data?.isPublicArchive;
-
 		this.tagSubscription = this.tagsService
 			.getItemTags$()
 			?.subscribe((tags) => {
@@ -138,6 +129,13 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
 	async ngOnInit() {
 		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+
+		this.canEdit = this.isUnlistedShare
+			? false
+			: this.accountService.checkMinimumAccess(
+					this.currentRecord.accessRole,
+					AccessRole.Editor,
+				) && !this.route.snapshot.data?.isPublicArchive;
 
 		if (this.isUnlistedShare) {
 			const response = await this.api.record.getWithShareTokenAuth(
