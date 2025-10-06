@@ -11,21 +11,25 @@ import { FolderResponse } from '@shared/services/api/folder.repo';
 import { FolderVO } from '@models/index';
 import { DataStatus } from '@models/data-status.enum';
 import { ApiService } from '@shared/services/api/api.service';
+import { of } from 'rxjs';
 import { ShareLinksService } from '../share-links/services/share-links.service';
 import { FilesystemApiService } from './filesystem-api.service';
 
 const folderId = 42;
+
+const mockFolderVO = {
+	folderId,
+	displayName: 'Unlisted Folder',
+	ChildItemVOs: [],
+	dataStatus: DataStatus.Lean,
+};
 const mockResponse = new FolderResponse({
 	isSuccessful: true,
 	Results: [
 		{
 			data: [
 				{
-					FolderVO: {
-						folderId,
-						displayName: 'Unlisted Folder',
-						ChildItemVOs: [],
-					},
+					FolderVO: mockFolderVO,
 				},
 			],
 		},
@@ -38,14 +42,10 @@ const mockApiService = {
 			.createSpy('getWithChildren')
 			.and.returnValue(Promise.resolve(mockResponse)),
 		navigateLean: jasmine.createSpy('navigateLean').and.returnValue(
-			// simulate observable for firstValueFrom
-			{
-				toPromise: async () =>
-					await Promise.resolve({
-						isSuccessful: true,
-						getFolderVO: () => ({ id: 'mock-folder', name: 'Mock Folder' }),
-					}),
-			},
+			of({
+				isSuccessful: true,
+				getFolderVO: () => mockFolderVO,
+			}),
 		),
 	},
 };
@@ -79,15 +79,27 @@ describe('FilesystemApiService', () => {
 		expect(service).toBeTruthy();
 	});
 
+	it('should navigate using navigateLean', async () => {
+		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
+
+		const folder = await service.navigate({ folderId });
+
+		expect(mockApiService.folder.navigateLean).toHaveBeenCalledWith(
+			jasmine.any(FolderVO),
+		);
+
+		expect(folder.folderId).toBe(folderId);
+		expect(folder.displayName).toBe('Unlisted Folder');
+		expect(folder.dataStatus).toBe(DataStatus.Lean);
+	});
+
 	it('should navigate using getWithChildren when in unlisted share', async () => {
 		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(true);
 		shareLinksServiceSpy.currentShareToken = 'mock-token';
 
-		const apiService = TestBed.inject(ApiService);
-
 		const folder = await service.navigate({ folderId });
 
-		expect(apiService.folder.getWithChildren).toHaveBeenCalledWith(
+		expect(mockApiService.folder.getWithChildren).toHaveBeenCalledWith(
 			[jasmine.any(FolderVO)],
 			'mock-token',
 		);
