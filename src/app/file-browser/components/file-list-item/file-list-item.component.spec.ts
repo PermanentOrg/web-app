@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ElementRef, Pipe, PipeTransform } from '@angular/core';
 import { of } from 'rxjs';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Deferred } from '@root/vendor/deferred';
 
 import { DataService } from '@shared/services/data/data.service';
@@ -42,6 +42,21 @@ describe('FileListItemComponent', () => {
 	let fixture: ComponentFixture<FileListItemComponent>;
 	let editService: EditService;
 
+	const activatedRouteMock = {
+		snapshot: {
+			data: {},
+		},
+		parent: {
+			snapshot: {
+				data: {
+					sharePreviewVO: {
+						previewToggle: 1,
+					},
+				},
+			},
+		},
+	};
+
 	const mockEditService = {
 		moveItems: jasmine.createSpy().and.returnValue(Promise.resolve()),
 		updateItems: jasmine.createSpy().and.returnValue(Promise.resolve()),
@@ -58,6 +73,7 @@ describe('FileListItemComponent', () => {
 			providers: [
 				provideNoopAnimations(),
 				provideRouter([]),
+				{ provide: ActivatedRoute, useValue: activatedRouteMock },
 				{ provide: ElementRef, useValue: { nativeElement: {} } },
 				{
 					provide: DataService,
