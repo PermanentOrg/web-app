@@ -205,7 +205,6 @@ export class FileListItemComponent
 	public isZip = false;
 	public date: string = '';
 	public isUnlistedShare = false;
-	public canPreview = true;
 
 	private folderThumb200: string;
 	private folderThumb500: string;
@@ -248,11 +247,6 @@ export class FileListItemComponent
 	async ngOnInit() {
 		const date = new Date(this.item.displayDT);
 		this.date = getFormattedDate(date);
-
-		const sharePreviewVO = this.route.parent.snapshot.data?.sharePreviewVO;
-		this.canPreview =
-			!!sharePreviewVO?.previewToggle ||
-			!!sharePreviewVO?.ShareVO?.previewToggle;
 
 		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 
@@ -498,7 +492,7 @@ export class FileListItemComponent
 	}
 
 	showUnlistedPreview() {
-		if (this.canPreview && this.isUnlistedShare) {
+		if (this.isUnlistedShare) {
 			//TO DO: make preview for folder --> story PER-10314
 			if (this.item.isFolder) {
 				return;
