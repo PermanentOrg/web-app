@@ -527,7 +527,7 @@ export class FileListComponent
 			});
 		}
 
-		let itemsToFetch = visibleListItems.map((c) => c.item);
+		const itemsToFetch = visibleListItems.map((c) => c.item);
 		if (itemsToFetch.length) {
 			await this.dataService.fetchLeanItems(itemsToFetch);
 		}

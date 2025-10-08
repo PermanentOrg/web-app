@@ -202,7 +202,10 @@ export class RecordRepo extends BaseRepo {
 		const recordVo = recordResponse.getRecordVO();
 		return recordVo.recordId;
 	}
-	public async get(recordVOs: RecordVO[], shareToken: string | null = null): Promise<RecordResponse> {
+	public async get(
+		recordVOs: RecordVO[],
+		shareToken: string | null = null,
+	): Promise<RecordResponse> {
 		const recordIds = await Promise.all(
 			// There are some flows (e.g. published records) where only the archiveNbr is known.
 			// In those cases, we need to look up the recordId first since stela API has phased
@@ -217,7 +220,7 @@ export class RecordRepo extends BaseRepo {
 			recordIds,
 		};
 		let options = {};
-		if(shareToken) {
+		if (shareToken) {
 			options = {
 				authToken: false,
 				shareToken,

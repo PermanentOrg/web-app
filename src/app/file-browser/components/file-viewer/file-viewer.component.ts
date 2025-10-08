@@ -138,7 +138,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 				) && !this.route.snapshot.data?.isPublicArchive;
 
 		if (this.isUnlistedShare) {
-			const response = await this.api.record.getWithShareTokenAuth(
+			const response = await this.api.record.get(
 				[this.currentRecord.recordId],
 				this.shareLinksService.currentShareToken,
 			);

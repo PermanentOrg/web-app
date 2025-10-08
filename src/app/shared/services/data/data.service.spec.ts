@@ -135,6 +135,8 @@ describe('DataService', () => {
 				expect(httpV2Service.get).toHaveBeenCalledWith(
 					'v2/record',
 					jasmine.any(Object),
+					null,
+					jasmine.any(Object),
 				);
 				records.forEach((item) => {
 					expect(item.dataStatus).toEqual(DataStatus.Full);
