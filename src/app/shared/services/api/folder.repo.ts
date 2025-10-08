@@ -177,7 +177,7 @@ export class FolderRepo extends BaseRepo {
 			folderIds: [folderVO.folderId],
 		};
 		let options = {};
-		if(shareToken) {
+		if (shareToken) {
 			options = {
 				authToken: false,
 				shareToken,
@@ -204,7 +204,7 @@ export class FolderRepo extends BaseRepo {
 			pageSize: 99999999, // We want all results in one request
 		};
 		let options = {};
-		if(shareToken) {
+		if (shareToken) {
 			options = {
 				authToken: false,
 				shareToken,
@@ -216,7 +216,7 @@ export class FolderRepo extends BaseRepo {
 					`v2/folder/${folderVO.folderId}/children`,
 					queryData,
 					null,
-					options
+					options,
 				),
 			)
 		)[0];
