@@ -595,7 +595,8 @@ export class DataService {
 		} else {
 			if (replace) {
 				this.selectedItems.clear();
-				this.lastManualclickItem = this.lastArrowclickItem = item;
+				this.lastArrowclickItem = item;
+				this.lastManualclickItem = item;
 			}
 			this.selectedItems.add(item);
 		}

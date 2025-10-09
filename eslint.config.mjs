@@ -140,7 +140,6 @@ export default typescriptEslint.config([
 			'no-case-declarations': 'off',
 			'no-constant-condition': 'off',
 			'no-lonely-if': 'off',
-			'no-multi-assign': 'off',
 			'no-param-reassign': 'off',
 			'no-promise-executor-return': 'off',
 			'no-prototype-builtins': 'off',
