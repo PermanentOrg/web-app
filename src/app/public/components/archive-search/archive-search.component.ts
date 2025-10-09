@@ -71,7 +71,7 @@ export class ArchiveSearchComponent implements OnInit {
 				debounceTime(100),
 				map((term) => this.searchService.parseSearchTerm(term.query)),
 				tap(([term, tags]) => {
-					const value = term ? term : tags[0]?.name;
+					const value = term || tags[0]?.name;
 					this.filteredTags = this.tags.filter((tag) =>
 						tag.name.toLowerCase().includes(value?.toLowerCase()),
 					);
@@ -89,7 +89,7 @@ export class ArchiveSearchComponent implements OnInit {
 
 						return this.searchService
 							.getResultsInPublicArchive(
-								term ? term : '',
+								term || '',
 								this.tag.length ? this.tag : [],
 								archiveId,
 								3,
