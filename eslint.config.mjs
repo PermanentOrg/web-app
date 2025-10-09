@@ -156,7 +156,6 @@ export default typescriptEslint.config([
 			'no-useless-catch': 'off',
 			'no-useless-concat': 'off',
 			'no-useless-escape': 'off',
-			'no-useless-return': 'off',
 			'object-shorthand': 'off',
 			'one-var': 'off',
 			'operator-assignment': 'off',

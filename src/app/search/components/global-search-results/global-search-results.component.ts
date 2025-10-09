@@ -108,9 +108,7 @@ export class GlobalSearchResultsComponent
 			params.query = query.trim();
 		}
 
-		if (params.query === this.route.snapshot.queryParamMap.get('query')) {
-			return;
-		} else {
+		if (params.query !== this.route.snapshot.queryParamMap.get('query')) {
 			this.router.navigate([], {
 				relativeTo: this.route,
 				queryParams: params,

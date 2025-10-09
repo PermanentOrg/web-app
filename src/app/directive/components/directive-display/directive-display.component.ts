@@ -44,7 +44,6 @@ export class DirectiveDisplayComponent implements OnInit {
 			}
 		} catch {
 			this.error = true;
-			return;
 		}
 	}
 
