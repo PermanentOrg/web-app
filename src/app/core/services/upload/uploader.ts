@@ -41,24 +41,20 @@ export class Uploader {
 	};
 
 	private registerRecord = async (item: UploadItem, destinationUrl: string) => {
-		try {
-			const archiveId = this.account.getArchive().archiveId;
+		const archiveId = this.account.getArchive().archiveId;
 
-			const record = await this.api.record.registerRecord(
-				item.RecordVO,
-				destinationUrl,
-				archiveId,
-			);
+		const record = await this.api.record.registerRecord(
+			item.RecordVO,
+			destinationUrl,
+			archiveId,
+		);
 
-			this.event.dispatch({
-				action: 'submit',
-				entity: 'record',
-				record,
-			});
-			return record;
-		} catch (response) {
-			throw response;
-		}
+		this.event.dispatch({
+			action: 'submit',
+			entity: 'record',
+			record,
+		});
+		return record;
 	};
 
 	private upload = async (

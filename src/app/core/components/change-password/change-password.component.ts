@@ -55,34 +55,24 @@ export class ChangePasswordComponent {
 		let trustToken = null;
 
 		try {
-			try {
-				const loginResp = await this.accountService.checkForMFAWithLogin(
-					value.passwordOld,
-				);
-				if (loginResp.needsMFA()) {
-					try {
-						const mfa = await this.showMFAPrompt();
-						try {
-							const keepLoggedIn =
-								this.accountService.getAccount().keepLoggedIn;
-							const mfaResp = await this.accountService.verifyMfa(
-								mfa.verificationCode,
-								keepLoggedIn,
-							);
-							trustToken = mfaResp.getTrustToken().value;
-						} catch (err) {
-							this.message.showError({
-								message: 'Incorrect verification code entered',
-							});
-							throw err;
-						}
-					} catch (err) {
-						// They canceled out of the prompt, do nothing
-						throw err;
-					}
+			const loginResp = await this.accountService.checkForMFAWithLogin(
+				value.passwordOld,
+			);
+			if (loginResp.needsMFA()) {
+				const mfa = await this.showMFAPrompt();
+				try {
+					const keepLoggedIn = this.accountService.getAccount().keepLoggedIn;
+					const mfaResp = await this.accountService.verifyMfa(
+						mfa.verificationCode,
+						keepLoggedIn,
+					);
+					trustToken = mfaResp.getTrustToken().value;
+				} catch (err) {
+					this.message.showError({
+						message: 'Incorrect verification code entered',
+					});
+					throw err;
 				}
-			} catch (err) {
-				throw err;
 			}
 			await this.api.auth.updatePassword(this.account, value, trustToken);
 			this.message.showMessage({
