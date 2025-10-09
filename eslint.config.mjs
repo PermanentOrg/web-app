@@ -141,7 +141,6 @@ export default typescriptEslint.config([
 			'no-await-in-loop': 'off',
 			'no-case-declarations': 'off',
 			'no-constant-condition': 'off',
-			'no-constructor-return': 'off',
 			'no-lonely-if': 'off',
 			'no-multi-assign': 'off',
 			'no-param-reassign': 'off',

@@ -43,7 +43,7 @@ export class ClaimStorageLoginComponent {
 	) {
 		if (!pledgeService.currentPledge) {
 			this.router.navigate(['..'], { relativeTo: this.route });
-			return this;
+			return;
 		}
 
 		if (this.accountService.getAccount()) {
