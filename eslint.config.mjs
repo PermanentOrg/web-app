@@ -157,7 +157,6 @@ export default typescriptEslint.config([
 			'prefer-regex-literals': 'off',
 			'prefer-template': 'off',
 			'vars-on-top': 'off',
-			yoda: 'off',
 		},
 	},
 	{
