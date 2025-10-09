@@ -150,7 +150,6 @@ export default typescriptEslint.config([
 			'no-prototype-builtins': 'off',
 			'no-restricted-globals': 'off',
 			'no-restricted-properties': 'off',
-			'no-restricted-syntax': 'off',
 			'no-return-assign': 'off',
 			'no-unneeded-ternary': 'off',
 			'object-shorthand': 'off',
