@@ -204,7 +204,7 @@ describe('FileListItemComponent', () => {
 		component.isUnlistedShare = true;
 		component.item.isFolder = false;
 		spyOn(component, 'goToItem');
-		component.showUnlistedPreview();
+		component.onItemClick({} as MouseEvent);
 
 		expect(component.goToItem).toHaveBeenCalled();
 	});
