@@ -153,7 +153,6 @@ export default typescriptEslint.config([
 			'no-restricted-syntax': 'off',
 			'no-return-assign': 'off',
 			'no-unneeded-ternary': 'off',
-			'no-useless-escape': 'off',
 			'object-shorthand': 'off',
 			'one-var': 'off',
 			'operator-assignment': 'off',

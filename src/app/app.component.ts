@@ -13,7 +13,7 @@ export class AppComponent {
 	@HostBinding('class.mobile-safari-menu-bar-showing') isMenuBarShowing = false;
 
 	constructor() {
-		const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+		const isSafari = !!navigator.userAgent.match(/Version\/[\d.]+.*Safari/);
 		const iPhone =
 			/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 		this.isMobileSafari = isSafari && iPhone;
