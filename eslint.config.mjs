@@ -156,7 +156,6 @@ export default typescriptEslint.config([
 			'prefer-promise-reject-errors': 'off',
 			'prefer-regex-literals': 'off',
 			'prefer-template': 'off',
-			'spaced-comment': 'off',
 			'vars-on-top': 'off',
 			yoda: 'off',
 		},
