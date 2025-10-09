@@ -364,7 +364,7 @@ export class MainComponent
 				type: 'start',
 				targetTypes: ['folder'],
 				srcComponent: this,
-				event: event,
+				event,
 			};
 
 			this.drag.dispatch(dragEvent);
@@ -379,7 +379,7 @@ export class MainComponent
 				type: 'end',
 				targetTypes: ['folder'],
 				srcComponent: this,
-				event: event,
+				event,
 			};
 
 			this.drag.dispatch(dragEvent);

@@ -198,7 +198,7 @@ function createMockDragEvent(files: File[]): DragServiceEvent {
 
 	Object.defineProperty(mockDragEvent, 'dataTransfer', {
 		value: {
-			files: files,
+			files,
 			items: files.map((file) => ({
 				kind: 'file',
 				getAsFile: () => file,

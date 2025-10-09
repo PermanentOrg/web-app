@@ -21,7 +21,7 @@ export class ConnectorsResolveService {
 		const archiveId = this.accountService.getArchive().archiveId;
 		const connectors = [
 			new ConnectorOverviewVO({
-				archiveId: archiveId,
+				archiveId,
 				type: 'type.connector.familysearch',
 			}),
 		];

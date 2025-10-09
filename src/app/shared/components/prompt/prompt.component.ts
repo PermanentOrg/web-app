@@ -93,12 +93,12 @@ export class PromptComponent implements OnDestroy {
 			});
 
 			this.promptQueue.push({
-				form: form,
-				fields: fields,
-				title: title,
-				savePromise: savePromise,
-				saveText: saveText,
-				cancelText: cancelText,
+				form,
+				fields,
+				title,
+				savePromise,
+				saveText,
+				cancelText,
 				donePromise: newDonePromise,
 				doneResolve: newDoneResolve,
 				doneReject: newDoneReject,
@@ -200,13 +200,13 @@ export class PromptComponent implements OnDestroy {
 			});
 
 			this.promptQueue.push({
-				buttons: buttons,
-				title: title,
-				savePromise: savePromise,
+				buttons,
+				title,
+				savePromise,
 				donePromise: newDonePromise,
 				doneResolve: newDoneResolve,
 				doneReject: newDoneReject,
-				template: template,
+				template,
 			});
 
 			return await newDonePromise;

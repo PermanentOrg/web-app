@@ -93,7 +93,7 @@ export class DragService {
 				type: 'end',
 				targetTypes: ['folder'],
 				srcComponent: this.dragSrc,
-				event: event,
+				event,
 			});
 		};
 

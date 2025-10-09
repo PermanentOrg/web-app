@@ -269,7 +269,7 @@ export function GroupByTimespan(
 
 	return {
 		groupedItems: timelineItems,
-		timespan: timespan,
+		timespan,
 	};
 }
 

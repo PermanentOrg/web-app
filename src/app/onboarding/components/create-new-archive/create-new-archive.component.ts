@@ -162,7 +162,7 @@ export class CreateNewArchiveComponent implements OnInit {
 		const action = screen === 'reasons' ? 'submit_reasons' : 'submit_goals';
 		this.event.dispatch({
 			entity: 'account',
-			action: action,
+			action,
 		});
 		this.screen = screen;
 		sessionStorage.setItem('onboardingScreen', screen);
@@ -265,7 +265,7 @@ export class CreateNewArchiveComponent implements OnInit {
 		if (action) {
 			this.event.dispatch({
 				entity: 'account',
-				action: action,
+				action,
 			});
 		}
 		if (this.screen === 'goals') {

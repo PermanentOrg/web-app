@@ -30,7 +30,7 @@ describe('AllArchivesComponent', () => {
 			useValue: {
 				snapshot: {
 					data: {
-						archives: archives,
+						archives,
 					},
 				},
 			},
