@@ -144,7 +144,6 @@ export default typescriptEslint.config([
 			'no-prototype-builtins': 'off',
 			'no-restricted-globals': 'off',
 			'no-restricted-properties': 'off',
-			'operator-assignment': 'off',
 			'prefer-arrow/prefer-arrow-functions': 'off',
 			'prefer-destructuring': 'off',
 			'prefer-exponentiation-operator': 'off',
