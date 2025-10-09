@@ -12,6 +12,10 @@ class TestImage {
 	public onerror = () => {};
 	private source: string;
 
+	get src(): string {
+		return this.source;
+	}
+
 	set src(src: string) {
 		this.source = src;
 		if (TestImage.testError) {
@@ -23,10 +27,6 @@ class TestImage {
 				this.onload();
 			});
 		}
-	}
-
-	get src(): string {
-		return this.source;
 	}
 }
 

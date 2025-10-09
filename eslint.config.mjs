@@ -248,7 +248,6 @@ export default typescriptEslint.config([
 			'@typescript-eslint/no-misused-spread': 'off',
 			'@typescript-eslint/no-unnecessary-type-conversion': 'off',
 			'import/no-duplicates': 'off',
-			'grouped-accessor-pairs': 'off',
 			'max-depth': 'off',
 			'@typescript-eslint/no-unnecessary-type-arguments': 'off',
 			'@typescript-eslint/consistent-type-exports': 'off',
