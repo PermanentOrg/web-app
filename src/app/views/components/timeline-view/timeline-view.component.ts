@@ -241,11 +241,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		const ids = Object.keys(counts);
 
-		if (!ids.length) {
-			this.currentTimezone = null;
-		} else {
+		if (ids.length) {
 			const mostCommonId = Number(maxBy(ids, (o) => counts[o]));
 			this.currentTimezone = this.timezones.get(mostCommonId);
+		} else {
+			this.currentTimezone = null;
 		}
 
 		const setMajorTimeLabel = (timezone: TimezoneVOData) => {
@@ -345,10 +345,10 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (ids.length === 1) {
 			const item = this.timelineItems.get(ids[0]) as DataItem &
 				TimelineDataItem;
-			if (item.dataType !== 'group') {
-				return this.timeline.focus(ids);
-			} else {
+			if (item.dataType === 'group') {
 				this.onGroupClick(item as TimelineGroup);
+			} else {
+				return this.timeline.focus(ids);
 			}
 		}
 

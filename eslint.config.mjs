@@ -258,7 +258,6 @@ export default typescriptEslint.config([
 			'@angular-eslint/prefer-inject': 'off',
 			'preserve-caught-error': 'off',
 			'no-plusplus': 'off',
-			'no-negated-condition': 'off',
 		},
 	},
 	{

@@ -118,15 +118,15 @@ export class PromptComponent implements OnDestroy {
 		this.editForm = form;
 		this.fields = fields;
 
-		if (!donePromise) {
+		if (donePromise) {
+			this.donePromise = donePromise;
+			this.doneResolve = doneResolve;
+			this.doneReject = doneReject;
+		} else {
 			this.donePromise = new Promise((resolve, reject) => {
 				this.doneResolve = resolve;
 				this.doneReject = reject;
 			});
-		} else {
-			this.donePromise = donePromise;
-			this.doneResolve = doneResolve;
-			this.doneReject = doneReject;
 		}
 
 		this.isVisible = true;
@@ -145,9 +145,7 @@ export class PromptComponent implements OnDestroy {
 	save(event: Event) {
 		event.stopPropagation();
 		this.doneResolve(this.editForm.value);
-		if (!this.savePromise) {
-			this.hide(event);
-		} else {
+		if (this.savePromise) {
 			this.waiting = true;
 			this.savePromise
 				.then(() => {
@@ -158,6 +156,8 @@ export class PromptComponent implements OnDestroy {
 					this.waiting = false;
 					this.hide(event);
 				});
+		} else {
+			this.hide(event);
 		}
 		return false;
 	}
@@ -217,15 +217,15 @@ export class PromptComponent implements OnDestroy {
 		this.template = template;
 		this.savePromise = savePromise;
 
-		if (!donePromise) {
+		if (donePromise) {
+			this.donePromise = donePromise;
+			this.doneResolve = doneResolve;
+			this.doneReject = doneReject;
+		} else {
 			this.donePromise = new Promise((resolve, reject) => {
 				this.doneResolve = resolve;
 				this.doneReject = reject;
 			});
-		} else {
-			this.donePromise = donePromise;
-			this.doneResolve = doneResolve;
-			this.doneReject = doneReject;
 		}
 
 		setTimeout(() => {
@@ -238,9 +238,7 @@ export class PromptComponent implements OnDestroy {
 	clickButton(button: PromptButton, event: Event) {
 		this.doneResolve(button.value || button.buttonName);
 		event.stopPropagation();
-		if (!this.savePromise) {
-			this.hide(event);
-		} else {
+		if (this.savePromise) {
 			this.waiting = true;
 			this.savePromise
 				.then(() => {
@@ -250,6 +248,8 @@ export class PromptComponent implements OnDestroy {
 				.catch(() => {
 					this.waiting = false;
 				});
+		} else {
+			this.hide(event);
 		}
 		return false;
 	}

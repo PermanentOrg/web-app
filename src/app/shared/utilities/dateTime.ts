@@ -62,11 +62,11 @@ export function formatDateISOString(dtString: string) {
 		return dtString;
 	}
 
-	if (!dtString.includes('Z')) {
+	if (dtString.includes('Z')) {
+		return dtString;
+	} else {
 		const format = 'YYYY-MM-DD[T]HH:mm:ss.SSSSSS';
 		return moment.utc(dtString, format).toISOString();
-	} else {
-		return dtString;
 	}
 }
 

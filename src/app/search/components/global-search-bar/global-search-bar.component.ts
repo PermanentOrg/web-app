@@ -229,7 +229,9 @@ export class GlobalSearchBarComponent {
 		this.localResultsByFolderId.clear();
 		this.localResultsByRecordId.clear();
 
-		if (!tags?.length) {
+		if (tags?.length) {
+			this.localResults = [];
+		} else {
 			this.localResults = this.searchService.getResultsInCurrentFolder(
 				term,
 				LOCAL_RESULTS_LIMIT,
@@ -241,8 +243,6 @@ export class GlobalSearchBarComponent {
 					this.localResultsByFolderId.add(result.folderId);
 				}
 			}
-		} else {
-			this.localResults = [];
 		}
 
 		this.showResults = true;

@@ -135,9 +135,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 			!viewOnly &&
 			this.accountService.checkMinimumArchiveAccess(AccessRole.Editor);
 
-		if (items.length !== 1) {
-			this.canShare = false;
-		} else {
+		if (items.length === 1) {
 			this.canShare =
 				!this.isPublicItem &&
 				!this.isRootFolder &&
@@ -145,6 +143,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 					this.selectedItem.accessRole,
 					AccessRole.Owner,
 				);
+		} else {
+			this.canShare = false;
 		}
 	}
 

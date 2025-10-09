@@ -75,14 +75,14 @@ describe('TagsService', () => {
 	it('should fetch tags once on archive update', (done) => {
 		let created = false;
 		service.getTags$().subscribe((tags) => {
-			if (!created) {
-				created = true;
-				api.tag.apiCalls = 0;
-				account.archiveChange.next(new ArchiveVO({}));
-			} else {
+			if (created) {
 				expect(tags.length).toBe(2);
 				expect(api.tag.apiCalls).toBe(1);
 				done();
+			} else {
+				created = true;
+				api.tag.apiCalls = 0;
+				account.archiveChange.next(new ArchiveVO({}));
 			}
 		});
 	});

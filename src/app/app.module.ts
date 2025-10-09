@@ -197,9 +197,7 @@ export class AppModule {
 	) {
 		library.addIcons(faFileArchive);
 		if (environment.debug) {
-			if (!this.storage.local.get('debug')) {
-				this.storage.local.set('debug', '*,-sockjs-client:*');
-			} else {
+			if (this.storage.local.get('debug')) {
 				const current = this.storage.local.get('debug');
 				if (
 					!current.includes('-sockjs-client:') &&
@@ -207,6 +205,8 @@ export class AppModule {
 				) {
 					this.storage.local.set('debug', current + '-sockjs-client:*');
 				}
+			} else {
+				this.storage.local.set('debug', '*,-sockjs-client:*');
 			}
 		}
 
@@ -230,10 +230,10 @@ export class AppModule {
 						currentTitle = currentRoute.snapshot.data.title;
 					}
 				}
-				if (!currentTitle) {
-					this.title.setTitle(`Permanent.org`);
-				} else {
+				if (currentTitle) {
 					this.title.setTitle(`${currentTitle} | Permanent.org`);
+				} else {
+					this.title.setTitle(`Permanent.org`);
 				}
 
 				let skipGaPageview = false;

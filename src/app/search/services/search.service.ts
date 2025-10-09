@@ -140,10 +140,10 @@ export class SearchService {
 	}
 
 	private indexTags(tags: TagVOData[]) {
-		if (!tags?.length) {
-			this.tagsFuse.setCollection([]);
-		} else {
+		if (tags?.length) {
 			this.tagsFuse.setCollection(tags);
+		} else {
+			this.tagsFuse.setCollection([]);
 		}
 	}
 }

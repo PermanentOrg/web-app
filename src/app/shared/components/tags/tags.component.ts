@@ -22,9 +22,7 @@ export class TagsComponent implements OnChanges {
 	hoveredMetadataId = null;
 
 	ngOnChanges() {
-		if (!this.tags?.length) {
-			this.orderedTags = [];
-		} else {
+		if (this.tags?.length) {
 			while (this.orderedTags.length) {
 				this.orderedTags.pop();
 			}
@@ -32,6 +30,8 @@ export class TagsComponent implements OnChanges {
 			for (const i of ordered) {
 				this.orderedTags.push(i);
 			}
+		} else {
+			this.orderedTags = [];
 		}
 	}
 

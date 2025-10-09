@@ -35,13 +35,13 @@ export class MessageService {
 
 		const { translate } = data;
 
-		if (!translate) {
-			this.component.display(data);
-		} else {
+		if (translate) {
 			this.component.display({
 				message: this.constants.translate(data.message),
 				...data,
 			});
+		} else {
+			this.component.display(data);
 		}
 	}
 

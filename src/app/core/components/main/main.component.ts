@@ -281,7 +281,27 @@ export class MainComponent
 					hasRequested = true;
 				}
 
-				if (!hasAccess && !hasRequested) {
+				if (hasAccess) {
+					// redirect to share in shares, already has access
+					if (shareItem.isRecord) {
+						this.router.navigate(['/shares', 'withme']);
+					} else if (shareItem.isFolder) {
+						this.router.navigate([
+							'/shares',
+							'withme',
+							shareItem.archiveNbr,
+							shareItem.folder_linkId,
+						]);
+					}
+				} else if (hasRequested) {
+					// show message about having requested already
+					const msg = `You have already requested access to ${shareItem.displayName}. ${shareAccount.fullName} must approve your request.`;
+					this.prompt.confirm('OK', msg);
+					this.router.navigate(['.'], {
+						relativeTo: this.route,
+						queryParams: { shareByUrl: null },
+					});
+				} else {
 					// no access and no request
 					const title = `Request access to ${shareItem.displayName} shared by ${shareAccount.fullName}?`;
 					try {
@@ -318,26 +338,6 @@ export class MainComponent
 							relativeTo: this.route,
 							queryParams: { shareByUrl: null },
 						});
-					}
-				} else if (hasRequested) {
-					// show message about having requested already
-					const msg = `You have already requested access to ${shareItem.displayName}. ${shareAccount.fullName} must approve your request.`;
-					this.prompt.confirm('OK', msg);
-					this.router.navigate(['.'], {
-						relativeTo: this.route,
-						queryParams: { shareByUrl: null },
-					});
-				} else if (hasAccess) {
-					// redirect to share in shares, already has access
-					if (shareItem.isRecord) {
-						this.router.navigate(['/shares', 'withme']);
-					} else if (shareItem.isFolder) {
-						this.router.navigate([
-							'/shares',
-							'withme',
-							shareItem.archiveNbr,
-							shareItem.folder_linkId,
-						]);
 					}
 				}
 			} catch (err) {
@@ -407,10 +407,10 @@ export class MainComponent
 
 		let targetFolder: FolderVO;
 
-		if (!dropTarget) {
-			targetFolder = this.data.currentFolder;
-		} else {
+		if (dropTarget) {
 			targetFolder = this.drag.getDestinationFromDropTarget(dropTarget);
+		} else {
+			targetFolder = this.data.currentFolder;
 		}
 
 		if (targetFolder.type.includes('public')) {

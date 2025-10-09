@@ -67,10 +67,10 @@ export class GuidedTourService {
 
 		const history = this.getHistoryForAccount();
 
-		if (!history[tour]) {
-			return false;
-		} else {
+		if (history[tour]) {
 			return history[tour][step] ? true : false;
+		} else {
+			return false;
 		}
 	}
 

@@ -208,13 +208,13 @@ export class FileListComponent
 				const url = this.router.url;
 				const urlParts = url.split('/').slice(0, 3);
 				const currentRoot = urlParts.join('/');
-				if (currentRoot !== url) {
-					this.router.navigateByUrl(currentRoot);
-				} else {
+				if (currentRoot === url) {
 					const timestamp = Date.now();
 					const queryParams: any = {};
 					queryParams[timestamp] = '';
 					this.router.navigate(['.'], { queryParams, relativeTo: this.route });
+				} else {
+					this.router.navigateByUrl(currentRoot);
 				}
 			}),
 		);
@@ -509,27 +509,28 @@ export class FileListComponent
 
 	async loadVisibleItems(animate?: boolean) {
 		this.debug('loadVisibleItems %d items', this.visibleItems.size);
-		if (!this.visibleItems.size) {
-			return;
-		}
+		if (this.visibleItems.size) {
+			const visibleListItems = Array.from(this.visibleItems);
+			this.visibleItems.clear();
+			if (animate) {
+				const targetElems = visibleListItems.map(
+					(c) => c.element.nativeElement,
+				);
+				gsap.from(targetElems, 0.25, {
+					duration: 0.25,
+					opacity: 0,
+					ease: 'Power4.easeOut',
+					stagger: {
+						amount: 0.015,
+					},
+				});
+			}
 
-		const visibleListItems = Array.from(this.visibleItems);
-		this.visibleItems.clear();
-		if (animate) {
-			const targetElems = visibleListItems.map((c) => c.element.nativeElement);
-			gsap.from(targetElems, 0.25, {
-				duration: 0.25,
-				opacity: 0,
-				ease: 'Power4.easeOut',
-				stagger: {
-					amount: 0.015,
-				},
-			});
-		}
+			const itemsToFetch = visibleListItems.map((c) => c.item);
 
-		const itemsToFetch = visibleListItems.map((c) => c.item);
-		if (itemsToFetch.length) {
-			await this.dataService.fetchLeanItems(itemsToFetch);
+			if (itemsToFetch.length) {
+				await this.dataService.fetchLeanItems(itemsToFetch);
+			}
 		}
 	}
 

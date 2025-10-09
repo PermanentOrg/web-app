@@ -251,16 +251,15 @@ export class GiftStorageComponent implements OnDestroy {
 				const numberOfEmails = emails.length;
 				const giftedAmount = numberOfEmails * Number(control.value);
 				const availableSpace = Number(this.availableSpace);
-				if (giftedAmount > availableSpace) {
+				if (giftedAmount <= availableSpace) {
+					this.successMessage = `Total gifted storage: ${giftedAmount} GB`;
+				} else {
 					this.successMessage = '';
 
 					return {
 						isGreaterThanAvailableSpace: true,
 						requiredSpace: giftedAmount,
 					};
-				}
-				if (giftedAmount <= availableSpace) {
-					this.successMessage = `Total gifted storage: ${giftedAmount} GB`;
 				}
 			}
 
@@ -289,10 +288,10 @@ export class GiftStorageComponent implements OnDestroy {
 		const duplicates: string[] = [];
 
 		emails.forEach((email) => {
-			if (!emailCount[email]) {
-				emailCount[email] = 1;
-			} else {
+			if (emailCount[email]) {
 				emailCount[email]++;
+			} else {
+				emailCount[email] = 1;
 			}
 		});
 

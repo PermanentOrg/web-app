@@ -55,11 +55,11 @@ class BaseStorage {
 		if (this.storeInMemory) {
 			this.store[key] = value;
 		} else {
-			if (!value) {
-				this.delete(key);
-			} else {
+			if (value) {
 				const isString = typeof value === 'string';
 				this.storage.setItem(key, isString ? value : JSON.stringify(value));
+			} else {
+				this.delete(key);
 			}
 		}
 	}

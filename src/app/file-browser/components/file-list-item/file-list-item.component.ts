@@ -988,9 +988,7 @@ export class FileListItemComponent
 			}
 		});
 
-		if (!Object.keys(changes).length) {
-			return deferred.resolve();
-		} else {
+		if (Object.keys(changes).length) {
 			this.item.update(changes);
 			return this.edit
 				.updateItems([this.item])
@@ -1007,6 +1005,8 @@ export class FileListItemComponent
 						});
 					}
 				});
+		} else {
+			return deferred.resolve();
 		}
 	}
 
