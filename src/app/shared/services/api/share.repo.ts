@@ -14,7 +14,7 @@ export class ShareRepo extends BaseRepo {
 			'/share/getShares',
 			[],
 			{
-				responseClass: ShareResponse,
+				ResponseClass: ShareResponse,
 			},
 		);
 	}
@@ -27,7 +27,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/update',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 
@@ -39,7 +39,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/upsert',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 
@@ -55,7 +55,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/delete',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 
@@ -75,7 +75,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/generateShareLink',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 
@@ -95,7 +95,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/getLink',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 
@@ -109,7 +109,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/checkShareLink',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 
@@ -121,7 +121,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/updateShareLink',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 
@@ -133,7 +133,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/dropShareLink',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 
@@ -147,7 +147,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/requestShareAccess',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 
@@ -162,7 +162,7 @@ export class ShareRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ShareResponse>(
 			'/share/getShareForPreview',
 			[data],
-			{ responseClass: ShareResponse },
+			{ ResponseClass: ShareResponse },
 		);
 	}
 }

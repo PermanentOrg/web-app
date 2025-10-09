@@ -13,7 +13,7 @@ import { getFirst } from '../http-v2/http-v2.service';
 export class AuthRepo extends BaseRepo {
 	public async isLoggedIn(): Promise<AuthResponse> {
 		return await this.http.sendRequestPromise('/auth/loggedIn', undefined, {
-			responseClass: AuthResponse,
+			ResponseClass: AuthResponse,
 		});
 	}
 
@@ -36,7 +36,7 @@ export class AuthRepo extends BaseRepo {
 		return this.http.sendRequest<AuthResponse>(
 			'/auth/login',
 			[{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO }],
-			{ responseClass: AuthResponse },
+			{ ResponseClass: AuthResponse },
 		);
 	}
 
@@ -58,7 +58,7 @@ export class AuthRepo extends BaseRepo {
 		return this.http.sendRequest<AuthResponse>(
 			'/auth/verify',
 			[{ AccountVO: accountVO, AuthVO: authVO }],
-			{ responseClass: AuthResponse },
+			{ ResponseClass: AuthResponse },
 		);
 	}
 
@@ -70,7 +70,7 @@ export class AuthRepo extends BaseRepo {
 		return this.http.sendRequest<AuthResponse>(
 			'/auth/sendEmailForgotPassword',
 			[{ AccountVO: accountVO }],
-			{ responseClass: AuthResponse },
+			{ ResponseClass: AuthResponse },
 		);
 	}
 
@@ -102,7 +102,7 @@ export class AuthRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<AuthResponse>(
 			'/account/changePassword',
 			data,
-			{ responseClass: AuthResponse },
+			{ ResponseClass: AuthResponse },
 		);
 	}
 
@@ -115,7 +115,7 @@ export class AuthRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<AuthResponse>(
 			'/auth/resendMailCreatedAccount',
 			[account],
-			{ responseClass: AuthResponse },
+			{ ResponseClass: AuthResponse },
 		);
 	}
 
@@ -128,7 +128,7 @@ export class AuthRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<AuthResponse>(
 			'/auth/resendTextCreatedAccount',
 			[account],
-			{ responseClass: AuthResponse },
+			{ ResponseClass: AuthResponse },
 		);
 	}
 

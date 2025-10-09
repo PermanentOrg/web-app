@@ -11,7 +11,7 @@ import { StorageService } from '@shared/services/storage/storage.service';
 const CSRF_KEY = 'CSRF';
 
 interface RequestOptions {
-	responseClass?: any;
+	ResponseClass?: any;
 	useAuthorizationHeader?: boolean;
 }
 
@@ -21,7 +21,7 @@ interface RequestOptions {
 export class HttpService {
 	public tokenExpired = new Subject<void>();
 	private apiUrl = environment.apiUrl;
-	private defaultResponseClass = BaseResponse;
+	private DefaultResponseClass = BaseResponse;
 
 	constructor(
 		private http: HttpClient,
@@ -47,10 +47,10 @@ export class HttpService {
 					if (response) {
 						this.storage.session.set(CSRF_KEY, JSON.stringify(response.csrf));
 					}
-					if (options?.responseClass) {
-						return new options.responseClass(response);
+					if (options?.ResponseClass) {
+						return new options.ResponseClass(response);
 					} else {
-						return new this.defaultResponseClass(response);
+						return new this.DefaultResponseClass(response);
 					}
 				}),
 				catchError((err) => {

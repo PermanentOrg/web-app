@@ -27,7 +27,7 @@ export class BillingRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<BillingResponse>(
 			'/billing/claimPledge',
 			data,
-			{ responseClass: BillingResponse },
+			{ ResponseClass: BillingResponse },
 		);
 	}
 
@@ -42,7 +42,7 @@ export class BillingRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<BillingResponse>(
 			'/billing/getBillingLedgerNonfinancial',
 			data,
-			{ responseClass: BillingResponse },
+			{ ResponseClass: BillingResponse },
 		);
 	}
 
@@ -57,7 +57,7 @@ export class BillingRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<BillingResponse>(
 			'/billing/getBillingLedgerFinancial',
 			data,
-			{ responseClass: BillingResponse },
+			{ ResponseClass: BillingResponse },
 		);
 	}
 

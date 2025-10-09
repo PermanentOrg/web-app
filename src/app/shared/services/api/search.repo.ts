@@ -23,7 +23,7 @@ export class SearchRepo extends BaseRepo {
 		return this.http.sendRequest<SearchResponse>(
 			'/search/archiveByEmail',
 			data,
-			{ responseClass: SearchResponse },
+			{ ResponseClass: SearchResponse },
 		);
 	}
 
@@ -37,7 +37,7 @@ export class SearchRepo extends BaseRepo {
 		];
 
 		return this.http.sendRequest<SearchResponse>('/search/archive', data, {
-			responseClass: SearchResponse,
+			ResponseClass: SearchResponse,
 		});
 	}
 
@@ -57,7 +57,7 @@ export class SearchRepo extends BaseRepo {
 		return this.http.sendRequest<SearchResponse>(
 			'/search/folderAndRecord',
 			[data],
-			{ responseClass: SearchResponse },
+			{ ResponseClass: SearchResponse },
 		);
 	}
 

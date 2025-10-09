@@ -6,7 +6,7 @@ export class NotificationRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<NotificationResponse>(
 			'/notification/getMyNotifications',
 			[{}],
-			{ responseClass: NotificationResponse },
+			{ ResponseClass: NotificationResponse },
 		);
 	}
 
@@ -20,7 +20,7 @@ export class NotificationRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<NotificationResponse>(
 			'/notification/getMyNotificationsSince',
 			[data],
-			{ responseClass: NotificationResponse },
+			{ ResponseClass: NotificationResponse },
 		);
 	}
 
@@ -32,7 +32,7 @@ export class NotificationRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<NotificationResponse>(
 			'/notification/updateNotification',
 			data,
-			{ responseClass: NotificationResponse },
+			{ ResponseClass: NotificationResponse },
 		);
 	}
 }

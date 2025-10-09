@@ -196,7 +196,7 @@ export class RecordRepo extends BaseRepo {
 			'/record/get',
 			[{ RecordVO: new RecordVO({ archiveNbr }) }],
 			{
-				responseClass: RecordResponse,
+				ResponseClass: RecordResponse,
 			},
 		);
 		const recordVo = recordResponse.getRecordVO();
@@ -268,7 +268,7 @@ export class RecordRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<RecordResponse>(
 			'/record/getLean',
 			data,
-			{ responseClass: RecordResponse },
+			{ ResponseClass: RecordResponse },
 		);
 	}
 
@@ -391,7 +391,7 @@ export class RecordRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<RecordResponse>(
 			'/record/delete',
 			data,
-			{ responseClass: RecordResponse },
+			{ ResponseClass: RecordResponse },
 		);
 	}
 
@@ -414,7 +414,7 @@ export class RecordRepo extends BaseRepo {
 			'/record/move',
 			data,
 			{
-				responseClass: RecordResponse,
+				ResponseClass: RecordResponse,
 				useAuthorizationHeader: true,
 			},
 		);
@@ -439,7 +439,7 @@ export class RecordRepo extends BaseRepo {
 			'/record/copy',
 			data,
 			{
-				responseClass: RecordResponse,
+				ResponseClass: RecordResponse,
 				useAuthorizationHeader: true,
 			},
 		);

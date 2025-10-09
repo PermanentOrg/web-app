@@ -64,14 +64,14 @@ export class HttpV2Service {
 	public post<T>(
 		endpoint: string,
 		data: any = {},
-		responseClass?: ResponseClass<T>,
+		ResponseClass?: ResponseClass<T>,
 		options: RequestOptions = defaultOptions,
 	): Observable<T[]> {
 		return this.makeHttpClientRequest(
 			endpoint,
 			data,
 			'post',
-			responseClass,
+			ResponseClass,
 			this.getOptions(options),
 		);
 	}
@@ -79,14 +79,14 @@ export class HttpV2Service {
 	public get<T>(
 		endpoint: string,
 		data: any = {},
-		responseClass?: ResponseClass<T>,
+		ResponseClass?: ResponseClass<T>,
 		options: RequestOptions = defaultOptions,
 	): Observable<T[]> {
 		return this.makeHttpClientRequest(
 			this.getEndpointWithData(endpoint, data),
 			{},
 			'get',
-			responseClass,
+			ResponseClass,
 			this.getOptions(options),
 		);
 	}
@@ -94,14 +94,14 @@ export class HttpV2Service {
 	public put<T>(
 		endpoint: string,
 		data: any = {},
-		responseClass?: ResponseClass<T>,
+		ResponseClass?: ResponseClass<T>,
 		options: RequestOptions = defaultOptions,
 	): Observable<T[]> {
 		return this.makeHttpClientRequest(
 			endpoint,
 			data,
 			'put',
-			responseClass,
+			ResponseClass,
 			this.getOptions(options),
 		);
 	}
@@ -109,14 +109,14 @@ export class HttpV2Service {
 	public patch<T>(
 		endpoint: string,
 		data: any = {},
-		responseClass?: ResponseClass<T>,
+		ResponseClass?: ResponseClass<T>,
 		options: RequestOptions = defaultOptions,
 	): Observable<T[]> {
 		return this.makeHttpClientRequest(
 			endpoint,
 			data,
 			'patch',
-			responseClass,
+			ResponseClass,
 			this.getOptions(options),
 		);
 	}
@@ -124,14 +124,14 @@ export class HttpV2Service {
 	public delete<T>(
 		endpoint: string,
 		data: any = {},
-		responseClass?: ResponseClass<T>,
+		ResponseClass?: ResponseClass<T>,
 		options: RequestOptions = defaultOptions,
 	): Observable<T[]> {
 		return this.makeHttpClientRequest(
 			this.getEndpointWithData(endpoint, data),
 			{},
 			'delete',
-			responseClass,
+			ResponseClass,
 			this.getOptions(options),
 		);
 	}
@@ -278,7 +278,7 @@ export class HttpV2Service {
 		endpoint: string,
 		data: any = {},
 		method: HttpMethod = 'post',
-		responseClass?: new (data: any) => T,
+		ResponseClass?: new (data: any) => T,
 		options: RequestOptions = defaultOptions,
 	): Observable<T[]> {
 		const observable = this.getObservable(endpoint, data, method, options);
@@ -291,8 +291,8 @@ export class HttpV2Service {
 
 				if (Array.isArray(response)) {
 					return response.map((obj) => {
-						if (responseClass) {
-							return new responseClass(obj);
+						if (ResponseClass) {
+							return new ResponseClass(obj);
 						}
 						return obj as T;
 					});
@@ -300,8 +300,8 @@ export class HttpV2Service {
 				if ('csrf' in response) {
 					this.storage.session.set(CSRF_KEY, response.csrf);
 				}
-				if (responseClass) {
-					return [new responseClass(response)];
+				if (ResponseClass) {
+					return [new ResponseClass(response)];
 				}
 				return [response as T];
 			}),

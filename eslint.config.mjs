@@ -136,7 +136,6 @@ export default typescriptEslint.config([
 
 			'@angular-eslint/prefer-standalone': 'off',
 			'class-methods-use-this': 'off',
-			'new-cap': 'off',
 			'no-await-in-loop': 'off',
 			'no-case-declarations': 'off',
 			'no-constant-condition': 'off',
