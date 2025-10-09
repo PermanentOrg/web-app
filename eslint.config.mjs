@@ -138,7 +138,6 @@ export default typescriptEslint.config([
 			'class-methods-use-this': 'off',
 			'no-await-in-loop': 'off',
 			'no-case-declarations': 'off',
-			'no-constant-condition': 'off',
 			'no-param-reassign': 'off',
 			'no-promise-executor-return': 'off',
 			'no-prototype-builtins': 'off',
