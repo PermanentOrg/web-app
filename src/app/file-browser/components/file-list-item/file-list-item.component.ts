@@ -491,18 +491,13 @@ export class FileListItemComponent
 		}
 	}
 
-	showUnlistedPreview() {
+	onItemClick(event: MouseEvent) {
 		if (this.isUnlistedShare) {
 			//TO DO: make preview for folder --> story PER-10314
 			if (this.item.isFolder) {
 				return;
 			}
 			this.goToItem();
-		}
-	}
-
-	onItemClick(event: MouseEvent) {
-		if (this.isUnlistedShare) {
 			return;
 		}
 		if (this.device.isMobileWidth() || !this.canSelect) {

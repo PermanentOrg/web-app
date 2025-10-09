@@ -139,7 +139,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
 		if (this.isUnlistedShare) {
 			const response = await this.api.record.get(
-				[this.currentRecord.recordId],
+				[this.currentRecord],
 				this.shareLinksService.currentShareToken,
 			);
 			this.setRecordsToPreview(response.getRecordVO());
