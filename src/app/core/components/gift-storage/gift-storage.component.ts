@@ -289,7 +289,7 @@ export class GiftStorageComponent implements OnDestroy {
 
 		emails.forEach((email) => {
 			if (emailCount[email]) {
-				emailCount[email]++;
+				emailCount[email] += 1;
 			} else {
 				emailCount[email] = 1;
 			}

@@ -329,9 +329,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
 		let targetIndex = this.currentIndex;
 		if (previous) {
-			targetIndex--;
+			targetIndex -= 1;
 		} else {
-			targetIndex++;
+			targetIndex += 1;
 		}
 
 		if (!this.records[targetIndex]) {

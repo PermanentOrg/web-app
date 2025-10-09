@@ -312,13 +312,13 @@ export class DataService {
 					fullFolders = folderResponse.getFolderVOs();
 				}
 
-				for (let i = 0; i < records.length; i++) {
+				for (let i = 0; i < records.length; i += 1) {
 					records[i].update(fullRecords[i]);
 					records[i].dataStatus = DataStatus.Full;
 					this.tags.checkTagsOnItem(records[i]);
 				}
 
-				for (let i = 0; i < folders.length; i++) {
+				for (let i = 0; i < folders.length; i += 1) {
 					const folder = folders[i] as FolderVO;
 					folder.update(
 						fullFolders[i] as FolderVOData,
@@ -616,7 +616,8 @@ export class DataService {
 		const end = Math.max(item1Index, item2Index);
 
 		while (current <= end) {
-			this.selectedItems.add(items[current++]);
+			this.selectedItems.add(items[current]);
+			current += 1;
 		}
 
 		this.selectedItemsSubject.next(this.selectedItems);

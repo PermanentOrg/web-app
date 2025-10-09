@@ -121,7 +121,8 @@ export class Uploader {
 					await this.uploadToMultipartUrl(url, item, filePointer, eTags);
 					uploaded = true;
 				} catch {
-					if (retries++ > retryLimit) {
+					retries += 1;
+					if (retries > retryLimit) {
 						throw new Error('Multipart upload retry limit exceeded');
 					}
 				}

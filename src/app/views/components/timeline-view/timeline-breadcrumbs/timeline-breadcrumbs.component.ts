@@ -87,11 +87,8 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 				(!bestMatch || bestMatch.dataType !== 'group') &&
 				timespan > TimelineGroupTimespan.Year
 			) {
-				bestMatch = this.getBestMatchGroupForTimespan(
-					midpoint,
-					--timespan,
-					true,
-				);
+				timespan -= 1;
+				bestMatch = this.getBestMatchGroupForTimespan(midpoint, timespan, true);
 			}
 
 			if (bestMatch.dataType === 'group') {
@@ -114,7 +111,7 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 		}
 
 		const folder = this.data.currentFolder;
-		for (let i = 0; i < folder.pathAsFolder_linkId.length; i++) {
+		for (let i = 0; i < folder.pathAsFolder_linkId.length; i += 1) {
 			this.breadcrumbs.push({
 				type: 'folder',
 				text: folder.pathAsText[i],
@@ -143,14 +140,14 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 				if (bestMatch.dataType === 'group') {
 					groups.push(bestMatch);
 				}
-				timespan++;
+				timespan += 1;
 			}
 
 			const bestFitGroups = [];
 			let lastGroupSize = 0;
 
 			// find only groups needed in breadcrumbs
-			for (let i = groups.length - 1; i >= 0; i--) {
+			for (let i = groups.length - 1; i >= 0; i -= 1) {
 				const x = groups[i];
 				if (
 					x.groupItems.length > lastGroupSize &&

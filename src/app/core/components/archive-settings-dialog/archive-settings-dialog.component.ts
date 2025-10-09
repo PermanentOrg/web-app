@@ -65,7 +65,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
 				})
 				.catch(() => {
 					setTimeout(() => {
-						this.fetchTagsAttempts++;
+						this.fetchTagsAttempts += 1;
 						if (this.fetchTagsAttempts < this.MAX_FETCH_ATTEMPTS) {
 							this.ngOnInit();
 						} else {

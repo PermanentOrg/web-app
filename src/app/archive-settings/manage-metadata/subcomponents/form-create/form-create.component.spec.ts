@@ -115,7 +115,7 @@ describe('FormCreateComponent', () => {
 	it('should not send multiple create requests', async () => {
 		let callbackCalls = 0;
 		const { find, fixture } = await defaultRender(async () => {
-			callbackCalls++;
+			callbackCalls += 1;
 		});
 		find('.placeholder-text').triggerEventHandler('click', {});
 		fixture.detectChanges();
@@ -123,7 +123,7 @@ describe('FormCreateComponent', () => {
 		input.nativeElement.value = 'abc';
 		input.triggerEventHandler('input', { target: input.nativeElement });
 		fixture.detectChanges();
-		for (let i = 0; i < 3; i++) {
+		for (let i = 0; i < 3; i += 1) {
 			find('form').triggerEventHandler('submit', {
 				target: find('form').nativeElement,
 			});

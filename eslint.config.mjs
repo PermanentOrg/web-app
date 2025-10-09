@@ -257,7 +257,6 @@ export default typescriptEslint.config([
 			'eslint-comments/require-description': 'off',
 			'@angular-eslint/prefer-inject': 'off',
 			'preserve-caught-error': 'off',
-			'no-plusplus': 'off',
 		},
 	},
 	{

@@ -119,17 +119,17 @@ export class UploadSession {
 		};
 
 		try {
-			this.statistics.current++;
+			this.statistics.current += 1;
 
 			await this.uploader.uploadFile(item, progressHandler);
 			this.account.deductAccountStorage(item.file.size);
 
-			this.statistics.completed++;
+			this.statistics.completed += 1;
 			item.uploadStatus = UploadStatus.Done;
 			this.emitProgress(item);
 		} catch (err: unknown) {
 			item.uploadStatus = UploadStatus.Cancelled;
-			this.statistics.error++;
+			this.statistics.error += 1;
 
 			const accessRole = this.account.getArchive().accessRole;
 

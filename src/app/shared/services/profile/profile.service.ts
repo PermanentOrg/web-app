@@ -410,7 +410,7 @@ export class ProfileService {
 				if (itemToCheck) {
 					for (const col of cols) {
 						if (itemToCheck[col]) {
-							filledEntries++;
+							filledEntries += 1;
 						}
 					}
 				}

@@ -16,7 +16,7 @@ class MockApiService {
 class MockTagsRepo {
 	public apiCalls: number = 0;
 	async getTagsByArchive(_archiveId: number) {
-		this.apiCalls++;
+		this.apiCalls += 1;
 		return {
 			getTagVOsData(): TagVO[] {
 				return [
