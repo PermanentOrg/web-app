@@ -1082,12 +1082,10 @@ export class FileListItemComponent
 							} else {
 								this.folderContentsType = FolderContentsType.MIXED_FILES;
 							}
+						} else if (allChildren.length === 0) {
+							this.folderContentsType = FolderContentsType.EMPTY_FOLDER;
 						} else {
-							if (allChildren.length === 0) {
-								this.folderContentsType = FolderContentsType.EMPTY_FOLDER;
-							} else {
-								this.folderContentsType = FolderContentsType.SUBFOLDERS;
-							}
+							this.folderContentsType = FolderContentsType.SUBFOLDERS;
 						}
 					} else {
 						this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;

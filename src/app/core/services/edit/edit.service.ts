@@ -371,10 +371,8 @@ export class EditService {
 				if (item.recordId) {
 					recordsByRecordId.set(item.recordId, item);
 				}
-			} else {
-				if (item.folderId) {
-					foldersByFolderId.set(item.folderId, item);
-				}
+			} else if (item.folderId) {
+				foldersByFolderId.set(item.folderId, item);
 			}
 		});
 

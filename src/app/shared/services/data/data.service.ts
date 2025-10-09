@@ -418,11 +418,9 @@ export class DataService {
 						updatedDT: updatedItem.updatedDT,
 					};
 					item.update(dataToUpdate);
-				} else {
-					if (this.selectedItems.has(item)) {
-						this.selectedItems.delete(item);
-						this.selectedItemsSubject.next(this.selectedItems);
-					}
+				} else if (this.selectedItems.has(item)) {
+					this.selectedItems.delete(item);
+					this.selectedItemsSubject.next(this.selectedItems);
 				}
 			}
 

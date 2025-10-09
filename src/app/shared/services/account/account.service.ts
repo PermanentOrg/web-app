@@ -351,10 +351,8 @@ export class AccountService {
 
 		if (rememberMe) {
 			this.cookies.set('rememberMe', email);
-		} else {
-			if (this.cookies.check('rememberMe')) {
-				this.cookies.delete('rememberMe');
-			}
+		} else if (this.cookies.check('rememberMe')) {
+			this.cookies.delete('rememberMe');
 		}
 
 		const currentAccount = this.account;
