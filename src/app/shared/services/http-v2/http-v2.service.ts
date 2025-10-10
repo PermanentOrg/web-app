@@ -18,6 +18,7 @@ type ResponseType = 'json' | 'text';
 interface RequestOptions {
 	csrf?: boolean;
 	authToken?: boolean;
+	shareToken?: string | null;
 	useStelaDomain?: boolean;
 	responseType?: ResponseType;
 }
@@ -25,6 +26,7 @@ interface RequestOptions {
 const defaultOptions: RequestOptions = {
 	csrf: false,
 	authToken: true,
+	shareToken: null,
 	useStelaDomain: true,
 	responseType: 'json',
 };
@@ -207,6 +209,9 @@ export class HttpV2Service {
 		let headers: HttpHeaders = HttpV2Service.HttpHeaders;
 		if (this.authToken && options.authToken) {
 			headers = headers.append('Authorization', `Bearer ${this.authToken}`);
+		}
+		if (options.shareToken) {
+			headers = headers.append('X-Permanent-Share-Token', options.shareToken);
 		}
 		return {
 			headers,

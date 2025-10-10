@@ -202,7 +202,10 @@ export class RecordRepo extends BaseRepo {
 		const recordVo = recordResponse.getRecordVO();
 		return recordVo.recordId;
 	}
-	public async get(recordVOs: RecordVO[]): Promise<RecordResponse> {
+	public async get(
+		recordVOs: RecordVO[],
+		shareToken: string | null = null,
+	): Promise<RecordResponse> {
 		const recordIds = await Promise.all(
 			// There are some flows (e.g. published records) where only the archiveNbr is known.
 			// In those cases, we need to look up the recordId first since stela API has phased
@@ -216,8 +219,15 @@ export class RecordRepo extends BaseRepo {
 		const data = {
 			recordIds,
 		};
+		let options = {};
+		if (shareToken) {
+			options = {
+				authToken: false,
+				shareToken,
+			};
+		}
 		const stelaRecords = await firstValueFrom(
-			this.httpV2.get<StelaRecord>('v2/record', data),
+			this.httpV2.get<StelaRecord>('v2/record', data, null, options),
 		);
 
 		// We need the `Results` to look the way v1 results look, for now.

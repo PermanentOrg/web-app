@@ -100,7 +100,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 	return new FolderVO({
 		...stelaFolder,
 		folderId: stelaFolder.folderId,
-		archiveId: stelaFolder.archive.id,
+		archiveId: stelaFolder.archive?.id,
 		displayName: stelaFolder.displayName,
 		displayDT: stelaFolder.displayTimestamp,
 		displayEndDT: stelaFolder.displayEndTimestamp,
@@ -109,7 +109,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		note: '',
 		description: stelaFolder.description,
 		sort: stelaFolder.sort,
-		locnId: stelaFolder.location.id,
+		locnId: stelaFolder.location?.id,
 		timeZoneId: 88, // Hard coded for now
 		view: stelaFolder.view,
 		imageRatio: stelaFolder.imageRatio,
@@ -124,15 +124,15 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		thumbnail256CloudPath: stelaFolder.thumbnailUrls['256'],
 		status: stelaFolder.status,
 		publicDT: stelaFolder.publicAt,
-		parentFolderId: stelaFolder.parentFolder.id,
+		parentFolderId: stelaFolder.parentFolder?.id,
 		pathAsText: stelaFolder.paths.names,
-		ParentFolderVOs: [new FolderVO({ folderId: stelaFolder.parentFolder.id })],
+		ParentFolderVOs: [new FolderVO({ folderId: stelaFolder.parentFolder?.id })],
 		ChildFolderVOs: childFolderVOs,
 		RecordVOs: childRecordVOs,
 		LocnVO: convertStelaLocationToLocnVOData(stelaFolder.location),
 		TimezoneVO: CENTRAL_TIMEZONE_VO,
 		TagVOs: (stelaFolder.tags ?? []).map((stelaTag) =>
-			convertStelaTagToTagVO(stelaTag, stelaFolder.archive.id),
+			convertStelaTagToTagVO(stelaTag, stelaFolder.archive?.id),
 		),
 		ChildItemVOs: [...childRecordVOs, ...childFolderVOs],
 		ShareVOs: (stelaFolder.shares ?? []).map(convertStelaSharetoShareVO),
@@ -169,15 +169,27 @@ export class FolderRepo extends BaseRepo {
 		);
 	}
 
-	private async getStelaFolder(folderVO: FolderVO): Promise<StelaFolder> {
+	private async getStelaFolder(
+		folderVO: FolderVO,
+		shareToken: string = null,
+	): Promise<StelaFolder> {
 		const queryData = {
 			folderIds: [folderVO.folderId],
 		};
+		let options = {};
+		if (shareToken) {
+			options = {
+				authToken: false,
+				shareToken,
+			};
+		}
 		const folderResponse = (
 			await firstValueFrom(
 				this.httpV2.get<PagedStelaResponse<StelaFolder>>(
 					`v2/folder`,
 					queryData,
+					null,
+					options,
 				),
 			)
 		)[0];
@@ -186,26 +198,42 @@ export class FolderRepo extends BaseRepo {
 
 	private async getStelaFolderChildren(
 		folderVO: FolderVO,
+		shareToken: string = null,
 	): Promise<StelaFolderChild[]> {
 		const queryData = {
 			pageSize: 99999999, // We want all results in one request
 		};
+		let options = {};
+		if (shareToken) {
+			options = {
+				authToken: false,
+				shareToken,
+			};
+		}
 		const childrenResponse = (
 			await firstValueFrom(
 				this.httpV2.get<PagedStelaResponse<StelaFolderChild>>(
 					`v2/folder/${folderVO.folderId}/children`,
 					queryData,
+					null,
+					options,
 				),
 			)
 		)[0];
 		return childrenResponse.items;
 	}
 
-	public async getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
+	public async getWithChildren(
+		folderVOs: FolderVO[],
+		shareToken: string = null,
+	): Promise<FolderResponse> {
 		// Stela has two separate endpoints -- one for loading the folder, one for loading the children.
 		const requests = folderVOs.map(async (folderVO) => {
-			const stelaFolder = await this.getStelaFolder(folderVO);
-			const stelaFolderChildren = await this.getStelaFolderChildren(folderVO);
+			const stelaFolder = await this.getStelaFolder(folderVO, shareToken);
+			const stelaFolderChildren = await this.getStelaFolderChildren(
+				folderVO,
+				shareToken,
+			);
 			return {
 				...stelaFolder,
 				children: stelaFolderChildren,

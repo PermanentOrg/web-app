@@ -81,7 +81,7 @@
 	class="share-preview-cover from-bottom"
 	[ngClass]="{ 'share-preview-cover-visible': showCover }"
 	(click)="toggleCover()"
-	*ngIf="!hasAccess && isLoggedIn"
+	*ngIf="!hasAccess && isLoggedIn && !isUnlistedShare"
 >
 	<div class="share-preview-cover-content" (click)="stopPropagation($event)">
 		<p *ngIf="!isLoggedIn">
@@ -96,7 +96,7 @@
 				>To view or edit this content, log in to Permanent.org.</span
 			>
 		</p>
-		<p *ngIf="isLoggedIn">
+		<p *ngIf="isLoggedIn && !isUnlistedShare">
 			<span *ngIf="isLinkShare && !hasRequested"
 				>Request full access from {{ shareAccount.fullName }}.</span
 			>
@@ -254,7 +254,7 @@
 		<div
 			class="share-preview-cover-buttons"
 			(click)="stopPropagation($event)"
-			*ngIf="isLoggedIn"
+			*ngIf="isLoggedIn && !isUnlistedShare"
 		>
 			<button
 				class="btn btn-wordpress"
@@ -285,7 +285,7 @@
 <div
 	class="share-preview-footer"
 	[ngClass]="{ 'share-preview-footer-visible': !showCover }"
-	*ngIf="!hasAccess && isLoggedIn"
+	*ngIf="!hasAccess && isLoggedIn && !isUnlistedShare"
 >
 	<div class="share-preview-footer-content">
 		<span (click)="toggleCover()">

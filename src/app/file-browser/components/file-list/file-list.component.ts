@@ -57,6 +57,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { routeHasDialog } from '@shared/utilities/router';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { EventService } from '@shared/services/event/event.service';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
 export interface ItemClickEvent {
 	event?: MouseEvent;
@@ -148,6 +149,7 @@ export class FileListComponent
 		public device: DeviceService,
 		private ngZone: NgZone,
 		private event: EventService,
+		private shareLinksService: ShareLinksService,
 	) {
 		this.currentFolder = this.route.snapshot.data.currentFolder;
 		// this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
@@ -526,7 +528,6 @@ export class FileListComponent
 		}
 
 		const itemsToFetch = visibleListItems.map((c) => c.item);
-
 		if (itemsToFetch.length) {
 			await this.dataService.fetchLeanItems(itemsToFetch);
 		}
