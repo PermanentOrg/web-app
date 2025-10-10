@@ -147,6 +147,18 @@ describe('SharePreviewComponent', () => {
 		});
 	}));
 
+	it('should not open dialog if user is logged out, but it is an unlisted share', fakeAsync(() => {
+		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
+		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
+
+		component.isLoggedIn = false;
+		component.isUnlistedShare = true;
+		component.ngOnInit();
+		tick(1005);
+
+		expect(dialogSpy).not.toHaveBeenCalled();
+	}));
+
 	it('should not open dialog if already open', () => {
 		const dialogSpy = spyOn(dialog, 'open');
 		component.createAccountDialogIsOpen = true;
