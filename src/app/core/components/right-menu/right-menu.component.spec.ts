@@ -35,7 +35,7 @@ describe('RightMenuComponent', () => {
 		TestBed.configureTestingModule(config).compileComponents();
 
 		fixture = TestBed.createComponent(RightMenuComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 		dataService = TestBed.inject(DataService);
 		dataService.setCurrentFolder();

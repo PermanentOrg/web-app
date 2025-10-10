@@ -176,7 +176,7 @@ export class ConnectionsDialogComponent {
 							style: 'success',
 						});
 						const newRelation = response.getRelationVO();
-						relation.relationId = newRelation.relationId;
+						({ relationId: relation.relationId } = newRelation);
 						relation.archiveId = newRelation.archiveId;
 						relation.relationArchiveId = newRelation.relationArchiveId;
 						relation.status = newRelation.status;

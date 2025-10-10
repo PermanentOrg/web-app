@@ -50,9 +50,9 @@ export class RoutedDialogWrapperComponent
 	ngAfterViewInit(): void {
 		this.title.setTitle(`${this.route.snapshot.data.title} | Permanent.org`);
 
-		const component = (this.route.snapshot.data as RouteData).component;
+		const { component } = this.route.snapshot.data as RouteData;
 
-		const dialogOptions = (this.route.snapshot.data as RouteData).dialogOptions;
+		const { dialogOptions } = this.route.snapshot.data as RouteData;
 
 		const dialogData = {
 			...this.route.snapshot.data,

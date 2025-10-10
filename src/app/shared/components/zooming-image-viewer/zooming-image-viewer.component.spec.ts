@@ -141,7 +141,7 @@ describe('ZoomingImageViewerComponent', () => {
 
 	it('should output an event when going fullscreen', async () => {
 		const { instance, outputs } = await renderWithRecord(getValidTestRecord());
-		const viewer = instance.viewer;
+		const { viewer } = instance;
 
 		viewer.raiseEvent('full-screen', { fullScreen: true });
 
@@ -155,7 +155,7 @@ describe('ZoomingImageViewerComponent', () => {
 	it('should output an event if the user zooms in', async () => {
 		const { instance, outputs } = await renderWithRecord(getValidTestRecord());
 
-		const viewer = instance.viewer;
+		const { viewer } = instance;
 		viewer.raiseEvent('zoom', { zoom: 2 });
 		viewer.raiseEvent('zoom', { zoom: 3 });
 
@@ -168,7 +168,7 @@ describe('ZoomingImageViewerComponent', () => {
 
 	it('should disable panning if the zoom level is lesss than 1', async () => {
 		const { instance } = await renderWithRecord(getValidTestRecord());
-		const viewer = instance.viewer;
+		const { viewer } = instance;
 
 		const expectPanning = (enabled: boolean) => {
 			expect((viewer as OpenSeadragon.Options).panHorizontal).toBe(enabled);

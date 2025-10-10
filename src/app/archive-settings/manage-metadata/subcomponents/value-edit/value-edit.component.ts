@@ -51,7 +51,7 @@ export class EditValueComponent {
 	}
 
 	public async save(newName: string) {
-		const metadataCategory = this.tag.name.split(':')[0];
+		const [metadataCategory] = this.tag.name.split(':');
 		const newTagVo = new TagVO({
 			tagId: this.tag.tagId,
 			name: `${metadataCategory}:${newName}`,

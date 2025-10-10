@@ -41,7 +41,7 @@ export class FamilySearchImportComponent {
 		private message: MessageService,
 		private guidedTour: GuidedTourService,
 	) {
-		this.currentUser = data.currentUserData;
+		({ currentUserData: this.currentUser } = data);
 		this.familyMembers = filter(
 			data.treeData,
 			(person) => person.id !== this.currentUser.id,
@@ -72,7 +72,7 @@ export class FamilySearchImportComponent {
 
 		this.waiting = true;
 
-		const total = archivesToCreate.length;
+		const { length: total } = archivesToCreate;
 
 		this.message.showMessage({
 			message: `Starting archive import for ${total} person(s). Do not close this window or refresh your browser.`,

@@ -95,7 +95,7 @@ export function setFormErrors(form: UntypedFormGroup, errors: any) {
 }
 
 export function getFormInputError(formInput: FormInputComponent | FormInput) {
-	const control = formInput.control;
+	const { control } = formInput;
 
 	if (
 		control.valid ||

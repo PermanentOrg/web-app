@@ -140,8 +140,8 @@ export class GiftStorageComponent implements OnDestroy {
 								...response.giftDelivered,
 							]),
 						];
-						this.alreadyInvited = response.alreadyInvited;
-						const giftedAmount = response.storageGifted;
+						({ alreadyInvited: this.alreadyInvited } = response);
+						const { storageGifted: giftedAmount } = response;
 						const remainingSpaceAfterGift =
 							Number(this.availableSpace) - giftedAmount;
 						this.availableSpace = String(remainingSpaceAfterGift.toFixed(2));
@@ -248,7 +248,7 @@ export class GiftStorageComponent implements OnDestroy {
 
 			if (emailControl) {
 				const emails = this.parseEmailString(emailControl.value as string);
-				const numberOfEmails = emails.length;
+				const { length: numberOfEmails } = emails;
 				const giftedAmount = numberOfEmails * Number(control.value);
 				const availableSpace = Number(this.availableSpace);
 				if (giftedAmount <= availableSpace) {
@@ -274,7 +274,7 @@ export class GiftStorageComponent implements OnDestroy {
 	public getAmountErrorMessage(): string | null {
 		const errors = this.giftForm.get('amount')?.errors;
 		if (errors?.isGreaterThanAvailableSpace) {
-			const requiredSpace = errors.requiredSpace;
+			const { requiredSpace } = errors;
 			return `You need at least ${requiredSpace} GB.`;
 		}
 		return null;

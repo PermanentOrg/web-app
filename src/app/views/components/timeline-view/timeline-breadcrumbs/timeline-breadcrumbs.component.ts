@@ -174,8 +174,7 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 
 	onBreadcrumbClick(clickedBreadcrumb: TimelineBreadcrumb) {
 		if (clickedBreadcrumb === this.breadcrumbs[0]) {
-			const publicArchiveNbr =
-				this.activatedRoute.snapshot.params.publicArchiveNbr;
+			const { publicArchiveNbr } = this.activatedRoute.snapshot.params;
 			this.router.navigate(['p', 'archive', publicArchiveNbr]);
 		} else {
 			this.breadcrumbClicked.emit(clickedBreadcrumb);

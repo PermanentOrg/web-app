@@ -21,7 +21,7 @@ export class RootFolderResolveService {
 		state: RouterStateSnapshot,
 	): Promise<any> {
 		// check for targetArchiveNbr parameter and switch archives if possible
-		const targetArchiveNbr = route.queryParams.targetArchiveNbr;
+		const { targetArchiveNbr } = route.queryParams;
 
 		if (
 			targetArchiveNbr &&

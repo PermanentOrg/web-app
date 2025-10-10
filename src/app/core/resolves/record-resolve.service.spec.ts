@@ -23,7 +23,7 @@ describe('RecordResolveService', () => {
 
 	beforeEach(() => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
-		const providers = config.providers;
+		const { providers } = config;
 		providers.push(RecordResolveService);
 		providers.push(DataService);
 		providers.push({

@@ -41,7 +41,7 @@ export class Uploader {
 	};
 
 	private registerRecord = async (item: UploadItem, destinationUrl: string) => {
-		const archiveId = this.account.getArchive().archiveId;
+		const { archiveId } = this.account.getArchive();
 
 		const record = await this.api.record.registerRecord(
 			item.RecordVO,
@@ -101,9 +101,9 @@ export class Uploader {
 		item: UploadItem,
 		emitProgress: (n: number) => void,
 	) => {
-		const archiveId = this.account.getArchive().archiveId;
+		const { archiveId } = this.account.getArchive();
 
-		const size = item.file.size;
+		const { size } = item.file;
 		const { urls, uploadId, key } =
 			await this.api.record.getMultipartUploadURLs(size);
 		let filePointer = 0;

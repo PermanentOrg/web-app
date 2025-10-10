@@ -41,7 +41,7 @@ describe('AllArchivesComponent', () => {
 		accountService.setArchive(currentArchive);
 
 		fixture = TestBed.createComponent(AllArchivesComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

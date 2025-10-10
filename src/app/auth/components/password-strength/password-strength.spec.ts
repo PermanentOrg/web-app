@@ -22,7 +22,7 @@ describe('PasswordStrengthComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(PasswordStrengthComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

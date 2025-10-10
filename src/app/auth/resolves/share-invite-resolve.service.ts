@@ -14,7 +14,7 @@ export class ShareInviteResolveService {
 			return await Promise.resolve(null);
 		}
 
-		const params = route.queryParams;
+		const { queryParams: params } = route;
 
 		let email, inviteCode;
 
@@ -30,7 +30,7 @@ export class ShareInviteResolveService {
 			.getShareInviteInfo(email, inviteCode, params.shid, params.tp)
 			.then(async (response) => {
 				try {
-					const responseData = response.getResultsData()[0][0];
+					const [[responseData]] = response.getResultsData();
 					return await Promise.resolve(responseData);
 				} catch (err) {
 					return await Promise.resolve(null);

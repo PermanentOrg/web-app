@@ -18,7 +18,7 @@ describe('ToggleComponent', () => {
 		const { instance, find, fixture } = await shallow.render();
 		instance.isChecked = true;
 		fixture.detectChanges();
-		const toggle = find('.toggle-container').nativeElement;
+		const { nativeElement: toggle } = find('.toggle-container');
 
 		expect(toggle.classList).toContain('checked');
 	});
@@ -27,7 +27,7 @@ describe('ToggleComponent', () => {
 		const { instance, find, fixture } = await shallow.render();
 		instance.disabled = true;
 		fixture.detectChanges();
-		const toggle = find('.toggle-container').nativeElement;
+		const { nativeElement: toggle } = find('.toggle-container');
 
 		expect(toggle.classList).toContain('disabled');
 	});
@@ -35,7 +35,7 @@ describe('ToggleComponent', () => {
 	it('should emit the correct value when the toggle is clicked', async () => {
 		const { instance, find, fixture } = await shallow.render();
 		fixture.detectChanges();
-		const toggle = find('.toggle-container').nativeElement;
+		const { nativeElement: toggle } = find('.toggle-container');
 		toggle.click();
 
 		expect(instance.isCheckedChange.emit).toHaveBeenCalledWith(true);
@@ -51,7 +51,7 @@ describe('ToggleComponent', () => {
 		const { instance, find, fixture } = await shallow.render();
 		instance.disabled = true;
 		fixture.detectChanges();
-		const toggle = find('.toggle-container').nativeElement;
+		const { nativeElement: toggle } = find('.toggle-container');
 		toggle.click();
 
 		expect(instance.isCheckedChange.emit).not.toHaveBeenCalled();

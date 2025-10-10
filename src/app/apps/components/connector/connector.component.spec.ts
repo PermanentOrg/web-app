@@ -46,9 +46,9 @@ describe('ConnectorComponent', () => {
 		accountService.setArchive(currentArchive);
 
 		fixture = TestBed.createComponent(TestHostComponent);
-		hostComponent = fixture.componentInstance;
+		({ componentInstance: hostComponent } = fixture);
 		fixture.detectChanges();
-		component = hostComponent.component;
+		({ component } = hostComponent);
 	});
 
 	afterEach(() => {
@@ -78,7 +78,7 @@ describe('ConnectorComponent', () => {
 			type: 'type.connector.familysearch',
 		});
 		fixture.detectChanges();
-		component = hostComponent.component;
+		({ component } = hostComponent);
 
 		const compiled = fixture.debugElement.nativeElement as HTMLElement;
 		const button = compiled.querySelector(
@@ -98,7 +98,7 @@ describe('ConnectorComponent', () => {
 			status: 'status.connector.connected',
 		});
 		fixture.detectChanges();
-		component = hostComponent.component;
+		({ component } = hostComponent);
 
 		const compiled = fixture.debugElement.nativeElement as HTMLElement;
 
@@ -136,7 +136,7 @@ describe('ConnectorComponent', () => {
 			status: 'status.connector.connected',
 		});
 		fixture.detectChanges();
-		component = hostComponent.component;
+		({ component } = hostComponent);
 
 		const compiled = fixture.debugElement.nativeElement as HTMLElement;
 
@@ -170,7 +170,7 @@ describe('ConnectorComponent', () => {
 			type: 'type.connector.familysearch',
 		});
 		fixture.detectChanges();
-		const connectorComponentInstance = hostComponent.component;
+		const { component: connectorComponentInstance } = hostComponent;
 
 		expect(connectorComponentInstance).toBeDefined();
 
@@ -189,9 +189,9 @@ describe('ConnectorComponent', () => {
 		});
 		fixture.detectChanges();
 
-		const connectorComponentInstance = fixture.debugElement.query(
+		const { componentInstance: connectorComponentInstance } = fixture.debugElement.query(
 			By.directive(ConnectorComponent),
-		).componentInstance;
+		);
 		spyOn(connectorComponentInstance, 'connect');
 
 		const button = fixture.debugElement.nativeElement.querySelector(

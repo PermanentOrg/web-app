@@ -61,12 +61,12 @@ export class ChangePasswordComponent {
 			if (loginResp.needsMFA()) {
 				const mfa = await this.showMFAPrompt();
 				try {
-					const keepLoggedIn = this.accountService.getAccount().keepLoggedIn;
+					const { keepLoggedIn } = this.accountService.getAccount();
 					const mfaResp = await this.accountService.verifyMfa(
 						mfa.verificationCode,
 						keepLoggedIn,
 					);
-					trustToken = mfaResp.getTrustToken().value;
+					({ value: trustToken } = mfaResp.getTrustToken());
 				} catch (err) {
 					this.message.showError({
 						message: 'Incorrect verification code entered',

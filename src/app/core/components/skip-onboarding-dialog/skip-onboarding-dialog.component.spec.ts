@@ -37,7 +37,7 @@ describe('SkipOnboardingDialogComponent', () => {
 		await TestBed.configureTestingModule(config).compileComponents();
 
 		fixture = TestBed.createComponent(SkipOnboardingDialogComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

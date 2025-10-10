@@ -49,7 +49,7 @@ export class ArchivePayerComponent implements OnInit {
 
 		this.hasPayer = !!this.payer;
 		if (this.hasPayer) {
-			this.payerService.payerId = this.payer.accountId;
+			({ accountId: this.payerService.payerId } = this.payer);
 		}
 		this.isPayerDifferentThanLoggedUser =
 			this.account?.accountId !== this.archive?.payerAccountId;
@@ -69,7 +69,7 @@ export class ArchivePayerComponent implements OnInit {
 			this.api.archive.update(this.archive);
 			this.hasPayer = !val;
 			this.isPayerDifferentThanLoggedUser = val;
-			this.payerService.payerId = this.archive.payerAccountId;
+			({ payerAccountId: this.payerService.payerId } = this.archive);
 		} catch (e) {
 			this.msg.showError({
 				message: 'Something went wrong. Please try again.',

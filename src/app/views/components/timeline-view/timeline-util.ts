@@ -42,7 +42,7 @@ function getAlternatingTimelineItemClass() {
 }
 
 function getEvenSpreadItems(items: any[], count = 4) {
-	const length = items.length;
+	const { length } = items;
 	const last = length - 1;
 	const spread = [];
 	if (!items.length) {
