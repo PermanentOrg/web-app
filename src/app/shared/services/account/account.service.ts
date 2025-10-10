@@ -18,7 +18,7 @@ import {
 	AccessRoleType,
 	checkMinimumAccess,
 } from '@models/access-role';
-import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
+import { ArchiveSwitcherComponent } from '@shared/components/archive-switcher/archive-switcher.component';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import * as Sentry from '@sentry/browser';
 import { HttpV2Service } from '../http-v2/http-v2.service';
