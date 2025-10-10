@@ -137,7 +137,6 @@ export default typescriptEslint.config([
 			'@angular-eslint/prefer-standalone': 'off',
 			'class-methods-use-this': 'off',
 			'no-param-reassign': 'off',
-			'no-restricted-properties': 'off',
 			'prefer-arrow/prefer-arrow-functions': 'off',
 			'prefer-destructuring': 'off',
 			'prefer-exponentiation-operator': 'off',
