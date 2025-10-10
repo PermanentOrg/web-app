@@ -136,7 +136,6 @@ export default typescriptEslint.config([
 
 			'@angular-eslint/prefer-standalone': 'off',
 			'class-methods-use-this': 'off',
-			'no-await-in-loop': 'off',
 			'no-param-reassign': 'off',
 			'no-promise-executor-return': 'off',
 			'no-restricted-globals': 'off',
