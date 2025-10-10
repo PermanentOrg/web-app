@@ -212,14 +212,14 @@ export class ConnectorComponent implements OnInit {
     archives for each of those persons. You'll find those
     memories saved in the apps section of those person archives.</p>
     `;
-		if (!this.connected) {
+		if (this.connected) {
 			template = `
-          <p>Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.</p>
+          <p>Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.</p>
           ${familySearchHelp}
           `;
 		} else {
 			template = `
-          <p>Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.</p>
+          <p>Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.</p>
           ${familySearchHelp}
           `;
 		}

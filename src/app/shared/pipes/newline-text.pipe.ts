@@ -10,6 +10,6 @@ export class NewlineTextPipe implements PipeTransform {
 			return text;
 		}
 
-		return '<p>' + text.replace(new RegExp('\n', 'g'), '</p><p>') + '</p>';
+		return '<p>' + text.replace(/\n/g, '</p><p>') + '</p>';
 	}
 }

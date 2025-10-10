@@ -91,12 +91,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 
 	ngOnInit() {
 		let pledgeAmount;
-		if (!this.iframe.isIFrame()) {
-			const params = this.route.snapshot.queryParams;
-			if (params) {
-				pledgeAmount = parseInt(params.pledgeAmount, 10);
-			}
-		} else {
+		if (this.iframe.isIFrame()) {
 			const url = document.referrer;
 			const split = url.split('?');
 			if (split.length > 1) {
@@ -106,6 +101,11 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 						pledgeAmount = parseInt(params.split('=').pop(), 0);
 					} catch (err) {}
 				}
+			}
+		} else {
+			const params = this.route.snapshot.queryParams;
+			if (params) {
+				pledgeAmount = parseInt(params.pledgeAmount, 10);
 			}
 		}
 		if (pledgeAmount) {
@@ -176,15 +176,15 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 
 	chooseDonationAmount(amount: any) {
 		this.donationSelection = amount;
-		if (amount !== 'custom') {
-			this.donationAmount = parseInt(amount, 10);
-		} else {
+		if (amount === 'custom') {
 			if (!this.pledgeForm.value.customDonationAmount) {
 				this.pledgeForm.patchValue({
 					customDonationAmount: this.donationAmount,
 				});
 			}
 			this.customDonationInput.nativeElement.focus();
+		} else {
+			this.donationAmount = parseInt(amount, 10);
 		}
 	}
 
@@ -241,9 +241,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 		this.pledgeForm.reset();
 
 		const isLoggedIn = this.accountService.isLoggedIn();
-		if (!isLoggedIn) {
-			this.router.navigate(['..', 'claim'], { relativeTo: this.route });
-		} else {
+		if (isLoggedIn) {
 			if (this.inlineFlow) {
 				this.waiting = true;
 
@@ -286,6 +284,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 			} else {
 				this.router.navigate(['..', 'claimlogin'], { relativeTo: this.route });
 			}
+		} else {
+			this.router.navigate(['..', 'claim'], { relativeTo: this.route });
 		}
 		this.waiting = false;
 	}

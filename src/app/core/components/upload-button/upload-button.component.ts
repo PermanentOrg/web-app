@@ -69,9 +69,7 @@ export class UploadButtonComponent implements OnDestroy, HasSubscriptions {
 	}
 
 	checkCurrentFolder() {
-		if (!this.currentFolder) {
-			this.hidden = true;
-		} else {
+		if (this.currentFolder) {
 			this.hidden =
 				this.currentFolder.type === 'type.folder.root.share' ||
 				this.currentFolder.type === 'type.folder.root.app' ||
@@ -87,6 +85,8 @@ export class UploadButtonComponent implements OnDestroy, HasSubscriptions {
 				) ||
 				(this.currentFolder.type.includes('app') &&
 					this.currentFolder.special !== 'familysearch.root.folder');
+		} else {
+			this.hidden = true;
 		}
 	}
 

@@ -21,11 +21,11 @@ describe('FormEditComponent', () => {
 				bind: {
 					name,
 					delete: async () => {
-						callbackCalls++;
+						callbackCalls += 1;
 						deleted = true;
 					},
 					save: async (n: string) => {
-						callbackCalls++;
+						callbackCalls += 1;
 						updated = true;
 						newTagName = n;
 					},

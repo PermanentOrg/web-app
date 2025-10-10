@@ -85,7 +85,7 @@ export class FamilySearchImportComponent {
 
 			const newArchives = response.getArchiveVOs();
 			const personIds = [];
-			for (let index = 0; index < newArchives.length; index++) {
+			for (let index = 0; index < newArchives.length; index += 1) {
 				personIds.push(selected[index].id);
 			}
 

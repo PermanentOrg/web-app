@@ -277,7 +277,7 @@ export class EditTagsComponent
 		if (event.key === 'ArrowDown') {
 			event.preventDefault();
 			if (index < this.matchingTags.length - 1) {
-				this.currentIndex++;
+				this.currentIndex += 1;
 				this.setFocusToCurrentIndex(index + 1);
 			}
 		} else if (event.key === 'ArrowUp') {

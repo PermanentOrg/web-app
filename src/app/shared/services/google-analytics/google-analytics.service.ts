@@ -28,11 +28,7 @@ export class GoogleAnalyticsService {
 			this.tracker = ga.getAll()[0];
 		}
 
-		if (!this.tracker) {
-			return false;
-		} else {
-			return true;
-		}
+		return !!this.tracker;
 	}
 
 	sendEvent(eventData: EventParams) {

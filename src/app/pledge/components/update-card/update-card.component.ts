@@ -117,18 +117,18 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
 			stripeToken: token,
 		});
 		this.waiting = false;
-		if (!result.data) {
-			this.message.showError({
-				message:
-					'There was an issue saving your payment information. Please try again.',
-			});
-		} else {
+		if (result.data) {
 			this.message.showMessage({
 				message: 'Payment method updated successfully.',
 				style: 'success',
 			});
 			this.cardSaved = true;
 			this.nameControl.reset();
+		} else {
+			this.message.showError({
+				message:
+					'There was an issue saving your payment information. Please try again.',
+			});
 		}
 	}
 }

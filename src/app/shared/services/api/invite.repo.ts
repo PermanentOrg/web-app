@@ -75,7 +75,7 @@ export class InviteRepo extends BaseRepo {
 		const data = [
 			{
 				primaryEmail: inviteEmail,
-				inviteCode: inviteCode,
+				inviteCode,
 				shid: shareItemId,
 				tp: shareItemType,
 			},

@@ -39,8 +39,6 @@ export class MockRelationshipService {
 	public update = async () => {};
 }
 export class MockPromptService {
-	public async confirm() {
-		return;
-	}
+	public async confirm() {}
 }
 export class NullDependency {}

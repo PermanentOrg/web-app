@@ -78,7 +78,8 @@ export class PublishComponent {
 			if (this.sourceItem instanceof FolderVO) {
 				await this.api.folder.copy([this.sourceItem], publicRoot);
 				let tries = 0;
-				while (!this.publicItem && tries++ < 10) {
+				while (!this.publicItem && tries < 10) {
+					tries += 1;
 					const publicRootResponse = (await this.api.folder
 						.navigateLean(publicRoot)
 						.toPromise()) as FolderResponse;

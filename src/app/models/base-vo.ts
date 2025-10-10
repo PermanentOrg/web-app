@@ -34,15 +34,15 @@ export class BaseVO {
 	}
 
 	public getCleanVO() {
-		if (!this.cleanParams.length) {
-			return this;
-		} else {
+		if (this.cleanParams.length) {
 			const clean = {};
 			this.cleanParams.forEach((param) => {
 				clean[param] = this[param];
 			});
 
 			return clean;
+		} else {
+			return this;
 		}
 	}
 

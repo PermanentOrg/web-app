@@ -40,12 +40,12 @@ export class PrDatePipe implements PipeTransform {
 		let outputDt: moment.Moment;
 		let abbrev = '';
 
-		if (!timezoneVO) {
-			outputDt = moment.utc(dtString).local();
-		} else {
+		if (timezoneVO) {
 			const isDST = dt.clone().local().isDST();
 			abbrev = isDST ? timezoneVO.dstAbbrev : timezoneVO.stdAbbrev;
 			outputDt = getOffsetMomentFromDTString(dtString as string, timezoneVO);
+		} else {
+			outputDt = moment.utc(dtString).local();
 		}
 
 		switch (part) {

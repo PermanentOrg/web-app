@@ -10,7 +10,7 @@ export function sortShareVOs(shares: ShareVO[]) {
 	return orderBy(
 		shares,
 		[
-			(share) => (share.status?.includes('pending') ? true : false),
+			(share) => !!share.status?.includes('pending'),
 			(share) => getAccessAsEnum(share.accessRole),
 			(share) => (share.ArchiveVO.fullName as string).toLowerCase(),
 		],

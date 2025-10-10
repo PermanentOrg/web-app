@@ -35,9 +35,10 @@ const TimelineItemClasses = [
 let timelineItemClassCounter = 0;
 
 function getAlternatingTimelineItemClass() {
-	return TimelineItemClasses[
-		timelineItemClassCounter++ % TimelineItemClasses.length
-	];
+	const result =
+		TimelineItemClasses[timelineItemClassCounter % TimelineItemClasses.length];
+	timelineItemClassCounter += 1;
+	return result;
 }
 
 function getEvenSpreadItems(items: any[], count = 4) {
@@ -58,7 +59,7 @@ function getEvenSpreadItems(items: any[], count = 4) {
 	const step = length / (count - 1);
 
 	let current = 0;
-	for (let x = 1; x <= middleCount; x++) {
+	for (let x = 1; x <= middleCount; x += 1) {
 		current = current + step;
 		const rounded = Math.round(current);
 		spread.push(items[rounded]);
@@ -268,7 +269,7 @@ export function GroupByTimespan(
 
 	return {
 		groupedItems: timelineItems,
-		timespan: timespan,
+		timespan,
 	};
 }
 

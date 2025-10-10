@@ -165,13 +165,13 @@ export class DataService {
 		const itemRejects = [];
 		let handleItemRegistration = false;
 
-		if (!currentFolder) {
-			currentFolder = this.currentFolder;
-		} else {
+		if (currentFolder) {
 			handleItemRegistration = true;
 			items.forEach((item) => {
 				this.registerItem(item);
 			});
+		} else {
+			currentFolder = this.currentFolder;
 		}
 		const folder = new FolderVO({
 			archiveNbr: currentFolder.archiveNbr,
@@ -285,15 +285,15 @@ export class DataService {
 			records.length ? this.api.record.get(records) : Promise.resolve(),
 		);
 
-		if (!withChildren) {
-			promises.push(
-				folders.length ? this.api.folder.get(folders) : Promise.resolve(),
-			);
-		} else {
+		if (withChildren) {
 			promises.push(
 				folders.length
 					? this.api.folder.getWithChildren(folders)
 					: Promise.resolve(),
+			);
+		} else {
+			promises.push(
+				folders.length ? this.api.folder.get(folders) : Promise.resolve(),
 			);
 		}
 		return await Promise.all(promises)
@@ -312,13 +312,13 @@ export class DataService {
 					fullFolders = folderResponse.getFolderVOs();
 				}
 
-				for (let i = 0; i < records.length; i++) {
+				for (let i = 0; i < records.length; i += 1) {
 					records[i].update(fullRecords[i]);
 					records[i].dataStatus = DataStatus.Full;
 					this.tags.checkTagsOnItem(records[i]);
 				}
 
-				for (let i = 0; i < folders.length; i++) {
+				for (let i = 0; i < folders.length; i += 1) {
 					const folder = folders[i] as FolderVO;
 					folder.update(
 						fullFolders[i] as FolderVOData,
@@ -428,9 +428,9 @@ export class DataService {
 
 			const finalUpdatedItems: ItemVO[] = updatedOrderedIds.map((id) => {
 				const isNew = !originalItemsById.has(id);
-				const item = !isNew
-					? originalItemsById.get(id)
-					: updatedItemsById.get(id);
+				const item = isNew
+					? updatedItemsById.get(id)
+					: originalItemsById.get(id);
 				if (isNew) {
 					item.isNewlyCreated = true;
 				}
@@ -448,16 +448,16 @@ export class DataService {
 			return;
 		}
 
-		if (!this.thumbRefreshQueue.length) {
+		if (this.thumbRefreshQueue.length) {
+			const itemsToCheck = this.thumbRefreshQueue;
+			this.thumbRefreshQueue = [];
+			this.debug('checkMissingThumbs %d items', itemsToCheck.length);
+			this.fetchLeanItems(itemsToCheck).then(() => {
+				this.scheduleMissingThumbsCheck();
+			});
+		} else {
 			return this.scheduleMissingThumbsCheck();
 		}
-
-		const itemsToCheck = this.thumbRefreshQueue;
-		this.thumbRefreshQueue = [];
-		this.debug('checkMissingThumbs %d items', itemsToCheck.length);
-		this.fetchLeanItems(itemsToCheck).then(() => {
-			this.scheduleMissingThumbsCheck();
-		});
 	}
 
 	public scheduleMissingThumbsCheck() {
@@ -543,15 +543,7 @@ export class DataService {
 						const index = this.lastManualclickItem
 							? findIndex(items, this.lastManualclickItem)
 							: 0;
-						if (!selectEvent.modifierKey) {
-							let newIndex = index + (selectEvent.key === 'up' ? -1 : 1);
-							newIndex = Math.max(0, newIndex);
-							newIndex = Math.min(items.length - 1, newIndex);
-							const newItem = items[newIndex];
-							if (newItem !== this.lastManualclickItem) {
-								this.clickItemSingle(newItem);
-							}
-						} else {
+						if (selectEvent.modifierKey) {
 							if (!this.lastArrowclickItem) {
 								this.lastArrowclickItem = this.lastManualclickItem;
 							}
@@ -564,6 +556,14 @@ export class DataService {
 							const newItem = items[newIndex];
 							this.clickItemsBetweenIndicies(index, newIndex);
 							this.lastArrowclickItem = newItem;
+						} else {
+							let newIndex = index + (selectEvent.key === 'up' ? -1 : 1);
+							newIndex = Math.max(0, newIndex);
+							newIndex = Math.min(items.length - 1, newIndex);
+							const newItem = items[newIndex];
+							if (newItem !== this.lastManualclickItem) {
+								this.clickItemSingle(newItem);
+							}
 						}
 						break;
 					case 'a':
@@ -616,7 +616,8 @@ export class DataService {
 		const end = Math.max(item1Index, item2Index);
 
 		while (current <= end) {
-			this.selectedItems.add(items[current++]);
+			this.selectedItems.add(items[current]);
+			current += 1;
 		}
 
 		this.selectedItemsSubject.next(this.selectedItems);

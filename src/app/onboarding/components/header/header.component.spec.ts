@@ -14,7 +14,7 @@ describe('OnboardingHeaderComponent', () => {
 	async function defaultRender(accountName: string = 'Unit Test') {
 		return await shallow.render({
 			bind: {
-				accountName: accountName,
+				accountName,
 			},
 		});
 	}

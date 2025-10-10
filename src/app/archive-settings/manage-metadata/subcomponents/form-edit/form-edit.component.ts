@@ -24,7 +24,8 @@ export class FormEditComponent implements OnInit, OnDestroy {
 	protected closeWindowSub: Subscription;
 
 	constructor() {
-		this.id = FormEditComponent.nextId++;
+		this.id = FormEditComponent.nextId;
+		FormEditComponent.nextId += 1;
 	}
 
 	ngOnInit(): void {

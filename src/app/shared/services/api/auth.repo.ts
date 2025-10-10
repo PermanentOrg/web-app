@@ -25,12 +25,12 @@ export class AuthRepo extends BaseRepo {
 	): Observable<AuthResponse> {
 		const accountVO = new AccountVO({
 			primaryEmail: email,
-			rememberMe: rememberMe,
-			keepLoggedIn: keepLoggedIn,
+			rememberMe,
+			keepLoggedIn,
 		});
 
 		const accountPasswordVO = new AccountPasswordVO({
-			password: password,
+			password,
 		});
 
 		return this.http.sendRequest<AuthResponse>(
@@ -51,8 +51,8 @@ export class AuthRepo extends BaseRepo {
 		});
 
 		const authVO = new AuthVO({
-			token: token,
-			type: type,
+			token,
+			type,
 		});
 
 		return this.http.sendRequest<AuthResponse>(

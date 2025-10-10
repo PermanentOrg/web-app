@@ -26,7 +26,7 @@ export class FileSizePipe implements PipeTransform {
 
 			while (bytes >= 1024) {
 				bytes /= 1024;
-				unit++;
+				unit += 1;
 			}
 
 			result = bytes.toFixed(+precision) + ' ' + this.units[unit];

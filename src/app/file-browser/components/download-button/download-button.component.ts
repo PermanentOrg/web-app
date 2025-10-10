@@ -48,12 +48,12 @@ export class DownloadButtonComponent {
 
 	async downloadClick() {
 		if (this.selectedItem instanceof RecordVO) {
-			if (!this.displayDownloadDropdown) {
-				this.displayDownloadOptions();
-				this.bringDropdownIntoView();
-			} else {
+			if (this.displayDownloadDropdown) {
 				this.displayDownloadDropdown = false;
 				this.downloadOptions = [];
+			} else {
+				this.displayDownloadOptions();
+				this.bringDropdownIntoView();
 			}
 		} else {
 			try {

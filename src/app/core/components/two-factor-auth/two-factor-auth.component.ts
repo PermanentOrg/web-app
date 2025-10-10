@@ -80,7 +80,7 @@ export class TwoFactorAuthComponent implements OnInit {
 
 		const char = { 0: '(', 3: ') ', 6: '-' };
 		let formatted = countryCode ? `${countryCode} ` : '';
-		for (let i = 0; i < numbers.length; i++) {
+		for (let i = 0; i < numbers.length; i += 1) {
 			formatted += (char[i] || '') + numbers[i];
 		}
 

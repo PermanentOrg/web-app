@@ -233,10 +233,10 @@ describe('UserChecklistComponent', () => {
 			percentage: number,
 		) {
 			DummyChecklistApi.items = [];
-			for (let i = 0; i < completed; i++) {
+			for (let i = 0; i < completed; i += 1) {
 				DummyChecklistApi.items.push(createTestTask({ completed: true }));
 			}
-			for (let i = 0; i < incomplete; i++) {
+			for (let i = 0; i < incomplete; i += 1) {
 				DummyChecklistApi.items.push(createTestTask({ completed: false }));
 			}
 			const { find } = await shallow.render();

@@ -78,9 +78,7 @@ export class SignupComponent {
 
 			const responseData = this.route.snapshot.data.shareInviteData;
 
-			if (!responseData) {
-				this.isForShareInvite = false;
-			} else {
+			if (responseData) {
 				const itemData: RecordVOData | FolderVOData = {
 					archiveNbr: responseData.recArchiveNbr,
 					folder_linkId: responseData.folder_linkId,
@@ -94,6 +92,8 @@ export class SignupComponent {
 				this.shareItem = this.shareItemIsRecord
 					? new RecordVO(itemData)
 					: new FolderVO(itemData);
+			} else {
+				this.isForShareInvite = false;
 			}
 		}
 

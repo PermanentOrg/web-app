@@ -41,9 +41,9 @@ export class PrLocationPipe implements PipeTransform {
 			}
 			if (!output.line1) {
 				output.line1 = item;
-			} else if (i === 3 || (line2.length > 1 && i === 4) || line2.length > 2) {
-				return;
-			} else {
+			} else if (
+				!(i === 3 || (line2.length > 1 && i === 4) || line2.length > 2)
+			) {
 				line2.push(item);
 				if (i === 4) {
 					return false;

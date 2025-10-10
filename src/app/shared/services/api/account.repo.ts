@@ -33,12 +33,12 @@ export class AccountRepo extends BaseRepo {
 		const requestBody = {
 			primaryEmail: email,
 			primaryPhone: phone,
-			fullName: fullName,
-			agreed: agreed,
-			optIn: optIn,
-			password: password,
+			fullName,
+			agreed,
+			optIn,
+			password,
 			passwordVerify: passwordConfirm,
-			inviteCode: inviteCode,
+			inviteCode,
 			createArchive: createDefaultArchive,
 		};
 

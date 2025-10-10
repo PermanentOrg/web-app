@@ -64,7 +64,7 @@ export class ArchivePayerComponent implements OnInit {
 	}
 
 	async handleAccountInfoChange(val: boolean) {
-		this.archive.payerAccountId = !val ? this.account.accountId : null;
+		this.archive.payerAccountId = val ? null : this.account.accountId;
 		try {
 			this.api.archive.update(this.archive);
 			this.hasPayer = !val;

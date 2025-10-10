@@ -207,14 +207,14 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 						true,
 					);
 				} else if (isSingleItem) {
-					if (!this.isPublic) {
+					if (this.isPublic) {
 						return this.setMultipleActions(
-							['delete', 'copy', 'move', 'share', 'publish'],
+							['delete', 'copy', 'move', 'publish'],
 							true,
 						);
 					} else {
 						return this.setMultipleActions(
-							['delete', 'copy', 'move', 'publish'],
+							['delete', 'copy', 'move', 'share', 'publish'],
 							true,
 						);
 					}
@@ -429,11 +429,11 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 			this.selectedItems.length === 1 &&
 			this.selectedItems[0] instanceof RecordVO
 		) {
-			if (!this.displayDownloadDropdown) {
-				this.displayDownloadOptions();
-			} else {
+			if (this.displayDownloadDropdown) {
 				this.displayDownloadDropdown = false;
 				this.downloadOptions = [];
+			} else {
+				this.displayDownloadOptions();
 			}
 		} else {
 			try {

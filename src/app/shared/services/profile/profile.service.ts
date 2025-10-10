@@ -78,10 +78,10 @@ export function addProfileItemToDictionary(
 ) {
 	const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
 
-	if (!dict[fieldNameUIShort]) {
-		dict[fieldNameUIShort] = [item];
-	} else {
+	if (dict[fieldNameUIShort]) {
 		dict[fieldNameUIShort].push(item);
+	} else {
+		dict[fieldNameUIShort] = [item];
 	}
 }
 
@@ -410,7 +410,7 @@ export class ProfileService {
 				if (itemToCheck) {
 					for (const col of cols) {
 						if (itemToCheck[col]) {
-							filledEntries++;
+							filledEntries += 1;
 						}
 					}
 				}

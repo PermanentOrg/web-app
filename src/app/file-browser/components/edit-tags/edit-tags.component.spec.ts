@@ -49,8 +49,8 @@ describe('EditTagsComponent', () => {
 			`<pr-edit-tags [item]="item" [tagType]="tagType"></pr-edit-tags>`,
 			{
 				bind: {
-					item: item,
-					tagType: tagType,
+					item,
+					tagType,
 				},
 			},
 		);

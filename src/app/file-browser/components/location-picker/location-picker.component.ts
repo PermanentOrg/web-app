@@ -153,17 +153,15 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 			lng: Number(locn.longitude),
 		});
 		this.currentLocationDisplay = this.locationPipe.transform(locn);
-		if (!pan) {
-			this.center = this.currentLocationLatLng;
-		} else {
+		if (pan) {
 			this.map.panTo(this.currentLocationLatLng);
+		} else {
+			this.center = this.currentLocationLatLng;
 		}
 	}
 
 	async save() {
-		if (!this.hasChanged) {
-			this.cancel();
-		} else {
+		if (this.hasChanged) {
 			this.saving = true;
 			try {
 				if (this.profileItem) {
@@ -184,6 +182,8 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 			} finally {
 				this.saving = false;
 			}
+		} else {
+			this.cancel();
 		}
 	}
 

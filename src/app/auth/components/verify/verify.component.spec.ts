@@ -41,7 +41,7 @@ describe('VerifyComponent', () => {
 			provide: ActivatedRoute,
 			useValue: {
 				snapshot: {
-					queryParams: queryParams,
+					queryParams,
 					params: {},
 				},
 			},

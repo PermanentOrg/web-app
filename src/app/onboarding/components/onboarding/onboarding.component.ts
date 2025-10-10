@@ -96,10 +96,10 @@ export class OnboardingComponent implements OnInit {
 			if (localStorage.getItem('shareToken')) {
 				localStorage.removeItem('shareToken');
 				this.router.navigate(['/app', 'shares']);
-			} else if (!this.isGlam) {
-				this.router.navigate(['/app', 'welcome']);
-			} else {
+			} else if (this.isGlam) {
 				this.router.navigate(['/app']);
+			} else {
+				this.router.navigate(['/app', 'welcome']);
 			}
 		}
 	}

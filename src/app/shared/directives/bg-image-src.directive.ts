@@ -61,11 +61,11 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
 	}
 
 	setBgImage(changes?: SimpleChanges) {
-		if (!this.bgSrc) {
+		if (this.bgSrc) {
+			this.loadBgImage();
+		} else {
 			this.renderer.setStyle(this.element, 'background-image', '');
 			this.renderer.removeClass(this.element, 'bg-image-loaded');
-		} else {
-			this.loadBgImage();
 		}
 
 		this.cover

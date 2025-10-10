@@ -44,7 +44,7 @@ describe('FormInputComponent', () => {
 	it('should bind the input type with form control', async () => {
 		const control = new UntypedFormControl('input');
 		const { find } = await shallow.render({
-			bind: { control: control, type: 'password' },
+			bind: { control, type: 'password' },
 		});
 
 		const inputElement = find('input').nativeElement;

@@ -148,7 +148,7 @@ export class NotificationService {
 			await this.api.notification.update(needsUpdate);
 			this.setNewNotificationCount();
 		} catch (err) {
-			for (let i = 0; i < needsUpdate.length; i++) {
+			for (let i = 0; i < needsUpdate.length; i += 1) {
 				const notification = needsUpdate[i];
 				notification.status = originalValues[i];
 			}

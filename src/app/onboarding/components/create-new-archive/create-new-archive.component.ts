@@ -162,7 +162,7 @@ export class CreateNewArchiveComponent implements OnInit {
 		const action = screen === 'reasons' ? 'submit_reasons' : 'submit_goals';
 		this.event.dispatch({
 			entity: 'account',
-			action: action,
+			action,
 		});
 		this.screen = screen;
 		sessionStorage.setItem('onboardingScreen', screen);
@@ -239,7 +239,9 @@ export class CreateNewArchiveComponent implements OnInit {
 			entity: 'account',
 			action: 'skip_create_archive',
 		});
-		if (!this.isGlam) {
+		if (this.isGlam) {
+			this.screen = 'create-archive-for-me';
+		} else {
 			this.dialog
 				.open(SkipOnboardingDialogComponent, {
 					data: { skipOnboarding: this.skipOnboarding },
@@ -255,8 +257,6 @@ export class CreateNewArchiveComponent implements OnInit {
 						this.progressUpdated.emit(1);
 					}
 				});
-		} else {
-			this.screen = 'create-archive-for-me';
 		}
 	}
 
@@ -265,7 +265,7 @@ export class CreateNewArchiveComponent implements OnInit {
 		if (action) {
 			this.event.dispatch({
 				entity: 'account',
-				action: action,
+				action,
 			});
 		}
 		if (this.screen === 'goals') {

@@ -219,9 +219,7 @@ export class FolderPickerComponent implements OnDestroy {
 		} else if (this.currentFolder) {
 			this.chooseFolderDeferred.resolve(this.currentFolder);
 		}
-		if (!this.savePromise) {
-			this.hide();
-		} else {
+		if (this.savePromise) {
 			this.saving = true;
 			this.savePromise
 				.then(() => {
@@ -232,6 +230,8 @@ export class FolderPickerComponent implements OnDestroy {
 					this.saving = false;
 					this.hide();
 				});
+		} else {
+			this.hide();
 		}
 	}
 
