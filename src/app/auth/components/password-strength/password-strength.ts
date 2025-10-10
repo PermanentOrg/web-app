@@ -67,27 +67,23 @@ export class PasswordStrengthComponent implements OnChanges {
 	private setStrength(strengthId: number): void {
 		switch (strengthId) {
 			case 0:
-				this.strength = PasswordStrength.Weak;
+				({ Weak: this.strength } = PasswordStrength);
 				break;
 			case 1:
-				this.strength = PasswordStrength.Medium;
+				({ Medium: this.strength } = PasswordStrength);
 				break;
 			case 3:
-				this.strength = PasswordStrength.Strong;
+				({ Strong: this.strength } = PasswordStrength);
 				break;
 			default:
-				this.strength = PasswordStrength.Null;
+				({ Null: this.strength } = PasswordStrength);
 		}
 
-		const {
-			message,
-			class: passwordClass,
-			progressBars,
-		} = this.strengthConfig[this.strength];
-
-		this.message = message;
-		this.passwordClass = passwordClass;
-		this.progressBars = progressBars;
+		({
+			message: this.message,
+			class: this.passwordClass,
+			progressBars: this.progressBars,
+		} = this.strengthConfig[this.strength]);
 	}
 
 	private updatePasswordStrength(): void {

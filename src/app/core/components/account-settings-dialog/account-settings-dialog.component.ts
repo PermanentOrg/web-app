@@ -40,7 +40,7 @@ export class AccountSettingsDialogComponent {
 		public route: ActivatedRoute,
 	) {
 		if (data.tab) {
-			this.activeTab = data.tab;
+			({ tab: this.activeTab } = data);
 		}
 		if (([...settingsTabs] as string[]).includes(route.snapshot.fragment)) {
 			this.activeTab = route.snapshot.fragment as SettingsTab;

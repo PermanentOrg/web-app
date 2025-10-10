@@ -465,7 +465,7 @@ export class AccountService {
 			.pipe(
 				map((response: AuthResponse) => {
 					if (response.isSuccessful) {
-						const keepLoggedIn = this.account.keepLoggedIn;
+						const { keepLoggedIn } = this.account;
 						const account = new AccountVO({
 							...response.getAccountVO(),
 							keepLoggedIn,
@@ -486,7 +486,7 @@ export class AccountService {
 			.pipe(
 				map((response: AuthResponse) => {
 					if (response.isSuccessful) {
-						const keepLoggedIn = this.account.keepLoggedIn;
+						const { keepLoggedIn } = this.account;
 						const account = new AccountVO({
 							...response.getAccountVO(),
 							keepLoggedIn,

@@ -17,11 +17,12 @@ export class ConfirmPayerDialogComponent {
 		private dialogRef: DialogRef,
 		@Inject(DIALOG_DATA) public data: any,
 	) {
-		this.archiveId = this.data.archiveId;
-		this.isPayerDifferentThanLoggedUser =
-			this.data.isPayerDifferentThanLoggedUser;
-		this.handleAccountInfoChange = this.data.handleAccountInfoChange;
-		this.cancelAccountPayerSet = this.data.cancelAccountPayerSet;
+		({
+			archiveId: this.archiveId,
+			isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
+			handleAccountInfoChange: this.handleAccountInfoChange,
+			cancelAccountPayerSet: this.cancelAccountPayerSet,
+		} = this.data);
 	}
 
 	onDoneClick(): void {

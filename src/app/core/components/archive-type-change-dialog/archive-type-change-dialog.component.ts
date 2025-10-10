@@ -21,7 +21,7 @@ export class ArchiveTypeChangeDialogComponent {
 		@Inject(DIALOG_DATA) public data: any,
 		private msg: MessageService,
 	) {
-		this.archiveType = this.data.archiveType;
+		({ archiveType: this.archiveType } = this.data);
 	}
 
 	public onDoneClick(): void {

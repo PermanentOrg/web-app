@@ -91,7 +91,7 @@ describe('MainComponent', () => {
 		spyOn(promptService, 'confirm');
 
 		fixture = TestBed.createComponent(MainComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	}
 

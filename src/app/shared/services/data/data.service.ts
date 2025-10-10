@@ -536,7 +536,7 @@ export class DataService {
 			case 'key':
 				switch (selectEvent.key) {
 					case 'up':
-					case 'down':
+					case 'down': {
 						const items = this.currentFolder.ChildItemVOs;
 						const index = this.lastManualclickItem
 							? findIndex(items, this.lastManualclickItem)
@@ -564,6 +564,7 @@ export class DataService {
 							}
 						}
 						break;
+					}
 					case 'a':
 						this.clickItemsBetweenIndicies(
 							0,

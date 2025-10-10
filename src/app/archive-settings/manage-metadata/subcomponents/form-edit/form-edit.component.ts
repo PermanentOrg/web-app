@@ -24,7 +24,7 @@ export class FormEditComponent implements OnInit, OnDestroy {
 	protected closeWindowSub: Subscription;
 
 	constructor() {
-		this.id = FormEditComponent.nextId;
+		({ nextId: this.id } = FormEditComponent);
 		FormEditComponent.nextId += 1;
 	}
 
@@ -57,7 +57,7 @@ export class FormEditComponent implements OnInit, OnDestroy {
 		if (event.target) {
 			event.stopPropagation();
 		}
-		this.newValueName = this.displayName;
+		({ displayName: this.newValueName } = this);
 		this.editing = true;
 		this.menuOpen = false;
 	}

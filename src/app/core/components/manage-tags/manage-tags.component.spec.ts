@@ -160,7 +160,7 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 		find('.edit')[0].nativeElement.click();
 		fixture.detectChanges();
 
-		const input = find('.tag input').nativeElement;
+		const { nativeElement: input } = find('.tag input');
 		input.focus();
 		input.value = 'Starchy Tuber';
 		input.dispatchEvent(new Event('change'));
@@ -181,7 +181,7 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 		find('.edit')[0].nativeElement.click();
 		fixture.detectChanges();
 
-		const input = find('.tag input').nativeElement;
+		const { nativeElement: input } = find('.tag input');
 		input.value = 'Do Not Show Value';
 		input.dispatchEvent(new Event('change'));
 		find('.cancel').nativeElement.click();

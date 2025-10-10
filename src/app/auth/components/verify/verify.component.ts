@@ -57,7 +57,7 @@ export class VerifyComponent implements OnInit {
 			});
 			return;
 		}
-		const queryParams = route.snapshot.queryParams;
+		const { snapshot: { queryParams } } = route;
 
 		this.needsEmail = account.emailNeedsVerification();
 		this.needsPhone = account.phoneNeedsVerification();

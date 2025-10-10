@@ -46,7 +46,7 @@ export class NewsletterSignupComponent implements OnInit {
 		private message: MessageService,
 		private accountService: AccountService,
 	) {
-		const queryParams = route.snapshot.queryParams;
+		const { queryParams } = route.snapshot;
 
 		this.mailchimpForm = fb.group({
 			email: ['', [Validators.required, Validators.email]],

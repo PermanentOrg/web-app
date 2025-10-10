@@ -97,8 +97,8 @@ const routes: RoutesWithData = [
 				path: 'app/fa-reset',
 				loadChildren: async () =>
 					await new Promise(() => {
-						const url = window.location.href;
-						const keyAndTenant = url.split('fa-reset')[1];
+						const { location: { href: url } } = window;
+						const [, keyAndTenant] = url.split('fa-reset');
 						window.location.href =
 							fusionauthHost + '/password/change' + keyAndTenant;
 					}),

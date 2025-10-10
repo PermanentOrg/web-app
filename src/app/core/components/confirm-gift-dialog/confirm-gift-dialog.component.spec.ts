@@ -28,7 +28,7 @@ describe('ConfirmGiftDialogComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(ConfirmGiftDialogComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		dialogRef = TestBed.inject(DialogRef) as unknown as MockDialogRef;
 		spyOn(dialogRef, 'close').and.callThrough();
 		fixture.detectChanges();

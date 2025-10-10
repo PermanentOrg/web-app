@@ -45,7 +45,7 @@ describe('AccountSettingsDialogComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(AccountSettingsDialogComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

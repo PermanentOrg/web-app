@@ -42,7 +42,7 @@ function getAlternatingTimelineItemClass() {
 }
 
 function getEvenSpreadItems(items: any[], count = 4) {
-	const length = items.length;
+	const { length } = items;
 	const last = length - 1;
 	const spread = [];
 	if (!items.length) {
@@ -250,7 +250,7 @@ export function GroupByTimespan(
 		});
 
 		for (const key in groups) {
-			if (groups.hasOwnProperty(key)) {
+			if (Object.hasOwn(groups, key)) {
 				const groupItems = groups[key];
 				if (groupItems.length < minimumGroupCount) {
 					timelineItems.push(...groupItems.map((i) => new TimelineItem(i)));

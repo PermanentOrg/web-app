@@ -12,7 +12,7 @@ describe('BasicLoadingSpinnerComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(BasicLoadingSpinnerComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

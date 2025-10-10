@@ -142,7 +142,7 @@ export class SharesComponent
 
 		this.sharesFolder.ChildItemVOs = this.shareItems;
 
-		const queryParams = this.route.snapshot.queryParams;
+		const { queryParams } = this.route.snapshot;
 
 		if (queryParams.shareArchiveNbr) {
 			const targetItem = find(this.allShareItems, {

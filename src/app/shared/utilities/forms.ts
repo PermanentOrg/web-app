@@ -75,7 +75,7 @@ export const FORM_ERROR_MESSAGES = {
 export function setFormErrors(form: UntypedFormGroup, errors: any) {
 	if (form.valid) {
 		for (const key in errors) {
-			if (errors.hasOwnProperty(key)) {
+			if (Object.hasOwn(errors, key)) {
 				delete errors[key];
 			}
 		}
@@ -95,7 +95,7 @@ export function setFormErrors(form: UntypedFormGroup, errors: any) {
 }
 
 export function getFormInputError(formInput: FormInputComponent | FormInput) {
-	const control = formInput.control;
+	const { control } = formInput;
 
 	if (
 		control.valid ||

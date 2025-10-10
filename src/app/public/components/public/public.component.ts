@@ -59,7 +59,7 @@ export class PublicComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		const publishedItem = this.route.snapshot.firstChild.data.publishedItem;
+		const { publishedItem } = this.route.snapshot.firstChild.data;
 
 		if (!publishedItem) {
 			this.missing = true;
