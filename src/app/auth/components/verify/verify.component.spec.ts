@@ -68,7 +68,7 @@ describe('VerifyComponent', () => {
 		accountService.setArchive(authResponse.getArchiveVO());
 
 		fixture = TestBed.createComponent(VerifyComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	}
 

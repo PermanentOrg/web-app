@@ -34,7 +34,7 @@ describe('UploadButtonComponent', () => {
 		dataService = TestBed.inject(DataService);
 
 		fixture = TestBed.createComponent(UploadButtonComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

@@ -13,7 +13,7 @@ describe('OrDividerComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(OrDividerComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

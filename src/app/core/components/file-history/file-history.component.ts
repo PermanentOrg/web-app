@@ -41,7 +41,7 @@ export class FileHistoryComponent implements OnInit {
 				this.account.getAccount(),
 			);
 			const ledgerItems = response.getLedgerNonfinancialVOs().reverse();
-			this.ledgerItemCount = ledgerItems.length;
+			({ length: this.ledgerItemCount } = ledgerItems);
 			this.ledgerItemPages = chunk(ledgerItems, this.pageSize);
 		} catch (err) {
 			this.message.showError({

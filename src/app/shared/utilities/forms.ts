@@ -86,7 +86,8 @@ export function setFormErrors(form: UntypedFormGroup, errors: any) {
 			const control = form.get(controlName);
 			if (control.dirty && control.errors) {
 				const errorName = Object.keys(control.errors).pop();
-				errors[controlName] = FORM_ERROR_MESSAGES[controlName][errorName];
+				const { [controlName]: controlMessages } = FORM_ERROR_MESSAGES;
+				errors[controlName] = controlMessages[errorName];
 			} else {
 				errors[controlName] = null;
 			}
@@ -95,7 +96,7 @@ export function setFormErrors(form: UntypedFormGroup, errors: any) {
 }
 
 export function getFormInputError(formInput: FormInputComponent | FormInput) {
-	const control = formInput.control;
+	const { control } = formInput;
 
 	if (
 		control.valid ||

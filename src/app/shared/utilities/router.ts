@@ -27,15 +27,18 @@ export function findRouteData(
 	let lastChild = snapshot;
 
 	while (lastChild.firstChild) {
-		lastChild = snapshot.firstChild;
+		const { firstChild } = snapshot;
+		lastChild = firstChild;
 	}
 
 	let data = null;
 	let currentSnapshot = lastChild;
 
 	while (!data && currentSnapshot) {
-		data = currentSnapshot.data[dataProp];
-		currentSnapshot = currentSnapshot.parent;
+		const { [dataProp]: dataValue } = currentSnapshot.data;
+		data = dataValue;
+		const { parent } = currentSnapshot;
+		currentSnapshot = parent;
 	}
 
 	return data;

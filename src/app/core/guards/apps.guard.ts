@@ -20,7 +20,7 @@ export class AppsGuard {
 		next: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Observable<boolean> | Promise<boolean> | boolean {
-		const queryParams = next.queryParams;
+		const { queryParams } = next;
 
 		if (queryParams && queryParams.redirect === 'facebook') {
 			this.router.navigate(['/apps']);
@@ -34,7 +34,7 @@ export class AppsGuard {
 		next: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Observable<boolean> | Promise<boolean> | boolean {
-		const queryParams = next.queryParams;
+		const { queryParams } = next;
 
 		if (queryParams && queryParams.redirect === 'facebook') {
 			this.router.navigate(['/apps']);

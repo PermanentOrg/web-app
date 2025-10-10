@@ -12,7 +12,7 @@ describe('ArchiveStoragePayerComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(ArchiveStoragePayerComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

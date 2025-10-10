@@ -138,7 +138,6 @@ export default typescriptEslint.config([
 			'class-methods-use-this': 'off',
 			'no-param-reassign': 'off',
 			'prefer-arrow/prefer-arrow-functions': 'off',
-			'prefer-destructuring': 'off',
 		},
 	},
 	{
@@ -187,7 +186,6 @@ export default typescriptEslint.config([
 			'@typescript-eslint/no-magic-numbers': 'off',
 			'@typescript-eslint/no-unsafe-type-assertion': 'off',
 			'@typescript-eslint/explicit-function-return-type': 'off',
-			'@typescript-eslint/prefer-destructuring': 'off',
 			'@typescript-eslint/prefer-optional-chain': 'off',
 			'@typescript-eslint/no-confusing-void-expression': 'off',
 			'@typescript-eslint/init-declarations': 'off',

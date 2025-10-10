@@ -386,7 +386,7 @@ export class EditService {
 		}
 
 		if (records.length) {
-			const archiveId = this.accountService.getArchive().archiveId;
+			const { archiveId } = this.accountService.getArchive();
 			promises.push(this.api.record.update(records, archiveId));
 		} else {
 			promises.push(Promise.resolve());

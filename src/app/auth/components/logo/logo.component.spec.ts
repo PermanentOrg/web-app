@@ -12,7 +12,7 @@ describe('LogoComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(LogoComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

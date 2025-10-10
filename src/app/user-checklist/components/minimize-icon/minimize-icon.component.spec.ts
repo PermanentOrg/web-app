@@ -12,7 +12,7 @@ describe('MinimizeIconComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(MinimizeIconComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

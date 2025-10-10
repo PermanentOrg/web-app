@@ -1,0 +1,853 @@
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/auth/components/password-strength/password-strength.ts
+  82:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/archive-payer/archive-payer.component.ts
+  52:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  72:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/archive-type-change-dialog/archive-type-change-dialog.component.ts
+  24:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/confirm-payer-dialog/confirm-payer-dialog.component.ts
+  20:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/connections-dialog/connections-dialog.component.ts
+  180:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  181:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  182:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  183:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  185:13  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  186:13  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  230:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  260:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  269:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  271:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/left-menu/left-menu.component.ts
+  99:7  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/main/main.component.ts
+  162:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  262:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  395:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  402:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  413:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/manage-tags/manage-tags.component.spec.ts
+  208:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/members-dialog/members-dialog.component.ts
+  120:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  121:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  131:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  248:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  297:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/multi-select-status/multi-select-status.component.ts
+  24:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/profile-edit/profile-edit.component.ts
+  150:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  156:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  171:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  185:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/public-settings/public-settings.component.ts
+  25:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/right-menu/right-menu.component.ts
+   74:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  104:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/skip-onboarding-dialog/skip-onboarding-dialog.component.ts
+  23:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/transaction-history/transaction-history.component.ts
+  44:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/two-factor-auth/two-factor-auth.component.ts
+  94:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/upload-button/upload-button.component.spec.ts
+  97:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/upload-progress/upload-progress.component.ts
+  37:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  57:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  60:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/welcome-dialog/welcome-dialog.component.ts
+  34:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/components/welcome-invitation-dialog/welcome-invitation-dialog.component.ts
+  25:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/resolves/folder-resolve.service.ts
+  45:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  46:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/resolves/lean-folder-resolve.service.ts
+  44:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  45:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/resolves/record-resolve.service.spec.ts
+   73:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  121:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/resolves/record-resolve.service.ts
+  39:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/resolves/root-folder-resolve.service.ts
+  24:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/services/edit/edit.service.ts
+  193:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  239:13  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+  340:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  407:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  418:11  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+  425:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/services/upload/upload.service.spec.ts
+   91:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  107:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/services/upload/upload.service.ts
+   63:12  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  183:13  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  203:12  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  257:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  271:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  272:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  335:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/services/upload/upload.session.ts
+  128:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  131:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/core/services/upload/uploader.ts
+  106:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/directive/components/directive-dialog/directive-dialog.component.spec.ts
+  34:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/directive/components/directive-display/directive-display.component.ts
+  31:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  32:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/directive/components/directive-display/directive-display.stories.ts
+  82:2  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/directive/components/directive-edit/directive-edit.component.ts
+  33:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  34:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  36:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  47:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  48:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/directive/components/directive-edit/directive-edit.stories.ts
+  93:2  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  94:2  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/directive/components/legacy-contact-dialog/legacy-contact-dialog.component.spec.ts
+  35:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/directive/components/legacy-contact-display/legacy-contact-display.component.ts
+  23:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/directive/components/legacy-contact-display/legacy-contact-display.stories.ts
+  52:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  53:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/embed/components/done-embed/done-embed.component.ts
+  24:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/embed/components/login-embed/login-embed.component.spec.ts
+  59:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/embed/components/login-embed/login-embed.component.ts
+  15:7  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  42:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  44:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/embed/components/newsletter-signup/newsletter-signup.component.ts
+   49:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  104:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/embed/components/signup-embed/signup-embed.component.spec.ts
+  52:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/embed/components/signup-embed/signup-embed.component.ts
+  15:7  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  44:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  46:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/download-button/download-button.component.spec.ts
+  28:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/edit-tags/edit-tags.component.ts
+  103:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  104:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  126:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  167:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  170:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  205:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/file-list-controls/file-list-controls.component.spec.ts
+  99:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/file-list-controls/file-list-controls.component.ts
+  129:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  288:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  312:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  465:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/file-list-item/file-list-item.component.spec.ts
+  138:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/file-list-item/file-list-item.component.ts
+   328:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   362:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   386:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   648:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   649:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   650:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   651:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   857:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   860:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   988:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1032:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1054:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1055:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1056:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1063:13  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1080:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1084:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1087:8   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1089:8   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1092:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  1096:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/file-list/file-list.component.spec.ts
+  127:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  140:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  171:9  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/file-list/file-list.component.ts
+  154:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  156:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  157:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  168:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  208:11  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  326:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  327:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  330:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  349:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  397:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  413:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  414:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/file-viewer/file-viewer.component.ts
+   96:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   98:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  109:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  164:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  185:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  195:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  330:7  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  344:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/folder-view/folder-view.component.ts
+  17:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  21:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/location-picker/location-picker.component.ts
+   81:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   82:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   83:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  117:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  119:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  159:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  201:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  203:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  231:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  248:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/publish/publish.component.ts
+  59:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  99:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/share-link-dropdown/share-link-dropdown.component.spec.ts
+  69:9  error  Use array destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/share-link-dropdown/share-link-dropdown.component.ts
+  29:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/sharing-dialog/sharing-dialog.component.spec.ts
+  115:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  216:9  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+  236:9  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/sharing-dialog/sharing-dialog.component.ts
+  175:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  183:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  302:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  303:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  320:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  458:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  463:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  480:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  548:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/sharing/sharing.component.ts
+   99:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  109:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  264:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  284:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  380:4  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/file-browser/components/sidebar/sidebar.component.ts
+   56:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   59:6   error  Use array destructuring   @typescript-eslint/prefer-destructuring
+  189:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  190:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/account-password-vo.ts
+  25:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/archive-vo.spec.ts
+  48:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  74:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/base-vo.ts
+  17:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  30:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  40:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  53:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/billing-payment-vo.ts
+  17:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  19:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  20:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  21:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  22:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  23:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  26:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  27:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/connector-overview-vo.ts
+  37:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  38:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  39:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  40:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  41:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  42:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  43:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  44:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  45:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  46:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  47:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/directive.ts
+  40:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/folder-vo.ts
+  163:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/get-thumbnail.ts
+  28:8  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/record-vo.spec.ts
+  22:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  38:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  60:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/record-vo.ts
+  135:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  152:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/models/tag-vo.ts
+  25:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  26:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  27:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  28:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/notifications/services/notification.service.spec.ts
+  149:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  186:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/notifications/services/notification.service.ts
+  123:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  142:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  152:11  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  153:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  192:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/archive-creation-with-share/archive-creation-with-share.component.ts
+  24:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  32:11  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  33:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/archive-type-select/archive-type-select.component.spec.ts
+  14:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/create-new-archive/create-new-archive.component.spec.ts
+   76:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  102:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  113:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  115:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/create-new-archive/create-new-archive.component.ts
+  183:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  252:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  254:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  264:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  310:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  313:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  322:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  334:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  335:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  336:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  341:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  346:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/glam-pending-archives/glam-pending-archives.component.ts
+  30:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/glam/archive-creation-start-screen/archive-creation-start-screen.component.spec.ts
+  35:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/glam/archive-creation-start-screen/archive-creation-start-screen.component.ts
+  19:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/glam/archive-type-icon/archive-type-icon.component.spec.ts
+  15:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/glam/archive-type-select/archive-type-select.component.ts
+  55:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  56:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/glam/create-archive-for-me-screen/create-archive-for-me-screen.component.ts
+  24:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/glam/pending-archive/pending-archive.component.spec.ts
+  94:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/glam/select-archive-type-screen/select-archive-type-screen.component.ts
+  52:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/onboarding/onboarding.component.spec.ts
+  195:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/onboarding/onboarding.component.stories.ts
+  235:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  238:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/onboarding/components/onboarding/onboarding.component.ts
+   59:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   69:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  121:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  124:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  127:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  147:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/pledge/components/claim-storage/claim-storage.component.ts
+  15:7  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  46:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/pledge/components/new-pledge/new-pledge.component.ts
+   95:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  106:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  131:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  152:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  154:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  166:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  201:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  250:11  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  253:11  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/pledge/components/phase-progress/phase-progress.component.ts
+   87:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  101:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  103:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  104:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/pledge/components/update-card/update-card.component.ts
+   45:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   78:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  104:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  108:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/components/archive-search/archive-search.component.spec.ts
+  52:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/components/archive-search/archive-search.component.ts
+  112:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/components/public-archive-web-links/public-archive-web-links.component.spec.ts
+  15:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/components/public-search-bar-results/public-search-bar-results.component.spec.ts
+  19:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/components/public-search-results/public-search-results.component.spec.ts
+  43:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/components/public-search-results/public-search-results.component.ts
+  47:8  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/components/public/public.component.ts
+  62:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  71:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  77:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  79:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  88:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/resolves/public-archive-resolve.service.ts
+  16:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/resolves/public-profile-items-resolve.service.ts
+  17:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/resolves/public-root-resolve.service.ts
+  20:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/resolves/public-tags-resolve.service.ts
+  17:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/public/resolves/publish-archive-resolve.service.ts
+  23:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  24:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/route-history/route-history.service.ts
+  24:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/search/components/global-search-bar/global-search-bar.component.ts
+  212:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/search/components/global-search-results/global-search-results.component.ts
+  95:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/share-preview/components/create-account-dialog/create-account-dialog.component.spec.ts
+  44:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/share-preview/components/create-account-dialog/create-account-dialog.component.ts
+  23:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/share-preview/components/share-preview-footer/share-preview-footer.component.ts
+  62:7  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  79:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/share-preview/components/share-preview/share-preview.component.spec.ts
+  108:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/share-preview/components/share-preview/share-preview.component.ts
+   35:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  118:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  190:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  248:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  249:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  327:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  340:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  343:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  345:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  347:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  349:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  603:13  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/share-preview/resolves/preview-archive-resolve.service.ts
+  23:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  24:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/share-preview/resolves/preview-folder-resolve.service.ts
+  45:2  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/share-preview/resolves/preview-resolve.service.ts
+  47:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  89:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  92:11  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+  94:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  95:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  96:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  97:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/archive-picker/archive-picker.component.spec.ts
+  37:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/archive-picker/archive-picker.component.ts
+  57:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  58:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  87:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/archive-search-box/archive-search-box.component.ts
+  133:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  164:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/archive-small/archive-small.component.spec.ts
+  29:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/archive-switcher-dialog/archive-switcher-dialog.component.ts
+  32:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/archive-switcher/archive-switcher.component.spec.ts
+  108:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/audio/audio.component.spec.ts
+  15:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/breadcrumbs/breadcrumbs.component.spec.ts
+  37:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/breadcrumbs/breadcrumbs.component.ts
+  144:11  error  Use array destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/folder-view-toggle/folder-view-toggle.component.ts
+  44:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/inline-value-edit/inline-value-edit.component.spec.ts
+   49:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  175:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  205:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  229:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  256:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  292:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  317:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  362:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  397:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  416:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  435:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/inline-value-edit/inline-value-edit.component.ts
+   99:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  149:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  190:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/message/message.component.spec.ts
+  22:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/message/message.component.ts
+  56:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  57:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  58:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  61:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  62:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/mobile-banner/mobile-banner.component.ts
+  40:7  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/prompt/prompt.component.spec.ts
+  18:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/static-map/static-map.component.spec.ts
+  15:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/static-map/static-map.component.ts
+  60:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  61:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  63:7  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/storage-meter/storage-meter.component.ts
+  38:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  39:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  67:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  68:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/switcher/switcher.component.spec.ts
+  15:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/tags/tags.component.spec.ts
+  19:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/thumbnail/thumbnail.component.ts
+  47:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  71:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  72:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  73:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  99:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/timeline-complete-dialog/timeline-complete-dialog.component.ts
+  28:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/video/video.component.spec.ts
+  22:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/video/video.component.ts
+  46:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/components/zooming-image-viewer/zooming-image-viewer.component.ts
+  40:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/directives/bg-image-src.directive.ts
+  29:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  60:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/directives/drag-target-router-link.directive.ts
+  39:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  48:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  75:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/directives/scroll-nav.directive.ts
+  53:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  56:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/directives/scroll-section.directive.ts
+  12:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/pipes/folder-contents.pipe.ts
+  11:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  12:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/pipes/pr-location.pipe.ts
+  58:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/account/account.service.helpers.ts
+  23:8  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/account/account.service.ts
+  358:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  370:8   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  468:13  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  489:13  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/analytics/analytics.service.spec.ts
+  860:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  861:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/analytics/analytics.service.ts
+  129:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  132:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/api/account.repo.ts
+  56:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/api/archive.repo.spec.ts
+  84:11  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/api/base.ts
+  21:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  22:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  23:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  25:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/api/billing.repo.ts
+  133:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  153:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/api/directive.repo.ts
+  90:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/api/folder.repo.ts
+  186:9  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+  213:9  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+  336:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  364:6  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/api/invite.repo.ts
+  61:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  63:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/api/record.repo.ts
+   44:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   45:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+   46:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  367:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  368:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  369:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/api/search.repo.ts
+   71:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  128:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/data/data.service.spec.ts
+  163:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/data/data.service.ts
+  174:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  218:12  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  223:7   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  317:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  327:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  333:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  383:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  450:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  494:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  540:13  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  546:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  554:14  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  561:14  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  611:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  627:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  681:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/drag/drag.service.ts
+  142:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  173:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  195:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  239:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  252:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  280:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  288:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/folder-view/folder-view.service.spec.ts
+  22:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/folder-view/folder-view.service.ts
+  28:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/google-analytics/google-analytics.service.ts
+  28:4  error  Use array destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/http-v2/http-v2.service.spec.ts
+   24:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  107:11  error  Use array destructuring   @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/http-v2/http-v2.service.ts
+  158:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/pr-constants/pr-constants.service.ts
+  127:7  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  130:4  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/profile/profile.service.ts
+  118:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  161:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  193:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  194:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  229:11  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  241:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  290:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  291:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  295:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  329:5   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  343:9   error  Use array destructuring   @typescript-eslint/prefer-destructuring
+  344:3   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  346:4   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  355:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  372:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  373:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  399:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  406:11  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/services/secrets/secrets.service.ts
+  10:2  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/utilities/debug.ts
+  11:2  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/utilities/forms.ts
+   89:5  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  135:8  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  136:8  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shared/utilities/router.ts
+  38:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/shares/components/shares/shares.component.ts
+  143:3  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  145:9  error  Use object destructuring  @typescript-eslint/prefer-destructuring
+--
+/Users/slifty/Maestral/Code/permanent/web-app/src/app/views/components/timeline-view/timeline-breadcrumbs/timeline-breadcrumbs.component.ts
+  113:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  157:6   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  177:9   error  Use object destructuring  @typescript-eslint/prefer-destructuring
+  179:10  error  Use object destructuring  @typescript-eslint/prefer-destructuring

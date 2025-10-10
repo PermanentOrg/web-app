@@ -35,14 +35,14 @@ const TimelineItemClasses = [
 let timelineItemClassCounter = 0;
 
 function getAlternatingTimelineItemClass() {
-	const result =
-		TimelineItemClasses[timelineItemClassCounter % TimelineItemClasses.length];
+	const { length } = TimelineItemClasses;
+	const { [timelineItemClassCounter % length]: result } = TimelineItemClasses;
 	timelineItemClassCounter += 1;
 	return result;
 }
 
 function getEvenSpreadItems(items: any[], count = 4) {
-	const length = items.length;
+	const { length } = items;
 	const last = length - 1;
 	const spread = [];
 	if (!items.length) {
@@ -88,7 +88,8 @@ export class TimelineItem implements DataItem, TimelineDataItem {
 
 	constructor(item: ItemVO, timezone: TimezoneVOData = null) {
 		this.item = item;
-		this.content = item.displayName;
+		const { displayName } = item;
+		this.content = displayName;
 		this.className = getAlternatingTimelineItemClass();
 		this.start = getTimezoneDateFromDisplayDate(
 			item.displayDT,
@@ -191,12 +192,13 @@ function getTimezoneDateFromDisplayDate(
 		return m;
 	}
 
+	const { dstOffset, stdOffset } = timezone;
 	let offset;
 
 	if (m.isDST()) {
-		offset = timezone.dstOffset;
+		offset = dstOffset;
 	} else {
-		offset = timezone.stdOffset;
+		offset = stdOffset;
 	}
 
 	const offsetMinutes = moment().utcOffset(offset).utcOffset();
@@ -251,7 +253,7 @@ export function GroupByTimespan(
 
 		for (const key in groups) {
 			if (Object.hasOwn(groups, key)) {
-				const groupItems = groups[key];
+				const { [key]: groupItems } = groups;
 				if (groupItems.length < minimumGroupCount) {
 					timelineItems.push(...groupItems.map((i) => new TimelineItem(i)));
 				} else {

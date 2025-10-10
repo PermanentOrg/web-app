@@ -12,7 +12,7 @@ describe('ChecklistIconComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(ChecklistIconComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

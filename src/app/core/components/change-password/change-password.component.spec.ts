@@ -30,7 +30,7 @@ describe('ChangePasswordComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(ChangePasswordComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

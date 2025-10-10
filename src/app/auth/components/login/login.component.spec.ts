@@ -336,7 +336,9 @@ describe('LoginComponent', () => {
 
 		instance.waiting = true;
 		fixture.detectChanges();
-		const compiled = fixture.debugElement.nativeElement;
+		const {
+			debugElement: { nativeElement: compiled },
+		} = fixture;
 		const loadingSpinner = compiled.querySelector('pr-loading-spinner');
 
 		expect(loadingSpinner).toBeTruthy();

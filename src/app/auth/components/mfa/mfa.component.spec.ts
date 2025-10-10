@@ -29,7 +29,7 @@ describe('MfaComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(MfaComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 
@@ -50,7 +50,9 @@ describe('MfaComponent', () => {
 	it('should display the loading spinner', () => {
 		component.waiting = true;
 		fixture.detectChanges();
-		const compiled = fixture.debugElement.nativeElement;
+		const {
+			debugElement: { nativeElement: compiled },
+		} = fixture;
 		const loadingSpinner = compiled.querySelector('pr-loading-spinner');
 
 		expect(loadingSpinner).toBeTruthy();

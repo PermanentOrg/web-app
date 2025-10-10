@@ -12,7 +12,7 @@ describe('V3RootComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(V3RootComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

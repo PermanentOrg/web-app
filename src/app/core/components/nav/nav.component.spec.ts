@@ -20,7 +20,7 @@ describe('NavComponent', () => {
 		TestBed.configureTestingModule(config).compileComponents();
 
 		fixture = TestBed.createComponent(NavComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

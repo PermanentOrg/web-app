@@ -205,7 +205,7 @@ export class FileListComponent
 		this.subscriptions.push(
 			this.account.archiveChange.subscribe(async (archive) => {
 				// may be in a subfolder we don't have access to, reload just the 'root'
-				const url = this.router.url;
+				const { url } = this.router;
 				const urlParts = url.split('/').slice(0, 3);
 				const currentRoot = urlParts.join('/');
 				if (currentRoot === url) {
@@ -408,7 +408,7 @@ export class FileListComponent
 	checkDragScrolling(event: MouseEvent) {
 		const scrollElem = this.scrollElement.nativeElement as HTMLElement;
 		const bounds = scrollElem.getBoundingClientRect();
-		const top = bounds.top;
+		const { top } = bounds;
 		const bottom = top + bounds.height;
 		const currentScrollTop = scrollElem.scrollTop;
 		const currentScrollHeight = scrollElem.scrollHeight;

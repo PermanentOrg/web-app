@@ -34,7 +34,7 @@ describe('FolderPickerComponent', () => {
 
 		TestBed.inject(HttpTestingController);
 
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

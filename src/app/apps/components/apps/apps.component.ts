@@ -44,8 +44,20 @@ export class AppsComponent
 		private storage: StorageService,
 		private guidedTour: GuidedTourService,
 	) {
-		this.appsFolder = this.route.snapshot.data.appsFolder;
-		this.connectors = this.route.snapshot.data.connectors;
+		({
+			route: {
+				snapshot: {
+					data: { appsFolder: this.appsFolder },
+				},
+			},
+		} = this);
+		({
+			route: {
+				snapshot: {
+					data: { connectors: this.connectors },
+				},
+			},
+		} = this);
 
 		this.dataService.setCurrentFolder(this.appsFolder);
 
@@ -69,8 +81,20 @@ export class AppsComponent
 				.pipe(filter((event) => event instanceof NavigationEnd))
 				.subscribe((event: NavigationEnd) => {
 					if (event.url === '/app/apps') {
-						this.appsFolder = this.route.snapshot.data.appsFolder;
-						this.connectors = this.route.snapshot.data.connectors;
+						({
+							route: {
+								snapshot: {
+									data: { appsFolder: this.appsFolder },
+								},
+							},
+						} = this);
+						({
+							route: {
+								snapshot: {
+									data: { connectors: this.connectors },
+								},
+							},
+						} = this);
 
 						this.dataService.setCurrentFolder(this.appsFolder);
 					}
@@ -79,7 +103,11 @@ export class AppsComponent
 	}
 
 	ngAfterViewInit() {
-		const queryParams = this.route.snapshot.queryParams;
+		const {
+			route: {
+				snapshot: { queryParams },
+			},
+		} = this;
 
 		if (queryParams.facebook !== undefined) {
 			const connectorComponents = this.connectorComponents.toArray();

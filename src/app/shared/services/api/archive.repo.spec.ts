@@ -96,7 +96,7 @@ describe('ArchiveRepo', () => {
 		const archive = new ArchiveVO({ archiveId: 1, type: 'type.archive.group' });
 
 		repo.create(archive).then((response: ArchiveResponse) => {
-			const type = response.getArchiveVO().type;
+			const { type } = response.getArchiveVO();
 
 			expect(type).toEqual('type.archive.group');
 		});

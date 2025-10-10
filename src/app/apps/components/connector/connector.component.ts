@@ -183,7 +183,7 @@ export class ConnectorComponent implements OnInit {
 			const userResponse = await this.api.connector.getFamilysearchTreeUser(
 				this.account.getArchive(),
 			);
-			const userResponseData = userResponse.getResultsData()[0][0];
+			const [[userResponseData]] = userResponse.getResultsData();
 
 			const treeResponse = await this.api.connector.getFamilysearchAncestry(
 				this.account.getArchive(),
@@ -191,7 +191,7 @@ export class ConnectorComponent implements OnInit {
 			);
 			this.waiting = false;
 
-			const treeResponseData = treeResponse.getResultsData()[0][0];
+			const [[treeResponseData]] = treeResponse.getResultsData();
 			return {
 				currentUserData: userResponseData,
 				treeData: treeResponseData.persons,
