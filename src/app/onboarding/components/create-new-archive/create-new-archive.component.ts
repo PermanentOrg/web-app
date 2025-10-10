@@ -286,11 +286,12 @@ export class CreateNewArchiveComponent implements OnInit {
 
 	private setName(archiveTypeTag: OnboardingTypes): void {
 		switch (archiveTypeTag) {
-			case OnboardingTypes.unsure:
+			case OnboardingTypes.unsure: {
 				const name = this.accountService.getAccount()?.fullName;
 				this.name = name;
 				sessionStorage.setItem('archiveName', name);
 				break;
+			}
 			default:
 				this.name = '';
 				break;

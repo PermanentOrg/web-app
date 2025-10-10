@@ -396,7 +396,7 @@ export class FileListItemComponent
 
 		switch (dragEvent.type) {
 			case 'start':
-			case 'end':
+			case 'end': {
 				const start = dragEvent.type === 'start';
 
 				if (this.item.isRecord && dragEvent.targetTypes.includes('record')) {
@@ -412,6 +412,7 @@ export class FileListItemComponent
 				}
 
 				break;
+			}
 		}
 	}
 
