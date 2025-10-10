@@ -140,7 +140,6 @@ export default typescriptEslint.config([
 			'no-case-declarations': 'off',
 			'no-param-reassign': 'off',
 			'no-promise-executor-return': 'off',
-			'no-prototype-builtins': 'off',
 			'no-restricted-globals': 'off',
 			'no-restricted-properties': 'off',
 			'prefer-arrow/prefer-arrow-functions': 'off',
