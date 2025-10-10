@@ -17,7 +17,7 @@
 		"coverage": "npm run secrets && ng test --source-map --no-watch --code-coverage",
 		"coverage:ci": "npm run coverage -- --browsers chrome_headless_no_sandbox",
 		"lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:tsc",
-		"lint:eslint": "eslint ./src --ext .ts",
+		"lint:eslint": "eslint ./src --ext .ts --max-warnings=0",
 		"lint:prettier": "prettier . --check",
 		"lint:tsc": "tsc --noEmit",
 		"format": "npm run format:prettier && npm run format:eslint",

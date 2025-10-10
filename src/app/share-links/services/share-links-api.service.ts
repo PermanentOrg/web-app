@@ -26,7 +26,7 @@ export class ShareLinksApiService {
 		const response = await firstValueFrom(
 			this.http.get<{ items: ShareLink[] }>(
 				'v2/share-links',
-				{ shareTokens: shareTokens },
+				{ shareTokens },
 				null,
 				{
 					authToken: false,
