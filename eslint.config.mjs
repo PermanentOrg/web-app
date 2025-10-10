@@ -141,7 +141,6 @@ export default typescriptEslint.config([
 			'prefer-destructuring': 'off',
 			'prefer-exponentiation-operator': 'off',
 			'prefer-promise-reject-errors': 'off',
-			'prefer-regex-literals': 'off',
 			'prefer-template': 'off',
 			'vars-on-top': 'off',
 		},
