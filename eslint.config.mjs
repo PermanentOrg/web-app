@@ -140,7 +140,6 @@ export default typescriptEslint.config([
 			'prefer-arrow/prefer-arrow-functions': 'off',
 			'prefer-destructuring': 'off',
 			'prefer-exponentiation-operator': 'off',
-			'prefer-promise-reject-errors': 'off',
 			'prefer-template': 'off',
 			'vars-on-top': 'off',
 		},
