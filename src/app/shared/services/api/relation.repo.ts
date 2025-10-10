@@ -15,7 +15,7 @@ export class RelationRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/getAll',
 			data,
-			{ responseClass: RelationResponse },
+			{ ResponseClass: RelationResponse },
 		);
 	}
 
@@ -30,7 +30,7 @@ export class RelationRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/post',
 			[data],
-			{ responseClass: RelationResponse },
+			{ ResponseClass: RelationResponse },
 		);
 	}
 
@@ -45,7 +45,7 @@ export class RelationRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/update',
 			[data],
-			{ responseClass: RelationResponse },
+			{ ResponseClass: RelationResponse },
 		);
 	}
 
@@ -60,7 +60,7 @@ export class RelationRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/acceptRelation',
 			[data],
-			{ responseClass: RelationResponse },
+			{ ResponseClass: RelationResponse },
 		);
 	}
 
@@ -74,7 +74,7 @@ export class RelationRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<RelationResponse>(
 			'/relation/delete',
 			[data],
-			{ responseClass: RelationResponse },
+			{ ResponseClass: RelationResponse },
 		);
 	}
 }

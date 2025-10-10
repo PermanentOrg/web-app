@@ -9,7 +9,7 @@ export class ConnectorRepo extends BaseRepo {
 		return this.http.sendRequest<ConnectorResponse>(
 			'/connector/getOverview',
 			connectors,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -23,7 +23,7 @@ export class ConnectorRepo extends BaseRepo {
 		return this.http.sendRequest<ConnectorResponse>(
 			'/connector/familysearchSetup',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -43,7 +43,7 @@ export class ConnectorRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ConnectorResponse>(
 			`/connector/familysearchAuthorize`,
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -57,7 +57,7 @@ export class ConnectorRepo extends BaseRepo {
 		return this.http.sendRequest<ConnectorResponse>(
 			'/connector/familysearchDisconnect',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -71,7 +71,7 @@ export class ConnectorRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchUser',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -85,7 +85,7 @@ export class ConnectorRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchTreeUser',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -103,7 +103,7 @@ export class ConnectorRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchAncestry',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -121,7 +121,7 @@ export class ConnectorRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/getFamilysearchMemories',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -153,7 +153,7 @@ export class ConnectorRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemoryImportRequest',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -171,7 +171,7 @@ export class ConnectorRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemorySyncRequest',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -189,7 +189,7 @@ export class ConnectorRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchMemoryUploadRequest',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 
@@ -213,7 +213,7 @@ export class ConnectorRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ConnectorResponse>(
 			'/connector/familysearchFactImportRequest',
 			data,
-			{ responseClass: ConnectorResponse },
+			{ ResponseClass: ConnectorResponse },
 		);
 	}
 }

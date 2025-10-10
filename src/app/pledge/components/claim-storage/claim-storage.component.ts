@@ -37,10 +37,10 @@ export class ClaimStorageComponent {
 	) {
 		if (!pledgeService.currentPledgeData) {
 			this.router.navigate(['..'], { relativeTo: this.route });
-			return this;
+			return;
 		} else if (!pledgeService.currentPledgeData.timestamp) {
 			this.router.navigate(['..', 'missing'], { relativeTo: this.route });
-			return this;
+			return;
 		}
 
 		this.pledge = pledgeService.currentPledgeData;

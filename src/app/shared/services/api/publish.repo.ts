@@ -15,7 +15,7 @@ export class PublishRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<PublishResponse>(
 			'/publish/getResource',
 			data,
-			{ responseClass: PublishResponse },
+			{ ResponseClass: PublishResponse },
 		);
 	}
 
@@ -31,7 +31,7 @@ export class PublishRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<PublishResponse>(
 			'/publish_ia/publish',
 			data,
-			{ responseClass: PublishResponse },
+			{ ResponseClass: PublishResponse },
 		);
 	}
 
@@ -47,7 +47,7 @@ export class PublishRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<PublishResponse>(
 			'/publish_ia/getLink',
 			data,
-			{ responseClass: PublishResponse },
+			{ ResponseClass: PublishResponse },
 		);
 	}
 }

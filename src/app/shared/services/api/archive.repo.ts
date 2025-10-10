@@ -22,7 +22,7 @@ export class ArchiveRepo extends BaseRepo {
 			'/archive/get',
 			data,
 			{
-				responseClass: ArchiveResponse,
+				ResponseClass: ArchiveResponse,
 			},
 		);
 	}
@@ -39,7 +39,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/getAllArchives',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -53,7 +53,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/change',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -67,7 +67,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/update',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -81,7 +81,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/delete',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -97,7 +97,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/post',
 			data,
-			{ responseClass: ArchiveResponse, useAuthorizationHeader: true },
+			{ ResponseClass: ArchiveResponse, useAuthorizationHeader: true },
 		);
 	}
 
@@ -111,7 +111,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/accept',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -125,7 +125,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/decline',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -139,7 +139,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/getShares',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -157,7 +157,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/share',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -175,7 +175,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/transferOwnership',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -191,7 +191,7 @@ export class ArchiveRepo extends BaseRepo {
 		];
 
 		return await this.http.sendRequestPromise('/archive/updateShare', data, {
-			responseClass: ArchiveResponse,
+			ResponseClass: ArchiveResponse,
 		});
 	}
 
@@ -209,7 +209,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/unshare',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -234,7 +234,7 @@ export class ArchiveRepo extends BaseRepo {
 		}
 
 		return await this.http.sendRequestPromise<ArchiveResponse>(endpoint, data, {
-			responseClass: ArchiveResponse,
+			ResponseClass: ArchiveResponse,
 		});
 	}
 
@@ -246,7 +246,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/profile_item/safeAddUpdate',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 
@@ -260,7 +260,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/profile_item/delete',
 			data,
-			{ responseClass: ArchiveResponse },
+			{ ResponseClass: ArchiveResponse },
 		);
 	}
 

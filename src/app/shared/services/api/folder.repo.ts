@@ -146,7 +146,7 @@ export class FolderRepo extends BaseRepo {
 			'/folder/getRoot',
 			[],
 			{
-				responseClass: FolderResponse,
+				ResponseClass: FolderResponse,
 			},
 		);
 	}
@@ -164,7 +164,7 @@ export class FolderRepo extends BaseRepo {
 			'/folder/get',
 			data,
 			{
-				responseClass: FolderResponse,
+				ResponseClass: FolderResponse,
 			},
 		);
 	}
@@ -281,7 +281,7 @@ export class FolderRepo extends BaseRepo {
 		];
 
 		return this.http.sendRequest<FolderResponse>('/folder/navigateMin', data, {
-			responseClass: FolderResponse,
+			ResponseClass: FolderResponse,
 		});
 	}
 
@@ -293,7 +293,7 @@ export class FolderRepo extends BaseRepo {
 		];
 
 		return this.http.sendRequest<FolderResponse>('/folder/navigateLean', data, {
-			responseClass: FolderResponse,
+			ResponseClass: FolderResponse,
 		});
 	}
 
@@ -303,7 +303,7 @@ export class FolderRepo extends BaseRepo {
 		}));
 
 		return this.http.sendRequest<FolderResponse>('/folder/getLeanItems', data, {
-			responseClass: FolderResponse,
+			ResponseClass: FolderResponse,
 		});
 	}
 
@@ -316,7 +316,7 @@ export class FolderRepo extends BaseRepo {
 			'/folder/post',
 			data,
 			{
-				responseClass: FolderResponse,
+				ResponseClass: FolderResponse,
 			},
 		);
 	}
@@ -345,7 +345,7 @@ export class FolderRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<FolderResponse>(
 			'/folder/update',
 			data,
-			{ responseClass: FolderResponse },
+			{ ResponseClass: FolderResponse },
 		);
 	}
 
@@ -373,7 +373,7 @@ export class FolderRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<FolderResponse>(
 			'/folder/updateRootColumns',
 			data,
-			{ responseClass: FolderResponse },
+			{ ResponseClass: FolderResponse },
 		);
 	}
 
@@ -385,7 +385,7 @@ export class FolderRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<FolderResponse>(
 			'/folder/delete',
 			data,
-			{ responseClass: FolderResponse },
+			{ ResponseClass: FolderResponse },
 		);
 	}
 
@@ -404,7 +404,7 @@ export class FolderRepo extends BaseRepo {
 			'/folder/move',
 			data,
 			{
-				responseClass: FolderResponse,
+				ResponseClass: FolderResponse,
 				useAuthorizationHeader: true,
 			},
 		);
@@ -425,7 +425,7 @@ export class FolderRepo extends BaseRepo {
 			'/folder/copy',
 			data,
 			{
-				responseClass: FolderResponse,
+				ResponseClass: FolderResponse,
 				useAuthorizationHeader: true,
 			},
 		);
@@ -443,7 +443,7 @@ export class FolderRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<FolderResponse>(
 			'/folder/getPublicRoot',
 			data,
-			{ responseClass: FolderResponse },
+			{ ResponseClass: FolderResponse },
 		);
 	}
 
@@ -459,7 +459,7 @@ export class FolderRepo extends BaseRepo {
 			'/folder/sort',
 			data,
 			{
-				responseClass: FolderResponse,
+				ResponseClass: FolderResponse,
 			},
 		);
 	}
@@ -477,7 +477,7 @@ export class FolderRepo extends BaseRepo {
 			'/zip/post',
 			data,
 			{
-				responseClass: FolderResponse,
+				ResponseClass: FolderResponse,
 			},
 		);
 	}

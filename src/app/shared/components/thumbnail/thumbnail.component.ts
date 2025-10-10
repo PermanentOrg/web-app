@@ -42,7 +42,7 @@ export class ThumbnailComponent implements OnInit, DoCheck {
 
 	constructor(
 		elementRef: ElementRef,
-		@Inject('Image') private imageClass: typeof Image,
+		@Inject('Image') private ImageClass: typeof Image,
 	) {
 		this.element = elementRef.nativeElement;
 		this.debouncedResize = debounce(this.calculateWidthsAndSetImageBg, 100);
@@ -95,7 +95,7 @@ export class ThumbnailComponent implements OnInit, DoCheck {
 		this.currentThumbUrl = imageUrl;
 
 		if (imageUrl) {
-			const imageLoader = new this.imageClass();
+			const imageLoader = new this.ImageClass();
 			const targetFolderLinkId = this.item.folder_linkId;
 			imageLoader.onload = () => {
 				this.thumbLoaded = true;

@@ -115,10 +115,8 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
 			if (tag) {
 				this.tagMap.get(category).push(tag);
 			}
-		} else {
-			if (tag) {
-				this.tagMap.set(category, [tag]);
-			}
+		} else if (tag) {
+			this.tagMap.set(category, [tag]);
 		}
 	}
 

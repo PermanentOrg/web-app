@@ -29,7 +29,7 @@ export class SystemRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<SystemResponse>(
 			'/system/logError',
 			data,
-			{ responseClass: SystemResponse },
+			{ ResponseClass: SystemResponse },
 		);
 	}
 }

@@ -186,7 +186,7 @@ export class GlobalSearchBarComponent {
 		if (this.activeResultIndex === -1) {
 			this.onAllResultsClick();
 		} else if (
-			-1 < this.activeResultIndex &&
+			this.activeResultIndex > -1 &&
 			this.activeResultIndex < localLength
 		) {
 			this.onLocalResultClick(this.localResults[this.activeResultIndex]);

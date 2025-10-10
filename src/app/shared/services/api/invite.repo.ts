@@ -84,7 +84,7 @@ export class InviteRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<InviteResponse>(
 			'/invite/getShareInviteInfo',
 			data,
-			{ responseClass: InviteResponse },
+			{ ResponseClass: InviteResponse },
 		);
 	}
 
@@ -98,7 +98,7 @@ export class InviteRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<InviteResponse>(
 			'/invite/getFullShareInvite',
 			data,
-			{ responseClass: InviteResponse },
+			{ ResponseClass: InviteResponse },
 		);
 	}
 
@@ -106,7 +106,7 @@ export class InviteRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<InviteResponse>(
 			'/invite/getMyInvites',
 			[{}],
-			{ responseClass: InviteResponse },
+			{ ResponseClass: InviteResponse },
 		);
 	}
 
@@ -118,7 +118,7 @@ export class InviteRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<InviteResponse>(
 			'/invite/inviteResend',
 			data,
-			{ responseClass: InviteResponse },
+			{ ResponseClass: InviteResponse },
 		);
 	}
 }

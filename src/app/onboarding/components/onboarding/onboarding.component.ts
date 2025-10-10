@@ -62,11 +62,7 @@ export class OnboardingComponent implements OnInit {
 				archives,
 				(archive) => !archive.status.endsWith('pending'),
 			);
-			if (ownArchives.length > 0 && false) {
-				// This user already has archives. They don't need to onboard.
-				this.showOnboarding = false;
-				this.router.navigate(['/app', 'private']);
-			} else {
+			if (ownArchives.length <= 0) {
 				this.pendingArchives = pendingArchives;
 				this.showOnboarding = true;
 				if (this.pendingArchives.length > 0) {
