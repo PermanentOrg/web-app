@@ -77,13 +77,19 @@ p {
 .buttons {
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
+	justify-content: space-between;
 	gap: 32px;
 	margin-top: 24px;
 
-	@media (max-width: 768px) {
-		justify-content: space-between;
+	@media (max-width: 1062px) {
+		flex-direction: column;
+		gap: 2rem;
 	}
+}
+
+.action-buttons {
+	display: flex;
+	gap: 40px;
 }
 
 .goal-container {

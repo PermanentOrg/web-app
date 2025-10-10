@@ -24,6 +24,11 @@
 	}
 }
 
+.action-buttons {
+	display: flex;
+	gap: 40px;
+}
+
 .what-is-important {
 	font-family: 'UsualLight', sans-serif;
 	font-size: 56px;
@@ -69,12 +74,14 @@ p {
 .buttons {
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
+	justify-content: space-between;
+
 	gap: 16px;
 	padding-bottom: 100px;
 
-	@media (max-width: 768px) {
-		justify-content: space-between;
+	@media (max-width: 1062px) {
+		flex-direction: column;
+		gap: 2rem;
 	}
 }
 
