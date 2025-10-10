@@ -42,9 +42,9 @@ export class MockDirectiveRepo {
 		directive: DirectiveCreateRequest,
 	): Promise<DirectiveData> {
 		if (MockDirectiveRepo.failRequest) {
-			await new Promise((resolve) =>
-				setTimeout(resolve, MockDirectiveRepo.errorDelay),
-			);
+			await new Promise<void>((resolve) => {
+				setTimeout(resolve, MockDirectiveRepo.errorDelay);
+			});
 			throw new Error('Forced Unit Test Error');
 		}
 		if (!MockDirectiveRepo.accountExists) {
@@ -86,9 +86,9 @@ export class MockDirectiveRepo {
 		directive: Partial<DirectiveData>,
 	): Promise<DirectiveData> {
 		if (MockDirectiveRepo.failRequest) {
-			await new Promise((resolve) =>
-				setTimeout(resolve, MockDirectiveRepo.errorDelay),
-			);
+			await new Promise<void>((resolve) => {
+				setTimeout(resolve, MockDirectiveRepo.errorDelay);
+			});
 			throw new Error('Forced Unit Test Error');
 		}
 		if (!MockDirectiveRepo.accountExists) {
