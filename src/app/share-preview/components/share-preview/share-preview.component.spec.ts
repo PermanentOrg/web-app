@@ -21,6 +21,9 @@ import { AccountVO, ArchiveVO, RecordVO } from '@root/app/models';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { Subject } from 'rxjs';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { ApiService } from '@shared/services/api/api.service';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { ShareResponse } from '@shared/services/api/share.repo';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 import { SharePreviewComponent } from './share-preview.component';
 
@@ -40,6 +43,10 @@ export const mockAccountService = jasmine.createSpyObj('AccountService', [
 // Provide default return values
 const defaultAccount = new AccountVO({ primaryEmail: 'test@example.com' });
 const defaultArchive = new ArchiveVO({ archiveId: 123 });
+
+const mockGoogleAnalyticsService = {
+	sendEvent: jasmine.createSpy(),
+};
 
 mockAccountService.getAccount.and.returnValue(defaultAccount);
 mockAccountService.getArchive.and.returnValue(defaultArchive);
@@ -70,6 +77,7 @@ describe('SharePreviewComponent', () => {
 	let fixture: ComponentFixture<SharePreviewComponent>;
 	let dialog: DialogCdkService;
 	let router: Router;
+	let apiService: ApiService;
 
 	beforeEach(async () => {
 		const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -109,10 +117,16 @@ describe('SharePreviewComponent', () => {
 			useValue: mockShareLinksService,
 		});
 
+		config.providers.push({
+			provide: GoogleAnalyticsService,
+			useValue: mockGoogleAnalyticsService,
+		});
+
 		await TestBed.configureTestingModule(config).compileComponents();
 
 		dialog = TestBed.inject(DialogCdkService);
 		router = TestBed.inject(Router);
+		apiService = TestBed.inject(ApiService);
 		spyOn(router, 'navigate');
 
 		fixture = TestBed.createComponent(SharePreviewComponent);
@@ -259,4 +273,61 @@ describe('SharePreviewComponent', () => {
 
 		expect(router.navigate).toHaveBeenCalledWith(['/app', 'auth', 'signup']);
 	});
+
+	it('should reload share preview data for link share', fakeAsync(() => {
+		component.isLinkShare = true;
+		component.isRelationshipShare = false;
+
+		const mockVO = { ShareVO: { status: 'ok', accessRole: 'editor' } };
+		spyOn(apiService.share, 'checkShareLink').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getShareByUrlVO: () => mockVO,
+			} as unknown as ShareResponse),
+		);
+
+		spyOn(component, 'checkAccess');
+
+		component.reloadSharePreviewData();
+		tick(1005);
+
+		expect(apiService.share.checkShareLink).toHaveBeenCalled();
+		expect(component.sharePreviewVO).toEqual(mockVO);
+		expect(component.checkAccess).toHaveBeenCalled();
+	}));
+
+	it('should reload share preview data for relationship share', fakeAsync(() => {
+		const mockVO = { ShareVO: { status: 'ok', accessRole: 'owner' } };
+		spyOn(apiService.share, 'getShareForPreview').and.returnValue(
+			Promise.resolve({
+				getShareVO: () => mockVO,
+			} as unknown as ShareResponse),
+		);
+		component.isLinkShare = false;
+		component.isRelationshipShare = true;
+
+		spyOn(component, 'checkAccess');
+
+		component.reloadSharePreviewData();
+		tick(1005);
+
+		expect(apiService.share.getShareForPreview).toHaveBeenCalled();
+		expect(component.sharePreviewVO).toEqual(mockVO);
+		expect(component.checkAccess).toHaveBeenCalled();
+	}));
+
+	it('should request access and not show cover', fakeAsync(() => {
+		component.archiveConfirmed = false;
+		component.chooseArchiveText = 'Choose archive';
+		component.shareToken = 'mock-token';
+		component.shareAccount = {
+			fullName: 'Sharer Name',
+		} as unknown as AccountVO;
+
+		component.onRequestAccessClick();
+		tick(2005);
+
+		expect(component.hasRequested).toBeTrue();
+		expect(component.showCover).toBeFalse();
+	}));
 });
