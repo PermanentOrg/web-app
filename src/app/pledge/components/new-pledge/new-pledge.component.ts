@@ -98,7 +98,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 				const params = split.pop();
 				if (params.includes('amount')) {
 					try {
-						pledgeAmount = parseInt(params.split('=').pop(), 0);
+						pledgeAmount = parseInt(params.split('=').pop(), 10);
 					} catch (err) {}
 				}
 			}

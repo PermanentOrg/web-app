@@ -114,10 +114,10 @@
 		"angular-eslint": "^20.3.0",
 		"dotenv": "^8.2.0",
 		"eslint": "^9.37.0",
-		"eslint-config-love": "^130.0.0",
+		"eslint-config-love": "^133.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-jasmine": "^4.2.2",
-		"eslint-plugin-jsdoc": "^61.0.1",
+		"eslint-plugin-jsdoc": "^61.1.2",
 		"eslint-plugin-prefer-arrow": "^1.2.2",
 		"eslint-plugin-prettier": "^5.5.4",
 		"eslint-plugin-storybook": "^9.1.10",
@@ -142,6 +142,6 @@
 		"ts-node": "^10.9.1",
 		"tslib": "^2.0.0",
 		"typescript": "5.8.3",
-		"typescript-eslint": "^8.46.0"
+		"typescript-eslint": "^8.46.1"
 	}
 }
