@@ -134,11 +134,12 @@ describe('SharePreviewComponent', () => {
 		expect(component.isUnlistedShare).toEqual(true);
 	}));
 
-	it('should open dialog shortly after loading if user is logged out', fakeAsync(() => {
+	it('should open dialog shortly after loading if user is logged out and it is not an unlisted share', fakeAsync(() => {
 		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
 		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
 
 		component.isLoggedIn = false;
+		component.isUnlistedShare = false;
 		component.showCreateAccountDialog();
 		tick(1005);
 
@@ -159,6 +160,27 @@ describe('SharePreviewComponent', () => {
 		expect(dialogSpy).not.toHaveBeenCalled();
 	}));
 
+	it('should not open dialog if user is logged in and it is not an unlisted share', fakeAsync(() => {
+		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
+		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
+
+		component.isLoggedIn = true;
+		component.isUnlistedShare = false;
+		component.ngOnInit();
+		tick(1005);
+
+		expect(dialogSpy).not.toHaveBeenCalled();
+	}));
+
+	it('should not open dialog shortly after loading if user is logged in and share is unlisted', fakeAsync(() => {
+		const dialogSpy = spyOn(dialog, 'open');
+		component.isLoggedIn = true;
+		component.isUnlistedShare = true;
+		tick(1005);
+
+		expect(dialogSpy).not.toHaveBeenCalled();
+	}));
+
 	it('should not open dialog if already open', () => {
 		const dialogSpy = spyOn(dialog, 'open');
 		component.createAccountDialogIsOpen = true;
@@ -167,22 +189,6 @@ describe('SharePreviewComponent', () => {
 
 		expect(dialogSpy).not.toHaveBeenCalled();
 	});
-
-	it('should not open dialog shortly after loading if share is unlisted', fakeAsync(() => {
-		const dialogSpy = spyOn(dialog, 'open');
-		component.isUnlistedShare = true;
-		tick(1005);
-
-		expect(dialogSpy).not.toHaveBeenCalled();
-	}));
-
-	it('should not open dialog shortly after loading if user is logged in', fakeAsync(() => {
-		const dialogSpy = spyOn(dialog, 'open');
-		component.isLoggedIn = true;
-		tick(1005);
-
-		expect(dialogSpy).not.toHaveBeenCalled();
-	}));
 
 	it('should open dialog when a thumbnail is clicked', fakeAsync(() => {
 		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
