@@ -207,7 +207,7 @@
 		<div class="dialog-body">
 			<div class="header-container">
 				<div class="header-small">Create link to share</div>
-				@if (shareLink) {
+				@if (newShareLink) {
 					<div class="remove-link" (click)="removeShareLink()">
 						<fa-icon class="trash-icon" [icon]="trashIcon" />
 						<span>Remove Link</span>
@@ -217,18 +217,18 @@
 			<hr />
 			<div class="content">
 				<div class="share-link">
-					@if (shareLink) {
+					@if (newShareLink) {
 						<div class="share-link-container">
 							<input
 								type="text"
 								class="form-control"
 								readonly
-								[value]="shareLink.shareUrl"
+								[value]="shareUrl"
 								#shareUrlInput
 							/>
 						</div>
 					}
-					@if (shareLink) {
+					@if (newShareLink) {
 						<button
 							class="btn btn-primary-light"
 							[disabled]="linkCopied"
@@ -237,12 +237,12 @@
 							{{ linkCopied ? 'Copied' : 'Copy' }}
 						</button>
 					}
-					@if (!shareLink) {
+					@if (!newShareLink) {
 						<div class="share-link-container">
 							Generate a link to invite people to share this content.
 						</div>
 					}
-					@if (!shareLink) {
+					@if (!newShareLink) {
 						<button
 							class="btn btn-primary-light"
 							(click)="generateShareLink()"
@@ -252,7 +252,7 @@
 						</button>
 					}
 				</div>
-				@if (shareLink) {
+				@if (newShareLink) {
 					<div class="share-link-settings-toggle" @ngIfScaleAnimation>
 						<button
 							class="btn btn-link"
@@ -283,7 +283,7 @@
 					  </select>
 					</div>
 				}
-				@if (showLinkSettings && shareLink) {
+				@if (showLinkSettings && newShareLink) {
 					<div class="share-link-settings" @ngIfScaleAnimation>
 						@if (linkType === 'private') {
 							<div class="link-settings-item">
@@ -399,14 +399,14 @@
 							</select>
 						</div>
 						<small class="text-muted">
-							@switch (shareLink.expiresDT) {
+							@switch (newShareLink.expirationTimestamp) {
 								@case (null) {
 									This link will only expire if deleted
 								}
 								@default {
 									This link will expire
 									{{
-										shareLink.expiresDT
+										newShareLink.expirationTimestamp
 											| date
 												: "MMM d, y 'at'
                               h:mm:ss a"
