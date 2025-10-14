@@ -133,8 +133,8 @@ export function trimWhitespace(
 
 export function copyFromInputElement(element: HTMLInputElement) {
 	const device = new DeviceService();
-	const oldContentEditable = element.contentEditable;
-	const oldReadOnly = element.readOnly;
+	const { contentEditable: oldContentEditable, readOnly: oldReadOnly } =
+		element;
 
 	if (device.isIos()) {
 		(element as any).contentEditable = true;

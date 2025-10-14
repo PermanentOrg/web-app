@@ -7,7 +7,8 @@ const requiredSecrets = require('@root/required-secrets');
 let secrets = {};
 
 try {
-	secrets = require('@root/secrets').SECRETS;
+	const { SECRETS } = require('@root/secrets');
+	secrets = SECRETS;
 } catch (err) {
 	throw new Error(
 		'Unable to read secrets.ts - make sure to run `node secrets.js` before building!',

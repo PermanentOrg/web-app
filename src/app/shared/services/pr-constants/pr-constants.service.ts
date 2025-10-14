@@ -124,10 +124,13 @@ export class PrConstantsService {
 
 	public translate(translateString: string) {
 		const split = translateString.split('.');
+		const { length } = split;
 		let currentBranch = this.constants;
 		while (split.length && currentBranch) {
-			const path = split.shift();
-			currentBranch = currentBranch[path];
+			const { 0: path } = split;
+			split.shift();
+			const { [path]: nextBranch } = currentBranch;
+			currentBranch = nextBranch;
 		}
 
 		return currentBranch || translateString;

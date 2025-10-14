@@ -115,7 +115,8 @@ export class ProfileService {
 				privateRoot,
 			)) as RecordVO;
 			const updateArchive = new ArchiveVO(currentArchive);
-			updateArchive.thumbArchiveNbr = record.archiveNbr;
+			const { archiveNbr } = record;
+			updateArchive.thumbArchiveNbr = archiveNbr;
 			const updateResponse = await this.api.archive.update(updateArchive);
 			currentArchive.update(updateResponse.getArchiveVO());
 
@@ -158,7 +159,8 @@ export class ProfileService {
 				item.fieldNameUI === 'profile.home' ||
 				item.fieldNameUI === 'profile.location'
 			) {
-				item.string2 = item.string1;
+				const { string1 } = item;
+				item.string2 = string1;
 			}
 
 			if (fieldsToConvert.includes(item.fieldNameUI)) {
@@ -190,8 +192,8 @@ export class ProfileService {
 		const currentArchive = this.account.getArchive();
 		const shortType = currentArchive?.type.split('.').pop();
 		const template = this.constants.getProfileTemplate();
-		const templateForType = template[shortType];
-		const valueTemplate = templateForType[fieldNameShort];
+		const { [shortType]: templateForType } = template;
+		const { [fieldNameShort]: valueTemplate } = templateForType;
 
 		const item: ProfileItemVOData = {
 			archiveId: currentArchive?.archiveId,
@@ -226,7 +228,7 @@ export class ProfileService {
 			if (
 				Object.prototype.hasOwnProperty.call(this.profileItemDictionary, key)
 			) {
-				const items = this.profileItemDictionary[key];
+				const { [key]: items } = this.profileItemDictionary;
 				allItems.push(...items);
 			}
 		}
@@ -238,7 +240,7 @@ export class ProfileService {
 		const currentArchive = this.account.getArchive();
 		const shortType = currentArchive?.type.split('.').pop();
 		const template = this.constants.getProfileTemplate();
-		const templateForType = template[shortType];
+		const { [shortType]: templateForType } = template;
 
 		const fields = Object.keys(templateForType) as FieldNameUIShort[];
 		for (const fieldNameShort of fields) {
@@ -287,12 +289,14 @@ export class ProfileService {
 			const response = await this.api.archive.addUpdateProfileItems(minItems);
 			const updated = response.getProfileItemVOs();
 			updated.forEach((item, i) => {
-				allItems[i].updatedDT = item.updatedDT;
-				allItems[i].publicDT = item.publicDT;
+				const { updatedDT, publicDT } = item;
+				allItems[i].updatedDT = updatedDT;
+				allItems[i].publicDT = publicDT;
 			});
 		} catch (err) {
 			allItems.forEach((item, i) => {
-				item.publicDT = originalValues[i];
+				const { [i]: originalValue } = originalValues;
+				item.publicDT = originalValue;
 			});
 
 			throw err;
@@ -326,7 +330,8 @@ export class ProfileService {
 			];
 
 			for (const value of minWhitelist.concat(...valueWhitelist)) {
-				(updateItem as any)[value] = item[value];
+				const { [value]: itemValue } = item;
+				(updateItem as any)[value] = itemValue;
 			}
 		}
 
@@ -340,10 +345,11 @@ export class ProfileService {
 
 		const response = await this.api.archive.addUpdateProfileItems([updateItem]);
 
-		const updated = response.getProfileItemVOs()[0];
-		item.updatedDT = updated.updatedDT;
+		const { 0: updated } = response.getProfileItemVOs();
+		const { updatedDT, profile_itemId } = updated;
+		item.updatedDT = updatedDT;
 		if (!item.profile_itemId) {
-			item.profile_itemId = updated.profile_itemId;
+			item.profile_itemId = profile_itemId;
 		}
 	}
 
@@ -351,10 +357,15 @@ export class ProfileService {
 		if (item.profile_itemId) {
 			await this.api.archive.deleteProfileItem(item);
 		}
-		const fieldNameShort = item.fieldNameUI.split('.')[1] as FieldNameUIShort;
-		const list = this.profileItemDictionary[fieldNameShort];
+		const { 1: fieldNameShort } = item.fieldNameUI.split('.') as [
+			string,
+			FieldNameUIShort,
+		];
+		const { [fieldNameShort]: list } = this.profileItemDictionary;
 
-		if (list.length === 1) {
+		const { length } = list;
+		if (length === 1) {
+			const { 0: firstItem } = list;
 			list[0] = this.createEmptyProfileItem(fieldNameShort);
 		} else {
 			remove(this.profileItemDictionary[fieldNameShort], item);
@@ -367,11 +378,15 @@ export class ProfileService {
 	) {
 		const template = this.constants.getProfileTemplate();
 		const currentArchive = this.account.getArchive();
-		const shortType = currentArchive.type.split('.').pop();
+		const { type } = currentArchive;
+		const shortType = type.split('.').pop();
 		const shortField = field.split('.').pop();
-		const templateForType = template[shortType];
-		const valueTemplate = templateForType[shortField].values[valueKey];
-		return valueTemplate.field_name_ui;
+		const { [shortType]: templateForType } = template;
+		const { [shortField]: fieldTemplate } = templateForType;
+		const { values } = fieldTemplate;
+		const { [valueKey]: valueTemplate } = values;
+		const { field_name_ui } = valueTemplate;
+		return field_name_ui;
 	}
 
 	isItemEmpty(item: ProfileItemVOData) {
@@ -395,21 +410,24 @@ export class ProfileService {
 		let filledEntries = 0;
 		const template = this.constants.getProfileTemplate();
 		const currentArchive = this.account.getArchive();
-		const shortType = currentArchive.type.split('.').pop();
-		const templateForType = template[shortType];
+		const { type } = currentArchive;
+		const shortType = type.split('.').pop();
+		const { [shortType]: templateForType } = template;
 
 		for (const fieldNameShort in CHECKLIST) {
 			if (
 				Object.prototype.hasOwnProperty.call(CHECKLIST, fieldNameShort) &&
 				templateForType[fieldNameShort]
 			) {
-				const cols = CHECKLIST[fieldNameShort];
-				totalEntries += cols.length;
+				const { [fieldNameShort]: cols } = CHECKLIST;
+				const { length } = cols;
+				totalEntries += length;
 
 				const itemToCheck = this.profileItemDictionary[fieldNameShort]?.[0];
 				if (itemToCheck) {
 					for (const col of cols) {
-						if (itemToCheck[col]) {
+						const { [col]: colValue } = itemToCheck;
+						if (colValue) {
 							filledEntries += 1;
 						}
 					}

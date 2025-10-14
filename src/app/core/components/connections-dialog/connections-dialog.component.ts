@@ -177,13 +177,17 @@ export class ConnectionsDialogComponent {
 						});
 						const newRelation = response.getRelationVO();
 						({ relationId: relation.relationId } = newRelation);
-						relation.archiveId = newRelation.archiveId;
-						relation.relationArchiveId = newRelation.relationArchiveId;
-						relation.status = newRelation.status;
-						relation.type = newRelation.type;
+						const { archiveId } = newRelation;
+						relation.archiveId = archiveId;
+						const { relationArchiveId } = newRelation;
+						relation.relationArchiveId = relationArchiveId;
+						const { status } = newRelation;
+						relation.status = status;
+						const { type } = newRelation;
+						relation.type = type;
 
-						const archiveVo = relation.ArchiveVO;
-						const relationArchiveVo = relation.RelationArchiveVO;
+						const { ArchiveVO: archiveVo } = relation;
+						const { RelationArchiveVO: relationArchiveVo } = relation;
 
 						relation.ArchiveVO = relationArchiveVo;
 						relation.RelationArchiveVO = archiveVo;
@@ -227,7 +231,8 @@ export class ConnectionsDialogComponent {
 					});
 				}
 
-				newRelation.relationArchiveId = archive.archiveId;
+				const { archiveId } = archive;
+				newRelation.relationArchiveId = archiveId;
 				newRelation.RelationArchiveVO = archive;
 				this.sentConnectionsRequests.push(newRelation);
 				return await this.editRelation(newRelation);
@@ -257,7 +262,8 @@ export class ConnectionsDialogComponent {
 				if (updatedRelation.relationId) {
 					return await this.api.relation.update(updatedRelation);
 				} else {
-					updatedRelation.relationArchiveId = relation.relationArchiveId;
+					const { relationArchiveId } = relation;
+					updatedRelation.relationArchiveId = relationArchiveId;
 					return await this.api.relation.create(updatedRelation);
 				}
 			})
@@ -266,9 +272,11 @@ export class ConnectionsDialogComponent {
 					message: 'Relationship saved successfully.',
 					style: 'success',
 				});
-				relation.type = updatedRelation.type;
+				const { type: updatedType } = updatedRelation;
+				relation.type = updatedType;
 				if (isNewRelation) {
-					relation.relationId = response.getRelationVO().relationId;
+					const { relationId: newRelationId } = response.getRelationVO();
+					relation.relationId = newRelationId;
 				}
 				deferred.resolve();
 			})
