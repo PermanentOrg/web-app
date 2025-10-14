@@ -128,7 +128,7 @@ export const convertStelaTagToTagVO = (
 	archiveId: string,
 ): TagVO =>
 	new TagVO({
-		tagId: Number.parseInt(stelaTag.id),
+		tagId: Number.parseInt(stelaTag.id, 10),
 		name: resolveTagName(stelaTag),
 		type: stelaTag.type,
 		archiveId: Number.parseInt(archiveId, 10),

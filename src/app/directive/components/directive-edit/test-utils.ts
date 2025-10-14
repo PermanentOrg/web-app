@@ -60,7 +60,7 @@ export class MockDirectiveRepo {
 		const testDirectiveId = '39b2a5fa-3508-4030-91b6-21dc6ec7a1ab';
 		const newDirective: DirectiveData = {
 			directiveId: testDirectiveId,
-			archiveId: parseInt(directive.archiveId.toString()),
+			archiveId: parseInt(directive.archiveId.toString(), 10),
 			type: directive.type,
 			createdDt: new Date(),
 			updatedDt: new Date(),
