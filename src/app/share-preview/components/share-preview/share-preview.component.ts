@@ -30,6 +30,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { FeatureService } from '@share-preview/feature-service';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
@@ -81,6 +82,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	archiveConfirmed = false;
 	public chooseArchiveText: string;
 	public isAutoApprove: boolean = false;
+	public someFolder: any;
 
 	formType: FormType = this.isInvite ? FormType.Invite : FormType.Signup;
 	signupForm: UntypedFormGroup;
@@ -114,6 +116,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		private ga: GoogleAnalyticsService,
 		private dialog: DialogCdkService,
 		private shareLinksService: ShareLinksService,
+		private featureService: FeatureService,
 	) {
 		this.shareToken = this.route.snapshot.params.shareToken;
 
@@ -653,15 +656,27 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 			});
 	}
 
+	showFolder(test) {
+		if (test?.item?.isFolder && this.isUnlistedShare) {
+			this.someFolder = test.item;
+			this.featureService.ephemeralFolder = test.item;
+		}
+	}
+
 	subscribeToItemClicks(componentReference) {
 		if (!('itemClicked' in componentReference)) {
 			return;
 		}
 
 		this.fileListClickListener = componentReference.itemClicked.subscribe(
-			() => {
-				this.dispatchBannerClose();
-				this.showCreateAccountDialog();
+			(test) => {
+				if (this.isUnlistedShare && test?.item?.isFolder) {
+					this.someFolder = test.item;
+					this.featureService.ephemeralFolder = test.item;
+				} else {
+					this.dispatchBannerClose();
+					this.showCreateAccountDialog();
+				}
 			},
 		);
 	}
