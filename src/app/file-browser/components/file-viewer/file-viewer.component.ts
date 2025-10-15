@@ -29,6 +29,7 @@ import { FileFormat } from '@models/file-vo';
 import { GetAccessFile } from '@models/get-access-file';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { FeatureService } from '@share-preview/feature-service';
 import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
@@ -91,6 +92,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		@Optional() publicProfile: PublicProfileService,
 		private shareLinksService: ShareLinksService,
 		private api: ApiService,
+		private featureService: FeatureService,
 	) {
 		// store current scroll position in file list
 		this.bodyScrollTop = window.scrollY;
@@ -174,11 +176,16 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		this.tagSubscription.unsubscribe();
 	}
 
-	private setRecordsToPreview(resolvedRecord: RecordVO) {
-		this.records = filter(
-			this.dataService.currentFolder.ChildItemVOs,
-			'isRecord',
-		) as RecordVO[];
+	private async setRecordsToPreview(resolvedRecord: RecordVO) {
+		let currentFolderChildren = this.dataService.currentFolder.ChildItemVOs;
+		if (this.featureService.ephemeralFolder) {
+			const stuff = await this.api.folder.getWithChildren(
+				[this.featureService.ephemeralFolder],
+				this.shareLinksService.currentShareToken,
+			);
+			currentFolderChildren = stuff.getFolderVO().ChildItemVOs;
+		}
+		this.records = filter(currentFolderChildren, 'isRecord') as RecordVO[];
 		this.currentIndex = findIndex(this.records, {
 			folder_linkId: resolvedRecord.folder_linkId,
 		});

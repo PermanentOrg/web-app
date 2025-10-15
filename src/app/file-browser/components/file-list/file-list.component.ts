@@ -17,6 +17,7 @@ import {
 	NgZone,
 	Renderer2,
 	DOCUMENT,
+	OnChanges,
 } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -58,6 +59,8 @@ import { routeHasDialog } from '@shared/utilities/router';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { EventService } from '@shared/services/event/event.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { ApiService } from '@shared/services/api/api.service';
+import { FeatureService } from '@share-preview/feature-service';
 
 export interface ItemClickEvent {
 	event?: MouseEvent;
@@ -81,6 +84,7 @@ const DRAG_SCROLL_STEP = 20;
 })
 export class FileListComponent
 	implements
+		OnChanges,
 		OnInit,
 		AfterViewInit,
 		OnDestroy,
@@ -104,6 +108,7 @@ export class FileListComponent
 	public showFolderThumbnails = false;
 
 	@Input() allowNavigation = true;
+	@Input() dataFolder: any;
 
 	@Output() itemClicked = new EventEmitter<ItemClickEvent>();
 
@@ -150,6 +155,8 @@ export class FileListComponent
 		private ngZone: NgZone,
 		private event: EventService,
 		private shareLinksService: ShareLinksService,
+		private api: ApiService,
+		private featureService: FeatureService,
 	) {
 		this.currentFolder = this.route.snapshot.data.currentFolder;
 		// this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
@@ -198,6 +205,26 @@ export class FileListComponent
 				entity: 'account',
 			});
 		}
+	}
+
+	async ngOnChanges() {
+		this.currentFolder =
+			this.dataFolder || this.route.snapshot.data.currentFolder;
+		if (this.dataFolder) {
+			const folderResponse = await this.api.folder.getWithChildren(
+				[this.currentFolder],
+				this.shareLinksService.currentShareToken,
+			);
+			this.currentFolder = folderResponse.getFolderVO();
+		}
+
+		this.showSidebar = this.route.snapshot.data.showSidebar;
+		this.dataService.setCurrentFolder(this.currentFolder);
+		this.isRootFolder = this.currentFolder.type.includes('root');
+		this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
+
+		this.visibleItems.clear();
+		this.reinit = true;
 	}
 
 	registerArchiveChangeHandlers() {
@@ -322,8 +349,18 @@ export class FileListComponent
 		}, 1);
 	}
 
-	ngOnInit() {
-		this.currentFolder = this.route.snapshot.data.currentFolder;
+	async ngOnInit() {
+		this.currentFolder =
+			this.featureService.ephemeralFolder ||
+			this.route.snapshot.data.currentFolder;
+
+		if (this.featureService.ephemeralFolder) {
+			const stuff = await this.api.folder.getWithChildren(
+				[this.featureService.ephemeralFolder],
+				this.shareLinksService.currentShareToken,
+			);
+			this.currentFolder = stuff.getFolderVO();
+		}
 		this.showSidebar = this.route.snapshot.data.showSidebar;
 		this.dataService.setCurrentFolder(this.currentFolder);
 		this.isRootFolder = this.currentFolder.type.includes('root');
@@ -509,28 +546,30 @@ export class FileListComponent
 
 	async loadVisibleItems(animate?: boolean) {
 		this.debug('loadVisibleItems %d items', this.visibleItems.size);
-		if (this.visibleItems.size) {
-			const visibleListItems = Array.from(this.visibleItems);
-			this.visibleItems.clear();
-			if (animate) {
-				const targetElems = visibleListItems.map(
-					(c) => c.element.nativeElement,
-				);
-				gsap.from(targetElems, 0.25, {
-					duration: 0.25,
-					opacity: 0,
-					ease: 'Power4.easeOut',
-					stagger: {
-						amount: 0.015,
-					},
-				});
-			}
+		if (this.dataFolder) {
+			return;
+		}
+		if (!this.visibleItems.size) {
+			return;
+		}
 
-			const itemsToFetch = visibleListItems.map((c) => c.item);
+		const visibleListItems = Array.from(this.visibleItems);
+		this.visibleItems.clear();
+		if (animate) {
+			const targetElems = visibleListItems.map((c) => c.element.nativeElement);
+			gsap.from(targetElems, 0.25, {
+				duration: 0.25,
+				opacity: 0,
+				ease: 'Power4.easeOut',
+				stagger: {
+					amount: 0.015,
+				},
+			});
+		}
 
-			if (itemsToFetch.length) {
-				await this.dataService.fetchLeanItems(itemsToFetch);
-			}
+		const itemsToFetch = visibleListItems.map((c) => c.item);
+		if (itemsToFetch.length && !this.shareLinksService.isUnlistedShare()) {
+			await this.dataService.fetchLeanItems(itemsToFetch);
 		}
 	}
 

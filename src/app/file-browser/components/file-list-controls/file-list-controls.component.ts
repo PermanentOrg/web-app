@@ -159,7 +159,7 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 	setAvailableActions() {
 		this.isShareRoot =
 			this.data.currentFolder.type === 'type.folder.root.share';
-		this.isPublic = this.data.currentFolder.type.includes('public');
+		this.isPublic = this.data.currentFolder?.type?.includes('public');
 		this.setAllActions(false);
 
 		const isSingleItem = this.selectedItems.length === 1;

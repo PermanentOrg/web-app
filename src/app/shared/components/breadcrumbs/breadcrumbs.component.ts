@@ -15,6 +15,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
 import debug from 'debug';
 import { EditService } from '@core/services/edit/edit.service';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
 export class Breadcrumb {
 	public routerPath: string;
@@ -76,6 +77,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private route: ActivatedRoute,
 		@Optional() private edit: EditService,
+		private shareLinkService: ShareLinksService,
 	) {}
 
 	ngOnInit() {
@@ -182,8 +184,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 				new Breadcrumb(
 					rootUrl,
 					folder.pathAsText[i],
-					folder.pathAsArchiveNbr[i],
-					folder.pathAsFolder_linkId[i],
+					folder.pathAsArchiveNbr && folder.pathAsArchiveNbr[i],
+					folder.pathAsFolder_linkId && folder.pathAsFolder_linkId[i],
 				),
 			);
 		}

@@ -557,6 +557,14 @@ export class FileListItemComponent
 		}
 
 		if (this.item.isFolder) {
+			if (this.isUnlistedShare) {
+				this.itemClicked.emit({
+					item: this.item,
+					event: event as MouseEvent,
+					selectable: false,
+				});
+				return;
+			}
 			if (this.checkFolderView && this.isFolderViewSet()) {
 				this.router.navigate([
 					rootUrl,

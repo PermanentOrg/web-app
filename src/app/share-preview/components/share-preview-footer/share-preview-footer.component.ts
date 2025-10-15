@@ -49,7 +49,7 @@ export class SharePreviewFooterComponent implements OnInit, OnDestroy {
 	constructor(private renderer: Renderer2) {
 		this.renderer.listen('window', 'click', (e: Event) => {
 			if (this.visible) {
-				if (!this.element.nativeElement.contains(e.target)) {
+				if (!this.element?.nativeElement?.contains(e.target)) {
 					let target = e.target as HTMLElement;
 					while (target.parentElement) {
 						const tagName = target.tagName.toLocaleLowerCase();
