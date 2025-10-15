@@ -580,8 +580,6 @@ export class DataService {
 		this.selectedItemsSubject.next(this.selectedItems);
 	}
 
-
-	//TODO: figure out how to clear the selected items wihtout breaking the current flow
 	clickItemSingle(item: ItemVO, replace = true) {
 		if (this.selectedItems.has(item)) {
 			if (this.selectedItems.size > 1 && replace) {
