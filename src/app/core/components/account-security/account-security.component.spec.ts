@@ -22,7 +22,7 @@ describe('AccountSecurityComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(AccountSecurityComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

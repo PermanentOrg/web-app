@@ -20,7 +20,7 @@ export class PreviewArchiveResolveService {
 	) {}
 
 	async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-		const archiveId = route.parent.data.previewItem.archiveId;
+		const { archiveId } = route.parent.data.previewItem;
 		const archiveNbr = route.parent.data.previewItem.archiveArchiveNbr;
 		return await this.api.archive
 			.get([new ArchiveVO({ archiveId, archiveNbr })])

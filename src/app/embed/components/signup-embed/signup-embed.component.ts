@@ -41,7 +41,7 @@ export class SignupEmbedComponent {
 		private route: ActivatedRoute,
 		private message: MessageService,
 	) {
-		const queryParams = this.route.snapshot.queryParams;
+		const { queryParams } = this.route.snapshot;
 		if (queryParams.invite) {
 			this.inviteCode = queryParams.invite;
 		}

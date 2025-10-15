@@ -18,7 +18,7 @@ export class ConnectorsResolveService {
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Observable<any> | Promise<any> {
-		const archiveId = this.accountService.getArchive().archiveId;
+		const { archiveId } = this.accountService.getArchive();
 		const connectors = [
 			new ConnectorOverviewVO({
 				archiveId,

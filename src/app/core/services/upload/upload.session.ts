@@ -131,7 +131,7 @@ export class UploadSession {
 			item.uploadStatus = UploadStatus.Cancelled;
 			this.statistics.error += 1;
 
-			const accessRole = this.account.getArchive().accessRole;
+			const { accessRole } = this.account.getArchive();
 
 			if (err instanceof BaseResponse && accessRole === 'access.role.viewer') {
 				this.emitError(UploadSessionStatus.NoAccessToUpload, item);

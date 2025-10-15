@@ -110,13 +110,14 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		const folder = this.data.currentFolder;
-		for (let i = 0; i < folder.pathAsFolder_linkId.length; i += 1) {
+		const { currentFolder: folder } = this.data;
+		const { pathAsText, pathAsArchiveNbr, pathAsFolder_linkId } = folder;
+		for (let i = 0; i < pathAsFolder_linkId.length; i += 1) {
 			this.breadcrumbs.push({
 				type: 'folder',
-				text: folder.pathAsText[i],
-				archiveNbr: folder.pathAsArchiveNbr[i],
-				folder_linkId: folder.pathAsFolder_linkId[i],
+				text: pathAsText[i],
+				archiveNbr: pathAsArchiveNbr[i],
+				folder_linkId: pathAsFolder_linkId[i],
 			});
 		}
 
@@ -130,7 +131,7 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 				? (group.groupStart + group.groupEnd) / 2
 				: group.groupStart;
 			const groups: TimelineGroup[] = [];
-			let timespan = TimelineGroupTimespan.Year;
+			let { Year: timespan } = TimelineGroupTimespan;
 			while (timespan < group.groupTimespan) {
 				const bestMatch = this.getBestMatchGroupForTimespan(
 					midpoint,
@@ -148,12 +149,14 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 
 			// find only groups needed in breadcrumbs
 			for (let i = groups.length - 1; i >= 0; i -= 1) {
-				const x = groups[i];
+				const { [i]: x } = groups;
+				const { groupItems } = x;
+				const { length: xGroupItemsLength } = groupItems;
 				if (
-					x.groupItems.length > lastGroupSize &&
-					x.groupItems.length > group.groupItems.length
+					xGroupItemsLength > lastGroupSize &&
+					xGroupItemsLength > group.groupItems.length
 				) {
-					lastGroupSize = x.groupItems.length;
+					lastGroupSize = xGroupItemsLength;
 					bestFitGroups.unshift(x);
 				}
 			}
@@ -173,9 +176,12 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 	}
 
 	onBreadcrumbClick(clickedBreadcrumb: TimelineBreadcrumb) {
-		if (clickedBreadcrumb === this.breadcrumbs[0]) {
-			const publicArchiveNbr =
-				this.activatedRoute.snapshot.params.publicArchiveNbr;
+		const { 0: firstBreadcrumb } = this.breadcrumbs;
+		if (clickedBreadcrumb === firstBreadcrumb) {
+			const {
+				snapshot: { params },
+			} = this.activatedRoute;
+			const { publicArchiveNbr } = params;
 			this.router.navigate(['p', 'archive', publicArchiveNbr]);
 		} else {
 			this.breadcrumbClicked.emit(clickedBreadcrumb);
@@ -190,10 +196,11 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 		timespan = Math.min(timespan, TimelineGroupTimespan.Hour);
 		let items = this.timelineGroups.get(timespan);
 		if (!items) {
-			items = GroupByTimespan(
+			const { groupedItems } = GroupByTimespan(
 				this.data.currentFolder.ChildItemVOs,
 				timespan,
-			).groupedItems;
+			);
+			items = groupedItems;
 			this.timelineGroups.set(timespan, items);
 		}
 
@@ -210,7 +217,7 @@ export class TimelineBreadcrumbsComponent implements OnInit, OnDestroy {
 				};
 			});
 
-		const bestMatch = minBy(diffs, (d) => d.diff).item;
+		const { item: bestMatch } = minBy(diffs, (d) => d.diff);
 		return bestMatch;
 	}
 

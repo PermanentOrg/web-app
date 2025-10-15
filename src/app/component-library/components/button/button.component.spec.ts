@@ -56,7 +56,7 @@ describe('ButtonComponent', () => {
 
 	it('should emit the @Output when clicking the button', async () => {
 		const { instance, find } = await shallow.render();
-		const button = find('.button').nativeElement;
+		const { nativeElement: button } = find('.button');
 
 		button.click();
 

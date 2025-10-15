@@ -149,16 +149,22 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		private fvService: FolderViewService,
 		private device: DeviceService,
 	) {
-		this.currentTimespan = TimelineGroupTimespan.Year;
+		({ Year: this.currentTimespan } = TimelineGroupTimespan);
 		this.dataService.showBreadcrumbs = false;
 		this.dataService.showPublicArchiveDescription = false;
 		this.dataService.publicCta = 'timeline';
 		this.fvService.containerFlexChange.emit(true);
 
-		this.timelineRootFolder = this.route.snapshot.data.currentFolder;
+		({
+			route: {
+				snapshot: {
+					data: { currentFolder: this.timelineRootFolder },
+				},
+			},
+		} = this);
 		this.dataService.setCurrentFolder(this.route.snapshot.data.currentFolder);
 		if (dialogData?.activatedRoute) {
-			this.route = dialogData.activatedRoute;
+			({ activatedRoute: this.route } = dialogData);
 		}
 	}
 
@@ -202,7 +208,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 	onFolderChange() {
 		this.timelineGroups.clear();
 		this.findBestTimezone();
-		this.timelineRootFolder = this.dataService.currentFolder;
+		({
+			dataService: { currentFolder: this.timelineRootFolder },
+		} = this);
 		this.groupTimelineItems(true, false);
 		if (this.timeline) {
 			this.setMaxZoom();
@@ -212,7 +220,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	initTimeline() {
-		const container = this.timelineElemRef.nativeElement;
+		const {
+			timelineElemRef: { nativeElement: container },
+		} = this;
 		this.timeline = new Timeline(
 			container,
 			this.timelineItems,
@@ -231,7 +241,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		const counts = countBy(
 			this.dataService.currentFolder.ChildItemVOs.filter((i) => i.TimezoneVO),
 			(i: ItemVO) => {
-				const id = i.TimezoneVO.timeZoneId;
+				const {
+					TimezoneVO: { timeZoneId: id },
+				} = i;
 				if (!this.timezones.has(id)) {
 					this.timezones.set(id, i.TimezoneVO);
 				}
@@ -309,7 +321,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.timelineItems.remove(ids);
 		}
 
-		let timespan = this.currentTimespan;
+		let { currentTimespan: timespan } = this;
 		if (bestFitTimespan) {
 			timespan = getBestFitTimespanForItems(
 				this.dataService.currentFolder.ChildItemVOs,
@@ -327,9 +339,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 				bestFitTimespan,
 				this.currentTimezone,
 			);
-			this.currentTimespan = groupResult.timespan;
+			({ timespan: this.currentTimespan } = groupResult);
 			this.timelineGroups.set(groupResult.timespan, groupResult.groupedItems);
-			itemsToAdd = groupResult.groupedItems;
+			({ groupedItems: itemsToAdd } = groupResult);
 		}
 
 		if (keepFolders) {
@@ -356,7 +368,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		let end = null;
 		for (const id of ids) {
 			const item = this.timelineItems.get(id);
-			const s = item.start;
+			const { start: s } = item;
 			const e = 'end' in item ? item.end : item.start;
 
 			if (start === null || s < start) {
@@ -574,7 +586,13 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		for (const uuid in this.timeline.itemSet.items) {
 			if (uuid.includes('-')) {
 				// @ts-ignore
-				const item = this.timeline.itemSet.items[uuid];
+				const {
+					timeline: {
+						itemSet: {
+							items: { [uuid]: item },
+						},
+					},
+				} = this;
 				item.width += (this.device.isMobileWidth() ? 10 : 100) * 2;
 			}
 		}

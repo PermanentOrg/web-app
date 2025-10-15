@@ -43,7 +43,7 @@ describe('ConfirmPayerDialogComponent', () => {
 		await TestBed.configureTestingModule(config).compileComponents();
 
 		fixture = TestBed.createComponent(ConfirmPayerDialogComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		dialogRef = TestBed.inject(DialogRef) as unknown as MockDialogRef;
 		spyOn(dialogRef, 'close').and.callThrough();
 		fixture.detectChanges();

@@ -36,7 +36,7 @@ describe('FormInputComponent', () => {
 			bind: { type: 'password', control: mockControl },
 		});
 
-		const inputElement = find('input').nativeElement;
+		const { nativeElement: inputElement } = find('input');
 
 		expect(inputElement.type).toBe('password');
 	});
@@ -47,7 +47,7 @@ describe('FormInputComponent', () => {
 			bind: { control, type: 'password' },
 		});
 
-		const inputElement = find('input').nativeElement;
+		const { nativeElement: inputElement } = find('input');
 
 		expect(inputElement.type).toBe('password');
 	});
@@ -84,7 +84,7 @@ describe('FormInputComponent', () => {
 			bind: { config, control: mockControl },
 		});
 
-		const inputElement = find('input').nativeElement;
+		const { nativeElement: inputElement } = find('input');
 
 		expect(inputElement.getAttribute('autocorrect')).toBe(config.autocorrect);
 
@@ -127,7 +127,7 @@ describe('FormInputComponent', () => {
 			bind: { placeholder: placeholderValue, control: mockControl },
 		});
 
-		const inputElement = find('input').nativeElement;
+		const { nativeElement: inputElement } = find('input');
 
 		expect(inputElement.placeholder).toBe(placeholderValue);
 	});

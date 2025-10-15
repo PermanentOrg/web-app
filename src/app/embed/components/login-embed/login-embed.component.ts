@@ -39,7 +39,7 @@ export class LoginEmbedComponent {
 		private message: MessageService,
 		private iFrame: IFrameService,
 	) {
-		const queryParams = this.route.snapshot.queryParams;
+		const { queryParams } = this.route.snapshot;
 		if (queryParams.invite) {
 			this.inviteCode = queryParams.invite;
 		}

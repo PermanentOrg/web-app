@@ -19,7 +19,7 @@ describe('CheckboxCompoent', () => {
 		const { instance, find, fixture } = await shallow.render();
 		instance.disabled = true;
 		fixture.detectChanges();
-		const checkbox = find('.checkbox-container').nativeElement;
+		const { nativeElement: checkbox } = find('.checkbox-container');
 
 		expect(checkbox.classList).toContain('checkbox-container-disabled');
 		expect(checkbox.classList).not.toContain('checkbox-container-enabled');
@@ -27,7 +27,7 @@ describe('CheckboxCompoent', () => {
 
 	it('should have the enabled class if the checkbox is enabled', async () => {
 		const { find } = await shallow.render();
-		const checkbox = find('.checkbox-container').nativeElement;
+		const { nativeElement: checkbox } = find('.checkbox-container');
 
 		expect(checkbox.classList).toContain('checkbox-container-enabled');
 		expect(checkbox.classList).not.toContain('checkbox-container-disabled');
@@ -37,7 +37,7 @@ describe('CheckboxCompoent', () => {
 		const { find, instance, fixture } = await shallow.render();
 		instance.isChecked = true;
 		fixture.detectChanges();
-		const checkbox = find('.checkbox').nativeElement;
+		const { nativeElement: checkbox } = find('.checkbox');
 
 		expect(checkbox.classList).toContain('checked');
 	});
@@ -46,7 +46,7 @@ describe('CheckboxCompoent', () => {
 		const { find, instance, fixture } = await shallow.render();
 		instance.value = 'value';
 		fixture.detectChanges();
-		const checkbox = find('.checkbox-container').nativeElement;
+		const { nativeElement: checkbox } = find('.checkbox-container');
 
 		checkbox.click();
 
@@ -58,7 +58,7 @@ describe('CheckboxCompoent', () => {
 		instance.disabled = true;
 		instance.value = 'value';
 		fixture.detectChanges();
-		const checkbox = find('.checkbox-container').nativeElement;
+		const { nativeElement: checkbox } = find('.checkbox-container');
 
 		checkbox.click();
 
@@ -69,7 +69,7 @@ describe('CheckboxCompoent', () => {
 		const { instance, find, fixture } = await shallow.render();
 		instance.variant = 'primary';
 		fixture.detectChanges();
-		const checkbox = find('.checkbox-container').nativeElement;
+		const { nativeElement: checkbox } = find('.checkbox-container');
 
 		expect(checkbox.classList).toContain('checkbox-container-primary');
 	});
@@ -78,14 +78,14 @@ describe('CheckboxCompoent', () => {
 		const { instance, find, fixture } = await shallow.render();
 		instance.variant = 'secondary';
 		fixture.detectChanges();
-		const checkbox = find('.checkbox-container').nativeElement;
+		const { nativeElement: checkbox } = find('.checkbox-container');
 
 		expect(checkbox.classList).toContain('checkbox-container-secondary');
 	});
 
 	it('should be focusable and have correct ARIA attributes', async () => {
 		const { find } = await shallow.render();
-		const checkboxContainer = find('.checkbox').nativeElement;
+		const { nativeElement: checkboxContainer } = find('.checkbox');
 
 		expect(checkboxContainer.getAttribute('role')).toEqual('checkbox');
 		expect(checkboxContainer.getAttribute('tabindex')).toEqual('0');
@@ -98,7 +98,7 @@ describe('CheckboxCompoent', () => {
 		instance.isChecked = false;
 		fixture.detectChanges();
 
-		const checkboxContainer = find('.checkbox-container').nativeElement;
+		const { nativeElement: checkboxContainer } = find('.checkbox-container');
 		const event = new KeyboardEvent('keydown', { key: 'Enter' });
 		checkboxContainer.dispatchEvent(event);
 
@@ -110,7 +110,7 @@ describe('CheckboxCompoent', () => {
 		instance.isChecked = false;
 		fixture.detectChanges();
 
-		const checkboxContainer = find('.checkbox-container').nativeElement;
+		const { nativeElement: checkboxContainer } = find('.checkbox-container');
 		const event = new KeyboardEvent('keydown', { key: ' ' });
 		checkboxContainer.dispatchEvent(event);
 
@@ -122,7 +122,7 @@ describe('CheckboxCompoent', () => {
 		instance.disabled = true;
 		fixture.detectChanges();
 
-		const checkboxContainer = find('.checkbox-container').nativeElement;
+		const { nativeElement: checkboxContainer } = find('.checkbox-container');
 		const event = new KeyboardEvent('keydown', { key: 'Enter' });
 		checkboxContainer.dispatchEvent(event);
 
@@ -135,7 +135,7 @@ describe('CheckboxCompoent', () => {
 			bind: { disabled: true },
 		});
 		fixture.detectChanges();
-		const checkboxContainer = find('.checkbox').nativeElement;
+		const { nativeElement: checkboxContainer } = find('.checkbox');
 
 		expect(checkboxContainer.getAttribute('aria-disabled')).toEqual('true');
 	});

@@ -111,7 +111,7 @@ export class InvitationsDialogComponent implements OnInit {
 			this.waiting = true;
 			const response = await this.api.invite.resendInvites([invite]);
 			const updated = response.getInviteVO();
-			invite.updatedDT = updated.updatedDT;
+			({ updatedDT: invite.updatedDT } = updated);
 			this.messageService.showMessage({
 				message: 'Invitation re-sent.',
 				style: 'success',

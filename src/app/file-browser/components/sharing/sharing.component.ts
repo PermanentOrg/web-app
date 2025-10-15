@@ -106,7 +106,7 @@ export class SharingComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		const queryParams = this.route.snapshot.queryParams;
+		const { queryParams } = this.route.snapshot;
 
 		if (queryParams.shareArchiveNbr && queryParams.requestToken) {
 			if (this.shareItem.archiveNbr === queryParams.shareArchiveNbr) {

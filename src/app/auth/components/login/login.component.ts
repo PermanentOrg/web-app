@@ -13,7 +13,7 @@ import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { DeviceService } from '@shared/services/device/device.service';
 
-const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
+const { passwordMinLength: MIN_PASSWORD_LENGTH } = APP_CONFIG;
 
 @Component({
 	selector: 'pr-login',

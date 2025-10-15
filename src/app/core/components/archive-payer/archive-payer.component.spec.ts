@@ -33,7 +33,7 @@ describe('ArchivePayerComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(ArchivePayerComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

@@ -159,7 +159,7 @@ export class MainComponent
 	}
 
 	async checkCta() {
-		const cta = this.route.snapshot.queryParams.cta;
+		const { cta } = this.route.snapshot.queryParams;
 
 		switch (cta) {
 			case 'timeline':
@@ -259,7 +259,7 @@ export class MainComponent
 	async checkShareByUrl() {
 		// check for share by URL parameter to display Request Access prompt
 		if (this.route.snapshot.queryParams.shareByUrl) {
-			const shareUrlToken = this.route.snapshot.queryParams.shareByUrl;
+			const { shareByUrl: shareUrlToken } = this.route.snapshot.queryParams;
 
 			let hasRequested = false;
 			let hasAccess = false;
@@ -270,7 +270,7 @@ export class MainComponent
 					await this.api.share.checkShareLink(shareUrlToken);
 
 				const shareByUrlVO = checkLinkResponse.getShareByUrlVO();
-				const shareVO = shareByUrlVO.ShareVO;
+				const { ShareVO: shareVO } = shareByUrlVO;
 				const shareItem: RecordVO | FolderVO =
 					shareByUrlVO.FolderVO || shareByUrlVO.RecordVO;
 				const shareAccount: AccountVO = shareByUrlVO.AccountVO;
@@ -392,14 +392,14 @@ export class MainComponent
 		dropTarget: DragTargetDroppableComponent,
 		dragEvent: DragServiceEvent,
 	) {
-		const files = (dragEvent.event as DragEvent).dataTransfer.files;
+		const { files } = (dragEvent.event as DragEvent).dataTransfer;
 		this.isDraggingFile = false;
 
 		if (!files?.length) {
 			return;
 		}
 
-		const items = (dragEvent.event as DragEvent).dataTransfer.items;
+		const { items } = (dragEvent.event as DragEvent).dataTransfer;
 		const supportsFolderUpload = items[0].webkitGetAsEntry !== null;
 		const copiedItems = Array.from(items).map(
 			(i) => i.webkitGetAsEntry && i.webkitGetAsEntry(),

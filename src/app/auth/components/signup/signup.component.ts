@@ -22,7 +22,7 @@ import {
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
-const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
+const { passwordMinLength: MIN_PASSWORD_LENGTH } = APP_CONFIG;
 const NEW_ONBOARDING_CHANCE = 1;
 
 @Component({
@@ -57,7 +57,9 @@ export class SignupComponent {
 		private device: DeviceService,
 		private ga: GoogleAnalyticsService,
 	) {
-		const params = route.snapshot.queryParams;
+		const {
+			snapshot: { queryParams: params },
+		} = route;
 
 		let name, email, inviteCode;
 
@@ -70,13 +72,19 @@ export class SignupComponent {
 		}
 
 		if (params.inviteCode) {
-			inviteCode = params.inviteCode;
+			({ inviteCode } = params);
 		}
 
 		if (params.shid && params.tp) {
 			this.isForShareInvite = true;
 
-			const responseData = this.route.snapshot.data.shareInviteData;
+			const {
+				route: {
+					snapshot: {
+						data: { shareInviteData: responseData },
+					},
+				},
+			} = this;
 
 			if (responseData) {
 				const itemData: RecordVOData | FolderVOData = {
@@ -86,7 +94,7 @@ export class SignupComponent {
 					thumbURL500: responseData.sharedThumb,
 				};
 
-				this.shareFromName = responseData.ShareArcName;
+				({ ShareArcName: this.shareFromName } = responseData);
 
 				this.shareItemIsRecord = params.tp === 'r';
 				this.shareItem = this.shareItemIsRecord

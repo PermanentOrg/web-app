@@ -294,7 +294,8 @@ export class MembersDialogComponent {
 		this.promptService
 			.prompt(fields, title, deferred.promise, 'Invite')
 			.then(async (value: any) => {
-				member.fullName = value.fullName;
+				const { fullName } = value;
+			member.fullName = fullName;
 				return await this.api.invite.sendMemberInvite(
 					member,
 					this.accountService.getArchive(),

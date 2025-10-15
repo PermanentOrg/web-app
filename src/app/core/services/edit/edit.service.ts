@@ -246,7 +246,7 @@ export class EditService {
 					actionDeferred.resolve();
 					this.openPublishDialog(items[0]);
 					break;
-				case 'share':
+				case 'share': {
 					const response: ShareResponse = await this.api.share.getShareLink(
 						items[0],
 					);
@@ -258,6 +258,7 @@ export class EditService {
 						},
 					});
 					break;
+				}
 				default:
 					actionDeferred.resolve();
 			}
@@ -385,7 +386,7 @@ export class EditService {
 		}
 
 		if (records.length) {
-			const archiveId = this.accountService.getArchive().archiveId;
+			const { archiveId } = this.accountService.getArchive();
 			promises.push(this.api.record.update(records, archiveId));
 		} else {
 			promises.push(Promise.resolve());

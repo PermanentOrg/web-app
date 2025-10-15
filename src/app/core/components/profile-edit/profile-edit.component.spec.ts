@@ -57,7 +57,7 @@ describe('ProfileEditComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(ProfileEditComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 

@@ -43,7 +43,8 @@ interface StoryArgs {
 const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => ({
 	render: () => {
 		DummyChecklistApi.reset();
-		DummyChecklistApi.items = args.tasks;
+		const { tasks } = args;
+		DummyChecklistApi.items = tasks;
 		return {};
 	},
 	moduleMetadata: {

@@ -7,7 +7,8 @@ export function debugSubscribable(
 	d: debug.Debugger,
 	obs: Observable<any> | Subject<any> | EventEmitter<any>,
 ) {
-	const d2 = debug(`${d.namespace}:$:${name}`);
-	d2.color = d.color;
+	const { namespace, color } = d;
+	const d2 = debug(`${namespace}:$:${name}`);
+	d2.color = color;
 	return obs.subscribe((event) => d2('%o', event));
 }

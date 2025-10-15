@@ -25,7 +25,8 @@ export class GoogleAnalyticsService {
 
 	private checkForGlobal() {
 		if ('ga' in window && ga.getAll && !this.tracker) {
-			this.tracker = ga.getAll()[0];
+			const { 0: firstTracker } = ga.getAll();
+			this.tracker = firstTracker;
 		}
 
 		return !!this.tracker;

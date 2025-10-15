@@ -142,11 +142,12 @@ export class SharesComponent
 
 		this.sharesFolder.ChildItemVOs = this.shareItems;
 
-		const queryParams = this.route.snapshot.queryParams;
+		const { queryParams } = this.route.snapshot;
+		const { shareArchiveNbr } = queryParams;
 
-		if (queryParams.shareArchiveNbr) {
+		if (shareArchiveNbr) {
 			const targetItem = find(this.allShareItems, {
-				archiveNbr: queryParams.shareArchiveNbr,
+				archiveNbr: shareArchiveNbr,
 			});
 			if (targetItem) {
 				this.editService.openShareDialog(targetItem);

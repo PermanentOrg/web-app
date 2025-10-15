@@ -58,7 +58,7 @@ describe('EditValueComponent', () => {
 							throw new Error('Test Error');
 						}
 						updated = true;
-						newTagName = tag.name;
+						({ name: newTagName } = tag);
 					},
 				},
 			})

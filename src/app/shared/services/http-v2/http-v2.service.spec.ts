@@ -21,7 +21,8 @@ class HealthResponse {
 
 	constructor(data: any) {
 		if (data?.status) {
-			this.status = data.status;
+			const { status } = data;
+			this.status = status;
 		}
 		this.constructorCalled = true;
 	}
@@ -104,7 +105,7 @@ describe('HttpV2Service', () => {
 			.post('/api/v2/health', {}, HealthResponse)
 			.toPromise()
 			.then((response) => {
-				const resp = response[0];
+				const { 0: resp } = response;
 
 				expect(resp instanceof HealthResponse).toBeTrue();
 				expect(resp.status).toBe('available');

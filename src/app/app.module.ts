@@ -84,7 +84,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		// Try to unwrap zone.js error.
 		// https://github.com/angular/angular/blob/master/packages/core/src/util/errors.ts
 		if (error && error.ngOriginalError) {
-			error = error.ngOriginalError;
+			({ ngOriginalError: error } = error);
 		}
 
 		// We can handle messages and Error objects directly.
@@ -222,12 +222,16 @@ export class AppModule {
 			)
 			.subscribe((event) => {
 				this.routerDebug('end navigate %s', this.router.url);
-				let currentRoute = this.route;
+				let { route: currentRoute } = this;
 				let currentTitle;
 				while (currentRoute.firstChild) {
-					currentRoute = currentRoute.firstChild;
+					({ firstChild: currentRoute } = currentRoute);
 					if (currentRoute.snapshot.data.title) {
-						currentTitle = currentRoute.snapshot.data.title;
+						({
+							snapshot: {
+								data: { title: currentTitle },
+							},
+						} = currentRoute);
 					}
 				}
 				if (currentTitle) {
@@ -248,7 +252,7 @@ export class AppModule {
 				}
 
 				if ('ga' in window && ga.getAll && !skipGaPageview) {
-					const tracker = ga.getAll()[0];
+					const [tracker] = ga.getAll();
 					if (tracker) {
 						tracker.send('pageview', { page: location.pathname });
 					}

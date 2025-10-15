@@ -75,7 +75,7 @@ export const FORM_ERROR_MESSAGES = {
 export function setFormErrors(form: UntypedFormGroup, errors: any) {
 	if (form.valid) {
 		for (const key in errors) {
-			if (errors.hasOwnProperty(key)) {
+			if (Object.hasOwn(errors, key)) {
 				delete errors[key];
 			}
 		}
@@ -86,7 +86,8 @@ export function setFormErrors(form: UntypedFormGroup, errors: any) {
 			const control = form.get(controlName);
 			if (control.dirty && control.errors) {
 				const errorName = Object.keys(control.errors).pop();
-				errors[controlName] = FORM_ERROR_MESSAGES[controlName][errorName];
+				const { [controlName]: controlMessages } = FORM_ERROR_MESSAGES;
+				errors[controlName] = controlMessages[errorName];
 			} else {
 				errors[controlName] = null;
 			}
@@ -95,7 +96,7 @@ export function setFormErrors(form: UntypedFormGroup, errors: any) {
 }
 
 export function getFormInputError(formInput: FormInputComponent | FormInput) {
-	const control = formInput.control;
+	const { control } = formInput;
 
 	if (
 		control.valid ||
@@ -132,8 +133,8 @@ export function trimWhitespace(
 
 export function copyFromInputElement(element: HTMLInputElement) {
 	const device = new DeviceService();
-	const oldContentEditable = element.contentEditable;
-	const oldReadOnly = element.readOnly;
+	const { contentEditable: oldContentEditable, readOnly: oldReadOnly } =
+		element;
 
 	if (device.isIos()) {
 		(element as any).contentEditable = true;

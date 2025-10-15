@@ -18,7 +18,7 @@ export class PublicTagsResolveService {
 		const response = await this.api.archive.get([
 			new ArchiveVO({ archiveNbr }),
 		]);
-		const archiveId = response.getArchiveVO().archiveId;
+		const { archiveId } = response.getArchiveVO();
 		const res = await this.api.archive.getPublicArchiveTags(archiveId);
 		this.storage.session.set('tags', JSON.stringify(res));
 	}

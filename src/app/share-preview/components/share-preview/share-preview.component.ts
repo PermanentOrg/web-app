@@ -324,7 +324,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 					}
 				});
 		} else if (this.isRelationshipShare) {
-			const params = this.route.snapshot.params;
+			const { params } = this.route.snapshot;
 			return await this.api.share
 				.getShareForPreview(params.shareId, params.folder_linkId)
 				.then((shareResponse: ShareResponse) => {
@@ -337,7 +337,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	sendGaEvent(eventAction: 'previewed' | 'viewed' | 'signup' | 'reshare') {
 		let eventCategory: any;
 
-		const queryParams = this.route.snapshot.queryParams;
+		const { queryParams } = this.route.snapshot;
 
 		if (this.isInvite) {
 			eventCategory = EVENTS.SHARE.ShareByInvite;
@@ -600,8 +600,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 					// attempt to auto switch archives if link is tagged
 					if (this.route.snapshot.queryParams.targetArchiveNbr) {
 						await this.accountService.refreshArchives();
-						const targetArchiveNbr =
-							this.route.snapshot.queryParams.targetArchiveNbr;
+						const { targetArchiveNbr } = this.route.snapshot.queryParams;
 						const targetArchive = find(this.accountService.getArchives(), {
 							archiveNbr: targetArchiveNbr,
 						}) as ArchiveVO;

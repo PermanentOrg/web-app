@@ -61,7 +61,7 @@ export class ZoomingImageViewerComponent implements AfterViewInit, OnDestroy {
 			});
 
 			this.viewer.addHandler('zoom', (event: ZoomEvent) => {
-				const zoom = event.zoom;
+				const { zoom } = event;
 				if (!this.initialZoom) {
 					this.initialZoom = zoom;
 				}

@@ -37,7 +37,7 @@ describe('LeftMenuComponent', () => {
 		accountService.setArchive(new ArchiveVO(TEST_DATA.archive));
 
 		fixture = TestBed.createComponent(LeftMenuComponent);
-		component = fixture.componentInstance;
+		({ componentInstance: component } = fixture);
 		fixture.detectChanges();
 	});
 
