@@ -97,7 +97,6 @@ export class SharingDialogComponent implements OnInit {
 	public shares: ShareVO[] = [];
 	public pendingShares: ShareVO[] = [];
 
-	public shareLink: ShareByUrlVO = null;
 	public newShareLink: ShareLink = null;
 
 	public autoApproveToggle: 0 | 1 = 1;
@@ -184,7 +183,6 @@ export class SharingDialogComponent implements OnInit {
 
 		this.relationshipService.update();
 
-		this.shareLink = this.data.link;
 
 		this.newShareLink = this.data.newShare;
 
@@ -503,13 +501,13 @@ export class SharingDialogComponent implements OnInit {
 			case Expiration.Never:
 				return null;
 			case Expiration.Day:
-				return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 1));
+				return getSQLDateTime(addDays(new Date(this.newShareLink.createdAt), 1));
 			case Expiration.Week:
-				return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 7));
+				return getSQLDateTime(addDays(new Date(this.newShareLink.createdAt), 7));
 			case Expiration.Month:
-				return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 30));
+				return getSQLDateTime(addDays(new Date(this.newShareLink.createdAt), 30));
 			case Expiration.Year:
-				return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 365));
+				return getSQLDateTime(addDays(new Date(this.newShareLink.createdAt), 365));
 		}
 	}
 
@@ -564,7 +562,7 @@ export class SharingDialogComponent implements OnInit {
 				itemId,
 				itemType,
 			});
-			this.newShareLink = response[0];
+			this.newShareLink = response;
 			await this.shareApi.updateShareLink(this.newShareLink.id, {
 				accessRestrictions: 'none',
 			});
@@ -605,7 +603,6 @@ export class SharingDialogComponent implements OnInit {
 			);
 
 			await this.shareApi.deleteShareLink(this.newShareLink.id);
-			this.shareLink = null;
 			this.newShareLink = null;
 			this.setShareLinkFormValue();
 			deferred.resolve();
