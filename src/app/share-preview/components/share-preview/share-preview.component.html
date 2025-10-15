@@ -71,6 +71,10 @@
 <div class="share-preview-content-breadcrumbs">
 	<pr-breadcrumbs></pr-breadcrumbs>
 </div>
+<pr-file-list
+	[dataFolder]="someFolder"
+	(itemClicked)="showFolder($event)"
+></pr-file-list>
 <div class="share-preview-content" [ngClass]="{ navigating: isNavigating }">
 	<router-outlet
 		(activate)="subscribeToItemClicks($event)"
