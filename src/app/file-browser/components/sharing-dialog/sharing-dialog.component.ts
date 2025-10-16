@@ -479,13 +479,13 @@ export class SharingDialogComponent implements OnInit {
 		}
 	}
 
-	getExpirationFromExpiresDT(expiresDT: string): Expiration {
-		if (!expiresDT) {
+	getExpirationFromExpirationTimestamp(expirationTimestamp: Date): Expiration {
+		if (!expirationTimestamp) {
 			return Expiration.Never;
 		}
 
 		const diff = differenceInHours(
-			new Date(expiresDT),
+			new Date(expirationTimestamp),
 			new Date(this.newShareLink.createdAt),
 		);
 
@@ -545,6 +545,7 @@ export class SharingDialogComponent implements OnInit {
 						);
 				}
 			});
+			this.expiration = this.getExpirationFromExpirationTimestamp(this.newShareLink.expirationTimestamp);
 		} else {
 			this.autoApproveToggle = 1;
 			this.expiration = Expiration.Never;
@@ -559,9 +560,9 @@ export class SharingDialogComponent implements OnInit {
 			let itemId = '';
 			let itemType: 'record' | 'folder' = 'record';
 			if (this.isRecord(this.shareItem)) {
-				itemId = this.shareItem.recordId;
+				itemId = this.shareItem.recordId.toString();
 			} else {
-				itemId = this.shareItem.folderId;
+				itemId = this.shareItem.folderId.toString();
 				itemType = 'folder';
 			}
 			const response = await this.shareApi.generateShareLink({
@@ -636,16 +637,14 @@ export class SharingDialogComponent implements OnInit {
 				update = { accessRestrictions: value };
 			}
 			if (propName == 'expiresDT') {
-				const conversion = this.getExpirationFromExpiresDT(value);
-				value = this.getExpiresDTFromExpiration(conversion);
 				update = { expirationTimestamp: value };
 			}
 			if (propName == 'defaultAccessRole') {
 				value = this.accessRoleToPermissionsLevel(value);
 				update = { permissionsLevel: value };
 			}
-			await this.shareApi.updateShareLink(this.newShareLink.id, update);
-			this.newShareLink[propName] = update[propName];
+			this.newShareLink = await this.shareApi.updateShareLink(this.newShareLink.id, update);
+			this.setShareLinkFormValue();
 		} catch (err) {
 			if (err instanceof ShareResponse) {
 				this.messageService.showError({
