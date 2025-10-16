@@ -49,6 +49,7 @@ import { addDays, differenceInHours, isPast } from 'date-fns';
 import { find, partition, remove } from 'lodash';
 import { faTrash } from '@fortawesome/pro-regular-svg-icons';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { environment } from '@root/environments/environment';
 
 enum Expiration {
 	Never = 'Never',
@@ -120,6 +121,8 @@ export class SharingDialogComponent implements OnInit {
 	public sendingInvitation = false;
 	public showInvitationForm = false;
 	public invitationForm: UntypedFormGroup;
+	public baseUrl = environment.apiUrl.replace('/api', '/share/');
+	public shareUrl = '';
 
 	public shareLinkTypes = [
 		{
@@ -185,6 +188,9 @@ export class SharingDialogComponent implements OnInit {
 
 
 		this.newShareLink = this.data.newShare;
+		if (this.newShareLink) {
+			this.shareUrl = this.baseUrl + this.newShareLink.token;
+		}
 
 		this.setShareLinkFormValue();
 
@@ -566,6 +572,7 @@ export class SharingDialogComponent implements OnInit {
 			await this.shareApi.updateShareLink(this.newShareLink.id, {
 				accessRestrictions: 'none',
 			});
+			this.shareUrl = this.baseUrl + this.newShareLink.token;
 			this.setShareLinkFormValue();
 			this.showLinkSettings = true;
 			this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
