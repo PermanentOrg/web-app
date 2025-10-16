@@ -285,6 +285,9 @@ export class HttpV2Service {
 
 		return observable.pipe(
 			map((response: Object | Array<Object>) => {
+				if (response === null) {
+					return;
+				}
 				if (options.responseType === 'text') {
 					return [response as unknown as T];
 				}

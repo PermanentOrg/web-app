@@ -1,5 +1,6 @@
 import { Subject } from 'rxjs';
-import { ArchiveVO, ShareByUrlVO } from '@models/index';
+import { ArchiveVO } from '@models/index';
+import { ShareLink } from '@root/app/share-links/models/share-link';
 
 export class MockAccountService {
 	public archiveChange = new Subject();
@@ -8,31 +9,44 @@ export class MockAccountService {
 }
 export class MockApiService {
 	public static readonly initialData = {
-		defaultAccessRole: 'access.role.viewer',
-		createdDT: '2023-02-15T20:31:36',
-		previewToggle: 1,
-		shareUrl: 'https://example.com/shareUrl',
-		status: 'status.generic.ok',
+		id: '1234',
+		itemId: '5',
+		itemType: 'record' as 'record' | 'folder',
+		token: 'sharetoken',
+		permissionsLevel: 'viewer' as
+			| 'contributor'
+			| 'editor'
+			| 'manager'
+			| 'owner'
+			| 'viewer',
+		accessRestrictions: 'none' as 'account' | 'approval' | 'none',
+		maxUses: null,
+		usesExpended: null,
+		createdAt: new Date('2023-02-15T20:31:36'),
+		updatedAt: new Date('2023-02-15T20:32:38'),
 	};
-	public static shareByUrlVO: ShareByUrlVO = new ShareByUrlVO(
-		MockApiService.initialData,
-	);
+
+	public static shareLink: ShareLink = MockApiService.initialData;
 
 	public share = {
 		generateShareLink: async () => ({
-			getShareByUrlVO: () => MockApiService.shareByUrlVO,
+			generateShareLink: () => MockApiService.shareLink,
 		}),
-		updateShareLink: async (shareLink: ShareByUrlVO) => {
-			MockApiService.shareByUrlVO = shareLink;
-			return MockApiService.shareByUrlVO;
+		updateShareLink: async (shareLink: ShareLink) => {
+			MockApiService.shareLink = shareLink;
+			return MockApiService.shareLink;
 		},
-		removeShareLink: async (_shareLink: ShareByUrlVO) => {
+		removeShareLink: async (_shareLink: ShareLink) => {
 			MockApiService.reset();
 		},
 	};
 
+	public async getShareLinksById(ids: number[]): Promise<ShareLink[]> {
+		return [MockApiService.shareLink];
+	}
+
 	public static reset(): void {
-		MockApiService.shareByUrlVO = new ShareByUrlVO(MockApiService.initialData);
+		MockApiService.shareLink = MockApiService.initialData;
 	}
 }
 export class MockRelationshipService {
