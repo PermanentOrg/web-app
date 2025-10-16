@@ -264,23 +264,20 @@
 				}
 				@if (showLinkSettings && displayDropdown) {
 					<div class="share-link-type-dropdown">
-					  <label>Link Type</label>
-					  <select
-					    class="form-control"
-					    [(ngModel)]="linkType"
-					    (ngModelChange)="
-							     onShareLinkPropChange(
-							     'accessRestrictions',
-							     linkType
-							     )
-							     "
-					    >
-					    @for (option of shareLinkTypes; track option) {
-					    <option [value]="option.value">
-					      {{ option.text }}
-					    </option>
-					    }
-					  </select>
+						<label>Link Type</label>
+						<select
+							class="form-control"
+							[(ngModel)]="linkType"
+							(ngModelChange)="
+								onShareLinkPropChange('accessRestrictions', linkType)
+							"
+						>
+							@for (option of shareLinkTypes; track option) {
+								<option [value]="option.value">
+									{{ option.text }}
+								</option>
+							}
+						</select>
 					</div>
 				}
 				@if (showLinkSettings && newShareLink) {

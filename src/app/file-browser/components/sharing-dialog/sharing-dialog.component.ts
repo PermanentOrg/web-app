@@ -12,14 +12,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
-import {
-	ShareVO,
-	ShareByUrlVO,
-	ItemVO,
-	ArchiveVO,
-	InviteVO,
-	RecordVO,
-} from '@models';
+import { ShareVO, ItemVO, ArchiveVO, InviteVO, RecordVO } from '@models';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { AccessRoleType } from '@models/access-role';
 import { sortShareVOs } from '@models/share-vo';
@@ -186,7 +179,6 @@ export class SharingDialogComponent implements OnInit {
 
 		this.relationshipService.update();
 
-
 		this.newShareLink = this.data.newShare;
 		if (this.newShareLink) {
 			this.shareUrl = this.baseUrl + this.newShareLink.token;
@@ -198,10 +190,10 @@ export class SharingDialogComponent implements OnInit {
 	}
 
 	calculateAccessRestrictions(linkType: string, autoApprove: number): string {
-		if (linkType == 'public') {
+		if (linkType === 'public') {
 			return 'none';
 		}
-		if (autoApprove == 1) {
+		if (autoApprove === 1) {
 			return 'account';
 		} else {
 			return 'approval';
@@ -507,25 +499,33 @@ export class SharingDialogComponent implements OnInit {
 			case Expiration.Never:
 				return null;
 			case Expiration.Day:
-				return getSQLDateTime(addDays(new Date(this.newShareLink.createdAt), 1));
+				return getSQLDateTime(
+					addDays(new Date(this.newShareLink.createdAt), 1),
+				);
 			case Expiration.Week:
-				return getSQLDateTime(addDays(new Date(this.newShareLink.createdAt), 7));
+				return getSQLDateTime(
+					addDays(new Date(this.newShareLink.createdAt), 7),
+				);
 			case Expiration.Month:
-				return getSQLDateTime(addDays(new Date(this.newShareLink.createdAt), 30));
+				return getSQLDateTime(
+					addDays(new Date(this.newShareLink.createdAt), 30),
+				);
 			case Expiration.Year:
-				return getSQLDateTime(addDays(new Date(this.newShareLink.createdAt), 365));
+				return getSQLDateTime(
+					addDays(new Date(this.newShareLink.createdAt), 365),
+				);
 		}
 	}
 
 	setShareLinkFormValue(): void {
 		if (this.newShareLink) {
-			if (this.newShareLink.accessRestrictions == 'none') {
+			if (this.newShareLink.accessRestrictions === 'none') {
 				this.linkType = 'public';
 				this.autoApproveToggle = 1;
-			} else if (this.newShareLink.accessRestrictions == 'account') {
+			} else if (this.newShareLink.accessRestrictions === 'account') {
 				this.linkType = 'private';
 				this.autoApproveToggle = 1;
-			} else if (this.newShareLink.accessRestrictions == 'approval') {
+			} else if (this.newShareLink.accessRestrictions === 'approval') {
 				this.linkType = 'private';
 				this.autoApproveToggle = 0;
 			}
@@ -545,7 +545,9 @@ export class SharingDialogComponent implements OnInit {
 						);
 				}
 			});
-			this.expiration = this.getExpirationFromExpirationTimestamp(this.newShareLink.expirationTimestamp);
+			this.expiration = this.getExpirationFromExpirationTimestamp(
+				this.newShareLink.expirationTimestamp,
+			);
 		} else {
 			this.autoApproveToggle = 1;
 			this.expiration = Expiration.Never;
@@ -628,22 +630,25 @@ export class SharingDialogComponent implements OnInit {
 		let update: Partial<ShareLink> = {};
 
 		try {
-			if (propName == 'accessRestrictions') {
+			if (propName === 'accessRestrictions') {
 				value = this.calculateAccessRestrictions(value, this.autoApproveToggle);
 				update = { accessRestrictions: value, permissionsLevel: 'viewer' };
-			} else if (propName == 'autoApproveToggle') {
+			} else if (propName === 'autoApproveToggle') {
 				propName = 'accessRestrictions';
 				value = this.calculateAccessRestrictions(this.linkType, value);
 				update = { accessRestrictions: value };
 			}
-			if (propName == 'expiresDT') {
+			if (propName === 'expiresDT') {
 				update = { expirationTimestamp: value };
 			}
-			if (propName == 'defaultAccessRole') {
+			if (propName === 'defaultAccessRole') {
 				value = this.accessRoleToPermissionsLevel(value);
 				update = { permissionsLevel: value };
 			}
-			this.newShareLink = await this.shareApi.updateShareLink(this.newShareLink.id, update);
+			this.newShareLink = await this.shareApi.updateShareLink(
+				this.newShareLink.id,
+				update,
+			);
 			this.setShareLinkFormValue();
 		} catch (err) {
 			if (err instanceof ShareResponse) {

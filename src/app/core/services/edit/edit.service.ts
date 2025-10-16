@@ -256,8 +256,10 @@ export class EditService {
 					);
 					let newShareLink: ShareLink;
 					if (response.getShareByUrlVO()) {
-					const shareResponse = await this.shareApi.getShareLinksById([response.getShareByUrlVO().shareby_urlId]);
-					newShareLink = shareResponse[0];
+						const shareResponse = await this.shareApi.getShareLinksById([
+							response.getShareByUrlVO().shareby_urlId,
+						]);
+						newShareLink = shareResponse[0];
 					}
 
 					actionDeferred.resolve();
@@ -265,7 +267,7 @@ export class EditService {
 						data: {
 							item: items[0],
 							link: response.getShareByUrlVO(),
-							newShare: newShareLink
+							newShare: newShareLink,
 						},
 					});
 					break;
@@ -531,20 +533,30 @@ export class EditService {
 		const response = await this.api.share.getShareLink(item);
 		let newShareLink: ShareLink;
 		if (response.getShareByUrlVO()) {
-			const shareResponse = await this.shareApi.getShareLinksById([response.getShareByUrlVO().shareby_urlId]);
+			const shareResponse = await this.shareApi.getShareLinksById([
+				response.getShareByUrlVO().shareby_urlId,
+			]);
 			newShareLink = shareResponse[0];
 		}
 		if (this.device.isMobile()) {
 			try {
 				this.dialog.open(SharingComponent, {
 					panelClass: 'dialog',
-					data: { item, link: response.getShareByUrlVO(), newShare: newShareLink},
+					data: {
+						item,
+						link: response.getShareByUrlVO(),
+						newShare: newShareLink,
+					},
 				});
 			} catch (err) {}
 		} else {
 			try {
 				this.dialog.open(SharingDialogComponent, {
-					data: { item, link: response.getShareByUrlVO(), newShare: newShareLink},
+					data: {
+						item,
+						link: response.getShareByUrlVO(),
+						newShare: newShareLink,
+					},
 					width: '600px',
 					panelClass: 'dialog',
 				});
