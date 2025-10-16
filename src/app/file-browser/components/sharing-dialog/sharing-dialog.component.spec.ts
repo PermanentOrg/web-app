@@ -12,6 +12,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ArchiveVO, RecordVO, ShareVO } from '@models';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { AccessRoleType } from '@models/access-role';
 import { MessageService } from '@shared/services/message/message.service';
@@ -262,7 +263,7 @@ describe('SharingDialogComponent - Shallow Rendering', () => {
 			ShallowTestingModule,
 		)
 			.mock(AccountService, new MockAccountService())
-			.mock(ApiService, new MockApiService())
+			.mock(ShareLinksApiService, new MockApiService())
 			.mock(RelationshipService, new MockRelationshipService())
 			.mock(Router, new NullDependency())
 			.mock(DialogRef, new NullDependency())
@@ -278,14 +279,14 @@ describe('SharingDialogComponent - Shallow Rendering', () => {
 
 		await instance.generateShareLink();
 
-		expect(instance.shareLink.shareUrl).toContain('example.com');
+		expect(instance.newShareLink.token).toContain('token');
 
-		instance.linkDefaultAccessRole = 'access.role.owner';
+		instance.newShareLink.permissionsLevel = 'owner';
 		await instance.onShareLinkPropChange(
 			'defaultAccessRole',
 			'access.role.owner',
 		);
 
-		expect(instance.shareLink.defaultAccessRole).toBe('access.role.owner');
+		expect(instance.newShareLink.permissionsLevel).toBe('owner');
 	});
 });
