@@ -105,6 +105,9 @@ export class ThumbnailComponent implements OnInit, DoCheck {
 			};
 
 			imageLoader.src = imageUrl;
+		} else {
+			this.thumbLoaded = false;
+			this.imageUrl = null;
 		}
 	}
 
