@@ -239,7 +239,8 @@
 					}
 					@if (!newShareLink) {
 						<div class="share-link-container">
-							Generate a link to invite people to share this content.
+							Generate a link to send via text or email for others to view this
+							material.
 						</div>
 					}
 					@if (!newShareLink) {
@@ -264,23 +265,20 @@
 				}
 				@if (showLinkSettings && displayDropdown) {
 					<div class="share-link-type-dropdown">
-					  <label>Link Type</label>
-					  <select
-					    class="form-control"
-					    [(ngModel)]="linkType"
-					    (ngModelChange)="
-							     onShareLinkPropChange(
-							     'accessRestrictions',
-							     linkType
-							     )
-							     "
-					    >
-					    @for (option of shareLinkTypes; track option) {
-					    <option [value]="option.value">
-					      {{ option.text }}
-					    </option>
-					    }
-					  </select>
+						<label>Link Type</label>
+						<select
+							class="form-control"
+							[(ngModel)]="linkType"
+							(ngModelChange)="
+								onShareLinkPropChange('accessRestrictions', linkType)
+							"
+						>
+							@for (option of shareLinkTypes; track option.value) {
+								<option [value]="option.value">
+									{{ option.text }}
+								</option>
+							}
+						</select>
 					</div>
 				}
 				@if (showLinkSettings && newShareLink) {
