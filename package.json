@@ -54,7 +54,7 @@
 		"@types/debug": "4.1.12",
 		"@types/hammerjs": "2.0.36",
 		"@types/lodash": "4.17.20",
-		"@types/openseadragon": "^3.0.5",
+		"@types/openseadragon": "^4.1.0",
 		"angular-shepherd": "^20.0.0",
 		"binaryjs": "0.2.1",
 		"check-password-strength": "^3.0.0",
