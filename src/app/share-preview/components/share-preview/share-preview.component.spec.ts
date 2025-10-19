@@ -21,9 +21,7 @@ import { AccountVO, ArchiveVO, RecordVO } from '@root/app/models';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { Subject } from 'rxjs';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
-import { ApiService } from '@shared/services/api/api.service';
-import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
-import { ShareResponse } from '@shared/services/api/share.repo';
+import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 import { SharePreviewComponent } from './share-preview.component';
 
@@ -72,6 +70,10 @@ const mockShareLinksService = {
 	isUnlistedShare: () => true,
 };
 
+const mockFilesystemService = {
+	getFolder: jasmine.createSpy().and.returnValue(Promise.resolve({})),
+};
+
 describe('SharePreviewComponent', () => {
 	let component: SharePreviewComponent;
 	let fixture: ComponentFixture<SharePreviewComponent>;
@@ -118,8 +120,8 @@ describe('SharePreviewComponent', () => {
 		});
 
 		config.providers.push({
-			provide: GoogleAnalyticsService,
-			useValue: mockGoogleAnalyticsService,
+			provide: FilesystemService,
+			useValue: mockFilesystemService,
 		});
 
 		await TestBed.configureTestingModule(config).compileComponents();

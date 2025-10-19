@@ -58,6 +58,8 @@ export class DataService {
 	private thumbRefreshQueue: Array<ItemVO> = [];
 	private thumbRefreshTimeout;
 
+	private _ephemeralFolder: FolderVO;
+
 	public multiclickItems: Map<number, ItemVO> = new Map();
 
 	private selectedItems: SelectedItemsSet = new Set();
@@ -104,6 +106,14 @@ export class DataService {
 		if (item.archiveNbr) {
 			delete this.byArchiveNbr[item.archiveNbr];
 		}
+	}
+
+	get ephemeralFolder() {
+		return this._ephemeralFolder;
+	}
+
+	set ephemeralFolder(folder: FolderVO) {
+		this._ephemeralFolder = folder;
 	}
 
 	public setCurrentFolder(folder?: FolderVO, isPage?: boolean) {

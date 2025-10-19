@@ -59,8 +59,6 @@ import { routeHasDialog } from '@shared/utilities/router';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { EventService } from '@shared/services/event/event.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
-import { ApiService } from '@shared/services/api/api.service';
-import { FeatureService } from '@share-preview/feature-service';
 
 export interface ItemClickEvent {
 	event?: MouseEvent;
@@ -108,7 +106,7 @@ export class FileListComponent
 	public showFolderThumbnails = false;
 
 	@Input() allowNavigation = true;
-	@Input() dataFolder: any;
+	@Input() ephemeralFolder: any = null;
 
 	@Output() itemClicked = new EventEmitter<ItemClickEvent>();
 
@@ -155,10 +153,9 @@ export class FileListComponent
 		private ngZone: NgZone,
 		private event: EventService,
 		private shareLinksService: ShareLinksService,
-		private api: ApiService,
-		private featureService: FeatureService,
 	) {
-		this.currentFolder = this.route.snapshot.data.currentFolder;
+		this.currentFolder =
+			this.ephemeralFolder || this.route.snapshot.data.currentFolder;
 		// this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
 		this.fileListCentered = this.route.snapshot.data.fileListCentered;
 		this.showSidebar = this.route.snapshot.data.showSidebar;
@@ -209,15 +206,7 @@ export class FileListComponent
 
 	async ngOnChanges() {
 		this.currentFolder =
-			this.dataFolder || this.route.snapshot.data.currentFolder;
-		if (this.dataFolder) {
-			const folderResponse = await this.api.folder.getWithChildren(
-				[this.currentFolder],
-				this.shareLinksService.currentShareToken,
-			);
-			this.currentFolder = folderResponse.getFolderVO();
-		}
-
+			this.ephemeralFolder || this.route.snapshot.data.currentFolder;
 		this.showSidebar = this.route.snapshot.data.showSidebar;
 		this.dataService.setCurrentFolder(this.currentFolder);
 		this.isRootFolder = this.currentFolder.type.includes('root');
@@ -351,16 +340,7 @@ export class FileListComponent
 
 	async ngOnInit() {
 		this.currentFolder =
-			this.featureService.ephemeralFolder ||
-			this.route.snapshot.data.currentFolder;
-
-		if (this.featureService.ephemeralFolder) {
-			const stuff = await this.api.folder.getWithChildren(
-				[this.featureService.ephemeralFolder],
-				this.shareLinksService.currentShareToken,
-			);
-			this.currentFolder = stuff.getFolderVO();
-		}
+			this.ephemeralFolder || this.route.snapshot.data.currentFolder;
 		this.showSidebar = this.route.snapshot.data.showSidebar;
 		this.dataService.setCurrentFolder(this.currentFolder);
 		this.isRootFolder = this.currentFolder.type.includes('root');
@@ -546,7 +526,7 @@ export class FileListComponent
 
 	async loadVisibleItems(animate?: boolean) {
 		this.debug('loadVisibleItems %d items', this.visibleItems.size);
-		if (this.dataFolder) {
+		if (this.ephemeralFolder) {
 			return;
 		}
 		if (!this.visibleItems.size) {
