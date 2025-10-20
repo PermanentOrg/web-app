@@ -578,12 +578,9 @@ export class FileListItemComponent
 				});
 			}
 			if (this.isInSharePreview || this.isInPublicArchive) {
-				this.router.navigate(
-					['view', this.item.archiveNbr, this.item.folder_linkId],
-					{
-						relativeTo: this.route.parent,
-					},
-				);
+				this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {
+					relativeTo: this.route.parent,
+				});
 			} else {
 				this.router.navigate([
 					rootUrl,

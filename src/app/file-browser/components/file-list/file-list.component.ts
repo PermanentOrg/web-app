@@ -106,7 +106,7 @@ export class FileListComponent
 	public showFolderThumbnails = false;
 
 	@Input() allowNavigation = true;
-	@Input() ephemeralFolder: any = null;
+	@Input() ephemeralFolder: FolderVO = null;
 
 	@Output() itemClicked = new EventEmitter<ItemClickEvent>();
 
@@ -205,15 +205,7 @@ export class FileListComponent
 	}
 
 	async ngOnChanges() {
-		this.currentFolder =
-			this.ephemeralFolder || this.route.snapshot.data.currentFolder;
-		this.showSidebar = this.route.snapshot.data.showSidebar;
-		this.dataService.setCurrentFolder(this.currentFolder);
-		this.isRootFolder = this.currentFolder.type.includes('root');
-		this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
-
-		this.visibleItems.clear();
-		this.reinit = true;
+		this.initializeFolder();
 	}
 
 	registerArchiveChangeHandlers() {
@@ -339,15 +331,7 @@ export class FileListComponent
 	}
 
 	async ngOnInit() {
-		this.currentFolder =
-			this.ephemeralFolder || this.route.snapshot.data.currentFolder;
-		this.showSidebar = this.route.snapshot.data.showSidebar;
-		this.dataService.setCurrentFolder(this.currentFolder);
-		this.isRootFolder = this.currentFolder.type.includes('root');
-		this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
-
-		this.visibleItems.clear();
-		this.reinit = true;
+		this.initializeFolder();
 	}
 
 	ngAfterViewInit() {
@@ -560,5 +544,17 @@ export class FileListComponent
 		} else {
 			this.visibleItems.delete(event.component);
 		}
+	}
+
+	private initializeFolder() {
+		this.currentFolder =
+			this.ephemeralFolder || this.route.snapshot.data.currentFolder;
+		this.showSidebar = this.route.snapshot.data.showSidebar;
+		this.dataService.setCurrentFolder(this.currentFolder);
+		this.isRootFolder = this.currentFolder.type.includes('root');
+		this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
+
+		this.visibleItems.clear();
+		this.reinit = true;
 	}
 }
