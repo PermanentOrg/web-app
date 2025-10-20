@@ -6,6 +6,8 @@ import {
 	Input,
 	ViewEncapsulation,
 	Optional,
+	Output,
+	EventEmitter,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -19,12 +21,14 @@ import { ShareLinksService } from '@root/app/share-links/services/share-links.se
 
 export class Breadcrumb {
 	public routerPath: string;
+	public folderIndex: FolderVO;
 	constructor(
 		rootUrl: string,
 		public text: string,
 		public archiveNbr?: string,
 		public folder_linkId?: number,
 		rootUrlOnly = false,
+		folderIndex = null,
 	) {
 		if (rootUrlOnly) {
 			this.routerPath = rootUrl;
@@ -33,6 +37,7 @@ export class Breadcrumb {
 		} else {
 			this.routerPath = [rootUrl, archiveNbr, folder_linkId].join('/');
 		}
+		this.folderIndex = folderIndex;
 	}
 
 	getSpecialRouterPath(displayText) {
@@ -66,6 +71,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
 	@Input() darkText = false;
 	@Input() large = false;
+
+	@Output() breadcrumbClicked = new EventEmitter<any>();
 
 	private scrollElement: Element;
 	private folderChangeListener: Subscription;
@@ -104,6 +111,10 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.folderChangeListener.unsubscribe();
+	}
+
+	breadcrumbItemClicked($event) {
+		this.breadcrumbClicked.emit($event);
 	}
 
 	setFolder(folder) {
@@ -186,6 +197,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 					folder.pathAsText[i],
 					folder.pathAsArchiveNbr && folder.pathAsArchiveNbr[i],
 					folder.pathAsFolder_linkId && folder.pathAsFolder_linkId[i],
+					null,
+					i,
 				),
 			);
 		}
