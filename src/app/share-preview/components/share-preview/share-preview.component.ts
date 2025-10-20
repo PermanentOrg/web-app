@@ -32,6 +32,7 @@ import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 import { DataService } from '@shared/services/data/data.service';
+import { ItemClickEvent } from '@fileBrowser/components/file-list/file-list.component';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
@@ -103,7 +104,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	public hideBannerSubject: Subject<void> = new Subject<void>();
 	public hideBannerObservable = this.hideBannerSubject.asObservable();
 	public isUnlistedShare = false;
-	public ephemeralFolder: any = null;
+	public ephemeralFolder: FolderVO = null;
 
 	constructor(
 		private router: Router,
@@ -665,11 +666,18 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 			});
 	}
 
-	async showFolder(test) {
-		if (test?.item?.isFolder && this.isUnlistedShare) {
-			this.ephemeralFolder = await this.filesystemService.getFolder(test.item);
+	async showFolder(itemClickEvent: ItemClickEvent) {
+		if (itemClickEvent?.item?.isFolder) {
+			this.ephemeralFolder = await this.filesystemService.getFolder(
+				itemClickEvent?.item,
+			);
 			this.dataService.ephemeralFolder = this.ephemeralFolder;
 		}
+	}
+
+	async goToFolderFromBreadcrumb($event) {
+		this.ephemeralFolder = await this.filesystemService.getFolder($event);
+		this.dataService.ephemeralFolder = this.ephemeralFolder;
 	}
 
 	subscribeToItemClicks(componentReference) {
@@ -678,12 +686,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		}
 
 		this.fileListClickListener = componentReference.itemClicked.subscribe(
-			async (test) => {
-				if (this.isUnlistedShare && test?.item?.isFolder) {
-					this.ephemeralFolder = await this.filesystemService.getFolder(
-						test.item,
-					);
-					this.dataService.ephemeralFolder = this.ephemeralFolder;
+			async (itemClickEvent: ItemClickEvent) => {
+				if (this.isUnlistedShare) {
+					this.showFolder(itemClickEvent);
 				} else {
 					this.dispatchBannerClose();
 					this.showCreateAccountDialog();

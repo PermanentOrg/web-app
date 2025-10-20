@@ -6,6 +6,8 @@ import {
 	HostListener,
 	HostBinding,
 	Optional,
+	Output,
+	EventEmitter,
 } from '@angular/core';
 import {
 	DragTargetDroppableComponent,
@@ -27,6 +29,8 @@ export class BreadcrumbComponent
 	@Input() breadcrumb: Breadcrumb;
 	@Input() last: boolean;
 
+	@Output() breadcrumbClicked = new EventEmitter<any>();
+
 	@HostBinding('class.drag-target') public isDragTarget = false;
 	@HostBinding('class.drop-target') public isDropTarget = false;
 
@@ -47,6 +51,12 @@ export class BreadcrumbComponent
 	ngOnDestroy() {
 		if (this.dragSubscription) {
 			this.dragSubscription.unsubscribe();
+		}
+	}
+
+	goToFolder() {
+		if (this.breadcrumb?.folderIndex) {
+			this.breadcrumbClicked.emit(this.breadcrumb.folderIndex);
 		}
 	}
 
