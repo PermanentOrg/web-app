@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
 
 import { FolderVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
@@ -31,9 +30,7 @@ export class FilesystemApiService implements FilesystemApi {
 				this.shareLinksService.currentShareToken,
 			);
 		} else {
-			response = await firstValueFrom(
-				this.api.folder.navigateLean(new FolderVO(folder)),
-			);
+			response = await this.api.folder.navigateLean(new FolderVO(folder));
 		}
 		if (!response.isSuccessful) {
 			throw response;

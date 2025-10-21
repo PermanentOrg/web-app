@@ -285,16 +285,29 @@ export class FolderRepo extends BaseRepo {
 		});
 	}
 
-	public navigateLean(folderVO: FolderVO): Observable<FolderResponse> {
-		const data = [
+	public async navigateLean(folderVO: FolderVO): Promise<FolderResponse> {
+		const stelaFolder = await this.getStelaFolder(folderVO);
+		stelaFolder.children = await this.getStelaFolderChildren(folderVO);
+		const simulatedV1FolderResponseResults = [
 			{
-				FolderVO: new FolderVO(folderVO),
+				data: [
+					{
+						FolderVO: convertStelaFolderToFolderVO(stelaFolder),
+					},
+				],
+				message: ['Folder retrieved'],
+				status: true,
+				resultDT: new Date().toISOString(),
+				createdDT: null,
+				updatedDT: null,
 			},
 		];
-
-		return this.http.sendRequest<FolderResponse>('/folder/navigateLean', data, {
-			ResponseClass: FolderResponse,
+		const folderResponse = new FolderResponse({
+			isSuccessful: true,
+			isSystemUp: true,
+			Results: simulatedV1FolderResponseResults,
 		});
+		return folderResponse;
 	}
 
 	public getLeanItems(folderVOs: FolderVO[]): Observable<FolderResponse> {

@@ -80,9 +80,9 @@ export class PublishComponent {
 				let tries = 0;
 				while (!this.publicItem && tries < 10) {
 					tries += 1;
-					const publicRootResponse = (await this.api.folder
-						.navigateLean(publicRoot)
-						.toPromise()) as FolderResponse;
+					const publicRootResponse = (await this.api.folder.navigateLean(
+						publicRoot,
+					)) as FolderResponse;
 					const publicRootFull = publicRootResponse.getFolderVO(true);
 					const publicFolders: FolderVO[] = publicRootFull.ChildItemVOs.filter(
 						(i) => i instanceof FolderVO,

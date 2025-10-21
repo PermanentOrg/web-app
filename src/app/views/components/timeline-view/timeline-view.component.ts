@@ -485,9 +485,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (folder.isFetching) {
 			await folder.fetched;
 		}
-		const folderResponse = await this.api.folder
-			.navigateLean(folder)
-			.toPromise();
+		const folderResponse = await this.api.folder.navigateLean(folder);
 		this.dataService.setCurrentFolder(folderResponse.getFolderVO(true));
 		this.isNavigating = false;
 	}

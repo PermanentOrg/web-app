@@ -4,7 +4,7 @@ import {
 	RouterStateSnapshot,
 	Router,
 } from '@angular/router';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { find, cloneDeep } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
@@ -60,8 +60,11 @@ export class LeanFolderResolveService {
 			targetFolder = new FolderVO(myFiles);
 		}
 
-		return this.api.folder
-			.navigateLean(targetFolder)
+		const leanFolderObservable = from(
+			this.api.folder.navigateLean(targetFolder),
+		);
+
+		return leanFolderObservable
 			.pipe(
 				map((response: FolderResponse) => {
 					if (!response.isSuccessful) {
