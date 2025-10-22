@@ -108,7 +108,9 @@ interface EditServiceClipboard {
 	operation: EditServiceClipboardOperation;
 }
 
-@Injectable()
+@Injectable({
+	providedIn: 'root',
+})
 export class EditService {
 	private clipboard: EditServiceClipboard;
 
