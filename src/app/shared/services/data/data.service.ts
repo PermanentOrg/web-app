@@ -60,7 +60,7 @@ export class DataService {
 
 	private _ephemeralFolder: FolderVO;
 
-	private _breadCrumbsFolders: Array<FolderVO> = [];
+	private _breadcrumbFolders: Array<FolderVO> = [];
 
 	public multiclickItems: Map<number, ItemVO> = new Map();
 
@@ -110,25 +110,20 @@ export class DataService {
 		}
 	}
 
-	public registerBreadcrumbFolder(folder: FolderVO) {
-		this._breadCrumbsFolders.push(folder);
-	}
-
-	public unregisterBreadcrumbFolder(folder: FolderVO) {
-		this._breadCrumbsFolders = [...this._breadCrumbsFolders].filter(
-			(currentFolder) => currentFolder.folderId !== folder.folderId,
-		);
+	public pushBreadcrumbFolder(folder: FolderVO) {
+		this._breadcrumbFolders.push(folder);
 	}
 
 	public cutBreadcrumbRoute(folder: FolderVO) {
-		const folderIndex = this._breadCrumbsFolders.findIndex(
+		const folderIndex = this._breadcrumbFolders.findIndex(
 			(currentFolder) => currentFolder.folderId === folder.folderId,
 		);
-		const foldersLength = this._breadCrumbsFolders.length;
-		this._breadCrumbsFolders = [...this._breadCrumbsFolders].toSpliced(
-			folderIndex + 1,
-			foldersLength,
-		);
+		const foldersLength = this._breadcrumbFolders.length;
+		this._breadcrumbFolders.splice(folderIndex + 1, foldersLength);
+	}
+
+	get breadcrumbFolders() {
+		return this._breadcrumbFolders;
 	}
 
 	get ephemeralFolder() {

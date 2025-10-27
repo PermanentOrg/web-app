@@ -20,16 +20,17 @@ import { EditService } from '@core/services/edit/edit.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
 export class Breadcrumb {
+	public id: number;
 	public routerPath: string;
-	public folderIndex: FolderVO;
 	constructor(
+		id: number,
 		rootUrl: string,
 		public text: string,
 		public archiveNbr?: string,
 		public folder_linkId?: number,
 		rootUrlOnly = false,
-		folderIndex = null,
 	) {
+		this.id = id;
 		if (rootUrlOnly) {
 			this.routerPath = rootUrl;
 		} else if (!archiveNbr && !folder_linkId) {
@@ -37,7 +38,6 @@ export class Breadcrumb {
 		} else {
 			this.routerPath = [rootUrl, archiveNbr, folder_linkId].join('/');
 		}
-		this.folderIndex = folderIndex;
 	}
 
 	getSpecialRouterPath(displayText) {
@@ -113,11 +113,11 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 		this.folderChangeListener.unsubscribe();
 	}
 
-	breadcrumbItemClicked($event) {
-		this.breadcrumbClicked.emit($event);
+	breadcrumbItemClicked(breadcrumbId: number) {
+		this.breadcrumbClicked.emit(breadcrumbId);
 	}
 
-	setFolder(folder) {
+	async setFolder(folder) {
 		this.currentFolder = folder;
 		this.breadcrumbs = [];
 
@@ -137,9 +137,13 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 		const isInPublic = this.router.routerState.snapshot.url.includes('/p/');
 		const isInFolderView =
 			this.router.routerState.snapshot.url.includes('/view/');
+		const isUnlistedShare = await this.shareLinkService.isUnlistedShare();
 
 		const showRootBreadcrumb =
-			!isInPublic && !isInSharePreviewView && !isInSharePreviewInviteView;
+			!isInPublic &&
+			!isInSharePreviewView &&
+			!isInSharePreviewInviteView &&
+			!isUnlistedShare;
 
 		let rootUrl;
 
@@ -175,14 +179,14 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 		}
 
 		if (showRootBreadcrumb) {
-			this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
+			this.breadcrumbs.push(new Breadcrumb(0, rootUrl, folder.pathAsText[0]));
 			if (this.breadcrumbs[0].routerPath === '/private')
 				this.breadcrumbs[0].text = 'Private';
 		}
 
 		if (isInPublicArchive) {
 			this.breadcrumbs.push(
-				new Breadcrumb(rootUrl, folder.pathAsText[0], null, null, true),
+				new Breadcrumb(0, rootUrl, folder.pathAsText[0], null, null, true),
 			);
 		}
 
@@ -193,12 +197,12 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
 			this.breadcrumbs.push(
 				new Breadcrumb(
+					i,
 					rootUrl,
 					folder.pathAsText[i],
 					folder.pathAsArchiveNbr && folder.pathAsArchiveNbr[i],
 					folder.pathAsFolder_linkId && folder.pathAsFolder_linkId[i],
 					null,
-					i,
 				),
 			);
 		}

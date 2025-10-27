@@ -16,6 +16,7 @@ import {
 } from '@shared/services/drag/drag.service';
 import { Subscription } from 'rxjs';
 import debug from 'debug';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { Breadcrumb } from './breadcrumbs.component';
 
 @Component({
@@ -29,14 +30,19 @@ export class BreadcrumbComponent
 	@Input() breadcrumb: Breadcrumb;
 	@Input() last: boolean;
 
-	@Output() breadcrumbClicked = new EventEmitter<any>();
+	@Output() breadcrumbClicked = new EventEmitter<number>();
 
 	@HostBinding('class.drag-target') public isDragTarget = false;
 	@HostBinding('class.drop-target') public isDropTarget = false;
 
+	public isUnlistedShare: boolean;
+
 	private dragSubscription: Subscription;
 	private debug = debug('component:breadcrumb');
-	constructor(@Optional() private drag: DragService) {
+	constructor(
+		@Optional() private drag: DragService,
+		private shareLinksService: ShareLinksService,
+	) {
 		if (this.drag) {
 			this.dragSubscription = this.drag.events().subscribe((dragEvent) => {
 				this.onDragServiceEvent(dragEvent);
@@ -44,8 +50,9 @@ export class BreadcrumbComponent
 		}
 	}
 
-	ngOnInit() {
+	async ngOnInit() {
 		this.debug('created %o', this.breadcrumb);
+		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 	}
 
 	ngOnDestroy() {
@@ -54,10 +61,8 @@ export class BreadcrumbComponent
 		}
 	}
 
-	goToFolder() {
-		if (this.breadcrumb?.folderIndex) {
-			this.breadcrumbClicked.emit(this.breadcrumb.folderIndex);
-		}
+	async goToFolder() {
+		this.breadcrumbClicked.emit(this.breadcrumb.id);
 	}
 
 	onDragServiceEvent(dragEvent: DragServiceEvent) {

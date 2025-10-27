@@ -201,6 +201,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 				this.route.snapshot.data.sharePreviewVO.FolderVO,
 			);
 			this.dataService.ephemeralFolder = this.ephemeralFolder;
+			this.dataService.pushBreadcrumbFolder(this.ephemeralFolder);
 		}
 
 		this.checkAccess();
@@ -672,12 +673,16 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 				itemClickEvent?.item,
 			);
 			this.dataService.ephemeralFolder = this.ephemeralFolder;
+			this.dataService.pushBreadcrumbFolder(this.ephemeralFolder);
 		}
 	}
 
-	async goToFolderFromBreadcrumb($event) {
-		this.ephemeralFolder = await this.filesystemService.getFolder($event);
+	async goToFolderFromBreadcrumb($event: number) {
+		const newEphemeralFolder = this.dataService.breadcrumbFolders[$event - 1];
+		this.ephemeralFolder =
+			await this.filesystemService.getFolder(newEphemeralFolder);
 		this.dataService.ephemeralFolder = this.ephemeralFolder;
+		this.dataService.cutBreadcrumbRoute(this.ephemeralFolder);
 	}
 
 	subscribeToItemClicks(componentReference) {
