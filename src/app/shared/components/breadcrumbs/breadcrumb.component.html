@@ -1,5 +1,5 @@
 @if (!last) {
-	@if (!breadcrumb.folderIndex) {
+	@if (!isUnlistedShare) {
 		<a [routerLink]="[breadcrumb.routerPath]">{{ breadcrumb.text }}</a>
 	} @else {
 		<a (click)="goToFolder()">{{ breadcrumb.text }}</a>
