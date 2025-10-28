@@ -117,7 +117,7 @@
 		"eslint-config-love": "^133.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-jasmine": "^4.2.2",
-		"eslint-plugin-jsdoc": "^61.1.7",
+		"eslint-plugin-jsdoc": "^61.1.10",
 		"eslint-plugin-prefer-arrow": "^1.2.2",
 		"eslint-plugin-prettier": "^5.5.4",
 		"eslint-plugin-storybook": "^9.1.15",
