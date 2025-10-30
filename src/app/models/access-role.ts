@@ -15,6 +15,39 @@ export type AccessRoleType =
 	| 'access.role.manager'
 	| 'access.role.owner';
 
+export type PermissionsLevel =
+	| 'contributor'
+	| 'editor'
+	| 'manager'
+	| 'owner'
+	| 'viewer';
+
+// Mapping for share link permissions. Note the stela share link API
+// mistakenly returns "manager" where it should use "curator" -- see
+// https://github.com/PermanentOrg/stela/issues/540
+export const ACCESS_ROLE_TO_PERMISSIONS_LEVEL: Record<
+	AccessRoleType,
+	PermissionsLevel
+> = {
+	'access.role.viewer': 'viewer',
+	'access.role.editor': 'editor',
+	'access.role.contributor': 'contributor',
+	'access.role.curator': 'manager',
+	'access.role.manager': 'manager',
+	'access.role.owner': 'owner',
+};
+
+export const PERMISSIONS_LEVEL_TO_ACCESS_ROLE: Record<
+	PermissionsLevel,
+	AccessRoleType
+> = {
+	viewer: 'access.role.viewer',
+	editor: 'access.role.editor',
+	contributor: 'access.role.contributor',
+	manager: 'access.role.curator',
+	owner: 'access.role.owner',
+};
+
 export function checkMinimumAccess(
 	accessRole: AccessRoleType,
 	minimumAccess: AccessRole,

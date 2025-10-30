@@ -207,34 +207,28 @@
 		<div class="dialog-body">
 			<div class="header-container">
 				<div class="header-small">Create link to share</div>
-				@if (shareLink) {
+				@if (newShareLink) {
 					<div class="remove-link" (click)="removeShareLink()">
 						<fa-icon class="trash-icon" [icon]="trashIcon" />
 						<span>Remove Link</span>
 					</div>
 				}
 			</div>
-			<div class="header-container">
-				<p>
-					Generate a link to send via text or email for others to view this
-					material. Learn more.
-				</p>
-			</div>
 			<hr />
 			<div class="content">
 				<div class="share-link">
-					@if (shareLink) {
+					@if (newShareLink) {
 						<div class="share-link-container">
 							<input
 								type="text"
 								class="form-control"
 								readonly
-								[value]="shareLink.shareUrl"
+								[value]="shareUrl"
 								#shareUrlInput
 							/>
 						</div>
 					}
-					@if (shareLink) {
+					@if (newShareLink) {
 						<button
 							class="btn btn-primary-light"
 							[disabled]="linkCopied"
@@ -243,13 +237,13 @@
 							{{ linkCopied ? 'Copied' : 'Copy' }}
 						</button>
 					}
-					@if (!shareLink) {
+					@if (!newShareLink) {
 						<div class="share-link-container">
-							Generate a link to send via text or email to invite people to
-							share this content.
+							Generate a link to send via text or email for others to view this
+							material.
 						</div>
 					}
-					@if (!shareLink) {
+					@if (!newShareLink) {
 						<button
 							class="btn btn-primary-light"
 							(click)="generateShareLink()"
@@ -259,7 +253,7 @@
 						</button>
 					}
 				</div>
-				@if (shareLink) {
+				@if (newShareLink) {
 					<div class="share-link-settings-toggle" @ngIfScaleAnimation>
 						<button
 							class="btn btn-link"
@@ -271,66 +265,24 @@
 				}
 				@if (showLinkSettings && displayDropdown) {
 					<div class="share-link-type-dropdown">
-						<span class="link-type-text"><b>Link Type</b></span>
-						<pr-share-link-dropdown
-							[linkTypes]="shareLinkTypes"
-							[(value)]="linkType"
-						></pr-share-link-dropdown>
+						<label>Link Type</label>
+						<select
+							class="form-control"
+							[(ngModel)]="linkType"
+							(ngModelChange)="
+								onShareLinkPropChange('accessRestrictions', linkType)
+							"
+						>
+							@for (option of shareLinkTypes; track option.value) {
+								<option [value]="option.value">
+									{{ option.text }}
+								</option>
+							}
+						</select>
 					</div>
 				}
-				@if (showLinkSettings && shareLink) {
+				@if (showLinkSettings && newShareLink) {
 					<div class="share-link-settings" @ngIfScaleAnimation>
-						@if (linkType === 'private') {
-							<div class="link-settings-item">
-								<label>Share Preview</label>
-								<div class="form-check form-check-inline">
-									<input
-										class="form-check-input"
-										type="radio"
-										name="sharePreviewToggle"
-										id="sharePreviewToggleOn"
-										[value]="1"
-										[disabled]="updatingLink"
-										[(ngModel)]="previewToggle"
-										(ngModelChange)="
-											onShareLinkPropChange('previewToggle', previewToggle)
-										"
-									/>
-									<label class="form-check-label" for="sharePreviewToggleOn"
-										>On</label
-									>
-								</div>
-								<div class="form-check form-check-inline">
-									<input
-										class="form-check-input"
-										type="radio"
-										name="sharePreviewToggle"
-										id="sharePreviewToggleOff"
-										[value]="0"
-										[disabled]="updatingLink"
-										[(ngModel)]="previewToggle"
-										(ngModelChange)="
-											onShareLinkPropChange('previewToggle', previewToggle)
-										"
-									/>
-									<label class="form-check-label" for="sharePreviewToggleOff"
-										>Off</label
-									>
-								</div>
-							</div>
-						}
-						@if (linkType === 'private') {
-							<small class="text-muted">
-								@switch (previewToggle) {
-									@case (1) {
-										Recipients can see a preview without being logged in.
-									}
-									@case (0) {
-										Recipients must be granted access to view content.
-									}
-								}
-							</small>
-						}
 						@if (linkType === 'private') {
 							<div class="link-settings-item">
 								<label>Auto Approve</label>
@@ -445,14 +397,14 @@
 							</select>
 						</div>
 						<small class="text-muted">
-							@switch (shareLink.expiresDT) {
+							@switch (newShareLink.expirationTimestamp) {
 								@case (null) {
 									This link will only expire if deleted
 								}
 								@default {
 									This link will expire
 									{{
-										shareLink.expiresDT
+										newShareLink.expirationTimestamp
 											| date
 												: "MMM d, y 'at'
                               h:mm:ss a"

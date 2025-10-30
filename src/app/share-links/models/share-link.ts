@@ -1,9 +1,11 @@
+import { PermissionsLevel } from '@models/access-role';
+
 export interface ShareLink {
 	id: string;
 	itemId: string;
 	itemType: 'folder' | 'record';
 	token: string;
-	permissionsLevel: 'contributor' | 'editor' | 'manager' | 'owner' | 'viewer';
+	permissionsLevel: PermissionsLevel;
 	accessRestrictions: 'account' | 'approval' | 'none';
 	maxUses: number | null;
 	usesExpended: number | null;
