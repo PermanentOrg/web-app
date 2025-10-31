@@ -48,7 +48,9 @@ export class FormCreateComponent implements OnInit, OnDestroy {
 			this.newTagName = '';
 		} catch (c) {
 			// Wait for next tick to keep waiting = false in case submit is run multiple times
-			await new Promise((resolve) => setTimeout(resolve));
+			await new Promise<void>((resolve) => {
+				setTimeout(resolve);
+			});
 		} finally {
 			this.waiting = false;
 		}

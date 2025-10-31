@@ -51,8 +51,8 @@ export class SearchService {
 	}
 
 	public parseSearchTerm(termString: string): [string, TagVOData[]] {
-		const splitByTerm = new RegExp(/\s(?=(?:[^"]+(["])[^"]+\1)*[^"]*$)/g);
-		const getTagName = new RegExp(/"(.+)"/g);
+		const splitByTerm = /\s(?=(?:[^"]+(["])[^"]+\1)*[^"]*$)/g;
+		const getTagName = /"(.+)"/g;
 		let queryString: string;
 		const parsedTags: TagVOData[] = [];
 

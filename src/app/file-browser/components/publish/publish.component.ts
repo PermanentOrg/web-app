@@ -91,7 +91,9 @@ export class PublishComponent {
 					if (latest && latest.displayName === this.sourceItem.displayName) {
 						this.publicItem = latest;
 					} else {
-						await new Promise<void>((r) => setTimeout(() => r(), 1000));
+						await new Promise<void>((r) => {
+							setTimeout(() => r(), 1000);
+						});
 					}
 				}
 

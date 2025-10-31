@@ -248,7 +248,7 @@ export class EditService {
 					actionDeferred.resolve();
 					this.openPublishDialog(items[0]);
 					break;
-				case 'share':
+				case 'share': {
 					const response: ShareResponse = await this.api.share.getShareLink(
 						items[0],
 					);
@@ -260,6 +260,7 @@ export class EditService {
 						},
 					});
 					break;
+				}
 				default:
 					actionDeferred.resolve();
 			}

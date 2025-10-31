@@ -250,7 +250,7 @@ export function GroupByTimespan(
 		});
 
 		for (const key in groups) {
-			if (groups.hasOwnProperty(key)) {
+			if (Object.hasOwn(groups, key)) {
 				const groupItems = groups[key];
 				if (groupItems.length < minimumGroupCount) {
 					timelineItems.push(...groupItems.map((i) => new TimelineItem(i)));

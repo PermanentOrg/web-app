@@ -589,7 +589,9 @@ export class AccountService {
 				)
 				.toPromise();
 		} catch (err) {
-			return await new Promise((resolve, reject) => reject(err));
+			return await new Promise((resolve, reject) => {
+				reject(err);
+			});
 		}
 	}
 
