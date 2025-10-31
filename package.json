@@ -121,7 +121,7 @@
 		"eslint-plugin-prefer-arrow": "^1.2.2",
 		"eslint-plugin-prettier": "^5.5.4",
 		"eslint-plugin-storybook": "^10.0.2",
-		"globals": "^16.3.0",
+		"globals": "^16.4.0",
 		"jasmine-bamboo-reporter": "0.0.2",
 		"jasmine-core": "^5.12.0",
 		"jasmine-spec-reporter": "~5.0.0",
