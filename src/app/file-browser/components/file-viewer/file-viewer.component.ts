@@ -174,11 +174,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		this.tagSubscription.unsubscribe();
 	}
 
-	private setRecordsToPreview(resolvedRecord: RecordVO) {
-		this.records = filter(
-			this.dataService.currentFolder.ChildItemVOs,
-			'isRecord',
-		) as RecordVO[];
+	private async setRecordsToPreview(resolvedRecord: RecordVO) {
+		const currentFolderChildren =
+			this.dataService?.ephemeralFolder?.ChildItemVOs ||
+			this.dataService.currentFolder.ChildItemVOs;
+
+		this.records = filter(currentFolderChildren, 'isRecord') as RecordVO[];
 		this.currentIndex = findIndex(this.records, {
 			folder_linkId: resolvedRecord.folder_linkId,
 		});

@@ -17,6 +17,7 @@ import {
 	NgZone,
 	Renderer2,
 	DOCUMENT,
+	OnChanges,
 } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -81,6 +82,7 @@ const DRAG_SCROLL_STEP = 20;
 })
 export class FileListComponent
 	implements
+		OnChanges,
 		OnInit,
 		AfterViewInit,
 		OnDestroy,
@@ -104,6 +106,7 @@ export class FileListComponent
 	public showFolderThumbnails = false;
 
 	@Input() allowNavigation = true;
+	@Input() ephemeralFolder: FolderVO = null;
 
 	@Output() itemClicked = new EventEmitter<ItemClickEvent>();
 
@@ -151,7 +154,8 @@ export class FileListComponent
 		private event: EventService,
 		private shareLinksService: ShareLinksService,
 	) {
-		this.currentFolder = this.route.snapshot.data.currentFolder;
+		this.currentFolder =
+			this.ephemeralFolder || this.route.snapshot.data.currentFolder;
 		// this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
 		this.fileListCentered = this.route.snapshot.data.fileListCentered;
 		this.showSidebar = this.route.snapshot.data.showSidebar;
@@ -198,6 +202,10 @@ export class FileListComponent
 				entity: 'account',
 			});
 		}
+	}
+
+	async ngOnChanges() {
+		this.initializeFolder();
 	}
 
 	registerArchiveChangeHandlers() {
@@ -322,15 +330,8 @@ export class FileListComponent
 		}, 1);
 	}
 
-	ngOnInit() {
-		this.currentFolder = this.route.snapshot.data.currentFolder;
-		this.showSidebar = this.route.snapshot.data.showSidebar;
-		this.dataService.setCurrentFolder(this.currentFolder);
-		this.isRootFolder = this.currentFolder.type.includes('root');
-		this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
-
-		this.visibleItems.clear();
-		this.reinit = true;
+	async ngOnInit() {
+		this.initializeFolder();
 	}
 
 	ngAfterViewInit() {
@@ -509,28 +510,30 @@ export class FileListComponent
 
 	async loadVisibleItems(animate?: boolean) {
 		this.debug('loadVisibleItems %d items', this.visibleItems.size);
-		if (this.visibleItems.size) {
-			const visibleListItems = Array.from(this.visibleItems);
-			this.visibleItems.clear();
-			if (animate) {
-				const targetElems = visibleListItems.map(
-					(c) => c.element.nativeElement,
-				);
-				gsap.from(targetElems, 0.25, {
-					duration: 0.25,
-					opacity: 0,
-					ease: 'Power4.easeOut',
-					stagger: {
-						amount: 0.015,
-					},
-				});
-			}
+		if (this.ephemeralFolder) {
+			return;
+		}
+		if (!this.visibleItems.size) {
+			return;
+		}
 
-			const itemsToFetch = visibleListItems.map((c) => c.item);
+		const visibleListItems = Array.from(this.visibleItems);
+		this.visibleItems.clear();
+		if (animate) {
+			const targetElems = visibleListItems.map((c) => c.element.nativeElement);
+			gsap.from(targetElems, 0.25, {
+				duration: 0.25,
+				opacity: 0,
+				ease: 'Power4.easeOut',
+				stagger: {
+					amount: 0.015,
+				},
+			});
+		}
 
-			if (itemsToFetch.length) {
-				await this.dataService.fetchLeanItems(itemsToFetch);
-			}
+		const itemsToFetch = visibleListItems.map((c) => c.item);
+		if (itemsToFetch.length && !this.shareLinksService.isUnlistedShare()) {
+			await this.dataService.fetchLeanItems(itemsToFetch);
 		}
 	}
 
@@ -541,5 +544,17 @@ export class FileListComponent
 		} else {
 			this.visibleItems.delete(event.component);
 		}
+	}
+
+	private initializeFolder() {
+		this.currentFolder =
+			this.ephemeralFolder || this.route.snapshot.data.currentFolder;
+		this.showSidebar = this.route.snapshot.data.showSidebar;
+		this.dataService.setCurrentFolder(this.currentFolder);
+		this.isRootFolder = this.currentFolder.type.includes('root');
+		this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
+
+		this.visibleItems.clear();
+		this.reinit = true;
 	}
 }
