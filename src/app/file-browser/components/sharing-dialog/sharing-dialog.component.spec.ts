@@ -13,7 +13,7 @@ import { ArchiveVO, RecordVO, ShareVO } from '@models';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
-import { AccessRoleType } from '@models/access-role';
+import { AccessRoleType, PermissionsLevel } from '@models/access-role';
 import { MessageService } from '@shared/services/message/message.service';
 import { Shallow } from 'shallow-render';
 import { NgModule } from '@angular/core';
@@ -251,6 +251,88 @@ describe('SharingDialogComponent', () => {
 		expect(confirmSpy).toHaveBeenCalled();
 		expect(component.shares.length).toBe(1);
 		expect(component.shares[0].accessRole).toBe(shareViewer.accessRole);
+	}));
+
+	it('should remove share link when confirmed', fakeAsync(() => {
+		const mockShareLink = {
+			id: '123',
+			token: 'test-token',
+			permissionsLevel: 'viewer' as PermissionsLevel,
+			accessRestrictions: 'none' as 'none' | 'account' | 'approval',
+			expirationTimestamp: null,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			itemId: '1',
+			itemType: 'record' as const,
+			maxUses: null,
+			usesExpended: null,
+		};
+
+		component.newShareLink = mockShareLink;
+		component.showLinkSettings = true;
+
+		const confirmSpy = spyOn(
+			TestBed.inject(PromptService),
+			'confirm',
+		).and.returnValue(Promise.resolve(true));
+
+		const deleteShareLinkSpy = spyOn(
+			TestBed.inject(ShareLinksApiService),
+			'deleteShareLink',
+		).and.returnValue(Promise.resolve());
+
+		component.removeShareLink();
+
+		tick();
+
+		expect(confirmSpy).toHaveBeenCalledWith(
+			'Remove link',
+			'Are you sure you want to remove this link?',
+			jasmine.any(Promise),
+			'btn-danger',
+		);
+
+		expect(deleteShareLinkSpy).toHaveBeenCalledWith('123');
+		expect(component.newShareLink).toBeNull();
+		expect(component.showLinkSettings).toBe(false);
+	}));
+
+	it('should not remove share link when cancelled', fakeAsync(() => {
+		const mockShareLink = {
+			id: '123',
+			token: 'test-token',
+			permissionsLevel: 'viewer' as PermissionsLevel,
+			accessRestrictions: 'none' as 'none' | 'account' | 'approval',
+			expirationTimestamp: null,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			itemId: '1',
+			itemType: 'record' as const,
+			maxUses: null,
+			usesExpended: null,
+		};
+
+		component.newShareLink = mockShareLink;
+		component.showLinkSettings = true;
+
+		const confirmSpy = spyOn(
+			TestBed.inject(PromptService),
+			'confirm',
+		).and.returnValue(Promise.reject(false));
+
+		const deleteShareLinkSpy = spyOn(
+			TestBed.inject(ShareLinksApiService),
+			'deleteShareLink',
+		).and.returnValue(Promise.resolve());
+
+		component.removeShareLink();
+
+		tick();
+
+		expect(confirmSpy).toHaveBeenCalled();
+		expect(deleteShareLinkSpy).not.toHaveBeenCalled();
+		expect(component.newShareLink).toEqual(mockShareLink);
+		expect(component.showLinkSettings).toBe(true);
 	}));
 });
 
