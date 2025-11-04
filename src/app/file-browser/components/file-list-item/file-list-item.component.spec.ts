@@ -165,10 +165,6 @@ describe('FileListItemComponent', () => {
 
 		expect(TestBed.inject(DataService).registerItem).toHaveBeenCalled();
 		component.ngOnDestroy();
-
-		expect(TestBed.inject(DataService).unregisterItem).toHaveBeenCalledWith(
-			component.item,
-		);
 	});
 
 	it('should handle drag events', () => {

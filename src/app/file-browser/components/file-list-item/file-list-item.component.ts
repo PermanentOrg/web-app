@@ -339,7 +339,6 @@ export class FileListItemComponent
 	}
 
 	ngOnDestroy() {
-		this.dataService.unregisterItem(this.item);
 		unsubscribeAll(this.subscriptions);
 	}
 
