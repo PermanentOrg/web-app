@@ -6,7 +6,6 @@ import { BreadcrumbsComponent } from '@shared/components/breadcrumbs/breadcrumbs
 import { DataService } from '@shared/services/data/data.service';
 import { Router } from '@angular/router';
 import { FolderVO } from '@root/app/models';
-import { of } from 'rxjs';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
 describe('BreadcrumbsComponent', () => {
@@ -14,7 +13,9 @@ describe('BreadcrumbsComponent', () => {
 	let fixture: ComponentFixture<BreadcrumbsComponent>;
 	let dataService: DataService;
 	const mockShareLinkService = {
-		isUnlistedShare: jasmine.createSpy().and.returnValue(of(false)),
+		isUnlistedShare: jasmine
+			.createSpy()
+			.and.returnValue(Promise.resolve(false)),
 	};
 
 	async function init(currentUrl?: string) {

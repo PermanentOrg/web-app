@@ -174,7 +174,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		this.tagSubscription.unsubscribe();
 	}
 
-	private async setRecordsToPreview(resolvedRecord: RecordVO) {
+	private setRecordsToPreview(resolvedRecord: RecordVO) {
 		const currentFolderChildren =
 			this.dataService?.ephemeralFolder?.ChildItemVOs ||
 			this.dataService.currentFolder.ChildItemVOs;

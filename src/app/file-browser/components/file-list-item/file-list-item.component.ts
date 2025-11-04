@@ -339,7 +339,6 @@ export class FileListItemComponent
 	}
 
 	ngOnDestroy() {
-		this.dataService.unregisterItem(this.item);
 		unsubscribeAll(this.subscriptions);
 	}
 
@@ -560,7 +559,6 @@ export class FileListItemComponent
 			if (this.isUnlistedShare) {
 				this.itemClicked.emit({
 					item: this.item,
-					event: event as MouseEvent,
 					selectable: false,
 				});
 				return;

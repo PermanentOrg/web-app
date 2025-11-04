@@ -92,6 +92,10 @@ export class FileListComponent
 	@ViewChildren(FileListItemComponent)
 	listItemsQuery: QueryList<FileListItemComponent>;
 
+	/**
+	 * currentFolder represents the shared folder in case of unlisted shares and
+	 * the rendered folder when the component is used in private/public/shared features
+	 */
 	currentFolder: FolderVO;
 	listItems: FileListItemComponent[] = [];
 
@@ -106,6 +110,11 @@ export class FileListComponent
 	public showFolderThumbnails = false;
 
 	@Input() allowNavigation = true;
+
+	/**
+	 * the ephemeralFolder is useful for using the component as is, without needing to change the route
+	 * also this will preserve the currentFolder, where the navigation by click starts from
+	 */
 	@Input() ephemeralFolder: FolderVO = null;
 
 	@Output() itemClicked = new EventEmitter<ItemClickEvent>();
@@ -116,6 +125,7 @@ export class FileListComponent
 	private reinit = false;
 	private inFileView = false;
 	private inDialog = false;
+	private isUnlistedShare = false;
 
 	@ViewChild('scroll') private scrollElement: ElementRef;
 	visibleItems: Set<FileListItemComponent> = new Set();
@@ -205,7 +215,7 @@ export class FileListComponent
 	}
 
 	async ngOnChanges() {
-		this.initializeFolder();
+		this.syncStateWithRouteandInput();
 	}
 
 	registerArchiveChangeHandlers() {
@@ -323,15 +333,15 @@ export class FileListComponent
 		}
 	}
 
-	refreshView() {
-		this.ngOnInit();
+	async refreshView() {
+		await this.ngOnInit();
 		setTimeout(() => {
 			this.ngAfterViewInit();
 		}, 1);
 	}
 
 	async ngOnInit() {
-		this.initializeFolder();
+		await this.syncStateWithRouteandInput();
 	}
 
 	ngAfterViewInit() {
@@ -532,7 +542,7 @@ export class FileListComponent
 		}
 
 		const itemsToFetch = visibleListItems.map((c) => c.item);
-		if (itemsToFetch.length && !this.shareLinksService.isUnlistedShare()) {
+		if (itemsToFetch.length && !this.isUnlistedShare) {
 			await this.dataService.fetchLeanItems(itemsToFetch);
 		}
 	}
@@ -546,7 +556,9 @@ export class FileListComponent
 		}
 	}
 
-	private initializeFolder() {
+	private async syncStateWithRouteandInput() {
+		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+
 		this.currentFolder =
 			this.ephemeralFolder || this.route.snapshot.data.currentFolder;
 		this.showSidebar = this.route.snapshot.data.showSidebar;

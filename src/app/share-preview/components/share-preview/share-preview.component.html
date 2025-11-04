@@ -74,7 +74,7 @@
 	></pr-breadcrumbs>
 </div>
 <div class="share-preview-content" [ngClass]="{ navigating: isNavigating }">
-	@if (ephemeralFolder) {
+	@if (ephemeralFolder !== null) {
 		<pr-file-list
 			[ephemeralFolder]="ephemeralFolder"
 			(itemClicked)="showFolder($event)"

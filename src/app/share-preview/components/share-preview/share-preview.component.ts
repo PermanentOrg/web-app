@@ -104,7 +104,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	public hideBannerSubject: Subject<void> = new Subject<void>();
 	public hideBannerObservable = this.hideBannerSubject.asObservable();
 	public isUnlistedShare = false;
-	public ephemeralFolder: FolderVO = null;
+	public ephemeralFolder: FolderVO | null = null;
 
 	constructor(
 		private router: Router,
@@ -677,8 +677,15 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	async goToFolderFromBreadcrumb($event: number) {
-		const newEphemeralFolder = this.dataService.breadcrumbFolders[$event - 1];
+	async goToFolderFromBreadcrumb(folderPosition: number) {
+		if (
+			folderPosition < 1 ||
+			folderPosition > this.dataService.breadcrumbFolders.length
+		) {
+			return;
+		}
+		const newEphemeralFolder =
+			this.dataService.breadcrumbFolders[folderPosition - 1];
 		this.ephemeralFolder =
 			await this.filesystemService.getFolder(newEphemeralFolder);
 		this.dataService.ephemeralFolder = this.ephemeralFolder;

@@ -61,8 +61,8 @@ export class BreadcrumbComponent
 		}
 	}
 
-	async goToFolder() {
-		this.breadcrumbClicked.emit(this.breadcrumb.id);
+	goToFolder() {
+		this.breadcrumbClicked.emit(this.breadcrumb.folderPosition);
 	}
 
 	onDragServiceEvent(dragEvent: DragServiceEvent) {

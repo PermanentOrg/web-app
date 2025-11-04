@@ -35,7 +35,7 @@
 @if (showSidebar) {
 	<pr-sidebar class="adjust-for-announcement"></pr-sidebar>
 }
-@if (router.url.includes('record')) {
+@if (!isUnlistedShare || router.url.includes('record')) {
 	<div [@slideUpAnimation]="o.isActivated ? o.activatedRoute : ''">
 		<router-outlet #o="outlet"></router-outlet>
 	</div>
