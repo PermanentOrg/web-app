@@ -24,6 +24,7 @@ import { ShareLinksService } from '@root/app/share-links/services/share-links.se
 import { ApiService } from '@shared/services/api/api.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
+import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 import { SharePreviewComponent } from './share-preview.component';
 
@@ -70,6 +71,10 @@ mockAccountService.accountChange = new Subject<AccountVO>();
 const mockShareLinksService = {
 	currentShareToken: null,
 	isUnlistedShare: () => true,
+};
+
+const mockFilesystemService = {
+	getFolder: jasmine.createSpy().and.returnValue(Promise.resolve({})),
 };
 
 describe('SharePreviewComponent', () => {
@@ -120,6 +125,11 @@ describe('SharePreviewComponent', () => {
 		config.providers.push({
 			provide: GoogleAnalyticsService,
 			useValue: mockGoogleAnalyticsService,
+		});
+
+		config.providers.push({
+			provide: FilesystemService,
+			useValue: mockFilesystemService,
 		});
 
 		await TestBed.configureTestingModule(config).compileComponents();
@@ -210,6 +220,7 @@ describe('SharePreviewComponent', () => {
 
 		const mockFileList = { itemClicked: new EventEmitter<any>() };
 
+		component.isUnlistedShare = false;
 		component.subscribeToItemClicks(mockFileList);
 		mockFileList.itemClicked.emit({
 			item: new RecordVO({}),

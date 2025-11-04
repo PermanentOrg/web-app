@@ -72,10 +72,17 @@
 	<pr-breadcrumbs></pr-breadcrumbs>
 </div>
 <div class="share-preview-content" [ngClass]="{ navigating: isNavigating }">
-	<router-outlet
-		(activate)="subscribeToItemClicks($event)"
-		(deactivate)="unsubscribeFromItemClicks()"
-	></router-outlet>
+	@if (ephemeralFolder !== null) {
+		<pr-file-list
+			[ephemeralFolder]="ephemeralFolder"
+			(itemClicked)="showFolder($event)"
+		></pr-file-list>
+	} @else {
+		<router-outlet
+			(activate)="subscribeToItemClicks($event)"
+			(deactivate)="unsubscribeFromItemClicks()"
+		></router-outlet>
+	}
 </div>
 <div
 	class="share-preview-cover from-bottom"
