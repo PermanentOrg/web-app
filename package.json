@@ -100,7 +100,7 @@
 		"@chromatic-com/storybook": "^4.1.2",
 		"@eslint/compat": "^1.4.1",
 		"@eslint/eslintrc": "^3.3.1",
-		"@eslint/js": "^9.38.0",
+		"@eslint/js": "^9.39.1",
 		"@storybook/addon-docs": "10.0.2",
 		"@storybook/addon-links": "10.0.2",
 		"@storybook/angular": "10.0.2",
@@ -113,11 +113,11 @@
 		"@types/webpack-env": "^1.18.8",
 		"angular-eslint": "^20.5.1",
 		"dotenv": "^8.2.0",
-		"eslint": "^9.38.0",
+		"eslint": "^9.39.1",
 		"eslint-config-love": "^133.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-jasmine": "^4.2.2",
-		"eslint-plugin-jsdoc": "^61.1.11",
+		"eslint-plugin-jsdoc": "^61.1.12",
 		"eslint-plugin-prefer-arrow": "^1.2.2",
 		"eslint-plugin-prettier": "^5.5.4",
 		"eslint-plugin-storybook": "^10.0.2",
@@ -142,6 +142,6 @@
 		"ts-node": "^10.9.1",
 		"tslib": "^2.0.0",
 		"typescript": "5.9.3",
-		"typescript-eslint": "^8.46.2"
+		"typescript-eslint": "^8.46.3"
 	}
 }
