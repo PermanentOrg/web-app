@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import debug from 'debug';
 
 import { ApiService } from '@shared/services/api/api.service';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { MessageService } from '@shared/services/message/message.service';
 
@@ -15,6 +16,8 @@ import {
 	RecordVOData,
 	ShareVO,
 } from '@root/app/models';
+
+import { ShareLink } from '@root/app/share-links/models/share-link';
 
 import {
 	FolderResponse,
@@ -124,6 +127,7 @@ export class EditService {
 
 	constructor(
 		private api: ApiService,
+		private shareApi: ShareLinksApiService,
 		private message: MessageService,
 		private folderPicker: FolderPickerService,
 		private dataService: DataService,
@@ -252,11 +256,14 @@ export class EditService {
 					const response: ShareResponse = await this.api.share.getShareLink(
 						items[0],
 					);
+					const newShareLink = await this.fetchShareLinkFromResponse(response);
+
 					actionDeferred.resolve();
 					this.dialog.open(SharingComponent, {
 						data: {
 							item: items[0],
 							link: response.getShareByUrlVO(),
+							newShare: newShareLink,
 						},
 					});
 					break;
@@ -416,7 +423,7 @@ export class EditService {
 				});
 			}
 
-			if (recordResponse) {
+			if (recordResponse && recordResponse.length > 0) {
 				const res = recordResponse[0];
 
 				const newData: RecordVOData = {
@@ -521,17 +528,26 @@ export class EditService {
 
 	async openShareDialog(item: ItemVO) {
 		const response = await this.api.share.getShareLink(item);
+		const newShareLink = await this.fetchShareLinkFromResponse(response);
 		if (this.device.isMobile()) {
 			try {
 				this.dialog.open(SharingComponent, {
 					panelClass: 'dialog',
-					data: { item, link: response.getShareByUrlVO() },
+					data: {
+						item,
+						link: response.getShareByUrlVO(),
+						newShare: newShareLink,
+					},
 				});
 			} catch (err) {}
 		} else {
 			try {
 				this.dialog.open(SharingDialogComponent, {
-					data: { item, link: response.getShareByUrlVO() },
+					data: {
+						item,
+						link: response.getShareByUrlVO(),
+						newShare: newShareLink,
+					},
 					width: '600px',
 					panelClass: 'dialog',
 				});
@@ -546,6 +562,18 @@ export class EditService {
 			panelClass: 'dialog',
 			width: '400px',
 		});
+	}
+
+	private async fetchShareLinkFromResponse(
+		response: ShareResponse,
+	): Promise<ShareLink | undefined> {
+		if (response.getShareByUrlVO()) {
+			const shareResponse = await this.shareApi.getShareLinksById([
+				response.getShareByUrlVO().shareby_urlId,
+			]);
+			return shareResponse[0];
+		}
+		return undefined;
 	}
 
 	async openTagsDialog(item: ItemVO, type: string) {

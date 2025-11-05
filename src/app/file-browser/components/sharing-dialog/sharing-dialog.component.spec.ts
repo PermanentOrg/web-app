@@ -13,7 +13,7 @@ import { ArchiveVO, RecordVO, ShareVO } from '@models';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
-import { AccessRoleType } from '@models/access-role';
+import { AccessRoleType, PermissionsLevel } from '@models/access-role';
 import { MessageService } from '@shared/services/message/message.service';
 import { Shallow } from 'shallow-render';
 import { NgModule } from '@angular/core';
@@ -21,11 +21,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
+import { ShareLinkMappingService } from '@root/app/share-links/services/share-link-mapping.service';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { SharingDialogComponent } from './sharing-dialog.component';
 import {
 	MockAccountService,
-	MockApiService,
+	MockShareLinksApiService,
 	MockRelationshipService,
+	MockShareLinkMappingService,
+	MockFeatureFlagService,
+	MockGoogleAnalyticsService,
 	NullDependency,
 } from './shared-test-classes';
 
@@ -244,11 +252,93 @@ describe('SharingDialogComponent', () => {
 		expect(component.shares.length).toBe(1);
 		expect(component.shares[0].accessRole).toBe(shareViewer.accessRole);
 	}));
+
+	it('should remove share link when confirmed', fakeAsync(() => {
+		const mockShareLink = {
+			id: '123',
+			token: 'test-token',
+			permissionsLevel: 'viewer' as PermissionsLevel,
+			accessRestrictions: 'none' as 'none' | 'account' | 'approval',
+			expirationTimestamp: null,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			itemId: '1',
+			itemType: 'record' as const,
+			maxUses: null,
+			usesExpended: null,
+		};
+
+		component.newShareLink = mockShareLink;
+		component.showLinkSettings = true;
+
+		const confirmSpy = spyOn(
+			TestBed.inject(PromptService),
+			'confirm',
+		).and.returnValue(Promise.resolve(true));
+
+		const deleteShareLinkSpy = spyOn(
+			TestBed.inject(ShareLinksApiService),
+			'deleteShareLink',
+		).and.returnValue(Promise.resolve());
+
+		component.removeShareLink();
+
+		tick();
+
+		expect(confirmSpy).toHaveBeenCalledWith(
+			'Remove link',
+			'Are you sure you want to remove this link?',
+			jasmine.any(Promise),
+			'btn-danger',
+		);
+
+		expect(deleteShareLinkSpy).toHaveBeenCalledWith('123');
+		expect(component.newShareLink).toBeNull();
+		expect(component.showLinkSettings).toBe(false);
+	}));
+
+	it('should not remove share link when cancelled', fakeAsync(() => {
+		const mockShareLink = {
+			id: '123',
+			token: 'test-token',
+			permissionsLevel: 'viewer' as PermissionsLevel,
+			accessRestrictions: 'none' as 'none' | 'account' | 'approval',
+			expirationTimestamp: null,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			itemId: '1',
+			itemType: 'record' as const,
+			maxUses: null,
+			usesExpended: null,
+		};
+
+		component.newShareLink = mockShareLink;
+		component.showLinkSettings = true;
+
+		const confirmSpy = spyOn(
+			TestBed.inject(PromptService),
+			'confirm',
+		).and.returnValue(Promise.reject(false));
+
+		const deleteShareLinkSpy = spyOn(
+			TestBed.inject(ShareLinksApiService),
+			'deleteShareLink',
+		).and.returnValue(Promise.resolve());
+
+		component.removeShareLink();
+
+		tick();
+
+		expect(confirmSpy).toHaveBeenCalled();
+		expect(deleteShareLinkSpy).not.toHaveBeenCalled();
+		expect(component.newShareLink).toEqual(mockShareLink);
+		expect(component.showLinkSettings).toBe(true);
+	}));
 });
 
 describe('SharingDialogComponent - Shallow Rendering', () => {
 	it('should be able to save default access role on a share link', async () => {
-		MockApiService.reset();
+		MockShareLinksApiService.reset();
 		// We have to use another describe() here since we're creating a component with a
 		// different set up, and these unit tests (and Angular's testing utilities in general)
 		// only expect there to be one TestBed that you use per suite of unit tests.
@@ -262,14 +352,20 @@ describe('SharingDialogComponent - Shallow Rendering', () => {
 			ShallowTestingModule,
 		)
 			.mock(AccountService, new MockAccountService())
-			.mock(ApiService, new MockApiService())
+			.mock(ApiService, new MockShareLinksApiService())
+			.mock(ShareLinksApiService, new MockShareLinksApiService())
+			.mock(ShareLinkMappingService, new MockShareLinkMappingService())
 			.mock(RelationshipService, new MockRelationshipService())
+			.mock(GoogleAnalyticsService, new MockGoogleAnalyticsService())
+			.mock(PromptService, new NullDependency())
+			.mock(FeatureFlagService, new MockFeatureFlagService())
 			.mock(Router, new NullDependency())
 			.mock(DialogRef, new NullDependency())
 			.mock(MessageService, new NullDependency())
 			.mock(ActivatedRoute, new NullDependency())
 			.mock(DIALOG_DATA, {
 				item: new RecordVO({
+					recordId: '123',
 					displayName: 'Test File',
 					accessRole: 'access.role.owner',
 				}),
@@ -278,7 +374,7 @@ describe('SharingDialogComponent - Shallow Rendering', () => {
 
 		await instance.generateShareLink();
 
-		expect(instance.shareLink.shareUrl).toContain('example.com');
+		expect(instance.newShareLink).toBeDefined();
 
 		instance.linkDefaultAccessRole = 'access.role.owner';
 		await instance.onShareLinkPropChange(
@@ -286,6 +382,6 @@ describe('SharingDialogComponent - Shallow Rendering', () => {
 			'access.role.owner',
 		);
 
-		expect(instance.shareLink.defaultAccessRole).toBe('access.role.owner');
+		expect(instance.newShareLink.permissionsLevel).toBe('owner');
 	});
 });
