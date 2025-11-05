@@ -93,8 +93,8 @@
 		"zone.js": "~0.15.1"
 	},
 	"devDependencies": {
-		"@angular/build": "^20.3.8",
-		"@angular/cli": "20.3.8",
+		"@angular/build": "^20.3.9",
+		"@angular/cli": "20.3.9",
 		"@angular/compiler-cli": "20.3.9",
 		"@angular/language-service": "20.3.9",
 		"@chromatic-com/storybook": "^4.1.2",
@@ -111,7 +111,7 @@
 		"@types/mandrill-api": "^1.0.30",
 		"@types/node": "^20.19.23",
 		"@types/webpack-env": "^1.18.8",
-		"angular-eslint": "^20.5.0",
+		"angular-eslint": "^20.5.1",
 		"dotenv": "^8.2.0",
 		"eslint": "^9.38.0",
 		"eslint-config-love": "^133.0.0",
