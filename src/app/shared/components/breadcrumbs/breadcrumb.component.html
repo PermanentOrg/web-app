@@ -1,5 +1,9 @@
 @if (!last) {
-	<a [routerLink]="[breadcrumb.routerPath]">{{ breadcrumb.text }}</a>
+	@if (!isUnlistedShare) {
+		<a [routerLink]="[breadcrumb.routerPath]">{{ breadcrumb.text }}</a>
+	} @else {
+		<a (click)="goToFolder()">{{ breadcrumb.text }}</a>
+	}
 }
 @if (!last) {
 	<span class="separator">

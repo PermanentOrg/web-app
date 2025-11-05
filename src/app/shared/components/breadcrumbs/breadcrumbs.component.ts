@@ -6,6 +6,8 @@ import {
 	Input,
 	ViewEncapsulation,
 	Optional,
+	Output,
+	EventEmitter,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -15,16 +17,24 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
 import debug from 'debug';
 import { EditService } from '@core/services/edit/edit.service';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
 export class Breadcrumb {
+	/**
+	 * The position of the folder in the breadcrumb lineup
+	 * This is not the index, because it starts from 1 and not from 0
+	 */
+	public folderPosition: number;
 	public routerPath: string;
 	constructor(
+		folderPosition: number,
 		rootUrl: string,
 		public text: string,
 		public archiveNbr?: string,
 		public folder_linkId?: number,
 		rootUrlOnly = false,
 	) {
+		this.folderPosition = folderPosition;
 		if (rootUrlOnly) {
 			this.routerPath = rootUrl;
 		} else if (!archiveNbr && !folder_linkId) {
@@ -66,8 +76,11 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 	@Input() darkText = false;
 	@Input() large = false;
 
+	@Output() breadcrumbClicked = new EventEmitter<any>();
+
 	private scrollElement: Element;
 	private folderChangeListener: Subscription;
+	private isUnlistedShare: boolean = false;
 
 	private debug = debug('component:breadcrumbs');
 	constructor(
@@ -76,19 +89,23 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private route: ActivatedRoute,
 		@Optional() private edit: EditService,
+		private shareLinkService: ShareLinksService,
 	) {}
 
-	ngOnInit() {
+	async ngOnInit() {
+		this.isUnlistedShare = await this.shareLinkService.isUnlistedShare();
 		this.scrollElement =
 			this.elementRef.nativeElement.querySelector('.breadcrumbs');
-		this.setFolder(this.dataService.currentFolder);
+		this.setFolder(
+			this.dataService.ephemeralFolder || this.dataService.currentFolder,
+		);
 		setTimeout(() => {
 			this.scrollToEnd();
 		});
 
 		this.folderChangeListener = this.dataService.currentFolderChange.subscribe(
 			(folder: FolderVO) => {
-				this.setFolder(folder);
+				this.setFolder(this.dataService.ephemeralFolder || folder);
 				setTimeout(() => {
 					this.scrollToEnd();
 				}, 0);
@@ -102,6 +119,10 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.folderChangeListener.unsubscribe();
+	}
+
+	breadcrumbItemClicked(breadcrumbId: number) {
+		this.breadcrumbClicked.emit(breadcrumbId);
 	}
 
 	setFolder(folder) {
@@ -126,7 +147,10 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 			this.router.routerState.snapshot.url.includes('/view/');
 
 		const showRootBreadcrumb =
-			!isInPublic && !isInSharePreviewView && !isInSharePreviewInviteView;
+			!isInPublic &&
+			!isInSharePreviewView &&
+			!isInSharePreviewInviteView &&
+			!this.isUnlistedShare;
 
 		let rootUrl;
 
@@ -162,14 +186,14 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 		}
 
 		if (showRootBreadcrumb) {
-			this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
+			this.breadcrumbs.push(new Breadcrumb(0, rootUrl, folder.pathAsText[0]));
 			if (this.breadcrumbs[0].routerPath === '/private')
 				this.breadcrumbs[0].text = 'Private';
 		}
 
 		if (isInPublicArchive) {
 			this.breadcrumbs.push(
-				new Breadcrumb(rootUrl, folder.pathAsText[0], null, null, true),
+				new Breadcrumb(0, rootUrl, folder.pathAsText[0], null, null, true),
 			);
 		}
 
@@ -180,10 +204,11 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
 			this.breadcrumbs.push(
 				new Breadcrumb(
+					i,
 					rootUrl,
-					folder.pathAsText[i],
-					folder.pathAsArchiveNbr[i],
-					folder.pathAsFolder_linkId[i],
+					folder.pathAsText?.[i],
+					folder.pathAsArchiveNbr?.[i],
+					folder.pathAsFolder_linkId?.[i],
 				),
 			);
 		}

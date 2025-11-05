@@ -69,7 +69,9 @@
 	</div>
 </div>
 <div class="share-preview-content-breadcrumbs">
-	<pr-breadcrumbs></pr-breadcrumbs>
+	<pr-breadcrumbs
+		(breadcrumbClicked)="goToFolderFromBreadcrumb($event)"
+	></pr-breadcrumbs>
 </div>
 <div class="share-preview-content" [ngClass]="{ navigating: isNavigating }">
 	@if (ephemeralFolder !== null) {

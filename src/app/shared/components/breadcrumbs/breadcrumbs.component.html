@@ -10,7 +10,12 @@
 	[class.breadcrumbs-large]="large"
 >
 	@for (breadcrumb of breadcrumbs; track breadcrumb; let last = $last) {
-		<pr-breadcrumb class="breadcrumb" [breadcrumb]="breadcrumb" [last]="last">
+		<pr-breadcrumb
+			class="breadcrumb"
+			[breadcrumb]="breadcrumb"
+			[last]="last"
+			(breadcrumbClicked)="breadcrumbItemClicked($event)"
+		>
 		</pr-breadcrumb>
 	}
 	@if (currentFolder?.ShareVOs?.length) {
