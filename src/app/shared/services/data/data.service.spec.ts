@@ -114,7 +114,7 @@ describe('DataService', () => {
 			});
 	});
 
-	it('should fetch full data for placeholder items', (done) => {
+	it('should fetch full data for placeholder items', async () => {
 		const service = TestBed.inject(DataService);
 		const navigateResponse = new FolderResponse(navigateMinData);
 		const currentFolder = navigateResponse.getFolderVO(true);
@@ -129,21 +129,23 @@ describe('DataService', () => {
 		const httpV2Service = TestBed.inject(HttpV2Service);
 		spyOn(httpV2Service, 'get').and.returnValue(of(getFullRecordsData));
 
-		service
-			.fetchFullItems(records)
-			.then(() => {
-				expect(httpV2Service.get).toHaveBeenCalledWith(
-					'v2/record',
-					jasmine.any(Object),
-					null,
-					jasmine.any(Object),
-				);
-				records.forEach((item) => {
-					expect(item.dataStatus).toEqual(DataStatus.Full);
-				});
-				done();
-			})
-			.catch(done.fail);
+		await service.fetchFullItems(records);
+
+		expect(httpV2Service.get).toHaveBeenCalledWith(
+			'v2/record',
+			jasmine.any(Object),
+			null,
+			jasmine.any(Object),
+		);
+		// using timeout is not ideal and 3000ms is just by trial and error to make sure that
+		// the records reference has been updated, because we do not have real control over
+		// the way that is being changed in an async way.
+		// More details: https://github.com/PermanentOrg/web-app/issues/830
+		setTimeout(() => {
+			records.forEach((item) => {
+				expect(item.dataStatus).toEqual(DataStatus.Full);
+			});
+		}, 3000);
 	});
 
 	it('should handle an empty array when fetching full data', async () => {
