@@ -125,7 +125,7 @@ export class FileListComponent
 	private reinit = false;
 	private inFileView = false;
 	private inDialog = false;
-	private isUnlistedShare = false;
+	public isUnlistedShare = false;
 
 	@ViewChild('scroll') private scrollElement: ElementRef;
 	visibleItems: Set<FileListItemComponent> = new Set();
@@ -151,7 +151,7 @@ export class FileListComponent
 		private account: AccountService,
 		private route: ActivatedRoute,
 		private dataService: DataService,
-		private router: Router,
+		public router: Router,
 		private elementRef: ElementRef,
 		private folderViewService: FolderViewService,
 		private routeHistory: RouteHistoryService,
