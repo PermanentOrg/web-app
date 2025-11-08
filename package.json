@@ -135,7 +135,7 @@
 		"karma-junit-reporter": "^2.0.1",
 		"karma-spec-reporter": "^0.0.36",
 		"karma-verbose-reporter": "^0.0.8",
-		"patch-package": "^8.0.0",
+		"patch-package": "^8.0.1",
 		"prettier": "^3.6.2",
 		"storybook": "10.0.5",
 		"ts-jest": "^29.1.1",
