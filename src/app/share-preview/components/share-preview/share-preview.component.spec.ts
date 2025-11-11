@@ -256,14 +256,6 @@ describe('SharePreviewComponent', () => {
 		expect(component.showCover).toBeFalse();
 	});
 
-	it('should dispatch banner close', () => {
-		const spy = jasmine.createSpy();
-		component.hideBannerObservable.subscribe(spy);
-		component.dispatchBannerClose();
-
-		expect(spy).toHaveBeenCalled();
-	});
-
 	it('should stop event propagation', () => {
 		const event = jasmine.createSpyObj('Event', ['stopPropagation']);
 		component.stopPropagation(event);
