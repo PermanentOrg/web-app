@@ -422,6 +422,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	}
 
 	async onMyAccountClick() {
+		this.shareLinksService.currentShareToken = undefined;
 		return await this.router.navigate(['/app', 'private']);
 	}
 

@@ -330,4 +330,11 @@ describe('SharePreviewComponent', () => {
 		expect(component.hasRequested).toBeTrue();
 		expect(component.showCover).toBeFalse();
 	}));
+
+	it('should redirect to archive when clicking on the "My Archive" button', () => {
+		component.onMyAccountClick();
+
+		expect(router.navigate).toHaveBeenCalled();
+		expect(mockShareLinksService.currentShareToken).toBeUndefined();
+	});
 });
