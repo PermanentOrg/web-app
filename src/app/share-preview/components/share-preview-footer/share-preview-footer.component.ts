@@ -47,25 +47,6 @@ export class SharePreviewFooterComponent implements OnInit, OnDestroy {
 	private scrollTimestamp: number;
 
 	constructor(private renderer: Renderer2) {
-		this.renderer.listen('window', 'click', (e: Event) => {
-			if (this.visible) {
-				if (!this.element.nativeElement.contains(e.target)) {
-					let target = e.target as HTMLElement;
-					while (target.parentElement) {
-						const tagName = target.tagName.toLocaleLowerCase();
-						if (tagName === 'pr-dialog') {
-							return;
-						}
-						if (tagName === 'pr-app-root') {
-							break;
-						}
-						target = target.parentElement;
-					}
-					this.close();
-				}
-			}
-		});
-
 		this.renderer.listen('window', 'scroll', (e: Event) => {
 			if (this.scrollTimeout) {
 				window.clearTimeout(this.scrollTimeout);

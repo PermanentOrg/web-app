@@ -660,7 +660,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
 		this.fileListClickListener = componentReference.itemClicked.subscribe(
 			() => {
-				this.dispatchBannerClose();
 				this.showCreateAccountDialog();
 			},
 		);
@@ -674,10 +673,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
 	stopPropagation(evt) {
 		evt.stopPropagation();
-	}
-
-	dispatchBannerClose(): void {
-		this.hideBannerSubject.next();
 	}
 
 	public navToAuth(): void {
