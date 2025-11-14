@@ -99,7 +99,9 @@ describe('FormCreateComponent', () => {
 		fixture.detectChanges();
 
 		expect(find('input').length).toBe(1);
-		await new Promise((resolve) => setTimeout(resolve, 1));
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 1);
+		});
 
 		expect(instance.waiting).toBe(false);
 	});

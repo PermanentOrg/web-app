@@ -21,6 +21,7 @@ import { ShareLinksService } from '@root/app/share-links/services/share-links.se
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component } from '@angular/core';
+import { ApiService } from '@shared/services/api/api.service';
 import { FileListComponent } from './file-list.component';
 
 @Component({ template: '' })
@@ -94,6 +95,16 @@ describe('FileListComponent', () => {
 			.and.returnValue(Promise.resolve(false)),
 	};
 
+	const mockApiService = {
+		folder: {
+			getWithChildren: jasmine.createSpy().and.returnValue(
+				of({
+					getFolderVO: jasmine.createSpy(),
+				}),
+			),
+		},
+	};
+
 	const mockDragService = {
 		events: () => of({ type: 'start' }),
 	};
@@ -120,6 +131,7 @@ describe('FileListComponent', () => {
 				{ provide: ShareLinksService, useValue: mockShareLinksService },
 				{ provide: Location, useValue: { replaceState: jasmine.createSpy() } },
 				{ provide: DOCUMENT, useValue: document },
+				{ provide: ApiService, useValue: mockApiService },
 			],
 		}).compileComponents();
 

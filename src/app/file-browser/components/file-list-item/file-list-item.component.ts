@@ -339,7 +339,6 @@ export class FileListItemComponent
 	}
 
 	ngOnDestroy() {
-		this.dataService.unregisterItem(this.item);
 		unsubscribeAll(this.subscriptions);
 	}
 
@@ -396,7 +395,7 @@ export class FileListItemComponent
 
 		switch (dragEvent.type) {
 			case 'start':
-			case 'end':
+			case 'end': {
 				const start = dragEvent.type === 'start';
 
 				if (this.item.isRecord && dragEvent.targetTypes.includes('record')) {
@@ -412,6 +411,7 @@ export class FileListItemComponent
 				}
 
 				break;
+			}
 		}
 	}
 
@@ -493,10 +493,6 @@ export class FileListItemComponent
 
 	onItemClick(event: MouseEvent) {
 		if (this.isUnlistedShare) {
-			//TO DO: make preview for folder --> story PER-10314
-			if (this.item.isFolder) {
-				return;
-			}
 			this.goToItem();
 			return;
 		}
@@ -560,6 +556,13 @@ export class FileListItemComponent
 		}
 
 		if (this.item.isFolder) {
+			if (this.isUnlistedShare) {
+				this.itemClicked.emit({
+					item: this.item,
+					selectable: false,
+				});
+				return;
+			}
 			if (this.checkFolderView && this.isFolderViewSet()) {
 				this.router.navigate([
 					rootUrl,

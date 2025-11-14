@@ -285,6 +285,13 @@ export class HttpV2Service {
 
 		return observable.pipe(
 			map((response: Object | Array<Object>) => {
+				if (response === null) {
+					// Some API calls result in a null response value (e.g. DELETE calls).
+					// For now we believe this is the appropriate way to handle those responses, but
+					// want to investigate more fully to either revise this implementation or remove this comment.
+					// See: https://github.com/PermanentOrg/web-app/issues/799
+					return;
+				}
 				if (options.responseType === 'text') {
 					return [response as unknown as T];
 				}

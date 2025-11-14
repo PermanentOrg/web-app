@@ -60,7 +60,9 @@ describe('AccountSettingsComponent', () => {
 
 		try {
 			await instance.onSaveProfileInfo('fullName', 'New Name');
-			await new Promise((r) => setTimeout(r, 0));
+			await new Promise<void>((r) => {
+				setTimeout(r, 0);
+			});
 		} finally {
 			expect(setAccountSpy).toHaveBeenCalled();
 			expect(accountUpdateSpy).toHaveBeenCalled();
@@ -84,7 +86,9 @@ describe('AccountSettingsComponent', () => {
 
 		try {
 			await instance.onSaveProfileInfo('fullName', 'New Name');
-			await new Promise((r) => setTimeout(r, 0));
+			await new Promise<void>((r) => {
+				setTimeout(r, 0);
+			});
 		} finally {
 			expect(setAccountSpy).not.toHaveBeenCalled();
 			expect(accountUpdateSpy).toHaveBeenCalled();

@@ -1,3 +1,5 @@
 export async function timeout(t: number = 0) {
-	return await new Promise((resolve) => setTimeout(resolve, t));
+	return await new Promise<void>((resolve) => {
+		setTimeout(resolve, t);
+	});
 }

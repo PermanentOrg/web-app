@@ -69,7 +69,9 @@ describe('Permanent Filesystem (Folder Caching)', () => {
 		// Simulate a backend change happening in another window/tab/client/etc.
 		api.addFolder(new FolderVO({ folderId: 0, displayName: 'Updated Value' }));
 		const folder = await fs.getFolder({ folderId: 0 });
-		await new Promise((resolve) => setTimeout(resolve, 0));
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
 
 		expect(folder.displayName).toBe('Updated Value');
 	});

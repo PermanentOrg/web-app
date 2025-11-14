@@ -30,6 +30,9 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { FilesystemService } from '@root/app/filesystem/filesystem.service';
+import { DataService } from '@shared/services/data/data.service';
+import { ItemClickEvent } from '@fileBrowser/components/file-list/file-list.component';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
@@ -101,6 +104,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	public hideBannerSubject: Subject<void> = new Subject<void>();
 	public hideBannerObservable = this.hideBannerSubject.asObservable();
 	public isUnlistedShare = false;
+	public ephemeralFolder: FolderVO | null = null;
 
 	constructor(
 		private router: Router,
@@ -114,6 +118,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		private ga: GoogleAnalyticsService,
 		private dialog: DialogCdkService,
 		private shareLinksService: ShareLinksService,
+		private filesystemService: FilesystemService,
+		private dataService: DataService,
 	) {
 		this.shareToken = this.route.snapshot.params.shareToken;
 
@@ -189,6 +195,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	async ngOnInit() {
 		this.shareLinksService.currentShareToken = this.shareToken;
 		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+
+		if (this.isUnlistedShare) {
+			this.ephemeralFolder = await this.filesystemService.getFolder(
+				this.route.snapshot.data.sharePreviewVO.FolderVO,
+			);
+			this.dataService.ephemeralFolder = this.ephemeralFolder;
+			this.dataService.pushBreadcrumbFolder(this.ephemeralFolder);
+		}
 
 		this.checkAccess();
 
@@ -653,15 +667,44 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 			});
 	}
 
+	async showFolder(itemClickEvent: ItemClickEvent) {
+		if (itemClickEvent?.item?.isFolder) {
+			this.ephemeralFolder = await this.filesystemService.getFolder(
+				itemClickEvent?.item,
+			);
+			this.dataService.ephemeralFolder = this.ephemeralFolder;
+			this.dataService.pushBreadcrumbFolder(this.ephemeralFolder);
+		}
+	}
+
+	async goToFolderFromBreadcrumb(folderPosition: number) {
+		if (
+			folderPosition < 1 ||
+			folderPosition > this.dataService.breadcrumbFolders.length
+		) {
+			return;
+		}
+		const newEphemeralFolder =
+			this.dataService.breadcrumbFolders[folderPosition - 1];
+		this.ephemeralFolder =
+			await this.filesystemService.getFolder(newEphemeralFolder);
+		this.dataService.ephemeralFolder = this.ephemeralFolder;
+		this.dataService.cutBreadcrumbRoute(this.ephemeralFolder);
+	}
+
 	subscribeToItemClicks(componentReference) {
 		if (!('itemClicked' in componentReference)) {
 			return;
 		}
 
 		this.fileListClickListener = componentReference.itemClicked.subscribe(
-			() => {
-				this.dispatchBannerClose();
-				this.showCreateAccountDialog();
+			async (itemClickEvent: ItemClickEvent) => {
+				if (this.isUnlistedShare) {
+					this.showFolder(itemClickEvent);
+				} else {
+					this.dispatchBannerClose();
+					this.showCreateAccountDialog();
+				}
 			},
 		);
 	}

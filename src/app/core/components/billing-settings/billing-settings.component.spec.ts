@@ -65,7 +65,9 @@ describe('BillingSettingsComponent', () => {
 
 		try {
 			await instance.onSaveInfo('fullName', 'New Name');
-			await new Promise((r) => setTimeout(r, 0));
+			await new Promise<void>((r) => {
+				setTimeout(r, 0);
+			});
 		} finally {
 			expect(setAccountSpy).toHaveBeenCalled();
 			expect(accountUpdateSpy).toHaveBeenCalled();
@@ -90,7 +92,9 @@ describe('BillingSettingsComponent', () => {
 
 		try {
 			await instance.onSaveInfo('fullName', 'New Name');
-			await new Promise((r) => setTimeout(r, 0));
+			await new Promise<void>((r) => {
+				setTimeout(r, 0);
+			});
 		} finally {
 			expect(setAccountSpy).not.toHaveBeenCalled();
 			expect(accountUpdateSpy).toHaveBeenCalled();

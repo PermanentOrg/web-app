@@ -14,7 +14,7 @@ import { SharingDialogComponent } from './sharing-dialog.component';
 
 import {
 	MockAccountService,
-	MockApiService,
+	MockShareLinksApiService,
 	MockPromptService,
 	MockRelationshipService,
 	NullDependency,
@@ -44,7 +44,7 @@ const testingProviders = [
 	},
 	{
 		provide: ApiService,
-		useClass: MockApiService,
+		useClass: MockShareLinksApiService,
 	},
 	{
 		provide: MessageService,
