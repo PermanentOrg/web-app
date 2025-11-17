@@ -16,6 +16,12 @@ export class PublicRoutePipe implements PipeTransform {
 					parentFolder.archiveNbr,
 					parentFolder.folder_linkId.toString(),
 				);
+			} else if (
+				value.parentFolderArchiveNumber &&
+				value.parentFolder_linkId &&
+				rootArchive !== value.parentFolderArchiveNumber
+			) {
+				route.push(value.parentFolderArchiveNumber, value.parentFolder_linkId);
 			}
 			route.push('record', value.archiveNbr);
 			return route;
