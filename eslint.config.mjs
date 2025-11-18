@@ -46,10 +46,6 @@ export default typescriptEslint.config([
 		files: ['src/**/*.spec.ts'],
 
 		languageOptions: {
-			parserOptions: {
-				project: './src/tsconfig.spec.json',
-			},
-
 			globals: {
 				...globals.jasmine,
 			},
