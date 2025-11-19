@@ -51,21 +51,14 @@ export class SharePreviewFooterComponent implements OnInit, OnDestroy {
 			if (this.scrollTimeout) {
 				window.clearTimeout(this.scrollTimeout);
 			}
-			if (
-				window.scrollY + document.body.clientHeight ===
-				document.body.scrollHeight
-			) {
-				this.show();
-			} else {
-				this.scrollTimestamp = e.timeStamp;
-				window.setTimeout(() => {
-					if (this.scrollTimestamp === e.timeStamp) {
-						if (!document.querySelector('pr-dialog')) {
-							this.show();
-						}
+			this.scrollTimestamp = e.timeStamp;
+			window.setTimeout(() => {
+				if (this.scrollTimestamp === e.timeStamp) {
+					if (!document.querySelector('pr-dialog')) {
+						this.show();
 					}
-				}, 1000);
-			}
+				}
+			}, 1000);
 		});
 	}
 
@@ -75,9 +68,7 @@ export class SharePreviewFooterComponent implements OnInit, OnDestroy {
 		});
 
 		setTimeout(() => {
-			if (document.body.scrollHeight === document.body.clientHeight) {
-				this.show();
-			}
+			this.show();
 		}, 1000);
 	}
 
