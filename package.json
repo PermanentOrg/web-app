@@ -52,7 +52,7 @@
 		"@popperjs/core": "^2.11.8",
 		"@sentry/browser": "7.119.1",
 		"@types/debug": "4.1.12",
-		"@types/hammerjs": "2.0.36",
+		"@types/hammerjs": "2.0.46",
 		"@types/lodash": "4.17.20",
 		"@types/openseadragon": "^4.1.0",
 		"angular-shepherd": "^20.0.0",
