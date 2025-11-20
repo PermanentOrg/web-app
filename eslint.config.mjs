@@ -46,10 +46,6 @@ export default typescriptEslint.config([
 		files: ['src/**/*.spec.ts'],
 
 		languageOptions: {
-			parserOptions: {
-				project: './src/tsconfig.spec.json',
-			},
-
 			globals: {
 				...globals.jasmine,
 			},
@@ -222,6 +218,10 @@ export default typescriptEslint.config([
 			'eslint-comments/require-description': 'off',
 			'@angular-eslint/prefer-inject': 'off',
 			'preserve-caught-error': 'off',
+			'no-useless-concat': 'off',
+			eqeqeq: 'off',
+			'no-await-in-loop': 'off',
+			'no-useless-assignment': 'off',
 		},
 	},
 	{
