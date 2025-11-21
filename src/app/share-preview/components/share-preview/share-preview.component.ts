@@ -702,7 +702,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 				if (this.isUnlistedShare) {
 					this.showFolder(itemClickEvent);
 				} else {
-					this.dispatchBannerClose();
 					this.showCreateAccountDialog();
 				}
 			},
@@ -717,10 +716,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
 	stopPropagation(evt) {
 		evt.stopPropagation();
-	}
-
-	dispatchBannerClose(): void {
-		this.hideBannerSubject.next();
 	}
 
 	public navToAuth(): void {
