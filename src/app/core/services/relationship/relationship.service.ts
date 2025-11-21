@@ -3,7 +3,7 @@ import { RelationVO, ArchiveVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { RelationResponse } from '@shared/services/api/index.repo';
-import Fuse from 'fuse.js';
+import Fuse, { IFuseOptions } from 'fuse.js';
 import { find, remove } from 'lodash';
 
 const REFRESH_THRESHOLD = 2 * 60 * 1000;
@@ -16,7 +16,7 @@ export class RelationshipService {
 	private lastUpdated: Date;
 	private currentArchive: ArchiveVO;
 
-	private fuseOptions: Fuse.IFuseOptions<RelationVO> = {
+	private fuseOptions: IFuseOptions<RelationVO> = {
 		keys: ['RelationArchiveVO.fullName'],
 		threshold: 0.1,
 	};
