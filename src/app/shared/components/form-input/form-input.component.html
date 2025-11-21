@@ -15,26 +15,28 @@
 	/>
 }
 @if (type === 'select') {
-	<select
-		class="form-control input-vertical"
-		[ngClass]="{ placeholder: !control.value }"
-		[id]="fieldName"
-		[name]="fieldName"
-		[formControl]="control"
-	>
-		@for (option of selectOptions; track option) {
-			<option [value]="option.value">
-				{{ option.text }}
-			</option>
-		}
-	</select>
-}
-@if (type === 'select') {
-	<div
-		class="input-vertical-select-placeholder"
-		[class.selected]="control.value"
-	>
-		{{ getOptionTextFromValue(control.value) || placeholder }}
+	<div class="select-wrapper">
+		<select
+			class="form-control input-vertical real-select"
+			[ngClass]="{ placeholder: !control.value }"
+			[id]="fieldName"
+			[name]="fieldName"
+			[formControl]="control"
+		>
+			@for (option of selectOptions; track option) {
+				<option [value]="option.value">
+					{{ option.text }}
+				</option>
+			}
+		</select>
+		<label
+			class="open-toggle input-vertical-select-placeholder"
+			[attr.for]="fieldName"
+			class.selected]="control.value"
+			(click)="openSelect()"
+		>
+			{{ getOptionTextFromValue(control.value) || placeholder }}
+		</label>
 	</div>
 }
 <div class="input-vertical-error" [ngClass]="{ hidden: !errors }">
