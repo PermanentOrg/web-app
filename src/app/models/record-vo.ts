@@ -103,6 +103,7 @@ export class RecordVO
 	public parentFolder_linkId;
 	public ParentFolderVOs;
 	public parentArchiveNbr: string;
+	public parentFolderArchiveNumber: string;
 	public parentDisplayName: string;
 	public pathAsArchiveNbr;
 	public files: PermanentFile[];
@@ -217,6 +218,7 @@ export interface RecordVOData extends BaseVOData {
 	pathAsFolder_linkId?: any;
 	pathAsText?: any;
 	parentFolder_linkId?: any;
+	parentFolderArchiveNumber?: any;
 	ParentFolderVOs?: any;
 	parentArchiveNbr?: any;
 	parentDisplayName?: string;
