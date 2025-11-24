@@ -25,6 +25,8 @@ const testRecord = new RecordVO({
 	archiveNbr: 'archivenbr',
 });
 
+// we should refactor the data service test suite and mock all the dependencies
+// so we do not have to fix the tests everytime an injected service changes
 describe('DataService', () => {
 	beforeEach(() => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -133,8 +135,6 @@ describe('DataService', () => {
 
 		expect(httpV2Service.get).toHaveBeenCalledWith(
 			'v2/record',
-			jasmine.any(Object),
-			null,
 			jasmine.any(Object),
 		);
 		// using timeout is not ideal and 3000ms is just by trial and error to make sure that
