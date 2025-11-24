@@ -117,7 +117,7 @@
 		"eslint-config-love": "^134.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-jasmine": "^4.2.2",
-		"eslint-plugin-jsdoc": "^61.3.0",
+		"eslint-plugin-jsdoc": "^61.4.1",
 		"eslint-plugin-prefer-arrow": "^1.2.2",
 		"eslint-plugin-prettier": "^5.5.4",
 		"eslint-plugin-storybook": "^10.0.8",
@@ -142,6 +142,6 @@
 		"ts-node": "^10.9.1",
 		"tslib": "^2.0.0",
 		"typescript": "5.9.3",
-		"typescript-eslint": "^8.47.0"
+		"typescript-eslint": "^8.48.0"
 	}
 }
