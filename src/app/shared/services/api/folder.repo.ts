@@ -176,23 +176,37 @@ export class FolderRepo extends BaseRepo {
 		const queryData = {
 			folderIds: [folderVO.folderId],
 		};
-		let options = {};
+		let folderResponse: PagedStelaResponse<StelaFolder>;
 		if (shareToken) {
-			options = {
-				authToken: false,
-				shareToken,
-			};
+			folderResponse = (
+				await firstValueFrom(
+					this.httpV2.get<PagedStelaResponse<StelaFolder>>(
+						`v2/folder`,
+						queryData,
+						null,
+						{
+							authToken: false,
+							shareToken,
+						},
+					),
+				)
+			)[0];
 		}
-		const folderResponse = (
-			await firstValueFrom(
-				this.httpV2.get<PagedStelaResponse<StelaFolder>>(
-					`v2/folder`,
-					queryData,
-					null,
-					options,
-				),
-			)
-		)[0];
+		// we do not want to reveal the existence or non-existence of
+		// matching items, unless the request is authenticated by auth token
+		// a request authenticated by a share token will not get a 404 or 401,
+		// it just responds with a 200 and an empty array and if we get an empty array,
+		// we try as a fallback and see if maybe we can get the files as an authenticated user
+		if (!folderResponse?.items?.[0]) {
+			folderResponse = (
+				await firstValueFrom(
+					this.httpV2.get<PagedStelaResponse<StelaFolder>>(
+						`v2/folder`,
+						queryData,
+					),
+				)
+			)[0];
+		}
 		return folderResponse.items[0];
 	}
 
@@ -203,23 +217,39 @@ export class FolderRepo extends BaseRepo {
 		const queryData = {
 			pageSize: 99999999, // We want all results in one request
 		};
-		let options = {};
+
+		let childrenResponse: PagedStelaResponse<StelaFolderChild>;
 		if (shareToken) {
-			options = {
-				authToken: false,
-				shareToken,
-			};
+			childrenResponse = (
+				await firstValueFrom(
+					this.httpV2.get<PagedStelaResponse<StelaFolderChild>>(
+						`v2/folder/${folderVO.folderId}/children`,
+						queryData,
+						null,
+						{
+							authToken: false,
+							shareToken,
+						},
+					),
+				)
+			)[0];
 		}
-		const childrenResponse = (
-			await firstValueFrom(
-				this.httpV2.get<PagedStelaResponse<StelaFolderChild>>(
-					`v2/folder/${folderVO.folderId}/children`,
-					queryData,
-					null,
-					options,
-				),
-			)
-		)[0];
+		// we do not want to reveal the existence or non-existence of
+		// matching items, unless the request is authenticated by auth token
+		// a request authenticated by a share token will not get a 404 or 401,
+		// it just responds with a 200 and an empty array and if we get an empty array,
+		// we try as a fallback and see if maybe we can get the files as an authenticated user
+		if (!childrenResponse?.items) {
+			childrenResponse = (
+				await firstValueFrom(
+					this.httpV2.get<PagedStelaResponse<StelaFolderChild>>(
+						`v2/folder/${folderVO.folderId}/children`,
+						queryData,
+					),
+				)
+			)[0];
+		}
+
 		return childrenResponse.items;
 	}
 
