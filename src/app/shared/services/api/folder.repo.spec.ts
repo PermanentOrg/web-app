@@ -6,17 +6,11 @@ import { HttpService } from '../http/http.service';
 import { FolderRepo } from './folder.repo';
 
 const emptyResponse = { items: [] };
-// The extra properties irrelevant to this test suite need to be there because
-// there are some checks missing in convertStelaFolderToFolderVO,
-// which will be fixed in the next commit
 const fakeFolderResponse = {
 	items: [
 		{
 			id: 42,
 			name: 'Auth Folder',
-			thumbnailUrls: { 200: 'test' },
-			paths: { names: 'test' },
-			location: { stelaLocation: { id: 13 } },
 		},
 	],
 };

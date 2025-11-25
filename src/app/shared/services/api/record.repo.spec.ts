@@ -46,13 +46,8 @@ describe('RecordRepo', () => {
 	// isolating the record.repo service functionality from other
 	// dependencies would make the tests more reliable
 	it('should use a V2 request to get records by id', fakeAsync(() => {
-		// The extra properties irrelevant to this test suite need to be there because
-		// there are some checks missing in convertStelaRecordToRecordVO, which will be
-		//  fixed in the next commit
 		const fakeRecordVO = {
 			recordId: 5,
-			location: { stelaLocation: { id: 13 } },
-			files: [],
 		} as unknown as RecordVO;
 
 		const recordPromise = repo.get([fakeRecordVO]);
