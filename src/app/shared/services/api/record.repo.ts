@@ -158,7 +158,7 @@ export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 export const convertStelaLocationToLocnVOData = (
 	stelaLocation: StelaLocation,
 ): LocnVOData =>
-	stelaLocation.id
+	stelaLocation?.id
 		? {
 				...stelaLocation,
 				locnId: Number.parseInt(stelaLocation.id, 10),
@@ -178,7 +178,7 @@ export const convertStelaRecordToRecordVO = (
 		folder_linkId: Number.parseInt(stelaRecord.folderLinkId, 10),
 		folder_linkType: stelaRecord.folderLinkType,
 		LocnVO: convertStelaLocationToLocnVOData(stelaRecord.location),
-		FileVOs: stelaRecord.files.map(convertStelaFileToPermanentFile),
+		FileVOs: stelaRecord.files?.map(convertStelaFileToPermanentFile),
 		createdDT: stelaRecord.createdAt,
 		updatedDT: stelaRecord.updatedAt,
 		locnId: stelaRecord.location?.id || null,
