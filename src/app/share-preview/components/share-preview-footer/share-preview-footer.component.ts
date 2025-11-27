@@ -47,44 +47,18 @@ export class SharePreviewFooterComponent implements OnInit, OnDestroy {
 	private scrollTimestamp: number;
 
 	constructor(private renderer: Renderer2) {
-		this.renderer.listen('window', 'click', (e: Event) => {
-			if (this.visible) {
-				if (!this.element.nativeElement.contains(e.target)) {
-					let target = e.target as HTMLElement;
-					while (target.parentElement) {
-						const tagName = target.tagName.toLocaleLowerCase();
-						if (tagName === 'pr-dialog') {
-							return;
-						}
-						if (tagName === 'pr-app-root') {
-							break;
-						}
-						target = target.parentElement;
-					}
-					this.close();
-				}
-			}
-		});
-
 		this.renderer.listen('window', 'scroll', (e: Event) => {
 			if (this.scrollTimeout) {
 				window.clearTimeout(this.scrollTimeout);
 			}
-			if (
-				window.scrollY + document.body.clientHeight ===
-				document.body.scrollHeight
-			) {
-				this.show();
-			} else {
-				this.scrollTimestamp = e.timeStamp;
-				window.setTimeout(() => {
-					if (this.scrollTimestamp === e.timeStamp) {
-						if (!document.querySelector('pr-dialog')) {
-							this.show();
-						}
+			this.scrollTimestamp = e.timeStamp;
+			window.setTimeout(() => {
+				if (this.scrollTimestamp === e.timeStamp) {
+					if (!document.querySelector('pr-dialog')) {
+						this.show();
 					}
-				}, 1000);
-			}
+				}
+			}, 1000);
 		});
 	}
 
@@ -94,9 +68,7 @@ export class SharePreviewFooterComponent implements OnInit, OnDestroy {
 		});
 
 		setTimeout(() => {
-			if (document.body.scrollHeight === document.body.clientHeight) {
-				this.show();
-			}
+			this.show();
 		}, 1000);
 	}
 
