@@ -54,6 +54,27 @@ describe('PublicRoutePipe', () => {
 		]);
 	});
 
+	it('returns correct link for record with no ParentFolderVOs defined', () => {
+		const record = new RecordVO({
+			parentFolder_linkId: 1234,
+			parentFolderArchiveNumber: '0001-meow',
+			folder_linkId: 1001,
+			archiveNbr: '0001-00gp',
+		});
+		const route = pipe.transform(record);
+
+		expect(route).toBeDefined();
+		expect(route).toEqual([
+			'/p',
+			'archive',
+			'0001-0000',
+			'0001-meow',
+			1234,
+			'record',
+			record.archiveNbr,
+		]);
+	});
+
 	it('returns correct link for record in the public root folder', () => {
 		const record = new RecordVO({
 			ParentFolderVOs: [
@@ -73,6 +94,34 @@ describe('PublicRoutePipe', () => {
 			'/p',
 			'archive',
 			'1234-0000',
+			'record',
+			'1234-5678',
+		]);
+	});
+
+	it('returns link for record in the public root folder, even if there is no ParentFolderVOs defined', () => {
+		const record = new RecordVO({
+			ParentFolderVOs: [
+				new FolderVO({
+					archiveNbr: 'do-not-use',
+					folder_linkId: -1,
+					folder_linkType: 'type.folder_link.root.public',
+					type: 'type.folder.root.public',
+				}),
+			],
+			parentFolderArchiveNumber: '1234-000d',
+			parentFolder_linkId: 987,
+			folder_linkId: 1001,
+			archiveNbr: '1234-5678',
+		});
+		const route = pipe.transform(record);
+
+		expect(route).toEqual([
+			'/p',
+			'archive',
+			'1234-0000',
+			'1234-000d',
+			987,
 			'record',
 			'1234-5678',
 		]);
