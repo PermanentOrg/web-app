@@ -231,12 +231,10 @@ export class EditTagsComponent
 		this.itemTagsById.clear();
 
 		this.itemTags = this.filterTagsByType(
-			(this.item?.TagVOs || [])
-				.map((tag) => this.allTags?.find((t) => t.tagId === tag.tagId))
-				.filter(
-					// Filter out tags that are now null from deletion
-					(tag) => tag?.name,
-				),
+			(this.item?.TagVOs || []).filter(
+				// Filter out tags that are now null from deletion
+				(tag) => tag?.name,
+			),
 		);
 
 		if (!this.item?.TagVOs?.length) {
