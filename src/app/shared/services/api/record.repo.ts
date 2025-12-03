@@ -158,7 +158,7 @@ export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 export const convertStelaLocationToLocnVOData = (
 	stelaLocation: StelaLocation,
 ): LocnVOData =>
-	stelaLocation.id
+	stelaLocation?.id
 		? {
 				...stelaLocation,
 				locnId: Number.parseInt(stelaLocation.id, 10),
@@ -178,7 +178,7 @@ export const convertStelaRecordToRecordVO = (
 		folder_linkId: Number.parseInt(stelaRecord.folderLinkId, 10),
 		folder_linkType: stelaRecord.folderLinkType,
 		LocnVO: convertStelaLocationToLocnVOData(stelaRecord.location),
-		FileVOs: stelaRecord.files.map(convertStelaFileToPermanentFile),
+		FileVOs: stelaRecord.files?.map(convertStelaFileToPermanentFile),
 		createdDT: stelaRecord.createdAt,
 		updatedDT: stelaRecord.updatedAt,
 		locnId: stelaRecord.location?.id || null,
@@ -219,16 +219,26 @@ export class RecordRepo extends BaseRepo {
 		const data = {
 			recordIds,
 		};
-		let options = {};
+		let stelaRecords: StelaRecord[];
 		if (shareToken) {
-			options = {
-				authToken: false,
-				shareToken,
-			};
+			stelaRecords = await firstValueFrom(
+				this.httpV2.get<StelaRecord>('v2/record', data, null, {
+					authToken: false,
+					shareToken,
+				}),
+			);
 		}
-		const stelaRecords = await firstValueFrom(
-			this.httpV2.get<StelaRecord>('v2/record', data, null, options),
-		);
+
+		// we do not want to reveal the existence or non-existence of
+		// matching items, unless the request is authenticated by auth token
+		// a request authenticated by a share token will not get a 404 or 401,
+		// it just responds with a 200 and an empty array and if we get an empty array,
+		// we try as a fallback and see if maybe we can get the files as an authenticated user
+		if (!stelaRecords || !stelaRecords.length) {
+			stelaRecords = await firstValueFrom(
+				this.httpV2.get<StelaRecord>('v2/record', data),
+			);
+		}
 
 		// We need the `Results` to look the way v1 results look, for now.
 		const simulatedV1RecordResponseResults = stelaRecords.map(
