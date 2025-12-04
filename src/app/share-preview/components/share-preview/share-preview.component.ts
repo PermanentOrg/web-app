@@ -197,9 +197,15 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 
 		if (this.isUnlistedShare) {
-			this.ephemeralFolder = await this.filesystemService.getFolder(
-				this.route.snapshot.data.sharePreviewVO.FolderVO,
-			);
+			if (this.route.snapshot.data.sharePreviewVO?.FolderVO) {
+				this.ephemeralFolder = await this.filesystemService.getFolder(
+					this.route.snapshot.data.sharePreviewVO.FolderVO,
+				);
+			} else {
+				this.ephemeralFolder = this.route.snapshot.data.currentFolder;
+				this.ephemeralFolder.folderId =
+					this.route.snapshot.data.sharePreviewVO?.RecordVO?.parentFolderId;
+			}
 			this.dataService.ephemeralFolder = this.ephemeralFolder;
 			this.dataService.pushBreadcrumbFolder(this.ephemeralFolder);
 		}
