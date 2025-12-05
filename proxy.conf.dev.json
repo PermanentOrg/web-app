@@ -1,6 +1,6 @@
 {
 	"/api": {
-		"target": "https://dev.permanent.org",
+		"target": "https://app.dev.permanent.org",
 		"secure": false,
 		"changeOrigin": true,
 		"cookieDomainRewrite": {
