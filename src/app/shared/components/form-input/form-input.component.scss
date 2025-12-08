@@ -3,3 +3,7 @@
 	cursor: not-allowed;
 	user-select: none;
 }
+
+.selected-option {
+	pointer-events: none;
+}

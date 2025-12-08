@@ -31,7 +31,7 @@
 }
 @if (type === 'select') {
 	<div
-		class="input-vertical-select-placeholder"
+		class="input-vertical-select-placeholder selected-option"
 		[class.selected]="control.value"
 	>
 		{{ getOptionTextFromValue(control.value) || placeholder }}
