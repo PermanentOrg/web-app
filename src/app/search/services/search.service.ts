@@ -2,21 +2,21 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { ItemVO, TagVOData } from '@models';
-import Fuse, { IFuseOptions } from 'fuse.js';
+import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { SearchResponse } from '@shared/services/api/index.repo';
 import { TagsService } from '@core/services/tags/tags.service';
 
 @Injectable()
 export class SearchService {
-	private fuseOptions: IFuseOptions<ItemVO> = {
+	private fuseOptions: Fuse.IFuseOptions<ItemVO> = {
 		keys: ['displayName'],
 		threshold: 0.1,
 		ignoreLocation: true,
 	};
 	private fuse = new Fuse([], this.fuseOptions);
 
-	private tagsFuseOptions: IFuseOptions<TagVOData> = {
+	private tagsFuseOptions: Fuse.IFuseOptions<TagVOData> = {
 		keys: ['name'],
 		threshold: 0.1,
 		ignoreLocation: true,
