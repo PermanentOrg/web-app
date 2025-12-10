@@ -91,9 +91,9 @@ export class PreviewResolveService {
 			if (!sharePreviewVO.previewToggle && !showPreview) {
 				const dummy = dummyItems[0];
 				record = cloneDeep(record);
-				record.thumbURL200 = dummy.thumbURL200;
-				record.thumbURL500 = dummy.thumbURL500;
-				record.thumbURL1000 = dummy.thumbURL1000;
+				record.thumbURL200 = record.thumbURL200 || dummy.thumbURL200;
+				record.thumbURL500 = record.thumbURL500 || dummy.thumbURL500;
+				record.thumbURL1000 = record.thumbURL1000 || dummy.thumbURL1000;
 				record.archiveNbr = dummy.archiveNbr;
 			}
 
