@@ -94,6 +94,7 @@ describe('SharePreviewComponent', () => {
 		mockRoute.snapshot.data = {
 			sharePreviewVO: {
 				ArchiveVO: {},
+				FolderVO: {},
 				AccountVO: { fullName: 'Sharer Name' },
 				ShareVO: { accessRole: 'viewer', status: 'pending' },
 				status: 'pending',
