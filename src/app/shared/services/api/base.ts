@@ -1,6 +1,7 @@
 import { HttpService } from '@shared/services/http/http.service';
 import { SimpleVO, ResponseMessageType } from '@root/app/models';
 import { compact } from 'lodash';
+import { Injectable } from '@angular/core';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 
 export interface CSRFResponse {
@@ -75,6 +76,7 @@ export class BaseResponse {
 	}
 }
 
+@Injectable()
 export class BaseRepo {
 	constructor(
 		public http: HttpService,

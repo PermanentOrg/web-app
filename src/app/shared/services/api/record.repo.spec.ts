@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import {
 	HttpTestingController,
 	provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
-import { RecordRepo } from '@shared/services/api/record.repo';
+import { RecordRepo, RecordResponse } from '@shared/services/api/record.repo';
 import { RecordVO } from '@root/app/models';
 import {
 	provideHttpClient,
@@ -38,6 +38,33 @@ describe('RecordRepo', () => {
 	afterEach(() => {
 		httpMock.verify();
 	});
+
+	// in order to test that the request is made with the auth token,
+	// with the share token and that the fallback works, the test suite
+	// should be refactored to mock the http and httpV2 services
+
+	// isolating the record.repo service functionality from other
+	// dependencies would make the tests more reliable
+	it('should use a V2 request to get records by id', fakeAsync(() => {
+		const fakeRecordVO = {
+			recordId: 5,
+		} as unknown as RecordVO;
+
+		const recordPromise = repo.get([fakeRecordVO]);
+
+		tick();
+
+		const req = httpMock.expectOne(
+			`${environment.apiUrl}/v2/record?recordIds[]=5`,
+		);
+
+		expect(req.request.method).toBe('GET');
+		expect(req.request.headers.get('Request-Version')).toBe('2');
+		req.flush([fakeRecordVO]);
+		recordPromise.then((recordResponse: RecordResponse) => {
+			expect(recordResponse).toBeDefined();
+		});
+	}));
 
 	it('should use a V2 request for registerRecord', (done) => {
 		const testRecord = new RecordVO({
