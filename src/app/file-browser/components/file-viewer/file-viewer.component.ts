@@ -49,6 +49,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	public isVideo = false;
 	public isAudio = false;
 	public isDocument = false;
+	public isArchive = false;
 	public showThumbnail = true;
 	public isPublicArchive: boolean = false;
 	public allowDownloads: boolean = false;
@@ -224,6 +225,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		this.isDocument = this.currentRecord.FileVOs?.some(
 			(obj) => obj.type.includes('pdf') || obj.type.includes('txt'),
 		);
+		this.isArchive = this.currentRecord.type.includes('archive');
 		this.documentUrl = this.getDocumentUrl();
 		this.setCurrentTags();
 	}
