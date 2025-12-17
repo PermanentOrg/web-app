@@ -38,12 +38,13 @@
 						!isDocument &&
 						!isVideo &&
 						!isAudio &&
-						!isArchive
+						!isArchive &&
+						!isWebArchive
 					"
 				  ></pr-zooming-image-viewer>
 				<replay-web-page source="{{currentRecord?.files?.[0]?.downloadUrl}}"
 						 replayBase="/assets/replay/"
-						 *ngIf="isArchive">
+						 *ngIf="isWebArchive">
 				</replay-web-page>
 				<pr-thumbnail
 					[item]="currentRecord"
@@ -53,7 +54,8 @@
 						!isDocument &&
 						!isVideo &&
 						!isAudio &&
-						!isArchive
+						!isArchive &&
+						!isWebArchive
 					"
 				></pr-thumbnail>
 				<pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
