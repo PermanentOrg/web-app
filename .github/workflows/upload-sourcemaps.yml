@@ -36,5 +36,7 @@ jobs:
           cp -r dist/mdot dist/p
           VERSION="mdot@$(sentry-cli releases propose-version)"
           export VERSION
+          sentry-cli releases new "$VERSION"
           sentry-cli releases set-commits "$VERSION" --auto --ignore-missing
-          sentry-cli releases files "$VERSION" upload-sourcemaps --validate --log-level info --strip-common-prefix ./dist/ --ignore mdot
+          sentry-cli sourcemaps upload --release "$VERSION" --validate --log-level info --strip-common-prefix ./dist/ --ignore mdot
+          sentry-cli releases finalize "$VERSION"
