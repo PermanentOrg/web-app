@@ -41,7 +41,7 @@
 						!isArchive
 					"
 				  ></pr-zooming-image-viewer>
-				<replay-web-page source="{{currentRecord?.downloadUrl?.[0]?.downloadUrl}}"
+				<replay-web-page source="{{currentRecord?.files?.[0]?.downloadUrl}}"
 						 replayBase="/assets/replay/"
 						 *ngIf="isArchive">
 				</replay-web-page>
