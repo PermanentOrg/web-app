@@ -41,12 +41,10 @@
 						!isArchive
 					"
 				  ></pr-zooming-image-viewer>
-				<replay-web-page source="https://replayweb.page/docs/examples/tweet-example.wacz"
-						 url="https://oembed.link/https://twitter.com/webrecorder_io/status/1565881026215219200"
-						 replayBase="/app/assets/replay/"
+				<replay-web-page source="{{currentRecord?.downloadUrl?.[0]?.downloadUrl}}"
+						 replayBase="/assets/replay/"
 						 *ngIf="isArchive">
 				</replay-web-page>
-
 				<pr-thumbnail
 					[item]="currentRecord"
 					*ngIf="
