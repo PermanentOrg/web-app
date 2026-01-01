@@ -94,7 +94,7 @@
 	},
 	"devDependencies": {
 		"@angular/build": "^20.3.10",
-		"@angular/cli": "20.3.10",
+		"@angular/cli": "20.3.13",
 		"@angular/compiler-cli": "20.3.12",
 		"@angular/language-service": "20.3.12",
 		"@chromatic-com/storybook": "^4.1.3",
