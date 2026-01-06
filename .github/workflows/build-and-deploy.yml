@@ -37,16 +37,9 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     uses: ./.github/workflows/reusable-build.yml
-    secrets:
-      google-api-key: ${{ matrix.env == 'prod' && secrets.GOOGLE_API_KEY_PROD || matrix.env == 'staging' && secrets.GOOGLE_API_KEY_STAGING || secrets.GOOGLE_API_KEY_DEV }}
-      firebase-api-key: ${{ matrix.env == 'prod' && secrets.FIREBASE_API_KEY_PROD || matrix.env == 'staging' && secrets.FIREBASE_API_KEY_STAGING || secrets.FIREBASE_API_KEY_DEV }}
-      stripe-api-key: ${{ matrix.env == 'prod' && secrets.STRIPE_LIVE_KEY || secrets.STRIPE_TEST_KEY }}
-      recaptcha-api-key: ${{ matrix.env == 'prod' && secrets.RECAPTCHA_API_KEY || secrets.RECAPTCHA_API_KEY_DEV }}
-      stela-domain: ${{ matrix.env == 'prod' && secrets.STELA_DOMAIN_PROD || matrix.env == 'staging' && secrets.STELA_DOMAIN_STAGING || secrets.STELA_DOMAIN_DEV }}
-      mixpanel-token: ${{ matrix.env == 'prod' && secrets.MIXPANEL_TOKEN_PROD || secrets.MIXPANEL_TOKEN_DEV }}
-      fusionauth-host: ${{ matrix.env == 'prod' && secrets.FUSIONAUTH_PROD_HOST || secrets.FUSIONAUTH_HOST_DEV }}
-      fontawesome-token: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
+    secrets: inherit
     with:
+      environment: ${{ matrix.env }}
       build-command: ${{ matrix.env == 'prod' && 'build' || format('build:{0}', matrix.env) }}
       artifact-name: ${{ matrix.env }}
 
@@ -58,6 +51,7 @@ jobs:
     uses: ./.github/workflows/reusable-build-storybook.yml
     secrets: inherit
     with:
+      environment: ${{ matrix.env }}
       artifact-name: ${{ matrix.env }}
 
   upload-sourcemaps:
@@ -68,6 +62,7 @@ jobs:
     uses: ./.github/workflows/reusable-upload-sourcemaps.yml
     secrets: inherit
     with:
+      environment: ${{ matrix.env }}
       artifact-name: ${{ matrix.env }}
 
   upload-code:
@@ -78,6 +73,7 @@ jobs:
     uses: ./.github/workflows/reusable-upload-code.yml
     secrets: inherit
     with:
+      environment: ${{ matrix.env }}
       artifact-name: ${{ matrix.env }}
       s3-destination: ${{ format('s3://permanent-repos/{0}/mdot.tar.gz', matrix.env) }}
 
@@ -87,6 +83,7 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     runs-on: ubuntu-latest
+    environment: ${{ matrix.env }}
     steps:
       - name: Trigger ${{ matrix.env }} deploy
         if: matrix.env == 'dev'

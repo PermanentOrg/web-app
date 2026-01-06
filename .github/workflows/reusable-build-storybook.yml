@@ -2,17 +2,21 @@ name: Build static Storybook
 on:
   workflow_call:
     inputs:
+      environment:
+        description: 'GitHub Environment to use for secrets'
+        required: true
+        type: string
       artifact-name:
         description: 'Artifact name to be downloaded later. "-storybook" is appended to the end.'
         required: true
         type: string
 
-env:
-  FONTAWESOME_PACKAGE_TOKEN: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
-
 jobs:
   build-storybook:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      FONTAWESOME_PACKAGE_TOKEN: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
     steps:
       - uses: actions/checkout@v5
 

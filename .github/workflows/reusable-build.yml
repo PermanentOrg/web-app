@@ -1,32 +1,11 @@
 name: Build deployable images
 on:
   workflow_call:
-    secrets:
-      google-api-key:
-        description: 'Google API key'
-        required: true
-      firebase-api-key:
-        description: 'Firebase API key'
-        required: true
-      stripe-api-key:
-        description: 'Stripe API key'
-        required: true
-      recaptcha-api-key:
-        description: 'Recaptcha API key'
-        required: true
-      stela-domain:
-        description: 'Domain to route Stela requests to'
-        required: true
-      mixpanel-token:
-        description: 'Mixpanel API key'
-        required: true
-      fusionauth-host:
-        description: 'FusionAuth host'
-        required: false
-      fontawesome-token:
-        description: 'FontAwesome package token'
-        required: true
     inputs:
+      environment:
+        description: 'GitHub Environment to use for secrets'
+        required: true
+        type: string
       build-command:
         description: 'The npm action that is run to build the Angular application.'
         default: 'build'
@@ -37,12 +16,12 @@ on:
         required: true
         type: string
 
-env:
-  FONTAWESOME_PACKAGE_TOKEN: ${{ secrets.fontawesome-token }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      FONTAWESOME_PACKAGE_TOKEN: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
     steps:
       - uses: actions/checkout@v5
 
@@ -64,13 +43,13 @@ jobs:
 
       - name: Build
         env:
-          GOOGLE_API_KEY: ${{ secrets.google-api-key }}
-          FIREBASE_API_KEY: ${{ secrets.firebase-api-key }}
-          STRIPE_API_KEY: ${{ secrets.stripe-api-key }}
-          RECAPTCHA_API_KEY: ${{ secrets.recaptcha-api-key }}
-          STELA_DOMAIN: ${{ secrets.stela-domain }}
-          MIXPANEL_TOKEN: ${{ secrets.mixpanel-token }}
-          FUSIONAUTH_HOST: ${{ secrets.fusionauth-host }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
+          RECAPTCHA_API_KEY: ${{ secrets.RECAPTCHA_API_KEY }}
+          STELA_DOMAIN: ${{ secrets.STELA_DOMAIN }}
+          MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
+          FUSIONAUTH_HOST: ${{ secrets.FUSIONAUTH_HOST }}
         run: npm run ${{ inputs.build-command }}
 
       - name: Archive `dist`
