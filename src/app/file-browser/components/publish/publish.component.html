@@ -43,58 +43,60 @@
 				Publish
 			</button>
 		</div>
-		<ng-container *ngIf="publicItem" [ngSwitch]="publishIa">
+		<ng-container *ngIf="publicItem">
 			<hr />
 			<img
 				src="assets/img/internetarchive/IALogo.png"
 				alt="Internet Archive"
 				class="internet-archive-logo"
 			/>
-			<div class="public-link-button" *ngSwitchCase="null">
-				<p>
-					This item can also be published to the Internet Archive.
-					<a
-						href="https://desk.zoho.com/portal/permanent/en/kb/articles/publishing-to-the-internet-archive"
-						target="_blank"
-						>Learn more about publishing to the Internet Archive.</a
-					>
-				</p>
-				<button
-					class="btn btn-primary publish-to-archive"
-					(click)="publishItemToInternetArchive()"
-					[disabled]="waiting || !isAtleastManager"
-				>
-					Publish to Internet Archive
-				</button>
-			</div>
-			<div class="public-link" *ngSwitchDefault>
-				<p>
-					When processed, you can view this item on the Internet Archive with
-					the link provided. Processing may take several minutes.
-				</p>
-				<input
-					type="text"
-					class="form-control"
-					readonly
-					[value]="publishIa.permalink"
-					#iaLinkInput
-				/>
-				<div class="buttons">
+			<ng-container [ngSwitch]="publishIa">
+				<div class="public-link-button" *ngSwitchCase="null">
+					<p>
+						This item can also be published to the Internet Archive.
+						<a
+							href="https://desk.zoho.com/portal/permanent/en/kb/articles/publishing-to-the-internet-archive"
+							target="_blank"
+							>Learn more about publishing to the Internet Archive.</a
+						>
+					</p>
 					<button
-						class="btn btn-primary"
-						[disabled]="iaLinkCopied"
-						(click)="copyInternetArchiveLink()"
+						class="btn btn-primary publish-to-archive"
+						(click)="publishItemToInternetArchive()"
+						[disabled]="waiting || !isAtleastManager"
 					>
-						{{ iaLinkCopied ? 'Link copied' : 'Copy link' }}
+						Publish to Internet Archive
 					</button>
-					<a
-						class="btn btn-primary"
-						[href]="publishIa.permalink"
-						target="_blank"
-						>View on web</a
-					>
 				</div>
-			</div>
+				<div class="public-link" *ngSwitchDefault>
+					<p>
+						When processed, you can view this item on the Internet Archive with
+						the link provided. Processing may take several minutes.
+					</p>
+					<input
+						type="text"
+						class="form-control"
+						readonly
+						[value]="publishIa.permalink"
+						#iaLinkInput
+					/>
+					<div class="buttons">
+						<button
+							class="btn btn-primary"
+							[disabled]="iaLinkCopied"
+							(click)="copyInternetArchiveLink()"
+						>
+							{{ iaLinkCopied ? 'Link copied' : 'Copy link' }}
+						</button>
+						<a
+							class="btn btn-primary"
+							[href]="publishIa.permalink"
+							target="_blank"
+							>View on web</a
+						>
+					</div>
+				</div>
+			</ng-container>
 			<hr />
 		</ng-container>
 	</div>
