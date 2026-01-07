@@ -2,6 +2,10 @@ name: Upload Built Artifacts
 on:
   workflow_call:
     inputs:
+      environment:
+        description: 'GitHub Environment to use for secrets'
+        required: true
+        type: string
       artifact-name:
         description: 'Name of artifact to download'
         required: true
@@ -14,6 +18,7 @@ on:
 jobs:
   upload-code:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - name: Download dist
         uses: actions/download-artifact@v7
