@@ -15,6 +15,7 @@ import {
 
 export default {
 	title: 'Directive Display',
+
 	decorators: [
 		moduleMetadata({
 			declarations: [],
@@ -31,12 +32,13 @@ export default {
 			],
 		}),
 	],
+
 	parameters: {
 		viewport: {
 			viewports: INITIAL_VIEWPORTS,
-			defaultViewport: 'archiveSettingsDesktop',
 		},
 	},
+
 	argTypes: {
 		archiveName: {
 			defaultValue: 'Volunteer Firefighter',
@@ -71,7 +73,15 @@ export default {
 			control: 'boolean',
 		},
 	},
+
 	component: DirectiveDisplayComponent,
+
+	globals: {
+		viewport: {
+			value: 'archiveSettingsDesktop',
+			isRotated: false,
+		},
+	},
 } as Meta;
 
 const storyTemplate = (args) => {

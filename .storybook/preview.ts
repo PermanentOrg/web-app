@@ -21,7 +21,7 @@ const preview: Preview = {
 			},
 		},
 		viewport: {
-			viewports: {
+			options: {
 				...MINIMAL_VIEWPORTS,
 				...customViewports,
 			},
