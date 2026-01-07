@@ -321,14 +321,14 @@
 					[disabled]="waiting || hasRequested"
 					*ngIf="isLinkShare"
 				>
-					<ng-container *ngIf="hasRequested; else accessText"
+					<ng-container *ngIf="hasRequested; else accessTextFooter"
 						>Access Requested</ng-container
 					>
-					<ng-template #accessText>
-						<ng-container *ngIf="isAutoApprove; else requestAccess"
+					<ng-template #accessTextFooter>
+						<ng-container *ngIf="isAutoApprove; else requestAccessFooter"
 							>Accept Share</ng-container
 						>
-						<ng-template #requestAccess>Request Access</ng-template>
+						<ng-template #requestAccessFooter>Request Access</ng-template>
 					</ng-template>
 				</button>
 			</div>
