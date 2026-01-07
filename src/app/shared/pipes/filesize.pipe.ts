@@ -24,7 +24,7 @@ export class FileSizePipe implements PipeTransform {
 		} else {
 			let unit = 0;
 
-			while (bytes >= 1024) {
+			while (bytes >= 1024 || bytes <= -1024) {
 				bytes /= 1024;
 				unit += 1;
 			}
