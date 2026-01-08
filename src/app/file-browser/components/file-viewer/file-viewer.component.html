@@ -1,188 +1,210 @@
 <div
-	class="file-viewer"
+  class="file-viewer"
 	[ngClass]="{
 		minimal: useMinimalView,
 		'editing-date': editingDate,
 		'can-edit': canEdit
 	}"
->
-	<div class="file-viewer-close">
-		<a (click)="close()"> <i class="ion-md-arrow-dropleft"></i> Back </a>
-	</div>
-	<div class="thumb-target">
-		<div
-			class="thumb-wrapper"
-			*ngFor="let record of records; let i = index"
-			[hidden]="!isQueued(i)"
+  >
+  <div class="file-viewer-close">
+    <a (click)="close()"> <i class="ion-md-arrow-dropleft"></i> Back </a>
+  </div>
+  <div class="thumb-target">
+    @for (record of records; track record; let i = $index) {
+      <div
+        class="thumb-wrapper"
+        [hidden]="!isQueued(i)"
 			[ngClass]="{
 				prev: i === currentIndex - 1,
 				next: i === currentIndex + 1,
 				current: i === currentIndex,
 				queue: isQueued(i)
 			}"
-		>
-			<div
-				class="thumb-preview no-placeholder"
-				prBgImage
-				[bgSrc]="record.thumbURL200"
-				*ngIf="isQueued(i)"
-			></div>
-			<div *ngIf="currentRecord === record" class="full">
-				<pr-zooming-image-viewer
-					[item]="currentRecord"
-					(disableSwipe)="toggleSwipe($event)"
-					(isFullScreen)="toggleFullscreen($event)"
-					*ngIf="
-						showThumbnail &&
-						isZoomableImage &&
-						!isDocument &&
-						!isVideo &&
-						!isAudio
-					"
-				></pr-zooming-image-viewer>
-				<pr-thumbnail
-					[item]="currentRecord"
-					*ngIf="
-						showThumbnail &&
-						!isZoomableImage &&
-						!isDocument &&
-						!isVideo &&
-						!isAudio
-					"
-				></pr-thumbnail>
-				<pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
-				<pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>
-				<iframe
-					[title]="currentRecord | getAltText"
-					[src]="documentUrl"
-					*ngIf="isDocument && documentUrl"
-				></iframe>
-			</div>
-		</div>
-		<div
-			class="file-viewer-control file-viewer-control-previous"
-			(click)="incrementCurrentRecord(true)"
-			*ngIf="currentIndex > 0"
-		>
-			<span>&#8249;</span>
-		</div>
-		<div
-			class="file-viewer-control file-viewer-control-next"
-			(click)="incrementCurrentRecord()"
-			*ngIf="currentIndex < records.length - 1"
-		>
-			<span>&#8250;</span>
-		</div>
-	</div>
-	<div class="file-viewer-name">{{ currentRecord.displayName }}</div>
-	<div class="file-viewer-metadata-wrapper">
-		<div class="file-viewer-metadata">
-			<pr-inline-value-edit
-				[displayValue]="currentRecord.displayName"
-				[isPublicArchive]="isPublicArchive"
-				[itemId]="currentRecord.folder_linkId"
-				[canEdit]="canEdit"
-				[required]="true"
-				(doneEditing)="onFinishEditing('displayName', $event)"
-				emptyMessage="Click to add name"
-				readOnlyEmptyMessage="No name"
-				type="text"
-				class="h5"
-			></pr-inline-value-edit>
-			<div class="file-viewer-description">
-				<pr-inline-value-edit
-					*ngIf="canEdit || currentRecord.description"
-					[displayValue]="currentRecord.description"
-					[itemId]="currentRecord.folder_linkId"
-					[canEdit]="canEdit"
-					(doneEditing)="onFinishEditing('description', $event)"
-					emptyMessage="Click to add description"
-					readOnlyEmptyMessage="No description"
-					type="textarea"
-				></pr-inline-value-edit>
-			</div>
-			<table class="metadata-table">
-				<tr>
-					<td>Date</td>
-					<td>
-						<pr-inline-value-edit
-							[displayValue]="currentRecord.displayDT"
-							[canEdit]="canEdit"
-							[item]="currentRecord"
-							[itemId]="currentRecord.folder_linkId"
-							emptyMessage="Click to add date"
-							readOnlyEmptyMessage="No date"
-							(doneEditing)="onFinishEditing('displayDT', $event)"
-							(toggledDatePicker)="onDateToggle($event)"
-							type="date"
-							class="no-padding"
-						></pr-inline-value-edit>
-					</td>
-				</tr>
-				<tr>
-					<td>Uploaded</td>
-					<td>{{ currentRecord.createdDT | date }}</td>
-				</tr>
-				<tr>
-					<td>Size</td>
-					<td>{{ currentRecord.size | dsFileSize }}</td>
-				</tr>
-				<tr>
-					<td>Type</td>
-					<td>{{ currentRecord.type | prConstants | titlecase }}</td>
-				</tr>
-			</table>
-			<p class="alt-text">Alt Text</p>
-			<pr-inline-value-edit
-				[displayValue]="currentRecord | getAltText"
-				[itemId]="currentRecord.folder_linkId"
-				[canEdit]="canEdit"
-				[required]="false"
-				(doneEditing)="onFinishEditing('altText', $event)"
-				[emptyMessage]="currentRecord | getAltText"
-				[readOnlyEmptyMessage]="currentRecord | getAltText"
-				type="description-textarea"
-			>
-			</pr-inline-value-edit>
-			<table class="metadata-table">
-				<tr>
-					<td class="title">Keywords</td>
-					<td (click)="onTagsClick('keyword')">
-						<pr-tags [tags]="keywords" [canEdit]="canEdit"></pr-tags>
-					</td>
-				</tr>
-				<tr>
-					<td class="top-align title">
-						Custom <br />
-						Metadata
-					</td>
-					<td (click)="onTagsClick('custom')">
-						<pr-tags [tags]="customMetadata" [canEdit]="canEdit"></pr-tags>
-					</td>
-				</tr>
-				<tr>
-					<td class="title">Location</td>
-					<td class="location-container" (click)="onLocationClick()">
-						<pr-static-map
-							[location]="currentRecord.LocnVO"
-							*ngIf="currentRecord.LocnVO"
-						></pr-static-map>
-						<span *ngIf="currentRecord.LocnVO">{{
-							(currentRecord.LocnVO | prLocation)?.full
-						}}</span>
-						<span class="add-location" *ngIf="!currentRecord.LocnVO && canEdit">
-							Click to add location</span
-						>
-						<span *ngIf="!currentRecord.LocnVO && !canEdit">No location</span>
-					</td>
-				</tr>
-				<tr></tr>
-			</table>
-			<pr-download-button
-				*ngIf="!isPublicArchive || (isPublicArchive && allowDownloads)"
-				[selectedItem]="currentRecord"
-				[isFileView]="true"
-			></pr-download-button>
-		</div>
-	</div>
-</div>
+        >
+        @if (isQueued(i)) {
+          <div
+            class="thumb-preview no-placeholder"
+            prBgImage
+            [bgSrc]="record.thumbURL200"
+          ></div>
+        }
+        @if (currentRecord === record) {
+          <div class="full">
+            @if (
+              showThumbnail &&
+              isZoomableImage &&
+              !isDocument &&
+              !isVideo &&
+              !isAudio
+              ) {
+              <pr-zooming-image-viewer
+                [item]="currentRecord"
+                (disableSwipe)="toggleSwipe($event)"
+                (isFullScreen)="toggleFullscreen($event)"
+              ></pr-zooming-image-viewer>
+            }
+            @if (
+              showThumbnail &&
+              !isZoomableImage &&
+              !isDocument &&
+              !isVideo &&
+              !isAudio
+              ) {
+              <pr-thumbnail
+                [item]="currentRecord"
+              ></pr-thumbnail>
+            }
+            @if (isVideo) {
+              <pr-video [item]="currentRecord"></pr-video>
+            }
+            @if (isAudio) {
+              <pr-audio [item]="currentRecord"></pr-audio>
+            }
+            @if (isDocument && documentUrl) {
+              <iframe
+                [title]="currentRecord | getAltText"
+                [src]="documentUrl"
+              ></iframe>
+            }
+          </div>
+        }
+      </div>
+    }
+    @if (currentIndex > 0) {
+      <div
+        class="file-viewer-control file-viewer-control-previous"
+        (click)="incrementCurrentRecord(true)"
+        >
+        <span>&#8249;</span>
+      </div>
+    }
+    @if (currentIndex < records.length - 1) {
+      <div
+        class="file-viewer-control file-viewer-control-next"
+        (click)="incrementCurrentRecord()"
+        >
+        <span>&#8250;</span>
+      </div>
+    }
+  </div>
+  <div class="file-viewer-name">{{ currentRecord.displayName }}</div>
+  <div class="file-viewer-metadata-wrapper">
+    <div class="file-viewer-metadata">
+      <pr-inline-value-edit
+        [displayValue]="currentRecord.displayName"
+        [isPublicArchive]="isPublicArchive"
+        [itemId]="currentRecord.folder_linkId"
+        [canEdit]="canEdit"
+        [required]="true"
+        (doneEditing)="onFinishEditing('displayName', $event)"
+        emptyMessage="Click to add name"
+        readOnlyEmptyMessage="No name"
+        type="text"
+        class="h5"
+      ></pr-inline-value-edit>
+      <div class="file-viewer-description">
+        @if (canEdit || currentRecord.description) {
+          <pr-inline-value-edit
+            [displayValue]="currentRecord.description"
+            [itemId]="currentRecord.folder_linkId"
+            [canEdit]="canEdit"
+            (doneEditing)="onFinishEditing('description', $event)"
+            emptyMessage="Click to add description"
+            readOnlyEmptyMessage="No description"
+            type="textarea"
+          ></pr-inline-value-edit>
+        }
+      </div>
+      <table class="metadata-table">
+        <tr>
+          <td>Date</td>
+          <td>
+            <pr-inline-value-edit
+              [displayValue]="currentRecord.displayDT"
+              [canEdit]="canEdit"
+              [item]="currentRecord"
+              [itemId]="currentRecord.folder_linkId"
+              emptyMessage="Click to add date"
+              readOnlyEmptyMessage="No date"
+              (doneEditing)="onFinishEditing('displayDT', $event)"
+              (toggledDatePicker)="onDateToggle($event)"
+              type="date"
+              class="no-padding"
+            ></pr-inline-value-edit>
+          </td>
+        </tr>
+        <tr>
+          <td>Uploaded</td>
+          <td>{{ currentRecord.createdDT | date }}</td>
+        </tr>
+        <tr>
+          <td>Size</td>
+          <td>{{ currentRecord.size | dsFileSize }}</td>
+        </tr>
+        <tr>
+          <td>Type</td>
+          <td>{{ currentRecord.type | prConstants | titlecase }}</td>
+        </tr>
+      </table>
+      <p class="alt-text">Alt Text</p>
+      <pr-inline-value-edit
+        [displayValue]="currentRecord | getAltText"
+        [itemId]="currentRecord.folder_linkId"
+        [canEdit]="canEdit"
+        [required]="false"
+        (doneEditing)="onFinishEditing('altText', $event)"
+        [emptyMessage]="currentRecord | getAltText"
+        [readOnlyEmptyMessage]="currentRecord | getAltText"
+        type="description-textarea"
+        >
+      </pr-inline-value-edit>
+      <table class="metadata-table">
+        <tr>
+          <td class="title">Keywords</td>
+          <td (click)="onTagsClick('keyword')">
+            <pr-tags [tags]="keywords" [canEdit]="canEdit"></pr-tags>
+          </td>
+        </tr>
+        <tr>
+          <td class="top-align title">
+            Custom <br />
+            Metadata
+          </td>
+          <td (click)="onTagsClick('custom')">
+            <pr-tags [tags]="customMetadata" [canEdit]="canEdit"></pr-tags>
+          </td>
+        </tr>
+        <tr>
+          <td class="title">Location</td>
+          <td class="location-container" (click)="onLocationClick()">
+            @if (currentRecord.LocnVO) {
+              <pr-static-map
+                [location]="currentRecord.LocnVO"
+              ></pr-static-map>
+            }
+            @if (currentRecord.LocnVO) {
+              <span>{{
+                (currentRecord.LocnVO | prLocation)?.full
+              }}</span>
+            }
+            @if (!currentRecord.LocnVO && canEdit) {
+              <span class="add-location">
+                Click to add location</span
+                >
+              }
+              @if (!currentRecord.LocnVO && !canEdit) {
+                <span>No location</span>
+              }
+            </td>
+          </tr>
+          <tr></tr>
+        </table>
+        @if (!isPublicArchive || (isPublicArchive && allowDownloads)) {
+          <pr-download-button
+            [selectedItem]="currentRecord"
+            [isFileView]="true"
+          ></pr-download-button>
+        }
+      </div>
+    </div>
+  </div>

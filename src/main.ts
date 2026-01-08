@@ -1,4 +1,4 @@
-import { enableProdMode, ɵresetCompiledComponents } from '@angular/core';
+import { enableProdMode, ɵresetCompiledComponents, provideZoneChangeDetection } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
@@ -14,4 +14,4 @@ if (module.hot) {
 	module.hot.dispose(() => ɵresetCompiledComponents());
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+platformBrowserDynamic().bootstrapModule(AppModule, { applicationProviders: [provideZoneChangeDetection()], });
