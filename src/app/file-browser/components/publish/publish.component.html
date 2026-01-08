@@ -1,106 +1,114 @@
 <div class="dialog-content">
-	<div class="dialog-body">
-		<div class="page-title break-all">
-			{{
-				this.sourceItem.folder_linkType.includes('public')
-					? 'Get public link for'
-					: 'Publish'
-			}}
-			{{ sourceItem.displayName }}
-		</div>
-		<div class="public-link" *ngIf="publicLink">
-			<p>This item can be viewed by anyone using the link provided</p>
-			<input
-				type="text"
-				class="form-control"
-				readonly
-				[value]="publicLink"
-				#publicLinkInput
-			/>
-			<div class="buttons">
-				<button
-					class="btn btn-primary"
-					[disabled]="linkCopied"
-					(click)="copyPublicLink()"
-				>
-					{{ linkCopied ? 'Link copied' : 'Copy link' }}
-				</button>
-				<button class="btn btn-primary" (click)="onViewOnWebClick()">
-					View on web
-				</button>
-			</div>
-		</div>
-		<div class="public-link-button" *ngIf="!publicItem || !publicLink">
-			<p>
-				Create a publicly viewable copy of this item in your Public workspace
-				and get a public link to share with anyone.
-			</p>
-			<button
-				class="btn btn-primary"
-				(click)="publishItem()"
-				[disabled]="waiting"
-			>
-				Publish
-			</button>
-		</div>
-		<ng-container *ngIf="publicItem">
-			<hr />
-			<img
-				src="assets/img/internetarchive/IALogo.png"
-				alt="Internet Archive"
-				class="internet-archive-logo"
-			/>
-			<ng-container [ngSwitch]="publishIa">
-				<div class="public-link-button" *ngSwitchCase="null">
-					<p>
-						This item can also be published to the Internet Archive.
-						<a
-							href="https://desk.zoho.com/portal/permanent/en/kb/articles/publishing-to-the-internet-archive"
-							target="_blank"
-							>Learn more about publishing to the Internet Archive.</a
-						>
-					</p>
-					<button
-						class="btn btn-primary publish-to-archive"
-						(click)="publishItemToInternetArchive()"
-						[disabled]="waiting || !isAtleastManager"
-					>
-						Publish to Internet Archive
-					</button>
-				</div>
-				<div class="public-link" *ngSwitchDefault>
-					<p>
-						When processed, you can view this item on the Internet Archive with
-						the link provided. Processing may take several minutes.
-					</p>
-					<input
-						type="text"
-						class="form-control"
-						readonly
-						[value]="publishIa.permalink"
-						#iaLinkInput
-					/>
-					<div class="buttons">
-						<button
-							class="btn btn-primary"
-							[disabled]="iaLinkCopied"
-							(click)="copyInternetArchiveLink()"
-						>
-							{{ iaLinkCopied ? 'Link copied' : 'Copy link' }}
-						</button>
-						<a
-							class="btn btn-primary"
-							[href]="publishIa.permalink"
-							target="_blank"
-							>View on web</a
-						>
-					</div>
-				</div>
-			</ng-container>
-			<hr />
-		</ng-container>
-	</div>
-	<div class="dialog-footer">
-		<button class="btn btn-secondary" (click)="close()">Done</button>
-	</div>
-</div>
+  <div class="dialog-body">
+    <div class="page-title break-all">
+      {{
+      this.sourceItem.folder_linkType.includes('public')
+      ? 'Get public link for'
+      : 'Publish'
+      }}
+      {{ sourceItem.displayName }}
+    </div>
+    @if (publicLink) {
+      <div class="public-link">
+        <p>This item can be viewed by anyone using the link provided</p>
+        <input
+          type="text"
+          class="form-control"
+          readonly
+          [value]="publicLink"
+          #publicLinkInput
+          />
+        <div class="buttons">
+          <button
+            class="btn btn-primary"
+            [disabled]="linkCopied"
+            (click)="copyPublicLink()"
+            >
+            {{ linkCopied ? 'Link copied' : 'Copy link' }}
+          </button>
+          <button class="btn btn-primary" (click)="onViewOnWebClick()">
+            View on web
+          </button>
+        </div>
+      </div>
+    }
+    @if (!publicItem || !publicLink) {
+      <div class="public-link-button">
+        <p>
+          Create a publicly viewable copy of this item in your Public workspace
+          and get a public link to share with anyone.
+        </p>
+        <button
+          class="btn btn-primary"
+          (click)="publishItem()"
+          [disabled]="waiting"
+          >
+          Publish
+        </button>
+      </div>
+    }
+    @if (publicItem) {
+      <hr />
+      <img
+        src="assets/img/internetarchive/IALogo.png"
+        alt="Internet Archive"
+        class="internet-archive-logo"
+        />
+      @switch (publishIa) {
+        @case (null) {
+          <div class="public-link-button">
+            <p>
+              This item can also be published to the Internet Archive.
+              <a
+                href="https://desk.zoho.com/portal/permanent/en/kb/articles/publishing-to-the-internet-archive"
+                target="_blank"
+                >Learn more about publishing to the Internet Archive.</a
+                >
+              </p>
+              <button
+                class="btn btn-primary publish-to-archive"
+                (click)="publishItemToInternetArchive()"
+                [disabled]="waiting || !isAtleastManager"
+                >
+                Publish to Internet Archive
+              </button>
+            </div>
+          }
+          @default {
+            <div class="public-link">
+              <p>
+                When processed, you can view this item on the Internet Archive with
+                the link provided. Processing may take several minutes.
+              </p>
+              <input
+                type="text"
+                class="form-control"
+                readonly
+                [value]="publishIa.permalink"
+                #iaLinkInput
+                />
+              <div class="buttons">
+                <button
+                  class="btn btn-primary"
+                  [disabled]="iaLinkCopied"
+                  (click)="copyInternetArchiveLink()"
+                  >
+                  {{ iaLinkCopied ? 'Link copied' : 'Copy link' }}
+                </button>
+                <a
+                  class="btn btn-primary"
+                  [href]="publishIa.permalink"
+                  target="_blank"
+                  >View on web</a
+                  >
+                </div>
+              </div>
+            }
+          }
+          <hr />
+        }
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-secondary" (click)="close()">Done</button>
+      </div>
+    </div>

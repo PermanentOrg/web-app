@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
-import { CountUpModule } from 'ngx-countup';
+import { CountUpDirective } from 'ngx-countup';
 import { environment } from '@root/environments/environment';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { ComponentsModule } from '../component-library/components.module';
@@ -33,7 +33,7 @@ import { UpdateCardComponent } from './components/update-card/update-card.compon
 		}),
 		AngularFireDatabaseModule,
 		PledgeRoutingModule,
-		CountUpModule,
+		CountUpDirective,
 	],
 	providers: [PledgeService],
 	declarations: [

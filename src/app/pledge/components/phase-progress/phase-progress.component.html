@@ -1,6 +1,6 @@
 <div class="pledge-progress-header">
 	<strong
-		[options]="percentCountUpOptions"
+		[countUpOptions]="percentCountUpOptions"
 		decimals="1"
 		duration="1.5"
 		[countUp]="
@@ -27,7 +27,7 @@
 	<div class="pledge-progress-detail">
 		<div
 			class="detail-heading"
-			[options]="dollarCountUpOptions"
+			[countUpOptions]="dollarCountUpOptions"
 			[countUp]="this.currentProgress.totalDollarAmount"
 			duration="1.5"
 		>
@@ -38,7 +38,7 @@
 	<div class="pledge-progress-detail">
 		<div
 			class="detail-heading"
-			[options]="pledgeCountUpOptions"
+			[countUpOptions]="pledgeCountUpOptions"
 			[countUp]="this.currentProgress.totalPledges"
 			duration="1.5"
 		>
@@ -49,7 +49,7 @@
 	<div class="pledge-progress-detail">
 		<div
 			class="detail-heading"
-			[options]="storageCountUpOptions"
+			[countUpOptions]="storageCountUpOptions"
 			[countUp]="this.currentProgress.totalStorageAmount"
 			duration="1.5"
 		>
