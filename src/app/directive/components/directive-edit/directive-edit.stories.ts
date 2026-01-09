@@ -27,6 +27,7 @@ class MockMessageService {
 
 export default {
 	title: 'Directive Edit',
+
 	decorators: [
 		moduleMetadata({
 			declarations: [],
@@ -47,13 +48,15 @@ export default {
 			],
 		}),
 	],
+
 	parameters: {
 		viewport: {
 			viewports: INITIAL_VIEWPORTS,
-			defaultViewport: 'archiveSettingsDesktop',
 		},
 	},
+
 	component: DirectiveEditComponent,
+
 	argTypes: {
 		accountExists: {
 			description:
@@ -80,6 +83,13 @@ export default {
 			control: 'boolean',
 		},
 		savedDirective: { action: 'savedDirective' },
+	},
+
+	globals: {
+		viewport: {
+			value: 'archiveSettingsDesktop',
+			isRotated: false,
+		},
 	},
 } as Meta;
 
