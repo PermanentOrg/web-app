@@ -1,9 +1,8 @@
-import { Shallow } from 'shallow-render';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ApiService } from '@shared/services/api/api.service';
 import { InviteVO, InviteVOData } from '@models/invite-vo';
 import { InviteResponse } from '@shared/services/api/invite.repo';
-import { OnboardingModule } from '../../onboarding.module';
 import { ArchiveCreationWithShareComponent } from './archive-creation-with-share.component';
 
 class MockInviteApiResponse extends InviteResponse {
@@ -38,27 +37,34 @@ class MockInviteRepo {
 }
 
 describe('ArchiveCreationWithShareToken', () => {
-	let shallow: Shallow<ArchiveCreationWithShareComponent>;
+	let fixture: ComponentFixture<ArchiveCreationWithShareComponent>;
+	let instance: ArchiveCreationWithShareComponent;
 	let mockInvite: MockInviteRepo;
 
 	function setLocalStorage(token: string) {
 		spyOn(localStorage, 'getItem').and.returnValue(token);
 	}
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		mockInvite = new MockInviteRepo();
 
-		shallow = new Shallow(ArchiveCreationWithShareComponent, OnboardingModule)
-			.provideMock({
-				provide: ApiService,
-				useValue: { invite: mockInvite },
-			})
-			.import(HttpClientTestingModule);
+		await TestBed.configureTestingModule({
+			declarations: [ArchiveCreationWithShareComponent],
+			providers: [
+				{
+					provide: ApiService,
+					useValue: { invite: mockInvite },
+				},
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
 	});
 
 	it('should create', async () => {
 		setLocalStorage(null);
-		const { instance } = await shallow.render();
+		fixture = TestBed.createComponent(ArchiveCreationWithShareComponent);
+		instance = fixture.componentInstance;
+		fixture.detectChanges();
 
 		expect(instance).toBeTruthy();
 	});
@@ -70,7 +76,9 @@ describe('ArchiveCreationWithShareToken', () => {
 		};
 		setLocalStorage('shareToken');
 
-		const { instance, fixture } = await shallow.render();
+		fixture = TestBed.createComponent(ArchiveCreationWithShareComponent);
+		instance = fixture.componentInstance;
+		fixture.detectChanges();
 
 		instance.ngOnInit();
 		await fixture.whenStable();
@@ -82,7 +90,9 @@ describe('ArchiveCreationWithShareToken', () => {
 
 	it('should not fetch invite data if no shareToken is present', async () => {
 		setLocalStorage(null);
-		const { instance, fixture } = await shallow.render();
+		fixture = TestBed.createComponent(ArchiveCreationWithShareComponent);
+		instance = fixture.componentInstance;
+		fixture.detectChanges();
 
 		instance.ngOnInit();
 		await fixture.whenStable();
@@ -99,7 +109,9 @@ describe('ArchiveCreationWithShareToken', () => {
 		};
 		setLocalStorage('shareToken');
 
-		const { instance, fixture } = await shallow.render();
+		fixture = TestBed.createComponent(ArchiveCreationWithShareComponent);
+		instance = fixture.componentInstance;
+		fixture.detectChanges();
 
 		instance.ngOnInit();
 		await fixture.whenStable();
@@ -114,7 +126,9 @@ describe('ArchiveCreationWithShareToken', () => {
 		};
 		setLocalStorage('shareToken');
 
-		const { instance, fixture } = await shallow.render();
+		fixture = TestBed.createComponent(ArchiveCreationWithShareComponent);
+		instance = fixture.componentInstance;
+		fixture.detectChanges();
 
 		instance.ngOnInit();
 		await fixture.whenStable();
@@ -123,80 +137,100 @@ describe('ArchiveCreationWithShareToken', () => {
 	});
 
 	it('should fetch invite data and set sharer and shared item names when copyToken is present', async () => {
-		const mockApi = {
-			share: {
-				checkShareLink: jasmine.createSpy().and.returnValue(
-					Promise.resolve({
-						Results: [
-							{
-								data: [
-									{
-										Shareby_urlVO: {
-											AccountVO: { fullName: 'Sharer Name' },
-											RecordVO: { displayName: 'Shared Item Name' },
-										},
+		const mockShareApi = {
+			checkShareLink: jasmine.createSpy().and.returnValue(
+				Promise.resolve({
+					Results: [
+						{
+							data: [
+								{
+									Shareby_urlVO: {
+										AccountVO: { fullName: 'Sharer Name' },
+										RecordVO: { displayName: 'Shared Item Name' },
 									},
-								],
-							},
-						],
-					}),
-				),
-			},
+								},
+							],
+						},
+					],
+				}),
+			),
 		};
 
-		const { instance, fixture } = await shallow
-			.mock(ApiService, mockApi)
-			.render();
+		TestBed.resetTestingModule();
+		await TestBed.configureTestingModule({
+			declarations: [ArchiveCreationWithShareComponent],
+			providers: [
+				{
+					provide: ApiService,
+					useValue: { invite: mockInvite, share: mockShareApi },
+				},
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(ArchiveCreationWithShareComponent);
+		instance = fixture.componentInstance;
 
 		spyOn(localStorage, 'getItem').and.callFake((key) => {
 			if (key === 'shareTokenFromCopy') return 'copyToken';
 			return null;
 		});
 
+		fixture.detectChanges();
 		instance.ngOnInit();
 		await fixture.whenStable();
 
-		expect(mockApi.share.checkShareLink).toHaveBeenCalledWith('copyToken');
+		expect(mockShareApi.checkShareLink).toHaveBeenCalledWith('copyToken');
 
 		expect(instance.sharerName).toBe('Sharer Name');
 		expect(instance.sharedItemName).toBe('Shared Item Name');
 	});
 
 	it('should set sharedItemName using FolderVO if RecordVO is missing', async () => {
-		const mockApi = {
-			share: {
-				checkShareLink: jasmine.createSpy().and.returnValue(
-					Promise.resolve({
-						Results: [
-							{
-								data: [
-									{
-										Shareby_urlVO: {
-											AccountVO: { fullName: 'Sharer Name' },
-											FolderVO: { displayName: 'Shared Folder Name' },
-										},
+		const mockShareApi = {
+			checkShareLink: jasmine.createSpy().and.returnValue(
+				Promise.resolve({
+					Results: [
+						{
+							data: [
+								{
+									Shareby_urlVO: {
+										AccountVO: { fullName: 'Sharer Name' },
+										FolderVO: { displayName: 'Shared Folder Name' },
 									},
-								],
-							},
-						],
-					}),
-				),
-			},
+								},
+							],
+						},
+					],
+				}),
+			),
 		};
 
-		const { instance, fixture } = await shallow
-			.mock(ApiService, mockApi)
-			.render();
+		TestBed.resetTestingModule();
+		await TestBed.configureTestingModule({
+			declarations: [ArchiveCreationWithShareComponent],
+			providers: [
+				{
+					provide: ApiService,
+					useValue: { invite: mockInvite, share: mockShareApi },
+				},
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(ArchiveCreationWithShareComponent);
+		instance = fixture.componentInstance;
 
 		spyOn(localStorage, 'getItem').and.callFake((key) => {
 			if (key === 'shareTokenFromCopy') return 'copyToken';
 			return null;
 		});
 
+		fixture.detectChanges();
 		instance.ngOnInit();
 		await fixture.whenStable();
 
-		expect(mockApi.share.checkShareLink).toHaveBeenCalledWith('copyToken');
+		expect(mockShareApi.checkShareLink).toHaveBeenCalledWith('copyToken');
 		expect(instance.sharerName).toBe('Sharer Name');
 		expect(instance.sharedItemName).toBe('Shared Folder Name'); // Folder name should be set
 	});

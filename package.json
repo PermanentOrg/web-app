@@ -82,7 +82,6 @@
 		"progressbar.js": "1.1.1",
 		"rxjs": "7.8.2",
 		"sass": "^1.93.2",
-		"shallow-render": "^20.0.0",
 		"time-ago-pipe": "^1.3.2",
 		"ts-key-enum": "^3.0.13",
 		"vis-data": "^8.0.3",

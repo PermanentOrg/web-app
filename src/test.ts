@@ -16,7 +16,7 @@ import {
 	NgbTimepickerModule,
 	NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
-import { CountUpDirective } from 'ngx-countup';
+import { CountUpDirective, CountUpModule } from 'ngx-countup';
 import { installNgMocksMatchers } from './test/ng-mocks-matchers';
 
 window.Stripe = () => ({
@@ -53,6 +53,7 @@ ngMocks.globalKeep(NgbTooltipModule);
 ngMocks.globalKeep(NgbDropdownModule);
 ngMocks.globalKeep(NgbPaginationModule);
 ngMocks.globalKeep(CountUpDirective);
+ngMocks.globalKeep(CountUpModule);
 
 // Install custom Jasmine matchers for ng-mocks compatibility
 installNgMocksMatchers();
