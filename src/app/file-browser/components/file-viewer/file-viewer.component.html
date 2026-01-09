@@ -27,7 +27,7 @@
 				[bgSrc]="record.thumbURL200"
 				*ngIf="isQueued(i)"
 			></div>
-			<div *ngIf="currentRecord === record" class="full" [ngSwitch]="">
+			<div *ngIf="currentRecord === record" class="full">
 				<pr-zooming-image-viewer
 					[item]="currentRecord"
 					(disableSwipe)="toggleSwipe($event)"
