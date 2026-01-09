@@ -1,9 +1,0 @@
-{
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit",
-		"source.fixAll.prettier": "explicit"
-	},
-	"editor.tabSize": 2,
-	"scss.includePaths": ["src/styles"],
-	"typescript.tsdk": "node_modules/typescript/lib"
-}
