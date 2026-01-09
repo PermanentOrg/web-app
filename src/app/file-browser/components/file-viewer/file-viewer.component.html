@@ -37,9 +37,15 @@
 						isZoomableImage &&
 						!isDocument &&
 						!isVideo &&
-						!isAudio
+						!isAudio &&
+						!isArchive &&
+						!isWebArchive
 					"
-				></pr-zooming-image-viewer>
+				  ></pr-zooming-image-viewer>
+				<replay-web-page source="{{currentRecord?.files?.[0]?.downloadUrl}}"
+						 replayBase="/assets/replay/"
+						 *ngIf="isWebArchive">
+				</replay-web-page>
 				<pr-thumbnail
 					[item]="currentRecord"
 					*ngIf="
@@ -47,7 +53,9 @@
 						!isZoomableImage &&
 						!isDocument &&
 						!isVideo &&
-						!isAudio
+						!isAudio &&
+						!isArchive &&
+						!isWebArchive
 					"
 				></pr-thumbnail>
 				<pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>

@@ -47,7 +47,8 @@ export type RecordType =
 	| 'type.record.reference'
 	| 'type.record.spreadsheet'
 	| 'type.record.unknown'
-	| 'type.record.video';
+	| 'type.record.video'
+	| 'type.record.web_archive';
 
 export type GenericStatus =
 	| 'status.generic.declined'
