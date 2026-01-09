@@ -6,7 +6,7 @@ import {
 	BrowserDynamicTestingModule,
 	platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
-import { Shallow } from 'shallow-render';
+import { ngMocks } from 'ng-mocks';
 import { RouterModule } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
@@ -17,6 +17,7 @@ import {
 	NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { CountUpDirective } from 'ngx-countup';
+import { installNgMocksMatchers } from './test/ng-mocks-matchers';
 
 window.Stripe = () => ({
 	elements: () => ({
@@ -36,16 +37,25 @@ window.doNotLoadGoogleMapsAPI = true;
 
 // Disable loading of MixPanel
 
+// Configure ng-mocks auto spy for Jasmine
+ngMocks.autoSpy('jasmine');
+
+// Allow respy for Jasmine (needed for some test patterns)
+jasmine.getEnv().allowRespy(true);
+
 // Always Replace RouterModule with RouterTestingModule to avoid errors.
-Shallow.alwaysReplaceModule(RouterModule, RouterTestingModule);
-Shallow.neverMock(
-	NgbDatepickerModule,
-	NgbTimepickerModule,
-	NgbTooltipModule,
-	NgbDropdownModule,
-	NgbPaginationModule,
-	CountUpDirective,
-);
+ngMocks.globalReplace(RouterModule, RouterTestingModule);
+
+// Never mock these modules/directives (keep them real)
+ngMocks.globalKeep(NgbDatepickerModule);
+ngMocks.globalKeep(NgbTimepickerModule);
+ngMocks.globalKeep(NgbTooltipModule);
+ngMocks.globalKeep(NgbDropdownModule);
+ngMocks.globalKeep(NgbPaginationModule);
+ngMocks.globalKeep(CountUpDirective);
+
+// Install custom Jasmine matchers for ng-mocks compatibility
+installNgMocksMatchers();
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
