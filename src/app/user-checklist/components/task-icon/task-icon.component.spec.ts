@@ -1,47 +1,37 @@
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { UserChecklistModule } from '../../user-checklist.module';
 import { TaskIconComponent } from './task-icon.component';
 
 describe('TaskIconComponent', () => {
-	let shallow: Shallow<TaskIconComponent>;
+	beforeEach(() => MockBuilder(TaskIconComponent, UserChecklistModule));
 
-	beforeEach(async () => {
-		shallow = new Shallow(TaskIconComponent, UserChecklistModule);
+	it('does nothing with no icon input', () => {
+		MockRender(TaskIconComponent);
+
+		expect(ngMocks.findAll('.completed').length).toBe(0);
+		expect(ngMocks.findAll('svg').length).toBe(0);
 	});
 
-	it('does nothing with no icon input', async () => {
-		const { find } = await shallow.render();
+	it('can handle undefined icons', () => {
+		MockRender(TaskIconComponent, { icon: 'undefinedIconForUnitTest' });
 
-		expect(find('.completed').length).toBe(0);
-		expect(find('svg').length).toBe(0);
+		expect(ngMocks.findAll('svg').length).toBe(0);
 	});
 
-	it('can handle undefined icons', async () => {
-		const { find } = await shallow.render({
-			bind: { icon: 'undefinedIconForUnitTest' },
-		});
+	it('should mark the element as completed if specified in the input', () => {
+		MockRender(TaskIconComponent, { completed: true });
 
-		expect(find('svg').length).toBe(0);
-	});
-
-	it('should mark the element as completed if specified in the input', async () => {
-		const { find } = await shallow.render({
-			bind: { completed: true },
-		});
-
-		expect(find('.completed').length).toBe(1);
+		expect(ngMocks.findAll('.completed').length).toBe(1);
 	});
 
 	describe('defined icons', () => {
-		async function expectIconToHaveDefinedSvg(icon: string) {
-			const { find } = await shallow.render({
-				bind: {
-					icon,
-				},
-			});
+		function expectIconToHaveDefinedSvg(icon: string) {
+			MockRender(TaskIconComponent, { icon });
 
-			expect(find('svg').length).toBe(1);
+			expect(ngMocks.findAll('svg').length).toBe(1);
 		}
+
 		const icons = [
 			'archiveCreated',
 			'storageRedeemed',
@@ -52,8 +42,8 @@ describe('TaskIconComponent', () => {
 			'publishContent',
 		];
 		icons.forEach((icon) => {
-			it(`has an icon for the "${icon}" item`, async () => {
-				await expectIconToHaveDefinedSvg(icon);
+			it(`has an icon for the "${icon}" item`, () => {
+				expectIconToHaveDefinedSvg(icon);
 			});
 		});
 	});

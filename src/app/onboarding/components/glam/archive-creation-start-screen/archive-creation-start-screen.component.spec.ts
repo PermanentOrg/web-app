@@ -1,8 +1,7 @@
-import { Shallow } from 'shallow-render';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AccountService } from '@shared/services/account/account.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { OnboardingModule } from '../../../onboarding.module';
+import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveCreationStartScreenComponent } from './archive-creation-start-screen.component';
 
 const mockAccountService = {
@@ -10,28 +9,30 @@ const mockAccountService = {
 };
 
 describe('ArchiveCreationStartScreenComponent', () => {
-	let shallow: Shallow<ArchiveCreationStartScreenComponent>;
+	let component: ArchiveCreationStartScreenComponent;
+	let fixture: ComponentFixture<ArchiveCreationStartScreenComponent>;
 
-	beforeEach(() => {
-		shallow = new Shallow(ArchiveCreationStartScreenComponent, OnboardingModule)
-			.mock(AccountService, mockAccountService)
-			.import(HttpClientTestingModule);
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [ArchiveCreationStartScreenComponent],
+			providers: [{ provide: AccountService, useValue: mockAccountService }],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(ArchiveCreationStartScreenComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
+	it('should create', () => {
+		expect(component).toBeTruthy();
 	});
 
-	it('should initialize with the account name', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance.name).toBe('John Doe');
+	it('should initialize with the account name', () => {
+		expect(component.name).toBe('John Doe');
 	});
 
-	it('should render the account name in the greeting', async () => {
-		const { fixture } = await shallow.render();
+	it('should render the account name in the greeting', () => {
 		const greetingElement = fixture.debugElement.query(
 			By.css('.greetings-container b'),
 		).nativeElement;
@@ -39,49 +40,46 @@ describe('ArchiveCreationStartScreenComponent', () => {
 		expect(greetingElement.textContent).toContain('John Doe');
 	});
 
-	it('should emit getStartedOutput event when Get Started button is clicked', async () => {
-		const { fixture, instance, outputs } = await shallow.render();
-		spyOn(instance, 'getStarted').and.callThrough();
+	it('should emit getStartedOutput event when Get Started button is clicked', () => {
+		spyOn(component, 'getStarted').and.callThrough();
+		spyOn(component.getStartedOutput, 'emit');
 
 		const getStartedButton = fixture.debugElement.query(By.css('.get-started'));
 
 		getStartedButton.triggerEventHandler('buttonClick', null);
 
-		expect(instance.getStarted).toHaveBeenCalled();
-		expect(outputs.getStartedOutput.emit).toHaveBeenCalled();
+		expect(component.getStarted).toHaveBeenCalled();
+		expect(component.getStartedOutput.emit).toHaveBeenCalled();
 	});
 
-	it('should emit createArchiveForMeOutput event when Create Archive for Me button is clicked', async () => {
-		const { fixture, instance, outputs } = await shallow.render();
-		spyOn(instance, 'createArchiveForMe').and.callThrough();
+	it('should emit createArchiveForMeOutput event when Create Archive for Me button is clicked', () => {
+		spyOn(component, 'createArchiveForMe').and.callThrough();
+		spyOn(component.createArchiveForMeOutput, 'emit');
 
 		const createArchiveButton = fixture.debugElement.query(
 			By.css('.create-archive-for-me'),
 		);
 		createArchiveButton.triggerEventHandler('buttonClick', null);
 
-		expect(instance.createArchiveForMe).toHaveBeenCalled();
-		expect(outputs.createArchiveForMeOutput.emit).toHaveBeenCalled();
+		expect(component.createArchiveForMe).toHaveBeenCalled();
+		expect(component.createArchiveForMeOutput.emit).toHaveBeenCalled();
 	});
 
-	it('should set hasToken to true if there is a token in the local storage', async () => {
-		const { instance, fixture } = await shallow.render();
-
+	it('should set hasToken to true if there is a token in the local storage', () => {
 		spyOn(localStorage, 'getItem').and.returnValue('someToken');
 
-		instance.ngOnInit();
+		component.ngOnInit();
 		fixture.detectChanges();
 
-		expect(instance.hasShareToken).toBeTrue();
+		expect(component.hasShareToken).toBeTrue();
 	});
 
-	it('should not set hasShareToken if shareToken does not exist in localStorage', async () => {
+	it('should not set hasShareToken if shareToken does not exist in localStorage', () => {
 		spyOn(localStorage, 'getItem').and.returnValue(null);
-		const { instance, fixture } = await shallow.render();
 
-		instance.ngOnInit();
+		component.ngOnInit();
 		fixture.detectChanges();
 
-		expect(instance.hasShareToken).toBeFalse();
+		expect(component.hasShareToken).toBeFalse();
 	});
 });

@@ -1,6 +1,8 @@
-import { Shallow } from 'shallow-render';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { CoreModule } from '@core/core.module';
+import { NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
@@ -11,57 +13,75 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
 
-describe('GiftStorageComponent', () => {
-	let shallow: Shallow<GiftStorageComponent>;
+@NgModule()
+class DummyModule {}
 
+describe('GiftStorageComponent', () => {
 	const mockAccount = new AccountVO({ accountId: 1 });
 
-	const mockAccountService = {
-		getAccount: jasmine.createSpy('getAccount').and.returnValue({
-			mockAccount,
-		}),
-		setAccount: jasmine.createSpy('setAccount'),
-	};
-
-	const mockDialog = jasmine.createSpyObj('DialogCdkService', ['open']);
-	mockDialog.open.and.returnValue({
-		closed: of(true),
-	});
-
-	const mockApiService = {
-		billing: {
-			giftStorage: jasmine.createSpy('giftStorage').and.returnValue(
-				Promise.resolve(
-					new GiftingResponse({
-						storageGifted: 50,
-						giftDelivered: ['test@example.com', 'test1@example.com'],
-						invitationSent: ['test@example.com', 'test2@example.com'],
-						alreadyInvited: [],
-					}),
-				),
-			),
-		},
-	};
+	let mockAccountService: any;
+	let mockDialog: any;
+	let mockApiService: any;
 
 	beforeEach(() => {
-		shallow = new Shallow(GiftStorageComponent, CoreModule)
-			.provide([HttpClient, HttpHandler])
-			.mock(AccountService, mockAccountService)
-			.mock(MessageService, {
-				showError: () => {},
+		mockAccountService = {
+			getAccount: jasmine.createSpy('getAccount').and.returnValue(mockAccount),
+			setAccount: jasmine.createSpy('setAccount'),
+		};
+
+		mockDialog = jasmine.createSpyObj('DialogCdkService', ['open']);
+		mockDialog.open.and.returnValue({
+			closed: of(true),
+		});
+
+		mockApiService = {
+			billing: {
+				giftStorage: jasmine.createSpy('giftStorage').and.returnValue(
+					Promise.resolve(
+						new GiftingResponse({
+							storageGifted: 50,
+							giftDelivered: ['test@example.com', 'test1@example.com'],
+							invitationSent: ['test@example.com', 'test2@example.com'],
+							alreadyInvited: [],
+						}),
+					),
+				),
+			},
+		};
+
+		return MockBuilder(GiftStorageComponent)
+			.keep(HttpClientTestingModule, { export: true })
+			.keep(ReactiveFormsModule)
+			.keep(UntypedFormBuilder)
+			.provide({
+				provide: AccountService,
+				useValue: mockAccountService,
 			})
-			.mock(DialogCdkService, mockDialog)
-			.mock(ApiService, mockApiService);
+			.provide({
+				provide: MessageService,
+				useValue: {
+					showError: () => {},
+				},
+			})
+			.provide({
+				provide: DialogCdkService,
+				useValue: mockDialog,
+			})
+			.provide({
+				provide: ApiService,
+				useValue: mockApiService,
+			});
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
+	it('should create', () => {
+		const fixture = MockRender(GiftStorageComponent);
 
-		expect(instance).toBeTruthy();
+		expect(fixture.point.componentInstance).toBeTruthy();
 	});
 
 	it('enables the "Send Gift Storage" button when the form is valid', async () => {
-		const { find, instance, fixture } = await shallow.render();
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.availableSpace = '10';
 
@@ -74,13 +94,14 @@ describe('GiftStorageComponent', () => {
 		fixture.detectChanges();
 		await fixture.whenStable();
 
-		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = ngMocks.find('.btn-primary').nativeElement;
 
 		expect(button.disabled).toBe(false);
 	});
 
-	it('disables the submit button if at least one email is not valid', async () => {
-		const { find, instance, fixture } = await shallow.render();
+	it('disables the submit button if at least one email is not valid', () => {
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.availableSpace = '5';
 
@@ -90,13 +111,14 @@ describe('GiftStorageComponent', () => {
 		instance.giftForm.updateValueAndValidity();
 		fixture.detectChanges();
 
-		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = ngMocks.find('.btn-primary').nativeElement;
 
 		expect(button.disabled).toBe(true);
 	});
 
-	it('disables the submit button if the there is a duplicate email', async () => {
-		const { find, instance, fixture } = await shallow.render();
+	it('disables the submit button if the there is a duplicate email', () => {
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.availableSpace = '5';
 
@@ -108,13 +130,14 @@ describe('GiftStorageComponent', () => {
 		instance.giftForm.updateValueAndValidity();
 		fixture.detectChanges();
 
-		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = ngMocks.find('.btn-primary').nativeElement;
 
 		expect(button.disabled).toBe(true);
 	});
 
 	it('disables the submit button if the amount entered exceeds the available amount', async () => {
-		const { find, instance, fixture } = await shallow.render();
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.availableSpace = '5';
 
@@ -126,13 +149,14 @@ describe('GiftStorageComponent', () => {
 		fixture.detectChanges();
 		await fixture.whenStable();
 
-		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = ngMocks.find('.btn-primary').nativeElement;
 
 		expect(button.disabled).toBe(true);
 	});
 
 	it('displays the total amount gifted based on the number of emails', async () => {
-		const { instance, fixture } = await shallow.render();
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.availableSpace = '5';
 
@@ -150,7 +174,8 @@ describe('GiftStorageComponent', () => {
 	});
 
 	it('disables the submit button if the amount multiplied by the number of emails exceeds the available amount', async () => {
-		const { find, instance, fixture } = await shallow.render();
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.availableSpace = '5';
 
@@ -164,13 +189,14 @@ describe('GiftStorageComponent', () => {
 		fixture.detectChanges();
 		await fixture.whenStable();
 
-		const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+		const button: HTMLButtonElement = ngMocks.find('.btn-primary').nativeElement;
 
 		expect(button.disabled).toBe(true);
 	});
 
-	it('parses the email string correctly', async () => {
-		const { instance } = await shallow.render();
+	it('parses the email string correctly', () => {
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
 		const result = instance.parseEmailString(
 			'test@example.com, test1@example.com',
@@ -180,7 +206,8 @@ describe('GiftStorageComponent', () => {
 	});
 
 	it('returns all the duplicate emails', async () => {
-		const { instance } = await shallow.render();
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
 		const testEmailString =
 			'test@example.com,test@example.com,test2@example.com';
@@ -192,8 +219,9 @@ describe('GiftStorageComponent', () => {
 		expect(duplicates).toEqual(expectedDuplicates);
 	});
 
-	it('calls submitStorageGiftForm when the form is valid', async () => {
-		const { instance } = await shallow.render();
+	it('calls submitStorageGiftForm when the form is valid', () => {
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.giftForm.controls.email.setValue('test@example.com');
 		instance.giftForm.controls.amount.setValue(5);
@@ -211,9 +239,9 @@ describe('GiftStorageComponent', () => {
 	});
 
 	it('filters out the duplicates from the giftDelivered and invitationSent of the response', async () => {
-		const { instance, fixture } = await shallow.render();
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
-		// Simulate setting form values and submission
 		instance.giftForm.controls.email.setValue('test@example.com');
 		instance.giftForm.controls.amount.setValue(5);
 		instance.giftForm.updateValueAndValidity();
@@ -230,9 +258,10 @@ describe('GiftStorageComponent', () => {
 	});
 
 	it('updates account details upon successful gift operation', async () => {
-		const { instance, fixture } = await shallow.render();
+		const fixture = MockRender(GiftStorageComponent);
+		const instance = fixture.point.componentInstance;
 
-		instance.availableSpace = '100'; // 100 GB
+		instance.availableSpace = '100';
 
 		instance.giftForm.controls.email.setValue('test@example.com');
 		instance.giftForm.controls.amount.setValue('50');
@@ -242,7 +271,6 @@ describe('GiftStorageComponent', () => {
 
 		await fixture.whenStable();
 
-		// Expect that setAccount was called on the AccountService
 		expect(mockAccountService.setAccount).toHaveBeenCalled();
 		expect(instance.availableSpace).toBe('50.00');
 	});
