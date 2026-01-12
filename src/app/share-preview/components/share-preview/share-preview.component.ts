@@ -439,13 +439,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		return await this.router.navigate(['/app', 'private']);
 	}
 
-	async onArchiveThumbClick() {
-		try {
-			await this.accountService.promptForArchiveChange();
-			this.archiveConfirmed = true;
-		} catch (err) {}
-	}
-
 	scrollCoverToggle() {
 		if (!this.hasScrollTriggered) {
 			this.hasScrollTriggered = true;
