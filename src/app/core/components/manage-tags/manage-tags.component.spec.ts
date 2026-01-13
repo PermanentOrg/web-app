@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { TagVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
@@ -14,153 +14,180 @@ import { ManageTagsComponent } from './manage-tags.component';
 })
 class DummyModule {}
 
-/**
- * Build fresh Shallow + mock state for each test.
- * Nothing persists across tests.
- */
-function buildHarness(initialTags?: TagVO[]) {
-	// Per-test mutable state lives in this closure:
-	const state = {
-		throwError: false,
-		confirmResult: true,
-		deleted: false as boolean,
-		deletedTag: null as TagVO | null,
-		renamed: false as boolean,
-		renamedTag: null as TagVO | null,
-		tags: initialTags ?? [
-			new TagVO({ name: 'Tomato', tagId: 2 }),
-			new TagVO({ name: 'Potato', tagId: 1 }),
-			new TagVO({
-				name: 'vegetable:potato',
-				tagId: 3,
-				type: 'type.tag.metadata.customField',
-			}),
-		],
+describe('ManageTagsComponent #manage-tags (ng-mocks)', () => {
+	// Per-test mutable state
+	let state: {
+		throwError: boolean;
+		confirmResult: boolean;
+		deleted: boolean;
+		deletedTag: TagVO | null;
+		renamed: boolean;
+		renamedTag: TagVO | null;
+		tags: TagVO[];
 	};
 
-	const mockApiService = {
-		tag: {
-			delete: async (data: any) => {
-				if (state.throwError) throw 'Test Error';
-				state.deleted = true;
-				state.deletedTag = data as TagVO;
-				return { getTagVOData: () => data };
-			},
-			update: async (data: any) => {
-				if (state.throwError) throw 'Test Error';
-				state.renamed = true;
-				state.renamedTag = data as TagVO;
-				return { getTagVOData: () => data };
-			},
-		},
-	};
+	let mockApiService: any;
+	let mockPromptService: any;
 
-	const mockPromptService = {
-		async confirm(): Promise<boolean> {
-			return state.confirmResult
-				? await Promise.resolve(true)
-				: await Promise.reject();
-		},
-	};
+	function initState(initialTags?: TagVO[]) {
+		state = {
+			throwError: false,
+			confirmResult: true,
+			deleted: false,
+			deletedTag: null,
+			renamed: false,
+			renamedTag: null,
+			tags: initialTags ?? [
+				new TagVO({ name: 'Tomato', tagId: 2 }),
+				new TagVO({ name: 'Potato', tagId: 1 }),
+				new TagVO({
+					name: 'vegetable:potato',
+					tagId: 3,
+					type: 'type.tag.metadata.customField',
+				}),
+			],
+		};
 
-	const shallow = new Shallow(ManageTagsComponent, DummyModule)
-		.mock(ApiService, mockApiService)
-		.mock(PromptService, mockPromptService);
-
-	/**
-	 * Convenience renderers that bind tags
-	 */
-	async function render(tags = state.tags) {
-		return await shallow.render(
-			`<pr-manage-tags [tags]="tags"></pr-manage-tags>`,
-			{
-				bind: { tags },
+		mockApiService = {
+			tag: {
+				delete: async (data: any) => {
+					if (state.throwError) throw 'Test Error';
+					state.deleted = true;
+					state.deletedTag = data as TagVO;
+					return { getTagVOData: () => data };
+				},
+				update: async (data: any) => {
+					if (state.throwError) throw 'Test Error';
+					state.renamed = true;
+					state.renamedTag = data as TagVO;
+					return { getTagVOData: () => data };
+				},
 			},
-		);
+		};
+
+		mockPromptService = {
+			async confirm(): Promise<boolean> {
+				return state.confirmResult
+					? await Promise.resolve(true)
+					: await Promise.reject();
+			},
+		};
 	}
 
-	return { state, render };
-}
+	async function setupMockBuilder() {
+		await MockBuilder(ManageTagsComponent, DummyModule)
+			.provide({
+				provide: ApiService,
+				useValue: mockApiService,
+			})
+			.provide({
+				provide: PromptService,
+				useValue: mockPromptService,
+			});
+	}
 
-describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
+	function render(tags = state.tags) {
+		return MockRender(`<pr-manage-tags [tags]="tags"></pr-manage-tags>`, {
+			tags,
+		});
+	}
+
 	it('should exist', async () => {
-		const { render } = buildHarness();
-		const { element } = await render();
+		initState();
+		await setupMockBuilder();
+		const fixture = render();
 
-		expect(element).not.toBeNull();
+		expect(fixture.point.nativeElement).not.toBeNull();
 	});
 
 	it('should have a sorted list of tags', async () => {
-		const { render } = buildHarness();
-		const { find } = await render();
+		initState();
+		await setupMockBuilder();
+		render();
 
-		expect(find('.tag').length).toBe(2);
-		expect(find('.tag')[0].nativeElement.textContent).toContain('Potato');
+		expect(ngMocks.findAll('.tag').length).toBe(2);
+		expect(ngMocks.findAll('.tag')[0].nativeElement.textContent).toContain(
+			'Potato',
+		);
 	});
 
 	it('should have a delete button for each keyword', async () => {
-		const { render } = buildHarness();
-		const { find, outputs } = await render();
+		initState();
+		await setupMockBuilder();
+		render();
+		const instance = ngMocks.findInstance(ManageTagsComponent);
 
-		expect(find('.delete').length).toBeGreaterThan(0);
-		expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
+		expect(ngMocks.findAll('.delete').length).toBeGreaterThan(0);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+
+		expect(refreshTagsSpy).not.toHaveBeenCalled();
 	});
 
 	it('should be able to delete a keyword', async () => {
-		const { state, render } = buildHarness();
-		const { find, fixture, outputs } = await render();
+		initState();
+		await setupMockBuilder();
+		const fixture = render();
+		const instance = ngMocks.findInstance(ManageTagsComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
 
-		find('.delete')[0].nativeElement.click();
+		ngMocks.findAll('.delete')[0].nativeElement.click();
 		await fixture.whenStable();
 		fixture.detectChanges();
 
 		expect(state.deleted).toBeTrue();
 		expect(state.deletedTag!.name).toBe('Potato');
-		expect(outputs.refreshTags.emit).toHaveBeenCalled();
-		expect(find('.tag').length).toBe(1);
+		expect(refreshTagsSpy).toHaveBeenCalled();
+		expect(ngMocks.findAll('.tag').length).toBe(1);
 	});
 
 	it('should not delete a keyword if an error happens', async () => {
-		const { state, render } = buildHarness();
-		const { element } = await render();
+		initState();
+		await setupMockBuilder();
+		render();
+		const instance = ngMocks.findInstance(ManageTagsComponent);
 		state.throwError = true;
 
 		try {
-			await element.componentInstance.deleteTag(state.tags[0]);
+			await instance.deleteTag(state.tags[0]);
 			fail('expected deleteTag to throw');
 		} catch {
 			// expected
 		} finally {
-			expect(element.componentInstance.getFilteredTags().length).toBe(2);
+			expect(instance.getFilteredTags().length).toBe(2);
 		}
 	});
 
 	it('should have edit buttons for each keyword', async () => {
-		const { render } = buildHarness();
-		const { find } = await render();
+		initState();
+		await setupMockBuilder();
+		render();
 
-		expect(find('.edit').length).toBeGreaterThan(0);
+		expect(ngMocks.findAll('.edit').length).toBeGreaterThan(0);
 	});
 
 	it('should be able to enter edit mode for a keyword', async () => {
-		const { render } = buildHarness();
-		const { find, fixture } = await render();
+		initState();
+		await setupMockBuilder();
+		const fixture = render();
 
-		find('.edit')[0].nativeElement.click();
+		ngMocks.findAll('.edit')[0].nativeElement.click();
 		fixture.detectChanges();
 
-		expect(find('.tag input').length).toBe(1);
-		expect(find('.tag input').nativeElement.value).toBe('Potato');
+		expect(ngMocks.findAll('.tag input').length).toBe(1);
+		expect(ngMocks.find('.tag input').nativeElement.value).toBe('Potato');
 	});
 
 	it('should be able to rename tags', async () => {
-		const { state, render } = buildHarness();
-		const { find, fixture, outputs } = await render();
+		initState();
+		await setupMockBuilder();
+		const fixture = render();
+		const instance = ngMocks.findInstance(ManageTagsComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
 
-		find('.edit')[0].nativeElement.click();
+		ngMocks.findAll('.edit')[0].nativeElement.click();
 		fixture.detectChanges();
 
-		const input = find('.tag input').nativeElement;
+		const input = ngMocks.find('.tag input').nativeElement;
 		input.focus();
 		input.value = 'Starchy Tuber';
 		input.dispatchEvent(new Event('change'));
@@ -168,50 +195,53 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(find('.tag input').length).toBe(0);
+		expect(ngMocks.findAll('.tag input').length).toBe(0);
 		expect(state.renamed).toBeTrue();
 		expect(state.renamedTag!.name).toBe('Starchy Tuber');
-		expect(outputs.refreshTags.emit).toHaveBeenCalled();
+		expect(refreshTagsSpy).toHaveBeenCalled();
 	});
 
 	it('can cancel out of renaming a keyword', async () => {
-		const { render } = buildHarness();
-		const { find, fixture } = await render();
+		initState();
+		await setupMockBuilder();
+		const fixture = render();
 
-		find('.edit')[0].nativeElement.click();
+		ngMocks.findAll('.edit')[0].nativeElement.click();
 		fixture.detectChanges();
 
-		const input = find('.tag input').nativeElement;
+		const input = ngMocks.find('.tag input').nativeElement;
 		input.value = 'Do Not Show Value';
 		input.dispatchEvent(new Event('change'));
-		find('.cancel').nativeElement.click();
+		ngMocks.find('.cancel').nativeElement.click();
 		fixture.detectChanges();
 
-		expect(find('.cancel').length).toBe(0);
-		expect(find('.tag')[0].nativeElement.textContent).not.toContain(
+		expect(ngMocks.findAll('.cancel').length).toBe(0);
+		expect(ngMocks.findAll('.tag')[0].nativeElement.textContent).not.toContain(
 			'Do Not Show Value',
 		);
 	});
 
 	it('should have a null state', async () => {
-		const { render } = buildHarness([]);
-		const { find } = await render([]);
+		initState([]);
+		await setupMockBuilder();
+		render([]);
 
-		expect(find('.tag').length).toBe(0);
-		expect(find('.tagList').length).toBe(0);
+		expect(ngMocks.findAll('.tag').length).toBe(0);
+		expect(ngMocks.findAll('.tagList').length).toBe(0);
 	});
 
 	describe('Keywords filtering', () => {
 		async function testValue(val: string, expectedCount: number) {
-			const { render } = buildHarness();
-			const { find, fixture } = await render();
-			const input = find('input.filter').nativeElement;
+			initState();
+			await setupMockBuilder();
+			const fixture = render();
+			const input = ngMocks.find('input.filter').nativeElement;
 
 			input.value = val;
 			input.dispatchEvent(new Event('change'));
 			fixture.detectChanges();
 
-			expect(find('.tag').length).toBe(expectedCount);
+			expect(ngMocks.findAll('.tag').length).toBe(expectedCount);
 		}
 
 		it('Trimming input', async () => {
@@ -237,11 +267,12 @@ describe('ManageTagsComponent #manage-tags (shallow-safe)', () => {
 
 	describe('Prompting for deletion', () => {
 		async function testConfirm(clickConfirm: boolean) {
-			const { state, render } = buildHarness();
-			const { find, fixture } = await render();
-
+			initState();
 			state.confirmResult = clickConfirm;
-			find('.delete')[0].nativeElement.click();
+			await setupMockBuilder();
+			const fixture = render();
+
+			ngMocks.findAll('.delete')[0].nativeElement.click();
 			await fixture.whenStable();
 
 			expect(state.deleted).toBe(clickConfirm);

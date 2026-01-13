@@ -1,11 +1,12 @@
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { AccountService } from '@shared/services/account/account.service';
+import { EventService } from '@shared/services/event/event.service';
 import { FeaturedArchive } from '../../types/featured-archive';
 import {
 	FEATURED_ARCHIVE_API,
 	FeaturedArchiveApi,
 } from '../../types/featured-archive-api';
-import { GalleryModule } from '../../gallery.module';
 import { GalleryComponent } from './gallery.component';
 
 class DummyFeaturedArchiveAPI implements FeaturedArchiveApi {
@@ -44,75 +45,120 @@ const testArchive: FeaturedArchive = {
 } as const;
 
 describe('GalleryComponent', () => {
-	let shallow: Shallow<GalleryComponent>;
+	let fixture: ComponentFixture<GalleryComponent>;
+	let component: GalleryComponent;
 	let dummyApi: DummyFeaturedArchiveAPI;
-	let dummyAccount: DummyAccountService;
 
 	beforeEach(async () => {
 		DummyFeaturedArchiveAPI.reset();
 		DummyAccountService.loggedIn = false;
 		dummyApi = new DummyFeaturedArchiveAPI();
-		dummyAccount = new DummyAccountService();
-		shallow = new Shallow(GalleryComponent, GalleryModule);
-		shallow
-			.provide({
-				provide: FEATURED_ARCHIVE_API,
-				useValue: dummyApi,
-			})
-			.provide({
-				provide: AccountService,
-				useValue: dummyAccount,
-			});
-		shallow.dontMock(FEATURED_ARCHIVE_API, AccountService);
+
+		await TestBed.configureTestingModule({
+			declarations: [GalleryComponent],
+			providers: [
+				{
+					provide: FEATURED_ARCHIVE_API,
+					useValue: dummyApi,
+				},
+				{
+					provide: AccountService,
+					useClass: DummyAccountService,
+				},
+				{
+					provide: EventService,
+					useValue: { dispatch: () => {} },
+				},
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(GalleryComponent);
+		component = fixture.componentInstance;
 	});
 
 	it('should fetch featured archives from the API', async () => {
-		await shallow.render();
+		fixture.detectChanges();
+		await fixture.whenStable();
 
 		expect(dummyApi.fetchedFromApi).toBeTrue();
 	});
 
 	it('displays the list of featured archives', async () => {
 		DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
-		const { fixture, find } = await shallow.render();
+		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.detectChanges();
 
-		expect(find('pr-featured-archive').length).toBe(1);
+		const featuredArchives = fixture.nativeElement.querySelectorAll(
+			'pr-featured-archive',
+		);
+
+		expect(featuredArchives.length).toBe(1);
 	});
 
-	it('does not display the error message while loading the archives', async () => {
+	it('does not display the error message while loading the archives', () => {
 		DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
-		const { find, instance } = await shallow.render();
-		instance.loading = true;
+		fixture.detectChanges();
+		component.loading = true;
+		fixture.detectChanges();
 
-		expect(find('.null-message').length).toBe(0);
+		const nullMessage = fixture.nativeElement.querySelector('.null-message');
+
+		expect(nullMessage).toBeFalsy();
 	});
 
 	it('displays an error message if no featured archives exist', async () => {
-		const { find } = await shallow.render();
+		fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
 
-		expect(find('pr-featured-archive').length).toBe(0);
-		expect(find('.null-message').length).toBe(1);
+		const featuredArchives = fixture.nativeElement.querySelectorAll(
+			'pr-featured-archive',
+		);
+		const nullMessage = fixture.nativeElement.querySelector('.null-message');
+
+		expect(featuredArchives.length).toBe(0);
+		expect(nullMessage).toBeTruthy();
 	});
 
 	it('displays an error message if the fetch failed', async () => {
 		DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
 		DummyFeaturedArchiveAPI.failRequest = true;
-		const { find } = await shallow.render();
+		fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
 
-		expect(find('.null-message').length).toBe(1);
+		const nullMessage = fixture.nativeElement.querySelector('.null-message');
+
+		expect(nullMessage).toBeTruthy();
 	});
 
 	it("does not display the user's public archives list if logged out", async () => {
-		const { find } = await shallow.render();
+		fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
 
-		expect(find('pr-public-archives-list').length).toBe(0);
+		const publicArchivesList = fixture.nativeElement.querySelector(
+			'pr-public-archives-list',
+		);
+
+		expect(publicArchivesList).toBeFalsy();
 	});
 
 	it("displays the user's public archives list if logged in", async () => {
 		DummyAccountService.loggedIn = true;
-		const { find } = await shallow.render();
+		// Need to recreate the component since isLoggedIn is called in constructor
+		fixture = TestBed.createComponent(GalleryComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
 
-		expect(find('pr-public-archives-list').length).toBe(1);
+		const publicArchivesList = fixture.nativeElement.querySelector(
+			'pr-public-archives-list',
+		);
+
+		expect(publicArchivesList).toBeTruthy();
 	});
 });

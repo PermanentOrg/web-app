@@ -1,4 +1,5 @@
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { OnboardingTypes } from '@root/app/onboarding/shared/onboarding-screen';
@@ -6,100 +7,100 @@ import { archiveDescriptions } from '../types/archive-types';
 import { GlamArchiveTypeSelectComponent } from './archive-type-select.component';
 
 describe('ArchiveTypeSelectComponent', () => {
-	let shallow: Shallow<GlamArchiveTypeSelectComponent>;
+	let component: GlamArchiveTypeSelectComponent;
+	let fixture: ComponentFixture<GlamArchiveTypeSelectComponent>;
 	let dialogRef: Subject<OnboardingTypes | undefined>;
+	let mockDialogService: { open: jasmine.Spy };
 
-	function expectCommunityDisplayed(find) {
-		expect(find('.type-name').nativeElement.innerText).toContain('Community');
-		expect(find('.type-description').nativeElement.innerText).toContain(
+	function expectCommunityDisplayed() {
+		const typeNameElement = fixture.nativeElement.querySelector('.type-name');
+		const typeDescriptionElement =
+			fixture.nativeElement.querySelector('.type-description');
+
+		expect(typeNameElement.innerText).toContain('Community');
+		expect(typeDescriptionElement.innerText).toContain(
 			archiveDescriptions['type:community'],
 		);
 	}
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		if (dialogRef) {
 			dialogRef.complete();
 		}
 		dialogRef = new Subject<OnboardingTypes | undefined>();
-		shallow = new Shallow(GlamArchiveTypeSelectComponent)
-			.provide({
-				provide: DialogCdkService,
-				useValue: {
-					open() {
-						return {
-							closed: dialogRef,
-						};
-					},
-				},
-			})
-			.dontMock(DialogCdkService);
+		mockDialogService = {
+			open: jasmine.createSpy('open').and.returnValue({
+				closed: dialogRef,
+			}),
+		};
+
+		await TestBed.configureTestingModule({
+			imports: [GlamArchiveTypeSelectComponent],
+			providers: [{ provide: DialogCdkService, useValue: mockDialogService }],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(GlamArchiveTypeSelectComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
+	it('should create', () => {
+		expect(component).toBeTruthy();
 	});
 
-	it('should open a selection dialog on click', async () => {
-		const { instance, inject } = await shallow.render();
-		const dialogService = inject(DialogCdkService);
-		const open = spyOn(dialogService, 'open').and.callThrough();
-		instance.onClick();
+	it('should open a selection dialog on click', () => {
+		component.onClick();
 
-		expect(open).toHaveBeenCalled();
+		expect(mockDialogService.open).toHaveBeenCalled();
 	});
 
-	it('should change displayed archive type when the dialog returns with a type', async () => {
-		const { find, instance, fixture } = await shallow.render();
-		instance.onClick();
+	it('should change displayed archive type when the dialog returns with a type', () => {
+		component.onClick();
 		dialogRef.next(OnboardingTypes.community);
 		fixture.detectChanges();
 
-		expectCommunityDisplayed(find);
+		expectCommunityDisplayed();
 	});
 
-	it('can change type multiple times', async () => {
-		const { find, instance, fixture } = await shallow.render();
-		instance.onClick();
+	it('can change type multiple times', () => {
+		component.onClick();
 		dialogRef.next(OnboardingTypes.famhist);
-		instance.onClick();
+		component.onClick();
 		dialogRef.next(OnboardingTypes.community);
 		fixture.detectChanges();
 
-		expectCommunityDisplayed(find);
+		expectCommunityDisplayed();
 	});
 
-	it('should not change the displayed archive type if the dialog is closed without any selection', async () => {
-		const { find, fixture, instance } = await shallow.render();
-		instance.onClick();
+	it('should not change the displayed archive type if the dialog is closed without any selection', () => {
+		component.onClick();
 		dialogRef.next(OnboardingTypes.community);
-		instance.onClick();
+		component.onClick();
 		dialogRef.next(undefined);
 
 		fixture.detectChanges();
 
-		expectCommunityDisplayed(find);
+		expectCommunityDisplayed();
 	});
 
-	it('handles an invalid onboardingtype', async () => {
-		const { find, fixture, instance } = await shallow.render();
-		instance.onClick();
+	it('handles an invalid onboardingtype', () => {
+		component.onClick();
 		dialogRef.next(OnboardingTypes.community);
-		instance.onClick();
+		component.onClick();
 		dialogRef.next('not-valid-type' as OnboardingTypes);
 
 		fixture.detectChanges();
 
-		expectCommunityDisplayed(find);
+		expectCommunityDisplayed();
 	});
 
-	it('emits the selected archive type', async () => {
-		const { outputs, instance } = await shallow.render();
-		instance.onClick();
+	it('emits the selected archive type', () => {
+		spyOn(component.typeSelected, 'emit');
+		component.onClick();
 		dialogRef.next(OnboardingTypes.famhist);
 
-		expect(outputs.typeSelected.emit).toHaveBeenCalledWith(
+		expect(component.typeSelected.emit).toHaveBeenCalledWith(
 			OnboardingTypes.famhist,
 		);
 	});

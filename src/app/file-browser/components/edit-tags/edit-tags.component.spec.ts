@@ -1,6 +1,9 @@
-import { waitForAsync } from '@angular/core/testing';
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 import { ItemVO, TagVOData, RecordVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
@@ -9,10 +12,7 @@ import { TagsService } from '@core/services/tags/tags.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { SearchService } from '@search/services/search.service';
 import { TagResponse } from '@shared/services/api/tag.repo';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { By } from '@angular/platform-browser';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { EditTagsComponent, TagType } from './edit-tags.component';
 
 const defaultTagList: TagVOData[] = [
@@ -40,174 +40,191 @@ const defaultTagList: TagVOData[] = [
 const defaultItem: ItemVO = new RecordVO({ TagVOs: defaultTagList });
 
 describe('EditTagsComponent', () => {
-	let shallow: Shallow<EditTagsComponent>;
-	async function defaultRender(
+	let component: EditTagsComponent;
+	let fixture: ComponentFixture<EditTagsComponent>;
+	let dialogCdkServiceSpy: jasmine.SpyObj<DialogCdkService>;
+
+	beforeEach(async () => {
+		dialogCdkServiceSpy = jasmine.createSpyObj('DialogCdkService', ['open']);
+
+		await TestBed.configureTestingModule({
+			declarations: [EditTagsComponent],
+			imports: [NoopAnimationsModule, FormsModule],
+			providers: [
+				{
+					provide: SearchService,
+					useValue: { getTagResults: (tag: string) => defaultTagList },
+				},
+				{
+					provide: TagsService,
+					useValue: {
+						getTags: () => defaultTagList,
+						getTags$: () => of(defaultTagList),
+						setItemTags: () => {},
+						getItemTags$: () => of([]),
+					},
+				},
+				{
+					provide: MessageService,
+					useValue: { showError: () => {} },
+				},
+				{
+					provide: ApiService,
+					useValue: {
+						tag: {
+							deleteTagLink: async (tag: TagVOData, tagLink: any) =>
+								await Promise.resolve(new TagResponse()),
+							create: async (tag: TagVOData, tagLink: any) =>
+								await Promise.resolve(new TagResponse()),
+						},
+					},
+				},
+				{
+					provide: DataService,
+					useValue: {
+						fetchFullItems: async (items: ItemVO[]) =>
+							await Promise.resolve([]),
+					},
+				},
+				{
+					provide: DialogCdkService,
+					useValue: dialogCdkServiceSpy,
+				},
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(EditTagsComponent);
+		component = fixture.componentInstance;
+	});
+
+	function setupComponent(
 		item: ItemVO = defaultItem,
 		tagType: TagType = 'keyword',
 	) {
-		return await shallow.render(
-			`<pr-edit-tags [item]="item" [tagType]="tagType"></pr-edit-tags>`,
-			{
-				bind: {
-					item,
-					tagType,
-				},
-			},
-		);
+		component.item = item;
+		component.tagType = tagType;
+		fixture.detectChanges();
 	}
 
-	beforeEach(waitForAsync(() => {
-		shallow = new Shallow(EditTagsComponent, FileBrowserComponentsModule)
-			.dontMock(NoopAnimationsModule)
-			.import(NoopAnimationsModule)
-			.mock(SearchService, { getTagResults: (tag) => defaultTagList })
-			.mock(TagsService, {
-				getTags: () => defaultTagList,
-				getTags$: () => of(defaultTagList),
-				setItemTags: () => {},
-			})
-			.mock(MessageService, { showError: () => {} })
-			.mock(ApiService, {
-				tag: {
-					deleteTagLink: async (tag, tagLink) =>
-						await Promise.resolve(new TagResponse()),
-					create: async (tag, tagLink) =>
-						await Promise.resolve(new TagResponse()),
-				},
-			})
-			.mock(DataService, {
-				fetchFullItems: async (items) => await Promise.resolve([]),
-			})
-			.mock(
-				DialogCdkService,
-				jasmine.createSpyObj('DialogCdkService', ['open']),
-			);
-	}));
+	it('should create', () => {
+		setupComponent();
 
-	it('should create', async () => {
-		const { element } = await defaultRender();
-
-		expect(element).not.toBeNull();
+		expect(component).not.toBeNull();
 	});
 
-	it('should only show keywords in keyword mode', async () => {
-		const { element } = await defaultRender();
+	it('should only show keywords in keyword mode', () => {
+		setupComponent();
 
 		expect(
-			element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
+			component.itemTags.find((tag) => tag.name === 'tagOne'),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo'),
+			component.itemTags.find((tag) => tag.name === 'tagTwo'),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.itemTags.find(
+			component.itemTags.find(
 				(tag) => tag.name === 'customField:customValueOne',
 			),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.itemTags.find(
+			component.itemTags.find(
 				(tag) => tag.name === 'customField:customValueTwo',
 			),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.matchingTags.find(
-				(tag) => tag.name === 'tagOne',
-			),
+			component.matchingTags.find((tag) => tag.name === 'tagOne'),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.matchingTags.find(
-				(tag) => tag.name === 'tagTwo',
-			),
+			component.matchingTags.find((tag) => tag.name === 'tagTwo'),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.matchingTags.find(
+			component.matchingTags.find(
 				(tag) => tag.name === 'customField:customValueOne',
 			),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.matchingTags.find(
+			component.matchingTags.find(
 				(tag) => tag.name === 'customField:customValueTwo',
 			),
 		).not.toBeTruthy();
 	});
 
-	it('should only show custom metadata in custom metadata mode', async () => {
-		const { element } = await defaultRender(defaultItem, 'customMetadata');
+	it('should only show custom metadata in custom metadata mode', () => {
+		setupComponent(defaultItem, 'customMetadata');
 
 		expect(
-			element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
+			component.itemTags.find((tag) => tag.name === 'tagOne'),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo'),
+			component.itemTags.find((tag) => tag.name === 'tagTwo'),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.itemTags.find(
+			component.itemTags.find(
 				(tag) => tag.name === 'customField:customValueOne',
 			),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.itemTags.find(
+			component.itemTags.find(
 				(tag) => tag.name === 'customField:customValueTwo',
 			),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.matchingTags.find(
-				(tag) => tag.name === 'tagOne',
-			),
+			component.matchingTags.find((tag) => tag.name === 'tagOne'),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.matchingTags.find(
-				(tag) => tag.name === 'tagTwo',
-			),
+			component.matchingTags.find((tag) => tag.name === 'tagTwo'),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.matchingTags.find(
+			component.matchingTags.find(
 				(tag) => tag.name === 'customField:customValueOne',
 			),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.matchingTags.find(
+			component.matchingTags.find(
 				(tag) => tag.name === 'customField:customValueTwo',
 			),
 		).toBeTruthy();
 	});
 
 	it('should not create custom metadata in keyword mode', async () => {
-		const { element } = await defaultRender();
-		const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
-		await element.componentInstance.onInputEnter('key:value');
+		setupComponent();
+		const apiService = TestBed.inject(ApiService);
+		const tagCreateSpy = spyOn(apiService.tag, 'create');
+		await component.onInputEnter('key:value');
 
-		expect(element.componentInstance.newTagInputError).toBeTruthy();
+		expect(component.newTagInputError).toBeTruthy();
 		expect(tagCreateSpy).not.toHaveBeenCalled();
 	});
 
 	it('should not create keyword in custom metadata mode', async () => {
-		const { element } = await defaultRender(defaultItem, 'customMetadata');
-		const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
-		await element.componentInstance.onInputEnter('keyword');
+		setupComponent(defaultItem, 'customMetadata');
+		const apiService = TestBed.inject(ApiService);
+		const tagCreateSpy = spyOn(apiService.tag, 'create');
+		await component.onInputEnter('keyword');
 
-		expect(element.componentInstance.newTagInputError).toBeTruthy();
+		expect(component.newTagInputError).toBeTruthy();
 		expect(tagCreateSpy).not.toHaveBeenCalled();
 	});
 
-	it('should highlight the correct tag on key down', async () => {
-		const { fixture, element } = await defaultRender();
+	it('should highlight the correct tag on key down', () => {
+		setupComponent();
 
-		element.componentInstance.isEditing = true;
+		component.isEditing = true;
 
 		fixture.detectChanges();
 		const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
@@ -222,10 +239,10 @@ describe('EditTagsComponent', () => {
 		expect(focusedElement).toBe(tags[1].nativeElement);
 	});
 
-	it('should highlight the correct tag on key up', async () => {
-		const { fixture, element } = await defaultRender();
+	it('should highlight the correct tag on key up', () => {
+		setupComponent();
 
-		element.componentInstance.isEditing = true;
+		component.isEditing = true;
 
 		fixture.detectChanges();
 		const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
@@ -240,10 +257,10 @@ describe('EditTagsComponent', () => {
 		expect(focusedElement).toBe(tags[0].nativeElement);
 	});
 
-	it('should highlight the input on key up', async () => {
-		const { fixture, element } = await defaultRender();
+	it('should highlight the input on key up', () => {
+		setupComponent();
 
-		element.componentInstance.isEditing = true;
+		component.isEditing = true;
 
 		fixture.detectChanges();
 		const tag = fixture.debugElement.query(By.css('.edit-tag'));
@@ -260,18 +277,17 @@ describe('EditTagsComponent', () => {
 		expect(focusedElement).toEqual(input.nativeElement);
 	});
 
-	it('should open dialog when manage link is clicked', async () => {
-		const { element, find, inject, fixture } = await defaultRender();
-		const dialogOpenSpy = inject(DialogCdkService);
+	it('should open dialog when manage link is clicked', () => {
+		setupComponent();
 
-		element.componentInstance.isEditing = true;
+		component.isEditing = true;
 		fixture.detectChanges();
 
-		find('.manage-tags-message .manage-tags-link').triggerEventHandler(
-			'click',
-			{},
+		const manageTagsLink = fixture.debugElement.query(
+			By.css('.manage-tags-message .manage-tags-link'),
 		);
+		manageTagsLink.triggerEventHandler('click', {});
 
-		expect(dialogOpenSpy.open).toHaveBeenCalled();
+		expect(dialogCdkServiceSpy.open).toHaveBeenCalled();
 	});
 });

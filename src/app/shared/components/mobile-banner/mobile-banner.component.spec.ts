@@ -1,6 +1,7 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 import { SharedModule } from '@shared/shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Shallow } from 'shallow-render';
 import { MobileBannerService } from '@shared/services/mobile-banner/mobile-banner.service';
 import { MobileBannerComponent } from './mobile-banner.component';
 
@@ -21,24 +22,24 @@ const mockBannerService = {
 };
 
 describe('MobileBannerComponent', () => {
-	let shallow: Shallow<MobileBannerComponent>;
+	let fixture: ComponentFixture<MobileBannerComponent>;
+	let instance: MobileBannerComponent;
 
-	beforeEach(() => {
-		shallow = new Shallow(MobileBannerComponent, SharedModule)
+	beforeEach(async () => {
+		await MockBuilder(MobileBannerComponent, SharedModule)
 			.mock(MobileBannerService, mockBannerService)
-			.dontMock(NoopAnimationsModule)
-			.import(NoopAnimationsModule);
+			.keep(NoopAnimationsModule, { export: true });
+
+		fixture = TestBed.createComponent(MobileBannerComponent);
+		instance = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should exist', async () => {
-		const { instance } = await shallow.render();
-
+	it('should exist', () => {
 		expect(instance).toBeTruthy();
 	});
 
-	it('should initialize with correct visibility and URL', async () => {
-		const { instance } = await shallow.render();
-
+	it('should initialize with correct visibility and URL', () => {
 		expect(instance.bannerService.isVisible).toBe(mockBannerService.isVisible);
 
 		expect(instance.url).toBe(
@@ -48,14 +49,13 @@ describe('MobileBannerComponent', () => {
 		);
 	});
 
-	it('should display the banner if visible', async () => {
-		const { find } = await shallow.render();
+	it('should display the banner if visible', () => {
+		const banners = ngMocks.findAll('.banner');
 
-		expect(find('.banner')).toHaveFoundOne();
+		expect(banners).toHaveFoundOne();
 	});
 
-	it('should use the correct URL based on platform', async () => {
-		const { instance } = await shallow.render();
+	it('should use the correct URL based on platform', () => {
 		if (instance.bannerService.isIos) {
 			expect(instance.url).toBe(mockBannerService.appStoreUrl);
 		} else {
@@ -63,12 +63,12 @@ describe('MobileBannerComponent', () => {
 		}
 	});
 
-	it('should close the banner when close icon is clicked', async () => {
-		spyOn(mockBannerService, 'hideBanner');
+	it('should close the banner when close icon is clicked', () => {
+		spyOn(instance.bannerService, 'hideBanner');
 		const mockEvent = { stopPropagation: () => {} };
-		const { find } = await shallow.render();
-		find('.material-icons').triggerEventHandler('click', mockEvent);
+		const closeIcon = ngMocks.find('.material-icons');
+		closeIcon.triggerEventHandler('click', mockEvent);
 
-		expect(mockBannerService.hideBanner).toHaveBeenCalled();
+		expect(instance.bannerService.hideBanner).toHaveBeenCalled();
 	});
 });

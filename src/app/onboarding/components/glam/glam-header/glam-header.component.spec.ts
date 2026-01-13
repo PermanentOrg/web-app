@@ -1,35 +1,49 @@
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { OnboardingModule } from '../../../onboarding.module';
 import { GlamOnboardingHeaderComponent } from './glam-header.component';
 
+const mockAccountService = {
+	clear: jasmine.createSpy('clear'),
+};
+
+const mockRouter = {
+	navigate: jasmine.createSpy('navigate').and.resolveTo(true),
+};
+
 describe('GlamHeaderComponent', () => {
-	let shallow: Shallow<GlamOnboardingHeaderComponent>;
+	let component: GlamOnboardingHeaderComponent;
+	let fixture: ComponentFixture<GlamOnboardingHeaderComponent>;
 
 	beforeEach(async () => {
-		shallow = new Shallow(GlamOnboardingHeaderComponent, OnboardingModule)
-			.import(HttpClientTestingModule)
-			.provideMock({ provide: AccountService, useValue: { clear: () => {} } });
+		mockAccountService.clear.calls.reset();
+		mockRouter.navigate.calls.reset();
+
+		await TestBed.configureTestingModule({
+			declarations: [GlamOnboardingHeaderComponent],
+			providers: [
+				{ provide: AccountService, useValue: mockAccountService },
+				{ provide: Router, useValue: mockRouter },
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(GlamOnboardingHeaderComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
+	it('should create', () => {
+		expect(component).toBeTruthy();
 	});
 
-	it('can log out the user', async () => {
-		const { find, inject } = await shallow.render();
+	it('can log out the user', () => {
+		const logoutButton =
+			fixture.nativeElement.querySelector('.actions .log-out');
+		logoutButton.click();
 
-		const accountClearSpy = spyOn(inject(AccountService), 'clear').and.callFake(
-			() => {},
-		);
-		const navigateSpy = spyOn(inject(Router), 'navigate').and.resolveTo(true);
-		find('.actions .log-out').triggerEventHandler('click');
-
-		expect(accountClearSpy).toHaveBeenCalled();
-		expect(navigateSpy).toHaveBeenCalled();
+		expect(mockAccountService.clear).toHaveBeenCalled();
+		expect(mockRouter.navigate).toHaveBeenCalled();
 	});
 });

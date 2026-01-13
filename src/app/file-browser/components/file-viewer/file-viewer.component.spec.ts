@@ -1,7 +1,8 @@
+import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SecurityContext } from '@angular/core';
-import { Shallow } from 'shallow-render';
 import { Subject } from 'rxjs';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { RecordVO, ItemVO, TagVOData, ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
@@ -9,10 +10,32 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { TagsService } from '@core/services/tags/tags.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FileBrowserComponentsModule } from '../../file-browser-components.module';
+import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { ApiService } from '@shared/services/api/api.service';
+import { MockComponent } from 'ng-mocks';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
 import { FileViewerComponent } from './file-viewer.component';
+
+@Pipe({ name: 'dsFileSize', standalone: false })
+class MockFileSizePipe implements PipeTransform {
+	transform(value: number): string {
+		return value?.toString() || '';
+	}
+}
+
+@Pipe({ name: 'getAltText', standalone: false })
+class MockGetAltTextPipe implements PipeTransform {
+	transform(value: any): string {
+		return value?.displayName || '';
+	}
+}
+
+@Pipe({ name: 'prConstants', standalone: false })
+class MockPrConstantsPipe implements PipeTransform {
+	transform(value: any): any {
+		return value;
+	}
+}
 
 const defaultTagList: TagVOData[] = [
 	{
@@ -63,7 +86,8 @@ class MockTagsService {
 }
 
 describe('FileViewerComponent', () => {
-	let shallow: Shallow<FileViewerComponent>;
+	let component: FileViewerComponent;
+	let fixture: ComponentFixture<FileViewerComponent>;
 	let activatedRouteData: ActivatedRouteSnapshotData;
 	let folderChildren: ItemVO[];
 	let tagsService: MockTagsService;
@@ -72,9 +96,7 @@ describe('FileViewerComponent', () => {
 	let hasAccess: boolean;
 	let openedDialogs: string[];
 	let downloaded: boolean;
-	async function defaultRender() {
-		return await shallow.render(`<pr-file-viewer>`);
-	}
+	let publicProfileService: PublicProfileService;
 
 	function setUpMultipleRecords(...items: ItemVO[]) {
 		folderChildren.push(...items);
@@ -94,112 +116,147 @@ describe('FileViewerComponent', () => {
 		hasAccess = true;
 		openedDialogs = [];
 		downloaded = false;
-		shallow = new Shallow(FileViewerComponent, FileBrowserComponentsModule)
-			.import(HttpClientTestingModule)
-			.dontMock(TagsService)
-			.dontMock(PublicProfileService)
-			.mock(Router, {
-				navigate: async (route: string[]) => {
-					navigatedUrl = route;
-					return await Promise.resolve(true);
-				},
-				routerState: {
-					snapshot: {
-						url: 'exampleUrl.com',
+		publicProfileService = new PublicProfileService();
+
+		await TestBed.configureTestingModule({
+			declarations: [
+				FileViewerComponent,
+				MockComponent(TagsComponent),
+				MockFileSizePipe,
+				MockGetAltTextPipe,
+				MockPrConstantsPipe,
+			],
+			imports: [HttpClientTestingModule],
+			providers: [
+				{
+					provide: Router,
+					useValue: {
+						navigate: async (route: string[]) => {
+							navigatedUrl = route;
+							return await Promise.resolve(true);
+						},
+						routerState: {
+							snapshot: {
+								url: 'exampleUrl.com',
+							},
+						},
 					},
 				},
-			})
-			.mock(ActivatedRoute, {
-				snapshot: {
-					data: activatedRouteData,
+				{
+					provide: ActivatedRoute,
+					useValue: {
+						snapshot: {
+							data: activatedRouteData,
+						},
+					},
 				},
-			})
-			.mock(DataService, {
-				currentFolder: {
-					ChildItemVOs: folderChildren,
+				{
+					provide: DataService,
+					useValue: {
+						currentFolder: {
+							ChildItemVOs: folderChildren,
+						},
+						fetchFullItems: async () => {},
+						fetchLeanItems: async () => {},
+						async downloadFile(_item: RecordVO, _type: string) {
+							downloaded = true;
+						},
+					},
 				},
-				fetchFullItems: async () => {},
-				fetchLeanItems: async () => {},
-				async downloadFile(_item: RecordVO, _type: string) {
-					downloaded = true;
+				{
+					provide: AccountService,
+					useValue: {
+						checkMinimumAccess: (_itemAccessRole: any, _minimumAccess: any) =>
+							hasAccess,
+					},
 				},
-			})
-			.mock(AccountService, {
-				checkMinimumAccess: (_itemAccessRole, _minimumAccess) => hasAccess,
-			})
-			.mock(EditService, {
-				async saveItemVoProperty(_record, name, value) {
-					savedProperty = { name: name as string, value };
+				{
+					provide: EditService,
+					useValue: {
+						async saveItemVoProperty(_record: any, name: string, value: any) {
+							savedProperty = { name: name as string, value };
+						},
+						async openLocationDialog(_item: any) {
+							openedDialogs.push('location');
+						},
+						async openTagsDialog(_record: any, _type: any) {
+							openedDialogs.push('tags');
+						},
+					},
 				},
-				async openLocationDialog(_item) {
-					openedDialogs.push('location');
+				{ provide: TagsService, useValue: tagsService },
+				{ provide: PublicProfileService, useValue: publicProfileService },
+				{
+					provide: ShareLinksService,
+					useValue: {
+						isUnlistedShare: async () => false,
+						currentShareToken: null,
+					},
 				},
-				async openTagsDialog(_record, _type) {
-					openedDialogs.push('tags');
+				{
+					provide: ApiService,
+					useValue: {
+						record: {
+							get: async () => ({ getRecordVO: () => defaultItem }),
+						},
+					},
 				},
-			})
-			.provide({ provide: TagsService, useValue: tagsService })
-			.provide({
-				provide: PublicProfileService,
-				useValue: new PublicProfileService(),
-			});
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(FileViewerComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { element } = await defaultRender();
-
-		expect(element).not.toBeNull();
+	it('should create', () => {
+		expect(component).not.toBeNull();
 	});
 
-	it('should have two tags components', async () => {
-		const { findComponent } = await defaultRender();
+	it('should have two tags components', () => {
+		const tagsComponents = fixture.nativeElement.querySelectorAll('pr-tags');
 
-		expect(findComponent(TagsComponent)).toHaveFound(2);
+		expect(tagsComponents.length).toBe(2);
 	});
 
-	it('should correctly distinguish between keywords and custom metadata', async () => {
-		const { element } = await defaultRender();
-
+	it('should correctly distinguish between keywords and custom metadata', () => {
 		expect(
-			element.componentInstance.keywords.find((tag) => tag.name === 'tagOne'),
+			component.keywords.find((tag) => tag.name === 'tagOne'),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.keywords.find((tag) => tag.name === 'tagTwo'),
+			component.keywords.find((tag) => tag.name === 'tagTwo'),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.keywords.find(
+			component.keywords.find(
 				(tag) => tag.name === 'customField:customValueOne',
 			),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.keywords.find(
+			component.keywords.find(
 				(tag) => tag.name === 'customField:customValueTwo',
 			),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.customMetadata.find(
-				(tag) => tag.name === 'tagOne',
-			),
+			component.customMetadata.find((tag) => tag.name === 'tagOne'),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.customMetadata.find(
-				(tag) => tag.name === 'tagTwo',
-			),
+			component.customMetadata.find((tag) => tag.name === 'tagTwo'),
 		).not.toBeTruthy();
 
 		expect(
-			element.componentInstance.customMetadata.find(
+			component.customMetadata.find(
 				(tag) => tag.name === 'customField:customValueOne',
 			),
 		).toBeTruthy();
 
 		expect(
-			element.componentInstance.customMetadata.find(
+			component.customMetadata.find(
 				(tag) => tag.name === 'customField:customValueTwo',
 			),
 		).toBeTruthy();
@@ -207,37 +264,39 @@ describe('FileViewerComponent', () => {
 
 	it('should be able to load multiple record in a folder', async () => {
 		setUpMultipleRecords(defaultItem, secondItem);
-		const { element } = await defaultRender();
+		// Need to recreate the component with the new data
+		fixture = TestBed.createComponent(FileViewerComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 
-		expect(element).not.toBeNull();
+		expect(component).not.toBeNull();
 	});
 
-	it('should listen to tag updates from the tag service', async () => {
-		const { instance } = await defaultRender();
+	it('should listen to tag updates from the tag service', () => {
 		tagsService.itemTagsObservable.next([
 			{ type: 'type.tag.metadata.customField', name: 'test:metadta' },
 			{ type: 'type.generic.placeholder', name: 'test' },
 		]);
 
-		expect(instance.keywords.length).toBe(1);
-		expect(instance.customMetadata.length).toBe(1);
+		expect(component.keywords.length).toBe(1);
+		expect(component.customMetadata.length).toBe(1);
 	});
 
-	it('should listen to public profile archive updates', async () => {
-		const { inject, instance } = await defaultRender();
-		const publicProfile = inject(PublicProfileService);
-		publicProfile.archiveBs.next(new ArchiveVO({ allowPublicDownload: true }));
+	it('should listen to public profile archive updates', () => {
+		publicProfileService.archiveBs.next(
+			new ArchiveVO({ allowPublicDownload: true }),
+		);
 
-		expect(instance.allowDownloads).toBeTruthy();
+		expect(component.allowDownloads).toBeTruthy();
 	});
 
-	it('should handle null public profile archive updates', async () => {
-		const { inject, instance } = await defaultRender();
-		const publicProfile = inject(PublicProfileService);
-		publicProfile.archiveBs.next(new ArchiveVO({ allowPublicDownload: true }));
-		publicProfile.archiveBs.next(null);
+	it('should handle null public profile archive updates', () => {
+		publicProfileService.archiveBs.next(
+			new ArchiveVO({ allowPublicDownload: true }),
+		);
+		publicProfileService.archiveBs.next(null);
 
-		expect(instance.allowDownloads).toBeFalsy();
+		expect(component.allowDownloads).toBeFalsy();
 	});
 
 	describe('Keyboard Input', () => {
@@ -247,36 +306,46 @@ describe('FileViewerComponent', () => {
 		) {
 			instance.onKeyDown(new KeyboardEvent('keydown', { key }));
 		}
+
 		it('should handle right arrow key input', async () => {
 			setUpMultipleRecords(defaultItem, secondItem);
-			const { instance } = await defaultRender();
-			keyDown(instance, 'ArrowRight');
+			// Recreate component with new data
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			keyDown(component, 'ArrowRight');
 
-			expect(instance.currentIndex).toBe(1);
+			expect(component.currentIndex).toBe(1);
 		});
 
 		it('should handle left arrow key input', async () => {
 			setUpMultipleRecords(secondItem, defaultItem);
-			const { instance } = await defaultRender();
-			keyDown(instance, 'ArrowLeft');
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			keyDown(component, 'ArrowLeft');
 
-			expect(instance.currentIndex).toBe(0);
+			expect(component.currentIndex).toBe(0);
 		});
 
 		it('does not wrap around on right arrow', async () => {
 			setUpMultipleRecords(secondItem, defaultItem);
-			const { instance } = await defaultRender();
-			keyDown(instance, 'ArrowRight');
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			keyDown(component, 'ArrowRight');
 
-			expect(instance.currentIndex).toBe(1);
+			expect(component.currentIndex).toBe(1);
 		});
 
 		it('does not wrap around on left arrow', async () => {
 			setUpMultipleRecords(defaultItem, secondItem);
-			const { instance } = await defaultRender();
-			keyDown(instance, 'ArrowLeft');
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			keyDown(component, 'ArrowLeft');
 
-			expect(instance.currentIndex).toBe(0);
+			expect(component.currentIndex).toBe(0);
 		});
 
 		it('does not increment if the current record is still loading', async () => {
@@ -285,11 +354,13 @@ describe('FileViewerComponent', () => {
 				secondItem,
 				new RecordVO({ folder_linkId: 2 }),
 			);
-			const { instance } = await defaultRender();
-			keyDown(instance, 'ArrowRight');
-			keyDown(instance, 'ArrowRight');
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			keyDown(component, 'ArrowRight');
+			keyDown(component, 'ArrowRight');
 
-			expect(instance.currentIndex).toBe(1);
+			expect(component.currentIndex).toBe(1);
 		});
 
 		describe('Navigation after keyboard input', () => {
@@ -298,8 +369,10 @@ describe('FileViewerComponent', () => {
 					archiveNbr: '1234-1234',
 				});
 				setUpMultipleRecords(defaultItem, secondItemWithArchiveNbr);
-				const { fixture, instance } = await defaultRender();
-				keyDown(instance, 'ArrowRight');
+				fixture = TestBed.createComponent(FileViewerComponent);
+				component = fixture.componentInstance;
+				fixture.detectChanges();
+				keyDown(component, 'ArrowRight');
 				await fixture.whenStable();
 
 				expect(navigatedUrl).toContain('1234-1234');
@@ -313,8 +386,10 @@ describe('FileViewerComponent', () => {
 					}),
 				});
 				setUpMultipleRecords(defaultItem, secondItemFetching);
-				const { fixture, instance } = await defaultRender();
-				keyDown(instance, 'ArrowRight');
+				fixture = TestBed.createComponent(FileViewerComponent);
+				component = fixture.componentInstance;
+				fixture.detectChanges();
+				keyDown(component, 'ArrowRight');
 				secondItemFetching.archiveNbr = '1234-1234';
 				await fixture.whenStable();
 
@@ -358,39 +433,50 @@ describe('FileViewerComponent', () => {
 			const url = instance.getDocumentUrl();
 
 			expect(url).toBeTruthy();
-			expect(
-				instance.sanitizer.sanitize(SecurityContext.RESOURCE_URL, url),
-			).toContain(phrase);
+			// Access the internal URL from SafeResourceUrl
+			const internalUrl = (url as any).changingThisBreaksApplicationSecurity;
+
+			expect(internalUrl).toContain(phrase);
 		}
 		it('can get the URL of a document', async () => {
 			setUpCurrentRecord('doc');
-			const { instance } = await defaultRender();
-			expectSantizedUrlToContain(instance, 'used');
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			await fixture.whenStable();
+			expectSantizedUrlToContain(component, 'used');
 		});
 
 		it('will prefer the URL of the original if it is a PDF', async () => {
 			setUpCurrentRecord('pdf');
-			const { instance } = await defaultRender();
-			expectSantizedUrlToContain(instance, 'original');
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			await fixture.whenStable();
+			expectSantizedUrlToContain(component, 'original');
 		});
 
 		it('will prefer the URL of the original if it is a TXT file', async () => {
 			setUpCurrentRecord('txt');
-			const { instance } = await defaultRender();
-			expectSantizedUrlToContain(instance, 'original');
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			await fixture.whenStable();
+			expectSantizedUrlToContain(component, 'original');
 		});
 
 		it('will have a falsy document URL if it is not a document', async () => {
-			const { instance } = await defaultRender();
-
-			expect(instance.getDocumentUrl()).toBeFalsy();
+			expect(component.getDocumentUrl()).toBeFalsy();
 		});
 
 		it('will have a falsy document URL if the URL is falsy', async () => {
 			setUpCurrentRecord('pdf', false);
-			const { instance } = await defaultRender();
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			await fixture.whenStable();
 
-			expect(instance.getDocumentUrl()).toBeFalsy();
+			expect(component.getDocumentUrl()).toBeFalsy();
 		});
 	});
 
@@ -399,16 +485,14 @@ describe('FileViewerComponent', () => {
 			hasAccess = access;
 			activatedRouteData.isPublicArchive = false;
 		}
-		it('can close the file viewer', async () => {
-			const { instance } = await defaultRender();
-			instance.close();
+		it('can close the file viewer', () => {
+			component.close();
 
 			expect(navigatedUrl).toContain('.');
 		});
 
 		it('can finish editing', async () => {
-			const { instance } = await defaultRender();
-			await instance.onFinishEditing('displayName', 'Test');
+			await component.onFinishEditing('displayName', 'Test');
 
 			expect(savedProperty.name).toBe('displayName');
 			expect(savedProperty.value).toBe('Test');
@@ -416,9 +500,11 @@ describe('FileViewerComponent', () => {
 
 		it('can open the location dialog with edit permissions', async () => {
 			setAccess(true);
-			const { fixture, instance } = await defaultRender();
-			instance.canEdit = true;
-			instance.onLocationClick();
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			component.canEdit = true;
+			component.onLocationClick();
 			await fixture.whenStable();
 
 			expect(openedDialogs).toContain('location');
@@ -426,8 +512,10 @@ describe('FileViewerComponent', () => {
 
 		it('cannot open the location dialog without edit permissions', async () => {
 			setAccess(false);
-			const { fixture, instance } = await defaultRender();
-			instance.onLocationClick();
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			component.onLocationClick();
 			await fixture.whenStable();
 
 			expect(openedDialogs).not.toContain('location');
@@ -435,9 +523,11 @@ describe('FileViewerComponent', () => {
 
 		it('can open the tags dialog with edit permissions', async () => {
 			setAccess(true);
-			const { fixture, instance } = await defaultRender();
-			instance.canEdit = true;
-			instance.onTagsClick('keyword');
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			component.canEdit = true;
+			component.onTagsClick('keyword');
 			await fixture.whenStable();
 
 			expect(openedDialogs).toContain('tags');
@@ -445,30 +535,28 @@ describe('FileViewerComponent', () => {
 
 		it('cannot open the tags dialog with edit permissions', async () => {
 			setAccess(false);
-			const { fixture, instance } = await defaultRender();
-			instance.onTagsClick('keyword');
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			component.onTagsClick('keyword');
 			await fixture.whenStable();
 
 			expect(openedDialogs).not.toContain('tags');
 		});
 
 		it('can download items', async () => {
-			const { fixture, instance } = await defaultRender();
-			instance.onDownloadClick();
+			component.onDownloadClick();
 			await fixture.whenStable();
 
 			expect(downloaded).toBeTrue();
 		});
 
-		it('should display "Click to add location" on fullscreen view', async () => {
-			const { fixture, instance, find } = await defaultRender();
-			instance.canEdit = true;
+		it('should display "Click to add location" on fullscreen view', () => {
+			component.canEdit = true;
 			fixture.detectChanges();
-			const locationSpan = find('.add-location');
+			const locationSpan = fixture.nativeElement.querySelector('.add-location');
 
-			expect(locationSpan.nativeElement.textContent.trim()).toBe(
-				'Click to add location',
-			);
+			expect(locationSpan.textContent.trim()).toBe('Click to add location');
 		});
 	});
 });

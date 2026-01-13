@@ -1,23 +1,26 @@
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 import { ComponentsModule } from '../../components.module';
 import { ButtonComponent } from './button.component';
 
 describe('ButtonComponent', () => {
-	let shallow: Shallow<ButtonComponent>;
+	let fixture: ComponentFixture<ButtonComponent>;
+	let instance: ButtonComponent;
 
 	beforeEach(async () => {
-		shallow = new Shallow(ButtonComponent, ComponentsModule);
+		await MockBuilder(ButtonComponent, ComponentsModule);
+
+		fixture = TestBed.createComponent(ButtonComponent);
+		instance = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
+	it('should create', () => {
 		expect(instance).toBeTruthy();
 	});
 
-	it('should have the correct class based on variant', async () => {
-		const { instance, fixture, find } = await shallow.render();
-		const button = find('.button');
+	it('should have the correct class based on variant', () => {
+		const button = ngMocks.find('.button');
 
 		expect(button.nativeElement.classList).toContain('button-primary');
 
@@ -32,9 +35,8 @@ describe('ButtonComponent', () => {
 		expect(button.nativeElement.classList).toContain('button-tertiary');
 	});
 
-	it('should have the correct class based on size', async () => {
-		const { instance, fixture, find } = await shallow.render();
-		const button = find('.button');
+	it('should have the correct class based on size', () => {
+		const button = ngMocks.find('.button');
 
 		expect(button.nativeElement.classList).toContain('button-hug');
 
@@ -44,9 +46,8 @@ describe('ButtonComponent', () => {
 		expect(button.nativeElement.classList).toContain('button-fill');
 	});
 
-	it('should disable the button', async () => {
-		const { instance, fixture, find } = await shallow.render();
-		const button = find('.button');
+	it('should disable the button', () => {
+		const button = ngMocks.find('.button');
 
 		instance.disabled = true;
 		fixture.detectChanges();
@@ -54,18 +55,17 @@ describe('ButtonComponent', () => {
 		expect(button.nativeElement.disabled).toBeTrue();
 	});
 
-	it('should emit the @Output when clicking the button', async () => {
-		const { instance, find } = await shallow.render();
-		const button = find('.button').nativeElement;
+	it('should emit the @Output when clicking the button', () => {
+		spyOn(instance.buttonClick, 'emit');
+		const button = ngMocks.find('.button').nativeElement;
 
 		button.click();
 
 		expect(instance.buttonClick.emit).toHaveBeenCalled();
 	});
 
-	it('should have the correct class based on mode', async () => {
-		const { instance, fixture, find } = await shallow.render();
-		const button = find('.button');
+	it('should have the correct class based on mode', () => {
+		const button = ngMocks.find('.button');
 
 		expect(button.nativeElement.classList).toContain('button-light');
 
@@ -75,9 +75,8 @@ describe('ButtonComponent', () => {
 		expect(button.nativeElement.classList).toContain('button-dark');
 	});
 
-	it('should have the correct class based on orientation', async () => {
-		const { instance, fixture, find } = await shallow.render();
-		const button = find('.button');
+	it('should have the correct class based on orientation', () => {
+		const button = ngMocks.find('.button');
 
 		instance.orientation = 'right';
 		fixture.detectChanges();
@@ -85,9 +84,8 @@ describe('ButtonComponent', () => {
 		expect(button.nativeElement.classList).toContain('button-reverse');
 	});
 
-	it('should have the correct class based on height', async () => {
-		const { instance, fixture, find } = await shallow.render();
-		const button = find('.button');
+	it('should have the correct class based on height', () => {
+		const button = ngMocks.find('.button');
 
 		expect(button.nativeElement.classList).toContain('button-medium');
 
@@ -97,10 +95,8 @@ describe('ButtonComponent', () => {
 		expect(button.nativeElement.classList).toContain('button-large');
 	});
 
-	it('should have the correct type based on the type input', async () => {
-		const { instance, fixture, find } = await shallow.render();
-
-		const button = find('.button');
+	it('should have the correct type based on the type input', () => {
+		const button = ngMocks.find('.button');
 
 		expect(button.nativeElement.type).toEqual('button');
 

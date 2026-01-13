@@ -1,90 +1,83 @@
-import { Shallow } from 'shallow-render';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { ComponentsModule } from '../../components.module';
 import { FormInputComponent, FormInputConfig } from './form-input.component';
 
 describe('FormInputComponent', () => {
-	let shallow: Shallow<FormInputComponent>;
+	let fixture: ComponentFixture<FormInputComponent>;
+	let instance: FormInputComponent;
 
 	beforeEach(async () => {
-		shallow = new Shallow(FormInputComponent, ComponentsModule).import(
+		await MockBuilder(FormInputComponent, ComponentsModule).keep(
 			ReactiveFormsModule,
 		);
+
+		fixture = TestBed.createComponent(FormInputComponent);
+		instance = fixture.componentInstance;
 	});
 
-	it('should create with an empty control', async () => {
-		const mockControl = new UntypedFormControl('');
-		const { instance } = await shallow.render({
-			bind: { control: mockControl },
-		});
+	it('should create with an empty control', () => {
+		instance.control = new UntypedFormControl('');
+		fixture.detectChanges();
 
 		expect(instance).toBeTruthy();
 	});
 
-	it('should create with a control', async () => {
-		const mockControl = new UntypedFormControl('input');
-		const { instance } = await shallow.render({
-			bind: { control: mockControl },
-		});
+	it('should create with a control', () => {
+		instance.control = new UntypedFormControl('input');
+		fixture.detectChanges();
 
 		expect(instance).toBeTruthy();
 	});
 
-	it('should bind the input type with empty form control', async () => {
-		const mockControl = new UntypedFormControl('');
-		const { find } = await shallow.render({
-			bind: { type: 'password', control: mockControl },
-		});
+	it('should bind the input type with empty form control', () => {
+		instance.control = new UntypedFormControl('');
+		instance.type = 'password';
+		fixture.detectChanges();
 
-		const inputElement = find('input').nativeElement;
-
-		expect(inputElement.type).toBe('password');
-	});
-
-	it('should bind the input type with form control', async () => {
-		const control = new UntypedFormControl('input');
-		const { find } = await shallow.render({
-			bind: { control, type: 'password' },
-		});
-
-		const inputElement = find('input').nativeElement;
+		const inputElement = ngMocks.find('input').nativeElement;
 
 		expect(inputElement.type).toBe('password');
 	});
 
-	it('should hide label for empty number inputs', async () => {
-		const mockControl = new UntypedFormControl('');
+	it('should bind the input type with form control', () => {
+		instance.control = new UntypedFormControl('input');
+		instance.type = 'password';
+		fixture.detectChanges();
 
-		const { instance } = await shallow.render({
-			bind: { type: 'number', control: mockControl },
-		});
+		const inputElement = ngMocks.find('input').nativeElement;
+
+		expect(inputElement.type).toBe('password');
+	});
+
+	it('should hide label for empty number inputs', () => {
+		instance.control = new UntypedFormControl('');
+		instance.type = 'number';
+		fixture.detectChanges();
 
 		expect(instance.isLabelHidden()).toBeTrue();
 	});
 
-	it('should show label for non-empty text inputs', async () => {
-		const mockControl = new UntypedFormControl('Some text');
-
-		const { instance } = await shallow.render({
-			bind: { type: 'text', control: mockControl },
-		});
+	it('should show label for non-empty text inputs', () => {
+		instance.control = new UntypedFormControl('Some text');
+		instance.type = 'text';
+		fixture.detectChanges();
 
 		expect(instance.isLabelHidden()).toBeFalse();
 	});
 
-	it('should set input attributes based on config', async () => {
-		const mockControl = new UntypedFormControl('Some text');
-
+	it('should set input attributes based on config', () => {
+		instance.control = new UntypedFormControl('Some text');
 		const config: FormInputConfig = {
 			autocorrect: 'off',
 			autocapitalize: 'off',
 			spellcheck: 'off',
 		};
-		const { find } = await shallow.render({
-			bind: { config, control: mockControl },
-		});
+		instance.config = config;
+		fixture.detectChanges();
 
-		const inputElement = find('input').nativeElement;
+		const inputElement = ngMocks.find('input').nativeElement;
 
 		expect(inputElement.getAttribute('autocorrect')).toBe(config.autocorrect);
 
@@ -95,14 +88,11 @@ describe('FormInputComponent', () => {
 		expect(inputElement.getAttribute('spellcheck')).toBe(config.spellcheck);
 	});
 
-	it('should emit valueChange event on input value change', async () => {
-		const mockControl = new UntypedFormControl('');
+	it('should emit valueChange event on input value change', () => {
+		instance.control = new UntypedFormControl('');
+		fixture.detectChanges();
 
 		const mockValue = 'test value';
-		const { instance } = await shallow.render({
-			bind: { control: mockControl },
-		});
-
 		const spy = spyOn(instance.valueChangeSubject, 'next');
 
 		instance.onInputChange(mockValue);
@@ -110,47 +100,40 @@ describe('FormInputComponent', () => {
 		expect(spy).toHaveBeenCalledWith(mockValue);
 	});
 
-	it('should apply right-align class based on config', async () => {
-		const mockControl = new UntypedFormControl('');
-		const { instance, fixture } = await shallow.render({
-			bind: { config: { textAlign: 'right' }, control: mockControl },
-		});
+	it('should apply right-align class based on config', () => {
+		instance.control = new UntypedFormControl('');
+		instance.config = { textAlign: 'right' };
 		fixture.detectChanges();
 
 		expect(instance.rightAlign).toBeTrue();
 	});
 
-	it('should bind the placeholder attribute to the input element', async () => {
-		const mockControl = new UntypedFormControl('');
+	it('should bind the placeholder attribute to the input element', () => {
+		instance.control = new UntypedFormControl('');
 		const placeholderValue = 'Enter text here';
-		const { find } = await shallow.render({
-			bind: { placeholder: placeholderValue, control: mockControl },
-		});
+		instance.placeholder = placeholderValue;
+		fixture.detectChanges();
 
-		const inputElement = find('input').nativeElement;
+		const inputElement = ngMocks.find('input').nativeElement;
 
 		expect(inputElement.placeholder).toBe(placeholderValue);
 	});
 
-	it('should return the correct error from the validation array', async () => {
-		const mockControl = new UntypedFormControl('');
-		const { instance } = await shallow.render({
-			bind: {
-				validators: [
-					{
-						validation: 'minLength',
-						message: 'Must be at least 3 characters',
-						value: 3,
-					},
-					{
-						validation: 'maxLength',
-						message: 'Must be at most 10 characters',
-						value: 10,
-					},
-				],
-				control: mockControl,
+	it('should return the correct error from the validation array', () => {
+		instance.control = new UntypedFormControl('');
+		instance.validators = [
+			{
+				validation: 'minLength',
+				message: 'Must be at least 3 characters',
+				value: 3,
 			},
-		});
+			{
+				validation: 'maxLength',
+				message: 'Must be at most 10 characters',
+				value: 10,
+			},
+		];
+		fixture.detectChanges();
 
 		const errorMessage = instance.getInputErrorFromValue('aa');
 

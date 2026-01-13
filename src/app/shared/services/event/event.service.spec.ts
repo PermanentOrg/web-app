@@ -1,25 +1,24 @@
-import { SharedModule } from '@shared/shared.module';
-import { Shallow } from 'shallow-render';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder } from 'ng-mocks';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventObserver, EventService } from './event.service';
 import { PermanentEvent } from './event-types';
 
 describe('EventService', () => {
-	let shallow: Shallow<EventService>;
-	beforeEach(() => {
-		shallow = new Shallow(EventService, SharedModule).import(
-			HttpClientTestingModule,
-		);
+	beforeEach(async () => {
+		await MockBuilder(EventService).keep(HttpClientTestingModule, {
+			export: true,
+		});
 	});
 
-	it('should be created', async () => {
-		const { instance } = shallow.createService();
+	it('should be created', () => {
+		const instance = TestBed.inject(EventService);
 
 		expect(instance).toBeTruthy();
 	});
 
-	it('should add an observer', async () => {
-		const { instance } = shallow.createService();
+	it('should add an observer', () => {
+		const instance = TestBed.inject(EventService);
 		const mockObserver: EventObserver = {
 			update: async (_: PermanentEvent) => {},
 		};
@@ -29,8 +28,8 @@ describe('EventService', () => {
 		expect(instance.getObservers()).toContain(mockObserver);
 	});
 
-	it('should notify all observers', async () => {
-		const { instance } = shallow.createService();
+	it('should notify all observers', () => {
+		const instance = TestBed.inject(EventService);
 		const mockObserver1: EventObserver = {
 			update: jasmine.createSpy('update'),
 		};
@@ -51,8 +50,8 @@ describe('EventService', () => {
 		expect(mockObserver2.update).toHaveBeenCalledWith(eventData);
 	});
 
-	it('should remove an observer', async () => {
-		const { instance } = shallow.createService();
+	it('should remove an observer', () => {
+		const instance = TestBed.inject(EventService);
 		const mockObserver: EventObserver = {
 			update: jasmine.createSpy('update'),
 		};
@@ -67,8 +66,8 @@ describe('EventService', () => {
 		expect(mockObserver.update).not.toHaveBeenCalled();
 	});
 
-	it('should not notify removed observers', async () => {
-		const { instance } = shallow.createService();
+	it('should not notify removed observers', () => {
+		const instance = TestBed.inject(EventService);
 		const mockObserver: EventObserver = {
 			update: jasmine.createSpy('update'),
 		};

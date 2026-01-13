@@ -1,20 +1,20 @@
-import { NgModule } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ngMocks } from 'ng-mocks';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-import { Shallow } from 'shallow-render';
 import { LoginComponent } from '@auth/components/login/login.component';
 import { MessageService } from '@shared/services/message/message.service';
 import { TEST_DATA } from '@core/core.module.spec';
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
-import { TestBed } from '@angular/core/testing';
 import { DeviceService } from '@shared/services/device/device.service';
 import { ArchiveVO } from '@models/index';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 const testEmail = 'unittest@example.com';
-
-@NgModule()
-class DummyModule {}
 
 class MockAccountService {
 	public switchedToDefaultArchive: boolean = false;
@@ -58,19 +58,13 @@ class MockActivatedRoute {
 	};
 }
 
-class MockRouter {
-	public navigatedRoute: string[] = [];
-	public async navigate(path: string[]) {
-		this.navigatedRoute = path;
-	}
-}
-
 class MockMessageService {
 	showMessage(_: string) {}
 }
 
 class LoginTestingHarness {
 	private component: LoginComponent;
+	public navigateSpy: jasmine.Spy;
 	constructor(
 		private account: MockAccountService,
 		private route: MockActivatedRoute,
@@ -130,8 +124,8 @@ class LoginTestingHarness {
 		});
 	}
 
-	public getMessageSpy(inject: typeof TestBed.inject) {
-		return spyOn(inject(MessageService), 'showMessage').and.callThrough();
+	public getMessageSpy() {
+		return spyOn(ngMocks.get(MessageService), 'showMessage').and.callThrough();
 	}
 
 	public hasPasswordBeenCleared(): boolean {
@@ -140,54 +134,58 @@ class LoginTestingHarness {
 }
 
 describe('LoginComponent', () => {
-	let shallow: Shallow<LoginComponent>;
+	let fixture: ComponentFixture<LoginComponent>;
+	let instance: LoginComponent;
 	let cookieService: Map<string, string>;
 	let accountService: MockAccountService;
 	let activatedRoute: MockActivatedRoute;
-	let router: MockRouter;
 	let harness: LoginTestingHarness;
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		accountService = new MockAccountService();
 		activatedRoute = new MockActivatedRoute();
-		router = new MockRouter();
 		cookieService = new Map<string, string>();
 		cookieService.set('rememberMe', testEmail);
 		harness = new LoginTestingHarness(accountService, activatedRoute);
-		shallow = new Shallow(LoginComponent, DummyModule).provideMock(
-			{
-				provide: AccountService,
-				useValue: accountService,
-			},
-			{ provide: ActivatedRoute, useValue: activatedRoute },
-			{ provide: CookieService, useValue: cookieService },
-			{ provide: MessageService, useClass: MockMessageService },
-			{ provide: Router, useValue: router },
-			{
-				provide: DeviceService,
-				useValue: {
-					isMobile() {
-						return true;
+
+		await TestBed.configureTestingModule({
+			imports: [ReactiveFormsModule, RouterTestingModule, NoopAnimationsModule],
+			declarations: [LoginComponent],
+			providers: [
+				{ provide: AccountService, useValue: accountService },
+				{ provide: ActivatedRoute, useValue: activatedRoute },
+				{ provide: CookieService, useValue: cookieService },
+				{ provide: MessageService, useClass: MockMessageService },
+				{
+					provide: DeviceService,
+					useValue: {
+						isMobile() {
+							return true;
+						},
 					},
 				},
-			},
+			],
+			schemas: [NO_ERRORS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(LoginComponent);
+		instance = fixture.componentInstance;
+		const router = TestBed.inject(Router);
+		harness.navigateSpy = spyOn(router, 'navigate').and.returnValue(
+			Promise.resolve(true),
 		);
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
+	it('should create', () => {
 		expect(instance).toBeTruthy();
 	});
 
-	it('should autofill with the email from cookies', async () => {
-		const { instance } = await shallow.render();
-
+	it('should autofill with the email from cookies', () => {
 		expect(instance.loginForm.value.email).toEqual(testEmail);
 	});
 
-	it('should set error for missing email', async () => {
-		const { instance } = await shallow.render();
+	it('should set error for missing email', () => {
 		instance.loginForm.get('email').markAsTouched();
 		instance.loginForm.patchValue({
 			email: '',
@@ -198,8 +196,7 @@ describe('LoginComponent', () => {
 		expect(instance.loginForm.get('email').errors.required).toBeTruthy();
 	});
 
-	it('should set error for invalid email', async () => {
-		const { instance } = await shallow.render();
+	it('should set error for invalid email', () => {
 		instance.loginForm.get('email').markAsTouched();
 		instance.loginForm.patchValue({
 			email: 'lasld;f;aslkj',
@@ -210,8 +207,7 @@ describe('LoginComponent', () => {
 		expect(instance.loginForm.get('email').errors.email).toBeTruthy();
 	});
 
-	it('should set error for missing password', async () => {
-		const { instance } = await shallow.render();
+	it('should set error for missing password', () => {
 		instance.loginForm.get('password').markAsTouched();
 		instance.loginForm.patchValue({
 			email: TEST_DATA.user.email,
@@ -222,8 +218,7 @@ describe('LoginComponent', () => {
 		expect(instance.loginForm.get('password').errors.required).toBeTruthy();
 	});
 
-	it('should set error for too short password', async () => {
-		const { instance } = await shallow.render();
+	it('should set error for too short password', () => {
 		instance.loginForm.get('password').markAsTouched();
 		instance.loginForm.patchValue({
 			email: TEST_DATA.user.email,
@@ -234,8 +229,7 @@ describe('LoginComponent', () => {
 		expect(instance.loginForm.get('password').errors.minlength).toBeTruthy();
 	});
 
-	it('should have no errors when email and password valid', async () => {
-		const { instance } = await shallow.render();
+	it('should have no errors when email and password valid', () => {
 		instance.loginForm.markAsTouched();
 		instance.loginForm.patchValue({
 			email: TEST_DATA.user.email,
@@ -246,73 +240,67 @@ describe('LoginComponent', () => {
 	});
 
 	it('should log in the user if they have archives', async () => {
-		const { instance } = await shallow.render();
-
 		harness.setComponent(instance);
 		harness.setupNormalLogin();
 		await harness.testLogin();
 
-		expect(router.navigatedRoute).toContain('/');
+		expect(harness.navigateSpy).toHaveBeenCalledWith(['/'], jasmine.anything());
 		expect(accountService.switchedToDefaultArchive).toBeTrue();
 	});
 
 	it('should redirect to onboarding if the user has no archives', async () => {
-		const { instance } = await shallow.render();
-
 		harness.setComponent(instance);
 		harness.setupOnboarding();
 		await harness.testLogin();
 
-		expect(router.navigatedRoute.join('/')).toContain('onboarding');
+		expect(harness.navigateSpy).toHaveBeenCalledWith(['/app/onboarding']);
 	});
 
 	it('should redirect to public if the user is coming from timeline view', async () => {
-		const { instance } = await shallow.render();
-
 		harness.setComponent(instance);
 		harness.setupTimelineCta();
 		await harness.testLogin();
 
-		expect(router.navigatedRoute).toContain('/public');
+		expect(harness.navigateSpy).toHaveBeenCalledWith(
+			['/public'],
+			jasmine.objectContaining({ queryParams: { cta: 'timeline' } }),
+		);
 	});
 
 	it('should redirect to a sharebyurl if the param is set', async () => {
-		const { instance } = await shallow.render();
-
 		harness.setComponent(instance);
 		harness.setupShareByUrl('test-1234');
 		await harness.testLogin();
 
-		expect(router.navigatedRoute).toContain('/share');
-		expect(router.navigatedRoute).toContain('test-1234');
+		expect(harness.navigateSpy).toHaveBeenCalledWith(['/share', 'test-1234']);
 	});
 
 	it('should redirect to Verify page if user needs verification', async () => {
-		const { instance } = await shallow.render();
-
 		harness.setComponent(instance);
 		harness.setupVerify();
 		await harness.testLogin();
 
-		expect(router.navigatedRoute).toContain('verify');
+		expect(harness.navigateSpy).toHaveBeenCalledWith(
+			['..', 'verify'],
+			jasmine.anything(),
+		);
 	});
 
 	it('should redirect to MFA page if user needs MFA', async () => {
-		const { instance } = await shallow.render();
-
 		harness.setComponent(instance);
 		harness.setupMfa();
 		await harness.testLogin();
 
-		expect(router.navigatedRoute).toContain('mfa');
+		expect(harness.navigateSpy).toHaveBeenCalledWith(
+			['..', 'mfa'],
+			jasmine.anything(),
+		);
 	});
 
 	it('should show an error message in case of login failure', async () => {
-		const { inject, instance } = await shallow.render();
-
 		harness.setComponent(instance);
 		harness.setupLoginError();
-		const messageSpy = harness.getMessageSpy(inject);
+		const messageSpy = harness.getMessageSpy();
 		await harness.testLogin();
 
 		expect(messageSpy).toHaveBeenCalled();
@@ -320,20 +308,16 @@ describe('LoginComponent', () => {
 	});
 
 	it('should show an error message in case of wrong username/password', async () => {
-		const { inject, instance } = await shallow.render();
-
 		harness.setComponent(instance);
 		harness.setupIncorrectLogin();
-		const messageSpy = harness.getMessageSpy(inject);
+		const messageSpy = harness.getMessageSpy();
 		await harness.testLogin();
 
 		expect(messageSpy).toHaveBeenCalled();
 		expect(harness.hasPasswordBeenCleared()).toBeTrue();
 	});
 
-	it('should display the loading spinner', async () => {
-		const { instance, fixture } = await shallow.render();
-
+	it('should display the loading spinner', () => {
 		instance.waiting = true;
 		fixture.detectChanges();
 		const compiled = fixture.debugElement.nativeElement;

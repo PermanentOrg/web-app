@@ -1,97 +1,91 @@
-import { Shallow } from 'shallow-render';
-import { OnboardingModule } from '@root/app/onboarding/onboarding.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ArchiveVO } from '@models/index';
 import { PendingArchiveComponent } from './pending-archive.component';
 
 describe('PendingArchiveComponent', () => {
-	let shallow: Shallow<PendingArchiveComponent>;
+	let component: PendingArchiveComponent;
+	let fixture: ComponentFixture<PendingArchiveComponent>;
 
 	beforeEach(async () => {
-		shallow = new Shallow(PendingArchiveComponent, OnboardingModule);
+		await TestBed.configureTestingModule({
+			declarations: [PendingArchiveComponent],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(PendingArchiveComponent);
+		component = fixture.componentInstance;
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render({
-			bind: {
-				archive: { fullName: 'John Doe' },
-			},
+	it('should create', () => {
+		component.archive = { fullName: 'John Doe' } as ArchiveVO;
+		fixture.detectChanges();
+
+		expect(component).toBeTruthy();
+	});
+
+	it('should display the archive fullName', () => {
+		component.archive = new ArchiveVO({
+			fullName: 'Test Archive',
+			archiveId: 1,
+			accessRole: 'access.role.viewer',
 		});
+		fixture.detectChanges();
 
-		expect(instance).toBeTruthy();
+		const fullNameElement = fixture.nativeElement.querySelector('.name b');
+
+		expect(fullNameElement.textContent).toContain('Test Archive');
 	});
 
-	it('should display the archive fullName', async () => {
-		const { find } = await shallow.render({
-			bind: {
-				archive: {
-					fullName: 'Test Archive',
-					id: 1,
-					role: 'access.role.viewer',
-				},
-			},
-		});
+	it('should handle undefined archive input gracefully', () => {
+		component.archive = {} as ArchiveVO;
+		fixture.detectChanges();
 
-		const fullNameElement = find('.name b');
+		const fullNameElement = fixture.nativeElement.querySelector('.name b');
 
-		expect(fullNameElement.nativeElement.textContent).toContain('Test Archive');
+		expect(fullNameElement.textContent).toBe('');
 	});
 
-	it('should handle undefined archive input gracefully', async () => {
-		const { find } = await shallow.render({
-			bind: {
-				archive: {},
-			},
-		});
-
-		const fullNameElement = find('.name b');
-
-		expect(fullNameElement.nativeElement.textContent).toBe('');
-	});
-
-	it('should emit acceptArchiveOutput event with the archive when acceptArchive is called', async () => {
+	it('should emit acceptArchiveOutput event with the archive when acceptArchive is called', () => {
 		const archiveData = new ArchiveVO({
 			fullName: 'Test Archive',
 			id: 1,
 			role: 'access.role.viewer',
 		});
-		const { instance, outputs } = await shallow.render({
-			bind: {
-				archive: archiveData,
-			},
-		});
+		component.archive = archiveData;
+		fixture.detectChanges();
 
-		instance.acceptArchive(archiveData);
+		spyOn(component.acceptArchiveOutput, 'emit');
 
-		expect(outputs.acceptArchiveOutput.emit).toHaveBeenCalledWith(archiveData);
+		component.acceptArchive(archiveData);
+
+		expect(component.acceptArchiveOutput.emit).toHaveBeenCalledWith(
+			archiveData,
+		);
 	});
 
-	it('should display the correct role name based on the role input', async () => {
-		const { find } = await shallow.render({
-			bind: {
-				archive: {
-					fullName: 'Test Archive',
-					id: 1,
-					accessRole: 'access.role.editor',
-				},
-			},
+	it('should display the correct role name based on the role input', () => {
+		component.archive = new ArchiveVO({
+			fullName: 'Test Archive',
+			archiveId: 1,
+			accessRole: 'access.role.editor',
 		});
+		fixture.detectChanges();
 
-		const roleElement = find('.role');
+		const roleElement = fixture.nativeElement.querySelector('.role');
 
-		expect(roleElement.nativeElement.textContent).toContain('Editor');
+		expect(roleElement.textContent).toContain('Editor');
 	});
 
-	it('should map role key to role name correctly', async () => {
-		const { instance } = await shallow.render({
-			bind: {
-				archive: {
-					fullName: 'Test Archive',
-					id: 1,
-					role: 'access.role.editor',
-				},
-			},
+	it('should map role key to role name correctly', () => {
+		component.archive = new ArchiveVO({
+			fullName: 'Test Archive',
+			archiveId: 1,
+			accessRole: 'access.role.editor',
 		});
-		const roleName = instance.roles['access.role.contributor'];
+		fixture.detectChanges();
+
+		const roleName = component.roles['access.role.contributor'];
 
 		expect(roleName).toBe('Contributor');
 	});

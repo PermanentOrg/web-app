@@ -1,7 +1,8 @@
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { AccountService } from '@shared/services/account/account.service';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
-import { OnboardingModule } from '../../../onboarding.module';
 import { CreateArchiveForMeScreenComponent } from './create-archive-for-me-screen.component';
 
 const mockAccountService = {
@@ -9,50 +10,55 @@ const mockAccountService = {
 };
 
 describe('CreateArchiveForMeScreenComponent', () => {
-	let shallow: Shallow<CreateArchiveForMeScreenComponent>;
+	let component: CreateArchiveForMeScreenComponent;
+	let fixture: ComponentFixture<CreateArchiveForMeScreenComponent>;
 
 	beforeEach(async () => {
-		shallow = new Shallow(CreateArchiveForMeScreenComponent, OnboardingModule)
-			.mock(AccountService, mockAccountService)
-			.provide(OnboardingService)
-			.dontMock(OnboardingService);
+		await TestBed.configureTestingModule({
+			declarations: [CreateArchiveForMeScreenComponent],
+			providers: [
+				{ provide: AccountService, useValue: mockAccountService },
+				OnboardingService,
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(CreateArchiveForMeScreenComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
+	it('should create', () => {
+		expect(component).toBeTruthy();
 	});
 
-	it('should initialize name with the account full name', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance.name).toBe('John Doe');
+	it('should initialize name with the account full name', () => {
+		expect(component.name).toBe('John Doe');
 	});
 
-	it('should render the archive name in the template', async () => {
-		const { find } = await shallow.render();
-		const archiveNameElement = find('.archive-name');
+	it('should render the archive name in the template', () => {
+		const archiveNameElement =
+			fixture.nativeElement.querySelector('.archive-name');
 
-		expect(archiveNameElement.nativeElement.textContent).toContain('John Doe');
+		expect(archiveNameElement.textContent).toContain('John Doe');
 	});
 
-	it('should emit goBackOutput when the Back button is clicked', async () => {
-		const { outputs, find } = await shallow.render();
-		const backButton = find('.back');
+	it('should emit goBackOutput when the Back button is clicked', () => {
+		spyOn(component.goBackOutput, 'emit');
+		const backButton = fixture.debugElement.query(By.css('.back'));
 
 		backButton.triggerEventHandler('buttonClick', null);
 
-		expect(outputs.goBackOutput.emit).toHaveBeenCalledWith('start');
+		expect(component.goBackOutput.emit).toHaveBeenCalledWith('start');
 	});
 
-	it('should emit continueOutput with correct payload when the Yes, create archive button is clicked', async () => {
-		const { outputs, find } = await shallow.render();
-		const continueButton = find('.continue');
+	it('should emit continueOutput with correct payload when the Yes, create archive button is clicked', () => {
+		spyOn(component.continueOutput, 'emit');
+		const continueButton = fixture.debugElement.query(By.css('.continue'));
 
 		continueButton.triggerEventHandler('buttonClick', null);
 
-		expect(outputs.continueOutput.emit).toHaveBeenCalledWith({
+		expect(component.continueOutput.emit).toHaveBeenCalledWith({
 			screen: 'goals',
 			type: 'type.archive.person',
 			name: 'John Doe',

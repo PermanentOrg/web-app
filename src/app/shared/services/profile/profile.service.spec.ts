@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder } from 'ng-mocks';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { ArchiveVO, FolderVO } from '@models/index';
-import { Shallow } from 'shallow-render';
-import { ProfileItemVOData } from '@models/profile-item-vo';
 import { RecordVO } from '../../../models/record-vo';
 import { ArchiveResponse } from '../api/archive.repo';
 import { AccountService } from '../account/account.service';
@@ -19,9 +18,9 @@ const mockApiService = {
 			await Promise.resolve(new ArchiveResponse({})),
 		getAllProfileItems: async (archive: ArchiveVO) =>
 			await Promise.resolve(new ArchiveResponse({})),
-		addUpdateProfileItems: async (profileItems: ProfileItemVOData[]) =>
+		addUpdateProfileItems: async (profileItems: any[]) =>
 			await Promise.resolve(new ArchiveResponse({})),
-		deleteProfileItem: async (profileItem: ProfileItemVOData) =>
+		deleteProfileItem: async (profileItem: any) =>
 			await Promise.resolve(new ArchiveResponse({})),
 	},
 };
@@ -33,46 +32,33 @@ const mockAccountService = {
 		new ArchiveVO({ archiveId: 1, type: 'archive.type.organization' }),
 };
 const mockFolderPickerService = {
-	hooseRecord: async (startingFolder: FolderVO) =>
+	chooseRecord: async (startingFolder: FolderVO) =>
 		await Promise.resolve(new RecordVO({})),
 };
 
-@NgModule({
-	declarations: [ProfileService], // components your module owns.
-	imports: [], // other modules your module needs.
-	providers: [ProfileService], // providers available to your module.
-	bootstrap: [], // bootstrap this root component.
-})
-class DummyModule {}
-
 describe('ProfileService', () => {
-	let shallow: Shallow<ProfileService>;
-
-	beforeEach(() => {
-		shallow = new Shallow(ProfileService, DummyModule)
-			.mock(MessageService, {
-				showError: () => {},
-			})
-			.provideMock({ provide: ApiService, useValue: mockApiService })
-			.provideMock({
+	beforeEach(async () => {
+		await MockBuilder(ProfileService)
+			.mock(MessageService, { showError: () => {} })
+			.provide({ provide: ApiService, useValue: mockApiService })
+			.provide({
 				provide: PrConstantsService,
 				useValue: mockConstantsService,
 			})
-			.provideMock({ provide: AccountService, useValue: mockAccountService })
-			.provideMock({
+			.provide({ provide: AccountService, useValue: mockAccountService })
+			.provide({
 				provide: FolderPickerService,
 				useValue: mockFolderPickerService,
-			})
-			.dontMock(ProfileService);
+			});
 	});
 
-	it('should exist', async () => {
-		const { instance } = shallow.createService();
+	it('should exist', () => {
+		const instance = TestBed.inject(ProfileService);
 
 		expect(instance).toBeTruthy();
 	});
 
-	it('should return the correct completion value when not all the fields have a value', async () => {
+	it('should return the correct completion value when not all the fields have a value', () => {
 		const mockDictionary = {
 			birth_info: [
 				{
@@ -118,7 +104,7 @@ describe('ProfileService', () => {
 				},
 			],
 		};
-		const { instance } = shallow.createService();
+		const instance = TestBed.inject(ProfileService);
 		(instance as any).profileItemDictionary = mockDictionary;
 
 		const progress = instance.calculateProfileProgress();
@@ -126,7 +112,7 @@ describe('ProfileService', () => {
 		expect(progress).toBe(0.8);
 	});
 
-	it('should 1 when at least one of each profile category has a value', async () => {
+	it('should 1 when at least one of each profile category has a value', () => {
 		const mockDictionary = {
 			birth_info: [
 				{
@@ -173,7 +159,7 @@ describe('ProfileService', () => {
 				},
 			],
 		};
-		const { instance } = shallow.createService();
+		const instance = TestBed.inject(ProfileService);
 		(instance as any).profileItemDictionary = mockDictionary;
 
 		const progress = instance.calculateProfileProgress();
@@ -181,9 +167,9 @@ describe('ProfileService', () => {
 		expect(progress).toBe(1);
 	});
 
-	it('should return 0 when no fields have any values', async () => {
+	it('should return 0 when no fields have any values', () => {
 		const mockDictionary = {};
-		const { instance } = shallow.createService();
+		const instance = TestBed.inject(ProfileService);
 		(instance as any).profileItemDictionary = mockDictionary;
 
 		const progress = instance.calculateProfileProgress();

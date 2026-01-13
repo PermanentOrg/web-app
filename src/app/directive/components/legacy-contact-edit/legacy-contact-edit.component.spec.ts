@@ -1,33 +1,26 @@
-import { Type, DebugElement } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
+import { NgModule } from '@angular/core';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { FormsModule } from '@angular/forms';
 import { LegacyContact } from '@models/directive';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { EventService } from '@shared/services/event/event.service';
-import { DirectiveModule } from '../../directive.module';
 import { MockDirectiveRepo } from '../legacy-contact-display/test-utils';
 import { MockMessageService } from '../directive-edit/test-utils';
 import { LegacyContactEditComponent } from './legacy-contact-edit.component';
 
-type Find = (
-	cssOrDirective: string | Type<any>,
-	options?: {
-		query?: string;
-	},
-) => QueryMatch<DebugElement>;
+@NgModule()
+class DummyModule {}
 
 class MockApiService {
 	public directive = new MockDirectiveRepo();
 }
 
 describe('LegacyContactEditComponent', () => {
-	let shallow: Shallow<LegacyContactEditComponent>;
-
-	const fillOutForm = (find: Find, email: string, name: string) => {
-		const emailInput = find('.legacy-contact-email')[0]
+	const fillOutForm = (email: string, name: string) => {
+		const emailInput = ngMocks.findAll('.legacy-contact-email')[0]
 			.nativeElement as HTMLInputElement;
-		const nameInput = find('.legacy-contact-name')[0]
+		const nameInput = ngMocks.findAll('.legacy-contact-name')[0]
 			.nativeElement as HTMLTextAreaElement;
 
 		emailInput.value = email;
@@ -36,71 +29,68 @@ describe('LegacyContactEditComponent', () => {
 		nameInput.dispatchEvent(new Event('input'));
 	};
 
-	beforeEach(() => {
-		shallow = new Shallow(LegacyContactEditComponent, DirectiveModule)
-			.provideMock(
-				{
-					provide: ApiService,
-					useClass: MockApiService,
-				},
-				{
-					provide: MessageService,
-					useClass: MockMessageService,
-				},
-			)
-			.provide(EventService)
-			.dontMock(EventService);
+	beforeEach(async () => {
 		MockDirectiveRepo.reset();
+		MockMessageService.reset();
+		await MockBuilder(LegacyContactEditComponent, DummyModule)
+			.keep(FormsModule, { export: true })
+			.provide({
+				provide: ApiService,
+				useClass: MockApiService,
+			})
+			.provide({
+				provide: MessageService,
+				useClass: MockMessageService,
+			})
+			.keep(EventService);
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
+	it('should create', () => {
+		const fixture = MockRender(LegacyContactEditComponent);
 
-		expect(instance).toBeTruthy();
+		expect(fixture.point.componentInstance).toBeTruthy();
 	});
 
-	it('should be able to fill out legacy contact form', async () => {
-		const { instance, find } = await shallow.render();
+	it('should be able to fill out legacy contact form', () => {
+		const fixture = MockRender(LegacyContactEditComponent);
+		const instance = fixture.point.componentInstance;
 
-		expect(find('.legacy-contact-name').length).toBe(1);
-		expect(find('.legacy-contact-email').length).toBe(1);
+		expect(ngMocks.findAll('.legacy-contact-name').length).toBe(1);
+		expect(ngMocks.findAll('.legacy-contact-email').length).toBe(1);
 
-		fillOutForm(find, 'test@example.com', 'Unit Testing');
+		fillOutForm('test@example.com', 'Unit Testing');
 
 		expect(instance.name).toBe('Unit Testing');
 		expect(instance.email).toBe('test@example.com');
 	});
 
 	it('should be able to save a legacy contact', async () => {
-		const { find, fixture } = await shallow.render();
+		const fixture = MockRender(LegacyContactEditComponent);
 
-		fillOutForm(find, 'save@example.com', 'Save Test');
+		fillOutForm('save@example.com', 'Save Test');
 
-		expect(find('.save-btn').length).toBe(1);
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		expect(ngMocks.findAll('.save-btn').length).toBe(1);
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 
-		expect(find('*[disabled]').length).toBe(3);
+		expect(ngMocks.findAll('*[disabled]').length).toBe(3);
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(find('*[disabled]').length).toBe(0);
+		expect(ngMocks.findAll('*[disabled]').length).toBe(0);
 
 		expect(MockDirectiveRepo.savedLegacyContact.email).toBe('save@example.com');
 		expect(MockDirectiveRepo.savedLegacyContact.name).toBe('Save Test');
 		expect(MockDirectiveRepo.createdLegacyContact).toBeTrue();
 	});
 
-	it('should be able to have existing legacy contact data passed in', async () => {
+	it('should be able to have existing legacy contact data passed in', () => {
 		const legacyContact: LegacyContact = {
 			name: 'Existing Contact',
 			email: 'existing@example.com',
 		};
-		const { instance } = await shallow.render({
-			bind: {
-				legacyContact,
-			},
-		});
+		const fixture = MockRender(LegacyContactEditComponent, { legacyContact });
+		const instance = fixture.point.componentInstance;
 
 		expect(instance.email).toBe('existing@example.com');
 		expect(instance.name).toBe('Existing Contact');
@@ -111,15 +101,11 @@ describe('LegacyContactEditComponent', () => {
 			name: 'Existing Contact',
 			email: 'existing@example.com',
 		};
-		const { find, fixture } = await shallow.render({
-			bind: {
-				legacyContact,
-			},
-		});
+		const fixture = MockRender(LegacyContactEditComponent, { legacyContact });
 
-		fillOutForm(find, 'existing@example.com', 'Existing Updated Contact');
+		fillOutForm('existing@example.com', 'Existing Updated Contact');
 
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		await fixture.whenStable();
 		fixture.detectChanges();
 
@@ -133,11 +119,11 @@ describe('LegacyContactEditComponent', () => {
 
 	it('should handle API errors on creation', async () => {
 		MockDirectiveRepo.throwError = true;
-		const { find, fixture } = await shallow.render();
+		const fixture = MockRender(LegacyContactEditComponent);
 
-		fillOutForm(find, 'error@example.com', 'Throw Error');
+		fillOutForm('error@example.com', 'Throw Error');
 
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		await fixture.whenStable();
 		fixture.detectChanges();
 
@@ -151,15 +137,11 @@ describe('LegacyContactEditComponent', () => {
 			name: 'Test',
 			email: 'test@example.com',
 		};
-		const { find, fixture } = await shallow.render({
-			bind: {
-				legacyContact,
-			},
-		});
+		const fixture = MockRender(LegacyContactEditComponent, { legacyContact });
 
-		fillOutForm(find, 'error@example.com', 'Throw Error');
+		fillOutForm('error@example.com', 'Throw Error');
 
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		await fixture.whenStable();
 		fixture.detectChanges();
 
@@ -168,55 +150,57 @@ describe('LegacyContactEditComponent', () => {
 	});
 
 	it('should emit an output after saving (creation)', async () => {
-		const { find, fixture, outputs } = await shallow.render();
+		const fixture = MockRender(LegacyContactEditComponent);
+		const instance = fixture.point.componentInstance;
+		const savedLegacyContactSpy = spyOn(instance.savedLegacyContact, 'emit');
 
-		fillOutForm(find, 'output@example.com', 'Test Output');
+		fillOutForm('output@example.com', 'Test Output');
 
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(outputs.savedLegacyContact.emit).toHaveBeenCalled();
+		expect(savedLegacyContactSpy).toHaveBeenCalled();
 	});
 
 	it('should emit an output after saving (update)', async () => {
-		const { find, fixture, outputs } = await shallow.render({
-			bind: {
-				legacyContact: {
-					id: '1',
-					name: 'Test Output',
-					email: 'output@example.com',
-				},
+		const fixture = MockRender(LegacyContactEditComponent, {
+			legacyContact: {
+				id: '1',
+				name: 'Test Output',
+				email: 'output@example.com',
 			},
 		});
+		const instance = fixture.point.componentInstance;
+		const savedLegacyContactSpy = spyOn(instance.savedLegacyContact, 'emit');
 
-		fillOutForm(find, 'output@example.com', 'Test Update Output');
+		fillOutForm('output@example.com', 'Test Update Output');
 
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(outputs.savedLegacyContact.emit).toHaveBeenCalled();
+		expect(savedLegacyContactSpy).toHaveBeenCalled();
 	});
 
-	it('should not allow the form to submit until all fields are filled out', async () => {
-		const { find, fixture } = await shallow.render();
+	it('should not allow the form to submit until all fields are filled out', () => {
+		const fixture = MockRender(LegacyContactEditComponent);
 
-		expect(find('.save-btn[disabled]').length).toBe(1);
+		expect(ngMocks.findAll('.save-btn[disabled]').length).toBe(1);
 
-		fillOutForm(find, '', 'Test No Submit');
+		fillOutForm('', 'Test No Submit');
 		fixture.detectChanges();
 
-		expect(find('.save-btn[disabled]').length).toBe(1);
+		expect(ngMocks.findAll('.save-btn[disabled]').length).toBe(1);
 
-		fillOutForm(find, 'no-submit@example.com', '');
+		fillOutForm('no-submit@example.com', '');
 		fixture.detectChanges();
 
-		expect(find('.save-btn[disabled]').length).toBe(1);
+		expect(ngMocks.findAll('.save-btn[disabled]').length).toBe(1);
 
-		fillOutForm(find, 'submit@example.com', 'Submit Now Works');
+		fillOutForm('submit@example.com', 'Submit Now Works');
 		fixture.detectChanges();
 
-		expect(find('.save-btn[disabled]').length).toBe(0);
+		expect(ngMocks.findAll('.save-btn[disabled]').length).toBe(0);
 	});
 });

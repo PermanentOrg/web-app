@@ -1,4 +1,4 @@
-import { Shallow } from 'shallow-render';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { A11yModule } from '@angular/cdk/a11y';
@@ -7,100 +7,99 @@ import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
 import { FormEditComponent } from './form-edit.component';
 
 describe('FormEditComponent', () => {
-	let shallow: Shallow<FormEditComponent>;
 	let deleted = false;
 	let updated = false;
 	let newTagName: string;
 	let callbackCalls: number;
 	let subject: Subject<number>;
 
-	const defaultRender = async (name: string = 'test') =>
-		await shallow.render(
-			'<pr-metadata-form-edit [displayName]="name" [delete]="delete" [save]="save" [closeWindowEvent]="subject"></pr-metadata-form-edit>',
-			{
-				bind: {
-					name,
-					delete: async () => {
-						callbackCalls += 1;
-						deleted = true;
-					},
-					save: async (n: string) => {
-						callbackCalls += 1;
-						updated = true;
-						newTagName = n;
-					},
-					subject,
-				},
-			},
-		);
-
-	beforeEach(() => {
+	beforeEach(async () => {
 		deleted = false;
 		updated = false;
 		newTagName = null;
 		callbackCalls = 0;
 		subject = new Subject<number>();
-		shallow = new Shallow(FormEditComponent, ManageMetadataModule)
-			.dontMock(A11yModule)
-			.import(FormsModule)
-			.dontMock(MetadataValuePipe);
+		await MockBuilder(FormEditComponent, ManageMetadataModule)
+			.keep(A11yModule)
+			.keep(FormsModule)
+			.keep(MetadataValuePipe);
 	});
 
-	it('should exist', async () => {
-		const { element } = await shallow.render();
+	function defaultRender(name: string = 'test') {
+		return MockRender(
+			'<pr-metadata-form-edit [displayName]="name" [delete]="delete" [save]="save" [closeWindowEvent]="subject"></pr-metadata-form-edit>',
+			{
+				name,
+				delete: async () => {
+					callbackCalls += 1;
+					deleted = true;
+				},
+				save: async (n: string) => {
+					callbackCalls += 1;
+					updated = true;
+					newTagName = n;
+				},
+				subject,
+			},
+		);
+	}
 
-		expect(element).not.toBeNull();
+	it('should exist', () => {
+		const fixture = MockRender(FormEditComponent);
+
+		expect(fixture.point.nativeElement).not.toBeNull();
 	});
 
-	it('should print tag value', async () => {
-		const { find } = await defaultRender();
+	it('should print tag value', () => {
+		defaultRender();
 
-		expect(find('.value-name').nativeElement.innerText).toBe('test');
+		expect(ngMocks.find('.value-name').nativeElement.innerText).toBe('test');
 	});
 
-	it('should have a dropdown edit/delete menu', async () => {
-		const { find, fixture } = await defaultRender();
+	it('should have a dropdown edit/delete menu', () => {
+		const fixture = defaultRender();
 
-		expect(find('.edit-delete-menu').length).toBe(0);
-		expect(find('.edit-delete-trigger').length).toBe(1);
-		find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+		expect(ngMocks.findAll('.edit-delete-menu').length).toBe(0);
+		expect(ngMocks.findAll('.edit-delete-trigger').length).toBe(1);
+		ngMocks.findAll('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 
-		expect(find('.edit-delete-menu').length).toBe(1);
+		expect(ngMocks.findAll('.edit-delete-menu').length).toBe(1);
 	});
 
 	it('should be call the delete function', async () => {
-		const { find, fixture } = await defaultRender();
+		const fixture = defaultRender();
 
-		expect(find('.delete').length).toBe(0);
-		find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+		expect(ngMocks.findAll('.delete').length).toBe(0);
+		ngMocks.findAll('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 
-		expect(find('.delete').length).toBe(1);
-		find('.delete')[0].triggerEventHandler('click', {});
+		expect(ngMocks.findAll('.delete').length).toBe(1);
+		ngMocks.findAll('.delete')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 		await fixture.whenStable();
 
 		expect(deleted).toBeTrue();
 	});
 
-	it('should be able to open the value editor', async () => {
-		const { instance, find, fixture } = await defaultRender('123');
+	it('should be able to open the value editor', () => {
+		const fixture = defaultRender('123');
+		const instance = ngMocks.findInstance(FormEditComponent);
 
-		expect(find('.value-editor').length).toBe(0);
-		expect(find('.edit').length).toBe(0);
-		find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+		expect(ngMocks.findAll('.value-editor').length).toBe(0);
+		expect(ngMocks.findAll('.edit').length).toBe(0);
+		ngMocks.findAll('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 
-		expect(find('.edit').length).toBe(1);
-		find('.edit')[0].triggerEventHandler('click', {});
+		expect(ngMocks.findAll('.edit').length).toBe(1);
+		ngMocks.findAll('.edit')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 
-		expect(find('.value-line').length).toBe(0);
-		expect(find('.edit-delete-menu').length).toBe(0);
-		expect(find('.value-editor').length).toBe(1);
-		expect(find('.value-editor input').length).toBe(1);
-		const input = find('.value-editor input');
+		expect(ngMocks.findAll('.value-line').length).toBe(0);
+		expect(ngMocks.findAll('.edit-delete-menu').length).toBe(0);
+		expect(ngMocks.findAll('.value-editor').length).toBe(1);
+		expect(ngMocks.findAll('.value-editor input').length).toBe(1);
+		const input = ngMocks.find('.value-editor input');
 		input.nativeElement.value = 'Test';
 		input.triggerEventHandler('input', { target: input.nativeElement });
 
@@ -109,32 +108,35 @@ describe('FormEditComponent', () => {
 	});
 
 	it('should be able to edit a value', async () => {
-		const { find, fixture, instance } = await defaultRender('testValue');
-		find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+		const fixture = defaultRender('testValue');
+		const instance = ngMocks.findInstance(FormEditComponent);
+
+		ngMocks.findAll('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
-		find('.edit')[0].triggerEventHandler('click', {});
+		ngMocks.findAll('.edit')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
-		const input = find('.value-editor input');
+		const input = ngMocks.find('.value-editor input');
 
 		expect(instance.newValueName).toBe('testValue');
 		input.nativeElement.value = 'potato';
 		input.triggerEventHandler('input', { target: input.nativeElement });
-		find('form').triggerEventHandler('submit', {});
+		ngMocks.find('form').triggerEventHandler('submit', {});
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(find('.value-editor').length).toBe(0);
+		expect(ngMocks.findAll('.value-editor').length).toBe(0);
 		expect(updated).toBeTrue();
 		expect(newTagName).toBe('potato');
 		expect(instance.newValueName).toBe('potato');
 	});
 
 	it('should not send multiple delete calls', async () => {
-		const { find, fixture } = await defaultRender();
-		find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+		const fixture = defaultRender();
+
+		ngMocks.findAll('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
-		find('.delete')[0].triggerEventHandler('click', {});
-		find('.delete')[0].triggerEventHandler('click', {});
+		ngMocks.findAll('.delete')[0].triggerEventHandler('click', {});
+		ngMocks.findAll('.delete')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -142,48 +144,52 @@ describe('FormEditComponent', () => {
 	});
 
 	it('should not send multiple save calls', async () => {
-		const { find, fixture } = await defaultRender();
-		find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+		const fixture = defaultRender();
+
+		ngMocks.findAll('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
-		find('.edit')[0].triggerEventHandler('click', {});
+		ngMocks.findAll('.edit')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
-		const input = find('.value-editor input');
+		const input = ngMocks.find('.value-editor input');
 		input.nativeElement.value = 'potato';
 		input.triggerEventHandler('input', { target: input.nativeElement });
-		find('form').triggerEventHandler('submit', {});
-		find('form').triggerEventHandler('submit', {});
+		ngMocks.find('form').triggerEventHandler('submit', {});
+		ngMocks.find('form').triggerEventHandler('submit', {});
 		await fixture.whenStable();
 		fixture.detectChanges();
 
 		expect(callbackCalls).toBe(1);
 	});
 
-	it('should be able to subscribe to an event that closes the edit dialog', async () => {
-		const { find, fixture } = await defaultRender();
-		find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+	it('should be able to subscribe to an event that closes the edit dialog', () => {
+		const fixture = defaultRender();
+
+		ngMocks.findAll('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 		subject.next(Infinity);
 		fixture.detectChanges();
 
-		expect(find('.edit-delete-menu').length).toBe(0);
+		expect(ngMocks.findAll('.edit-delete-menu').length).toBe(0);
 	});
 
-	it('should emit an event that closes other edit dialogs when another is opened', async () => {
+	it('should emit an event that closes other edit dialogs when another is opened', () => {
 		let emitted = false;
 		subject.subscribe(() => {
 			emitted = true;
 		});
-		const { find } = await defaultRender();
-		find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+		defaultRender();
+
+		ngMocks.findAll('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 
 		expect(emitted).toBeTrue();
 	});
 
-	it('should open the editor directly if double clicked', async () => {
-		const { find, fixture } = await defaultRender();
-		find('.value-line').triggerEventHandler('dblclick', {});
+	it('should open the editor directly if double clicked', () => {
+		const fixture = defaultRender();
+
+		ngMocks.find('.value-line').triggerEventHandler('dblclick', {});
 		fixture.detectChanges();
 
-		expect(find('.value-editor input').length).toBe(1);
+		expect(ngMocks.findAll('.value-editor input').length).toBe(1);
 	});
 });

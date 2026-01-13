@@ -1,48 +1,49 @@
-import { Shallow } from 'shallow-render';
-import { OnboardingModule } from '../../../onboarding.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { goals } from '../../../shared/onboarding-screen';
 import { GlamGoalsScreenComponent } from './glam-goals-screen.component';
 
 describe('GlamGoalsScreenComponent', () => {
-	let shallow: Shallow<GlamGoalsScreenComponent>;
+	let component: GlamGoalsScreenComponent;
+	let fixture: ComponentFixture<GlamGoalsScreenComponent>;
 
 	beforeEach(async () => {
-		shallow = new Shallow(GlamGoalsScreenComponent, OnboardingModule);
+		await TestBed.configureTestingModule({
+			declarations: [GlamGoalsScreenComponent],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
 
 		spyOn(sessionStorage, 'getItem').and.callFake((key) => {
-			const store = {
+			const store: { [key: string]: string } = {
 				goals: JSON.stringify(['Mock Goal']),
 			};
 			return store[key] || null;
 		});
 
 		spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {});
+
+		fixture = TestBed.createComponent(GlamGoalsScreenComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
+	it('should create', () => {
+		expect(component).toBeTruthy();
 	});
 
-	it('should initialize goals from shared/onboarding-screen', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance.goals).toEqual(goals);
+	it('should initialize goals from shared/onboarding-screen', () => {
+		expect(component.goals).toEqual(goals);
 	});
 
-	it('should initialize selectedGoals from sessionStorage', async () => {
-		const { instance } = await shallow.render();
-
+	it('should initialize selectedGoals from sessionStorage', () => {
 		expect(sessionStorage.getItem).toHaveBeenCalledWith('goals');
-		expect(instance.selectedGoals).toEqual(['Mock Goal']);
+		expect(component.selectedGoals).toEqual(['Mock Goal']);
 	});
 
-	it('should update sessionStorage when addGoal is called', async () => {
-		const { instance } = await shallow.render();
+	it('should update sessionStorage when addGoal is called', () => {
 		const goal = 'Test Goal';
 
-		instance.addGoal(goal);
+		component.addGoal(goal);
 
 		expect(sessionStorage.setItem).toHaveBeenCalledWith(
 			'goals',
@@ -50,65 +51,61 @@ describe('GlamGoalsScreenComponent', () => {
 		);
 	});
 
-	it('should add goal to selectedGoals when addGoal is called', async () => {
-		const { instance } = await shallow.render();
+	it('should add goal to selectedGoals when addGoal is called', () => {
 		const goal = 'Test Goal';
-		instance.addGoal(goal);
+		component.addGoal(goal);
 
-		expect(instance.selectedGoals).toContain(goal);
+		expect(component.selectedGoals).toContain(goal);
 	});
 
-	it('should remove goal from selectedGoals when addGoal is called twice', async () => {
-		const { instance } = await shallow.render();
+	it('should remove goal from selectedGoals when addGoal is called twice', () => {
 		const goal = 'Test Goal';
-		instance.addGoal(goal);
-		instance.addGoal(goal);
+		component.addGoal(goal);
+		component.addGoal(goal);
 
-		expect(instance.selectedGoals).not.toContain(goal);
+		expect(component.selectedGoals).not.toContain(goal);
 	});
 
-	it('should emit backToNameArchiveOutput when backToNameArchive is called', async () => {
-		const { instance, outputs } = await shallow.render();
-		instance.backToNameArchive();
+	it('should emit backToNameArchiveOutput when backToNameArchive is called', () => {
+		spyOn(component.goalsOutput, 'emit');
+		component.backToNameArchive();
 
-		expect(outputs.goalsOutput.emit).toHaveBeenCalledWith({
+		expect(component.goalsOutput.emit).toHaveBeenCalledWith({
 			screen: 'name-archive',
 			goals: ['Mock Goal'],
 		});
 	});
 
-	it('should emit goToNextReasonsOutput with selectedGoals when goToNextReasons is called', async () => {
-		const { instance, outputs } = await shallow.render();
+	it('should emit goToNextReasonsOutput with selectedGoals when goToNextReasons is called', () => {
+		spyOn(component.goalsOutput, 'emit');
 		const goal = 'Test Goal';
-		instance.addGoal(goal);
-		instance.goToNextReasons();
+		component.addGoal(goal);
+		component.goToNextReasons();
 
-		expect(outputs.goalsOutput.emit).toHaveBeenCalledWith({
+		expect(component.goalsOutput.emit).toHaveBeenCalledWith({
 			screen: 'reasons',
 			goals: ['Mock Goal', goal],
 		});
 	});
 
-	it('should clear selectedGoals and update sessionStorage when skipStep is called', async () => {
-		const { instance } = await shallow.render();
+	it('should clear selectedGoals and update sessionStorage when skipStep is called', () => {
+		expect(component.selectedGoals).toEqual(['Mock Goal']);
 
-		expect(instance.selectedGoals).toEqual(['Mock Goal']);
+		component.skipStep();
 
-		instance.skipStep();
-
-		expect(instance.selectedGoals).toEqual([]);
+		expect(component.selectedGoals).toEqual([]);
 		expect(sessionStorage.setItem).toHaveBeenCalledWith(
 			'goals',
 			JSON.stringify([]),
 		);
 	});
 
-	it('should emit goalsOutput with empty goals when skipStep is called', async () => {
-		const { instance, outputs } = await shallow.render();
+	it('should emit goalsOutput with empty goals when skipStep is called', () => {
+		spyOn(component.goalsOutput, 'emit');
 
-		instance.skipStep();
+		component.skipStep();
 
-		expect(outputs.goalsOutput.emit).toHaveBeenCalledWith({
+		expect(component.goalsOutput.emit).toHaveBeenCalledWith({
 			screen: 'reasons',
 			goals: [],
 		});

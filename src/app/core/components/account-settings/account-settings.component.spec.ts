@@ -1,10 +1,13 @@
-import { Shallow } from 'shallow-render';
 import { NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { EventService } from '@shared/services/event/event.service';
 import { AccountVO } from '@models/account-vo';
 import { AccountSettingsComponent } from './account-settings.component';
 
@@ -24,39 +27,54 @@ class MockAccountService {
 }
 
 describe('AccountSettingsComponent', () => {
-	let shallow: Shallow<AccountSettingsComponent>;
-
-	beforeEach(() => {
-		shallow = new Shallow(AccountSettingsComponent, DummyModule)
-			.provide(HttpClientTestingModule)
-			.provideMock(
-				{ provide: AccountService, useClass: MockAccountService },
-				{ provide: ActivatedRoute, useValue: {} },
-				{
-					provide: ApiService,
-					useValue: { account: { update: async () => new AccountVO({}) } },
+	beforeEach(async () => {
+		await MockBuilder(AccountSettingsComponent, DummyModule)
+			.keep(HttpClientTestingModule, { export: true })
+			.provide({ provide: AccountService, useClass: MockAccountService })
+			.provide({ provide: ActivatedRoute, useValue: {} })
+			.provide({ provide: Router, useValue: { navigate: async () => {} } })
+			.provide({
+				provide: PrConstantsService,
+				useValue: {
+					getCountries: () => [],
+					getStates: () => ({}),
 				},
-				{
-					provide: MessageService,
-					useValue: { showMessage(_: any) {}, showError(_: any) {} },
-				},
-			);
+			})
+			.provide({
+				provide: EventService,
+				useValue: { dispatch: () => {} },
+			})
+			.provide({
+				provide: ApiService,
+				useValue: { account: { update: async () => new AccountVO({}) } },
+			})
+			.provide({
+				provide: MessageService,
+				useValue: { showMessage(_: any) {}, showError(_: any) {} },
+			});
 	});
 
-	it('exists', async () => {
-		const { instance } = await shallow.render();
+	it('exists', () => {
+		const fixture = MockRender(AccountSettingsComponent);
 
-		expect(instance).toBeTruthy();
+		expect(fixture.point.componentInstance).toBeTruthy();
 	});
 
 	it('can save an account property', async () => {
-		const { instance, inject } = await shallow.render();
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
 
-		const accountService = inject(AccountService);
+		const accountService = TestBed.inject(AccountService);
 		const setAccountSpy = spyOn(accountService, 'setAccount').and.callThrough();
-		const accountUpdateSpy = spyOn(inject(ApiService).account, 'update');
-		const successfulMessageSpy = spyOn(inject(MessageService), 'showMessage');
-		const errorMessageSpy = spyOn(inject(MessageService), 'showError');
+		const accountUpdateSpy = spyOn(
+			TestBed.inject(ApiService).account,
+			'update',
+		);
+		const successfulMessageSpy = spyOn(
+			TestBed.inject(MessageService),
+			'showMessage',
+		);
+		const errorMessageSpy = spyOn(TestBed.inject(MessageService), 'showError');
 
 		try {
 			await instance.onSaveProfileInfo('fullName', 'New Name');
@@ -73,16 +91,20 @@ describe('AccountSettingsComponent', () => {
 	});
 
 	it('should reset an account property if an error occurs', async () => {
-		const { instance, inject } = await shallow.render();
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
 
-		const accountService = inject(AccountService);
+		const accountService = TestBed.inject(AccountService);
 		const setAccountSpy = spyOn(accountService, 'setAccount').and.callThrough();
 		const accountUpdateSpy = spyOn(
-			inject(ApiService).account,
+			TestBed.inject(ApiService).account,
 			'update',
 		).and.rejectWith({});
-		const successfulMessageSpy = spyOn(inject(MessageService), 'showMessage');
-		const errorMessageSpy = spyOn(inject(MessageService), 'showError');
+		const successfulMessageSpy = spyOn(
+			TestBed.inject(MessageService),
+			'showMessage',
+		);
+		const errorMessageSpy = spyOn(TestBed.inject(MessageService), 'showError');
 
 		try {
 			await instance.onSaveProfileInfo('fullName', 'New Name');
@@ -98,26 +120,28 @@ describe('AccountSettingsComponent', () => {
 		}
 	});
 
-	it('should disable "Verify Phone Number" button if primaryPhone is empty', async () => {
-		const { find, instance, fixture } = await shallow.render();
+	it('should disable "Verify Phone Number" button if primaryPhone is empty', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.account.primaryPhone = '';
 		instance.account.phoneStatus = '';
 		fixture.detectChanges();
 
-		const button = find('.verify-phone-button');
+		const button = ngMocks.find('.verify-phone-button');
 
 		expect(button.properties.disabled).toBeTrue();
 	});
 
-	it('should enable "Verify Phone Number" button if primaryPhone exists', async () => {
-		const { find, instance, fixture } = await shallow.render();
+	it('should enable "Verify Phone Number" button if primaryPhone exists', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.account.primaryPhone = '1234567890';
 		instance.account.phoneStatus = '';
 		fixture.detectChanges();
 
-		const button = find('.verify-phone-button');
+		const button = ngMocks.find('.verify-phone-button');
 
 		expect(button.properties.disabled).toBeFalse();
 	});

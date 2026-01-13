@@ -1,7 +1,7 @@
+import { NgModule, EventEmitter } from '@angular/core';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+
 import { UploadService } from '@core/services/upload/upload.service';
-import { CoreModule } from '@core/core.module';
-import { EventEmitter } from '@angular/core';
-import { Shallow } from 'shallow-render';
 import {
 	UploadProgressEvent,
 	UploadSessionStatus,
@@ -9,6 +9,9 @@ import {
 import { UploadItem } from '@core/services/upload/uploadItem';
 import { FolderVO } from '@models/index';
 import { UploadProgressComponent } from './upload-progress.component';
+
+@NgModule()
+class DummyModule {}
 
 class MockUploadSession {
 	public progress = new EventEmitter<UploadProgressEvent>();
@@ -22,30 +25,29 @@ const mockUploadService = {
 };
 
 describe('UploadProgressComponent', () => {
-	let shallow: Shallow<UploadProgressComponent>;
-
-	beforeEach(() => {
-		shallow = new Shallow(UploadProgressComponent, CoreModule).mock(
-			UploadService,
-			mockUploadService,
-		);
+	beforeEach(async () => {
+		await MockBuilder(UploadProgressComponent, DummyModule).provide({
+			provide: UploadService,
+			useValue: mockUploadService,
+		});
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
+	it('should create', () => {
+		const fixture = MockRender(UploadProgressComponent);
 
-		expect(instance).toBeTruthy();
+		expect(fixture.point.componentInstance).toBeTruthy();
 	});
 
-	it('should become visible when show() is called', async () => {
-		const { instance } = await shallow.render();
+	it('should become visible when show() is called', () => {
+		const fixture = MockRender(UploadProgressComponent);
+		const instance = fixture.point.componentInstance;
 		instance.show();
 
 		expect(instance.visible).toBe(true);
 	});
 
-	it('should display the correct file name and the folder when dragging the file into a folder', async () => {
-		const { find, fixture } = await shallow.render();
+	it('should display the correct file name and the folder when dragging the file into a folder', () => {
+		const fixture = MockRender(UploadProgressComponent);
 
 		const mockContent = new Uint8Array(10000);
 		const progressEvent = {
@@ -65,19 +67,19 @@ describe('UploadProgressComponent', () => {
 
 		fixture.detectChanges();
 
-		expect(find('.current-file').nativeElement.textContent.trim()).toBe(
+		expect(ngMocks.find('.current-file').nativeElement.textContent.trim()).toBe(
 			`Uploading ${progressEvent.item.file.name} to ${progressEvent.item.parentFolder.displayName}`,
 		);
 
-		const fileCountElements = find('.file-count strong');
+		const fileCountElements = ngMocks.findAll('.file-count strong');
 
 		expect(fileCountElements[0].nativeElement.textContent).toEqual('1');
 
 		expect(fileCountElements[1].nativeElement.textContent).toEqual('5');
 	});
 
-	it('should display the correct file name, the target folder and the current folder when dragging a file  nested into a folder over a folder', async () => {
-		const { find, fixture } = await shallow.render();
+	it('should display the correct file name, the target folder and the current folder when dragging a file nested into a folder over a folder', () => {
+		const fixture = MockRender(UploadProgressComponent);
 
 		const mockContent = new Uint8Array(10000);
 		const progressEvent = {
@@ -97,11 +99,11 @@ describe('UploadProgressComponent', () => {
 
 		fixture.detectChanges();
 
-		expect(find('.current-file').nativeElement.textContent.trim()).toBe(
+		expect(ngMocks.find('.current-file').nativeElement.textContent.trim()).toBe(
 			`Uploading ${progressEvent.item.file.name} to testfolder/${progressEvent.item.parentFolder.displayName}`,
 		);
 
-		const fileCountElements = find('.file-count strong');
+		const fileCountElements = ngMocks.findAll('.file-count strong');
 
 		expect(fileCountElements[0].nativeElement.textContent).toEqual('1');
 

@@ -1,6 +1,6 @@
+import { TestBed } from '@angular/core/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
-import { Shallow } from 'shallow-render';
 import { Observable } from 'rxjs';
 import { UploadService } from '@core/services/upload/upload.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -9,123 +9,173 @@ import { AuthResponse } from '@shared/services/api/index.repo';
 import { AccountVO, FolderVO, RecordVO } from '@root/app/models';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { HttpService } from '@shared/services/http/http.service';
-import { AppModule } from '../../../../app.module';
+import { LocationStrategy } from '@angular/common';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { Subject } from 'rxjs';
 import { StorageService } from '../../storage/storage.service';
 import { EditService } from '../../../../core/services/edit/edit.service';
+import { EventService } from '../../event/event.service';
+
+const mockApiService = {
+	account: {
+		signUp: (
+			email: string,
+			fullName: string,
+			password: string,
+			passwordConfirm: string,
+			agreed: boolean,
+			optIn: boolean,
+			createDefaultArchive: boolean,
+			phone?: string,
+			inviteCode?: string,
+		) =>
+			new Observable((observer) => {
+				observer.next(
+					new AccountVO({
+						primaryEmail: 'test@permanent.org',
+						fullName: 'Test User',
+					}),
+				);
+				observer.complete();
+			}),
+		get: async (account: AccountVO) => await Promise.reject({}),
+	},
+	auth: {
+		verify: (account, token, type) =>
+			new Observable((observer) => {
+				observer.next(
+					new AuthResponse({
+						isSuccessful: true,
+						Results: [
+							{
+								data: [
+									{
+										AccountVO: {
+											primaryEmail: 'test@permanent.org',
+											fullName: 'Test User',
+											emailStatus: 'status.auth.verified',
+											phoneStatus: 'status.auth.verified',
+										},
+									},
+								],
+							},
+						],
+					}),
+				);
+				observer.complete();
+			}),
+		logIn: (
+			email: string,
+			password: string,
+			rememberMe: boolean,
+			keepLoggedIn: boolean,
+		) =>
+			new Observable((observer) => {
+				observer.next(
+					new AuthResponse({
+						isSuccessful: true,
+						Results: [
+							{
+								data: [
+									{
+										AccountVO: {
+											primaryEmail: 'test@permanent.org',
+											fullName: 'Test User',
+										},
+									},
+								],
+							},
+						],
+					}),
+				);
+				observer.complete();
+			}),
+	},
+};
+
+const mockRouter = {
+	navigate: async (route: string[]) => await Promise.resolve(true),
+};
+
+const mockStorageService = {
+	local: {
+		get: () => {},
+		set: () => {},
+	},
+	session: {
+		get: () => {},
+		set: () => {},
+	},
+};
+
+const mockUploadService = {
+	uploadFiles: async (parentFolder: FolderVO, files: File[]) =>
+		await Promise.resolve(true),
+};
+
+const mockEditService = {
+	deleteItems: async (items: any[]) => await Promise.resolve(true),
+};
+
+const mockCookieService = {
+	set: (key: string, value: string) => {},
+};
+
+const mockDialogCdkService = {
+	open: () => {},
+};
+
+const mockEventService = {
+	dispatch: () => {},
+};
+
+const mockLocationStrategy = {
+	path: () => '/app/private',
+};
 
 describe('AccountService', () => {
-	let shallow: Shallow<AccountService>;
+	let instance: AccountService;
+	let uploadService: UploadService;
+	let editService: EditService;
+	let httpV2Service: HttpV2Service;
+	let httpService: HttpService;
 
-	beforeEach(() => {
-		shallow = new Shallow(AccountService, AppModule)
-			.mock(ApiService, {
-				account: {
-					signUp: (
-						email: string,
-						fullName: string,
-						password: string,
-						passwordConfirm: string,
-						agreed: boolean,
-						optIn: boolean,
-						createDefaultArchive: boolean,
-						phone?: string,
-						inviteCode?: string,
-					) =>
-						new Observable((observer) => {
-							observer.next(
-								new AccountVO({
-									primaryEmail: 'test@permanent.org',
-									fullName: 'Test User',
-								}),
-							);
-							observer.complete();
-						}),
-					get: async (account: AccountVO) => await Promise.reject({}),
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			providers: [
+				AccountService,
+				{ provide: ApiService, useValue: mockApiService },
+				{ provide: Router, useValue: mockRouter },
+				{ provide: StorageService, useValue: mockStorageService },
+				{ provide: UploadService, useValue: mockUploadService },
+				{ provide: EditService, useValue: mockEditService },
+				{ provide: CookieService, useValue: mockCookieService },
+				{ provide: DialogCdkService, useValue: mockDialogCdkService },
+				{ provide: EventService, useValue: mockEventService },
+				{ provide: LocationStrategy, useValue: mockLocationStrategy },
+				{
+					provide: HttpV2Service,
+					useValue: { tokenExpired: new Subject<void>() },
 				},
-				auth: {
-					verify: (account, token, type) =>
-						new Observable((observer) => {
-							observer.next(
-								new AuthResponse({
-									isSuccessful: true,
-									Results: [
-										{
-											data: [
-												{
-													AccountVO: {
-														primaryEmail: 'test@permanent.org',
-														fullName: 'Test User',
-														emailStatus: 'status.auth.verified',
-														phoneStatus: 'status.auth.verified',
-													},
-												},
-											],
-										},
-									],
-								}),
-							);
-							observer.complete();
-						}),
-					logIn: (
-						email: string,
-						password: string,
-						rememberMe: boolean,
-						keepLoggedIn: boolean,
-					) =>
-						new Observable((observer) => {
-							observer.next(
-								new AuthResponse({
-									isSuccessful: true,
-									Results: [
-										{
-											data: [
-												{
-													AccountVO: {
-														primaryEmail: 'test@permanent.org',
-														fullName: 'Test User',
-													},
-												},
-											],
-										},
-									],
-								}),
-							);
-							observer.complete();
-						}),
+				{
+					provide: HttpService,
+					useValue: { tokenExpired: new Subject<void>() },
 				},
-			})
-			.mock(Router, {
-				navigate: async (route: string[]) => await Promise.resolve(true),
-			})
-			.mock(StorageService, {
-				local: {
-					get: () => {},
-					set: () => {},
-				},
-				session: {
-					get: () => {},
-					set: () => {},
-				},
-			})
-			.mock(UploadService, {
-				uploadFiles: async (parentFolder: FolderVO, files: File[]) =>
-					await Promise.resolve(true),
-			})
-			.mock(EditService, {
-				deleteItems: async (items: any[]) => await Promise.resolve(true),
-			})
-			.mock(CookieService, { set: (key: string, value: string) => {} });
+			],
+		}).compileComponents();
+
+		instance = TestBed.inject(AccountService);
+		uploadService = TestBed.inject(UploadService);
+		editService = TestBed.inject(EditService);
+		httpV2Service = TestBed.inject(HttpV2Service);
+		httpService = TestBed.inject(HttpService);
 	});
 
 	it('should be created', () => {
-		const { instance } = shallow.createService();
-
 		expect(instance).toBeTruthy();
 	});
 
 	it('should make the correct API calls during signUp', async () => {
-		const { instance, inject } = shallow.createService();
-		inject(ApiService);
 		const account = await instance.signUp(
 			'test@permanent.org',
 			'Test User',
@@ -142,8 +192,6 @@ describe('AccountService', () => {
 	});
 
 	it('should pass along errors encountered during signUp', async () => {
-		const { instance, inject } = shallow.createService();
-		inject(ApiService);
 		const expectedError = 'Out of cheese error. Redo from start';
 		try {
 			await instance.signUp(
@@ -163,8 +211,6 @@ describe('AccountService', () => {
 	});
 
 	it('should update the account storage when a file is uploaded successfully', async () => {
-		const { instance, inject } = shallow.createService();
-		const uploadService = inject(UploadService);
 		const account = new AccountVO({
 			spaceLeft: 100000,
 		});
@@ -177,8 +223,6 @@ describe('AccountService', () => {
 	});
 
 	it('should add storage back after deleting an item', async () => {
-		const { instance, inject } = shallow.createService();
-		const editService = inject(EditService);
 		const account = new AccountVO({
 			spaceLeft: 100000,
 		});
@@ -203,17 +247,15 @@ describe('AccountService', () => {
 
 	describe('Log out on token expiration', () => {
 		it('HttpV2Service', async () => {
-			const { instance, inject } = shallow.createService();
 			const logOut = spyOn(instance, 'logOut').and.rejectWith(false);
-			inject(HttpV2Service).tokenExpired.next();
+			httpV2Service.tokenExpired.next();
 
 			expect(logOut).toHaveBeenCalled();
 		});
 
 		it('HttpService', async () => {
-			const { instance, inject } = shallow.createService();
 			const spy = spyOn(instance, 'logOut').and.rejectWith(false);
-			inject(HttpService).tokenExpired.next();
+			httpService.tokenExpired.next();
 
 			expect(spy).toHaveBeenCalled();
 		});

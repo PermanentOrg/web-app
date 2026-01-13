@@ -1,10 +1,14 @@
-import { Shallow } from 'shallow-render';
-import { CoreModule } from '@core/core.module';
+import { NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender } from 'ng-mocks';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { DialogRef } from '@angular/cdk/dialog';
 import { EventService } from '@shared/services/event/event.service';
 import { StorageDialogComponent } from './storage-dialog.component';
+
+@NgModule()
+class DummyModule {}
 
 class MockDialogRef {
 	close(_?: any): void {
@@ -13,54 +17,60 @@ class MockDialogRef {
 }
 
 describe('StorageDialogComponent', () => {
-	let shallow: Shallow<StorageDialogComponent>;
 	let mockActivatedRoute;
 	const paramMap = new BehaviorSubject(convertToParamMap({}));
 	const queryParamMap = new BehaviorSubject(convertToParamMap({}));
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		mockActivatedRoute = {
 			paramMap: paramMap.asObservable(),
 			queryParamMap: queryParamMap.asObservable(),
 			snapshot: { fragment: null },
 		};
-		shallow = new Shallow(StorageDialogComponent, CoreModule)
-			.provideMock({ provide: DialogRef, useClass: MockDialogRef })
-			.provideMock([{ provide: ActivatedRoute, useValue: mockActivatedRoute }]);
+		await MockBuilder(StorageDialogComponent, DummyModule)
+			.provide({ provide: DialogRef, useClass: MockDialogRef })
+			.provide({ provide: ActivatedRoute, useValue: mockActivatedRoute })
+			.keep(EventService);
 	});
 
-	it('should exist', async () => {
-		const { element } = await shallow.render();
+	it('should exist', () => {
+		const fixture = MockRender(StorageDialogComponent);
 
-		expect(element).not.toBeNull();
+		expect(fixture.point.nativeElement).not.toBeNull();
 	});
 
-	it('should set the tab if the URL fragment matches a tab', async () => {
+	it('should set the tab if the URL fragment matches a tab', () => {
 		mockActivatedRoute.snapshot.fragment = 'promo';
-		const { instance } = await shallow.render();
+		const fixture = MockRender(StorageDialogComponent);
 
-		expect(instance.activeTab).toBe('promo');
+		expect(fixture.point.componentInstance.activeTab).toBe('promo');
 	});
 
-	it('should not set the tab if the URL fragment is invalid', async () => {
+	it('should not set the tab if the URL fragment is invalid', () => {
 		mockActivatedRoute.snapshot.fragment = 'not-a-real-tab';
-		const { instance } = await shallow.render();
+		const fixture = MockRender(StorageDialogComponent);
 
-		expect(instance.activeTab).not.toBe(mockActivatedRoute.snapshot.fragment);
+		expect(fixture.point.componentInstance.activeTab).not.toBe(
+			mockActivatedRoute.snapshot.fragment,
+		);
 	});
 
-	it('can close the dialog', async () => {
-		const { instance, inject } = await shallow.render();
-		const spy = spyOn(inject(DialogRef), 'close');
+	it('can close the dialog', () => {
+		const fixture = MockRender(StorageDialogComponent);
+		const instance = fixture.point.componentInstance;
+		const dialogRef = TestBed.inject(DialogRef);
+		const spy = spyOn(dialogRef, 'close');
 		instance.onDoneClick();
 
 		expect(spy).toHaveBeenCalled();
 	});
 
 	it('should emit an event when the promo tab is selected', async () => {
-		const { fixture, instance, inject } = await shallow.render();
+		const fixture = MockRender(StorageDialogComponent);
+		const instance = fixture.point.componentInstance;
+		const eventService = TestBed.inject(EventService);
 		let eventCalled = false;
-		inject(EventService).addObserver({
+		eventService.addObserver({
 			async update() {
 				eventCalled = true;
 			},

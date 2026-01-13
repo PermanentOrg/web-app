@@ -10,7 +10,7 @@ describe('ArchivePayerComponent', () => {
 	let fixture: ComponentFixture<ArchivePayerComponent>;
 	let mockAccountService;
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		mockAccountService = {
 			getAccount: jasmine
 				.createSpy('getAccount')
@@ -19,9 +19,7 @@ describe('ArchivePayerComponent', () => {
 				.createSpy('getArchive')
 				.and.returnValue({ accessRole: 'access.role.manager' }),
 		};
-	});
 
-	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			declarations: [ArchivePayerComponent],
 			providers: [

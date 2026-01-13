@@ -1,10 +1,18 @@
-import { Shallow } from 'shallow-render';
+import { NgModule } from '@angular/core';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import {
+	ReactiveFormsModule,
+	FormsModule,
+	UntypedFormBuilder,
+} from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { CoreModule } from '@core/core.module';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TwoFactorAuthComponent } from './two-factor-auth.component';
+
+@NgModule()
+class DummyModule {}
 
 const mockApiService = {
 	idpuser: {
@@ -20,25 +28,32 @@ const mockApiService = {
 };
 
 describe('TwoFactorAuthComponent', () => {
-	let shallow: Shallow<TwoFactorAuthComponent>;
+	beforeEach(
+		async () =>
+			await MockBuilder(TwoFactorAuthComponent, DummyModule)
+				.keep(HttpClientTestingModule, { export: true })
+				.keep(ReactiveFormsModule, { export: true })
+				.keep(FormsModule, { export: true })
+				.keep(UntypedFormBuilder)
+				.provide({
+					provide: MessageService,
+					useValue: { showError: () => {} },
+				})
+				.provide({
+					provide: ApiService,
+					useValue: mockApiService,
+				}),
+	);
 
-	beforeEach(async () => {
-		shallow = new Shallow(TwoFactorAuthComponent, CoreModule)
-			.mock(MessageService, {
-				showError: () => {},
-			})
-			.mock(ApiService, mockApiService)
-			.import(HttpClientTestingModule);
+	it('should create', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+
+		expect(fixture.point.componentInstance).toBeTruthy();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
-	});
-
-	it('should remove method and update form state', async () => {
-		const { instance } = await shallow.render();
+	it('should remove method and update form state', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 		const method = {
 			methodId: 'email',
 			method: 'email',
@@ -51,32 +66,36 @@ describe('TwoFactorAuthComponent', () => {
 		expect(instance.form.get('contactInfo').value).toBe('user@example.com');
 	});
 
-	it('should format phone number correctly', async () => {
-		const { instance } = await shallow.render();
+	it('should format phone number correctly', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 		instance.method = 'sms';
 		instance.formatPhoneNumber('1234567890');
 
 		expect(instance.form.get('contactInfo').value).toBe('(123) 456-7890');
 	});
 
-	it('should format phone number with country code correctly', async () => {
-		const { instance } = await shallow.render();
+	it('should format phone number with country code correctly', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 		instance.method = 'sms';
 		instance.formatPhoneNumber('+12345678900');
 
 		expect(instance.form.get('contactInfo').value).toBe('+1 (234) 567-8900');
 	});
 
-	it('should format international phone numbers correctly', async () => {
-		const { instance } = await shallow.render();
+	it('should format international phone numbers correctly', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 		instance.method = 'sms';
 		instance.formatPhoneNumber('0040123456789');
 
 		expect(instance.form.get('contactInfo').value).toBe('+401 (234) 567-89');
 	});
 
-	it('should handle international phone numbers with country code correctly', async () => {
-		const { instance } = await shallow.render();
+	it('should handle international phone numbers with country code correctly', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 		instance.method = 'sms';
 		instance.formatPhoneNumber('+40123456789');
 
@@ -84,7 +103,8 @@ describe('TwoFactorAuthComponent', () => {
 	});
 
 	it('should set codeSent to true when sendCode is called', async () => {
-		const { instance } = await shallow.render();
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 		const event = {
 			preventDefault: () => {},
 		};
@@ -93,8 +113,9 @@ describe('TwoFactorAuthComponent', () => {
 		expect(instance.codeSent).toBe(true);
 	});
 
-	it('should call submitData with the form value', async () => {
-		const { instance } = await shallow.render();
+	it('should call submitData with the form value', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 		instance.form.setValue({ code: '1234', contactInfo: 'user@example.com' });
 
 		const submitDataSpy = spyOn(instance, 'submitData').and.callThrough();
@@ -106,8 +127,9 @@ describe('TwoFactorAuthComponent', () => {
 		});
 	});
 
-	it('should reset component state when cancel is called', async () => {
-		const { instance } = await shallow.render();
+	it('should reset component state when cancel is called', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 		instance.cancel();
 
 		expect(instance.method).toBe('');
@@ -117,19 +139,20 @@ describe('TwoFactorAuthComponent', () => {
 		expect(instance.form.get('code').value).toBe('');
 	});
 
-	it('should display methods correctly in the table', async () => {
+	it('should display methods correctly in the table', () => {
 		const methods = [
 			{ methodId: 'email', method: 'email', value: 'janedoe@example.com' },
 			{ methodId: 'sms', method: 'sms', value: '(123) 456-7890' },
 		];
 
-		const { instance, find, fixture } = await shallow.render();
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 
-		instance.methods = methods; // Set the methods directly on the component instance
+		instance.methods = methods;
 
 		fixture.detectChanges();
 
-		const methodRows = find('.method');
+		const methodRows = ngMocks.findAll('.method');
 
 		expect(methodRows.length).toBe(methods.length);
 		expect(methodRows[0].nativeElement.textContent).toContain('Email');
@@ -141,33 +164,36 @@ describe('TwoFactorAuthComponent', () => {
 		expect(methodRows[1].nativeElement.textContent).toContain('(123) 456-7890');
 	});
 
-	it('should display the code input after the code was sent', async () => {
-		const { instance, find, fixture } = await shallow.render();
+	it('should display the code input after the code was sent', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.codeSent = true;
 		instance.turnOn = true;
 		instance.method = 'sms';
 		fixture.detectChanges();
 
-		const codeContaier = find('.code-container');
+		const codeContainer = ngMocks.findAll('.code-container');
 
-		expect(codeContaier.length).toBe(1);
+		expect(codeContainer.length).toBe(1);
 	});
 
-	it('should not display the code input if the code was not sent', async () => {
-		const { find, instance, fixture } = await shallow.render();
+	it('should not display the code input if the code was not sent', () => {
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.turnOn = true;
 		instance.method = 'sms';
 		fixture.detectChanges();
 
-		const codeContainer = find('.code-container');
+		const codeContainer = ngMocks.findAll('.code-container');
 
 		expect(codeContainer.length).toBe(0);
 	});
 
 	it('should retrieve all the methods after a method has been deleted', async () => {
-		const { instance } = await shallow.render();
+		const fixture = MockRender(TwoFactorAuthComponent);
+		const instance = fixture.point.componentInstance;
 
 		instance.methods = [
 			{ methodId: 'email', method: 'email', value: 'janedoe@example.com' },

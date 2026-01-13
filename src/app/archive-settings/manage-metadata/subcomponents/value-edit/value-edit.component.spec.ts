@@ -1,4 +1,4 @@
-import { Shallow } from 'shallow-render';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +13,6 @@ import { ManageMetadataModule } from '../../manage-metadata.module';
 import { EditValueComponent } from './value-edit.component';
 
 describe('EditValueComponent', () => {
-	let shallow: Shallow<EditValueComponent>;
 	let deleted: boolean;
 	let updated: boolean;
 	let newTagName: string;
@@ -21,19 +20,7 @@ describe('EditValueComponent', () => {
 	let messageShown: boolean;
 	let rejectDelete: boolean;
 
-	const defaultRender = async (
-		tag: TagVO = new TagVO({ tagId: 1, name: 'abc:123' }),
-	) =>
-		await shallow.render(
-			'<pr-metadata-edit-value [tag]="tag"></pr-metadata-edit-value>',
-			{
-				bind: {
-					tag,
-				},
-			},
-		);
-
-	beforeEach(() => {
+	beforeEach(async () => {
 		updated = false;
 		deleted = false;
 		newTagName = '';
@@ -41,89 +28,123 @@ describe('EditValueComponent', () => {
 		messageShown = false;
 		rejectDelete = false;
 
-		shallow = new Shallow(EditValueComponent, ManageMetadataModule)
-			.import(FormsModule)
-			.dontMock(FormEditComponent)
-			.dontMock(MetadataValuePipe)
-			.mock(ApiService, {
-				tag: {
-					delete: async (tag: TagVO) => {
-						if (error) {
-							throw new Error('Test Error');
-						}
-						deleted = true;
-					},
-					update: async (tag: TagVO) => {
-						if (error) {
-							throw new Error('Test Error');
-						}
-						updated = true;
-						newTagName = tag.name;
+		await MockBuilder(EditValueComponent, ManageMetadataModule)
+			.keep(FormsModule)
+			.keep(FormEditComponent)
+			.keep(MetadataValuePipe)
+			.provide({
+				provide: ApiService,
+				useValue: {
+					tag: {
+						delete: async (tag: TagVO) => {
+							if (error) {
+								throw new Error('Test Error');
+							}
+							deleted = true;
+						},
+						update: async (tag: TagVO) => {
+							if (error) {
+								throw new Error('Test Error');
+							}
+							updated = true;
+							newTagName = tag.name;
+						},
 					},
 				},
 			})
-			.mock(MessageService, {
-				showError: (message: MessageDisplayOptions) => {
-					messageShown = true;
+			.provide({
+				provide: MessageService,
+				useValue: {
+					showError: (message: MessageDisplayOptions) => {
+						messageShown = true;
+					},
 				},
 			})
-			.mock(PromptService, {
-				confirm: async () => {
-					if (rejectDelete) {
-						throw new Error('promise rejection');
-					}
-					return true;
+			.provide({
+				provide: PromptService,
+				useValue: {
+					confirm: async () => {
+						if (rejectDelete) {
+							throw new Error('promise rejection');
+						}
+						return true;
+					},
 				},
 			});
 	});
 
-	it('should create', async () => {
-		const { element } = await defaultRender();
+	function defaultRender(
+		tag: TagVO = new TagVO({ tagId: 1, name: 'abc:123' }),
+	) {
+		return MockRender(
+			'<pr-metadata-edit-value [tag]="tag"></pr-metadata-edit-value>',
+			{ tag },
+		);
+	}
 
-		expect(element).toBeTruthy();
+	it('should create', () => {
+		const fixture = defaultRender();
+
+		expect(fixture.point.nativeElement).toBeTruthy();
 	});
 
 	it('should be able to delete a tag', async () => {
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(EditValueComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const deletedTagSpy = spyOn(instance.deletedTag, 'emit');
+
 		await instance.delete();
 
 		expect(deleted).toBeTrue();
-		expect(outputs.refreshTags.emit).toHaveBeenCalled();
-		expect(outputs.deletedTag.emit).toHaveBeenCalled();
+		expect(refreshTagsSpy).toHaveBeenCalled();
+		expect(deletedTagSpy).toHaveBeenCalled();
 	});
 
 	it('should be able to edit a value', async () => {
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(EditValueComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+
 		await instance.save('potato');
 
 		expect(updated).toBeTrue();
 		expect(newTagName).toBe('abc:potato');
-		expect(outputs.refreshTags.emit).toHaveBeenCalled();
+		expect(refreshTagsSpy).toHaveBeenCalled();
 	});
 
 	it('should deal with errors while deleting', async () => {
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(EditValueComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+
 		error = true;
 		await expectAsync(instance.delete()).toBeRejected();
 
 		expect(messageShown).toBeTrue();
-		expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
+		expect(refreshTagsSpy).not.toHaveBeenCalled();
 	});
 
 	it('should deal with errors while editing', async () => {
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(EditValueComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+
 		error = true;
 		await expectAsync(instance.save('test')).toBeRejected();
 
 		expect(messageShown).toBeTrue();
-		expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
+		expect(refreshTagsSpy).not.toHaveBeenCalled();
 	});
 
 	it('should not do anything if they cancel out of the deletion confirmation prompt', async () => {
 		rejectDelete = true;
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(EditValueComponent);
+		const deletedTagSpy = spyOn(instance.deletedTag, 'emit');
+
 		await instance.delete();
 
-		expect(outputs.deletedTag.emit).not.toHaveBeenCalled();
+		expect(deletedTagSpy).not.toHaveBeenCalled();
 	});
 });

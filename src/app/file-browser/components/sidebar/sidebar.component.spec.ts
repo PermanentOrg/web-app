@@ -1,12 +1,95 @@
-import { Shallow } from 'shallow-render';
-import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
+import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
 import { of } from 'rxjs';
-import { RecordCastPipe } from '@shared/pipes/cast.pipe';
 import { SidebarComponent } from './sidebar.component';
+
+@Pipe({ name: 'prTooltip', standalone: false })
+class MockPrTooltipPipe implements PipeTransform {
+	transform(value: any): any {
+		return value;
+	}
+}
+
+@Pipe({ name: 'prConstants', standalone: false })
+class MockPrConstantsPipe implements PipeTransform {
+	transform(value: any): any {
+		return value;
+	}
+}
+
+@Pipe({ name: 'getAltText', standalone: false })
+class MockGetAltTextPipe implements PipeTransform {
+	transform(value: any): string {
+		return value?.displayName || '';
+	}
+}
+
+@Pipe({ name: 'prDate', standalone: false })
+class MockPrDatePipe implements PipeTransform {
+	transform(value: any): string {
+		return value?.toString() || '';
+	}
+}
+
+@Pipe({ name: 'prLocation', standalone: false })
+class MockPrLocationPipe implements PipeTransform {
+	transform(value: any): string {
+		return value || '';
+	}
+}
+
+@Pipe({ name: 'asRecord', standalone: false })
+class MockAsRecordPipe implements PipeTransform {
+	transform(value: any): any {
+		return value;
+	}
+}
+
+@Pipe({ name: 'asFolder', standalone: false })
+class MockAsFolderPipe implements PipeTransform {
+	transform(value: any): any {
+		return value;
+	}
+}
+
+@Pipe({ name: 'dsFileSize', standalone: false })
+class MockDsFileSizePipe implements PipeTransform {
+	transform(value: any): string {
+		return value?.toString() || '';
+	}
+}
+
+@Pipe({ name: 'folderContents', standalone: false })
+class MockFolderContentsPipe implements PipeTransform {
+	transform(value: any): string {
+		return '';
+	}
+}
+
+@Pipe({ name: 'isPublicItem', standalone: false })
+class MockIsPublicItemPipe implements PipeTransform {
+	transform(value: any): boolean {
+		return false;
+	}
+}
+
+@Pipe({ name: 'originalFileExtension', standalone: false })
+class MockOriginalFileExtensionPipe implements PipeTransform {
+	transform(value: any): string {
+		return '';
+	}
+}
+
+@Pipe({ name: 'selectedItem', standalone: false })
+class MockSelectedItemPipe implements PipeTransform {
+	transform(value: any): any {
+		return value;
+	}
+}
 
 const mockDataService = {
 	selectedItems$: () =>
@@ -17,11 +100,14 @@ const mockDataService = {
 				}),
 			]),
 		),
-	fetchFullItems: (_) => {},
+	fetchFullItems: (_: any) => {},
+	currentFolder: {
+		type: 'folder',
+	},
 };
 
 const mockEditService = {
-	openLocationDialog: (_) => {},
+	openLocationDialog: (_: any) => {},
 };
 
 class MockAccountService {
@@ -37,109 +123,121 @@ class MockAccountService {
 }
 
 describe('SidebarComponent', () => {
-	let shallow: Shallow<SidebarComponent>;
+	let component: SidebarComponent;
+	let fixture: ComponentFixture<SidebarComponent>;
 
-	beforeEach(() => {
-		shallow = new Shallow(SidebarComponent, FileBrowserComponentsModule)
-			.provideMock({
-				provide: DataService,
-				useValue: mockDataService,
-			})
-			.provideMock({
-				provide: EditService,
-				useValue: mockEditService,
-			})
-			.provideMock({
-				provide: AccountService,
-				useClass: MockAccountService,
-			})
-			.dontMock(RecordCastPipe);
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [
+				SidebarComponent,
+				MockPrTooltipPipe,
+				MockPrConstantsPipe,
+				MockGetAltTextPipe,
+				MockPrDatePipe,
+				MockPrLocationPipe,
+				MockAsRecordPipe,
+				MockAsFolderPipe,
+				MockDsFileSizePipe,
+				MockFolderContentsPipe,
+				MockIsPublicItemPipe,
+				MockOriginalFileExtensionPipe,
+				MockSelectedItemPipe,
+			],
+			providers: [
+				{
+					provide: DataService,
+					useValue: mockDataService,
+				},
+				{
+					provide: EditService,
+					useValue: mockEditService,
+				},
+				{
+					provide: AccountService,
+					useClass: MockAccountService,
+				},
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(SidebarComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
+	it('should create', () => {
+		expect(component).toBeTruthy();
 	});
 
-	it('should open location dialog on Enter key press if editable', async () => {
-		const { instance } = await shallow.render();
-
+	it('should open location dialog on Enter key press if editable', () => {
 		const locationDialogSpy = spyOn(
 			mockEditService,
 			'openLocationDialog',
 		).and.callThrough();
 
-		instance.onLocationEnterPress(
+		component.onLocationEnterPress(
 			new KeyboardEvent('keydown', { key: 'Enter' }),
 		);
 
-		expect(locationDialogSpy).toHaveBeenCalledWith(instance.selectedItem);
+		expect(locationDialogSpy).toHaveBeenCalledWith(component.selectedItem);
 	});
 
-	it('should set currentTab correctly when setCurrentTab is called', async () => {
-		const { instance, fixture } = await shallow.render();
-
-		instance.setCurrentTab('info');
+	it('should set currentTab correctly when setCurrentTab is called', () => {
+		component.setCurrentTab('info');
 		fixture.detectChanges();
 
-		expect(instance.currentTab).toBe('info');
+		expect(component.currentTab).toBe('info');
 
-		instance.isRootFolder = false;
-		instance.isPublicItem = false;
-		instance.setCurrentTab('sharing');
+		component.isRootFolder = false;
+		component.isPublicItem = false;
+		component.setCurrentTab('sharing');
 		fixture.detectChanges();
 
-		expect(instance.currentTab).toBe('sharing');
+		expect(component.currentTab).toBe('sharing');
 	});
 
-	it('should call editService.openLocationDialog when onLocationClick is called if editable', async () => {
-		const { instance, inject } = await shallow.render();
-		const editService = inject(EditService);
+	it('should call editService.openLocationDialog when onLocationClick is called if editable', () => {
+		const editService = TestBed.inject(EditService);
 		spyOn(editService, 'openLocationDialog');
 
-		instance.canEdit = true;
-		instance.selectedItem = new RecordVO({});
+		component.canEdit = true;
+		component.selectedItem = new RecordVO({});
 
-		instance.onLocationClick();
+		component.onLocationClick();
 
 		expect(editService.openLocationDialog).toHaveBeenCalledWith(
-			instance.selectedItem,
+			component.selectedItem,
 		);
 	});
 
-	it('should correctly update canEdit and canShare when checkPermissions is called', async () => {
-		const { instance } = await shallow.render();
-
-		instance.selectedItem = new RecordVO({
+	it('should correctly update canEdit and canShare when checkPermissions is called', () => {
+		component.selectedItem = new RecordVO({
 			accessRole: 'access.role.editor',
 		});
-		instance.selectedItems = [instance.selectedItem];
-		instance.isRootFolder = false;
-		instance.isPublicItem = false;
+		component.selectedItems = [component.selectedItem];
+		component.isRootFolder = false;
+		component.isPublicItem = false;
 
-		instance.checkPermissions();
+		component.checkPermissions();
 
-		expect(instance.canEdit).toBe(true);
-		expect(instance.canShare).toBe(true);
+		expect(component.canEdit).toBe(true);
+		expect(component.canShare).toBe(true);
 
-		instance.selectedItem = new RecordVO({
+		component.selectedItem = new RecordVO({
 			accessRole: 'access.role.viewer',
 		});
-		instance.selectedItems = [instance.selectedItem];
-		instance.isRootFolder = false;
-		instance.isPublicItem = false;
+		component.selectedItems = [component.selectedItem];
+		component.isRootFolder = false;
+		component.isPublicItem = false;
 
-		instance.checkPermissions();
+		component.checkPermissions();
 
-		expect(instance.canEdit).toBe(false);
-		expect(instance.canShare).toBe(true);
+		expect(component.canEdit).toBe(false);
+		expect(component.canShare).toBe(true);
 	});
 
-	it('should hide the original format for folders', async () => {
-		const { instance, fixture } = await shallow.render();
-
-		instance.isRecord = false;
+	it('should hide the original format for folders', () => {
+		component.isRecord = false;
 
 		fixture.detectChanges();
 

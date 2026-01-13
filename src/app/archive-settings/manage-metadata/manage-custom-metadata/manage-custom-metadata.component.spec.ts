@@ -1,4 +1,4 @@
-import { Shallow } from 'shallow-render';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { ApiService } from '@shared/services/api/api.service';
 import { Observable } from 'rxjs';
 import { TagVO, TagVOData } from '@models/tag-vo';
@@ -8,7 +8,6 @@ import { ManageMetadataModule } from '../manage-metadata.module';
 import { ManageCustomMetadataComponent } from './manage-custom-metadata.component';
 
 describe('ManageCustomMetadataComponent #custom-metadata', () => {
-	let shallow: Shallow<ManageCustomMetadataComponent>;
 	let defaultTagList: TagVOData[] = [];
 
 	beforeEach(async () => {
@@ -45,74 +44,85 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
 			},
 		];
 
-		shallow = new Shallow(ManageCustomMetadataComponent, ManageMetadataModule)
-			.dontMock(MetadataValuePipe)
-			.mock(TagsService, {
-				getTags: () => [...defaultTagList],
-				getTags$: () => new Observable<TagVOData[]>(),
-				refreshTags: async () => {},
-				resetTags: async () => {},
+		await MockBuilder(ManageCustomMetadataComponent, ManageMetadataModule)
+			.keep(MetadataValuePipe)
+			.provide({
+				provide: TagsService,
+				useValue: {
+					getTags: () => [...defaultTagList],
+					getTags$: () => new Observable<TagVOData[]>(),
+					refreshTags: async () => {},
+					resetTags: async () => {},
+				},
 			})
-			.mock(ApiService, {
-				tag: {
-					update: async (tag: TagVO) => {},
-					delete: async (tag: TagVO) => {},
+			.provide({
+				provide: ApiService,
+				useValue: {
+					tag: {
+						update: async (tag: TagVO) => {},
+						delete: async (tag: TagVO) => {},
+					},
 				},
 			});
 	});
 
-	it('should create', async () => {
-		const { element } = await shallow.render();
+	it('should create', () => {
+		const fixture = MockRender(ManageCustomMetadataComponent);
 
-		expect(element).not.toBeNull();
+		expect(fixture.point.nativeElement).not.toBeNull();
 	});
 
-	it('should load custom metadata categories', async () => {
-		const { find } = await shallow.render();
+	it('should load custom metadata categories', () => {
+		MockRender(ManageCustomMetadataComponent);
 
-		expect(find('.category').length).toBe(3);
+		expect(ngMocks.findAll('.category').length).toBe(3);
 	});
 
-	it('should be able to select a category', async () => {
-		const { find, fixture } = await shallow.render();
+	it('should be able to select a category', () => {
+		const fixture = MockRender(ManageCustomMetadataComponent);
 
-		expect(find('.category.selected').length).toBe(0);
-		find('.category')[0].triggerEventHandler('click', {});
+		expect(ngMocks.findAll('.category.selected').length).toBe(0);
+		ngMocks.findAll('.category')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 
-		expect(find('.category.selected').length).toBe(1);
+		expect(ngMocks.findAll('.category.selected').length).toBe(1);
 	});
 
-	it('should be able to load tags by metadata category', async () => {
-		const { find, fixture } = await shallow.render();
+	it('should be able to load tags by metadata category', () => {
+		const fixture = MockRender(ManageCustomMetadataComponent);
 
-		expect(find('.value').length).toBe(0);
-		find('.category')[0].triggerEventHandler('click', {});
+		expect(ngMocks.findAll('.value').length).toBe(0);
+		ngMocks.findAll('.category')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 
-		expect(find('.value').length).toBe(3);
+		expect(ngMocks.findAll('.value').length).toBe(3);
 	});
 
 	it('should be able to react to the add-new-value form', async () => {
-		const { find, fixture } = await shallow.render();
-		find('.category')[0].triggerEventHandler('click', {});
+		const fixture = MockRender(ManageCustomMetadataComponent);
+
+		ngMocks.findAll('.category')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 
-		expect(find('.value').length).toBe(3);
+		expect(ngMocks.findAll('.value').length).toBe(3);
 		defaultTagList.push({
 			tagId: 9,
 			name: 'a:potato',
 			type: 'type.tag.metadata.customField',
 		});
-		find('pr-metadata-add-new-value').triggerEventHandler('tagsUpdate', {});
+		ngMocks
+			.find('pr-metadata-add-new-value')
+			.triggerEventHandler('tagsUpdate', {});
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(find('.value').length).toBe(4);
+		expect(ngMocks.findAll('.value').length).toBe(4);
 	});
 
 	it('should be able to filter out deleted tags', async () => {
-		const { instance } = await shallow.render();
+		const fixture = MockRender(ManageCustomMetadataComponent);
+		const instance = fixture.point.componentInstance;
+
 		instance.addDeletedTag(new TagVO(defaultTagList[1]));
 		await instance.refreshTagsInPlace();
 
@@ -121,7 +131,9 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
 	});
 
 	it('should be able to filter out deleted categories', async () => {
-		const { instance } = await shallow.render();
+		const fixture = MockRender(ManageCustomMetadataComponent);
+		const instance = fixture.point.componentInstance;
+
 		instance.addDeletedCategory('a');
 		await instance.refreshTagsInPlace();
 
@@ -132,7 +144,9 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
 	});
 
 	it('should be able to un-filter out deleted categories that are recreated', async () => {
-		const { instance } = await shallow.render();
+		const fixture = MockRender(ManageCustomMetadataComponent);
+		const instance = fixture.point.componentInstance;
+
 		instance.addDeletedCategory('a');
 		await instance.refreshTagsInPlace();
 		defaultTagList.push({
@@ -145,8 +159,10 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
 		expect(instance.tagsList.length).toBe(3);
 	});
 
-	it('should unselect the current category if its been deleted', async () => {
-		const { instance } = await shallow.render();
+	it('should unselect the current category if its been deleted', () => {
+		const fixture = MockRender(ManageCustomMetadataComponent);
+		const instance = fixture.point.componentInstance;
+
 		instance.activeCategory = 'potato';
 		instance.addDeletedCategory('potato');
 
@@ -154,7 +170,9 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
 	});
 
 	it('should unselect the current category if its last tag is deleted', async () => {
-		const { instance } = await shallow.render();
+		const fixture = MockRender(ManageCustomMetadataComponent);
+		const instance = fixture.point.componentInstance;
+
 		instance.activeCategory = 'c';
 		defaultTagList.pop();
 		await instance.refreshTagsInPlace();
@@ -162,8 +180,10 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
 		expect(instance.activeCategory).toBeNull();
 	});
 
-	it('should unselect the current category if its last tag is hidden by a deletion action', async () => {
-		const { instance } = await shallow.render();
+	it('should unselect the current category if its last tag is hidden by a deletion action', () => {
+		const fixture = MockRender(ManageCustomMetadataComponent);
+		const instance = fixture.point.componentInstance;
+
 		instance.activeCategory = 'c';
 		instance.addDeletedTag(new TagVO(defaultTagList.slice(-1).pop()));
 
