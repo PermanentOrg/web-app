@@ -595,6 +595,7 @@
 		"billing": {
 			"transfer": {
 				"account_to_creditcard": "Refund",
+				"admin_adjustment": "Adjustment applied by Permanent.org",
 				"creditcard_to_account": "Purchase",
 				"pledge_to_account": "Donation",
 				"account_to_pledge": "Donation failed",
