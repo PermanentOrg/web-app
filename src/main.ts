@@ -1,4 +1,4 @@
-import { enableProdMode, ɵresetCompiledComponents } from '@angular/core';
+import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { BrowserAgent } from '@newrelic/browser-agent/loaders/browser-agent';
 
@@ -59,12 +59,6 @@ window.ga('send', 'pageview');
 
 if (environment.production) {
 	enableProdMode();
-}
-
-declare let module: any;
-if (module.hot) {
-	module.hot.accept();
-	module.hot.dispose(() => ɵresetCompiledComponents());
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule);
