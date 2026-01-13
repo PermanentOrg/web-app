@@ -5,6 +5,21 @@ interface FirebaseConfig {
 	projectId: string;
 }
 
+interface NewRelicConfig {
+	agentID: string;
+	applicationID: string;
+	accountID: string;
+	trustKey: string;
+	licenseKey: string;
+}
+
+interface AnalyticsConfig {
+	googleAnalytics: {
+		trackingId: string;
+	};
+	newRelic: NewRelicConfig;
+}
+
 export interface Environment {
 	production: boolean;
 	apiUrl: string;
@@ -14,4 +29,5 @@ export interface Environment {
 	release: string;
 	environment: string;
 	analyticsDebug: boolean;
+	analytics: AnalyticsConfig;
 }

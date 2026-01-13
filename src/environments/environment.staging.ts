@@ -15,4 +15,16 @@ export const environment: Environment = {
 	release: PackageJson.version,
 	environment: 'staging',
 	analyticsDebug: true,
+	analytics: {
+		googleAnalytics: {
+			trackingId: 'UA-117528189-2',
+		},
+		newRelic: {
+			agentID: '1833415775',
+			applicationID: '1833415775',
+			accountID: '3239273',
+			trustKey: '3239273',
+			licenseKey: 'NRJS-e4d5bb32df7091210db',
+		},
+	},
 } as const;
