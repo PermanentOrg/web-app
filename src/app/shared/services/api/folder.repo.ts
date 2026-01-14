@@ -327,16 +327,6 @@ export class FolderRepo extends BaseRepo {
 		});
 	}
 
-	public getLeanItems(folderVOs: FolderVO[]): Observable<FolderResponse> {
-		const data = folderVOs.map((folderVO) => ({
-			FolderVO: new FolderVO(folderVO),
-		}));
-
-		return this.http.sendRequest<FolderResponse>('/folder/getLeanItems', data, {
-			ResponseClass: FolderResponse,
-		});
-	}
-
 	public async post(folderVOs: FolderVO[]): Promise<FolderResponse> {
 		const data = folderVOs.map((folderVO) => ({
 			FolderVO: new FolderVO(folderVO),
