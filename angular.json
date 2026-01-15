@@ -84,7 +84,6 @@
 									"with": "src/environments/environment.dev.ts"
 								}
 							],
-							"index": "src/index/dev/index.html",
 							"deployUrl": "/app/",
 							"optimization": true,
 							"outputHashing": "all",
@@ -105,7 +104,6 @@
 									"with": "src/environments/environment.prod.ts"
 								}
 							],
-							"index": "src/index/prod/index.html",
 							"deployUrl": "/app/",
 							"optimization": true,
 							"outputHashing": "all",
@@ -126,7 +124,6 @@
 									"with": "src/environments/environment.staging.ts"
 								}
 							],
-							"index": "src/index/staging/index.html",
 							"deployUrl": "/app/",
 							"optimization": true,
 							"outputHashing": "all",
