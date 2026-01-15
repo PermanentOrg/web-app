@@ -130,7 +130,8 @@ form {
 		}
 	}
 
-	select.form-control {
+	select.form-control,
+	select.form-select {
 		color: rgba(white, 0);
 
 		option {

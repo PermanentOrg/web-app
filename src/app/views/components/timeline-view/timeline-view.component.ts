@@ -186,7 +186,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.fvService.containerFlexChange.emit(false);
 	}
 
-	@HostListener('window:resize', ['$event'])
+	@HostListener('window:resize', [])
 	onViewportResize() {
 		this.debouncedResizeHandler();
 	}

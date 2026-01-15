@@ -5,69 +5,70 @@
 			<img class="banner-logo" src="assets/img/logo/sideways_logo.png" />
 		</a>
 		<div class="banner-buttons">
-			<div
-				class="banner-archive-thumb"
-				prBgImage
-				[bgSrc]="archive.thumbURL200"
-				*ngIf="archive"
-				(click)="onMyAccountClick()"
-				[cover]="true"
-			></div>
-			<button
-				class="btn btn-wordpress"
-				(click)="navToAuth()"
-				*ngIf="!isLoggedIn"
-			>
-				{{ isRelationshipShare ? 'Log In' : 'Sign Up' }}
-			</button>
-			<button
-				class="btn btn-wordpress"
-				*ngIf="isLoggedIn"
-				(click)="onMyAccountClick()"
-			>
-				My Archive
-			</button>
+			@if (archive) {
+				<div
+					class="banner-archive-thumb"
+					prBgImage
+					[bgSrc]="archive.thumbURL200"
+					(click)="onMyAccountClick()"
+					[cover]="true"
+				></div>
+			}
+			@if (!isLoggedIn) {
+				<button class="btn btn-wordpress" (click)="navToAuth()">
+					{{ isRelationshipShare ? 'Log In' : 'Sign Up' }}
+				</button>
+			}
+			@if (isLoggedIn) {
+				<button class="btn btn-wordpress" (click)="onMyAccountClick()">
+					My Archive
+				</button>
+			}
 		</div>
 	</div>
 </div>
 <pr-announcement></pr-announcement>
-<div class="share-preview-archive" *ngIf="shareArchive">
-	<div
-		class="share-preview-archive-thumb"
-		prBgImage
-		[bgSrc]="shareArchive.thumbURL200"
-	></div>
-	<span>
-		<strong>{{ displayName }}</strong
-		><br />
-		Shared by
-		{{
-			account && shareAccount.accountId === account.accountId
-				? 'you'
-				: shareAccount.fullName
-		}}<br />
-		<em class="share-preview-archive-name" *ngIf="shareArchive.fullName"
-			>From the <strong>{{ shareArchive.fullName }}</strong> Archive</em
-		>
-	</span>
-	<div class="share-preview-archive-buttons" *ngIf="hasAccess">
-		<button class="btn btn-primary" (click)="onViewShareClick()">
+@if (shareArchive) {
+	<div class="share-preview-archive">
+		<div
+			class="share-preview-archive-thumb"
+			prBgImage
+			[bgSrc]="shareArchive.thumbURL200"
+		></div>
+		<span>
+			<strong>{{ displayName }}</strong
+			><br />
+			Shared by
 			{{
-				(sharePreviewVO.ShareVO
-					? sharePreviewVO.ShareVO.accessRole
-					: sharePreviewVO.accessRole || 'access.role.owner'
-				) | shareActionLabel
-			}}
-		</button>
-		<button
-			class="btn btn-primary"
-			*ngIf="canShare || isLinkShare"
-			(click)="onShareShareClick()"
-		>
-			Share
-		</button>
+				account && shareAccount.accountId === account.accountId
+					? 'you'
+					: shareAccount.fullName
+			}}<br />
+			@if (shareArchive.fullName) {
+				<em class="share-preview-archive-name"
+					>From the <strong>{{ shareArchive.fullName }}</strong> Archive</em
+				>
+			}
+		</span>
+		@if (hasAccess) {
+			<div class="share-preview-archive-buttons">
+				<button class="btn btn-primary" (click)="onViewShareClick()">
+					{{
+						(sharePreviewVO.ShareVO
+							? sharePreviewVO.ShareVO.accessRole
+							: sharePreviewVO.accessRole || 'access.role.owner'
+						) | shareActionLabel
+					}}
+				</button>
+				@if (canShare || isLinkShare) {
+					<button class="btn btn-primary" (click)="onShareShareClick()">
+						Share
+					</button>
+				}
+			</div>
+		}
 	</div>
-</div>
+}
 <div class="share-preview-content-breadcrumbs">
 	<pr-breadcrumbs
 		(breadcrumbClicked)="goToFolderFromBreadcrumb($event)"
@@ -86,258 +87,289 @@
 		></router-outlet>
 	}
 </div>
-<div
-	class="share-preview-cover from-bottom"
-	[ngClass]="{ 'share-preview-cover-visible': showCover }"
-	(click)="toggleCover()"
-	*ngIf="!hasAccess && isLoggedIn && !isUnlistedShare"
->
-	<div class="share-preview-cover-content" (click)="stopPropagation($event)">
-		<p *ngIf="!isLoggedIn">
-			<span *ngIf="isInvite || (isLinkShare && formType === 0)"
-				>Get full access to {{ shareAccount.fullName }}'s shared item and claim
-				your free gigabyte of storage.</span
-			>
-			<span *ngIf="isLinkShare && formType === 2"
-				>Get full access to {{ shareAccount.fullName }}'s shared item.</span
-			>
-			<span *ngIf="isRelationshipShare"
-				>To view or edit this content, log in to Permanent.org.</span
-			>
-		</p>
-		<p *ngIf="isLoggedIn && !isUnlistedShare">
-			<span *ngIf="isLinkShare && !hasRequested"
-				>Request full access from {{ shareAccount.fullName }}.</span
-			>
-			<span *ngIf="isLinkShare && hasRequested"
-				>Your request is awaiting approval from
-				{{ shareAccount.fullName }}.</span
-			>
-			<span *ngIf="isRelationshipShare"
-				>To view or edit this content, switch archives or accounts.</span
-			>
-		</p>
-		<div class="share-preview-form-wrapper" *ngIf="!isLoggedIn">
-			<div class="share-preview-form">
-				<!-- regular signup form -->
-				<form
-					[formGroup]="signupForm"
-					(ngSubmit)="onSignupSubmit(signupForm.value)"
-					*ngIf="formType === 0"
-				>
-					<div class="input-group-vertical">
-						<pr-form-input
-							fieldName="name"
-							placeholder="Full name"
-							[control]="signupForm.controls['name']"
-							[config]="{
-								autocomplete: 'name',
-								autocorrect: 'off',
-								autocapitalize: 'yes',
-								spellcheck: 'off'
-							}"
-						></pr-form-input>
-						<pr-form-input
-							fieldName="email"
-							placeholder="Email"
-							[control]="signupForm.controls['email']"
-							[config]="{
-								autocomplete: 'email',
-								autocorrect: 'off',
-								autocapitalize: 'off',
-								spellcheck: 'off'
-							}"
-						></pr-form-input>
-						<pr-form-input
-							type="password"
-							fieldName="password"
-							placeholder="Password (min. 8 chars)"
-							[control]="signupForm.controls['password']"
-							[config]="{
-								autocomplete: 'new-password',
-								autocorrect: 'off',
-								autocapitalize: 'off',
-								spellcheck: 'off'
-							}"
-						></pr-form-input>
-					</div>
-					<button
-						type="submit"
-						class="btn btn-alternate"
-						[disabled]="waiting || signupForm.invalid"
-					>
-						Sign up
-					</button>
-					<a tabindex="0" (click)="formType = 2">Already have an account?</a>
-				</form>
-				<!-- short signup for invite form -->
-				<form
-					[formGroup]="signupForm"
-					(ngSubmit)="onSignupSubmit(signupForm.value)"
-					*ngIf="formType === 1"
-				>
-					<div class="input-group-vertical">
-						<pr-form-input
-							fieldName="email"
-							placeholder="Email"
-							[control]="signupForm.controls['email']"
-							[config]="{ readOnly: true }"
-						></pr-form-input>
-						<pr-form-input
-							type="text"
-							fieldName="name"
-							placeholder="Full name"
-							[control]="signupForm.controls['name']"
-							[config]="{
-								autocomplete: 'name',
-								autocorrect: 'off',
-								autocapitalize: 'yes',
-								spellcheck: 'off'
-							}"
-						></pr-form-input>
-						<pr-form-input
-							type="password"
-							fieldName="password"
-							placeholder="Password (min. 8 chars)"
-							[control]="signupForm.controls['password']"
-							[config]="{
-								autocomplete: 'new-password',
-								autocorrect: 'off',
-								autocapitalize: 'off',
-								spellcheck: 'off'
-							}"
-						></pr-form-input>
-					</div>
-					<button
-						type="submit"
-						class="btn btn-alternate"
-						[disabled]="waiting || signupForm.invalid"
-					>
-						Sign up
-					</button>
-				</form>
-				<!-- login form -->
-				<form
-					[formGroup]="loginForm"
-					(ngSubmit)="onLoginSubmit(loginForm.value)"
-					*ngIf="formType === 2"
-				>
-					<div class="input-group-vertical">
-						<pr-form-input
-							fieldName="email"
-							placeholder="Email"
-							[control]="loginForm.controls['email']"
-							[config]="{
-								autocomplete: 'email',
-								autocorrect: 'off',
-								autocapitalize: 'off',
-								spellcheck: 'off'
-							}"
-						></pr-form-input>
-						<pr-form-input
-							type="password"
-							fieldName="password"
-							placeholder="Password (min. 8 chars)"
-							[control]="loginForm.controls['password']"
-							[config]="{
-								autocomplete: 'new-password',
-								autocorrect: 'off',
-								autocapitalize: 'off',
-								spellcheck: 'off'
-							}"
-						></pr-form-input>
-					</div>
-					<button
-						type="submit"
-						class="btn btn-alternate"
-						[disabled]="waiting || loginForm.invalid"
-					>
-						Log in
-					</button>
-					<a tabindex="0" (click)="formType = 0" *ngIf="!isRelationshipShare"
-						>Need to sign up?</a
-					>
-				</form>
-			</div>
-		</div>
-		<div
-			class="share-preview-cover-buttons"
-			(click)="stopPropagation($event)"
-			*ngIf="isLoggedIn && !isUnlistedShare"
-		>
-			<button
-				class="btn btn-wordpress"
-				(click)="onRequestAccessClick()"
-				[disabled]="waiting || hasRequested"
-				*ngIf="isLinkShare"
-			>
-				<ng-container *ngIf="hasRequested; else accessText"
-					>Access Requested</ng-container
-				>
-				<ng-template #accessText>
-					<ng-container *ngIf="isAutoApprove; else requestAccess"
-						>Accept Share</ng-container
-					>
-					<ng-template #requestAccess>Request Access</ng-template>
-				</ng-template>
-			</button>
-			<button
-				class="btn btn-wordpress"
-				(click)="onArchiveThumbClick()"
-				*ngIf="isRelationshipShare"
-			>
-				Switch Archive
-			</button>
-		</div>
-	</div>
-</div>
-<div
-	class="share-preview-footer"
-	[ngClass]="{ 'share-preview-footer-visible': !showCover }"
-	*ngIf="!hasAccess && isLoggedIn && !isUnlistedShare"
->
-	<div class="share-preview-footer-content">
-		<span (click)="toggleCover()">
-			<strong *ngIf="isLinkShare && !hasRequested">
-				<ng-container *ngIf="isAutoApprove; else requestFullAccessText">
-					Accept and view the share in your archive.
-				</ng-container>
-				<ng-template #requestFullAccessText>
-					Request full access from {{ shareAccount.fullName }}.
-				</ng-template>
-			</strong>
-			<strong *ngIf="isLinkShare && hasRequested"
-				>Your request is awaiting approval from
-				{{ shareAccount.fullName }}.</strong
-			>
-			<strong *ngIf="isRelationshipShare"
-				>Your current archive does not have access to this content. Switch to
-				view or edit.</strong
-			>
-			<div *ngIf="isLinkShare">
-				<button
-					class="btn btn-alternate"
-					(click)="onRequestAccessClick()"
-					[disabled]="waiting || hasRequested"
-					*ngIf="isLinkShare"
-				>
-					<ng-container *ngIf="hasRequested; else accessTextFooter"
-						>Access Requested</ng-container
-					>
-					<ng-template #accessTextFooter>
-						<ng-container *ngIf="isAutoApprove; else requestAccessFooter"
-							>Accept Share</ng-container
+@if (!hasAccess && isLoggedIn && !isUnlistedShare) {
+	<div
+		class="share-preview-cover from-bottom"
+		[ngClass]="{ 'share-preview-cover-visible': showCover }"
+		(click)="toggleCover()"
+	>
+		<div class="share-preview-cover-content" (click)="stopPropagation($event)">
+			@if (!isLoggedIn) {
+				<p>
+					@if (isInvite || (isLinkShare && formType === 0)) {
+						<span
+							>Get full access to {{ shareAccount.fullName }}'s shared item and
+							claim your free gigabyte of storage.</span
 						>
-						<ng-template #requestAccessFooter>Request Access</ng-template>
-					</ng-template>
-				</button>
-			</div>
-		</span>
+					}
+					@if (isLinkShare && formType === 2) {
+						<span
+							>Get full access to {{ shareAccount.fullName }}'s shared
+							item.</span
+						>
+					}
+					@if (isRelationshipShare) {
+						<span>To view or edit this content, log in to Permanent.org.</span>
+					}
+				</p>
+			}
+			@if (isLoggedIn && !isUnlistedShare) {
+				<p>
+					@if (isLinkShare && !hasRequested) {
+						<span>Request full access from {{ shareAccount.fullName }}.</span>
+					}
+					@if (isLinkShare && hasRequested) {
+						<span
+							>Your request is awaiting approval from
+							{{ shareAccount.fullName }}.</span
+						>
+					}
+					@if (isRelationshipShare) {
+						<span
+							>To view or edit this content, switch archives or accounts.</span
+						>
+					}
+				</p>
+			}
+			@if (!isLoggedIn) {
+				<div class="share-preview-form-wrapper">
+					<div class="share-preview-form">
+						<!-- regular signup form -->
+						@if (formType === 0) {
+							<form
+								[formGroup]="signupForm"
+								(ngSubmit)="onSignupSubmit(signupForm.value)"
+							>
+								<div class="input-group-vertical">
+									<pr-form-input
+										fieldName="name"
+										placeholder="Full name"
+										[control]="signupForm.controls['name']"
+										[config]="{
+											autocomplete: 'name',
+											autocorrect: 'off',
+											autocapitalize: 'yes',
+											spellcheck: 'off'
+										}"
+									></pr-form-input>
+									<pr-form-input
+										fieldName="email"
+										placeholder="Email"
+										[control]="signupForm.controls['email']"
+										[config]="{
+											autocomplete: 'email',
+											autocorrect: 'off',
+											autocapitalize: 'off',
+											spellcheck: 'off'
+										}"
+									></pr-form-input>
+									<pr-form-input
+										type="password"
+										fieldName="password"
+										placeholder="Password (min. 8 chars)"
+										[control]="signupForm.controls['password']"
+										[config]="{
+											autocomplete: 'new-password',
+											autocorrect: 'off',
+											autocapitalize: 'off',
+											spellcheck: 'off'
+										}"
+									></pr-form-input>
+								</div>
+								<button
+									type="submit"
+									class="btn btn-alternate"
+									[disabled]="waiting || signupForm.invalid"
+								>
+									Sign up
+								</button>
+								<a tabindex="0" (click)="formType = 2"
+									>Already have an account?</a
+								>
+							</form>
+						}
+						<!-- short signup for invite form -->
+						@if (formType === 1) {
+							<form
+								[formGroup]="signupForm"
+								(ngSubmit)="onSignupSubmit(signupForm.value)"
+							>
+								<div class="input-group-vertical">
+									<pr-form-input
+										fieldName="email"
+										placeholder="Email"
+										[control]="signupForm.controls['email']"
+										[config]="{ readOnly: true }"
+									></pr-form-input>
+									<pr-form-input
+										type="text"
+										fieldName="name"
+										placeholder="Full name"
+										[control]="signupForm.controls['name']"
+										[config]="{
+											autocomplete: 'name',
+											autocorrect: 'off',
+											autocapitalize: 'yes',
+											spellcheck: 'off'
+										}"
+									></pr-form-input>
+									<pr-form-input
+										type="password"
+										fieldName="password"
+										placeholder="Password (min. 8 chars)"
+										[control]="signupForm.controls['password']"
+										[config]="{
+											autocomplete: 'new-password',
+											autocorrect: 'off',
+											autocapitalize: 'off',
+											spellcheck: 'off'
+										}"
+									></pr-form-input>
+								</div>
+								<button
+									type="submit"
+									class="btn btn-alternate"
+									[disabled]="waiting || signupForm.invalid"
+								>
+									Sign up
+								</button>
+							</form>
+						}
+						<!-- login form -->
+						@if (formType === 2) {
+							<form
+								[formGroup]="loginForm"
+								(ngSubmit)="onLoginSubmit(loginForm.value)"
+							>
+								<div class="input-group-vertical">
+									<pr-form-input
+										fieldName="email"
+										placeholder="Email"
+										[control]="loginForm.controls['email']"
+										[config]="{
+											autocomplete: 'email',
+											autocorrect: 'off',
+											autocapitalize: 'off',
+											spellcheck: 'off'
+										}"
+									></pr-form-input>
+									<pr-form-input
+										type="password"
+										fieldName="password"
+										placeholder="Password (min. 8 chars)"
+										[control]="loginForm.controls['password']"
+										[config]="{
+											autocomplete: 'new-password',
+											autocorrect: 'off',
+											autocapitalize: 'off',
+											spellcheck: 'off'
+										}"
+									></pr-form-input>
+								</div>
+								<button
+									type="submit"
+									class="btn btn-alternate"
+									[disabled]="waiting || loginForm.invalid"
+								>
+									Log in
+								</button>
+								@if (!isRelationshipShare) {
+									<a tabindex="0" (click)="formType = 0">Need to sign up?</a>
+								}
+							</form>
+						}
+					</div>
+				</div>
+			}
+			@if (isLoggedIn && !isUnlistedShare) {
+				<div
+					class="share-preview-cover-buttons"
+					(click)="stopPropagation($event)"
+				>
+					@if (isLinkShare) {
+						<button
+							class="btn btn-wordpress"
+							(click)="onRequestAccessClick()"
+							[disabled]="waiting || hasRequested"
+						>
+							@if (hasRequested) {
+								Access Requested
+							} @else {
+								@if (isAutoApprove) {
+									Accept Share
+								} @else {
+									Request Access
+								}
+							}
+						</button>
+					}
+					@if (isRelationshipShare) {
+						<button class="btn btn-wordpress" (click)="onArchiveThumbClick()">
+							Switch Archive
+						</button>
+					}
+				</div>
+			}
+		</div>
 	</div>
-</div>
-<pr-share-preview-footer
-	*ngIf="!isLoggedIn && !isUnlistedShare"
-	[accountUserName]="shareAccount.fullName"
-	[closeEvent]="hideBannerObservable"
-></pr-share-preview-footer>
+}
+@if (!hasAccess && isLoggedIn && !isUnlistedShare) {
+	<div
+		class="share-preview-footer"
+		[ngClass]="{ 'share-preview-footer-visible': !showCover }"
+	>
+		<div class="share-preview-footer-content">
+			<span (click)="toggleCover()">
+				@if (isLinkShare && !hasRequested) {
+					<strong>
+						@if (isAutoApprove) {
+							Accept and view the share in your archive.
+						} @else {
+							Request full access from {{ shareAccount.fullName }}.
+						}
+					</strong>
+				}
+				@if (isLinkShare && hasRequested) {
+					<strong
+						>Your request is awaiting approval from
+						{{ shareAccount.fullName }}.</strong
+					>
+				}
+				@if (isRelationshipShare) {
+					<strong
+						>Your current archive does not have access to this content. Switch
+						to view or edit.</strong
+					>
+				}
+				@if (isLinkShare) {
+					<div>
+						@if (isLinkShare) {
+							<button
+								class="btn btn-alternate"
+								(click)="onRequestAccessClick()"
+								[disabled]="waiting || hasRequested"
+							>
+								@if (hasRequested) {
+									Access Requested
+								} @else {
+									@if (isAutoApprove) {
+										Accept Share
+									} @else {
+										Request Access
+									}
+								}
+							</button>
+						}
+					</div>
+				}
+			</span>
+		</div>
+	</div>
+}
+@if (!isLoggedIn && !isUnlistedShare) {
+	<pr-share-preview-footer
+		[accountUserName]="shareAccount.fullName"
+		[closeEvent]="hideBannerObservable"
+	></pr-share-preview-footer>
+}
 <pr-prompt></pr-prompt>

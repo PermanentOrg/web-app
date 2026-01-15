@@ -531,7 +531,7 @@ export class FileListComponent
 		this.visibleItems.clear();
 		if (animate) {
 			const targetElems = visibleListItems.map((c) => c.element.nativeElement);
-			gsap.from(targetElems, 0.25, {
+			gsap.from(targetElems, {
 				duration: 0.25,
 				opacity: 0,
 				ease: 'Power4.easeOut',
