@@ -1,6 +1,4 @@
-import { DebugElement } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { AnnouncementModule } from '@announcement/announcement.module';
 import { AnnouncementEvent } from '@announcement/models/announcement-event';
@@ -29,80 +27,78 @@ Object.freeze(pastTestEvent);
 Object.freeze(futureTestEvent);
 
 describe('AnnouncementComponent', () => {
-	let shallow: Shallow<AnnouncementComponent>;
-	async function defaultRender(events?: AnnouncementEvent[]) {
-		return await shallow.render(
-			`<pr-announcement [eventsList]="events"></pr-announcement>`,
-			{
-				bind: {
-					events,
-				},
-			},
-		);
-	}
-	beforeEach(() => {
-		shallow = new Shallow(AnnouncementComponent, AnnouncementModule);
+	beforeEach(async () => {
+		await MockBuilder(AnnouncementComponent, AnnouncementModule);
 	});
 
 	afterEach(() => {
 		window.localStorage.clear();
 	});
 
-	it('should exist', async () => {
-		expect(shallow).not.toBeNull();
+	function defaultRender(events?: AnnouncementEvent[]) {
+		return MockRender(
+			`<pr-announcement [eventsList]="events"></pr-announcement>`,
+			{ events },
+		);
+	}
+
+	it('should exist', () => {
+		const fixture = defaultRender([currentTestEvent]);
+
+		expect(fixture).not.toBeNull();
 	});
 
-	it('should take in test data', async () => {
-		const { element } = await defaultRender([currentTestEvent]);
+	it('should take in test data', () => {
+		const fixture = defaultRender([currentTestEvent]);
 
-		expect(element).not.toBeNull();
+		expect(fixture.debugElement).not.toBeNull();
 	});
 
-	it('should display the message', async () => {
-		const { find, element } = await defaultRender([currentTestEvent]);
+	it('should display the message', () => {
+		const fixture = defaultRender([currentTestEvent]);
 
-		expect(find('.announcement').length).toBeGreaterThan(0);
-		expect(element.nativeElement.innerText).toContain('Test Event!!!');
+		expect(ngMocks.findAll('.announcement').length).toBeGreaterThan(0);
+		expect(fixture.nativeElement.innerText).toContain('Test Event!!!');
 	});
 
-	it('should hide itself if event is in the future', async () => {
-		const { find } = await defaultRender([futureTestEvent]);
+	it('should hide itself if event is in the future', () => {
+		defaultRender([futureTestEvent]);
 
-		expect(find('.announcement').length).toBe(0);
+		expect(ngMocks.findAll('.announcement').length).toBe(0);
 	});
 
-	it('should hide itself if the event is already over', async () => {
-		const { find } = await defaultRender([pastTestEvent]);
+	it('should hide itself if the event is already over', () => {
+		defaultRender([pastTestEvent]);
 
-		expect(find('.announcement').length).toBe(0);
+		expect(ngMocks.findAll('.announcement').length).toBe(0);
 	});
 
-	it('should support multiple event definitions', async () => {
-		const { find, element } = await defaultRender([
+	it('should support multiple event definitions', () => {
+		const fixture = defaultRender([
 			pastTestEvent,
 			currentTestEvent,
 			futureTestEvent,
 		]);
 
-		expect(find('.announcement').length).toBe(1);
-		expect(element.nativeElement.innerText).toContain('Test Event!!!');
+		expect(ngMocks.findAll('.announcement').length).toBe(1);
+		expect(fixture.nativeElement.innerText).toContain('Test Event!!!');
 	});
 
-	it('should be dismissable', async () => {
-		const { find, fixture } = await defaultRender([currentTestEvent]);
+	it('should be dismissable', () => {
+		const fixture = defaultRender([currentTestEvent]);
 
-		expect(find('.dismiss-button').length).toBe(1);
-		find('.dismiss-button').nativeElement.click();
+		expect(ngMocks.findAll('.dismiss-button').length).toBe(1);
+		ngMocks.find('.dismiss-button').nativeElement.click();
 		fixture.detectChanges();
 
-		expect(find('.announcement').length).toBe(0);
+		expect(ngMocks.findAll('.announcement').length).toBe(0);
 	});
 
-	it('should set dismissed setting in localStorage', async () => {
-		const { find, fixture } = await defaultRender([currentTestEvent]);
+	it('should set dismissed setting in localStorage', () => {
+		const fixture = defaultRender([currentTestEvent]);
 
-		expect(find('.dismiss-button').length).toBe(1);
-		find('.dismiss-button').nativeElement.click();
+		expect(ngMocks.findAll('.dismiss-button').length).toBe(1);
+		ngMocks.find('.dismiss-button').nativeElement.click();
 		fixture.detectChanges();
 
 		expect(window.localStorage.getItem('announcementDismissed')).toBe(
@@ -110,67 +106,63 @@ describe('AnnouncementComponent', () => {
 		);
 	});
 
-	it('should recall dismissed setting from localStorage', async () => {
+	it('should recall dismissed setting from localStorage', () => {
 		window.localStorage.setItem(
 			'announcementDismissed',
 			currentTestEvent.start.toString(),
 		);
-		const { find } = await defaultRender([currentTestEvent]);
+		defaultRender([currentTestEvent]);
 
-		expect(find('.announcement').length).toBe(0);
+		expect(ngMocks.findAll('.announcement').length).toBe(0);
 	});
 
-	it('should still be able to show a new announcement after dismissing a previous one', async () => {
+	it('should still be able to show a new announcement after dismissing a previous one', () => {
 		window.localStorage.setItem('announcementDismissed', 'pastevent');
-		const { find } = await defaultRender([currentTestEvent]);
+		defaultRender([currentTestEvent]);
 
-		expect(find('.announcement').length).toBe(1);
+		expect(ngMocks.findAll('.announcement').length).toBe(1);
 	});
 
-	it('should be able to handle an empty data array', async () => {
-		const { find } = await defaultRender([]);
+	it('should be able to handle an empty data array', () => {
+		defaultRender([]);
 
-		expect(find('.announcement').length).toBe(0);
+		expect(ngMocks.findAll('.announcement').length).toBe(0);
 	});
 
-	it('should be able to handle the null case', async () => {
-		const { find } = await defaultRender();
+	it('should be able to handle the null case', () => {
+		defaultRender();
 
-		expect(find('.announcement').length).toBe(0);
+		expect(ngMocks.findAll('.announcement').length).toBe(0);
 	});
 
 	describe('Layout Adjustment', () => {
-		async function renderWithAdjustables() {
-			return await shallow.render(
+		function renderWithAdjustables() {
+			return MockRender(
 				`<div class="adjust-for-announcement"></div><pr-announcement [eventsList]="events"></pr-announcement><div class="adjust-for-announcement"></div>`,
-				{
-					bind: {
-						events: [currentTestEvent],
-					},
-				},
+				{ events: [currentTestEvent] },
 			);
 		}
-		function getAdjustedElements(
-			find: (s: string) => QueryMatch<DebugElement>,
-		) {
-			const adjustedElements = find('.adjust-for-announcement');
+
+		function getAdjustedElements() {
+			const adjustedElements = ngMocks.findAll('.adjust-for-announcement');
 
 			expect(adjustedElements.length).toBeGreaterThan(0);
 			return adjustedElements;
 		}
-		it('should adjust the page layout when it appears', async () => {
-			const { find } = await renderWithAdjustables();
-			getAdjustedElements(find).forEach((element) => {
+
+		it('should adjust the page layout when it appears', () => {
+			renderWithAdjustables();
+			getAdjustedElements().forEach((element) => {
 				expect(element.nativeElement.style.paddingTop).not.toBe('0px');
 				expect(element.nativeElement.style.paddingTop).not.toBeUndefined();
 			});
 		});
 
-		it('should readjust the page layout when it disappears', async () => {
-			const { find, fixture } = await renderWithAdjustables();
-			find('.dismiss-button').nativeElement.click();
+		it('should readjust the page layout when it disappears', () => {
+			const fixture = renderWithAdjustables();
+			ngMocks.find('.dismiss-button').nativeElement.click();
 			fixture.detectChanges();
-			getAdjustedElements(find).forEach((element) => {
+			getAdjustedElements().forEach((element) => {
 				expect(element.nativeElement.style.paddingTop).toBe('0px');
 			});
 		});

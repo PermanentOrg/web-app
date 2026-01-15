@@ -1,76 +1,77 @@
-import { Shallow } from 'shallow-render';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { FormsModule } from '@angular/forms';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ManageMetadataModule } from '../../manage-metadata.module';
 import { FormCreateComponent } from './form-create.component';
 
 describe('FormCreateComponent', () => {
-	let shallow: Shallow<FormCreateComponent>;
+	beforeEach(
+		async () =>
+			await MockBuilder(FormCreateComponent, ManageMetadataModule)
+				.keep(FormsModule)
+				.keep(A11yModule),
+	);
 
-	const defaultRender = async (
+	function defaultRender(
 		c: (tagName: string) => Promise<void> = async () => {},
-	) =>
-		await shallow.render(
+	) {
+		return MockRender(
 			'<pr-metadata-creation-form placeholder="Add New Test" [submitCallback]="callback"></pr-metadata-creation-form>',
-			{
-				bind: {
-					callback: c,
-				},
-			},
+			{ callback: c },
 		);
+	}
 
-	beforeEach(async () => {
-		shallow = new Shallow(FormCreateComponent, ManageMetadataModule)
-			.import(FormsModule)
-			.dontMock(A11yModule);
+	it('should create', () => {
+		const fixture = defaultRender();
+
+		expect(fixture.point.nativeElement).not.toBeNull();
 	});
 
-	it('should create', async () => {
-		const { element } = await defaultRender();
+	it('should be a text label at first', () => {
+		defaultRender();
 
-		expect(element).not.toBeNull();
+		expect(ngMocks.findAll('.placeholder-text').length).toBe(1);
+		expect(ngMocks.findAll('input').length).toBe(0);
 	});
 
-	it('should be a text label at first', async () => {
-		const { find } = await defaultRender();
+	it('should open up to a textbox', () => {
+		const fixture = defaultRender();
 
-		expect(find('.placeholder-text').length).toBe(1);
-		expect(find('input').length).toBe(0);
-	});
-
-	it('should open up to a textbox', async () => {
-		const { find, fixture } = await defaultRender();
-		find('.placeholder-text').triggerEventHandler('click', {});
+		ngMocks.find('.placeholder-text').triggerEventHandler('click', {});
 		fixture.detectChanges();
 
-		expect(find('input').length).toBe(1);
+		expect(ngMocks.findAll('input').length).toBe(1);
 	});
 
-	it('should use specified placeholder text', async () => {
-		const { find, fixture } = await defaultRender();
+	it('should use specified placeholder text', () => {
+		const fixture = defaultRender();
 
-		expect(find('.placeholder-text').nativeElement.innerText).toBe(
+		expect(ngMocks.find('.placeholder-text').nativeElement.innerText).toBe(
 			'Add New Test',
 		);
-		find('.placeholder-text').triggerEventHandler('click', {});
+		ngMocks.find('.placeholder-text').triggerEventHandler('click', {});
 		fixture.detectChanges();
 
-		expect(find('input').nativeElement.placeholder).toBe('Add New Test');
+		expect(ngMocks.find('input').nativeElement.placeholder).toBe(
+			'Add New Test',
+		);
 	});
 
 	it('should take in a callback and execute it', async () => {
 		let createdTag = '';
-		const { instance, find, fixture } = await defaultRender(async (tagName) => {
+		const fixture = defaultRender(async (tagName) => {
 			createdTag = tagName;
 		});
-		find('.placeholder-text').triggerEventHandler('click', {});
+		const instance = ngMocks.findInstance(FormCreateComponent);
+
+		ngMocks.find('.placeholder-text').triggerEventHandler('click', {});
 		fixture.detectChanges();
-		const input = find('input');
+		const input = ngMocks.find('input');
 		input.nativeElement.value = 'abc';
 		input.triggerEventHandler('input', { target: input.nativeElement });
 		fixture.detectChanges();
-		find('form').triggerEventHandler('submit', {
-			target: find('form').nativeElement,
+		ngMocks.find('form').triggerEventHandler('submit', {
+			target: ngMocks.find('form').nativeElement,
 		});
 
 		expect(instance.waiting).toBe(true);
@@ -79,26 +80,28 @@ describe('FormCreateComponent', () => {
 
 		expect(createdTag).toBe('abc');
 		expect(instance.waiting).toBe(false);
-		expect(find('.placeholder-text').length).toBe(1);
+		expect(ngMocks.findAll('.placeholder-text').length).toBe(1);
 	});
 
 	it('should not close editor if callback promise is rejected', async () => {
-		const { instance, find, fixture } = await defaultRender(async (tagName) => {
+		const fixture = defaultRender(async (tagName) => {
 			throw new Error();
 		});
-		find('.placeholder-text').triggerEventHandler('click', {});
+		const instance = ngMocks.findInstance(FormCreateComponent);
+
+		ngMocks.find('.placeholder-text').triggerEventHandler('click', {});
 		fixture.detectChanges();
-		const input = find('input');
+		const input = ngMocks.find('input');
 		input.nativeElement.value = 'abc';
 		input.triggerEventHandler('input', { target: input.nativeElement });
 		fixture.detectChanges();
-		find('form').triggerEventHandler('submit', {
-			target: find('form').nativeElement,
+		ngMocks.find('form').triggerEventHandler('submit', {
+			target: ngMocks.find('form').nativeElement,
 		});
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(find('input').length).toBe(1);
+		expect(ngMocks.findAll('input').length).toBe(1);
 		await new Promise<void>((resolve) => {
 			setTimeout(resolve, 1);
 		});
@@ -107,7 +110,9 @@ describe('FormCreateComponent', () => {
 	});
 
 	it('should blank out the form after submitting', async () => {
-		const { instance } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(FormCreateComponent);
+
 		instance.newTagName = 'potato';
 		await instance.runSubmitCallback();
 
@@ -116,18 +121,19 @@ describe('FormCreateComponent', () => {
 
 	it('should not send multiple create requests', async () => {
 		let callbackCalls = 0;
-		const { find, fixture } = await defaultRender(async () => {
+		const fixture = defaultRender(async () => {
 			callbackCalls += 1;
 		});
-		find('.placeholder-text').triggerEventHandler('click', {});
+
+		ngMocks.find('.placeholder-text').triggerEventHandler('click', {});
 		fixture.detectChanges();
-		const input = find('input');
+		const input = ngMocks.find('input');
 		input.nativeElement.value = 'abc';
 		input.triggerEventHandler('input', { target: input.nativeElement });
 		fixture.detectChanges();
 		for (let i = 0; i < 3; i += 1) {
-			find('form').triggerEventHandler('submit', {
-				target: find('form').nativeElement,
+			ngMocks.find('form').triggerEventHandler('submit', {
+				target: ngMocks.find('form').nativeElement,
 			});
 		}
 		await fixture.whenStable();

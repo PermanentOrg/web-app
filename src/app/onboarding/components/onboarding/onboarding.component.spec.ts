@@ -1,16 +1,22 @@
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { ngMocks, MockComponent } from 'ng-mocks';
 import { Location } from '@angular/common';
-import { ActivatedRoute, RouterModule, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ArchiveVO } from '@models/archive-vo';
 import { AccountVO } from '@models/account-vo';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '@shared/services/event/event.service';
-import { OnboardingModule } from '../../onboarding.module';
+import { MobileBannerComponent } from '@shared/components/mobile-banner/mobile-banner.component';
+import { PromptComponent } from '@shared/components/prompt/prompt.component';
+import { OnboardingHeaderComponent } from '../header/header.component';
+import { GlamOnboardingHeaderComponent } from '../glam/glam-header/glam-header.component';
+import { WelcomeScreenComponent } from '../welcome-screen/welcome-screen.component';
+import { GlamPendingArchivesComponent } from '../glam-pending-archives/glam-pending-archives.component';
+import { CreateNewArchiveComponent } from '../create-new-archive/create-new-archive.component';
 import { OnboardingComponent } from './onboarding.component';
 
 class NullRoute {
@@ -55,60 +61,86 @@ const mockRouter = {
 };
 
 describe('OnboardingComponent #onboarding', () => {
-	let shallow: Shallow<OnboardingComponent>;
-	beforeEach(() => {
-		shallow = new Shallow(OnboardingComponent, OnboardingModule)
-			.mock(ActivatedRoute, new NullRoute())
-			.mock(Location, { go: (path: string) => {} })
-			.mock(ApiService, mockApiService)
-			.mock(AccountService, mockAccountService)
-			.mock(Router, mockRouter)
-			.mock(MessageService, mockMessageService)
-			.provide(EventService)
-			.dontMock(EventService)
-			.replaceModule(RouterModule, RouterTestingModule);
+	beforeEach(async () => {
+		mockRouter.navigate.calls.reset();
+		await TestBed.configureTestingModule({
+			declarations: [
+				OnboardingComponent,
+				MockComponent(OnboardingHeaderComponent),
+				MockComponent(GlamOnboardingHeaderComponent),
+				MockComponent(WelcomeScreenComponent),
+				MockComponent(GlamPendingArchivesComponent),
+				MockComponent(CreateNewArchiveComponent),
+				MockComponent(MobileBannerComponent),
+				MockComponent(PromptComponent),
+			],
+			providers: [
+				{ provide: ActivatedRoute, useValue: new NullRoute() },
+				{ provide: Location, useValue: { go: (path: string) => {} } },
+				{ provide: ApiService, useValue: mockApiService },
+				{ provide: AccountService, useValue: mockAccountService },
+				{ provide: Router, useValue: mockRouter },
+				{ provide: MessageService, useValue: mockMessageService },
+				EventService,
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
 	});
 
 	it('should exist', async () => {
-		const { element } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		fixture.detectChanges();
 
-		expect(element).not.toBeNull();
+		expect(fixture.nativeElement).not.toBeNull();
 	});
 
 	it('should load the create new archive screen as default', async () => {
-		const { find, fixture } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		fixture.detectChanges();
+		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(find('pr-create-new-archive')).toHaveFoundOne();
+		expect(
+			fixture.nativeElement.querySelectorAll('pr-create-new-archive').length,
+		).toBe(1);
 	});
 
 	it('can change screens', async () => {
-		const { find, fixture } = await shallow.render();
-
-		expect(find('pr-create-new-archive')).toHaveFoundOne();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		fixture.detectChanges();
+		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(find('pr-welcome-screen')).toHaveFound(0);
+		expect(
+			fixture.nativeElement.querySelectorAll('pr-create-new-archive').length,
+		).toBe(1);
+
+		expect(
+			fixture.nativeElement.querySelectorAll('pr-welcome-screen').length,
+		).toBe(0);
 	});
 
 	it('stores the newly created archive', async () => {
-		const { element, find, fixture } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		const instance = fixture.componentInstance;
 
-		expect(element.componentInstance.currentArchive).toBeUndefined();
+		expect(instance.currentArchive).toBeUndefined();
+		fixture.detectChanges();
+		await fixture.whenStable();
 		fixture.detectChanges();
 
-		const child = find('pr-create-new-archive');
+		const child = ngMocks.find('pr-create-new-archive');
 
-		expect(child).toHaveFoundOne();
+		expect(child).toBeTruthy();
 		child.triggerEventHandler('createdArchive', new ArchiveVO({}));
 
-		expect(element.componentInstance.currentArchive).not.toBeUndefined();
+		expect(instance.currentArchive).not.toBeUndefined();
 	});
 
 	it('stores an accepted archive invitation', async () => {
 		const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
 
-		const mockAccountService = {
+		const localMockAccountService = {
 			refreshArchives: jasmine
 				.createSpy('refreshArchives')
 				.and.returnValue(Promise.resolve([mockPendingArchive])),
@@ -119,47 +151,73 @@ describe('OnboardingComponent #onboarding', () => {
 				),
 		};
 
-		const shallow = new Shallow(OnboardingComponent, OnboardingModule)
-			.mock(AccountService, mockAccountService)
-			.mock(ApiService, mockApiService)
-			.import(HttpClientTestingModule);
+		TestBed.resetTestingModule();
+		await TestBed.configureTestingModule({
+			declarations: [
+				OnboardingComponent,
+				MockComponent(OnboardingHeaderComponent),
+				MockComponent(GlamOnboardingHeaderComponent),
+				MockComponent(WelcomeScreenComponent),
+				MockComponent(GlamPendingArchivesComponent),
+				MockComponent(CreateNewArchiveComponent),
+				MockComponent(MobileBannerComponent),
+				MockComponent(PromptComponent),
+			],
+			providers: [
+				{ provide: AccountService, useValue: localMockAccountService },
+				{ provide: ApiService, useValue: mockApiService },
+				{ provide: ActivatedRoute, useValue: new NullRoute() },
+				{ provide: Location, useValue: { go: (path: string) => {} } },
+				{ provide: Router, useValue: mockRouter },
+				{ provide: MessageService, useValue: mockMessageService },
+				EventService,
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
 
-		const { instance, find, fixture, element } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		const instance = fixture.componentInstance;
 
 		instance.ngOnInit();
+		fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
 
 		if (instance.pendingArchives.length > 0) {
 			expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
 		}
 
-		expect(find('pr-welcome-screen')).toHaveFoundOne();
-		find('pr-welcome-screen').triggerEventHandler(
-			'selectInvitation',
-			new ArchiveVO({ fullName: 'Pending Test' }),
-		);
+		expect(
+			fixture.nativeElement.querySelectorAll('pr-welcome-screen').length,
+		).toBe(1);
+		ngMocks
+			.find('pr-welcome-screen')
+			.triggerEventHandler(
+				'selectInvitation',
+				new ArchiveVO({ fullName: 'Pending Test' }),
+			);
 		fixture.detectChanges();
 		await fixture.whenStable();
 
-		expect(
-			element.componentInstance.selectedPendingArchive,
-		).not.toBeUndefined();
+		expect(instance.selectedPendingArchive).not.toBeUndefined();
 	});
 
 	it('can be tested with debugging component', async () => {
-		const { element } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		const instance = fixture.componentInstance;
 
-		expect(element.componentInstance.pendingArchives.length).toBe(0);
-		element.componentInstance.setState({
+		expect(instance.pendingArchives.length).toBe(0);
+		instance.setState({
 			pendingArchives: [new ArchiveVO({})],
 		});
 
-		expect(element.componentInstance.pendingArchives.length).toBe(1);
+		expect(instance.pendingArchives.length).toBe(1);
 	});
 
 	it('displays the pending archives screen when there are pending archives', async () => {
 		const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
 
-		const mockAccountService = {
+		const localMockAccountService = {
 			refreshArchives: jasmine
 				.createSpy('refreshArchives')
 				.and.returnValue(Promise.resolve([mockPendingArchive])),
@@ -170,14 +228,35 @@ describe('OnboardingComponent #onboarding', () => {
 				),
 		};
 
-		const shallow = new Shallow(OnboardingComponent, OnboardingModule)
-			.mock(AccountService, mockAccountService)
-			.mock(ApiService, mockApiService)
-			.import(HttpClientTestingModule);
+		TestBed.resetTestingModule();
+		await TestBed.configureTestingModule({
+			declarations: [
+				OnboardingComponent,
+				MockComponent(OnboardingHeaderComponent),
+				MockComponent(GlamOnboardingHeaderComponent),
+				MockComponent(WelcomeScreenComponent),
+				MockComponent(GlamPendingArchivesComponent),
+				MockComponent(CreateNewArchiveComponent),
+				MockComponent(MobileBannerComponent),
+				MockComponent(PromptComponent),
+			],
+			providers: [
+				{ provide: AccountService, useValue: localMockAccountService },
+				{ provide: ApiService, useValue: mockApiService },
+				{ provide: ActivatedRoute, useValue: new NullRoute() },
+				{ provide: Location, useValue: { go: (path: string) => {} } },
+				{ provide: Router, useValue: mockRouter },
+				{ provide: MessageService, useValue: mockMessageService },
+				EventService,
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
 
-		const { instance } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		const instance = fixture.componentInstance;
 
 		instance.ngOnInit();
+		fixture.detectChanges();
 
 		if (instance.pendingArchives.length > 0) {
 			expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
@@ -185,7 +264,8 @@ describe('OnboardingComponent #onboarding', () => {
 	});
 
 	it('should remove shareToken from localStorage', async () => {
-		const { instance, fixture } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		const instance = fixture.componentInstance;
 
 		const getItemSpy = spyOn(localStorage, 'getItem').and.returnValue(
 			'someToken',
@@ -204,7 +284,8 @@ describe('OnboardingComponent #onboarding', () => {
 	});
 
 	it('should navigate to /app/welcome if shareToken is not in localStorage and isGlam is false', async () => {
-		const { instance, fixture } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		const instance = fixture.componentInstance;
 
 		spyOn(localStorage, 'getItem').and.returnValue(null);
 		instance.isGlam = false;
@@ -218,7 +299,8 @@ describe('OnboardingComponent #onboarding', () => {
 	});
 
 	it('should navigate to /app if shareToken is not in localStorage and isGlam is true', async () => {
-		const { instance, fixture } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		const instance = fixture.componentInstance;
 
 		spyOn(localStorage, 'getItem').and.returnValue(null);
 		instance.isGlam = true;
@@ -232,7 +314,8 @@ describe('OnboardingComponent #onboarding', () => {
 	});
 
 	it('should navigate to /app/welcome-invite if shareToken is not in localStorage and isGlam is true', async () => {
-		const { instance, fixture } = await shallow.render();
+		const fixture = TestBed.createComponent(OnboardingComponent);
+		const instance = fixture.componentInstance;
 
 		spyOn(localStorage, 'getItem').and.returnValue(null);
 		instance.isGlam = false;

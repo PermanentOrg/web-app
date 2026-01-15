@@ -1,15 +1,15 @@
-import { Shallow } from 'shallow-render';
 import { NgModule } from '@angular/core';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountDropdownComponent } from '@shared/components/account-dropdown/account-dropdown.component';
 import { GalleryHeaderComponent } from './gallery-header.component';
 
 @NgModule({
-	declarations: [GalleryHeaderComponent, AccountDropdownComponent], // components your module owns.
-	imports: [], // other modules your module needs.
-	providers: [AccountService], // providers available to your module.
-	bootstrap: [], // bootstrap this root component.
+	declarations: [GalleryHeaderComponent, AccountDropdownComponent],
+	imports: [],
+	providers: [AccountService],
+	bootstrap: [],
 })
 class DummyModule {}
 
@@ -19,31 +19,29 @@ const accountMock = {
 };
 
 describe('GalleryHeaderComponent', () => {
-	let shallow: Shallow<GalleryHeaderComponent>;
-
-	const defaultRender = async () =>
-		await shallow.render('<pr-gallery-header></pr-gallery-header>', {
-			bind: {
-				isLoggedIn,
-			},
-		});
-	beforeEach(() => {
+	beforeEach(async () => {
 		isLoggedIn = true;
-		shallow = new Shallow(GalleryHeaderComponent, DummyModule).mock(
-			AccountService,
-			accountMock,
-		);
+		await MockBuilder(GalleryHeaderComponent, DummyModule).provide({
+			provide: AccountService,
+			useValue: accountMock,
+		});
 	});
 
-	it('should render', async () => {
-		const { element } = await defaultRender();
+	function defaultRender() {
+		return MockRender('<pr-gallery-header></pr-gallery-header>', {
+			isLoggedIn,
+		});
+	}
 
-		expect(element).not.toBeNull();
+	it('should render', () => {
+		const fixture = defaultRender();
+
+		expect(fixture.point.nativeElement).not.toBeNull();
 	});
 
-	it('should render back button when logged in', async () => {
-		const { find } = await defaultRender();
+	it('should render back button when logged in', () => {
+		defaultRender();
 
-		expect(find('.return-btn').length).toBeGreaterThan(0);
+		expect(ngMocks.findAll('.return-btn').length).toBeGreaterThan(0);
 	});
 });

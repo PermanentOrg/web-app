@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
@@ -7,10 +7,10 @@ import { MessageService } from '@shared/services/message/message.service';
 import { PublicSettingsComponent } from './public-settings.component';
 
 @NgModule({
-	declarations: [], // components your module owns.
-	imports: [], // other modules your module needs.
-	providers: [ApiService], // providers available to your module.
-	bootstrap: [], // bootstrap this root component.
+	declarations: [],
+	imports: [],
+	providers: [ApiService],
+	bootstrap: [],
 })
 class DummyModule {}
 
@@ -31,73 +31,80 @@ const mockApiService = {
 };
 
 describe('PublicSettingsComponent', () => {
-	let shallow: Shallow<PublicSettingsComponent>;
-	async function defaultRender(a: ArchiveVO = archive) {
-		return await shallow.render(
-			`<pr-public-settings [archive]="archive"></pr-public-settings>`,
-			{
-				bind: {
-					archive: a,
-				},
-			},
-		);
-	}
-	beforeEach(() => {
+	beforeEach(async () => {
 		throwError = false;
 		updatedDownload = null;
 		updated = false;
 		archive = {
 			allowPublicDownload: true,
 		} as ArchiveVO;
-		shallow = new Shallow(PublicSettingsComponent, DummyModule)
-			.mock(ApiService, mockApiService)
-			.mock(MessageService, {
-				showError: () => {},
+		await MockBuilder(PublicSettingsComponent, DummyModule)
+			.provide({
+				provide: ApiService,
+				useValue: mockApiService,
+			})
+			.provide({
+				provide: MessageService,
+				useValue: {
+					showError: () => {},
+				},
 			});
 	});
 
-	it('should exist', async () => {
-		const { element } = await defaultRender();
+	function defaultRender(a: ArchiveVO = archive) {
+		return MockRender(
+			`<pr-public-settings [archive]="archive"></pr-public-settings>`,
+			{ archive: a },
+		);
+	}
 
-		expect(element).not.toBeNull();
+	it('should exist', () => {
+		const fixture = defaultRender();
+
+		expect(fixture.point.nativeElement).not.toBeNull();
 	});
 
 	describe('it should have the proper option checked by default', () => {
-		it('on', async () => {
-			const { element } = await defaultRender();
+		it('on', () => {
+			defaultRender();
+			const instance = ngMocks.findInstance(PublicSettingsComponent);
 
-			expect(element.componentInstance.allowDownloadsToggle).toBeTruthy();
+			expect(instance.allowDownloadsToggle).toBeTruthy();
 		});
 
-		it('off', async () => {
-			const { element } = await defaultRender({
+		it('off', () => {
+			defaultRender({
 				allowPublicDownload: false,
 			} as ArchiveVO);
+			const instance = ngMocks.findInstance(PublicSettingsComponent);
 
-			expect(element.componentInstance.allowDownloadsToggle).toBeFalsy();
+			expect(instance.allowDownloadsToggle).toBeFalsy();
 		});
 	});
 
 	it('should save the archive setting when changed', async () => {
-		const { element } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(PublicSettingsComponent);
 
 		expect(updated).toBeFalse();
-		element.componentInstance.allowDownloadsToggle = 0;
-		await element.componentInstance.onAllowDownloadsChange();
+		instance.allowDownloadsToggle = 0;
+		await instance.onAllowDownloadsChange();
 
 		expect(updated).toBeTrue();
 		expect(updatedDownload).toBeFalse();
-		element.componentInstance.allowDownloadsToggle = 1;
-		await element.componentInstance.onAllowDownloadsChange();
+		instance.allowDownloadsToggle = 1;
+		await instance.onAllowDownloadsChange();
 
 		expect(updatedDownload).toBeTrue();
 	});
 
 	it('should fail silently', async () => {
-		const { element } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(PublicSettingsComponent);
+
 		throwError = true;
-		element.componentInstance.allowDownloadsToggle = 0;
-		await element.componentInstance.onAllowDownloadsChange();
+		instance.allowDownloadsToggle = 0;
+		await instance.onAllowDownloadsChange();
 
 		expect(updated).toBeFalse();
 	});

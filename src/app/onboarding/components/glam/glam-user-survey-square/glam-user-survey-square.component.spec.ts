@@ -1,51 +1,71 @@
-import { Shallow } from 'shallow-render';
-import { OnboardingModule } from '@root/app/onboarding/onboarding.module';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GlamUserSurveySquareComponent } from './glam-user-survey-square.component';
 
+@Component({
+	selector: 'pr-checkbox',
+	template: '',
+	standalone: false,
+})
+class MockCheckboxComponent {
+	@Input() isChecked: boolean;
+	@Input() variant: string;
+	@Input() onboarding: boolean;
+}
+
 describe('GlamUserSurveySquareComponent', () => {
-	let shallow: Shallow<GlamUserSurveySquareComponent>;
+	let component: GlamUserSurveySquareComponent;
+	let fixture: ComponentFixture<GlamUserSurveySquareComponent>;
 
 	beforeEach(async () => {
-		shallow = new Shallow(GlamUserSurveySquareComponent, OnboardingModule);
+		await TestBed.configureTestingModule({
+			declarations: [GlamUserSurveySquareComponent, MockCheckboxComponent],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(GlamUserSurveySquareComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
+	it('should create', () => {
+		expect(component).toBeTruthy();
 	});
 
-	it('should display the text correctly', async () => {
+	it('should display the text correctly', () => {
 		const text = 'Test Text';
-		const { find } = await shallow.render({ bind: { text } });
-		const textElement = find('.text');
+		component.text = text;
+		fixture.detectChanges();
+		const textElement = fixture.nativeElement.querySelector('.text');
 
-		expect(textElement.nativeElement.textContent).toContain(text);
+		expect(textElement.textContent).toContain(text);
 	});
 
-	it('should toggle selected state and emit selectedChange when clicked', async () => {
+	it('should toggle selected state and emit selectedChange when clicked', () => {
 		const tag = 'test-tag';
-		const { instance, outputs, find } = await shallow.render({
-			bind: { tag },
-		});
-		const squareElement = find('.square');
-		squareElement.triggerEventHandler('click', null);
+		component.tag = tag;
+		fixture.detectChanges();
 
-		expect(instance.selected).toBeTrue();
-		expect(outputs.selectedChange.emit).toHaveBeenCalledWith(tag);
+		spyOn(component.selectedChange, 'emit');
 
-		squareElement.triggerEventHandler('click', null);
+		const squareElement = fixture.nativeElement.querySelector('.square');
+		squareElement.click();
 
-		expect(instance.selected).toBeFalse();
-		expect(outputs.selectedChange.emit).toHaveBeenCalledWith(tag);
+		expect(component.selected).toBeTrue();
+		expect(component.selectedChange.emit).toHaveBeenCalledWith(tag);
+
+		squareElement.click();
+
+		expect(component.selected).toBeFalse();
+		expect(component.selectedChange.emit).toHaveBeenCalledWith(tag);
 	});
 
-	it('should add selected class when selected is true', async () => {
-		const { find } = await shallow.render({
-			bind: { selected: true },
-		});
-		const squareElement = find('.square');
+	it('should add selected class when selected is true', () => {
+		component.selected = true;
+		fixture.detectChanges();
 
-		expect(squareElement.classes.selected).toBeTrue();
+		const squareElement = fixture.nativeElement.querySelector('.square');
+
+		expect(squareElement.classList.contains('selected')).toBeTrue();
 	});
 });

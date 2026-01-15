@@ -1,12 +1,9 @@
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import OpenSeadragon from 'openseadragon';
-import { NgModule } from '@angular/core';
 import { GetAltTextPipe } from '@shared/pipes/get-alt-text.pipe';
 import { RecordVO } from '@models/index';
 import { ZoomingImageViewerComponent } from './zooming-image-viewer.component';
-
-@NgModule()
-class DummyModule {}
 
 class MockOpenSeaDragon {
 	private handlers = new Map<string, (any) => void>();
@@ -31,19 +28,25 @@ function createMockOpenSeaDragon(options: OpenSeadragon.Options) {
 }
 
 describe('ZoomingImageViewerComponent', () => {
-	let shallow: Shallow<ZoomingImageViewerComponent>;
+	let fixture: ComponentFixture<ZoomingImageViewerComponent>;
+	let instance: ZoomingImageViewerComponent;
 
-	beforeEach(() => {
-		shallow = new Shallow(ZoomingImageViewerComponent, DummyModule)
-			.declare(GetAltTextPipe)
-			.provideMock({
-				provide: 'openseadragon',
-				useValue: createMockOpenSeaDragon,
-			});
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [ZoomingImageViewerComponent, GetAltTextPipe],
+			providers: [
+				{ provide: 'openseadragon', useValue: createMockOpenSeaDragon },
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(ZoomingImageViewerComponent);
+		instance = fixture.componentInstance;
 	});
 
-	async function renderWithRecord(record: RecordVO) {
-		return await shallow.render({ bind: { item: record } });
+	function renderWithRecord(record: RecordVO) {
+		instance.item = record;
+		fixture.detectChanges();
 	}
 
 	function getValidTestRecord(): RecordVO {
@@ -54,7 +57,7 @@ describe('ZoomingImageViewerComponent', () => {
 	}
 
 	it('should create', async () => {
-		const { instance } = await shallow.render();
+		renderWithRecord(getValidTestRecord());
 
 		expect(instance).toBeTruthy();
 	});
@@ -101,30 +104,28 @@ describe('ZoomingImageViewerComponent', () => {
 	});
 
 	describe('Record formats that prevent openseadragon setup', () => {
-		async function expectNoViewerWithRecord(record: RecordVO) {
-			const { instance } = await renderWithRecord(record);
+		function expectNoViewerWithRecord(record: RecordVO) {
+			renderWithRecord(record);
 
 			expect(instance.viewer).toBeUndefined();
 		}
 
 		it('needs an instance of RecordVO', async () => {
-			await expectNoViewerWithRecord({} as RecordVO);
+			expectNoViewerWithRecord({} as RecordVO);
 		});
 
 		it('needs FileVOs', async () => {
-			await expectNoViewerWithRecord(
-				new RecordVO({ type: 'type.record.image' }),
-			);
+			expectNoViewerWithRecord(new RecordVO({ type: 'type.record.image' }));
 		});
 
 		it('needs to be an image', async () => {
-			await expectNoViewerWithRecord(
+			expectNoViewerWithRecord(
 				new RecordVO({ FileVOs: [{ fileURL: 'test' }] }),
 			);
 		});
 
 		it('needs a valid image url', async () => {
-			await expectNoViewerWithRecord(
+			expectNoViewerWithRecord(
 				new RecordVO({
 					FileVOs: [{}],
 					type: 'type.record.image',
@@ -134,40 +135,43 @@ describe('ZoomingImageViewerComponent', () => {
 	});
 
 	it('sets up openseadragon with a record that is an image', async () => {
-		const { instance } = await renderWithRecord(getValidTestRecord());
+		renderWithRecord(getValidTestRecord());
 
 		expect(instance.viewer).toBeTruthy();
 	});
 
 	it('should output an event when going fullscreen', async () => {
-		const { instance, outputs } = await renderWithRecord(getValidTestRecord());
+		renderWithRecord(getValidTestRecord());
+		const isFullScreenSpy = spyOn(instance.isFullScreen, 'emit');
+
 		const viewer = instance.viewer;
 
 		viewer.raiseEvent('full-screen', { fullScreen: true });
 
-		expect(outputs.isFullScreen.emit).toHaveBeenCalledWith(true);
+		expect(isFullScreenSpy).toHaveBeenCalledWith(true);
 
 		viewer.raiseEvent('full-screen', { fullScreen: false });
 
-		expect(outputs.isFullScreen.emit).toHaveBeenCalledWith(false);
+		expect(isFullScreenSpy).toHaveBeenCalledWith(false);
 	});
 
 	it('should output an event if the user zooms in', async () => {
-		const { instance, outputs } = await renderWithRecord(getValidTestRecord());
+		renderWithRecord(getValidTestRecord());
+		const disableSwipeSpy = spyOn(instance.disableSwipe, 'emit');
 
 		const viewer = instance.viewer;
 		viewer.raiseEvent('zoom', { zoom: 2 });
 		viewer.raiseEvent('zoom', { zoom: 3 });
 
-		expect(outputs.disableSwipe.emit).toHaveBeenCalledWith(true);
+		expect(disableSwipeSpy).toHaveBeenCalledWith(true);
 
 		viewer.raiseEvent('zoom', { zoom: 2 });
 
-		expect(outputs.disableSwipe.emit).toHaveBeenCalledWith(false);
+		expect(disableSwipeSpy).toHaveBeenCalledWith(false);
 	});
 
 	it('should disable panning if the zoom level is lesss than 1', async () => {
-		const { instance } = await renderWithRecord(getValidTestRecord());
+		renderWithRecord(getValidTestRecord());
 		const viewer = instance.viewer;
 
 		const expectPanning = (enabled: boolean) => {

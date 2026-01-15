@@ -1,12 +1,16 @@
-import { Shallow } from 'shallow-render';
-import { CoreModule } from '@core/core.module';
+import { NgModule } from '@angular/core';
+import { MockBuilder, MockRender } from 'ng-mocks';
 import { DialogRef } from '@angular/cdk/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { TagsService } from '@core/services/tags/tags.service';
 import { ArchiveResponse } from '@shared/services/api/archive.repo';
 import { ArchiveSettingsDialogComponent } from './archive-settings-dialog.component';
+
+@NgModule()
+class DummyModule {}
 
 class MockDialogRef {
 	close(value?: any): void {}
@@ -15,7 +19,7 @@ class MockDialogRef {
 const mockApiService = {
 	tag: {
 		async getTagsByArchive(archive) {
-			return await Promise.resolve([]);
+			return await Promise.resolve({ getTagVOs: () => [] });
 		},
 	},
 	archive: {
@@ -40,37 +44,40 @@ const mockAccountService = {
 };
 
 describe('ArchiveSettingsDialogComponent', () => {
-	let shallow: Shallow<ArchiveSettingsDialogComponent>;
+	beforeEach(
+		async () =>
+			await MockBuilder(ArchiveSettingsDialogComponent, DummyModule)
+				.provide({
+					provide: DialogRef,
+					useClass: MockDialogRef,
+				})
+				.provide({
+					provide: ActivatedRoute,
+					useValue: { snapshot: { fragment: null } },
+				})
+				.provide({
+					provide: ApiService,
+					useValue: mockApiService,
+				})
+				.provide({
+					provide: AccountService,
+					useValue: mockAccountService,
+				})
+				.provide({
+					provide: TagsService,
+					useValue: mockTagsService,
+				}),
+	);
 
-	beforeEach(() => {
-		shallow = new Shallow(ArchiveSettingsDialogComponent, CoreModule)
-			.provide({
-				provide: DialogRef,
-				useClass: MockDialogRef,
-			})
-			.provideMock({
-				provide: ApiService,
-				useValue: mockApiService,
-			})
-			.provideMock({
-				provide: AccountService,
-				useValue: mockAccountService,
-			})
-			.provide({
-				provide: TagsService,
-				useValue: mockTagsService,
-			});
+	it('should create', () => {
+		const fixture = MockRender(ArchiveSettingsDialogComponent);
+
+		expect(fixture.point.componentInstance).toBeTruthy();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
+	it('should initialize with public-settings tab', () => {
+		const fixture = MockRender(ArchiveSettingsDialogComponent);
 
-		expect(instance).toBeTruthy();
-	});
-
-	it('should initialize with public-settings tab', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance.activeTab).toBe('public-settings');
+		expect(fixture.point.componentInstance.activeTab).toBe('public-settings');
 	});
 });

@@ -1,49 +1,50 @@
-import { Shallow } from 'shallow-render';
+import { NgModule } from '@angular/core';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
-import { OnboardingModule } from '../../onboarding.module';
 import { OnboardingHeaderComponent } from './header.component';
+
+@NgModule()
+class DummyModule {}
 
 class AccountClearStub {
 	public clear() {}
 }
 
 describe('OnboardingHeaderComponent', () => {
-	let shallow: Shallow<OnboardingHeaderComponent>;
-
-	async function defaultRender(accountName: string = 'Unit Test') {
-		return await shallow.render({
-			bind: {
-				accountName,
-			},
-		});
-	}
-
 	beforeEach(async () => {
-		shallow = new Shallow(
-			OnboardingHeaderComponent,
-			OnboardingModule,
-		).provideMock({ provide: AccountService, useClass: AccountClearStub });
+		await MockBuilder(OnboardingHeaderComponent, DummyModule).provide({
+			provide: AccountService,
+			useClass: AccountClearStub,
+		});
 	});
 
-	it('should create', async () => {
-		const { instance } = await defaultRender();
+	it('should create', () => {
+		const fixture = MockRender(OnboardingHeaderComponent, {
+			accountName: 'Unit Test',
+		});
 
-		expect(instance).toBeTruthy();
+		expect(fixture.point.componentInstance).toBeTruthy();
 	});
 
-	it("should display the user's name", async () => {
-		const { element } = await defaultRender();
+	it("should display the user's name", () => {
+		const fixture = MockRender(OnboardingHeaderComponent, {
+			accountName: 'Unit Test',
+		});
 
-		expect(element.nativeElement.innerText).toContain('Unit Test');
+		expect(fixture.nativeElement.innerText).toContain('Unit Test');
 	});
 
-	it('can log out the user', async () => {
-		const { find, inject } = await defaultRender();
+	it('can log out the user', () => {
+		MockRender(OnboardingHeaderComponent, {
+			accountName: 'Unit Test',
+		});
 
-		const accountClearSpy = spyOn(inject(AccountService), 'clear');
-		const navigateSpy = spyOn(inject(Router), 'navigate');
-		find('.banner-logout button').triggerEventHandler('click');
+		const accountService = ngMocks.get(AccountService);
+		const router = ngMocks.get(Router);
+		const accountClearSpy = spyOn(accountService, 'clear');
+		const navigateSpy = spyOn(router, 'navigate');
+		ngMocks.find('.banner-logout button').triggerEventHandler('click', null);
 
 		expect(accountClearSpy).toHaveBeenCalled();
 		expect(navigateSpy).toHaveBeenCalled();

@@ -1,4 +1,5 @@
-import { Shallow } from 'shallow-render';
+import { ComponentFixture } from '@angular/core/testing';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { AnnouncementModule } from '@announcement/announcement.module';
 import {
@@ -26,68 +27,70 @@ class DummyInstallPromptEvent
 let prompted: boolean;
 
 describe('AndroidAppNotifyComponent', () => {
-	let shallow: Shallow<AndroidAppNotifyComponent>;
-	const waitForPromptEvent = async (fixture) => {
-		const event = new DummyInstallPromptEvent();
-		window.dispatchEvent(event);
-		fixture.detectChanges();
-		await fixture.whenStable();
-	};
-	beforeEach(() => {
+	beforeEach(async () => {
 		prompted = false;
-		shallow = new Shallow(AndroidAppNotifyComponent, AnnouncementModule);
+		await MockBuilder(AndroidAppNotifyComponent, AnnouncementModule);
 	});
 
 	afterEach(() => {
 		localStorage.clear();
 	});
 
-	it('should exist', async () => {
-		const { element } = await shallow.render();
+	const waitForPromptEvent = async (
+		fixture: ComponentFixture<AndroidAppNotifyComponent>,
+	) => {
+		const event = new DummyInstallPromptEvent();
+		window.dispatchEvent(event);
+		fixture.detectChanges();
+		await fixture.whenStable();
+	};
 
-		expect(element).not.toBeNull();
+	it('should exist', () => {
+		const fixture = MockRender(AndroidAppNotifyComponent);
+
+		expect(fixture.debugElement).not.toBeNull();
 	});
 
-	it('should be invisible before `beforeinstallprompt` event', async () => {
-		const { find } = await shallow.render();
+	it('should be invisible before `beforeinstallprompt` event', () => {
+		MockRender(AndroidAppNotifyComponent);
 
-		expect(find('div').length).toBe(0);
+		expect(ngMocks.findAll('div').length).toBe(0);
 	});
 
 	it('should appear when the `beforeinstallprompt` fires', async () => {
-		const { find, fixture } = await shallow.render();
+		const fixture = MockRender(AndroidAppNotifyComponent);
 		await waitForPromptEvent(fixture);
 
-		expect(find('div').length).toBeGreaterThan(0);
+		expect(ngMocks.findAll('div').length).toBeGreaterThan(0);
 	});
 
 	it('has a clickable button that shows the prompt', async () => {
-		const { find, fixture } = await shallow.render();
+		const fixture = MockRender(AndroidAppNotifyComponent);
 		await waitForPromptEvent(fixture);
-		find('.prompt-button')[0].triggerEventHandler('click', {});
+		ngMocks.findAll('.prompt-button')[0].triggerEventHandler('click', {});
 
 		expect(prompted).toBeTruthy();
 	});
 
 	it('should dismiss itself after the App Install Banner appears', async () => {
-		const { find, fixture } = await shallow.render();
+		const fixture = MockRender(AndroidAppNotifyComponent);
 		await waitForPromptEvent(fixture);
-		find('.prompt-button')[0].triggerEventHandler('click', {});
+		ngMocks.findAll('.prompt-button')[0].triggerEventHandler('click', {});
 		await fixture.whenStable();
 		fixture.detectChanges();
 		await fixture.whenStable();
 
-		expect(find('div').length).toBe(0);
+		expect(ngMocks.findAll('div').length).toBe(0);
 	});
 
 	it('should be dismissable from a close button', async () => {
-		const { find, fixture } = await shallow.render();
+		const fixture = MockRender(AndroidAppNotifyComponent);
 		await waitForPromptEvent(fixture);
-		find('.dismiss-button')[0].triggerEventHandler('click', {});
+		ngMocks.findAll('.dismiss-button')[0].triggerEventHandler('click', {});
 		fixture.detectChanges();
 		await fixture.whenStable();
 
-		expect(find('div').length).toBe(0);
+		expect(ngMocks.findAll('div').length).toBe(0);
 		const dismissed = localStorage.getItem(
 			AndroidAppNotifyComponent.storageKey,
 		);
@@ -97,9 +100,9 @@ describe('AndroidAppNotifyComponent', () => {
 
 	it('should not show up if previously dismissed', async () => {
 		localStorage.setItem(AndroidAppNotifyComponent.storageKey, 'true');
-		const { find, fixture } = await shallow.render();
+		const fixture = MockRender(AndroidAppNotifyComponent);
 		await waitForPromptEvent(fixture);
 
-		expect(find('div').length).toBe(0);
+		expect(ngMocks.findAll('div').length).toBe(0);
 	});
 });

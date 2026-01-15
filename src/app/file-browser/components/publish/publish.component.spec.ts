@@ -1,4 +1,5 @@
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderVO, RecordVO } from '@models/index';
 import { FolderResponse } from '@shared/services/api/folder.repo';
@@ -6,8 +7,8 @@ import { Observable } from 'rxjs';
 import { MessageService } from '@shared/services/message/message.service';
 import { EventService } from '@shared/services/event/event.service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { Router } from '@angular/router';
 import { ArchiveVO } from '../../../models/archive-vo';
-import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { PublishComponent } from './publish.component';
 
@@ -16,6 +17,10 @@ const mockAccountService = {
 		const archive = new ArchiveVO({ accessRole: 'access.role.viewer' });
 		return archive;
 	},
+	getRootFolder: () => ({
+		ChildItemVOs: [],
+	}),
+	refreshAccountDebounced: () => {},
 };
 
 class MockDialogRef {
@@ -31,42 +36,73 @@ const mockApiService = {
 		navigateLean: (folder: FolderVO): Observable<FolderResponse> =>
 			new Observable<FolderResponse>(),
 	},
+	publish: {
+		getInternetArchiveLink: async () => ({
+			getPublishIaVO: () => null,
+		}),
+		publishToInternetArchive: async () => ({
+			getPublishIaVO: () => null,
+		}),
+	},
+	record: {
+		copy: async () => ({
+			getRecordVO: () => new RecordVO({}),
+		}),
+	},
 };
 
 describe('PublishComponent', () => {
-	let shallow: Shallow<PublishComponent>;
+	let component: PublishComponent;
+	let fixture: ComponentFixture<PublishComponent>;
 
-	beforeEach(() => {
-		shallow = new Shallow(PublishComponent, FileBrowserComponentsModule)
-			.mock(AccountService, mockAccountService)
-			.mock(ApiService, mockApiService)
-			.mock(DIALOG_DATA, {
-				item: { folder_linkType: 'linkType' },
-			})
-			.provide({ provide: DialogRef, useClass: MockDialogRef })
-			.provide(EventService)
-			.dontMock(EventService)
-			.mock(MessageService, {
-				showError: () => {},
-			});
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [PublishComponent],
+			providers: [
+				{ provide: AccountService, useValue: mockAccountService },
+				{ provide: ApiService, useValue: mockApiService },
+				{
+					provide: DIALOG_DATA,
+					useValue: {
+						item: { folder_linkType: 'linkType' },
+					},
+				},
+				{ provide: DialogRef, useClass: MockDialogRef },
+				EventService,
+				{
+					provide: MessageService,
+					useValue: {
+						showError: () => {},
+					},
+				},
+				{
+					provide: Router,
+					useValue: {
+						navigate: () => {},
+					},
+				},
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(PublishComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
+	it('should create', () => {
+		expect(component).toBeTruthy();
 	});
 
-	it('should disaple the public to internet archive button if the user does not have the correct access role', async () => {
-		const { instance, find, fixture } = await shallow.render();
-		instance.publicItem = new RecordVO({ recordId: 1 });
-		instance.publishIa = null;
-		instance.publicLink = null;
+	it('should disaple the public to internet archive button if the user does not have the correct access role', () => {
+		component.publicItem = new RecordVO({ recordId: 1 });
+		component.publishIa = null;
+		component.publicLink = null;
 
 		fixture.detectChanges();
 
-		const button = find('.publish-to-archive');
+		const button = fixture.nativeElement.querySelector('.publish-to-archive');
 
-		expect(button.nativeElement.disabled).toBeTruthy();
+		expect(button.disabled).toBeTruthy();
 	});
 });

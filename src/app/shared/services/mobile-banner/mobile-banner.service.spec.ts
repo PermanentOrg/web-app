@@ -1,6 +1,6 @@
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder } from 'ng-mocks';
 import { DeviceService } from '@shared/services/device/device.service';
-import { CoreModule } from '@core/core.module';
-import { Shallow } from 'shallow-render';
 import { MobileBannerService } from './mobile-banner.service';
 
 const mockAndroidDeviceService = {
@@ -13,18 +13,16 @@ const mockIosDeviceService = {
 };
 
 describe('BannerService', () => {
-	let shallow: Shallow<MobileBannerService>;
-
 	describe('when on an Android device', () => {
-		beforeEach(() => {
-			shallow = new Shallow(MobileBannerService, CoreModule).mock(
-				DeviceService,
-				mockAndroidDeviceService,
-			);
+		beforeEach(async () => {
+			await MockBuilder(MobileBannerService).provide({
+				provide: DeviceService,
+				useValue: mockAndroidDeviceService,
+			});
 		});
 
-		it('should be visible on Android', async () => {
-			const { instance } = shallow.createService();
+		it('should be visible on Android', () => {
+			const instance = TestBed.inject(MobileBannerService);
 
 			expect(instance.isVisible).toBeTrue();
 
@@ -33,15 +31,15 @@ describe('BannerService', () => {
 	});
 
 	describe('when on an iOS device', () => {
-		beforeEach(() => {
-			shallow = new Shallow(MobileBannerService, CoreModule).mock(
-				DeviceService,
-				mockIosDeviceService,
-			);
+		beforeEach(async () => {
+			await MockBuilder(MobileBannerService).provide({
+				provide: DeviceService,
+				useValue: mockIosDeviceService,
+			});
 		});
 
-		it('should be visible on iOS', async () => {
-			const { instance } = shallow.createService();
+		it('should be visible on iOS', () => {
+			const instance = TestBed.inject(MobileBannerService);
 
 			expect(instance.isVisible).toBeTrue();
 

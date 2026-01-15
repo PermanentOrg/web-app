@@ -1,28 +1,25 @@
-import { Shallow } from 'shallow-render';
+import { NgModule } from '@angular/core';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { ArchiveVO } from '@models/archive-vo';
-import { OnboardingModule } from '../../onboarding.module';
 import { WelcomeScreenComponent } from './welcome-screen.component';
 
+@NgModule()
+class DummyModule {}
+
 describe('WelcomeScreenComponent #onboarding', () => {
-	let shallow: Shallow<WelcomeScreenComponent>;
 	async function defaultRender(pendingArchives: ArchiveVO[] = []) {
-		return await shallow.render(
-			`<pr-welcome-screen [pendingArchives]="pendingArchives"></pr-welcome-screen>`,
-			{
-				bind: {
-					pendingArchives,
-				},
-			},
-		);
+		return MockRender(WelcomeScreenComponent, {
+			pendingArchives,
+		});
 	}
-	beforeEach(() => {
-		shallow = new Shallow(WelcomeScreenComponent, OnboardingModule);
+	beforeEach(async () => {
+		await MockBuilder(WelcomeScreenComponent, DummyModule);
 	});
 
 	it('should exist', async () => {
-		const { find } = await defaultRender();
+		await defaultRender();
 
-		expect(find('.welcome-screen')).toHaveFoundOne();
+		expect(ngMocks.find('.welcome-screen')).toBeTruthy();
 	});
 
 	it('should display a list of pending archives if they are available', async () => {
@@ -31,9 +28,9 @@ describe('WelcomeScreenComponent #onboarding', () => {
 				fullName: 'Pending Test',
 			}),
 		];
-		const { find } = await defaultRender(pendingArchives);
+		await defaultRender(pendingArchives);
 
-		expect(find('pr-archive-small')).toHaveFoundOne();
+		expect(ngMocks.findAll('pr-archive-small').length).toBe(1);
 	});
 
 	it('should pass up a selected archive', async () => {
@@ -42,11 +39,14 @@ describe('WelcomeScreenComponent #onboarding', () => {
 				fullName: 'Pending Test',
 			}),
 		];
-		const { element, outputs } = await defaultRender(pendingArchives);
-		element.componentInstance.selectPendingArchive(pendingArchives[0]);
-
-		expect(outputs.selectInvitation.emit).toHaveBeenCalledWith(
-			pendingArchives[0],
+		const fixture = await defaultRender(pendingArchives);
+		const instance = fixture.point.componentInstance;
+		const selectInvitationSpy = spyOn(
+			fixture.point.componentInstance.selectInvitation,
+			'emit',
 		);
+		instance.selectPendingArchive(pendingArchives[0]);
+
+		expect(selectInvitationSpy).toHaveBeenCalledWith(pendingArchives[0]);
 	});
 });

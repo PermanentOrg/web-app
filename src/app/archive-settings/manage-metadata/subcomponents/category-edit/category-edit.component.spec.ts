@@ -1,4 +1,4 @@
-import { Shallow } from 'shallow-render';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import {
@@ -11,7 +11,6 @@ import { ManageMetadataModule } from '../../manage-metadata.module';
 import { CategoryEditComponent } from './category-edit.component';
 
 describe('CategoryEditComponent', () => {
-	let shallow: Shallow<CategoryEditComponent>;
 	let category: string;
 	let tags: TagVO[];
 	let deletedTags: TagVO[];
@@ -20,17 +19,7 @@ describe('CategoryEditComponent', () => {
 	let messageShown: boolean;
 	let rejectDelete: boolean;
 
-	const defaultRender = async () =>
-		await shallow.render(
-			'<pr-metadata-category-edit [category]="category" [tags]="tags"></pr-metadata-category-edit>',
-			{
-				bind: {
-					category,
-					tags,
-				},
-			},
-		);
-	beforeEach(() => {
+	beforeEach(async () => {
 		category = 'test';
 		tags = [
 			new TagVO({
@@ -64,68 +53,95 @@ describe('CategoryEditComponent', () => {
 		error = false;
 		messageShown = false;
 		rejectDelete = false;
-		shallow = new Shallow(CategoryEditComponent, ManageMetadataModule)
-			.dontMock(FormEditComponent)
-			.mock(ApiService, {
-				tag: {
-					update: async (tag: TagVO[]) => {
-						if (error) {
-							throw new Error('Test Error');
-						}
-						savedTags = savedTags.concat(tag);
-					},
-					delete: async (tag: TagVO[]) => {
-						if (error) {
-							throw new Error('Test Error');
-						}
-						deletedTags = deletedTags.concat(tag);
+		await MockBuilder(CategoryEditComponent, ManageMetadataModule)
+			.keep(FormEditComponent)
+			.provide({
+				provide: ApiService,
+				useValue: {
+					tag: {
+						update: async (tag: TagVO[]) => {
+							if (error) {
+								throw new Error('Test Error');
+							}
+							savedTags = savedTags.concat(tag);
+						},
+						delete: async (tag: TagVO[]) => {
+							if (error) {
+								throw new Error('Test Error');
+							}
+							deletedTags = deletedTags.concat(tag);
+						},
 					},
 				},
 			})
-			.mock(MessageService, {
-				showError: async (msg: MessageDisplayOptions) => {
-					messageShown = true;
+			.provide({
+				provide: MessageService,
+				useValue: {
+					showError: async (msg: MessageDisplayOptions) => {
+						messageShown = true;
+					},
 				},
 			})
-			.mock(PromptService, {
-				confirm: async () => {
-					if (rejectDelete) {
-						throw new Error('Rejected delete');
-					}
-					return true;
+			.provide({
+				provide: PromptService,
+				useValue: {
+					confirm: async () => {
+						if (rejectDelete) {
+							throw new Error('Rejected delete');
+						}
+						return true;
+					},
 				},
 			});
 	});
 
-	it('should exist', async () => {
-		const { element } = await defaultRender();
+	function defaultRender() {
+		return MockRender(
+			'<pr-metadata-category-edit [category]="category" [tags]="tags"></pr-metadata-category-edit>',
+			{ category, tags },
+		);
+	}
 
-		expect(element).not.toBeNull();
+	it('should exist', () => {
+		const fixture = defaultRender();
+
+		expect(fixture.point.nativeElement).not.toBeNull();
 	});
 
 	it('should be able to delete a category', async () => {
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(CategoryEditComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const deletedCategorySpy = spyOn(instance.deletedCategory, 'emit');
+
 		await instance.delete();
 
 		expect(deletedTags.length).toBe(2);
-		await expect(deletedTags[0].name).toContain('test');
-		await expect(deletedTags[1].name).toContain('test');
-		expect(outputs.refreshTags.emit).toHaveBeenCalled();
-		expect(outputs.deletedCategory.emit).toHaveBeenCalledWith('test');
+		expect(deletedTags[0].name).toContain('test');
+		expect(deletedTags[1].name).toContain('test');
+		expect(refreshTagsSpy).toHaveBeenCalled();
+		expect(deletedCategorySpy).toHaveBeenCalledWith('test');
 	});
 
 	it('should deal with errors while deleting', async () => {
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(CategoryEditComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const deletedCategorySpy = spyOn(instance.deletedCategory, 'emit');
+
 		error = true;
 		await expectAsync(instance.delete()).toBeRejected();
 
 		expect(messageShown).toBeTrue();
-		expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
-		expect(outputs.deletedCategory.emit).not.toHaveBeenCalled();
+		expect(refreshTagsSpy).not.toHaveBeenCalled();
+		expect(deletedCategorySpy).not.toHaveBeenCalled();
 	});
 
 	it('should be able to save a category', async () => {
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(CategoryEditComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+
 		await instance.save('potato');
 
 		expect(savedTags.length).toBe(2);
@@ -134,24 +150,30 @@ describe('CategoryEditComponent', () => {
 			expect(tag.name.substring(6).includes('potato')).toBeFalse(); // Verify value name not changed
 		});
 
-		expect(outputs.refreshTags.emit).toHaveBeenCalled();
+		expect(refreshTagsSpy).toHaveBeenCalled();
 	});
 
 	it('should deal with errors while saving', async () => {
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(CategoryEditComponent);
+		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+
 		error = true;
 		await expectAsync(instance.save('potato')).toBeRejected();
 
 		expect(messageShown).toBeTrue();
-		expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
+		expect(refreshTagsSpy).not.toHaveBeenCalled();
 	});
 
 	it('should not do anything if they cancel out of the deletion confirmation prompt', async () => {
 		rejectDelete = true;
-		const { instance, outputs } = await defaultRender();
+		defaultRender();
+		const instance = ngMocks.findInstance(CategoryEditComponent);
+		const deletedCategorySpy = spyOn(instance.deletedCategory, 'emit');
+
 		await instance.delete();
 
 		expect(deletedTags.length).toBe(0);
-		expect(outputs.deletedCategory.emit).not.toHaveBeenCalled();
+		expect(deletedCategorySpy).not.toHaveBeenCalled();
 	});
 });

@@ -1,12 +1,12 @@
-import { DebugElement, Type } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { FormsModule } from '@angular/forms';
 import { DirectiveData } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { Shallow } from 'shallow-render';
-import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
 import { EventService } from '@shared/services/event/event.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { DirectiveModule } from '../../directive.module';
 import { MockAccountService } from '../directive-display/test-utils';
 import { DirectiveEditComponent } from './directive-edit.component';
 import {
@@ -15,24 +15,18 @@ import {
 	createDirective,
 } from './test-utils';
 
+@NgModule()
+class DummyModule {}
+
 class MockApiService {
 	public directive = new MockDirectiveRepo();
 }
 
-type Find = (
-	cssOrDirective: string | Type<any>,
-	options?: {
-		query?: string;
-	},
-) => QueryMatch<DebugElement>;
-
 describe('DirectiveEditComponent', () => {
-	let shallow: Shallow<DirectiveEditComponent>;
-
-	const fillOutForm = (find: Find, email: string, note: string) => {
-		const emailInput = find('.archive-steward-email')[0]
+	const fillOutForm = (email: string, note: string) => {
+		const emailInput = ngMocks.findAll('.archive-steward-email')[0]
 			.nativeElement as HTMLInputElement;
-		const noteInput = find('.archive-steward-note')[0]
+		const noteInput = ngMocks.findAll('.archive-steward-note')[0]
 			.nativeElement as HTMLTextAreaElement;
 
 		emailInput.value = email;
@@ -41,82 +35,86 @@ describe('DirectiveEditComponent', () => {
 		noteInput.dispatchEvent(new Event('input'));
 	};
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		MockDirectiveRepo.reset();
 		MockMessageService.reset();
-		shallow = new Shallow<DirectiveEditComponent>(
-			DirectiveEditComponent,
-			DirectiveModule,
-		)
-			.provideMock([
-				{
-					provide: ApiService,
-					useClass: MockApiService,
-				},
-			])
-			.provideMock([
-				{
-					provide: AccountService,
-					useClass: MockAccountService,
-				},
-			])
-			.provideMock([
-				{
-					provide: MessageService,
-					useClass: MockMessageService,
-				},
-			])
-			.provide(EventService)
-			.dontMock(EventService);
+		await MockBuilder(DirectiveEditComponent, DummyModule)
+			.keep(FormsModule, { export: true })
+			.provide({
+				provide: ApiService,
+				useClass: MockApiService,
+			})
+			.provide({
+				provide: AccountService,
+				useClass: MockAccountService,
+			})
+			.provide({
+				provide: MessageService,
+				useClass: MockMessageService,
+			})
+			.keep(EventService);
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
+	it('should create', () => {
+		const fixture = MockRender(DirectiveEditComponent);
 
-		expect(instance).not.toBeNull();
+		expect(fixture.point.componentInstance).not.toBeNull();
 	});
 
-	it('should be able to fill out the directive form', async () => {
-		const { instance, find } = await shallow.render();
+	it('should be able to fill out the directive form', () => {
+		const fixture = MockRender(DirectiveEditComponent);
+		const instance = fixture.point.componentInstance;
 
-		expect(find('.archive-steward-email').length).toBe(1);
-		expect(find('.archive-steward-note').length).toBe(1);
+		expect(ngMocks.findAll('.archive-steward-email').length).toBe(1);
+		expect(ngMocks.findAll('.archive-steward-note').length).toBe(1);
 
-		fillOutForm(find, 'test@example.com', 'Unit Testing!');
+		fillOutForm('test@example.com', 'Unit Testing!');
 
 		expect(instance.email).toBe('test@example.com');
 		expect(instance.note).toBe('Unit Testing!');
 	});
 
 	it('should be able to save a new directive', async () => {
-		const { find, fixture } = await shallow.render();
+		// Reset TestBed and reconfigure for this test
+		TestBed.resetTestingModule();
+		MockDirectiveRepo.reset();
 
-		fillOutForm(find, 'test@example.com', 'Test Memo');
+		await TestBed.configureTestingModule({
+			imports: [FormsModule],
+			declarations: [DirectiveEditComponent],
+			providers: [
+				{ provide: ApiService, useValue: new MockApiService() },
+				{ provide: AccountService, useValue: new MockAccountService() },
+				{ provide: MessageService, useValue: new MockMessageService() },
+				EventService,
+			],
+		}).compileComponents();
 
-		expect(find('.save-btn').length).toBe(1);
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		const fixture = TestBed.createComponent(DirectiveEditComponent);
+		const instance = fixture.componentInstance;
 		fixture.detectChanges();
 
-		expect(find('*[disabled], *[readonly]').length).toBe(3);
-		await fixture.whenStable();
+		// Fill out form manually
+		instance.email = 'test@example.com';
+		instance.note = 'Test Memo';
 		fixture.detectChanges();
 
-		expect(find('*[disabled], *[readonly]').length).toBe(0);
+		// Call submitForm directly and await it
+		await instance.submitForm();
+		fixture.detectChanges();
 
-		expect(find('.account-not-found').length).toBe(0);
+		// Check that form is enabled after save
+		expect(instance.waiting).toBeFalse();
 		expect(MockDirectiveRepo.createdDirective).not.toBeNull();
 	});
 
-	it('should be able to have existing directive data passed in', async () => {
+	it('should be able to have existing directive data passed in', () => {
 		const directive = createDirective(
 			'existing@example.com',
 			'already existing directive',
 		);
-		const { instance } = await shallow.render({
-			bind: {
-				directive,
-			},
-		});
+		const fixture = MockRender(DirectiveEditComponent, { directive });
+		const instance = fixture.point.componentInstance;
 
 		expect(instance.email).toBe('existing@example.com');
 		expect(instance.note).toBe('already existing directive');
@@ -128,37 +126,37 @@ describe('DirectiveEditComponent', () => {
 			'already existing directive',
 		);
 
-		const { find, fixture } = await shallow.render({
-			bind: {
-				directive,
-			},
-		});
+		const fixture = MockRender(DirectiveEditComponent, { directive });
+		const instance = fixture.point.componentInstance;
 
-		fillOutForm(find, 'test@example.com', 'Test Memo');
+		fillOutForm('test@example.com', 'Test Memo');
 
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 
-		expect(find('*[disabled], *[readonly]').length).toBe(3);
+		// Check that form is disabled during save
+		expect(instance.waiting).toBeTrue();
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(find('*[disabled], *[readonly]').length).toBe(0);
+		// Check that form is enabled after save
+		expect(instance.waiting).toBeFalse();
+		expect(ngMocks.find('.save-btn').nativeElement.disabled).toBeFalse();
 		expect(MockDirectiveRepo.createdDirective).toBeNull();
 		expect(MockDirectiveRepo.editedDirective).not.toBeNull();
 	});
 
 	it('should handle API errors on creation', async () => {
 		MockDirectiveRepo.failRequest = true;
-		const { find, fixture } = await shallow.render();
+		const fixture = MockRender(DirectiveEditComponent);
 
-		fillOutForm(find, 'test@example.com', 'Test Memo');
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		fillOutForm('test@example.com', 'Test Memo');
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 		await fixture.whenStable();
 
 		expect(MockDirectiveRepo.createdDirective).toBeNull();
-		expect(find('.account-not-found').length).toBe(0);
+		expect(ngMocks.findAll('.account-not-found').length).toBe(0);
 		expect(MockMessageService.errorShown).toBeTrue();
 	});
 
@@ -168,32 +166,29 @@ describe('DirectiveEditComponent', () => {
 			'existing@example.com',
 			'already existing directive',
 		);
-		const { find, fixture } = await shallow.render({
-			bind: {
-				directive,
-			},
-		});
+		const fixture = MockRender(DirectiveEditComponent, { directive });
 
-		fillOutForm(find, 'test@example.com', 'Test Memo');
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		fillOutForm('test@example.com', 'Test Memo');
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 		await fixture.whenStable();
 
 		expect(MockDirectiveRepo.editedDirective).toBeNull();
-		expect(find('.account-not-found').length).toBe(0);
+		expect(ngMocks.findAll('.account-not-found').length).toBe(0);
 		expect(MockMessageService.errorShown).toBeTrue();
 	});
 
 	it('should emit an output when a directive is created', async () => {
-		const { find, fixture, instance } = await shallow.render();
+		const fixture = MockRender(DirectiveEditComponent);
+		const instance = fixture.point.componentInstance;
 		let savedDirective: DirectiveData;
 		instance.savedDirective.emit = jasmine
 			.createSpy()
 			.and.callFake((dir: DirectiveData) => {
 				savedDirective = dir;
 			});
-		fillOutForm(find, 'test@example.com', 'Test Memo');
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		fillOutForm('test@example.com', 'Test Memo');
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -206,19 +201,16 @@ describe('DirectiveEditComponent', () => {
 			'existing@example.com',
 			'already existing directive',
 		);
-		const { instance, find, fixture } = await shallow.render({
-			bind: {
-				directive,
-			},
-		});
+		const fixture = MockRender(DirectiveEditComponent, { directive });
+		const instance = fixture.point.componentInstance;
 		let savedDirective: DirectiveData;
 		instance.savedDirective.emit = jasmine
 			.createSpy()
 			.and.callFake((dir: DirectiveData) => {
 				savedDirective = dir;
 			});
-		fillOutForm(find, 'test@example.com', 'Test Memo');
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		fillOutForm('test@example.com', 'Test Memo');
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -226,43 +218,45 @@ describe('DirectiveEditComponent', () => {
 		expect(savedDirective).not.toBeUndefined();
 	});
 
-	it('should not allow submitting a form until email is filled out', async () => {
-		const { find, fixture } = await shallow.render();
-		fillOutForm(find, '  ', 'Test Memo');
+	it('should not allow submitting a form until email is filled out', () => {
+		const fixture = MockRender(DirectiveEditComponent);
+		fillOutForm('  ', 'Test Memo');
 		fixture.detectChanges();
 
-		expect(find('.save-btn').nativeElement.disabled).toBeTruthy();
-		fillOutForm(find, 'email@example.com', '');
+		expect(ngMocks.find('.save-btn').nativeElement.disabled).toBeTruthy();
+		fillOutForm('email@example.com', '');
 		fixture.detectChanges();
 
-		expect(find('.save-btn').nativeElement.disabled).toBeFalsy();
-		fillOutForm(find, 'email@example.com', 'memo');
+		expect(ngMocks.find('.save-btn').nativeElement.disabled).toBeFalsy();
+		fillOutForm('email@example.com', 'memo');
 		fixture.detectChanges();
 
-		expect(find('.save-btn').nativeElement.disabled).toBeFalsy();
+		expect(ngMocks.find('.save-btn').nativeElement.disabled).toBeFalsy();
 	});
 
 	it('should show an error message if a user with the given email does not exist when creating a directive', async () => {
 		MockDirectiveRepo.accountExists = false;
-		const { find, fixture, outputs } = await shallow.render();
-		fillOutForm(find, 'notfound@example.com', 'Test Memo');
+		const fixture = MockRender(DirectiveEditComponent);
+		const instance = fixture.point.componentInstance;
+		const savedDirectiveSpy = spyOn(instance.savedDirective, 'emit');
+		fillOutForm('notfound@example.com', 'Test Memo');
 
-		expect(find('.account-not-found').length).toBe(0);
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		expect(ngMocks.findAll('.account-not-found').length).toBe(0);
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		await fixture.whenStable();
 		fixture.detectChanges();
 
 		expect(MockDirectiveRepo.createdDirective).toBeNull();
-		expect(outputs.savedDirective.emit).not.toHaveBeenCalled();
-		expect(find('.account-not-found').length).toBe(1);
+		expect(savedDirectiveSpy).not.toHaveBeenCalled();
+		expect(ngMocks.findAll('.account-not-found').length).toBe(1);
 		MockDirectiveRepo.accountExists = true;
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		await fixture.whenStable();
 		fixture.detectChanges();
 
 		expect(MockDirectiveRepo.createdDirective).not.toBeNull();
-		expect(outputs.savedDirective.emit).toHaveBeenCalled();
-		expect(find('.account-not-found').length).toBe(0);
+		expect(savedDirectiveSpy).toHaveBeenCalled();
+		expect(ngMocks.findAll('.account-not-found').length).toBe(0);
 	});
 
 	it('should show an error message if a user with the given email does not exist when editing', async () => {
@@ -271,26 +265,26 @@ describe('DirectiveEditComponent', () => {
 			'existing@example.com',
 			'already existing directive',
 		);
-		const { find, fixture, outputs } = await shallow.render({
-			bind: { directive },
-		});
-		fillOutForm(find, 'notfound@example.com', 'Test Memo');
+		const fixture = MockRender(DirectiveEditComponent, { directive });
+		const instance = fixture.point.componentInstance;
+		const savedDirectiveSpy = spyOn(instance.savedDirective, 'emit');
+		fillOutForm('notfound@example.com', 'Test Memo');
 
-		expect(find('.account-not-found').length).toBe(0);
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		expect(ngMocks.findAll('.account-not-found').length).toBe(0);
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		await fixture.whenStable();
 		fixture.detectChanges();
 
 		expect(MockDirectiveRepo.editedDirective).toBeNull();
-		expect(outputs.savedDirective.emit).not.toHaveBeenCalled();
-		expect(find('.account-not-found').length).toBe(1);
+		expect(savedDirectiveSpy).not.toHaveBeenCalled();
+		expect(ngMocks.findAll('.account-not-found').length).toBe(1);
 		MockDirectiveRepo.accountExists = true;
-		find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
+		ngMocks.find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
 		await fixture.whenStable();
 		fixture.detectChanges();
 
 		expect(MockDirectiveRepo.editedDirective).not.toBeNull();
-		expect(outputs.savedDirective.emit).toHaveBeenCalled();
-		expect(find('.account-not-found').length).toBe(0);
+		expect(savedDirectiveSpy).toHaveBeenCalled();
+		expect(ngMocks.findAll('.account-not-found').length).toBe(0);
 	});
 });

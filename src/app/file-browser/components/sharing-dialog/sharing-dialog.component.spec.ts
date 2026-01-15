@@ -5,6 +5,7 @@ import {
 	TestModuleMetadata,
 	tick,
 } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { cloneDeep } from 'lodash';
 import * as Testing from '@root/test/testbedConfig';
@@ -15,8 +16,6 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { AccessRoleType, PermissionsLevel } from '@models/access-role';
 import { MessageService } from '@shared/services/message/message.service';
-import { Shallow } from 'shallow-render';
-import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -336,52 +335,65 @@ describe('SharingDialogComponent', () => {
 	}));
 });
 
-describe('SharingDialogComponent - Shallow Rendering', () => {
-	it('should be able to save default access role on a share link', async () => {
+describe('SharingDialogComponent - Share Link Test', () => {
+	let component: SharingDialogComponent;
+	let fixture: ComponentFixture<SharingDialogComponent>;
+
+	beforeEach(async () => {
 		MockShareLinksApiService.reset();
-		// We have to use another describe() here since we're creating a component with a
-		// different set up, and these unit tests (and Angular's testing utilities in general)
-		// only expect there to be one TestBed that you use per suite of unit tests.
-		@NgModule({
+
+		await TestBed.configureTestingModule({
+			declarations: [SharingDialogComponent],
 			imports: [FormsModule, CommonModule, ReactiveFormsModule],
-		})
-		class ShallowTestingModule {}
+			providers: [
+				{ provide: AccountService, useClass: MockAccountService },
+				{ provide: ApiService, useClass: MockShareLinksApiService },
+				{ provide: ShareLinksApiService, useClass: MockShareLinksApiService },
+				{
+					provide: ShareLinkMappingService,
+					useClass: MockShareLinkMappingService,
+				},
+				{ provide: RelationshipService, useClass: MockRelationshipService },
+				{
+					provide: GoogleAnalyticsService,
+					useClass: MockGoogleAnalyticsService,
+				},
+				{ provide: PromptService, useClass: NullDependency },
+				{ provide: FeatureFlagService, useClass: MockFeatureFlagService },
+				{ provide: Router, useClass: NullDependency },
+				{ provide: DialogRef, useClass: NullDependency },
+				{ provide: MessageService, useClass: NullDependency },
+				{ provide: ActivatedRoute, useClass: NullDependency },
+				{
+					provide: DIALOG_DATA,
+					useValue: {
+						item: new RecordVO({
+							recordId: '123',
+							displayName: 'Test File',
+							accessRole: 'access.role.owner',
+						}),
+					},
+				},
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
 
-		const shallow = new Shallow<SharingDialogComponent>(
-			SharingDialogComponent,
-			ShallowTestingModule,
-		)
-			.mock(AccountService, new MockAccountService())
-			.mock(ApiService, new MockShareLinksApiService())
-			.mock(ShareLinksApiService, new MockShareLinksApiService())
-			.mock(ShareLinkMappingService, new MockShareLinkMappingService())
-			.mock(RelationshipService, new MockRelationshipService())
-			.mock(GoogleAnalyticsService, new MockGoogleAnalyticsService())
-			.mock(PromptService, new NullDependency())
-			.mock(FeatureFlagService, new MockFeatureFlagService())
-			.mock(Router, new NullDependency())
-			.mock(DialogRef, new NullDependency())
-			.mock(MessageService, new NullDependency())
-			.mock(ActivatedRoute, new NullDependency())
-			.mock(DIALOG_DATA, {
-				item: new RecordVO({
-					recordId: '123',
-					displayName: 'Test File',
-					accessRole: 'access.role.owner',
-				}),
-			});
-		const { instance } = await shallow.render();
+		fixture = TestBed.createComponent(SharingDialogComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-		await instance.generateShareLink();
+	it('should be able to save default access role on a share link', async () => {
+		await component.generateShareLink();
 
-		expect(instance.newShareLink).toBeDefined();
+		expect(component.newShareLink).toBeDefined();
 
-		instance.linkDefaultAccessRole = 'access.role.owner';
-		await instance.onShareLinkPropChange(
+		component.linkDefaultAccessRole = 'access.role.owner';
+		await component.onShareLinkPropChange(
 			'defaultAccessRole',
 			'access.role.owner',
 		);
 
-		expect(instance.newShareLink.permissionsLevel).toBe('owner');
+		expect(component.newShareLink.permissionsLevel).toBe('owner');
 	});
 });

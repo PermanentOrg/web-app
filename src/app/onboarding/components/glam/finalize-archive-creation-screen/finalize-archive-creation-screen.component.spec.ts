@@ -1,43 +1,50 @@
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 import { ArchiveVO } from '@models/index';
 import { AccessRolePipe } from '@shared/pipes/access-role.pipe';
-import { OnboardingModule } from '../../../onboarding.module';
 import { FinalizeArchiveCreationScreenComponent } from './finalize-archive-creation-screen.component';
 
 describe('FinalizeArchiveCreationScreenComponent', () => {
-	let shallow: Shallow<FinalizeArchiveCreationScreenComponent>;
+	let component: FinalizeArchiveCreationScreenComponent;
+	let fixture: ComponentFixture<FinalizeArchiveCreationScreenComponent>;
 	let onboardingService: OnboardingService;
 
 	beforeEach(async () => {
 		onboardingService = new OnboardingService();
-		shallow = new Shallow(
-			FinalizeArchiveCreationScreenComponent,
-			OnboardingModule,
-		)
-			.provide({ provide: OnboardingService, useValue: onboardingService })
-			.dontMock(OnboardingService)
-			.dontMock(AccessRolePipe);
+
+		await TestBed.configureTestingModule({
+			declarations: [FinalizeArchiveCreationScreenComponent, AccessRolePipe],
+			providers: [{ provide: OnboardingService, useValue: onboardingService }],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(FinalizeArchiveCreationScreenComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
-	it('should create', async () => {
-		const { instance } = await shallow.render();
-
-		expect(instance).toBeTruthy();
+	it('should create', () => {
+		expect(component).toBeTruthy();
 	});
 
-	it('should display the archive name correctly', async () => {
+	it('should display the archive name correctly', () => {
 		const name = 'John Doe';
 		onboardingService.registerArchive(new ArchiveVO({ fullName: name }));
-		const { find } = await shallow.render();
-		const archiveNameElement = find('.archive-info p');
 
-		expect(archiveNameElement.nativeElement.textContent).toContain(
-			`The ${name} Archive`,
-		);
+		// Recreate the fixture to pick up the registered archive
+		fixture = TestBed.createComponent(FinalizeArchiveCreationScreenComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+
+		const archiveNameElement =
+			fixture.nativeElement.querySelector('.archive-info p');
+
+		expect(archiveNameElement.textContent).toContain(`The ${name} Archive`);
 	});
 
-	it('it should display multiple archives with access roles correctly', async () => {
+	it('it should display multiple archives with access roles correctly', () => {
 		onboardingService.registerArchive(
 			new ArchiveVO({ fullName: 'Unit Test', accessRole: 'access.role.owner' }),
 		);
@@ -54,40 +61,41 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
 			}),
 		);
 
-		const { find } = await shallow.render();
-		const archiveNameElement = find('.archive-info .single-archive');
+		// Recreate the fixture to pick up the registered archives
+		fixture = TestBed.createComponent(FinalizeArchiveCreationScreenComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
 
-		expect(archiveNameElement.length).toBe(3);
-		expect(archiveNameElement[0].nativeElement.textContent).toContain(
-			'Unit Test Archive',
+		const archiveNameElements = fixture.nativeElement.querySelectorAll(
+			'.archive-info .single-archive',
 		);
 
-		expect(archiveNameElement[0].nativeElement.textContent).toContain('Owner');
+		expect(archiveNameElements.length).toBe(3);
+		expect(archiveNameElements[0].textContent).toContain('Unit Test Archive');
+		expect(archiveNameElements[0].textContent).toContain('Owner');
 	});
 
-	it('should emit finalizeArchiveOutput when finalizeArchive is called', async () => {
-		const { instance, outputs } = await shallow.render();
-		instance.finalizeArchive();
+	it('should emit finalizeArchiveOutput when finalizeArchive is called', () => {
+		spyOn(component.finalizeArchiveOutput, 'emit');
+		component.finalizeArchive();
 
-		expect(outputs.finalizeArchiveOutput.emit).toHaveBeenCalled();
+		expect(component.finalizeArchiveOutput.emit).toHaveBeenCalled();
 	});
 
-	it('should call finalizeArchive when the Done button is clicked', async () => {
-		const { instance, find } = await shallow.render();
-		const doneButton = find('pr-button');
-		spyOn(instance, 'finalizeArchive');
+	it('should call finalizeArchive when the Done button is clicked', () => {
+		const doneButton = fixture.debugElement.query(By.css('pr-button'));
+		spyOn(component, 'finalizeArchive');
 		doneButton.triggerEventHandler('buttonClick', null);
 
-		expect(instance.finalizeArchive).toHaveBeenCalled();
+		expect(component.finalizeArchive).toHaveBeenCalled();
 	});
 
-	it('should disable the done button when it is clicked', async () => {
-		const { instance, fixture, find } = await shallow.render();
-		const doneButton = find('pr-button');
+	it('should disable the done button when it is clicked', () => {
+		const doneButton = fixture.debugElement.query(By.css('pr-button'));
 		doneButton.triggerEventHandler('buttonClick', null);
 
 		fixture.detectChanges();
 
-		expect(instance.isArchiveSubmitted).toBe(true);
+		expect(component.isArchiveSubmitted).toBe(true);
 	});
 });

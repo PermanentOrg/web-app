@@ -1,15 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { Shallow } from 'shallow-render';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BillingPaymentVO } from '@models/billing-payment-vo';
 import { BillingResponse } from '@shared/services/api/billing.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '@shared/services/event/event.service';
 import { PledgeService } from '../../services/pledge.service';
 import { ApiService } from '../../../shared/services/api/api.service';
-import { PledgeModule } from '../../pledge.module';
 import { NewPledgeComponent } from './new-pledge.component';
 
 const mockPromoData = {
@@ -56,32 +57,38 @@ const mockApiService = {
 };
 
 describe('NewPledgeComponent', () => {
-	let shallow: Shallow<NewPledgeComponent>;
+	let fixture: ComponentFixture<NewPledgeComponent>;
+	let instance: NewPledgeComponent;
 
-	beforeEach(() => {
-		shallow = new Shallow(NewPledgeComponent, PledgeModule)
-			.provide(HttpClient)
-			.replaceModule(HttpClient, HttpClientTestingModule)
-			.dontMock(HttpClientTestingModule)
-			.mock(ApiService, mockApiService)
-			.mock(AccountService, mockAccountService)
-			.mock(PledgeService, mockPledgeService)
-			.mock(MessageService, {
-				showError: () => {},
-			})
-			.provide(EventService)
-			.dontMock(EventService);
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [
+				HttpClientTestingModule,
+				ReactiveFormsModule,
+				RouterTestingModule,
+			],
+			declarations: [NewPledgeComponent],
+			providers: [
+				{ provide: ApiService, useValue: mockApiService },
+				{ provide: AccountService, useValue: mockAccountService },
+				{ provide: PledgeService, useValue: mockPledgeService },
+				{ provide: MessageService, useValue: { showError: () => {} } },
+				EventService,
+			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		fixture = TestBed.createComponent(NewPledgeComponent);
+		instance = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
 	it('should exist', async () => {
-		const { element } = await shallow.render();
-
-		expect(element).not.toBeNull();
+		expect(fixture.nativeElement).not.toBeNull();
 	});
 
 	it('should enable the button if the data is correct', async () => {
-		const { find, instance, fixture } = await shallow.render();
-		const button = find('.btn-primary');
+		const button = fixture.nativeElement.querySelector('.btn-primary');
 
 		instance.pledgeForm.patchValue({
 			email: 'test@example.com',
@@ -95,12 +102,11 @@ describe('NewPledgeComponent', () => {
 
 		fixture.detectChanges();
 
-		expect(button.nativeElement.disabled).toBeFalsy();
+		expect(button.disabled).toBeFalsy();
 	});
 
 	it('should disabled the button if there is card form is not complete', async () => {
-		const { find, instance, fixture } = await shallow.render();
-		const button = find('.btn-primary');
+		const button = fixture.nativeElement.querySelector('.btn-primary');
 
 		instance.pledgeForm.patchValue({
 			email: 'test@example.com',
@@ -114,12 +120,11 @@ describe('NewPledgeComponent', () => {
 
 		fixture.detectChanges();
 
-		expect(button.nativeElement.disabled).toBeTruthy();
+		expect(button.disabled).toBeTruthy();
 	});
 
 	it('should disabled the button if the email is invalid', async () => {
-		const { find, instance, fixture } = await shallow.render();
-		const button = find('.btn-primary');
+		const button = fixture.nativeElement.querySelector('.btn-primary');
 
 		instance.pledgeForm.patchValue({
 			email: 'test',
@@ -133,12 +138,11 @@ describe('NewPledgeComponent', () => {
 
 		fixture.detectChanges();
 
-		expect(button.nativeElement.disabled).toBeTruthy();
+		expect(button.disabled).toBeTruthy();
 	});
 
 	it('should disabled the button if no name was provided', async () => {
-		const { find, instance, fixture } = await shallow.render();
-		const button = find('.btn-primary');
+		const button = fixture.nativeElement.querySelector('.btn-primary');
 
 		instance.pledgeForm.patchValue({
 			email: 'test@mail.com',
@@ -151,50 +155,46 @@ describe('NewPledgeComponent', () => {
 
 		fixture.detectChanges();
 
-		expect(button.nativeElement.disabled).toBeTruthy();
+		expect(button.disabled).toBeTruthy();
 	});
 
 	it('should set the correct amount when clicking on a button', async () => {
-		const { find, instance } = await shallow.render();
-
-		const buttons = find('.pledge-button');
+		const buttons = fixture.nativeElement.querySelectorAll('.pledge-button');
 
 		expect(buttons.length).toBe(4);
 
-		buttons[1].triggerEventHandler('click', null);
+		buttons[1].click();
 
 		expect(instance.donationAmount).toBe(20);
 	});
 
 	it('should select the custom value for the last input when clicked on it', async () => {
-		const { find, instance } = await shallow.render();
-
-		const buttons = find('.pledge-button');
+		const buttons = fixture.nativeElement.querySelectorAll('.pledge-button');
 
 		expect(buttons.length).toBe(4);
 
-		buttons[3].triggerEventHandler('click', null);
+		buttons[3].click();
 
 		expect(instance.donationSelection).toBe('custom');
 	});
 
 	it('should display the loading spinner', async () => {
-		const { find, instance } = await shallow.render();
-
 		instance.waiting = true;
+		fixture.detectChanges();
 
-		expect(find('pr-loading-spinner')).toBeTruthy();
+		expect(
+			fixture.nativeElement.querySelector('pr-loading-spinner'),
+		).toBeTruthy();
 	});
 
 	it('should display the succes message if the transaction is succesful', async () => {
-		const { find, instance, fixture } = await shallow.render();
-
 		instance.isSuccessful = true;
 		instance.amountInGb = 5;
 
 		fixture.detectChanges();
 
-		const displayedMessage = find('.success-message');
+		const displayedMessage =
+			fixture.nativeElement.querySelector('.success-message');
 
 		expect(displayedMessage).toBeTruthy();
 	});

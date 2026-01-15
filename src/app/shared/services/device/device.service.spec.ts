@@ -1,24 +1,29 @@
-import { SharedModule } from '@shared/shared.module';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder } from 'ng-mocks';
 import { CookieService } from 'ngx-cookie-service';
-import { Shallow } from 'shallow-render';
 
 import { DeviceService } from './device.service';
 
 describe('DeviceService', () => {
-	let shallow: Shallow<DeviceService>;
-	beforeEach(() => {
-		shallow = new Shallow(DeviceService, SharedModule).mock(CookieService, {
-			check: () => false,
+	let cookieServiceMock: jasmine.SpyObj<CookieService>;
+
+	beforeEach(async () => {
+		cookieServiceMock = jasmine.createSpyObj('CookieService', ['check']);
+		cookieServiceMock.check.and.returnValue(false);
+
+		await MockBuilder(DeviceService).provide({
+			provide: CookieService,
+			useValue: cookieServiceMock,
 		});
 	});
 
-	it('should be created', async () => {
-		const { instance } = shallow.createService();
+	it('should be created', () => {
+		const instance = TestBed.inject(DeviceService);
 
 		expect(instance).toBeTruthy();
 	});
 
-	it('should detect mobile width correctly', async () => {
+	it('should detect mobile width correctly', () => {
 		spyOn(window, 'matchMedia').and.callFake(
 			(query: string) =>
 				({
@@ -26,40 +31,37 @@ describe('DeviceService', () => {
 				}) as MediaQueryList,
 		);
 
-		const { instance } = shallow.createService();
+		const instance = TestBed.inject(DeviceService);
 
 		expect(instance.isMobileWidth()).toBeTrue();
 	});
 
-	it('should detect mobile device correctly', async () => {
+	it('should detect mobile device correctly', () => {
 		Object.defineProperty(window.navigator, 'userAgent', {
 			value: 'iphone',
 			configurable: true,
 		});
 
-		const { instance } = shallow.createService();
+		const instance = TestBed.inject(DeviceService);
 
 		expect(instance.isMobile()).toBeTrue();
 	});
 
-	it('should detect iOS device correctly', async () => {
+	it('should detect iOS device correctly', () => {
 		Object.defineProperty(window.navigator, 'userAgent', {
 			value: 'ipad',
 			configurable: true,
 		});
 
-		const { instance } = shallow.createService();
+		const instance = TestBed.inject(DeviceService);
 
 		expect(instance.isIos()).toBeTrue();
 	});
 
-	it('should handle cookie check for opt-out correctly', async () => {
-		const cookieService = jasmine.createSpyObj('CookieService', ['check']);
-		cookieService.check.and.returnValue(true);
+	it('should handle cookie check for opt-out correctly', () => {
+		cookieServiceMock.check.and.returnValue(true);
 
-		shallow = shallow.mock(CookieService, cookieService);
-
-		const { instance } = shallow.createService();
+		const instance = TestBed.inject(DeviceService);
 
 		expect(instance.didOptOut()).toBeTrue();
 	});

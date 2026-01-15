@@ -1,9 +1,18 @@
-import { Shallow } from 'shallow-render';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {
+	ComponentFixture,
+	TestBed,
+	fakeAsync,
+	tick,
+} from '@angular/core/testing';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { FolderVO, ItemVO, RecordVO } from '@models';
 import { DataStatus } from '@models/data-status.enum';
-import { NgModule } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {
+	FontAwesomeModule,
+	FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
+import { faFileArchive } from '@fortawesome/free-solid-svg-icons';
 import { GetAltTextPipe } from '../../pipes/get-alt-text.pipe';
 
 class TestImage {
@@ -74,154 +83,207 @@ const fullItem2 = new RecordVO(
 	{ dataStatus: DataStatus.Full },
 );
 
-@NgModule({})
-class DummyModule {}
+@Component({
+	selector: 'pr-thumbnail-test-host',
+	template: `<div [style.width]="width" [style.height]="height">
+		<pr-thumbnail [item]="item" [maxWidth]="maxWidth"></pr-thumbnail>
+	</div>`,
+	standalone: false,
+})
+class ThumbnailTestHostComponent {
+	item: ItemVO = minItem;
+	maxWidth: number | undefined;
+	width: string = '200px';
+	height: string = '200px';
+}
 
 describe('ThumbnailComponent', () => {
-	let shallow: Shallow<ThumbnailComponent>;
+	let fixture: ComponentFixture<ThumbnailTestHostComponent>;
+	let hostComponent: ThumbnailTestHostComponent;
+	let thumbnailComponent: ThumbnailComponent;
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		TestImage.testError = false;
 		window.devicePixelRatio = 1;
-		shallow = new Shallow(ThumbnailComponent, DummyModule)
-			.declare(GetAltTextPipe)
-			.provideMock({
-				provide: 'Image',
-				useValue: TestImage,
-			})
-			.import(FontAwesomeModule);
+
+		await TestBed.configureTestingModule({
+			imports: [FontAwesomeModule],
+			declarations: [
+				ThumbnailComponent,
+				ThumbnailTestHostComponent,
+				GetAltTextPipe,
+			],
+			providers: [{ provide: 'Image', useValue: TestImage }],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+		}).compileComponents();
+
+		const library = TestBed.inject(FaIconLibrary);
+		library.addIcons(faFileArchive);
+
+		fixture = TestBed.createComponent(ThumbnailTestHostComponent);
+		hostComponent = fixture.componentInstance;
+		fixture.detectChanges();
+		thumbnailComponent =
+			fixture.debugElement.children[0].children[0].componentInstance;
 	});
 
-	async function renderWithItem(
-		item: ItemVO = minItem,
-		size: number = 200,
-		maxWidth?: number,
-	) {
-		return await shallow.render(
-			`<div [style.width]="'${size}px'" [style.height]="'${size}px'"><pr-thumbnail [item]="item" [maxWidth]="maxWidth"></pr-thumbnail></div>`,
-			{
-				bind: {
-					item: item.isFolder ? new FolderVO(item) : new RecordVO(item),
-					maxWidth,
-				},
-			},
-		);
+	function setItem(item: ItemVO, size: number = 200, maxWidth?: number) {
+		hostComponent.item = item.isFolder
+			? new FolderVO(item)
+			: new RecordVO(item);
+		hostComponent.width = `${size}px`;
+		hostComponent.height = `${size}px`;
+		hostComponent.maxWidth = maxWidth;
+
+		// Mock the clientWidth since it's 0 in headless test environments
+		const thumbnailElement =
+			fixture.debugElement.children[0].children[0].nativeElement;
+		Object.defineProperty(thumbnailElement, 'clientWidth', {
+			get: () => size,
+			configurable: true,
+		});
+
+		// Update dpiScale based on current devicePixelRatio (it's cached in constructor)
+		(thumbnailComponent as any).dpiScale =
+			window?.devicePixelRatio > 1.75 ? 2 : 1;
+
+		fixture.detectChanges();
+
+		// Force recalculation after mocking clientWidth
+		thumbnailComponent.resetImage();
+
+		// Update the view with the new state (isZip, etc.)
+		fixture.detectChanges();
 	}
 
 	it('should exist', async () => {
-		const { instance } = await renderWithItem();
-
-		expect(instance).toBeTruthy();
+		expect(thumbnailComponent).toBeTruthy();
 	});
 
 	it('should use image 200 if item is lean at any DPI and width', async () => {
-		const { instance } = await renderWithItem(leanItem);
+		setItem(leanItem);
 
-		expect(instance.getCurrentThumbUrl()).toEqual(image200);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
 	});
 
 	it('should use image 200 for low DPI at width 100', async () => {
-		const { instance } = await renderWithItem(fullItem, 100);
+		setItem(fullItem, 100);
 
-		expect(instance.getTargetThumbWidth()).toEqual(200);
-		expect(instance.getCurrentThumbUrl()).toEqual(image200);
+		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(200);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
 	});
 
 	it('should use image 200 for high DPI at width 100', async () => {
 		window.devicePixelRatio = 2;
-		const { instance } = await renderWithItem(fullItem, 100);
+		setItem(fullItem, 100);
 
-		expect(instance.getTargetThumbWidth()).toEqual(200);
-		expect(instance.getCurrentThumbUrl()).toEqual(image200);
+		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(200);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
 	});
 
 	it('should use image 200 for low DPI at width 200', async () => {
-		const { instance } = await renderWithItem(fullItem, 200);
+		setItem(fullItem, 200);
 
-		expect(instance.getTargetThumbWidth()).toEqual(200);
-		expect(instance.getCurrentThumbUrl()).toEqual(image200);
+		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(200);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
 	});
 
 	it('should use image 500 for high DPI at width 200', async () => {
 		window.devicePixelRatio = 2;
-		const { instance } = await renderWithItem(fullItem, 200);
+		setItem(fullItem, 200);
 
-		expect(instance.getTargetThumbWidth()).toEqual(500);
-		expect(instance.getCurrentThumbUrl()).toEqual(image500);
+		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(500);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image500);
 	});
 
 	it('should use the maximum image size if there is no bigger thumbnail', async () => {
 		window.devicePixelRatio = 10000;
-		const { instance } = await renderWithItem(fullItem, 10000);
+		setItem(fullItem, 10000);
 
-		expect(instance.getTargetThumbWidth()).toEqual(2000);
-		expect(instance.getCurrentThumbUrl()).toEqual(image2000);
+		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(2000);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image2000);
 	});
 
 	it('should use reset when changing records', async () => {
 		window.devicePixelRatio = 2;
-		const { instance, fixture } = await renderWithItem(fullItem, 200);
+		setItem(fullItem, 200);
 
-		expect(instance.getTargetThumbWidth()).toEqual(500);
-		expect(instance.getCurrentThumbUrl()).toEqual(image500);
+		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(500);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image500);
 
-		instance.item = fullItem2;
+		thumbnailComponent.item = fullItem2;
 		fixture.detectChanges();
 
-		expect(instance.getTargetThumbWidth()).toEqual(500);
-		expect(instance.getCurrentThumbUrl()).toEqual(fullItem2.thumbURL500);
+		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(500);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(
+			fullItem2.thumbURL500,
+		);
 	});
 
 	it('should show a zip icon if the item is a .zip archive', async () => {
-		const { find } = await renderWithItem(
-			new RecordVO({ ...fullItem, type: 'type.record.archive' }),
-			200,
+		setItem(new RecordVO({ ...fullItem, type: 'type.record.archive' }), 200);
+
+		const faIcons = fixture.nativeElement.querySelectorAll('fa-icon');
+		const visibleImages = fixture.nativeElement.querySelectorAll(
+			'.pr-thumbnail-image:not([hidden])',
 		);
 
-		expect(find('fa-icon').length).toBeGreaterThan(0);
-		expect(find('.pr-thumbnail-image:not([hidden])').length).toBe(0);
+		expect(faIcons.length).toBeGreaterThan(0);
+		expect(visibleImages.length).toBe(0);
 	});
 
 	it('should show a folder icon if the item is a folder', async () => {
-		const { find } = await renderWithItem(
+		setItem(
 			new FolderVO({
 				thumbURL200: 'https://do-not-use',
 			}),
 		);
 
-		expect(find('.pr-thumbnail-image[hidden]').length).toBe(1);
-		expect(find('i.ion-md-folder[hidden]').length).toBe(0);
+		const hiddenImages = fixture.nativeElement.querySelectorAll(
+			'.pr-thumbnail-image[hidden]',
+		);
+		const folderIcons = fixture.nativeElement.querySelectorAll(
+			'i.ion-md-folder:not([hidden])',
+		);
+
+		expect(hiddenImages.length).toBe(1);
+		expect(folderIcons.length).toBeGreaterThan(0);
 	});
 
 	it('can have a maximum width set', async () => {
 		window.devicePixelRatio = 2;
-		const { instance } = await renderWithItem(fullItem, 10000, 200);
+		setItem(fullItem, 10000, 200);
 
-		expect(instance.getTargetThumbWidth()).toEqual(200);
-		expect(instance.getCurrentThumbUrl()).toEqual(image200);
+		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(200);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
 	});
 
-	it('should show set the background image after it loads', async () => {
-		const { find, fixture } = await renderWithItem(fullItem);
+	it('should show set the background image after it loads', fakeAsync(() => {
+		setItem(fullItem);
 
-		await fixture.whenStable();
+		// Wait for the TestImage setTimeout to fire
+		tick(100);
 		fixture.detectChanges();
 
-		expect(
-			find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
-		).toContain(image200);
-	});
+		const thumbnailImage = fixture.nativeElement.querySelector(
+			'.pr-thumbnail-image',
+		);
+
+		expect(thumbnailImage.style.backgroundImage).toContain(image200);
+	}));
 
 	it('should be able to handle an image erroring out', async () => {
 		TestImage.testError = true;
-		const { instance, find, fixture } = await renderWithItem(leanItem);
+		setItem(leanItem);
 
-		instance.item.update(fullItem);
+		thumbnailComponent.item.update(fullItem);
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(
-			find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
-		).toBe('');
+		const thumbnailImage = fixture.nativeElement.querySelector(
+			'.pr-thumbnail-image',
+		);
+
+		expect(thumbnailImage.style.backgroundImage).toBe('');
 	});
 });
