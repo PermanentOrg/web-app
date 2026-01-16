@@ -7,6 +7,20 @@ import { FolderVO } from '@models/index';
 import { FolderPickerService } from './folder-picker.service';
 
 class FakeComponent {
+	public currentFolder: FolderVO;
+	public chooseFolderPromise: Promise<FolderVO>;
+	public chooseFolderResolve: (value: FolderVO) => void;
+	public operation: FolderPickerOperations;
+	public operationName: string;
+	public savePromise: Promise<any>;
+	public visible: boolean;
+	public waiting: boolean;
+	public saving: boolean;
+	public isRootFolder = true;
+	public allowRecords = false;
+	public selectedRecord = null;
+	public filterFolderLinkIds: number[];
+
 	public async show(
 		startingFolder: FolderVO,
 		operation: FolderPickerOperations,
@@ -20,7 +34,7 @@ class FakeComponent {
 			savePromise,
 			filterFolderLinkIds,
 			allowRecords,
-		};
+		} as unknown as FolderVO;
 	}
 }
 
@@ -81,7 +95,7 @@ describe('FolderPickerService', () => {
 			params.operation,
 		);
 
-		expect(result).toEqual(params);
+		expect(result).toEqual(params as unknown as FolderVO);
 	});
 
 	it('should call the correct component method when choosing a record', async () => {

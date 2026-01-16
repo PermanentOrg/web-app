@@ -4,7 +4,6 @@ import {
 	PromptField,
 } from '@shared/services/prompt/prompt.service';
 import { RelationVO, ArchiveVO, InviteVO, ItemVO } from '@models';
-import { Deferred } from '@root/vendor/deferred';
 import { ApiService } from '@shared/services/api/api.service';
 import {
 	SearchResponse,
@@ -63,7 +62,7 @@ export class ArchivePickerComponent {
 	}
 
 	async searchByEmail() {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		const fields: PromptField[] = [
 			{
 				fieldName: 'email',
@@ -82,22 +81,22 @@ export class ArchivePickerComponent {
 		this.searchResults = null;
 
 		return await this.prompt
-			.prompt(fields, 'Search by email', deferred.promise, 'Search')
+			.prompt(fields, 'Search by email', promise, 'Search')
 			.then(async (value) => {
 				this.searchEmail = value.email;
 				return await this.api.search.archiveByEmail(value.email).toPromise();
 			})
 			.then((response: SearchResponse) => {
 				this.searchResults = response.getArchiveVOs();
-				deferred.resolve();
+				resolve(undefined);
 			})
 			.catch((response: SearchResponse) => {
-				deferred.resolve();
+				resolve(undefined);
 			});
 	}
 
 	async sendInvite() {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		const fields: PromptField[] = clone(INVITATION_FIELDS(this.searchEmail));
 		const forShare = !!this.dialogData.shareItem;
 
@@ -109,7 +108,7 @@ export class ArchivePickerComponent {
 			.prompt(
 				fields,
 				forShare ? 'Invite to share' : 'Send invitation',
-				deferred.promise,
+				promise,
 				'Send',
 			)
 			.then((value) => {
@@ -137,12 +136,12 @@ export class ArchivePickerComponent {
 				if (forShare) {
 					this.ga.sendEvent(EVENTS.SHARE.ShareByInvite.initiated.params);
 				}
-				deferred.resolve();
+				resolve(undefined);
 				this.cancel();
 			})
 			.catch((response: InviteResponse) => {
 				if (response) {
-					deferred.resolve();
+					resolve(undefined);
 					this.message.showError({
 						message: response.getMessage(),
 						translate: true,

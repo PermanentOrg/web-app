@@ -14,7 +14,6 @@ import { AccountService } from '@shared/services/account/account.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { RelationVO, ArchiveVO } from '@models';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
-import { Deferred } from '@root/vendor/deferred';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, find } from 'lodash';
 import {
@@ -155,12 +154,12 @@ export class ConnectionsDialogComponent {
 	}
 
 	onRelationRequestClick(relation: RelationVO, skipDecline = false) {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		this.promptService
 			.prompt(
 				[RELATIONSHIP_FIELD],
 				`Accept relationship with ${relation.ArchiveVO.fullName}?`,
-				deferred.promise,
+				promise,
 				'Accept',
 				skipDecline ? 'Cancel' : 'Decline',
 			)
@@ -191,18 +190,18 @@ export class ConnectionsDialogComponent {
 						remove(this.connectionRequests, relation);
 						this.connections.push(relation);
 
-						deferred.resolve();
+						resolve(undefined);
 					});
 			})
 			.catch((response: RelationResponse) => {
 				if (response) {
-					deferred.resolve();
+					resolve(undefined);
 					this.messageService.showError({
 						message: response.getMessage(),
 						translate: true,
 					});
 				} else if (!skipDecline) {
-					deferred.resolve();
+					resolve(undefined);
 					this.removeRelation(relation);
 				}
 			});
@@ -238,14 +237,14 @@ export class ConnectionsDialogComponent {
 	async editRelation(relation: RelationVO) {
 		let updatedRelation: RelationVO;
 		const isNewRelation = !relation.relationId;
-		const deferred = new Deferred();
+		const { promise, resolve, reject } = Promise.withResolvers();
 		const fields: PromptField[] = [RELATIONSHIP_FIELD_INITIAL(relation.type)];
 
 		return await this.promptService
 			.prompt(
 				fields,
 				`Relationship with ${relation.RelationArchiveVO.fullName}`,
-				deferred.promise,
+				promise,
 				'Save',
 			)
 			.then(async (value) => {
@@ -270,7 +269,7 @@ export class ConnectionsDialogComponent {
 				if (isNewRelation) {
 					relation.relationId = response.getRelationVO().relationId;
 				}
-				deferred.resolve();
+				resolve(undefined);
 			})
 			.catch((response: RelationResponse) => {
 				if (response) {
@@ -278,7 +277,7 @@ export class ConnectionsDialogComponent {
 						message: response.getMessage(),
 						translate: true,
 					});
-					deferred.reject();
+					reject();
 				} else if (isNewRelation) {
 					remove(this.connections, relation);
 				}
@@ -286,7 +285,7 @@ export class ConnectionsDialogComponent {
 	}
 
 	async removeRelation(relation: RelationVO) {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		let confirmTitle = `Remove relationship with ${relation.RelationArchiveVO.fullName}?`;
 		let confirmText = 'Remove';
 
@@ -302,7 +301,7 @@ export class ConnectionsDialogComponent {
 			await this.promptService.confirm(
 				confirmText,
 				confirmTitle,
-				deferred.promise,
+				promise,
 				'btn-danger',
 			);
 			const response = await this.relationService.remove(relation);
@@ -322,7 +321,7 @@ export class ConnectionsDialogComponent {
 				});
 			}
 		} finally {
-			deferred.resolve();
+			resolve(undefined);
 		}
 	}
 }

@@ -41,6 +41,9 @@ import 'core-js/es/set';
 /** IE10 and IE11 requires the following for the Reflect API. */
 import 'core-js/es/reflect';
 
+/** Promise.withResolvers() polyfill for browsers < Chrome 119, Firefox 121, Safari 17.4 */
+import 'core-js/es/promise/with-resolvers';
+
 /** Evergreen browsers require these. **/
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
 // import 'core-js/es/reflect';
