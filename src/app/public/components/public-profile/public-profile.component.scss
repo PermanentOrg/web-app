@@ -27,6 +27,40 @@ $profile-max-width: 1200px;
 	@include profileSectionHeader;
 
 	max-width: none;
+
+	.header-title {
+		cursor: pointer;
+		user-select: none;
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.header-title::after {
+		@include material-icon;
+		content: 'expand_more';
+		margin-left: $grid-unit * 0.5;
+		font-size: $font-size-lg;
+		display: inline-flex;
+		align-items: center;
+		opacity: 0.5;
+		position: relative;
+		transition: 250ms $tweaked-ease transform;
+		transform: rotate(0deg);
+	}
+
+	.header-title:hover::after {
+		opacity: 0.75;
+	}
+
+	&.active-sort {
+		.header-title::after {
+			opacity: 1;
+		}
+
+		&.sort-desc .header-title::after {
+			transform: rotate(180deg);
+		}
+	}
 }
 
 .profile-group {
