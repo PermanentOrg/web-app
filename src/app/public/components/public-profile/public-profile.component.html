@@ -1,5 +1,15 @@
 <ng-container>
-	<div class="profile-section-header">Milestones</div>
+	<div
+		class="profile-section-header active-sort"
+		[class.sort-desc]="(milestoneSortOrder$ | async) === 'desc'"
+	>
+		<span
+			class="header-title"
+			(click)="toggleMilestoneSortOrder()"
+			[attr.aria-label]="(milestoneSortOrder$ | async) === 'desc' ? 'Milestones sorted newest first, click to sort oldest first' : 'Milestones sorted oldest first, click to sort newest first'"
+			>Milestones</span
+		>
+	</div>
 	@if (milestones$ | async; as milestones) {
 		<div class="profile-section">
 			@if (!milestones.length) {

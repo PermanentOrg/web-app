@@ -5,7 +5,7 @@ import {
 	ProfileItemVOData,
 } from '@models/profile-item-vo';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject, combineLatest } from 'rxjs';
 import {
 	HasSubscriptions,
 	unsubscribeAll,
@@ -25,6 +25,7 @@ export class PublicProfileComponent
 	archive: ArchiveVO;
 	profileItems: ProfileItemVODictionary = {};
 	milestones$: Observable<ProfileItemVOData[]>;
+	milestoneSortOrder$ = new BehaviorSubject<'asc' | 'desc'>('desc');
 
 	subscriptions: Subscription[] = [];
 	constructor(private publicProfile: PublicProfileService) {}
@@ -39,16 +40,24 @@ export class PublicProfileComponent
 				.subscribe((items) => (this.profileItems = items)),
 		);
 
-		this.milestones$ = this.publicProfile.profileItemsDictionary$().pipe(
-			map((profileItems) => {
+		this.milestones$ = combineLatest([
+			this.publicProfile.profileItemsDictionary$(),
+			this.milestoneSortOrder$,
+		]).pipe(
+			map(([profileItems, sortOrder]) => {
 				const milestones = concat(
 					profileItems.job || [],
 					profileItems.home || [],
 					profileItems.milestone || [],
 				);
-				return orderBy(milestones, (i) => i.day1, 'desc');
+				return orderBy(milestones, (i) => i.day1, sortOrder);
 			}),
 		);
+	}
+
+	toggleMilestoneSortOrder(): void {
+		const currentOrder = this.milestoneSortOrder$.value;
+		this.milestoneSortOrder$.next(currentOrder === 'desc' ? 'asc' : 'desc');
 	}
 
 	ngOnDestroy(): void {
