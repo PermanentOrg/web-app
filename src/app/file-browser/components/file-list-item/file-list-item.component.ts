@@ -43,7 +43,6 @@ import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
-import { Deferred } from '@root/vendor/deferred';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccessRole } from '@models/access-role';
@@ -693,7 +692,7 @@ export class FileListItemComponent
 
 		const actionButtons: PromptButton[] = [];
 
-		const actionDeferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 
 		const isAtLeastCurator = this.accountService.checkMinimumAccess(
 			this.item.accessRole,
@@ -750,13 +749,9 @@ export class FileListItemComponent
 
 		if (actionButtons.length) {
 			this.prompt
-				.promptButtons(
-					actionButtons,
-					this.item.displayName,
-					actionDeferred.promise,
-				)
+				.promptButtons(actionButtons, this.item.displayName, promise)
 				.then((value: ActionType) => {
-					this.onActionClick(value, actionDeferred);
+					this.onActionClick(value, resolve);
 				})
 				.catch();
 		} else {
@@ -774,32 +769,32 @@ export class FileListItemComponent
 		return false;
 	}
 
-	async onActionClick(value: ActionType, actionDeferred: Deferred) {
+	async onActionClick(value: ActionType, resolve: (value?: unknown) => void) {
 		switch (value) {
 			case 'delete':
-				return await this.deleteItem(actionDeferred.resolve);
+				return await this.deleteItem(resolve);
 			case 'rename':
-				actionDeferred.resolve();
+				resolve();
 				this.promptForUpdate();
 				break;
 			case 'move':
-				actionDeferred.resolve();
+				resolve();
 				this.openFolderPicker(FolderPickerOperations.Move);
 				break;
 			case 'copy':
-				actionDeferred.resolve();
+				resolve();
 				this.openFolderPicker(FolderPickerOperations.Copy);
 				break;
 			case 'download':
 				this.dataService.downloadFile(this.item as RecordVO).then(() => {
-					actionDeferred.resolve();
+					resolve();
 				});
 				break;
 			case 'share':
 				this.api.share
 					.getShareLink(this.item)
 					.then((response: ShareResponse) => {
-						actionDeferred.resolve();
+						resolve();
 						this.dialog.open(SharingComponent, {
 							data: {
 								item: this.item,
@@ -810,24 +805,24 @@ export class FileListItemComponent
 				break;
 			case 'unshare':
 				await this.unshareItem();
-				actionDeferred.resolve();
+				resolve();
 				break;
 			case 'publish':
-				actionDeferred.resolve();
+				resolve();
 				this.dialog.open(PublishComponent, {
 					data: { item: this.item },
 					height: 'auto',
 				});
 				break;
 			case 'tags':
-				actionDeferred.resolve();
+				resolve();
 				this.dialog.open(EditTagsComponent, {
 					data: { item: this.item },
 					height: 'auto',
 				});
 				break;
 			case 'setFolderView':
-				actionDeferred.resolve();
+				resolve();
 				this.promptForFolderView();
 				break;
 		}
@@ -890,11 +885,11 @@ export class FileListItemComponent
 			return false;
 		}
 
-		const deferred = new Deferred();
+		const { promise, resolve, reject } = Promise.withResolvers();
 		const rootFolder = this.accountService.getRootFolder();
 
 		this.folderPicker
-			.chooseFolder(rootFolder, operation, deferred.promise)
+			.chooseFolder(rootFolder, operation, promise)
 			.then(async (destination: FolderVO) => {
 				switch (operation) {
 					case FolderPickerOperations.Copy:
@@ -905,7 +900,7 @@ export class FileListItemComponent
 			})
 			.then(() => {
 				setTimeout(() => {
-					deferred.resolve();
+					resolve(undefined);
 					const message = `${this.item.isFolder ? 'Folder' : 'File'} ${
 						this.item.displayName
 					} ${
@@ -919,7 +914,7 @@ export class FileListItemComponent
 				}, 500);
 			})
 			.catch((response: FolderResponse | RecordResponse) => {
-				deferred.reject();
+				reject();
 				this.message.showError({
 					message: response.getMessage(),
 					translate: true,
@@ -928,7 +923,7 @@ export class FileListItemComponent
 	}
 
 	async promptForUpdate() {
-		const updateDeferred = new Deferred();
+		const { promise, resolve, reject } = Promise.withResolvers();
 
 		const fields: PromptField[] = [
 			{
@@ -950,11 +945,11 @@ export class FileListItemComponent
 			const values = await this.prompt.prompt(
 				fields,
 				`Rename "${this.item.displayName}"`,
-				updateDeferred.promise,
+				promise,
 				'Rename',
 				'Cancel',
 			);
-			this.saveUpdates(values, updateDeferred);
+			this.saveUpdates(values, { resolve, reject });
 		} catch (err) {
 			if (err) {
 				throw err;
@@ -963,7 +958,7 @@ export class FileListItemComponent
 	}
 
 	promptForFolderView() {
-		const updateDeferred = new Deferred();
+		const { promise, resolve, reject } = Promise.withResolvers();
 
 		const fields = [FOLDER_VIEW_FIELD_INIIAL(this.item.view)];
 
@@ -971,17 +966,26 @@ export class FileListItemComponent
 			.prompt(
 				fields,
 				`Set folder view for "${this.item.displayName}"`,
-				updateDeferred.promise,
+				promise,
 				'Save',
 				'Cancel',
 			)
 			.then((values) => {
-				this.saveUpdates(values, updateDeferred);
+				this.saveUpdates(values, { resolve, reject });
 			})
 			.catch();
 	}
 
-	saveUpdates(changes: RecordVOData | FolderVOData, deferred: Deferred) {
+	async saveUpdates(
+		changes: RecordVOData | FolderVOData,
+		{
+			resolve,
+			reject,
+		}: {
+			resolve: (value?: unknown) => void;
+			reject: (reason?: unknown) => void;
+		},
+	) {
 		const originalData = {};
 		Object.keys(changes).forEach((key) => {
 			if (this.item[key] === changes[key]) {
@@ -993,13 +997,13 @@ export class FileListItemComponent
 
 		if (Object.keys(changes).length) {
 			this.item.update(changes);
-			return this.edit
+			return await this.edit
 				.updateItems([this.item])
 				.then(() => {
-					deferred.resolve();
+					resolve();
 				})
 				.catch((response: RecordResponse | FolderResponse) => {
-					deferred.reject();
+					reject();
 					this.item.update(originalData);
 					if (response.getMessage) {
 						this.message.showError({
@@ -1009,7 +1013,7 @@ export class FileListItemComponent
 					}
 				});
 		} else {
-			return deferred.resolve();
+			return resolve();
 		}
 	}
 

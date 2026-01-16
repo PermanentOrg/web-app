@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ElementRef, Pipe, PipeTransform } from '@angular/core';
 import { of } from 'rxjs';
 import { ActivatedRoute, provideRouter } from '@angular/router';
-import { Deferred } from '@root/vendor/deferred';
 
 import { DataService } from '@shared/services/data/data.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
@@ -262,26 +261,29 @@ describe('FileListItemComponent', () => {
 	});
 
 	it('should resolve update if no changes', () => {
-		const deferred = new Deferred();
+		const { promise, resolve, reject } = Promise.withResolvers();
 		component.item.displayName = 'Same';
-		component.saveUpdates({ displayName: 'Same' }, deferred);
-		deferred.promise.then(() => {
+		component.saveUpdates({ displayName: 'Same' }, { resolve, reject });
+		promise.then(() => {
 			expect(component.item.update).not.toHaveBeenCalled();
 		});
 	});
 
 	it('should reject update and restore original data', async () => {
-		const deferred = new Deferred();
+		const { promise, resolve, reject } = Promise.withResolvers();
 		editService.updateItems = jasmine
 			.createSpy()
 			.and.returnValue(Promise.reject({ getMessage: () => 'Error' }));
-		await component.saveUpdates({ displayName: 'New' }, deferred).catch(() => {
+		component.saveUpdates({ displayName: 'New' }, { resolve, reject });
+		try {
+			await promise;
+		} catch {
 			expect(component.item.update).toHaveBeenCalledWith({
 				displayName: 'Test Item',
 			});
 
 			expect(TestBed.inject(MessageService).showError).toHaveBeenCalled();
-		});
+		}
 	});
 
 	it('should update multi-select status', () => {
