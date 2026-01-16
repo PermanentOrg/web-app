@@ -21,7 +21,6 @@ import {
 	PermissionsLevel,
 } from '@models/access-role';
 import { sortShareVOs } from '@models/share-vo';
-import { Deferred } from '@root/vendor/deferred';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import {
 	ngIfScaleAnimation,
@@ -541,22 +540,22 @@ export class SharingDialogComponent implements OnInit {
 	}
 
 	async removeShareLink() {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		try {
 			await this.promptService.confirm(
 				'Remove link',
 				'Are you sure you want to remove this link?',
-				deferred.promise,
+				promise,
 				'btn-danger',
 			);
 
 			await this.shareApi.deleteShareLink(this.newShareLink.id);
 			this.newShareLink = null;
 			this.setShareLinkFormValue();
-			deferred.resolve();
+			resolve(undefined);
 			this.showLinkSettings = false;
 		} catch (response) {
-			deferred.resolve();
+			resolve(undefined);
 			if (response instanceof ShareResponse) {
 				this.messageService.showError({ message: response.getMessage() });
 			}

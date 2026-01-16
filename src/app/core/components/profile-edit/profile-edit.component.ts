@@ -28,7 +28,6 @@ import {
 	PromptService,
 	READ_ONLY_FIELD,
 } from '@shared/services/prompt/prompt.service';
-import { Deferred } from '@root/vendor/deferred';
 import { CookieService } from 'ngx-cookie-service';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { EventService } from '@shared/services/event/event.service';
@@ -210,13 +209,13 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 	}
 
 	async onRemoveProfileItemClick(item: ProfileItemVOData) {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		try {
 			if (!this.profile.isItemEmpty(item)) {
 				await this.prompt.confirm(
 					'Remove',
 					'Remove this item?',
-					deferred.promise,
+					promise,
 					'btn-danger',
 				);
 			}
@@ -227,7 +226,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 				this.message.showError({ message: err.getMessage(), translate: true });
 			}
 		} finally {
-			deferred.resolve();
+			resolve(undefined);
 			this.updateProgress();
 		}
 	}
@@ -266,17 +265,17 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 		const url = `https://${location.host}/p/archive/${this.archive.archiveNbr}/profile`;
 		const fields = [READ_ONLY_FIELD('profileLink', 'Profile link', url)];
 
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 
 		await this.prompt.prompt(
 			fields,
 			'Share profile link',
-			deferred.promise,
+			promise,
 			'Copy link',
 		);
 		const input = this.prompt.getInput('profileLink');
 		copyFromInputElement(input);
-		deferred.resolve();
+		resolve(undefined);
 	}
 
 	private trackProfileEdit(item: ProfileItemVOData) {

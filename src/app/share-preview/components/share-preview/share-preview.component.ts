@@ -27,7 +27,6 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
 import { PromptService } from '@shared/services/prompt/prompt.service';
-import { Deferred } from '@root/vendor/deferred';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { FilesystemService } from '@root/app/filesystem/filesystem.service';
@@ -423,19 +422,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 				READ_ONLY_FIELD('shareUrl', 'Share link', this.sharePreviewVO.shareUrl),
 			];
 
-			const deferred = new Deferred();
+			const { promise, resolve } = Promise.withResolvers();
 
 			this.prompt
-				.prompt(
-					fields,
-					'Copy share link to share',
-					deferred.promise,
-					'Copy link',
-				)
+				.prompt(fields, 'Copy share link to share', promise, 'Copy link')
 				.then(() => {
 					const input = this.prompt.getInput('shareUrl');
 					copyFromInputElement(input);
-					deferred.resolve();
+					resolve(undefined);
 				})
 				.catch();
 		}

@@ -28,7 +28,6 @@ import {
 	PromptButton,
 	PromptService,
 } from '@shared/services/prompt/prompt.service';
-import { Deferred } from '@root/vendor/deferred';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { DeviceService } from '@shared/services/device/device.service';
@@ -121,7 +120,8 @@ export class EditService {
 	public deleteNotifier$ = this.deleteSubject.asObservable();
 
 	private isGoogleMapsApiLoaded = false;
-	private googleMapsLoadedDeferred: Deferred;
+	private googleMapsLoadedPromise: Promise<void>;
+	private googleMapsLoadedResolve: () => void;
 
 	private debug = debug('service:editService');
 
@@ -154,7 +154,9 @@ export class EditService {
 		}
 
 		if (!this.isGoogleMapsApiLoaded) {
-			this.googleMapsLoadedDeferred = new Deferred();
+			const { promise, resolve } = Promise.withResolvers<void>();
+			this.googleMapsLoadedPromise = promise;
+			this.googleMapsLoadedResolve = resolve;
 
 			const script = document.createElement('script');
 			const callbackName = '__gmapsLoaded';
@@ -165,7 +167,7 @@ export class EditService {
 
 			window[callbackName] = () => {
 				this.isGoogleMapsApiLoaded = true;
-				this.googleMapsLoadedDeferred.resolve();
+				this.googleMapsLoadedResolve();
 				this.debug('Google Maps API loaded');
 			};
 
@@ -177,7 +179,7 @@ export class EditService {
 		if (this.isGoogleMapsApiLoaded) {
 			return await Promise.resolve();
 		} else {
-			return await this.googleMapsLoadedDeferred.promise;
+			return await this.googleMapsLoadedPromise;
 		}
 	}
 
@@ -189,7 +191,7 @@ export class EditService {
 	}
 
 	promptForAction(items: ItemVO[], actions: PromptButton[] = []) {
-		const actionDeferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 
 		let title;
 
@@ -201,9 +203,9 @@ export class EditService {
 
 		if (actions.length) {
 			this.prompt
-				.promptButtons(actions, title, actionDeferred.promise)
+				.promptButtons(actions, title, promise)
 				.then((value: ActionType) => {
-					this.handleAction(items, value, actionDeferred);
+					this.handleAction(items, value, resolve);
 				})
 				.catch();
 		} else {
@@ -222,25 +224,25 @@ export class EditService {
 	async handleAction(
 		items: ItemVO[],
 		value: ActionType,
-		actionDeferred: Deferred,
+		resolve: (value?: unknown) => void,
 	) {
 		try {
 			switch (value) {
 				case 'delete':
 					await this.deleteItems(items);
 					this.dataService.refreshCurrentFolder();
-					actionDeferred.resolve();
+					resolve(undefined);
 					break;
 				case 'move':
-					actionDeferred.resolve();
+					resolve(undefined);
 					this.openFolderPicker(items, FolderPickerOperations.Move);
 					break;
 				case 'copy':
-					actionDeferred.resolve();
+					resolve(undefined);
 					this.openFolderPicker(items, FolderPickerOperations.Copy);
 					break;
 				case 'download':
-					actionDeferred.resolve();
+					resolve(undefined);
 					if (items.length === 1) {
 						const item = items[0];
 						if (item instanceof RecordVO) {
@@ -249,7 +251,7 @@ export class EditService {
 					}
 					break;
 				case 'publish':
-					actionDeferred.resolve();
+					resolve(undefined);
 					this.openPublishDialog(items[0]);
 					break;
 				case 'share': {
@@ -258,7 +260,7 @@ export class EditService {
 					);
 					const newShareLink = await this.fetchShareLinkFromResponse(response);
 
-					actionDeferred.resolve();
+					resolve(undefined);
 					this.dialog.open(SharingComponent, {
 						data: {
 							item: items[0],
@@ -269,13 +271,13 @@ export class EditService {
 					break;
 				}
 				default:
-					actionDeferred.resolve();
+					resolve(undefined);
 			}
 		} catch (err) {
 			if (err instanceof FolderResponse || err instanceof RecordResponse) {
 				this.message.showError({ message: err.getMessage(), translate: true });
 			}
-			actionDeferred.resolve();
+			resolve(undefined);
 		}
 	}
 
@@ -597,7 +599,11 @@ export class EditService {
 		items: ItemVO[],
 		operation: FolderPickerOperations,
 	): Promise<void> {
-		const deferred = new Deferred();
+		const {
+			promise: pickerPromise,
+			resolve: pickerResolve,
+			reject: pickerReject,
+		} = Promise.withResolvers();
 		const rootFolder = this.accountService.getRootFolder();
 
 		const filterFolderLinkIds = [];
@@ -608,14 +614,9 @@ export class EditService {
 			}
 		}
 
-		return await new Promise<void>((resolve, reject) => {
+		return await new Promise<void>((resolve) => {
 			this.folderPicker
-				.chooseFolder(
-					rootFolder,
-					operation,
-					deferred.promise,
-					filterFolderLinkIds,
-				)
+				.chooseFolder(rootFolder, operation, pickerPromise, filterFolderLinkIds)
 				.then(async (destination: FolderVO) => {
 					switch (operation) {
 						case FolderPickerOperations.Copy:
@@ -626,7 +627,7 @@ export class EditService {
 				})
 				.then(() => {
 					setTimeout(() => {
-						deferred.resolve();
+						pickerResolve(undefined);
 						const msg = `${items.length} item(s) ${
 							operation === FolderPickerOperations.Copy ? 'copied' : 'moved'
 						} successfully.`;
@@ -635,7 +636,7 @@ export class EditService {
 					}, 500);
 				})
 				.catch((response: FolderResponse | RecordResponse) => {
-					deferred.reject();
+					pickerReject();
 					this.message.showError({
 						message: response.getMessage(),
 						translate: true,

@@ -48,12 +48,12 @@ export class FolderPickerService {
 			throw new Error('FolderPickerService - Folder picker component missing');
 		}
 
-		return await this.component.show(
+		return (await this.component.show(
 			startingFolder,
 			FolderPickerOperations.ChooseRecord,
 			null,
 			null,
 			true,
-		);
+		)) as RecordVO;
 	}
 }
