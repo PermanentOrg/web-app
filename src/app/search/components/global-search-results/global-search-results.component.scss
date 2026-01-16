@@ -42,10 +42,11 @@ input {
 	max-width: 30rem;
 }
 
-i.ion-md-search {
+i.material-icons {
 	position: absolute;
 	left: $input-padding;
 	opacity: 0.5;
+	font-size: 1em;
 }
 
 .tag-results {

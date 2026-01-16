@@ -57,10 +57,11 @@ input {
 	}
 }
 
-i.ion-md-search {
+i.material-icons {
 	position: absolute;
 	left: $input-padding;
 	opacity: 0.5;
+	font-size: 1em;
 }
 
 $result-padding-x: 0.5rem;

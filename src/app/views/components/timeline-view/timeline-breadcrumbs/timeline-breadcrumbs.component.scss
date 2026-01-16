@@ -29,7 +29,12 @@
 
 	.separator {
 		display: inline-block;
-		padding: 0px 6px 0px 4px;
+		padding: 0px 1px;
 		opacity: 0.5;
+
+		i.material-icons {
+			font-size: 1.2em;
+			vertical-align: middle;
+		}
 	}
 }

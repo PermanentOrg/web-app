@@ -6,7 +6,7 @@
 		#searchInput
 		[formControl]="formControl"
 	/>
-	<i class="ion-md-search"></i>
+	<i class="material-icons migrated-ionicon">search</i>
 	@if (waiting) {
 		<div class="fade-ring-loader" @ngIfFadeInAnimation></div>
 	}
@@ -54,13 +54,13 @@
 							}
 							@if (item.isFolder) {
 								<div class="item-thumb">
-									<i class="ion-md-folder"></i>
+									<i class="material-icons migrated-ionicon">folder</i>
 								</div>
 							}
 							<div class="item-info">
 								<div class="item-name">{{ item.displayName }}</div>
 								<div class="item-parent-folder">
-									<i class="ion-md-folder"></i>
+									<i class="material-icons migrated-ionicon">folder</i>
 									{{ item.parentDisplayName }}
 								</div>
 							</div>

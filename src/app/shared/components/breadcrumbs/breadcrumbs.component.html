@@ -21,10 +21,11 @@
 	@if (currentFolder?.ShareVOs?.length) {
 		<div class="breadcrumb-shares">
 			<i
-				class="ion-md-people"
+				class="material-icons migrated-ionicon"
 				(click)="onShareIconClick()"
 				[ngbTooltip]="sharesList"
-			></i>
+				>group</i
+			>
 			<ng-template #sharesList>
 				<ng-container [ngPlural]="currentFolder?.ShareVOs?.length">
 					Shared with
