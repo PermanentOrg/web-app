@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -8,6 +8,7 @@ import { TimelineViewComponent } from './components/timeline-view/timeline-view.
 import { TimelineBreadcrumbsComponent } from './components/timeline-view/timeline-breadcrumbs/timeline-breadcrumbs.component';
 
 @NgModule({
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	imports: [CommonModule, RouterModule, SharedModule],
 	exports: [TimelineViewComponent],
 	declarations: [TimelineViewComponent, TimelineBreadcrumbsComponent],

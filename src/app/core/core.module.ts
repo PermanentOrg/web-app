@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreRoutingModule } from '@core/core.routes';
 import { SharedModule } from '@shared/shared.module';
@@ -65,6 +65,7 @@ import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-
 import { RedeemGiftComponent } from './components/redeem-gift/redeem-gift.component';
 
 @NgModule({
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	imports: [
 		AnnouncementModule,
 		CommonModule,

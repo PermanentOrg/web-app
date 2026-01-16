@@ -41,12 +41,12 @@
 										{{ member.primaryEmail }}
 									</div>
 									<div class="member-access">
-										<i
-											class="ion-md-information-circle"
+										<ion-icon
+											name="information-circle"
 											[ngbTooltip]="
 												getTooltipForAccess(member.accessRole) | prTooltip
 											"
-										></i>
+										></ion-icon>
 										Access: {{ member.accessRole | prConstants }}
 									</div>
 								</div>
@@ -110,12 +110,12 @@
 										{{ member.primaryEmail }}
 									</div>
 									<div class="member-access">
-										<i
-											class="ion-md-information-circle"
+										<ion-icon
+											name="information-circle"
 											[ngbTooltip]="
 												getTooltipForAccess(member.accessRole) | prTooltip
 											"
-										></i>
+										></ion-icon>
 										Access: {{ member.accessRole | prConstants }}
 										<span>(pending)</span>
 									</div>

@@ -1,4 +1,8 @@
-import { NgModule, ComponentFactoryResolver } from '@angular/core';
+import {
+	NgModule,
+	ComponentFactoryResolver,
+	CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { GoogleMapsModule } from '@angular/google-maps';
@@ -29,6 +33,7 @@ import { SharingDialogComponent } from './components/sharing-dialog/sharing-dial
 import { DownloadButtonComponent } from './components/download-button/download-button.component';
 
 @NgModule({
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	imports: [
 		CommonModule,
 		RouterModule,

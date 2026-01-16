@@ -87,11 +87,11 @@
 				{{ item.displayName }}
 			</p>
 			@if (!showAccess && item.ShareVOs?.length && !isUnlistedShare) {
-				<i
-					class="ion-md-people"
+				<ion-icon
+					name="people"
 					@ngIfFadeInAnimation
 					[ngbTooltip]="'fileList.icons.share' | prTooltip"
-				></i>
+				></ion-icon>
 			}
 		</div>
 		<div class="second-row">
