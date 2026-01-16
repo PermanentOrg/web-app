@@ -34,7 +34,7 @@ export type TagType = 'keyword' | 'customMetadata';
 	templateUrl: './edit-tags.component.html',
 	styleUrls: ['./edit-tags.component.scss'],
 	animations: [ngIfScaleAnimation],
-	providers: [SearchService, DataService],
+	providers: [SearchService],
 	standalone: false,
 })
 export class EditTagsComponent
