@@ -1,9 +1,38 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { BrowserAgent } from '@newrelic/browser-agent/loaders/browser-agent';
+import { addIcons } from 'ionicons';
+import {
+	addCircle,
+	caretBack,
+	caretForward,
+	exit,
+	folder,
+	helpCircle,
+	informationCircle,
+	people,
+	personAdd,
+	search,
+} from 'ionicons/icons';
+import { defineCustomElements } from 'ionicons/loader';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+
+// Initialize Ionicons web components
+addIcons({
+	addCircle,
+	caretBack,
+	caretForward,
+	exit,
+	folder,
+	helpCircle,
+	informationCircle,
+	people,
+	personAdd,
+	search,
+});
+defineCustomElements(window);
 
 // Initialize New Relic browser agent
 const newRelicConfig = environment.analytics.newRelic;

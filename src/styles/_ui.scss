@@ -404,3 +404,10 @@ $drag-outline-border: 5px;
 	display: flex;
 	align-items: center;
 }
+
+// Ionicons web component styling
+ion-icon {
+	// Ensure ion-icon inherits font-size for sizing (1em default)
+	font-size: inherit;
+	vertical-align: middle;
+}

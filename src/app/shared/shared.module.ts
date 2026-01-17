@@ -1,4 +1,8 @@
-import { NgModule, ComponentFactoryResolver } from '@angular/core';
+import {
+	NgModule,
+	ComponentFactoryResolver,
+	CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
@@ -72,6 +76,7 @@ import { GetFileTypePipe } from './pipes/get-file-type.pipe';
 import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
 
 @NgModule({
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	imports: [
 		CommonModule,
 		FormsModule,

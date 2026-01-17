@@ -69,7 +69,8 @@ nav.navbar {
 			justify-content: center;
 			font-weight: $font-weight-bold;
 
-			i {
+			i,
+			ion-icon {
 				margin-right: $navbar-button-icon-padding;
 			}
 		}

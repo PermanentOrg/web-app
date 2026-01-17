@@ -57,7 +57,7 @@ input {
 	}
 }
 
-i.ion-md-search {
+ion-icon[name='search'] {
 	position: absolute;
 	left: $input-padding;
 	opacity: 0.5;
