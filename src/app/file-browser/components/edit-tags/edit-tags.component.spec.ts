@@ -82,6 +82,7 @@ describe('EditTagsComponent', () => {
 				{
 					provide: DataService,
 					useValue: {
+						currentFolderChange: of(null),
 						fetchFullItems: async (items: ItemVO[]) =>
 							await Promise.resolve([]),
 					},
