@@ -740,6 +740,9 @@
 				"mkv": "A Matroska Multimedia Container file",
 				"mpg": "A MPEG-2 File",
 				"mpeg": "A MPEG-2 File"
+			},
+			"web_archive": {
+				"wacz": "Web Archive"
 			}
 		},
 		"folder": {
@@ -833,7 +836,8 @@
 			"reference": "Reference",
 			"spreadsheet": "spreadsheet",
 			"unknown": "unknown",
-			"video": "video"
+			"video": "video",
+			"web_archive": "web archive"
 		},
 		"report": {
 			"cloud_file_missing": "Went to get a cloud file that should have been there",
