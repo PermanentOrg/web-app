@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
-import { FolderVO, ArchiveVO, RecordVO } from '@models';
+import { FolderVO, ArchiveVO } from '@models';
 import {
 	ProfileItemVOData,
 	ProfileItemVODictionary,
@@ -148,26 +148,21 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 	async chooseBannerPicture() {
 		const originalValue = this.publicRoot.thumbArchiveNbr;
 		try {
-			const record = await this.folderPicker.chooseRecord(
+			const record = (await this.folderPicker.chooseRecord(
 				this.account.getPrivateRoot(),
-			);
+			)) as any;
 			const updateFolder = new FolderVO(this.publicRoot);
-			updateFolder.thumbArchiveNbr = record.archiveNbr;
+			updateFolder.thumbArchiveNbr = record.archiveNumber;
 			await this.api.folder.updateRoot(
 				[updateFolder],
 				['thumbArchiveNbr', 'view', 'viewProperty'],
 			);
 			// borrow thumb URLs from record for now, until they can be regenerated
-			const thumbProps: Array<keyof (ArchiveVO | RecordVO)> = [
-				'thumbURL200',
-				'thumbURL500',
-				'thumbURL1000',
-				'thumbURL2000',
-			];
-			for (const prop of thumbProps) {
-				this.publicRoot[prop] = record[prop] as never;
-			}
-			this.publicRoot.thumbArchiveNbr = record.archiveNbr;
+			this.publicRoot.thumbArchiveNbr = record.archiveNumber;
+			this.publicRoot.thumbURL200 = record.thumbURL200 || record.thumbUrl200;
+			this.publicRoot.thumbURL500 = record.thumbURL500 || record.thumbUrl200;
+			this.publicRoot.thumbURL1000 = record.thumbURL1000 || record.thumbUrl1000;
+			this.publicRoot.thumbURL2000 = record.thumbURL2000 || record.thumbUrl2000;
 		} catch (err) {
 			if (err instanceof FolderResponse) {
 				this.publicRoot.thumbArchiveNbr = originalValue;

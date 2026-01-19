@@ -33,7 +33,10 @@
 								</div>
 							}
 							@default {
-								<div prBgImage [bgSrc]="item.thumbURL200"></div>
+								<div
+									prBgImage
+									[bgSrc]="item.thumbURL200 || item.thumbUrl200"
+								></div>
 							}
 						}
 						<div class="name">{{ item.displayName }}</div>
@@ -50,7 +53,10 @@
 		}
 		@if (selectedRecord) {
 			<div class="picker-contents picker-selected-record">
-				<div prBgImage [bgSrc]="selectedRecord.thumbURL200"></div>
+				<div
+					prBgImage
+					[bgSrc]="selectedRecord.thumbURL200 || selectedRecord.thumbUrl200"
+				></div>
 			</div>
 		}
 		<div class="picker-footer">

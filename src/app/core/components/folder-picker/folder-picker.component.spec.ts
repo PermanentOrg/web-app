@@ -64,8 +64,8 @@ describe('FolderPickerComponent', () => {
 		expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
 
 		const getLeanItemsExpected = require('@root/test/responses/folder.getLeanItems.folderPicker.myFiles.success.json');
-		spyOn(api.folder, 'getLeanItems').and.returnValue(
-			of(new FolderResponse(getLeanItemsExpected)),
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve(new FolderResponse(getLeanItemsExpected)),
 		);
 
 		await component.loadCurrentFolderChildData();

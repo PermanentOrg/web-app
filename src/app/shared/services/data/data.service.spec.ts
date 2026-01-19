@@ -147,6 +147,45 @@ describe('DataService', () => {
 			});
 	});
 
+	it('should return 0 and reset items when fetchLeanItems response is unsuccessful', (done) => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: false,
+			} as unknown as FolderResponse),
+		);
+
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true);
+		service.setCurrentFolder(currentFolder);
+		currentFolder.ChildItemVOs.forEach((item: RecordVO | FolderVO) => {
+			service.registerItem(item);
+		});
+		const rejects: number[] = [];
+		currentFolder.ChildItemVOs.forEach((item, index) => {
+			item.fetched = new Promise((resolve, reject) => {
+				const wrappedReject = () => {
+					rejects.push(index);
+					reject();
+				};
+				(item as any)._reject = wrappedReject;
+			});
+		});
+
+		service
+			.fetchLeanItems(currentFolder.ChildItemVOs)
+			.then((count) => {
+				expect(count).toBe(0);
+				currentFolder.ChildItemVOs.forEach((item) => {
+					expect(item.isFetching).toBeFalse();
+					expect(item.fetched).toBeNull();
+				});
+				done();
+			})
+			.catch(done.fail);
+	});
+
 	// the method fetchFullItems uses both the record.repo and the folder.repo
 	// and the data service test suite does not create mocks for them
 	// because the methods api.folder.getWithChildren and api.record.get
