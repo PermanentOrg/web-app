@@ -28,6 +28,7 @@ const mockConstantsService = {
 	getProfileTemplate: () => PROFILE_TEMPLATE,
 };
 const mockAccountService = {
+	getPrivateRoot: () => 'root',
 	getArchive: () =>
 		new ArchiveVO({ archiveId: 1, type: 'archive.type.organization' }),
 };
@@ -175,5 +176,44 @@ describe('ProfileService', () => {
 		const progress = instance.calculateProfileProgress();
 
 		expect(progress).toBe(0);
+	});
+
+	it('should update the profile picture', async () => {
+		const mockRecord = new RecordVO({
+			archiveNumber: '123',
+			thumbURL200: 'url200',
+			thumbURL500: 'url500',
+			thumbURL1000: 'url1000',
+			thumbURL2000: 'url2000',
+		} as any);
+
+		const mockArchive = new ArchiveVO({ archiveId: 1 });
+		mockArchive.update = jasmine.createSpy('update');
+
+		const apiUpdateSpy = spyOn(
+			mockApiService.archive,
+			'update',
+		).and.callThrough();
+		const chooseRecordSpy = spyOn(
+			mockFolderPickerService,
+			'chooseRecord',
+		).and.resolveTo(mockRecord);
+		const getArchiveSpy = spyOn(
+			mockAccountService,
+			'getArchive',
+		).and.returnValue(mockArchive);
+		const getPrivateRootSpy = spyOn(
+			mockAccountService,
+			'getPrivateRoot',
+		).and.returnValue('root');
+
+		const instance = TestBed.inject(ProfileService);
+
+		await instance.promptForProfilePicture();
+
+		expect(getPrivateRootSpy).toHaveBeenCalled();
+		expect(getArchiveSpy).toHaveBeenCalled();
+		expect(chooseRecordSpy).toHaveBeenCalled();
+		expect(apiUpdateSpy).toHaveBeenCalled();
 	});
 });

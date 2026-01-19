@@ -121,7 +121,7 @@
 						prBgImage
 						[bgSrc]="
 							this.publicRoot.thumbArchiveNbr
-								? this.publicRoot.thumbURL2000
+								? this.publicRoot.thumbURL2000 || this.publicRoot.thumbUrl2000
 								: null
 						"
 						(click)="chooseBannerPicture()"
