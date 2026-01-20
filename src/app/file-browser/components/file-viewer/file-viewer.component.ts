@@ -57,6 +57,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	public customMetadata: TagVOData[];
 
 	public documentUrl = null;
+	public replayUrl = null;
 
 	public canEdit: boolean;
 
@@ -227,6 +228,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		);
 		this.isWebArchive = this.currentRecord.type.includes('web_archive');
 		this.documentUrl = this.getDocumentUrl();
+		this.replayUrl = this.getReplayUrl();
 		this.setCurrentTags();
 	}
 
@@ -259,6 +261,23 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		if (!url) {
 			return false;
 		}
+		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+	}
+
+	getReplayUrl() {
+		if (!this.isWebArchive) {
+			return null;
+		}
+
+		const downloadUrl = this.currentRecord?.FileVOs?.find(
+			(file) => file.format === FileFormat.Original,
+		)?.fileURL;
+
+		if (!downloadUrl) {
+			return null;
+		}
+
+		const url = `https://replay.dev.permanent.org/?source=${encodeURIComponent(downloadUrl)}&embed=replay-with-info`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 

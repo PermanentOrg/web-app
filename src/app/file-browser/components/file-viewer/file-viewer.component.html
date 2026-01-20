@@ -41,11 +41,15 @@
 						!isArchive &&
 						!isWebArchive
 					"
-				  ></pr-zooming-image-viewer>
-				<replay-web-page source="{{currentRecord?.files?.[0]?.downloadUrl}}"
-						 replayBase="/assets/replay/"
-						 *ngIf="isWebArchive">
-				</replay-web-page>
+				></pr-zooming-image-viewer>
+
+				<iframe
+					[src]="replayUrl"
+					*ngIf="isWebArchive && replayUrl"
+					width="100%"
+					height="100%"
+					frameborder="0"
+				></iframe>
 				<pr-thumbnail
 					[item]="currentRecord"
 					*ngIf="
