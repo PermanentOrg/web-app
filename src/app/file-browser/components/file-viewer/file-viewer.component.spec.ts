@@ -12,6 +12,7 @@ import { TagsService } from '@core/services/tags/tags.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { MockComponent } from 'ng-mocks';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
 import { FileViewerComponent } from './file-viewer.component';
@@ -97,6 +98,7 @@ describe('FileViewerComponent', () => {
 	let openedDialogs: string[];
 	let downloaded: boolean;
 	let publicProfileService: PublicProfileService;
+	let featureFlagsEnabled: Map<string, boolean>;
 
 	function setUpMultipleRecords(...items: ItemVO[]) {
 		folderChildren.push(...items);
@@ -117,6 +119,7 @@ describe('FileViewerComponent', () => {
 		openedDialogs = [];
 		downloaded = false;
 		publicProfileService = new PublicProfileService();
+		featureFlagsEnabled = new Map<string, boolean>();
 
 		await TestBed.configureTestingModule({
 			declarations: [
@@ -199,6 +202,12 @@ describe('FileViewerComponent', () => {
 						record: {
 							get: async () => ({ getRecordVO: () => defaultItem }),
 						},
+					},
+				},
+				{
+					provide: FeatureFlagService,
+					useValue: {
+						isEnabled: (flag: string) => featureFlagsEnabled.get(flag) ?? false,
 					},
 				},
 			],
@@ -477,6 +486,60 @@ describe('FileViewerComponent', () => {
 			await fixture.whenStable();
 
 			expect(component.getDocumentUrl()).toBeFalsy();
+		});
+	});
+
+	describe('Replay URLs for web archives', () => {
+		function setUpWebArchiveRecord() {
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'type.record.web_archive',
+				displayName: 'Test Web Archive',
+				TagVOs: [],
+				FileVOs: [
+					{
+						format: 'file.format.original',
+						type: 'wacz',
+						fileURL: 'http://example.com/archive.wacz',
+					},
+				],
+			});
+		}
+
+		it('should set replayUrl when replay-web feature flag is enabled', async () => {
+			featureFlagsEnabled.set('replay-web', true);
+			setUpWebArchiveRecord();
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			await fixture.whenStable();
+
+			expect(component.replayUrl).toBeTruthy();
+		});
+
+		it('should not set replayUrl when replay-web feature flag is disabled', async () => {
+			featureFlagsEnabled.set('replay-web', false);
+			setUpWebArchiveRecord();
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			await fixture.whenStable();
+
+			expect(component.replayUrl).toBeNull();
+		});
+
+		it('should have null replayUrl for non-web-archive records even when flag is enabled', async () => {
+			featureFlagsEnabled.set('replay-web', true);
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Test Document',
+				TagVOs: [],
+			});
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			await fixture.whenStable();
+
+			expect(component.replayUrl).toBeNull();
 		});
 	});
 
