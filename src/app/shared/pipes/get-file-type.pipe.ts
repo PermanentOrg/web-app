@@ -10,6 +10,7 @@ export class GetFileTypePipe implements PipeTransform {
 		'type.folder.public': 'Folder',
 		'type.record.image': 'Image',
 		'type.record.video': 'Video',
+		'type.record.web_archive': 'Web Archive',
 	};
 
 	transform(value: string): string {
