@@ -13,6 +13,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { Router } from '@angular/router';
 import { ArchiveVO, FolderVO } from '@root/app/models';
 import { Component } from '@angular/core';
+import { DialogRef } from '@angular/cdk/dialog';
 import { ArchiveSwitcherComponent } from './archive-switcher.component';
 
 @Component({
@@ -47,6 +48,10 @@ describe('ArchiveSwitcherComponent', () => {
 		),
 		setArchive: jasmine.createSpy(),
 		changeArchive: jasmine.createSpy().and.returnValue(Promise.resolve()),
+	};
+
+	const mockDialogRef = {
+		close: jasmine.createSpy(),
 	};
 
 	const mockApiService = {
@@ -95,6 +100,7 @@ describe('ArchiveSwitcherComponent', () => {
 			imports: [MockArchiveSmallComponent, MockLoadingSpinnerComponent],
 			providers: [
 				{ provide: AccountService, useValue: mockAccountService },
+				{ provide: DialogRef, useValue: mockDialogRef },
 				{ provide: ApiService, useValue: mockApiService },
 				{ provide: DataService, useValue: mockDataService },
 				{ provide: PrConstantsService, useValue: mockPrConstants },
@@ -154,6 +160,7 @@ describe('ArchiveSwitcherComponent', () => {
 
 		expect(mockPromptService.promptButtons).toHaveBeenCalled();
 		expect(mockAccountService.changeArchive).toHaveBeenCalledWith(archive);
+		expect(mockDialogRef.close).toHaveBeenCalled();
 		expect(mockRouter.navigate).toHaveBeenCalledWith(['/private']);
 	}));
 
