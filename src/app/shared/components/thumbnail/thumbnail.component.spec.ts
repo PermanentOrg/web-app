@@ -243,7 +243,7 @@ describe('ThumbnailComponent', () => {
 			'.pr-thumbnail-image[hidden]',
 		);
 		const folderIcons = fixture.nativeElement.querySelectorAll(
-			'i.ion-md-folder:not([hidden])',
+			'.pr-thumbnail-icon:not([hidden]) i.material-icons',
 		);
 
 		expect(hiddenImages.length).toBe(1);

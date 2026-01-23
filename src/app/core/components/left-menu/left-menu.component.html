@@ -91,7 +91,7 @@
 				[routerLink]="['/search']"
 				[class.active]="checkMenuItemActive('/search')"
 			>
-				<i class="ion-md-search"></i>
+				<i class="material-icons migrated-ionicon">search</i>
 				Search
 			</a>
 			<a
@@ -216,14 +216,14 @@
 				[routerLink]="[{ outlets: { dialog: ['invitations'] } }]"
 				[class.active]="checkMenuItemActive('/invitations')"
 			>
-				<i class="ion-md-person-add"></i>
+				<i class="material-icons migrated-ionicon">person_add</i>
 				Invitations
 			</a>
 			<a
 				class="menu-item hide-desktop"
 				[routerLink]="[{ outlets: { dialog: ['storage', 'add'] } }]"
 			>
-				<i class="ion-md-add-circle"></i>
+				<i class="material-icons migrated-ionicon">add_circle</i>
 				Add Storage
 			</a>
 			<a
@@ -231,11 +231,11 @@
 				href="https://desk.zoho.com/portal/permanent/home"
 				target="_blank"
 			>
-				<i class="ion-md-help-circle"></i>
+				<i class="material-icons migrated-ionicon">help</i>
 				Help
 			</a>
 			<a class="menu-item hide-desktop" (click)="logOut()">
-				<i class="ion-md-exit"></i>
+				<i class="material-icons migrated-ionicon">logout</i>
 				Log Out
 			</a>
 		</div>

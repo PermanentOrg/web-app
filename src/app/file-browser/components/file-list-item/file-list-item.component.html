@@ -88,10 +88,11 @@
 			</p>
 			@if (!showAccess && item.ShareVOs?.length && !isUnlistedShare) {
 				<i
-					class="ion-md-people"
+					class="material-icons migrated-ionicon"
 					@ngIfFadeInAnimation
 					[ngbTooltip]="'fileList.icons.share' | prTooltip"
-				></i>
+					>group</i
+				>
 			}
 		</div>
 		<div class="second-row">

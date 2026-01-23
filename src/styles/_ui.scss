@@ -404,3 +404,10 @@ $drag-outline-border: 5px;
 	display: flex;
 	align-items: center;
 }
+
+// Material icons that were migrated from ionicons need to inherit font-size
+// (matching previous ion-icon behavior). Only apply to icons with this class.
+i.material-icons.migrated-ionicon {
+	font-size: inherit;
+	vertical-align: middle;
+}
