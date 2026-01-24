@@ -176,6 +176,13 @@ $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 }
 
 @import 'bootstrap/scss/functions';
+
+// Override Bootstrap form control styling
+$input-border-color: $gray-400;
+$input-focus-border-color: $form-border-focus;
+$input-focus-bg: white;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+
 @import 'bootstrap/scss/variables';
 @import 'utilities';
 
@@ -185,7 +192,7 @@ $box-shadow-dark: 0 0.5rem 1rem rgba($black, 0.3) !default;
 $font-size-xs: ($font-size-base * 0.75) !default;
 
 // Customizations to Bootstrap Variables
-$link-color: lighten(theme-color('primary'), 20%);
+$link-color: lighten($primary, 20%);
 $link-decoration: underline;
 $link-hover-color: lighten($link-color, 20%);
 $link-hover-decoration: none;

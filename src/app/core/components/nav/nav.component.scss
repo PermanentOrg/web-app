@@ -68,6 +68,7 @@ nav.navbar {
 			align-items: center;
 			justify-content: center;
 			font-weight: $font-weight-bold;
+			white-space: nowrap;
 
 			i {
 				margin-right: $navbar-button-icon-padding;

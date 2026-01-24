@@ -35,16 +35,14 @@
 					}}
 				</div>
 			}
-			<div class="input-group-append">
-				<button
-					class="btn btn-primary"
-					[ngClass]="'add-tag-' + tagType"
-					(click)="newTagName ? onInputEnter(newTagName) : endEditing()"
-					(keydown)="setFocusToFirstTagOrButton($event)"
-				>
-					{{ newTagName ? 'Add' : 'Done' }}
-				</button>
-			</div>
+			<button
+				class="btn btn-primary"
+				[ngClass]="'add-tag-' + tagType"
+				(click)="newTagName ? onInputEnter(newTagName) : endEditing()"
+				(keydown)="setFocusToFirstTagOrButton($event)"
+			>
+				{{ newTagName ? 'Add' : 'Done' }}
+			</button>
 		</div>
 	}
 	@if (isEditing && matchingTags?.length) {
@@ -115,17 +113,15 @@
 							}}
 						</div>
 					}
-					<div class="input-group-append">
-						<button
-							class="btn btn-primary"
-							[ngClass]="'add-tag-' + tagType"
-							(click)="onInputEnter(newTagName)"
-							[disabled]="!newTagName"
-							(keydown)="setFocusToFirstTagOrButton($event)"
-						>
-							Add
-						</button>
-					</div>
+					<button
+						class="btn btn-primary"
+						[ngClass]="'add-tag-' + tagType"
+						(click)="onInputEnter(newTagName)"
+						[disabled]="!newTagName"
+						(keydown)="setFocusToFirstTagOrButton($event)"
+					>
+						Add
+					</button>
 				</div>
 				@if (isEditing) {
 					<div class="edit-tags" @ngIfScaleAnimation>

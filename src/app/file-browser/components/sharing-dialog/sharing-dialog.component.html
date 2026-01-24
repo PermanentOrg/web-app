@@ -32,7 +32,7 @@
 					<div class="dialog-form-field">
 						<label for="inviteConnection">Connection</label>
 						<select
-							class="form-control"
+							class="form-select"
 							name="inviteConnection"
 							formControlName="relationship"
 						>
@@ -46,7 +46,7 @@
 					<div class="dialog-form-field">
 						<label for="inviteAccessRole">Access Role</label>
 						<select
-							class="form-control"
+							class="form-select"
 							name="inviteAccessRole"
 							formControlName="accessRole"
 						>
@@ -68,7 +68,7 @@
 							(archiveSelect)="onAddArchive($event)"
 							(invite)="onAddInvite($event)"
 						></pr-archive-search-box>
-						<select class="form-control" [(ngModel)]="newAccessRole">
+						<select class="form-select" [(ngModel)]="newAccessRole">
 							@for (option of accessRoleOptions; track option) {
 								<option [value]="option.value">
 									{{ option.text }}
@@ -156,7 +156,7 @@
 									The {{ share.ArchiveVO.fullName }} Archive
 								</div>
 								<select
-									class="form-control"
+									class="form-select"
 									[disabled]="
 										!canShare ||
 										share.accessRole === 'access.role.owner' ||
@@ -267,7 +267,7 @@
 					<div class="share-link-type-dropdown">
 						<label>Link Type</label>
 						<select
-							class="form-control"
+							class="form-select"
 							[(ngModel)]="linkType"
 							(ngModelChange)="
 								onShareLinkPropChange('accessRestrictions', linkType)
@@ -345,7 +345,7 @@
 							<div class="link-settings-item">
 								<label>Default Share Role</label>
 								<select
-									class="form-control"
+									class="form-select"
 									[disabled]="!canShare || updatingLink"
 									[(ngModel)]="linkDefaultAccessRole"
 									(ngModelChange)="
@@ -376,7 +376,7 @@
 						<div class="link-settings-item">
 							<label>Link expires after</label>
 							<select
-								class="form-control"
+								class="form-select"
 								[disabled]="!canShare || updatingLink"
 								[(ngModel)]="expiration"
 								(ngModelChange)="
