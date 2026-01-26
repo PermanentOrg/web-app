@@ -29,6 +29,7 @@ import { FileFormat } from '@models/file-vo';
 import { GetAccessFile } from '@models/get-access-file';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
@@ -49,6 +50,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	public isVideo = false;
 	public isAudio = false;
 	public isDocument = false;
+	public isWebArchive = false;
 	public showThumbnail = true;
 	public isPublicArchive: boolean = false;
 	public allowDownloads: boolean = false;
@@ -56,6 +58,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	public customMetadata: TagVOData[];
 
 	public documentUrl = null;
+	public replayUrl = null;
 
 	public canEdit: boolean;
 
@@ -91,6 +94,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		@Optional() publicProfile: PublicProfileService,
 		private shareLinksService: ShareLinksService,
 		private api: ApiService,
+		private feature: FeatureFlagService,
 	) {
 		// store current scroll position in file list
 		this.bodyScrollTop = window.scrollY;
@@ -224,7 +228,11 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		this.isDocument = this.currentRecord.FileVOs?.some(
 			(obj) => obj.type.includes('pdf') || obj.type.includes('txt'),
 		);
+		this.isWebArchive = this.currentRecord.type.includes('web_archive');
 		this.documentUrl = this.getDocumentUrl();
+		if (this.feature.isEnabled('replay-web')) {
+			this.replayUrl = this.getReplayUrl();
+		}
 		this.setCurrentTags();
 	}
 
@@ -257,6 +265,23 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		if (!url) {
 			return false;
 		}
+		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+	}
+
+	getReplayUrl() {
+		if (!this.isWebArchive) {
+			return null;
+		}
+
+		const originalFileUrl = this.currentRecord?.FileVOs?.find(
+			(file) => file.format === FileFormat.Original,
+		)?.fileURL;
+
+		if (!originalFileUrl) {
+			return null;
+		}
+
+		const url = `https://replay.dev.permanent.org/?source=${encodeURIComponent(originalFileUrl)}&embed=replay-with-info`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 
