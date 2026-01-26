@@ -206,4 +206,8 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 				}
 			});
 	}
+
+	backButtonClick() {
+		this.dialogRef.close();
+	}
 }
