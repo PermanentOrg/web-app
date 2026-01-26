@@ -72,7 +72,7 @@
 		"intersection-observer": "^0.12.2",
 		"ios-inner-height": "^1.1.1",
 		"keycharm": "^0.4.0",
-		"lodash": "^4.17.21",
+		"lodash": "^4.17.23",
 		"moment": "^2.30.1",
 		"ng-in-viewport": "^16.1.0",
 		"ng-recaptcha-2": "^16.0.1",
