@@ -222,4 +222,10 @@ describe('ArchiveSwitcherComponent', () => {
 
 		expect(component.createArchiveClick).toHaveBeenCalled();
 	});
+
+	it('should close the dialog when backButtonClick is called', () => {
+		component.backButtonClick();
+
+		expect(mockDialogRef.close).toHaveBeenCalled();
+	});
 });

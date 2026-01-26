@@ -623,7 +623,13 @@ export class AccountService {
 			return this.dialog.open(
 				ArchiveSwitcherComponent,
 
-				{ height: 'auto', width: 'fullscreen', data: { promptText } },
+				{
+					height: 'auto',
+					width: 'fullscreen',
+					data: { promptText },
+					hasBackdrop: true,
+					disableClose: true,
+				},
 			);
 		}
 	}
