@@ -462,29 +462,21 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	}
 
 	async onRequestAccessClick() {
+		let dialogRef;
 		try {
 			this.waiting = true;
 			if (!this.archiveConfirmed) {
-				await this.accountService.promptForArchiveChange(
+				dialogRef = await this.accountService.promptForArchiveChange(
 					this.chooseArchiveText,
 				);
 				this.archiveConfirmed = true;
 			}
-			const response = await this.api.share.requestShareAccess(this.shareToken);
-			const shareVo = response.getShareVO();
-			if (shareVo.status === 'status.generic.pending') {
-				this.message.showMessage({
-					message: `Access requested. ${this.shareAccount.fullName} must approve your request.`,
-					style: 'success',
+			if (dialogRef) {
+				dialogRef.closed.subscribe(async () => {
+					await this.requestShareAccess();
 				});
-				this.showCover = false;
-				this.hasRequested = true;
 			} else {
-				this.message.showMessage({
-					message: 'Access granted.',
-					style: 'success',
-				});
-				this.router.navigate(['/app', 'shares']);
+				await this.requestShareAccess();
 			}
 		} catch (err) {
 			if (err instanceof ShareResponse) {
@@ -501,6 +493,25 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 			}
 		} finally {
 			this.waiting = false;
+		}
+	}
+
+	async requestShareAccess() {
+		const response = await this.api.share.requestShareAccess(this.shareToken);
+		const shareVo = response.getShareVO();
+		if (shareVo.status === 'status.generic.pending') {
+			this.message.showMessage({
+				message: `Access requested. ${this.shareAccount.fullName} must approve your request.`,
+				style: 'success',
+			});
+			this.showCover = false;
+			this.hasRequested = true;
+		} else {
+			this.message.showMessage({
+				message: 'Access granted.',
+				style: 'success',
+			});
+			this.router.navigate(['/app', 'shares']);
 		}
 	}
 
