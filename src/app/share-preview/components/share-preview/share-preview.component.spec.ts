@@ -25,6 +25,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { FilesystemService } from '@root/app/filesystem/filesystem.service';
+import { MessageService } from '@shared/services/message/message.service';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 import { SharePreviewComponent } from './share-preview.component';
 
@@ -75,6 +76,10 @@ const mockShareLinksService = {
 
 const mockFilesystemService = {
 	getFolder: jasmine.createSpy().and.returnValue(Promise.resolve({})),
+};
+
+const mockMessageService = {
+	showMessage: jasmine.createSpy(),
 };
 
 describe('SharePreviewComponent', () => {
@@ -131,6 +136,11 @@ describe('SharePreviewComponent', () => {
 		config.providers.push({
 			provide: FilesystemService,
 			useValue: mockFilesystemService,
+		});
+
+		config.providers.push({
+			provide: MessageService,
+			useValue: mockMessageService,
 		});
 
 		await TestBed.configureTestingModule(config).compileComponents();
@@ -333,5 +343,56 @@ describe('SharePreviewComponent', () => {
 
 		expect(component.hasRequested).toBeTrue();
 		expect(component.showCover).toBeFalse();
+	}));
+
+	it('should request access and show pending message when status is pending', fakeAsync(() => {
+		const mockResponse = {
+			getShareVO: () => ({ status: 'status.generic.pending' }),
+		};
+		spyOn(apiService.share, 'requestShareAccess').and.returnValue(
+			Promise.resolve(mockResponse as any),
+		);
+
+		component.shareToken = 'mock-token';
+		component.shareAccount = { fullName: 'Sharer Name' } as any;
+
+		component.requestShareAccess();
+		tick();
+
+		expect(apiService.share.requestShareAccess).toHaveBeenCalledWith(
+			'mock-token',
+		);
+
+		expect(mockMessageService.showMessage).toHaveBeenCalledWith({
+			message: 'Access requested. Sharer Name must approve your request.',
+			style: 'success',
+		});
+
+		expect(component.showCover).toBeFalse();
+		expect(component.hasRequested).toBeTrue();
+	}));
+
+	it('should show access granted message and navigate when status is not pending', fakeAsync(() => {
+		const mockResponse = {
+			getShareVO: () => ({ status: 'ok' }),
+		};
+		spyOn(apiService.share, 'requestShareAccess').and.returnValue(
+			Promise.resolve(mockResponse as any),
+		);
+		const routerSpy = spyOn(router, 'navigate');
+		component.shareToken = 'mock-token';
+		component.requestShareAccess();
+		tick();
+
+		expect(apiService.share.requestShareAccess).toHaveBeenCalledWith(
+			'mock-token',
+		);
+
+		expect(mockMessageService.showMessage).toHaveBeenCalledWith({
+			message: 'Access granted.',
+			style: 'success',
+		});
+
+		expect(routerSpy).toHaveBeenCalledWith(['/app', 'shares']);
 	}));
 });
