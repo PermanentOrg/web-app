@@ -56,6 +56,12 @@ describe('ArchiveSwitcherComponent', () => {
 
 	const mockApiService = {
 		archive: {
+			get: jasmine.createSpy().and.returnValue(
+				Promise.resolve({
+					getArchiveVO: () =>
+						new ArchiveVO({ archiveId: '789', fullName: 'New Archive' }),
+				}),
+			),
 			accept: jasmine.createSpy().and.returnValue(Promise.resolve()),
 			create: jasmine.createSpy().and.returnValue(
 				Promise.resolve({

@@ -190,6 +190,10 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 			.then(
 				async (value) => await this.api.archive.create(new ArchiveVO(value)),
 			)
+			.then(
+				async (response: ArchiveResponse) =>
+					await this.api.archive.get([response.getArchiveVO()]),
+			)
 			.then((response: ArchiveResponse) => {
 				const newArchive = response.getArchiveVO();
 				this.archives.push(newArchive);
