@@ -46,3 +46,31 @@ jobs:
           node-version-file: .node-version
       - run: npm ci
       - run: npm run lint:tsc
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+      - run: npm ci
+      - name: Verify build succeeds
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY_DEV }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_DEV }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
+        run: npm run build:dev
+  storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+      - run: npm ci
+      - name: Verify Storybook build succeeds
+        env:
+          GOOGLE_API_KEY: '-'
+          FIREBASE_API_KEY: '-'
+          STRIPE_API_KEY: '-'
+        run: npm run build-storybook
