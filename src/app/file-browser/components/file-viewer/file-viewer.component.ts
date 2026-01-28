@@ -196,7 +196,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	@HostListener('window:resize', [])
-	onViewportResize(event) {
+	onViewportResize() {
 		this.screenWidth = this.touchElement.clientWidth;
 		this.offscreenThreshold = this.screenWidth / 2;
 	}
