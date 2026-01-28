@@ -1,0 +1,95 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy (leave empty for all)'
+        required: false
+        default: ''
+        type: choice
+        options:
+          - ''
+          - dev
+          - staging
+          - prod
+
+jobs:
+  setup-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          if [ -z "${{ inputs.environment }}" ]; then
+            echo 'matrix={"include":[{"env":"dev"},{"env":"staging"},{"env":"prod"}]}' >> $GITHUB_OUTPUT
+          else
+            echo 'matrix={"include":[{"env":"${{ inputs.environment }}"}]}' >> $GITHUB_OUTPUT
+          fi
+
+  build:
+    needs: setup-matrix
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      environment: ${{ matrix.env }}
+      build-command: ${{ matrix.env == 'prod' && 'build' || format('build:{0}', matrix.env) }}
+      artifact-name: ${{ matrix.env }}
+
+  build-storybook:
+    needs: setup-matrix
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+    uses: ./.github/workflows/reusable-build-storybook.yml
+    secrets: inherit
+    with:
+      environment: ${{ matrix.env }}
+      artifact-name: ${{ matrix.env }}
+
+  upload-sourcemaps:
+    needs: [setup-matrix, build]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+    uses: ./.github/workflows/reusable-upload-sourcemaps.yml
+    secrets: inherit
+    with:
+      environment: ${{ matrix.env }}
+      artifact-name: ${{ matrix.env }}
+
+  upload-code:
+    needs: [setup-matrix, build, build-storybook]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+    uses: ./.github/workflows/reusable-upload-code.yml
+    secrets: inherit
+    with:
+      environment: ${{ matrix.env }}
+      artifact-name: ${{ matrix.env }}
+      s3-destination: ${{ format('s3://permanent-repos/{0}/mdot.tar.gz', matrix.env) }}
+
+  deploy:
+    needs: [setup-matrix, upload-code, upload-sourcemaps]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.env }}
+    steps:
+      - name: Trigger ${{ matrix.env }} deploy
+        if: matrix.env == 'dev'
+        run: |
+          curl -X POST \
+            -H 'Accept: application/vnd.github.v3+json' \
+            -H 'Authorization: Bearer ${{ secrets.PERMANENT_DEPLOY_PAT }}' \
+            https://api.github.com/repos/PermanentOrg/infrastructure/actions/workflows/deploy-dev.yml/dispatches \
+            -d '{"ref":"main"}'

@@ -1,4 +1,5 @@
-name: lint
+name: CI
+
 on:
   pull_request:
   workflow_dispatch:
@@ -19,6 +20,7 @@ jobs:
           node-version-file: .node-version
       - name: Lint GitHub Action workflows
         uses: raven-actions/actionlint@v2
+
   eslint:
     runs-on: ubuntu-latest
     steps:
@@ -26,8 +28,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
+          cache: 'npm'
       - run: npm ci
       - run: npm run lint:eslint
+
   prettier:
     runs-on: ubuntu-latest
     steps:
@@ -35,8 +39,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
+          cache: 'npm'
       - run: npm ci
       - run: npm run lint:prettier
+
   tsc:
     runs-on: ubuntu-latest
     steps:
@@ -44,5 +50,26 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
+          cache: 'npm'
       - run: npm ci
       - run: npm run lint:tsc
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: 'npm'
+      - run: npm ci
+      - name: Run unit tests
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY_DEV }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_DEV }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
+        run: npm run coverage:ci
+      - name: Upload report to codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

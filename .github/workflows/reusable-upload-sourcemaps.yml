@@ -2,6 +2,10 @@ name: Upload Sourcemaps
 on:
   workflow_call:
     inputs:
+      environment:
+        description: 'GitHub Environment to use for secrets'
+        required: true
+        type: string
       artifact-name:
         description: 'Name of artifact to download'
         required: true
@@ -10,6 +14,7 @@ on:
 jobs:
   upload-sourcemaps:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v5
         with:
