@@ -12,6 +12,7 @@ import { environment } from '@root/environments/environment';
 import { DataStatus } from '@models/data-status.enum';
 
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { ApiService } from '@shared/services/api/api.service';
 
 const navigateMinData = require('@root/test/responses/folder.navigateMin.success.json');
 const getLeanItemsData = require('@root/test/responses/folder.getLeanItems.success.json');
@@ -24,6 +25,32 @@ const testRecord = new RecordVO({
 	folder_linkId: 4,
 	archiveNbr: 'archivenbr',
 });
+const childItemVOsMock = [
+	{
+		folder_linkId: '233483',
+		archiveNbr: '05r0-016p',
+	},
+	{
+		folder_linkId: '233484',
+		archiveNbr: '05r0-016p',
+	},
+	{
+		folder_linkId: '224722',
+		archiveNbr: '05r0-016p',
+	},
+	{
+		folder_linkId: '223367',
+		archiveNbr: '05r0-016p',
+	},
+	{
+		folder_linkId: '223366',
+		archiveNbr: '05r0-016p',
+	},
+	{
+		folder_linkId: '233485',
+		archiveNbr: '05r0-016p',
+	},
+];
 
 // we should refactor the data service test suite and mock all the dependencies
 // so we do not have to fix the tests everytime an injected service changes
@@ -76,7 +103,13 @@ describe('DataService', () => {
 
 	it('should fetch lean data for placeholder items', (done) => {
 		const service = TestBed.inject(DataService);
-		const httpMock = TestBed.inject(HttpTestingController);
+		const api = TestBed.inject(ApiService);
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({ ChildItemVOs: childItemVOsMock }),
+			} as unknown as FolderResponse),
+		);
 		const navigateResponse = new FolderResponse(navigateMinData);
 		const currentFolder = navigateResponse.getFolderVO(true);
 		service.setCurrentFolder(currentFolder);
@@ -88,15 +121,13 @@ describe('DataService', () => {
 		service
 			.fetchLeanItems(currentFolder.ChildItemVOs)
 			.then(() => {
+				expect(api.folder.getWithChildren).toHaveBeenCalled();
 				currentFolder.ChildItemVOs.forEach((item) => {
 					expect(item.dataStatus).toEqual(DataStatus.Lean);
 				});
 				done();
 			})
 			.catch(done.fail);
-
-		const req = httpMock.expectOne(`${environment.apiUrl}/folder/getLeanItems`);
-		req.flush(getLeanItemsData);
 	});
 
 	it('should handle an empty array when fetching lean data', (done) => {
@@ -114,6 +145,45 @@ describe('DataService', () => {
 			.catch(() => {
 				fail();
 			});
+	});
+
+	it('should return 0 and reset items when fetchLeanItems response is unsuccessful', (done) => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: false,
+			} as unknown as FolderResponse),
+		);
+
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true);
+		service.setCurrentFolder(currentFolder);
+		currentFolder.ChildItemVOs.forEach((item: RecordVO | FolderVO) => {
+			service.registerItem(item);
+		});
+		const rejects: number[] = [];
+		currentFolder.ChildItemVOs.forEach((item, index) => {
+			item.fetched = new Promise((resolve, reject) => {
+				const wrappedReject = () => {
+					rejects.push(index);
+					reject();
+				};
+				(item as any)._reject = wrappedReject;
+			});
+		});
+
+		service
+			.fetchLeanItems(currentFolder.ChildItemVOs)
+			.then((count) => {
+				expect(count).toBe(0);
+				currentFolder.ChildItemVOs.forEach((item) => {
+					expect(item.isFetching).toBeFalse();
+					expect(item.fetched).toBeNull();
+				});
+				done();
+			})
+			.catch(done.fail);
 	});
 
 	// the method fetchFullItems uses both the record.repo and the folder.repo
@@ -209,7 +279,9 @@ describe('DataService', () => {
 			})
 			.catch(done.fail);
 
-		const req = httpMock.expectOne(`${environment.apiUrl}/folder/getLeanItems`);
+		const req = httpMock.expectOne(
+			`${environment.apiUrl}/v2/folder?folderIds[]=149612`,
+		);
 		req.flush(getLeanItemsData);
 	});
 });
