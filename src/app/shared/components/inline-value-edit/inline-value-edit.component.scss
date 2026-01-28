@@ -133,6 +133,11 @@ div.form-control {
 
 .form-control {
 	padding: $inline-padding-y $inline-padding-x;
+	border-color: transparent;
+
+	&:focus {
+		border-color: $input-focus-border-color;
+	}
 }
 
 .inline-value-container {

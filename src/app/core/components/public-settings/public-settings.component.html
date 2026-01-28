@@ -43,7 +43,7 @@
 				name="archiveType"
 				id="archiveType"
 				(ngModelChange)="onArchiveTypeChange()"
-				class="custom-select"
+				class="form-select"
 			>
 				@for (type of archiveTypes; track type) {
 					<option [ngValue]="type.value">

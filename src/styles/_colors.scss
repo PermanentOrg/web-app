@@ -39,6 +39,14 @@ $toggle-checked: #12b76a;
 $toggle: #e7e8ed;
 
 $theme-colors: (
+	'primary': $PR-blue,
+	'secondary': $gray-600,
+	'success': #198754,
+	'info': #0dcaf0,
+	'warning': #ffc107,
+	'danger': $red,
+	'light': $gray-100,
+	'dark': $gray-900,
 	'primary-light': $PR-blue-light,
 	'white': $white,
 );
