@@ -2,10 +2,6 @@
 
 $transition-length: 0.4s;
 
-:host {
-	z-index: 100000;
-}
-
 .menu-wrapper.visible {
 	.prompt {
 		transform: translateY(0);
@@ -30,6 +26,7 @@ $transition-length: 0.4s;
 
 @include after($tablet-horizontal) {
 	.menu-wrapper {
+		z-index: 10000;
 		display: flex;
 		justify-content: center;
 		align-items: center;
