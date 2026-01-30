@@ -33,7 +33,7 @@
 							"node_modules/gsap/dist/gsap.js"
 						],
 						"externalDependencies": ["assets/*"],
-						"aot": false,
+						"aot": true,
 						"extractLicenses": false,
 						"sourceMap": true,
 						"optimization": false,

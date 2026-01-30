@@ -51,7 +51,8 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
 			this.renderer.addClass(this.element, 'bg-image-loaded');
 			if (this.fadeIn) {
 				this.fadeIn = false;
-				gsap.from(this.element, FADE_IN_DURATION, {
+				gsap.from(this.element, {
+					duration: FADE_IN_DURATION,
 					opacity: 0,
 					ease: 'Power4.easeOut',
 				});
