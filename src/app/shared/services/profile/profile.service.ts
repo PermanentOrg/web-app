@@ -111,9 +111,9 @@ export class ProfileService {
 		const privateRoot = this.account.getPrivateRoot();
 		try {
 			const currentArchive = this.account.getArchive();
-			const record = (await this.folderPicker.chooseRecord(privateRoot)) as any;
+			const record = await this.folderPicker.chooseRecord(privateRoot);
 			const updateArchive = new ArchiveVO(currentArchive);
-			updateArchive.thumbArchiveNbr = record.archiveNumber;
+			updateArchive.thumbArchiveNbr = record.archiveNbr;
 
 			updateArchive.thumbURL200 = record.thumbURL200;
 			updateArchive.thumbURL500 = record.thumbURL500;

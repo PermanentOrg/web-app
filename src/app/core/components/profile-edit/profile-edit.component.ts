@@ -148,17 +148,17 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 	async chooseBannerPicture() {
 		const originalValue = this.publicRoot.thumbArchiveNbr;
 		try {
-			const record = (await this.folderPicker.chooseRecord(
+			const record = await this.folderPicker.chooseRecord(
 				this.account.getPrivateRoot(),
-			)) as any;
+			);
 			const updateFolder = new FolderVO(this.publicRoot);
-			updateFolder.thumbArchiveNbr = record.archiveNumber;
+			updateFolder.thumbArchiveNbr = record.archiveNbr;
 			await this.api.folder.updateRoot(
 				[updateFolder],
 				['thumbArchiveNbr', 'view', 'viewProperty'],
 			);
 			// borrow thumb URLs from record for now, until they can be regenerated
-			this.publicRoot.thumbArchiveNbr = record.archiveNumber;
+			this.publicRoot.thumbArchiveNbr = record.archiveNbr;
 			this.publicRoot.thumbURL200 = record.thumbURL200;
 			this.publicRoot.thumbURL500 = record.thumbURL500;
 			this.publicRoot.thumbURL1000 = record.thumbURL1000;

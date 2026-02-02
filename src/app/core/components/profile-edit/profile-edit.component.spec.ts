@@ -122,8 +122,8 @@ describe('ProfileEditComponent', () => {
 			thumbURL500: 'new500',
 			thumbURL1000: 'new1000',
 			thumbURL2000: 'new2000',
-		}) as any;
-		mockRecord.archiveNumber = 999;
+			archiveNbr: 999,
+		});
 		mockFolderPickerService.chooseRecord.and.resolveTo(mockRecord);
 
 		await component.chooseBannerPicture();
