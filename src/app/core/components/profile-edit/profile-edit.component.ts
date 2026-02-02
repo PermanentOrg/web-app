@@ -159,10 +159,10 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 			);
 			// borrow thumb URLs from record for now, until they can be regenerated
 			this.publicRoot.thumbArchiveNbr = record.archiveNumber;
-			this.publicRoot.thumbURL200 = record.thumbURL200 || record.thumbUrl200;
-			this.publicRoot.thumbURL500 = record.thumbURL500 || record.thumbUrl200;
-			this.publicRoot.thumbURL1000 = record.thumbURL1000 || record.thumbUrl1000;
-			this.publicRoot.thumbURL2000 = record.thumbURL2000 || record.thumbUrl2000;
+			this.publicRoot.thumbURL200 = record.thumbURL200;
+			this.publicRoot.thumbURL500 = record.thumbURL500;
+			this.publicRoot.thumbURL1000 = record.thumbURL1000;
+			this.publicRoot.thumbURL2000 = record.thumbURL2000;
 		} catch (err) {
 			if (err instanceof FolderResponse) {
 				this.publicRoot.thumbArchiveNbr = originalValue;

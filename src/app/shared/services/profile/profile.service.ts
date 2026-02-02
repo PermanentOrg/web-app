@@ -115,10 +115,10 @@ export class ProfileService {
 			const updateArchive = new ArchiveVO(currentArchive);
 			updateArchive.thumbArchiveNbr = record.archiveNumber;
 
-			updateArchive.thumbURL200 = record.thumbURL200 || record.thumbUrl200;
-			updateArchive.thumbURL500 = record.thumbURL500 || record.thumbUrl200;
-			updateArchive.thumbURL1000 = record.thumbURL1000 || record.thumbUrl1000;
-			updateArchive.thumbURL2000 = record.thumbURL2000 || record.thumbUrl2000;
+			updateArchive.thumbURL200 = record.thumbURL200;
+			updateArchive.thumbURL500 = record.thumbURL500;
+			updateArchive.thumbURL1000 = record.thumbURL1000;
+			updateArchive.thumbURL2000 = record.thumbURL2000;
 			const updateResponse = await this.api.archive.update(updateArchive);
 			currentArchive.update(updateResponse.getArchiveVO());
 		} catch (err) {

@@ -49,11 +49,7 @@
 		@if (!item.isFolder && !isZip) {
 			<div
 				prBgImage
-				[bgSrc]="
-					!inGridView
-						? item.thumbURL200 || item.thumbUrl200
-						: item.thumbURL500 || item.thumbUrl500
-				"
+				[bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500"
 				[cover]="inGridView"
 			></div>
 		}

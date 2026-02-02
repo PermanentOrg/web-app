@@ -11,7 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { FolderVO } from '@models/index';
 import { RecordVO } from '@models/record-vo';
-import { FolderResponse } from '@shared/services/api/folder.repo'; // adjust path if needed
+import { FolderResponse } from '@shared/services/api/folder.repo';
 import { ProfileEditComponent } from './profile-edit.component';
 
 describe('ProfileEditComponent', () => {

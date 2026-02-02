@@ -93,7 +93,7 @@ export interface StelaShare {
 	archive: {
 		id: string;
 		name: string;
-		thumbUrl200: string;
+		thumbURL200: string;
 	};
 }
 export type StelaRecord = Omit<RecordVO, 'files'> & {
@@ -151,7 +151,7 @@ export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 		ArchiveVO: {
 			archiveId: stelaShare.archive.id,
 			fullName: stelaShare.archive.name,
-			thumbURL200: stelaShare.archive.thumbUrl200,
+			thumbURL200: stelaShare.archive.thumbURL200,
 		},
 	});
 
@@ -170,6 +170,10 @@ export const convertStelaRecordToRecordVO = (
 ): RecordVO =>
 	new RecordVO({
 		...stelaRecord,
+		thumbURL200: stelaRecord.thumbUrl200,
+		thumbURL500: stelaRecord.thumbUrl500,
+		thumbURL1000: stelaRecord.thumbUrl1000,
+		thumbURL2000: stelaRecord.thumbUrl2000,
 		TagVOs: (stelaRecord.tags ?? []).map((stelaTag) =>
 			convertStelaTagToTagVO(stelaTag, stelaRecord.archiveId),
 		),
