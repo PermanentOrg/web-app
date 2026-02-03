@@ -30,36 +30,37 @@ import type { User } from './User';
 				<h1>Acme</h1>
 			</div>
 			<div>
-				<div *ngIf="user">
-					<span class="welcome">
-						Welcome, <b>{{ user.name }}</b
-						>!
-					</span>
-					<storybook-button
-						*ngIf="user"
-						size="small"
-						(clicked)="logoutClicked.emit($event)"
-						label="Log out"
-					></storybook-button>
-				</div>
-				<div *ngIf="!user">
-					<storybook-button
-						*ngIf="!user"
-						size="small"
-						class="margin-left"
-						(clicked)="loginClicked.emit($event)"
-						label="Log in"
-					></storybook-button>
-					<storybook-button
-						*ngIf="!user"
-						primary
-						size="small"
-						primary="true"
-						class="margin-left"
-						(clicked)="createAccountClicked.emit($event)"
-						label="Sign up"
-					></storybook-button>
-				</div>
+				@if (user) {
+					<div>
+						<span class="welcome">
+							Welcome, <b>{{ user.name }}</b
+							>!
+						</span>
+						<storybook-button
+							size="small"
+							(clicked)="logoutClicked.emit($event)"
+							label="Log out"
+						></storybook-button>
+					</div>
+				}
+				@if (!user) {
+					<div>
+						<storybook-button
+							size="small"
+							class="margin-left"
+							(clicked)="loginClicked.emit($event)"
+							label="Log in"
+						></storybook-button>
+						<storybook-button
+							primary
+							size="small"
+							primary="true"
+							class="margin-left"
+							(clicked)="createAccountClicked.emit($event)"
+							label="Sign up"
+						></storybook-button>
+					</div>
+				}
 			</div>
 		</div>
 	</header>`,

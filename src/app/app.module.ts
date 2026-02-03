@@ -48,7 +48,8 @@ import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '@shared/services/event/event.service';
 import { DataService } from '@shared/services/data/data.service';
-import { OverlayContainer } from '@angular/cdk/overlay';
+import { OverlayContainer, OVERLAY_DEFAULT_CONFIG } from '@angular/cdk/overlay';
+import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
 import { RouteHistoryModule } from './route-history/route-history.module';
 import { CustomOverlayContainer } from './dialog-cdk/custom-overlay-container';
 import { FeatureFlagModule } from './feature-flag/feature-flag.module';
@@ -166,6 +167,19 @@ export class PermErrorHandler implements ErrorHandler {
 		{
 			provide: OverlayContainer,
 			useClass: CustomOverlayContainer,
+		},
+		{
+			provide: DEFAULT_DIALOG_CONFIG,
+			useValue: {
+				usePopover: false,
+				hasBackdrop: true,
+			} as DialogConfig,
+		},
+		{
+			provide: OVERLAY_DEFAULT_CONFIG,
+			useValue: {
+				usePopover: false,
+			},
 		},
 		provideAppInitializer(() => {
 			const initializerFn = initializeAnalytics(

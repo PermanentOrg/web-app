@@ -112,7 +112,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 		});
 	}
 
-	@HostListener('window:resize', ['$event'])
+	@HostListener('window:resize', [])
 	setMapDimensions() {
 		const height = (this.mapWrapperRef.nativeElement as HTMLElement)
 			.clientHeight;

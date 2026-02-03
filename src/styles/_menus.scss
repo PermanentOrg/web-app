@@ -8,7 +8,7 @@
 		background-color $menu-transition-length $menu-open-ease,
 		visibility 0s linear $menu-transition-length;
 	visibility: hidden;
-	z-index: 11;
+	z-index: 1100;
 
 	.menu {
 		position: absolute;

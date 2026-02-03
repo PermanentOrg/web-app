@@ -33,7 +33,8 @@ export class VideoComponent implements OnInit {
 		this.videoElem.addEventListener('loadstart', (event) => {
 			setTimeout(() => {
 				this.renderer.removeClass(this.videoWrapperElem, 'loading');
-				gsap.from(this.videoElem, FADE_IN_DURATION, {
+				gsap.from(this.videoElem, {
+					duration: FADE_IN_DURATION,
 					opacity: 0,
 					ease: 'Power4.easeOut',
 				});

@@ -18,6 +18,30 @@ ngb-datepicker {
 		}
 	}
 
+	// Fix Bootstrap 5 navigation select styling
+	.ngb-dp-navigation-select {
+		display: flex;
+		flex: 1 1 12rem;
+		gap: 0.25rem;
+
+		.form-select {
+			flex: 1 1 50%;
+			padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+			font-size: 0.875rem;
+			background-color: $gray-200;
+			border: none;
+			min-width: 4rem;
+			background-position: right 0.25rem center;
+			background-size: 12px;
+		}
+	}
+
+	// Selected day background color
+	[ngbDatepickerDayView].bg-primary {
+		background-color: $primary !important;
+		color: white !important;
+	}
+
 	.ngb-dp-month {
 		flex: 1 1 auto;
 
