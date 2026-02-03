@@ -12,81 +12,90 @@
 		</a>
 	</div>
 	<div class="thumb-target">
-		<div
-			class="thumb-wrapper"
-			*ngFor="let record of records; let i = index"
-			[hidden]="!isQueued(i)"
-			[ngClass]="{
-				prev: i === currentIndex - 1,
-				next: i === currentIndex + 1,
-				current: i === currentIndex,
-				queue: isQueued(i)
-			}"
-		>
+		@for (record of records; track record; let i = $index) {
 			<div
-				class="thumb-preview no-placeholder"
-				prBgImage
-				[bgSrc]="record.thumbURL200"
-				*ngIf="isQueued(i)"
-			></div>
-			<div *ngIf="currentRecord === record" class="full">
-				<pr-zooming-image-viewer
-					[item]="currentRecord"
-					(disableSwipe)="toggleSwipe($event)"
-					(isFullScreen)="toggleFullscreen($event)"
-					*ngIf="
-						showThumbnail &&
-						isZoomableImage &&
-						!isDocument &&
-						!isVideo &&
-						!isAudio &&
-						!isArchive &&
-						!isWebArchive
-					"
-				></pr-zooming-image-viewer>
-
-				<iframe
-					[src]="replayUrl"
-					*ngIf="isWebArchive && replayUrl"
-					width="100%"
-					height="100%"
-					frameborder="0"
-				></iframe>
-				<pr-thumbnail
-					[item]="currentRecord"
-					*ngIf="
-						showThumbnail &&
-						!isZoomableImage &&
-						!isDocument &&
-						!isVideo &&
-						!isAudio &&
-						!isArchive &&
-						!isWebArchive
-					"
-				></pr-thumbnail>
-				<pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
-				<pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>
-				<iframe
-					[title]="currentRecord | getAltText"
-					[src]="documentUrl"
-					*ngIf="isDocument && documentUrl"
-				></iframe>
+				class="thumb-wrapper"
+				[hidden]="!isQueued(i)"
+				[ngClass]="{
+					prev: i === currentIndex - 1,
+					next: i === currentIndex + 1,
+					current: i === currentIndex,
+					queue: isQueued(i)
+				}"
+			>
+				@if (isQueued(i)) {
+					<div
+						class="thumb-preview no-placeholder"
+						prBgImage
+						[bgSrc]="record.thumbURL200"
+					></div>
+				}
+				@if (currentRecord === record) {
+					<div class="full">
+						@if (
+							showThumbnail &&
+							isZoomableImage &&
+							!isDocument &&
+							!isVideo &&
+							!isAudio &&
+							!isWebArchive
+						) {
+							<pr-zooming-image-viewer
+								[item]="currentRecord"
+								(disableSwipe)="toggleSwipe($event)"
+								(isFullScreen)="toggleFullscreen($event)"
+							></pr-zooming-image-viewer>
+						}
+						@if (isWebArchive && replayUrl) {
+							<iframe
+								[src]="replayUrl"
+								width="100%"
+								height="100%"
+								frameborder="0"
+							></iframe>
+						}
+						@if (
+							showThumbnail &&
+							!isZoomableImage &&
+							!isDocument &&
+							!isVideo &&
+							!isAudio &&
+							!isWebArchive
+						) {
+							<pr-thumbnail [item]="currentRecord"></pr-thumbnail>
+						}
+						@if (isVideo) {
+							<pr-video [item]="currentRecord"></pr-video>
+						}
+						@if (isAudio) {
+							<pr-audio [item]="currentRecord"></pr-audio>
+						}
+						@if (isDocument && documentUrl) {
+							<iframe
+								[title]="currentRecord | getAltText"
+								[src]="documentUrl"
+							></iframe>
+						}
+					</div>
+				}
 			</div>
-		</div>
-		<div
-			class="file-viewer-control file-viewer-control-previous"
-			(click)="incrementCurrentRecord(true)"
-			*ngIf="currentIndex > 0"
-		>
-			<span>&#8249;</span>
-		</div>
-		<div
-			class="file-viewer-control file-viewer-control-next"
-			(click)="incrementCurrentRecord()"
-			*ngIf="currentIndex < records.length - 1"
-		>
-			<span>&#8250;</span>
-		</div>
+		}
+		@if (currentIndex > 0) {
+			<div
+				class="file-viewer-control file-viewer-control-previous"
+				(click)="incrementCurrentRecord(true)"
+			>
+				<span>&#8249;</span>
+			</div>
+		}
+		@if (currentIndex < records.length - 1) {
+			<div
+				class="file-viewer-control file-viewer-control-next"
+				(click)="incrementCurrentRecord()"
+			>
+				<span>&#8250;</span>
+			</div>
+		}
 	</div>
 	<div class="file-viewer-name">{{ currentRecord.displayName }}</div>
 	<div class="file-viewer-metadata-wrapper">
@@ -104,16 +113,17 @@
 				class="h5"
 			></pr-inline-value-edit>
 			<div class="file-viewer-description">
-				<pr-inline-value-edit
-					*ngIf="canEdit || currentRecord.description"
-					[displayValue]="currentRecord.description"
-					[itemId]="currentRecord.folder_linkId"
-					[canEdit]="canEdit"
-					(doneEditing)="onFinishEditing('description', $event)"
-					emptyMessage="Click to add description"
-					readOnlyEmptyMessage="No description"
-					type="textarea"
-				></pr-inline-value-edit>
+				@if (canEdit || currentRecord.description) {
+					<pr-inline-value-edit
+						[displayValue]="currentRecord.description"
+						[itemId]="currentRecord.folder_linkId"
+						[canEdit]="canEdit"
+						(doneEditing)="onFinishEditing('description', $event)"
+						emptyMessage="Click to add description"
+						readOnlyEmptyMessage="No description"
+						type="textarea"
+					></pr-inline-value-edit>
+				}
 			</div>
 			<table class="metadata-table">
 				<tr>
@@ -177,26 +187,28 @@
 				<tr>
 					<td class="title">Location</td>
 					<td class="location-container" (click)="onLocationClick()">
-						<pr-static-map
-							[location]="currentRecord.LocnVO"
-							*ngIf="currentRecord.LocnVO"
-						></pr-static-map>
-						<span *ngIf="currentRecord.LocnVO">{{
-							(currentRecord.LocnVO | prLocation)?.full
-						}}</span>
-						<span class="add-location" *ngIf="!currentRecord.LocnVO && canEdit">
-							Click to add location</span
-						>
-						<span *ngIf="!currentRecord.LocnVO && !canEdit">No location</span>
+						@if (currentRecord.LocnVO) {
+							<pr-static-map [location]="currentRecord.LocnVO"></pr-static-map>
+						}
+						@if (currentRecord.LocnVO) {
+							<span>{{ (currentRecord.LocnVO | prLocation)?.full }}</span>
+						}
+						@if (!currentRecord.LocnVO && canEdit) {
+							<span class="add-location"> Click to add location</span>
+						}
+						@if (!currentRecord.LocnVO && !canEdit) {
+							<span>No location</span>
+						}
 					</td>
 				</tr>
 				<tr></tr>
 			</table>
-			<pr-download-button
-				*ngIf="!isPublicArchive || (isPublicArchive && allowDownloads)"
-				[selectedItem]="currentRecord"
-				[isFileView]="true"
-			></pr-download-button>
+			@if (!isPublicArchive || (isPublicArchive && allowDownloads)) {
+				<pr-download-button
+					[selectedItem]="currentRecord"
+					[isFileView]="true"
+				></pr-download-button>
+			}
 		</div>
 	</div>
 </div>

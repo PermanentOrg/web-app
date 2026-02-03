@@ -1,292 +1,309 @@
-<ng-container [ngSwitch]="type" *ngIf="type">
-	<ng-container *ngSwitchCase="'text'">
-		<form novalidate>
+@if (type) {
+	@switch (type) {
+		@case ('text') {
+			<form novalidate>
+				<div class="inline-value-container" [class.can-edit]="canEdit">
+					<input
+						tabindex="0"
+						(focus)="startEdit()"
+						type="text"
+						name="text"
+						class="form-control"
+						[class.is-editing]="isEditing"
+						[(ngModel)]="editValue"
+						#input
+						#model="ngModel"
+						[required]="required"
+						[email]="email"
+						[attr.minlength]="minLength > 0 ? minLength : null"
+						[attr.maxlength]="maxLength > 0 ? maxLength : null"
+						(blur)="onTextInputBlur()"
+					/>
+					<div
+						class="inline-value-display inline-value-text form-control"
+						(click)="startEdit()"
+						[class.is-editing]="isEditing"
+						[class.inline-value-text-with-border]="displayBorder"
+						[class.showing-empty-message]="!displayValue && emptyMessage"
+						[class.is-name-hovered]="isNameHovered && isPublicArchive"
+						(mouseenter)="isNameHovered = true"
+						(mouseleave)="isNameHovered = false"
+					>
+						<span [ngClass]="extraClasses">{{
+							displayValue ||
+								(canEdit ? emptyMessage : readOnlyEmptyMessage) ||
+								'&nbsp;'
+						}}</span>
+					</div>
+				</div>
+				@if (isEditing) {
+					<div class="inline-value-controls" @ngIfScaleAnimation>
+						<button
+							class="btn btn-primary btn-sm"
+							(click)="save()"
+							type="submit"
+							[disabled]="isEditing && model?.invalid"
+							name="save"
+						>
+							Save
+						</button>
+						<button
+							class="btn btn-secondary btn-sm"
+							(mousedown)="cancel()"
+							type="button"
+							name="cancel"
+						>
+							Cancel
+						</button>
+					</div>
+				}
+			</form>
+		}
+		@case ('textarea') {
+			<form novalidate>
+				<div class="inline-value-container" [class.can-edit]="canEdit">
+					<textarea
+						tabindex="0"
+						(focus)="startEdit()"
+						name="textarea"
+						class="form-control"
+						[class.is-editing]="isEditing"
+						[attr.maxlength]="maxLength > 0 ? maxLength : null"
+						[(ngModel)]="editValue"
+						#input
+						#model="ngModel"
+						(blur)="onTextInputBlur()"
+					></textarea>
+					<div
+						class="inline-value-display inline-value-textarea form-control"
+						[class.is-editing]="isEditing"
+						(click)="onDisplayClick($event)"
+						[innerHTML]="
+							!loading
+								? displayValue ||
+									(!canEdit ? readOnlyEmptyMessage : emptyMessage)
+								: ''
+						"
+						[class.showing-empty-message]="
+							!loading && !displayValue && emptyMessage
+						"
+					></div>
+					<div
+						class="inline-value-placeholder"
+						[hidden]="!loading || displayValue"
+					>
+						<div class="placeholder-line two-thirds"></div>
+						<div class="placeholder-line"></div>
+						<div class="placeholder-line three-quarters"></div>
+						<div class="placeholder-line two-thirds"></div>
+						<div class="placeholder-line"></div>
+					</div>
+				</div>
+				@if (isEditing) {
+					<div class="inline-value-controls" @ngIfScaleAnimation>
+						<button
+							class="btn btn-primary btn-sm"
+							(click)="save()"
+							type="submit"
+							[disabled]="isEditing && model?.invalid"
+						>
+							Save
+						</button>
+						<button
+							class="btn btn-secondary btn-sm"
+							(mousedown)="cancel()"
+							type="button"
+						>
+							Cancel
+						</button>
+					</div>
+				}
+			</form>
+		}
+		@case ('description-textarea') {
+			<form novalidate>
+				@if (isEditing) {
+					<div class="inline-value-container" [class.can-edit]="canEdit">
+						<textarea
+							name="textarea"
+							class="form-control"
+							[class.is-editing]="isEditing"
+							[attr.maxlength]="maxLength > 0 ? maxLength : null"
+							[(ngModel)]="editValue"
+							#input
+							#model="ngModel"
+							(blur)="onTextInputBlur()"
+						></textarea>
+						<div
+							class="inline-value-display inline-value-textarea form-control"
+							[class.is-editing]="isEditing"
+							(click)="startEdit()"
+							[innerHTML]="
+								loading
+									? ''
+									: displayValue ||
+										(canEdit ? emptyMessage : readOnlyEmptyMessage)
+							"
+							[class.showing-empty-message]="
+								!loading && !displayValue && emptyMessage
+							"
+						></div>
+						<div
+							class="inline-value-placeholder"
+							[hidden]="!loading || displayValue"
+						>
+							<div class="placeholder-line two-thirds"></div>
+							<div class="placeholder-line"></div>
+							<div class="placeholder-line three-quarters"></div>
+							<div class="placeholder-line two-thirds"></div>
+							<div class="placeholder-line"></div>
+						</div>
+					</div>
+				}
+				@if (!isEditing) {
+					<div
+						class="description-textarea"
+						[class.can-edit]="canEdit"
+						(click)="startEdit()"
+					>
+						@if (displayValue && displayValue.trim()) {
+							<p
+								class="description-textarea-value"
+								[innerHtml]="displayValue"
+							></p>
+						}
+						@if (!displayValue || !displayValue.trim()) {
+							<p>{{ emptyMessage }}</p>
+						}
+					</div>
+				}
+				@if (isEditing) {
+					<div class="inline-value-controls" @ngIfScaleAnimation>
+						<button
+							class="btn btn-primary btn-sm"
+							(click)="save()"
+							type="submit"
+							[disabled]="isEditing && model?.invalid"
+						>
+							Save
+						</button>
+						<button
+							class="btn btn-secondary btn-sm"
+							(click)="cancel()"
+							type="button"
+						>
+							Cancel
+						</button>
+					</div>
+				}
+			</form>
+		}
+		@case ('date') {
+			<div
+				class="inline-value-container inline-value-date"
+				[class.can-edit]="canEdit"
+			>
+				@if (!isEditing) {
+					<div
+						[ngClass]="
+							'inline-value-display inline-value-text form-control ' + class
+						"
+						tabindex="0"
+						(focus)="startEdit()"
+						(click)="startEdit()"
+						[class.showing-empty-message]="!displayValue && emptyMessage"
+					>
+						@if (!dateOnly) {
+							{{
+								displayValue
+									? (displayValue | prDate: item?.TimezoneVO)
+									: (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'
+							}}
+						}
+						@if (dateOnly) {
+							{{
+								displayValue
+									? (displayValue | date: 'yyyy-MM-dd' : '+0000')
+									: (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'
+							}}
+						}
+					</div>
+				}
+				<ngb-datepicker
+					#datePicker
+					[startDate]="ngbDate"
+					[hidden]="!isEditing"
+					[maxDate]="maxNgbDate"
+					[weekdays]="true"
+					(dateSelect)="onDateChange($event)"
+					[footerTemplate]="!dateOnly ? timePicker : null"
+					[firstDayOfWeek]="7"
+				></ngb-datepicker>
+				<ng-template #timePicker>
+					<div class="datepicker-footer">
+						<ngb-timepicker
+							[(ngModel)]="ngbTime"
+							(ngModelChange)="onTimeChange($event)"
+						></ngb-timepicker>
+					</div>
+				</ng-template>
+			</div>
+			<ng-container *ngTemplateOutlet="inlineControls"></ng-container>
+		}
+		@case ('select') {
+			<form novalidate>
+				<div
+					class="inline-value-container inline-value-select"
+					[class.can-edit]="canEdit"
+					[class.showing-empty-message]="!displayValue && emptyMessage"
+				>
+					<select
+						name="select"
+						class="form-select"
+						#input
+						#model="ngModel"
+						[(ngModel)]="editValue"
+						(blur)="onTextInputBlur()"
+						(change)="save()"
+						[required]="required"
+						[class.is-editing]="isEditing"
+					>
+						<option value="" disabled selected>{{ emptyMessage }}</option>
+						@for (option of selectOptions; track option) {
+							<option [value]="option.value">
+								{{ option.text }}
+							</option>
+						}
+					</select>
+				</div>
+			</form>
+		}
+		@case ('external') {
 			<div class="inline-value-container" [class.can-edit]="canEdit">
-				<input
-					tabindex="0"
-					(focus)="startEdit()"
-					type="text"
-					name="text"
-					class="form-control"
-					[class.is-editing]="isEditing"
-					[(ngModel)]="editValue"
-					#input
-					#model="ngModel"
-					[required]="required"
-					[email]="email"
-					[attr.minlength]="minLength > 0 ? minLength : null"
-					[attr.maxlength]="maxLength > 0 ? maxLength : null"
-					(blur)="onTextInputBlur()"
-				/>
 				<div
 					class="inline-value-display inline-value-text form-control"
-					(click)="startEdit()"
-					[class.is-editing]="isEditing"
-					[class.inline-value-text-with-border]="displayBorder"
+					(click)="startExternalEdit()"
 					[class.showing-empty-message]="!displayValue && emptyMessage"
-					[class.is-name-hovered]="isNameHovered && isPublicArchive"
-					(mouseenter)="isNameHovered = true"
-					(mouseleave)="isNameHovered = false"
 				>
-					<span [ngClass]="extraClasses">{{
+					{{
 						displayValue ||
-							(canEdit ? emptyMessage : readOnlyEmptyMessage) ||
+							(!canEdit ? readOnlyEmptyMessage : emptyMessage) ||
 							'&nbsp;'
-					}}</span>
-				</div>
-			</div>
-			<div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
-				<button
-					class="btn btn-primary btn-sm"
-					(click)="save()"
-					type="submit"
-					[disabled]="isEditing && model?.invalid"
-					name="save"
-				>
-					Save
-				</button>
-				<button
-					class="btn btn-secondary btn-sm"
-					(mousedown)="cancel()"
-					type="button"
-					name="cancel"
-				>
-					Cancel
-				</button>
-			</div>
-		</form>
-	</ng-container>
-	<ng-container *ngSwitchCase="'textarea'">
-		<form novalidate>
-			<div class="inline-value-container" [class.can-edit]="canEdit">
-				<textarea
-					tabindex="0"
-					(focus)="startEdit()"
-					name="textarea"
-					class="form-control"
-					[class.is-editing]="isEditing"
-					[attr.maxlength]="maxLength > 0 ? maxLength : null"
-					[(ngModel)]="editValue"
-					#input
-					#model="ngModel"
-					(blur)="onTextInputBlur()"
-				></textarea>
-				<div
-					class="inline-value-display inline-value-textarea form-control"
-					[class.is-editing]="isEditing"
-					(click)="onDisplayClick($event)"
-					[innerHTML]="
-						!loading
-							? displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage)
-							: ''
-					"
-					[class.showing-empty-message]="
-						!loading && !displayValue && emptyMessage
-					"
-				></div>
-				<div
-					class="inline-value-placeholder"
-					[hidden]="!loading || displayValue"
-				>
-					<div class="placeholder-line two-thirds"></div>
-					<div class="placeholder-line"></div>
-					<div class="placeholder-line three-quarters"></div>
-					<div class="placeholder-line two-thirds"></div>
-					<div class="placeholder-line"></div>
-				</div>
-			</div>
-			<div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
-				<button
-					class="btn btn-primary btn-sm"
-					(click)="save()"
-					type="submit"
-					[disabled]="isEditing && model?.invalid"
-				>
-					Save
-				</button>
-				<button
-					class="btn btn-secondary btn-sm"
-					(mousedown)="cancel()"
-					type="button"
-				>
-					Cancel
-				</button>
-			</div>
-		</form>
-	</ng-container>
-	<ng-container *ngSwitchCase="'description-textarea'">
-		<form novalidate>
-			<div
-				*ngIf="isEditing"
-				class="inline-value-container"
-				[class.can-edit]="canEdit"
-			>
-				<textarea
-					name="textarea"
-					class="form-control"
-					[class.is-editing]="isEditing"
-					[attr.maxlength]="maxLength > 0 ? maxLength : null"
-					[(ngModel)]="editValue"
-					#input
-					#model="ngModel"
-					(blur)="onTextInputBlur()"
-				></textarea>
-				<div
-					class="inline-value-display inline-value-textarea form-control"
-					[class.is-editing]="isEditing"
-					(click)="startEdit()"
-					[innerHTML]="
-						loading
-							? ''
-							: displayValue || (canEdit ? emptyMessage : readOnlyEmptyMessage)
-					"
-					[class.showing-empty-message]="
-						!loading && !displayValue && emptyMessage
-					"
-				></div>
-				<div
-					class="inline-value-placeholder"
-					[hidden]="!loading || displayValue"
-				>
-					<div class="placeholder-line two-thirds"></div>
-					<div class="placeholder-line"></div>
-					<div class="placeholder-line three-quarters"></div>
-					<div class="placeholder-line two-thirds"></div>
-					<div class="placeholder-line"></div>
-				</div>
-			</div>
-			<div
-				class="description-textarea"
-				[class.can-edit]="canEdit"
-				*ngIf="!isEditing"
-				(click)="startEdit()"
-			>
-				<p
-					class="description-textarea-value"
-					*ngIf="displayValue && displayValue.trim()"
-					[innerHtml]="displayValue"
-				></p>
-				<p *ngIf="!displayValue || !displayValue.trim()">{{ emptyMessage }}</p>
-			</div>
-			<div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
-				<button
-					class="btn btn-primary btn-sm"
-					(click)="save()"
-					type="submit"
-					[disabled]="isEditing && model?.invalid"
-				>
-					Save
-				</button>
-				<button
-					class="btn btn-secondary btn-sm"
-					(click)="cancel()"
-					type="button"
-				>
-					Cancel
-				</button>
-			</div>
-		</form>
-	</ng-container>
-	<ng-container *ngSwitchCase="'date'">
-		<div
-			class="inline-value-container inline-value-date"
-			[class.can-edit]="canEdit"
-		>
-			<div
-				[ngClass]="
-					'inline-value-display inline-value-text form-control ' + class
-				"
-				tabindex="0"
-				(focus)="startEdit()"
-				(click)="startEdit()"
-				*ngIf="!isEditing"
-				[class.showing-empty-message]="!displayValue && emptyMessage"
-			>
-				<ng-container *ngIf="!dateOnly">
-					{{
-						displayValue
-							? (displayValue | prDate: item?.TimezoneVO)
-							: (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'
 					}}
-				</ng-container>
-				<ng-container *ngIf="dateOnly">
-					{{
-						displayValue
-							? (displayValue | date: 'yyyy-MM-dd' : '+0000')
-							: (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'
-					}}
-				</ng-container>
-			</div>
-			<ngb-datepicker
-				#datePicker
-				[startDate]="ngbDate"
-				[hidden]="!isEditing"
-				[maxDate]="maxNgbDate"
-				[weekdays]="true"
-				(dateSelect)="onDateChange($event)"
-				[footerTemplate]="!dateOnly ? timePicker : null"
-				[firstDayOfWeek]="7"
-			></ngb-datepicker>
-			<ng-template #timePicker>
-				<div class="datepicker-footer">
-					<ngb-timepicker
-						[(ngModel)]="ngbTime"
-						(ngModelChange)="onTimeChange($event)"
-					></ngb-timepicker>
 				</div>
-			</ng-template>
-		</div>
-		<ng-container *ngTemplateOutlet="inlineControls"></ng-container>
-	</ng-container>
-	<ng-container *ngSwitchCase="'select'">
-		<form novalidate>
-			<div
-				class="inline-value-container inline-value-select"
-				[class.can-edit]="canEdit"
-				[class.showing-empty-message]="!displayValue && emptyMessage"
-			>
-				<select
-					name="select"
-					class="form-control"
-					#input
-					#model="ngModel"
-					[(ngModel)]="editValue"
-					(blur)="onTextInputBlur()"
-					(change)="save()"
-					[required]="required"
-					[class.is-editing]="isEditing"
-				>
-					<option value="" disabled selected>{{ emptyMessage }}</option>
-					<option [value]="option.value" *ngFor="let option of selectOptions">
-						{{ option.text }}
-					</option>
-				</select>
 			</div>
-		</form>
-	</ng-container>
-	<ng-container *ngSwitchCase="'external'">
-		<div class="inline-value-container" [class.can-edit]="canEdit">
-			<div
-				class="inline-value-display inline-value-text form-control"
-				(click)="startExternalEdit()"
-				[class.showing-empty-message]="!displayValue && emptyMessage"
-			>
-				{{
-					displayValue ||
-						(!canEdit ? readOnlyEmptyMessage : emptyMessage) ||
-						'&nbsp;'
-				}}
-			</div>
-		</div>
-	</ng-container>
-</ng-container>
+		}
+	}
+}
 <ng-template #inlineControls>
-	<div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
-		<button class="btn btn-primary btn-sm" (click)="save()" type="submit">
-			Save
-		</button>
-		<button class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
-			Cancel
-		</button>
-	</div>
+	@if (isEditing) {
+		<div class="inline-value-controls" @ngIfScaleAnimation>
+			<button class="btn btn-primary btn-sm" (click)="save()" type="submit">
+				Save
+			</button>
+			<button class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
+				Cancel
+			</button>
+		</div>
+	}
 </ng-template>

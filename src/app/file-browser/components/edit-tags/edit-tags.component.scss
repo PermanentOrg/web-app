@@ -22,6 +22,7 @@
 	position: relative;
 	z-index: 1;
 	padding: 0.5rem 0.75rem;
+	border-color: $input-border-color;
 
 	.has-tags & {
 		border-bottom-left-radius: 0;
