@@ -89,7 +89,7 @@
 		"vis-timeline": "^8.4.0",
 		"vis-util": "^6.0.0",
 		"xss": "^1.0.14",
-		"zone.js": "~0.15.1"
+		"zone.js": "~0.16.0"
 	},
 	"devDependencies": {
 		"@angular-devkit/build-angular": "^21.1.0",
