@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 
 import { remove, find, partition } from 'lodash';
-import { Deferred } from '@root/vendor/deferred';
 
 import {
 	PromptButton,
@@ -246,7 +245,7 @@ export class SharingComponent implements OnInit {
 
 	async editShareVo(shareVo: ShareVO) {
 		let updatedShareVo: ShareVO;
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		const fields: PromptField[] = [
 			ACCESS_ROLE_FIELD_INITIAL(shareVo.accessRole),
 		];
@@ -258,7 +257,7 @@ export class SharingComponent implements OnInit {
 		}
 
 		return await this.promptService
-			.prompt(fields, promptTitle, deferred.promise, 'Share')
+			.prompt(fields, promptTitle, promise, 'Share')
 			.then(async (value) => {
 				updatedShareVo = new ShareVO(shareVo);
 				updatedShareVo.accessRole = value.accessRole;
@@ -283,7 +282,7 @@ export class SharingComponent implements OnInit {
 				} else {
 					shareVo.accessRole = updatedShareVo.accessRole;
 				}
-				deferred.resolve();
+				resolve(undefined);
 			})
 			.catch((response: ShareResponse) => {
 				if (response) {
@@ -292,15 +291,15 @@ export class SharingComponent implements OnInit {
 						translate: true,
 					});
 				}
-				deferred.resolve();
+				resolve(undefined);
 			});
 	}
 
 	removeShareVo(shareVO: ShareVO) {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		const confirmTitle = `Remove ${shareVO.ArchiveVO.fullName} from this share?`;
 		this.promptService
-			.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
+			.confirm('Remove', confirmTitle, promise, 'btn-danger')
 			.then(() => {
 				this.api.share
 					.remove(shareVO)
@@ -312,10 +311,10 @@ export class SharingComponent implements OnInit {
 						remove(this.shareItem.ShareVOs, shareVO);
 						remove(this.pendingShares, shareVO);
 						remove(this.shares, shareVO);
-						deferred.resolve();
+						resolve(undefined);
 					})
 					.catch((response: ShareResponse) => {
-						deferred.resolve();
+						resolve(undefined);
 						this.messageService.showError({
 							message: response.getMessage(),
 							translate: true,
@@ -323,12 +322,12 @@ export class SharingComponent implements OnInit {
 					});
 			})
 			.catch(() => {
-				deferred.resolve();
+				resolve(undefined);
 			});
 	}
 
 	approvePendingShareVo(shareVO: ShareVO) {
-		const deferred = new Deferred();
+		const { resolve } = Promise.withResolvers();
 
 		shareVO.status = 'status.generic.ok';
 
@@ -341,10 +340,10 @@ export class SharingComponent implements OnInit {
 				});
 				remove(this.pendingShares, shareVO);
 				this.shares.push(shareVO);
-				deferred.resolve();
+				resolve(undefined);
 			})
 			.catch((response: ShareResponse) => {
-				deferred.resolve();
+				resolve(undefined);
 				this.messageService.showError({
 					message: response.getMessage(),
 					translate: true,
@@ -373,7 +372,7 @@ export class SharingComponent implements OnInit {
 	}
 
 	manageShareLink() {
-		const deferred = new Deferred();
+		const { promise, resolve, reject } = Promise.withResolvers();
 		const title = `Manage share link for ${this.shareItem.displayName}`;
 		let currentDate = null;
 		if (this.shareLink.expiresDT) {
@@ -402,7 +401,7 @@ export class SharingComponent implements OnInit {
 		];
 
 		this.promptService
-			.prompt(fields, title, deferred.promise, 'Save')
+			.prompt(fields, title, promise, 'Save')
 			.then(
 				async (result: {
 					previewToggle: 'on' | 'off';
@@ -424,9 +423,9 @@ export class SharingComponent implements OnInit {
 						const updateResponse =
 							await this.api.share.updateShareLink(updatedShareVo);
 						this.shareLink = updateResponse.getShareByUrlVO();
-						deferred.resolve();
+						resolve(undefined);
 					} catch (response) {
-						deferred.reject();
+						reject();
 						if (response.getMessage()) {
 							this.messageService.showError(response.getMessage());
 						}
@@ -441,20 +440,20 @@ export class SharingComponent implements OnInit {
 	}
 
 	async removeShareLink() {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		try {
 			await this.promptService.confirm(
 				'Remove link',
 				'Are you sure you want to remove this link?',
-				deferred.promise,
+				promise,
 				'btn-danger',
 			);
 
 			await this.api.share.removeShareLink(this.shareLink);
 			this.shareLink = null;
-			deferred.resolve();
+			resolve(undefined);
 		} catch (response) {
-			deferred.resolve();
+			resolve(undefined);
 			if (response instanceof ShareResponse) {
 				this.messageService.showError({ message: response.getMessage() });
 			}

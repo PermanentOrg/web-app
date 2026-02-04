@@ -18,7 +18,6 @@ import {
 } from '@shared/utilities/hasSubscriptions';
 import debug from 'debug';
 import { AccountService } from '@shared/services/account/account.service';
-import { Deferred } from '@root/vendor/deferred';
 import { UploadStatus } from './uploadItem';
 import { UploadSession, UploadSessionStatus } from './upload.session';
 
@@ -172,11 +171,11 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 			const filePromises: Promise<any>[] = [];
 			for (const entry of dirEntries) {
 				if (entry.isFile) {
-					const deferred = new Deferred();
-					filePromises.push(deferred.promise);
+					const { promise, resolve } = Promise.withResolvers();
+					filePromises.push(promise);
 					entry.file((file) => {
 						if (FILENAME_BLACKLIST.includes((file as File).name)) {
-							return deferred.resolve();
+							return resolve(undefined);
 						}
 
 						// store file with parent folder VO grouped by path
@@ -196,7 +195,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 							filesByPath.set(parentPath, [fileWithPath]);
 						}
 
-						deferred.resolve();
+						resolve(undefined);
 					});
 				} else {
 					const vo = new FolderVO({ displayName: entry.name });
@@ -222,21 +221,21 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 			const dirReader = directory.createReader();
 			let e = [];
 
-			const deferred = new Deferred();
+			const { promise, resolve } = Promise.withResolvers<any[]>();
 			const getEntries = function () {
 				dirReader.readEntries(function (results) {
 					if (results.length) {
 						e = e.concat(Array.from(results));
 						getEntries();
 					} else {
-						deferred.resolve(e);
+						resolve(e);
 					}
 				});
 			};
 
 			getEntries();
 
-			return await deferred.promise;
+			return await promise;
 		}
 	}
 

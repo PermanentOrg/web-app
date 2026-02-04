@@ -1,6 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
 import { remove } from 'lodash';
-import { Deferred } from '@root/vendor/deferred';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, ItemVO, RecordVO } from '@root/app/models/index';
 import { ApiService } from '@shared/services/api/api.service';
@@ -23,7 +22,8 @@ export enum FolderPickerOperations {
 })
 export class FolderPickerComponent implements OnDestroy {
 	public currentFolder: FolderVO;
-	public chooseFolderDeferred: Deferred;
+	public chooseFolderPromise: Promise<FolderVO | RecordVO>;
+	public chooseFolderResolve: (value: FolderVO | RecordVO) => void;
 	public operation: FolderPickerOperations;
 	public operationName: string;
 
@@ -85,9 +85,11 @@ export class FolderPickerComponent implements OnDestroy {
 			this.loadCurrentFolderChildData();
 		});
 
-		this.chooseFolderDeferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers<FolderVO | RecordVO>();
+		this.chooseFolderPromise = promise;
+		this.chooseFolderResolve = resolve;
 
-		return await this.chooseFolderDeferred.promise;
+		return await this.chooseFolderPromise;
 	}
 
 	onItemClick(item: ItemVO, evt: Event) {
@@ -199,7 +201,8 @@ export class FolderPickerComponent implements OnDestroy {
 
 		this.cancelResetTimeout = setTimeout(() => {
 			this.currentFolder = null;
-			this.chooseFolderDeferred = null;
+			this.chooseFolderPromise = null;
+			this.chooseFolderResolve = null;
 			this.isRootFolder = true;
 			this.cancelResetTimeout = null;
 		}, 500);
@@ -215,9 +218,9 @@ export class FolderPickerComponent implements OnDestroy {
 
 	protected setChosenFolder(): void {
 		if (this.selectedRecord) {
-			this.chooseFolderDeferred.resolve(this.selectedRecord);
+			this.chooseFolderResolve(this.selectedRecord);
 		} else if (this.currentFolder) {
-			this.chooseFolderDeferred.resolve(this.currentFolder);
+			this.chooseFolderResolve(this.currentFolder);
 		}
 		if (this.savePromise) {
 			this.saving = true;

@@ -6,7 +6,6 @@ import {
 	PromptService,
 } from '@shared/services/prompt/prompt.service';
 import { AccountVO } from '@models';
-import { Deferred } from '@root/vendor/deferred';
 import { Validators } from '@angular/forms';
 import {
 	ArchiveResponse,
@@ -95,18 +94,18 @@ export class MembersDialogComponent {
 	}
 
 	async editMember(member: AccountVO) {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		const fields = [ACCESS_ROLE_FIELD_INITIAL(member.accessRole)];
 		const value: any = await this.promptService.prompt(
 			fields,
 			`Edit access for ${member.fullName}`,
-			deferred.promise,
+			promise,
 		);
 		const updatedMember = clone(member);
 		updatedMember.accessRole = value.accessRole as AccessRoleType;
 		try {
 			if (updatedMember.accessRole === 'access.role.owner') {
-				deferred.resolve();
+				resolve(undefined);
 				await this.confirmOwnershipTransfer();
 				const response = await this.api.archive.transferOwnership(
 					updatedMember,
@@ -129,24 +128,24 @@ export class MembersDialogComponent {
 					style: 'success',
 				});
 				member.accessRole = updatedMember.accessRole;
-				deferred.resolve();
+				resolve(undefined);
 			}
 		} catch (err) {
 			if (err instanceof ArchiveResponse) {
 				this.message.showError({ message: err.getMessage(), translate: true });
 			}
-			deferred.resolve();
+			resolve(undefined);
 		}
 	}
 
 	async removeMember(member: AccountVO) {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		const confirmTitle = `Remove ${member.fullName}'s access to The ${
 			this.accountService.getArchive().fullName
 		} Archive?`;
 
 		return await this.promptService
-			.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
+			.confirm('Remove', confirmTitle, promise, 'btn-danger')
 			.then(
 				async () =>
 					await this.api.archive.removeMember(
@@ -167,10 +166,10 @@ export class MembersDialogComponent {
 						this.payerService.payerId = '';
 					}
 				}
-				deferred.resolve();
+				resolve(undefined);
 			})
 			.catch((response: ArchiveResponse) => {
-				deferred.resolve();
+				resolve(undefined);
 				if (response) {
 					this.message.showError({
 						message: response.getMessage(),
@@ -202,7 +201,7 @@ export class MembersDialogComponent {
 			}
 			return;
 		}
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		const emailField: PromptField = {
 			fieldName: 'primaryEmail',
 			placeholder: 'Member email',
@@ -222,14 +221,14 @@ export class MembersDialogComponent {
 		const value = await this.promptService.prompt(
 			fields,
 			'Add member',
-			deferred.promise,
+			promise,
 		);
 		const member = value as AccountVO;
 
 		try {
 			let response: ArchiveResponse;
 			if (member.accessRole === 'access.role.owner') {
-				deferred.resolve();
+				resolve(undefined);
 				await this.confirmOwnershipTransfer();
 				response = await this.api.archive.transferOwnership(member, archive);
 				this.message.showMessage({
@@ -242,7 +241,7 @@ export class MembersDialogComponent {
 					message: 'Member added successfully.',
 					style: 'success',
 				});
-				deferred.resolve();
+				resolve(undefined);
 			}
 			const account = response.getAccountVOs().pop();
 			account.accessRole = member.accessRole;
@@ -259,7 +258,7 @@ export class MembersDialogComponent {
 					});
 				}
 			}
-			deferred.resolve();
+			resolve(undefined);
 		}
 	}
 
@@ -275,7 +274,7 @@ export class MembersDialogComponent {
 	}
 
 	promptForInvite(member: AccountVO) {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 		const title = `No account found for ${member.primaryEmail}. Send invitation?`;
 		const fields: PromptField[] = [
 			{
@@ -292,7 +291,7 @@ export class MembersDialogComponent {
 		];
 
 		this.promptService
-			.prompt(fields, title, deferred.promise, 'Invite')
+			.prompt(fields, title, promise, 'Invite')
 			.then(async (value: any) => {
 				member.fullName = value.fullName;
 				return await this.api.invite.sendMemberInvite(
@@ -301,14 +300,14 @@ export class MembersDialogComponent {
 				);
 			})
 			.then(() => {
-				deferred.resolve();
+				resolve(undefined);
 				this.message.showMessage({
 					message: 'Invite sent successfully.',
 					style: 'success',
 				});
 			})
 			.catch((response: InviteResponse) => {
-				deferred.resolve();
+				resolve(undefined);
 				if (response) {
 					this.message.showError({
 						message: response.getMessage(),

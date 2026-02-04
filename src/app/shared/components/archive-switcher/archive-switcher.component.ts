@@ -2,7 +2,6 @@ import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
 
 import { remove, orderBy } from 'lodash';
-import { Deferred } from '@root/vendor/deferred';
 import { gsap } from 'gsap';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -84,7 +83,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 	}
 
 	archiveClick(archive: ArchiveVO) {
-		const deferred = new Deferred();
+		const { promise, resolve } = Promise.withResolvers();
 
 		const buttons: PromptButton[] = [
 			{
@@ -110,38 +109,35 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 			)} access and switch?`;
 		}
 
-		this.prompt
-			.promptButtons(buttons, message, deferred.promise)
-			.then((result) => {
-				if (result === 'switch') {
-					let acceptIfNeeded: Promise<ArchiveResponse | any> =
-						Promise.resolve();
+		this.prompt.promptButtons(buttons, message, promise).then((result) => {
+			if (result === 'switch') {
+				let acceptIfNeeded: Promise<ArchiveResponse | any> = Promise.resolve();
 
-					if (archive.isPending()) {
-						acceptIfNeeded = this.api.archive.accept(archive);
-					}
-
-					acceptIfNeeded
-						.then(async () => await this.accountService.changeArchive(archive))
-						.then(() => {
-							deferred.resolve();
-							this.router.navigate(['/private']);
-						})
-						.catch((response: BaseResponse) => {
-							deferred.resolve();
-							this.message.showError({
-								message: response.getMessage(),
-								translate: true,
-							});
-						});
-				} else {
-					deferred.resolve();
+				if (archive.isPending()) {
+					acceptIfNeeded = this.api.archive.accept(archive);
 				}
-			});
+
+				acceptIfNeeded
+					.then(async () => await this.accountService.changeArchive(archive))
+					.then(() => {
+						resolve(undefined);
+						this.router.navigate(['/private']);
+					})
+					.catch((response: BaseResponse) => {
+						resolve(undefined);
+						this.message.showError({
+							message: response.getMessage(),
+							translate: true,
+						});
+					});
+			} else {
+				resolve(undefined);
+			}
+		});
 	}
 
 	createArchiveClick() {
-		const deferred = new Deferred();
+		const { promise, resolve, reject } = Promise.withResolvers();
 
 		const fields: PromptField[] = [
 			{
@@ -183,7 +179,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 		];
 
 		this.prompt
-			.prompt(fields, 'Create new archive', deferred.promise, 'Create archive')
+			.prompt(fields, 'Create new archive', promise, 'Create archive')
 			.then(
 				async (value) => await this.api.archive.create(new ArchiveVO(value)),
 			)
@@ -191,7 +187,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 				const newArchive = response.getArchiveVO();
 				this.archives.push(newArchive);
 				this.archiveClick(newArchive);
-				deferred.resolve();
+				resolve(undefined);
 			})
 			.catch((response: ArchiveResponse | BaseResponse) => {
 				if (response) {
@@ -199,7 +195,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 						message: response.getMessage(),
 						translate: true,
 					});
-					deferred.reject();
+					reject();
 				}
 			});
 	}

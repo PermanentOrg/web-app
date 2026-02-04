@@ -27,7 +27,6 @@ import { FolderVO, RecordVO, AccountVO } from '@root/app/models';
 import { find } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
-import { Deferred } from '@root/vendor/deferred';
 import { Validators } from '@angular/forms';
 import { DataService } from '@shared/services/data/data.service';
 import { UploadSessionStatus } from '@core/services/upload/upload.session';
@@ -206,12 +205,13 @@ export class MainComponent
 			},
 		];
 
-		const folderCreate = new Deferred();
+		const { promise: folderCreatePromise, resolve: folderCreateResolve } =
+			Promise.withResolvers();
 
 		const promptData: any = await this.prompt.prompt(
 			secondScreenFields,
 			'Name your new timeline',
-			folderCreate.promise,
+			folderCreatePromise,
 			'Continue',
 			null,
 			secondScreenTemplate,
@@ -231,7 +231,7 @@ export class MainComponent
 
 		this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.initiated.params);
 		const newFolder = response.getFolderVO();
-		folderCreate.resolve();
+		folderCreateResolve(undefined);
 		await this.router.navigate([
 			'/public',
 			newFolder.archiveNbr,
@@ -305,21 +305,17 @@ export class MainComponent
 					// no access and no request
 					const title = `Request access to ${shareItem.displayName} shared by ${shareAccount.fullName}?`;
 					try {
-						const deferred = new Deferred();
-						await this.prompt.confirm(
-							'Request access',
-							title,
-							deferred.promise,
-						);
+						const { promise, resolve } = Promise.withResolvers();
+						await this.prompt.confirm('Request access', title, promise);
 						try {
 							await this.api.share.requestShareAccess(shareUrlToken);
-							deferred.resolve();
+							resolve(undefined);
 							this.messageService.showMessage({
 								message: 'Access requested.',
 								style: 'success',
 							});
 						} catch (err) {
-							deferred.resolve();
+							resolve(undefined);
 							if (err instanceof ShareResponse) {
 								if (err.messageIncludesPhrase('share.already_exists')) {
 									this.messageService.showError({
