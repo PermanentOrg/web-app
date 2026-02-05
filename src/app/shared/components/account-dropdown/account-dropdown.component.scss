@@ -24,6 +24,12 @@ button {
 	max-width: pxToGrid(360px);
 	overflow: hidden;
 	text-overflow: ellipsis;
+	--bs-btn-color: #{$PR-orange};
+	--bs-btn-hover-color: #{$PR-orange};
+	--bs-btn-active-color: #{$PR-orange};
+	--bs-btn-border-color: transparent;
+	--bs-btn-hover-border-color: transparent;
+	--bs-btn-active-border-color: transparent;
 
 	> span {
 		margin-right: $grid-unit * 0.25;

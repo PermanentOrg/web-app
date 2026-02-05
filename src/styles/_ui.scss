@@ -181,6 +181,12 @@ a {
 .btn-wordpress,
 .btn-wordpress-alternate {
 	$size: 34px;
+	--bs-btn-color: #{$PR-orange};
+	--bs-btn-hover-color: #{$PR-orange};
+	--bs-btn-active-color: #{$PR-orange};
+	--bs-btn-bg: #{rgba(white, 0.2)};
+	--bs-btn-hover-bg: #{white};
+	--bs-btn-active-bg: #{white};
 	background: rgba(white, 0.2);
 	height: $size;
 	border-radius: $size * 0.5;
@@ -191,12 +197,19 @@ a {
 	font-size: 0.7em;
 	display: inline-flex;
 	align-items: center;
+	width: auto;
 
 	&:hover {
 		background: white;
 	}
 
 	&.btn-wordpress-alternate {
+		--bs-btn-color: #{white};
+		--bs-btn-hover-color: #{white};
+		--bs-btn-active-color: #{white};
+		--bs-btn-bg: #{$PR-purple};
+		--bs-btn-hover-bg: #{$PR-orange};
+		--bs-btn-active-bg: #{$PR-orange};
 		background: $PR-purple;
 		color: white;
 
