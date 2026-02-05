@@ -49,6 +49,31 @@ describe('Folder repo', () => {
 		folderRepo = TestBed.inject(FolderRepo);
 	});
 
+	it('should post folderVOs and return a FolderResponse', async () => {
+		const folder1 = new FolderVO({ folderId: 1 });
+		const folder2 = new FolderVO({ folderId: 2 });
+		const mockResponse = { success: true } as any;
+
+		httpSpy.sendRequestPromise.and.resolveTo(mockResponse);
+		const result = await folderRepo.post([folder1, folder2]);
+
+		expect(httpSpy.sendRequestPromise).toHaveBeenCalledWith(
+			'/folder/post',
+			[
+				{ FolderVO: jasmine.any(FolderVO) },
+				{ FolderVO: jasmine.any(FolderVO) },
+			],
+			{ ResponseClass: jasmine.any(Function) },
+		);
+
+		const callArgs = httpSpy.sendRequestPromise.calls.mostRecent().args[1];
+
+		expect(callArgs[0].FolderVO instanceof FolderVO).toBeTrue();
+		expect(callArgs[1].FolderVO instanceof FolderVO).toBeTrue();
+
+		expect(result).toBe(mockResponse);
+	});
+
 	it('should get folder with children using the auth token', async () => {
 		const mockFolderVO = { folderId: 42 } as FolderVO;
 

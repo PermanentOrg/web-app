@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
-import { RecordVO, ArchiveVO } from '@models';
+import { ArchiveVO } from '@models';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import {
 	FieldNameUI,
@@ -111,24 +111,16 @@ export class ProfileService {
 		const privateRoot = this.account.getPrivateRoot();
 		try {
 			const currentArchive = this.account.getArchive();
-			const record = (await this.folderPicker.chooseRecord(
-				privateRoot,
-			)) as RecordVO;
+			const record = await this.folderPicker.chooseRecord(privateRoot);
 			const updateArchive = new ArchiveVO(currentArchive);
 			updateArchive.thumbArchiveNbr = record.archiveNbr;
+
+			updateArchive.thumbURL200 = record.thumbURL200;
+			updateArchive.thumbURL500 = record.thumbURL500;
+			updateArchive.thumbURL1000 = record.thumbURL1000;
+			updateArchive.thumbURL2000 = record.thumbURL2000;
 			const updateResponse = await this.api.archive.update(updateArchive);
 			currentArchive.update(updateResponse.getArchiveVO());
-
-			// borrow thumb URLs from record for now, until they can be regenerated
-			const thumbProps: Array<keyof (ArchiveVO | RecordVO)> = [
-				'thumbURL200',
-				'thumbURL500',
-				'thumbURL1000',
-				'thumbURL2000',
-			];
-			for (const prop of thumbProps) {
-				currentArchive[prop] = record[prop] as never;
-			}
 		} catch (err) {
 			if (err instanceof ArchiveResponse) {
 				this.message.showError({

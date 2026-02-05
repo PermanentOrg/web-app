@@ -202,6 +202,7 @@ export class DataService {
 			currentFolder = this.currentFolder;
 		}
 		const folder = new FolderVO({
+			folderId: currentFolder.folderId,
 			archiveNbr: currentFolder.archiveNbr,
 			folder_linkId: currentFolder.folder_linkId,
 			ChildItemVOs: items
@@ -228,19 +229,15 @@ export class DataService {
 		}
 
 		return await this.api.folder
-			.getLeanItems([folder])
-			.pipe(
-				map((response: FolderResponse) => {
-					if (!response.isSuccessful) {
-						throw response;
-					}
+			.getWithChildren([folder])
+			.then((response: FolderResponse) => {
+				if (!response.isSuccessful) {
+					throw response;
+				}
 
-					const fetchedFolder = response.getFolderVO();
-
-					return fetchedFolder.ChildItemVOs;
-				}),
-			)
-			.toPromise()
+				const fetchedFolder = response.getFolderVO();
+				return fetchedFolder.ChildItemVOs;
+			})
 			.then(async (leanItems) => {
 				leanItems.forEach((leanItem, index) => {
 					const item = this.byFolderLinkId[leanItem.folder_linkId];
