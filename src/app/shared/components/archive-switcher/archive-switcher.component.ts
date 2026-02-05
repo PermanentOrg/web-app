@@ -20,6 +20,7 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 import { RELATIONSHIP_FIELD } from '@shared/components/prompt/prompt-fields';
 import { DataService } from '@shared/services/data/data.service';
 import { Router } from '@angular/router';
+import { DialogRef } from '@angular/cdk/dialog';
 
 @Component({
 	selector: 'pr-archive-switcher',
@@ -34,6 +35,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 
 	constructor(
 		private accountService: AccountService,
+		private dialogRef: DialogRef,
 		private api: ApiService,
 		private data: DataService,
 		private prConstants: PrConstantsService,
@@ -121,6 +123,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 					.then(async () => await this.accountService.changeArchive(archive))
 					.then(() => {
 						resolve(undefined);
+						this.dialogRef.close();
 						this.router.navigate(['/private']);
 					})
 					.catch((response: BaseResponse) => {
@@ -183,6 +186,10 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 			.then(
 				async (value) => await this.api.archive.create(new ArchiveVO(value)),
 			)
+			.then(
+				async (response: ArchiveResponse) =>
+					await this.api.archive.get([response.getArchiveVO()]),
+			)
 			.then((response: ArchiveResponse) => {
 				const newArchive = response.getArchiveVO();
 				this.archives.push(newArchive);
@@ -198,5 +205,9 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 					reject();
 				}
 			});
+	}
+
+	backButtonClick() {
+		this.dialogRef.close();
 	}
 }
