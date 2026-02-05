@@ -20,6 +20,7 @@ import { ShareStatus } from '@models/share-vo';
 import { AccessRoleType } from '@models/access-role';
 import { getFirst } from '../http-v2/http-v2.service';
 import { CENTRAL_TIMEZONE_VO } from './folder.repo';
+import { ShareLink } from '@root/app/share-links/models/share-link';
 
 class MultipartUploadUrlsList {
 	public urls: string[] = [];
@@ -265,6 +266,22 @@ export class RecordRepo extends BaseRepo {
 			Results: simulatedV1RecordResponseResults,
 		});
 		return recordResponse;
+	}
+
+		public async getRecordShareLink(
+		recordVO: RecordVO,
+	): Promise<ShareLink[]> {
+		const recordId = await Promise.all(
+			// There are some flows (e.g. published records) where only the archiveNbr is known.
+			// In those cases, we need to look up the recordId first since stela API has phased
+			// out archiveNbr.
+			
+					recordVO.recordId ??
+					(await this.getRecordIdByArchiveNbr(recordVO.archiveNbr))
+		);
+		return firstValueFrom(
+				this.httpV2.get(`v2/record/${recordId}/share-links`),
+			);
 	}
 
 	public async getLean(
