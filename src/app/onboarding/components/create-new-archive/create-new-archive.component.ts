@@ -205,6 +205,13 @@ export class CreateNewArchiveComponent implements OnInit {
 					response = await this.api.archive.create(archive);
 					createdArchive = response.getArchiveVO();
 				}
+
+				const shareToken =
+					localStorage.getItem('shareToken') ||
+					localStorage.getItem('shareTokenFromCopy');
+				if (shareToken) {
+					await this.api.share.requestShareAccess(shareToken);
+				}
 			} catch (archiveError) {
 				this.errorOccurred.emit('An error occurred. Please try again.');
 			}
