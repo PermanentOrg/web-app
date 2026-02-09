@@ -18,6 +18,7 @@ import { firstValueFrom } from 'rxjs';
 import { FileFormat, PermanentFile } from '@models/file-vo';
 import { ShareStatus } from '@models/share-vo';
 import { AccessRoleType } from '@models/access-role';
+import { ShareLink } from '@root/app/share-links/models/share-link';
 import { getFirst } from '../http-v2/http-v2.service';
 import { CENTRAL_TIMEZONE_VO } from './folder.repo';
 
@@ -265,6 +266,20 @@ export class RecordRepo extends BaseRepo {
 			Results: simulatedV1RecordResponseResults,
 		});
 		return recordResponse;
+	}
+
+	public async getRecordShareLink(recordVO: RecordVO): Promise<ShareLink[]> {
+		const recordId =
+			recordVO.recordId ??
+			(await this.getRecordIdByArchiveNbr(recordVO.archiveNbr));
+
+		const response = await firstValueFrom(
+			this.httpV2.get<{ items: ShareLink[] }>(
+				`v2/record/${recordId}/share-links`,
+			),
+		);
+
+		return response[0].items;
 	}
 
 	public async getLean(
