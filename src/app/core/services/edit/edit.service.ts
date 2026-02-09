@@ -529,10 +529,10 @@ export class EditService {
 	}
 
 	async openShareDialog(item: ItemVO) {
-		const response = await this.api.share.getShareLink(item);
-		const newShareLink = await this.fetchShareLinkFromResponse(response);
 		if (this.device.isMobile()) {
 			try {
+				const response = await this.api.share.getShareLink(item);
+				const newShareLink = await this.fetchShareLinkFromResponse(response);
 				this.dialog.open(SharingComponent, {
 					panelClass: 'dialog',
 					data: {
@@ -544,10 +544,10 @@ export class EditService {
 			} catch (err) {}
 		} else {
 			try {
+				const newShareLink = await this.getShareLinkByItemId(item);
 				this.dialog.open(SharingDialogComponent, {
 					data: {
 						item,
-						link: response.getShareByUrlVO(),
 						newShare: newShareLink,
 					},
 					width: '600px',
@@ -576,6 +576,23 @@ export class EditService {
 			return shareResponse[0];
 		}
 		return undefined;
+	}
+	private async getShareLinkByItemId(
+		item: ItemVO,
+	): Promise<ShareLink | undefined> {
+		let shareResponse: ShareLink[] | undefined;
+
+		if (item.isRecord) {
+			shareResponse = await this.api.record.getRecordShareLink(
+				item as RecordVO,
+			);
+		} else if (item.isFolder) {
+			shareResponse = await this.api.folder.getFolderShareLink(
+				item as FolderVO,
+			);
+		}
+
+		return shareResponse?.[0];
 	}
 
 	async openTagsDialog(item: ItemVO, type: string) {
