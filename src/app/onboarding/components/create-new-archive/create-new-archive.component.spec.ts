@@ -26,6 +26,9 @@ const mockApiService = {
 			};
 		},
 	},
+	share: {
+		requestShareAccess: jasmine.createSpy('requestShareAccess').and.resolveTo(),
+	},
 };
 
 const mockAccountService = {
@@ -45,6 +48,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		feature = new FeatureFlagService(undefined, new SecretsService());
 		calledAccept = false;
 		acceptedArchive = null;
+		mockApiService.share.requestShareAccess.calls.reset();
 
 		await TestBed.configureTestingModule({
 			declarations: [CreateNewArchiveComponent],
@@ -145,5 +149,53 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 
 		expect(calledAccept).toBeFalse();
 		expect(acceptedArchive).toBeNull();
+	});
+
+	it('should call requestShareAccess with shareToken from localStorage', async () => {
+		spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+			if (key === 'shareToken') return 'test-share-token';
+			return null;
+		});
+
+		await component.onSubmit();
+
+		expect(mockApiService.share.requestShareAccess).toHaveBeenCalledWith(
+			'test-share-token',
+		);
+	});
+
+	it('should call requestShareAccess with shareTokenFromCopy when shareToken is not present', async () => {
+		spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+			if (key === 'shareTokenFromCopy') return 'test-share-token-from-copy';
+			return null;
+		});
+
+		await component.onSubmit();
+
+		expect(mockApiService.share.requestShareAccess).toHaveBeenCalledWith(
+			'test-share-token-from-copy',
+		);
+	});
+
+	it('should prefer shareToken over shareTokenFromCopy when both are present', async () => {
+		spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+			if (key === 'shareToken') return 'primary-token';
+			if (key === 'shareTokenFromCopy') return 'secondary-token';
+			return null;
+		});
+
+		await component.onSubmit();
+
+		expect(mockApiService.share.requestShareAccess).toHaveBeenCalledWith(
+			'primary-token',
+		);
+	});
+
+	it('should not call requestShareAccess when no share token exists in localStorage', async () => {
+		spyOn(localStorage, 'getItem').and.returnValue(null);
+
+		await component.onSubmit();
+
+		expect(mockApiService.share.requestShareAccess).not.toHaveBeenCalled();
 	});
 });
