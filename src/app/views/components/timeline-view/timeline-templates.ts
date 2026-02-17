@@ -5,13 +5,13 @@ export const TimelineLineTemplate = `
 `;
 export const TimelineRecordTemplate = compile(`
 <div class="timeline-item timeline-record">
-  <img src={{item.thumbnailUrl}} style="width:{{imageWidth}}" height="{{imageHeight}}" width="{{imageWidth}}">
+  <img src={{thumbnailUrl}} style="width:{{imageWidth}}" height="{{imageHeight}}" width="{{imageWidth}}">
 </div>
 `);
 
 export const TimelineFolderTemplate = compile(`
 <div class="timeline-item timeline-folder">
-  <img src={{item.thumbnailUrl}} style="width:{{imageWidth}}">
+  <img src={{thumbnailUrl}} style="width:{{imageWidth}}">
   <div>
     <div class="timeline-folder-name">{{item.displayName}}</div>
     {{#if item.FolderSizeVO}}
