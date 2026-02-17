@@ -289,4 +289,52 @@ describe('EditService', () => {
 			});
 		});
 	});
+
+	it('should call refreshAccountDebounced and refreshCurrentFolder after successful deletion', async () => {
+		const record = new RecordVO({ recordId: 1 });
+		(apiService as any).record.delete = jasmine
+			.createSpy('delete')
+			.and.returnValue(Promise.resolve());
+		accountService.refreshAccountDebounced = Object.assign(
+			jasmine.createSpy('refreshAccountDebounced'),
+			{
+				cancel: jasmine.createSpy('cancel'),
+				flush: jasmine.createSpy('flush'),
+			},
+		) as any;
+		(mockDataService as any).refreshCurrentFolder = jasmine.createSpy(
+			'refreshCurrentFolder',
+		);
+
+		await service.deleteItems([record]);
+
+		expect(accountService.refreshAccountDebounced).toHaveBeenCalled();
+		expect(mockDataService.refreshCurrentFolder).toHaveBeenCalled();
+	});
+
+	it('should call refreshAccountDebounced and refreshCurrentFolder even when deletion fails', async () => {
+		const record = new RecordVO({ recordId: 1 });
+		(apiService as any).record.delete = jasmine
+			.createSpy('delete')
+			.and.returnValue(Promise.reject(new Error('API error')));
+		accountService.refreshAccountDebounced = Object.assign(
+			jasmine.createSpy('refreshAccountDebounced'),
+			{
+				cancel: jasmine.createSpy('cancel'),
+				flush: jasmine.createSpy('flush'),
+			},
+		) as any;
+		(mockDataService as any).refreshCurrentFolder = jasmine.createSpy(
+			'refreshCurrentFolder',
+		);
+
+		try {
+			await service.deleteItems([record]);
+		} catch (e) {
+			// the try will fail, because we are testing the finally block
+		}
+
+		expect(accountService.refreshAccountDebounced).toHaveBeenCalled();
+		expect(mockDataService.refreshCurrentFolder).toHaveBeenCalled();
+	});
 });
