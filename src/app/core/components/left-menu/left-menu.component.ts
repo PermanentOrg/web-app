@@ -109,7 +109,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	checkArchiveThumbnail() {
-		if (!GetThumbnail(this.archive, 500)) {
+		if (!GetThumbnail(this.archive)) {
 			setTimeout(async () => {
 				await this.accountService.refreshArchive();
 				this.checkArchiveThumbnail();

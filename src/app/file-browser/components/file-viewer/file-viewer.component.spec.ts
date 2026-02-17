@@ -14,6 +14,7 @@ import { ShareLinksService } from '@root/app/share-links/services/share-links.se
 import { ApiService } from '@shared/services/api/api.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { MockComponent } from 'ng-mocks';
+import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
 import { FileViewerComponent } from './file-viewer.component';
 
@@ -128,6 +129,7 @@ describe('FileViewerComponent', () => {
 				MockFileSizePipe,
 				MockGetAltTextPipe,
 				MockPrConstantsPipe,
+				GetThumbnailPipe,
 			],
 			imports: [HttpClientTestingModule],
 			providers: [

@@ -5,7 +5,7 @@
 			@for (item of searchResults; track $index) {
 				<div (click)="goToFile(item)" class="result">
 					<div class="info">
-						<img [src]="item.thumbURL200" />
+						<img [src]="item | getThumbnail" />
 						<span class="result-name">{{ item.displayName }}</span>
 					</div>
 					<div class="result-type">

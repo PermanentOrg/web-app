@@ -7,6 +7,7 @@ import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
+import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { DataService } from '../../../shared/services/data/data.service';
 import { PublicSearchResultsComponent } from './public-search-results.component';
 
@@ -26,7 +27,7 @@ describe('PublicSearchResultsComponent', () => {
 		]);
 
 		await TestBed.configureTestingModule({
-			declarations: [PublicSearchResultsComponent],
+			declarations: [PublicSearchResultsComponent, GetThumbnailPipe],
 			imports: [],
 			providers: [
 				{ provide: Router, useValue: mockRouter },

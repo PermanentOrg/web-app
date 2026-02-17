@@ -27,7 +27,7 @@
 					<div
 						class="thumb-preview no-placeholder"
 						prBgImage
-						[bgSrc]="record.thumbURL200"
+						[bgSrc]="record | getThumbnail"
 					></div>
 				}
 				@if (currentRecord === record) {

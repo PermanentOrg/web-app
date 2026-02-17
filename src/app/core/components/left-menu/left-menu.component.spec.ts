@@ -14,6 +14,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { By } from '@angular/platform-browser';
 import { ArchiveStoragePayerComponent } from '@core/components/archive-storage-payer/archive-storage-payer.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 
 describe('LeftMenuComponent', () => {
 	let component: LeftMenuComponent;
@@ -27,6 +28,7 @@ describe('LeftMenuComponent', () => {
 		config.declarations.push(BgImageSrcDirective);
 		config.declarations.push(PrConstantsPipe);
 		config.declarations.push(ArchiveStoragePayerComponent);
+		config.declarations.push(GetThumbnailPipe);
 		config.imports.push(NgbTooltipModule);
 		config.imports.push(NoopAnimationsModule);
 

@@ -69,6 +69,7 @@ import { AccessRolePipe } from './pipes/access-role.pipe';
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
 import { ZoomingImageViewerComponent } from './components/zooming-image-viewer/zooming-image-viewer.component';
 import { GetFileTypePipe } from './pipes/get-file-type.pipe';
+import { GetThumbnailPipe } from './pipes/get-thumbnail.pipe';
 import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
 
 @NgModule({
@@ -138,6 +139,7 @@ import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-
 		SwitcherComponent,
 		GetAltTextPipe,
 		GetFileTypePipe,
+		GetThumbnailPipe,
 		AccessRolePipe,
 		MobileBannerComponent,
 		ZoomingImageViewerComponent,
@@ -190,6 +192,7 @@ import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-
 		SwitcherComponent,
 		GetAltTextPipe,
 		GetFileTypePipe,
+		GetThumbnailPipe,
 		AccessRolePipe,
 		MobileBannerComponent,
 		ZoomingImageViewerComponent,

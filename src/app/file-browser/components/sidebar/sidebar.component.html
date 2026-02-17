@@ -289,7 +289,7 @@
 							<div
 								class="archive-thumb"
 								prBgImage
-								[bgSrc]="share.ArchiveVO.thumbURL200"
+								[bgSrc]="share.ArchiveVO | getThumbnail"
 								[cover]="true"
 							></div>
 							<div class="archive-info">

@@ -11,6 +11,7 @@ import { of, merge, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { GetBanner } from '@models/get-thumbnail';
 
 @Component({
 	selector: 'pr-public-archive',
@@ -30,6 +31,10 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 	shortText = '';
 	emails: string[] = [];
 	websites: string[] = [];
+
+	get bannerThumbnail(): string | null {
+		return this.publicRoot?.thumbArchiveNbr ? GetBanner(this.publicRoot) : null;
+	}
 	showProfileInformation: boolean = false;
 
 	waiting = true;
