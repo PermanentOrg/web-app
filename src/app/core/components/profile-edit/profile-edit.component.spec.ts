@@ -12,6 +12,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { FolderVO } from '@models/index';
 import { RecordVO } from '@models/record-vo';
 import { FolderResponse } from '@shared/services/api/folder.repo';
+import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { ProfileEditComponent } from './profile-edit.component';
 
 describe('ProfileEditComponent', () => {
@@ -55,7 +56,7 @@ describe('ProfileEditComponent', () => {
 
 	beforeEach(async () => {
 		TestBed.configureTestingModule({
-			declarations: [ProfileEditComponent],
+			declarations: [ProfileEditComponent, GetThumbnailPipe],
 			providers: [
 				{ provide: DialogCdkService, useValue: mockDialogService },
 				{ provide: AccountService, useValue: mockAccountService },

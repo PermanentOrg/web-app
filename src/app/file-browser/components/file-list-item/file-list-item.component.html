@@ -47,11 +47,7 @@
 			</div>
 		}
 		@if (!item.isFolder && !isZip) {
-			<div
-				prBgImage
-				[bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500"
-				[cover]="inGridView"
-			></div>
+			<div prBgImage [bgSrc]="item | getThumbnail" [cover]="inGridView"></div>
 		}
 	</ng-container>
 	@if (inGridView && item.isFolder ? item.view : true) {
@@ -137,7 +133,7 @@
 				<div
 					class="archive-thumb"
 					prBgImage
-					[bgSrc]="item.ShareArchiveVO.thumbURL200"
+					[bgSrc]="item.ShareArchiveVO | getThumbnail"
 					[cover]="true"
 				></div>
 				<span>The {{ item.ShareArchiveVO?.fullName }} Archive</span>

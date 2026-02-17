@@ -3,8 +3,7 @@ import { FolderContentsType } from '@fileBrowser/components/file-list-item/file-
 import { ItemVO } from '@models';
 
 export interface FolderThumbData {
-	folderThumb200: string;
-	folderThumb500: string;
+	folderThumb: string;
 	folderContentsType: FolderContentsType;
 }
 
@@ -19,10 +18,7 @@ export class ThumbnailCache {
 	public saveThumbnail(item: ItemVO, thumbs: FolderThumbData): void {
 		this.fetchCacheMapFromStorage();
 		if (thumbs.folderContentsType === FolderContentsType.NORMAL) {
-			this.cache.set(item.folder_linkId, [
-				thumbs.folderThumb200,
-				thumbs.folderThumb500,
-			]);
+			this.cache.set(item.folder_linkId, [thumbs.folderThumb, '']);
 		} else {
 			this.cache.set(item.folder_linkId, ['icon', thumbs.folderContentsType]);
 		}
@@ -35,15 +31,13 @@ export class ThumbnailCache {
 			if (thumbs && Array.isArray(thumbs) && thumbs.length > 1) {
 				if (thumbs[0] === 'icon') {
 					return {
-						folderThumb200: '',
-						folderThumb500: '',
+						folderThumb: '',
 						folderContentsType: thumbs[1] as FolderContentsType,
 					};
 				}
 				// Cast to string just to be sure we actually have strings from our data structure.
 				return {
-					folderThumb200: `${thumbs[0]}`,
-					folderThumb500: `${thumbs[1]}`,
+					folderThumb: `${thumbs[0]}`,
 					folderContentsType: FolderContentsType.NORMAL,
 				};
 			} else {
@@ -52,8 +46,7 @@ export class ThumbnailCache {
 			}
 		}
 		return {
-			folderThumb200: '',
-			folderThumb500: '',
+			folderThumb: '',
 			folderContentsType: FolderContentsType.BROKEN_THUMBNAILS,
 		};
 	}

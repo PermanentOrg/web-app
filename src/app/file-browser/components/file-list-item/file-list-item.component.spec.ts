@@ -13,6 +13,7 @@ import { ShareLinksService } from '@root/app/share-links/services/share-links.se
 import { EditService } from '@core/services/edit/edit.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { FileListItemComponent } from './file-list-item.component';
 
 @Pipe({ name: 'itemTypeIcon' })
@@ -68,7 +69,7 @@ describe('FileListItemComponent', () => {
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			imports: [MockItemTypeIconPipe, MockPrDatePipe, MockPrConstantsPipe],
-			declarations: [FileListItemComponent],
+			declarations: [FileListItemComponent, GetThumbnailPipe],
 			providers: [
 				provideNoopAnimations(),
 				provideRouter([]),

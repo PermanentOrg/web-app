@@ -9,7 +9,7 @@
 				<div
 					class="banner-archive-thumb"
 					prBgImage
-					[bgSrc]="archive.thumbURL200"
+					[bgSrc]="archive | getThumbnail"
 					(click)="onMyAccountClick()"
 					[cover]="true"
 				></div>
@@ -33,7 +33,7 @@
 		<div
 			class="share-preview-archive-thumb"
 			prBgImage
-			[bgSrc]="shareArchive.thumbURL200"
+			[bgSrc]="shareArchive | getThumbnail"
 		></div>
 		<span>
 			<strong>{{ displayName }}</strong

@@ -13,7 +13,7 @@
 			>
 				@for (archive of publicArchives; track archive) {
 					<div (click)="goToArchive(archive)" class="public-archive">
-						<img [src]="archive.thumbURL200" />
+						<img [src]="archive | getThumbnail" />
 						<div class="public-archive-info">
 							<span>The {{ archive.fullName }} Archive</span>
 							<span>Access: {{ archive.accessRole | accessRole }}</span>

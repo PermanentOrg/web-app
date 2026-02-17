@@ -5,6 +5,7 @@ import { PublicProfileService } from '@public/services/public-profile/public-pro
 import { Router, ActivatedRoute } from '@angular/router';
 import { ArchiveVO } from '@models/index';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { PublicArchiveComponent } from './public-archive.component';
 
 const publicProfileServiceMock = {
@@ -30,7 +31,7 @@ describe('PublicArchiveComponent', () => {
 
 		await TestBed.configureTestingModule({
 			imports: [BrowserAnimationsModule],
-			declarations: [PublicArchiveComponent],
+			declarations: [PublicArchiveComponent, GetThumbnailPipe],
 			providers: [
 				{ provide: PublicProfileService, useValue: publicProfileServiceMock },
 				{ provide: Router, useValue: mockRouter },

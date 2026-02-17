@@ -3,6 +3,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { Router } from '@angular/router';
+import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { ArchiveVO } from '../../../models/archive-vo';
 import { PublicArchivesListComponent } from './public-archives-list.component';
 
@@ -35,7 +36,11 @@ describe('PublicArchivesComponent', () => {
 		mockRouter.navigate.calls.reset();
 
 		await TestBed.configureTestingModule({
-			declarations: [PublicArchivesListComponent, MockAccessRolePipe],
+			declarations: [
+				PublicArchivesListComponent,
+				MockAccessRolePipe,
+				GetThumbnailPipe,
+			],
 			providers: [
 				{ provide: AccountService, useValue: mockAccountService },
 				{ provide: MessageService, useValue: mockMessageService },
