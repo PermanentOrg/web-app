@@ -73,12 +73,14 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	private screenWidth: number;
 	private offscreenThreshold: number;
 	private loadingRecord = false;
+	private allTags: TagVOData[];
 
 	// UI
 	public useMinimalView = false;
 	public editingDate: boolean = false;
 	private bodyScrollTop: number;
-	private tagSubscription: Subscription;
+	private itemTagsSubscription: Subscription;
+	private tagsSubscription: Subscription;
 	private isUnlistedShare = true;
 
 	constructor(
@@ -100,6 +102,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		this.bodyScrollTop = window.scrollY;
 
 		const resolvedRecord = route.snapshot.data.currentRecord;
+		this.allTags = tagsService.getTags();
 
 		if (route.snapshot.data.singleFile) {
 			this.currentRecord = resolvedRecord;
@@ -119,16 +122,22 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			});
 		}
 
-		this.tagSubscription = this.tagsService
+		this.itemTagsSubscription = this.tagsService
 			.getItemTags$()
 			?.subscribe((tags) => {
 				this.customMetadata = tags?.filter((tag) =>
 					tag.type.includes('type.tag.metadata'),
 				);
 				this.keywords = tags?.filter(
-					(tag) => !tag.type.includes('type.tag.metadata'),
+					(tag) =>
+						!tag.type.includes('type.tag.metadata') &&
+						this.allTags?.find((generalTag) => generalTag?.name === tag?.name),
 				);
 			});
+
+		this.tagsSubscription = this.tagsService.getTags$()?.subscribe((tags) => {
+			this.allTags = tags;
+		});
 	}
 
 	async ngOnInit() {
@@ -175,7 +184,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		setTimeout(() => {
 			window.scrollTo(0, this.bodyScrollTop);
 		});
-		this.tagSubscription.unsubscribe();
+		this.itemTagsSubscription.unsubscribe();
+		this.tagsSubscription.unsubscribe();
 	}
 
 	private setRecordsToPreview(resolvedRecord: RecordVO) {
@@ -455,7 +465,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
 	private setCurrentTags(): void {
 		this.keywords = this.currentRecord.TagVOs.filter(
-			(tag) => !tag.type.includes('type.tag.metadata'),
+			(tag) =>
+				!tag.type.includes('type.tag.metadata') &&
+				this.allTags?.find((generalTag) => generalTag?.name === tag?.name),
 		);
 		this.customMetadata = this.currentRecord.TagVOs.filter((tag) =>
 			tag.type.includes('type.tag.metadata'),
