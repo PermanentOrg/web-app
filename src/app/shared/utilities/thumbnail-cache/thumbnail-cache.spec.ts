@@ -30,7 +30,7 @@ describe('ThumbnailCache', () => {
 	it('should return an empty FolderThumbData object for uncached thumbnail', () => {
 		const thumbs = cache.getThumbnail(folder);
 
-		expect(thumbs.folderThumb).toBeDefined();
+		expect(thumbs.folderThumb).toBe('');
 		expect(thumbs.folderContentsType).toBe(
 			FolderContentsType.BROKEN_THUMBNAILS,
 		);
@@ -90,8 +90,20 @@ describe('ThumbnailCache', () => {
 			expect(cache.hasThumbnail(folder)).toBeFalse();
 		});
 
-		it('handles linking another value instead of a string tuple', () => {
-			storage.session.set('folderThumbnailCache', [[1234, 'potato']]);
+		it('reports no cache hit for stale entries', () => {
+			storage.session.set('folderThumbnailCache', [
+				[1234, ['https://old200', 'https://old500']],
+			]);
+			cache = new ThumbnailCache(storage);
+
+			expect(cache.hasThumbnail(folder)).toBeFalse();
+			expect(storage.session.get('folderThumbnailCache').length).toBe(0);
+		});
+
+		it('wipes stale [thumb200, thumb500] tuples from old format', () => {
+			storage.session.set('folderThumbnailCache', [
+				[1234, ['https://old200', 'https://old500']],
+			]);
 			cache = new ThumbnailCache(storage);
 			const thumbz = cache.getThumbnail(folder);
 
@@ -103,13 +115,19 @@ describe('ThumbnailCache', () => {
 			expect(storage.session.get('folderThumbnailCache').length).toBe(0);
 		});
 
-		it('handles properly casting other values to string if a tuple is provided', () => {
-			storage.session.set('folderThumbnailCache', [[1234, [3.141, {}]]]);
+		it('wipes entries with unrecognized shape', () => {
+			storage.session.set('folderThumbnailCache', [
+				[1234, { something: 'unexpected' }],
+			]);
 			cache = new ThumbnailCache(storage);
 			const thumbz = cache.getThumbnail(folder);
 
-			expect(thumbz.folderThumb).toBe('3.141');
-			expect(thumbz.folderContentsType).toBe(FolderContentsType.NORMAL);
+			expect(thumbz.folderThumb).toBe('');
+			expect(thumbz.folderContentsType).toBe(
+				FolderContentsType.BROKEN_THUMBNAILS,
+			);
+
+			expect(storage.session.get('folderThumbnailCache').length).toBe(0);
 		});
 	});
 });

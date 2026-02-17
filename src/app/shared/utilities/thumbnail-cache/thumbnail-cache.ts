@@ -7,43 +7,77 @@ export interface FolderThumbData {
 	folderContentsType: FolderContentsType;
 }
 
+enum CachedThumbnailType {
+	Image = 'image',
+	Icon = 'icon',
+}
+
+interface CachedImage {
+	type: CachedThumbnailType.Image;
+	url: string;
+}
+
+interface CachedIcon {
+	type: CachedThumbnailType.Icon;
+	icon: FolderContentsType;
+}
+
+type CachedThumbnail = CachedImage | CachedIcon;
+
+function isCachedThumbnail(entry: unknown): entry is CachedThumbnail {
+	return (
+		typeof entry === 'object' &&
+		entry !== null &&
+		'type' in entry &&
+		Object.values(CachedThumbnailType).some((v) => v === entry.type)
+	);
+}
+
 export class ThumbnailCache {
-	private cache: Map<number, [string, string]>;
+	// Stores `unknown` because entries are hydrated from local storage,
+	// which may contain entries in an old or otherwise unexpected format.
+	private entriesByFolderLinkId: Map<number, unknown> = new Map();
 	private readonly STORAGE_KEY: string = 'folderThumbnailCache';
 
 	constructor(private storage: StorageService) {
-		this.fetchCacheMapFromStorage();
+		this.loadEntriesFromStorage();
 	}
 
 	public saveThumbnail(item: ItemVO, thumbs: FolderThumbData): void {
-		this.fetchCacheMapFromStorage();
+		this.loadEntriesFromStorage();
 		if (thumbs.folderContentsType === FolderContentsType.NORMAL) {
-			this.cache.set(item.folder_linkId, [thumbs.folderThumb, '']);
+			this.entriesByFolderLinkId.set(item.folder_linkId, {
+				type: CachedThumbnailType.Image,
+				url: thumbs.folderThumb,
+			});
 		} else {
-			this.cache.set(item.folder_linkId, ['icon', thumbs.folderContentsType]);
+			this.entriesByFolderLinkId.set(item.folder_linkId, {
+				type: CachedThumbnailType.Icon,
+				icon: thumbs.folderContentsType,
+			});
 		}
-		this.saveMapToStorage();
+		this.saveEntriesToStorage();
 	}
 
 	public getThumbnail(item: ItemVO): FolderThumbData {
-		if (this.cache.has(item.folder_linkId)) {
-			const thumbs = this.cache.get(item.folder_linkId);
-			if (thumbs && Array.isArray(thumbs) && thumbs.length > 1) {
-				if (thumbs[0] === 'icon') {
+		if (this.entriesByFolderLinkId.has(item.folder_linkId)) {
+			const cacheEntry = this.entriesByFolderLinkId.get(item.folder_linkId);
+			if (isCachedThumbnail(cacheEntry)) {
+				if (cacheEntry.type === CachedThumbnailType.Image) {
 					return {
-						folderThumb: '',
-						folderContentsType: thumbs[1] as FolderContentsType,
+						folderThumb: cacheEntry.url,
+						folderContentsType: FolderContentsType.NORMAL,
 					};
 				}
-				// Cast to string just to be sure we actually have strings from our data structure.
-				return {
-					folderThumb: `${thumbs[0]}`,
-					folderContentsType: FolderContentsType.NORMAL,
-				};
-			} else {
-				this.cache.delete(item.folder_linkId);
-				this.saveMapToStorage();
+				if (cacheEntry.type === CachedThumbnailType.Icon) {
+					return {
+						folderThumb: '',
+						folderContentsType: cacheEntry.icon,
+					};
+				}
 			}
+			this.entriesByFolderLinkId.delete(item.folder_linkId);
+			this.saveEntriesToStorage();
 		}
 		return {
 			folderThumb: '',
@@ -52,30 +86,37 @@ export class ThumbnailCache {
 	}
 
 	public hasThumbnail(item: ItemVO): boolean {
-		return this.cache.has(item.folder_linkId);
+		if (!this.entriesByFolderLinkId.has(item.folder_linkId)) {
+			return false;
+		}
+		if (isCachedThumbnail(this.entriesByFolderLinkId.get(item.folder_linkId))) {
+			return true;
+		}
+		this.entriesByFolderLinkId.delete(item.folder_linkId);
+		this.saveEntriesToStorage();
+		return false;
 	}
 
 	public invalidateFolder(folderLinkId: number): void {
-		if (this.cache.has(folderLinkId)) {
-			this.cache.delete(folderLinkId);
-			this.saveMapToStorage();
+		if (this.entriesByFolderLinkId.has(folderLinkId)) {
+			this.entriesByFolderLinkId.delete(folderLinkId);
+			this.saveEntriesToStorage();
 		}
 	}
 
-	private fetchCacheMapFromStorage(): void {
-		const cacheData = this.storage.session.get(this.STORAGE_KEY);
-		if (cacheData && Array.isArray(cacheData)) {
-			this.cache = new Map<number, [string, string]>(cacheData);
+	private loadEntriesFromStorage(): void {
+		const storedEntries = this.storage.session.get(this.STORAGE_KEY);
+		if (storedEntries && Array.isArray(storedEntries)) {
+			this.entriesByFolderLinkId = new Map<number, unknown>(storedEntries);
 		} else {
-			this.cache = new Map<number, [string, string]>();
-			this.saveMapToStorage();
+			this.entriesByFolderLinkId = new Map<number, unknown>();
 		}
 	}
 
-	private saveMapToStorage(): void {
+	private saveEntriesToStorage(): void {
 		this.storage.session.set(
 			this.STORAGE_KEY,
-			Array.from(this.cache.entries()),
+			Array.from(this.entriesByFolderLinkId.entries()),
 		);
 	}
 }
