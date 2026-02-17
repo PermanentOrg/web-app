@@ -205,8 +205,7 @@ export class FileListItemComponent
 	public date: string = '';
 	public isUnlistedShare = false;
 
-	private folderThumb200: string;
-	private folderThumb500: string;
+	private folderThumb: string;
 	private folderContentsType: FolderContentsType = FolderContentsType.NORMAL;
 
 	private isInShares: boolean;
@@ -1058,8 +1057,7 @@ export class FileListItemComponent
 		if (cache.hasThumbnail(this.item)) {
 			const thumbs = cache.getThumbnail(this.item);
 			this.folderContentsType = thumbs.folderContentsType;
-			this.folderThumb200 = thumbs.folderThumb200;
-			this.folderThumb500 = thumbs.folderThumb500;
+			this.folderThumb = thumbs.folderThumb;
 		} else {
 			this.api.folder
 				.getWithChildren([this.item as FolderVO])
@@ -1076,12 +1074,8 @@ export class FileListItemComponent
 						const thumbnailItem = sortedItems.shift();
 						if (thumbnailItem) {
 							if (sortPriorities.includes(thumbnailItem.type)) {
-								if (
-									GetThumbnail(thumbnailItem, 200) &&
-									GetThumbnail(thumbnailItem, 500)
-								) {
-									this.folderThumb200 = GetThumbnail(thumbnailItem, 200);
-									this.folderThumb500 = GetThumbnail(thumbnailItem, 500);
+								if (GetThumbnail(thumbnailItem)) {
+									this.folderThumb = GetThumbnail(thumbnailItem);
 								} else {
 									this.folderContentsType =
 										FolderContentsType.BROKEN_THUMBNAILS;
@@ -1103,8 +1097,7 @@ export class FileListItemComponent
 				})
 				.finally(() => {
 					cache.saveThumbnail(this.item, {
-						folderThumb200: this.folderThumb200,
-						folderThumb500: this.folderThumb500,
+						folderThumb: this.folderThumb,
 						folderContentsType: this.folderContentsType,
 					});
 				});
@@ -1116,14 +1109,14 @@ export class FileListItemComponent
 			return '';
 		}
 		if (this.item.isFolder) {
-			if (this.folderThumb200 || this.folderThumb500) {
-				return this.inGridView ? this.folderThumb500 : this.folderThumb200;
+			if (this.folderThumb) {
+				return this.folderThumb;
 			} else {
 				// Do not display default fallback thumbs
 				return '';
 			}
 		} else {
-			return GetThumbnail(this.item, 500);
+			return GetThumbnail(this.item);
 		}
 	}
 

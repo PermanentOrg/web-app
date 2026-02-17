@@ -5,6 +5,7 @@ import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
 import { of } from 'rxjs';
+import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -142,6 +143,7 @@ describe('SidebarComponent', () => {
 				MockIsPublicItemPipe,
 				MockOriginalFileExtensionPipe,
 				MockSelectedItemPipe,
+				GetThumbnailPipe,
 			],
 			providers: [
 				{
