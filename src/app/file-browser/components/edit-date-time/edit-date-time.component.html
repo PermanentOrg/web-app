@@ -1,0 +1,208 @@
+<div class="pr-edit-date-time-dialog">
+	<div class="pr-dialog-header">
+		<h2>Edit date and time</h2>
+		<button class="pr-close-button" (click)="onCancel()">
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+
+	<div class="pr-dialog-content">
+		<!-- Date qualifiers -->
+		<div class="pr-qualifiers-row">
+			<span class="pr-qualifiers-label">This date is:</span>
+
+			<div class="pr-qualifier-option">
+				<span>Approximate</span>
+				<label class="pr-toggle">
+					<input
+						type="checkbox"
+						[checked]="qualifiers().approximate"
+						[disabled]="fieldsDisabled()"
+						(change)="onQualifierChange(DateQualifier.Approximate)"
+					/>
+					<span class="pr-toggle-slider"></span>
+				</label>
+			</div>
+
+			<div class="pr-qualifier-option">
+				<span>Uncertain</span>
+				<label class="pr-toggle">
+					<input
+						type="checkbox"
+						[checked]="qualifiers().uncertain"
+						[disabled]="fieldsDisabled()"
+						(change)="onQualifierChange(DateQualifier.Uncertain)"
+					/>
+					<span class="pr-toggle-slider"></span>
+				</label>
+			</div>
+
+			<div class="pr-qualifier-option">
+				<span>Unknown</span>
+				<label class="pr-toggle">
+					<input
+						type="checkbox"
+						[checked]="qualifiers().unknown"
+						(change)="onQualifierChange(DateQualifier.Unknown)"
+					/>
+					<span class="pr-toggle-slider"></span>
+				</label>
+			</div>
+		</div>
+
+		<!-- Date and Time inputs -->
+		<div class="pr-datetime-row" [class.disabled]="fieldsDisabled()">
+			<pr-datepicker-input
+				[date]="date()"
+				[disabled]="fieldsDisabled()"
+				(dateChange)="date.set($event)"
+			/>
+
+			<pr-timepicker-input
+				[time]="time()"
+				[disabled]="fieldsDisabled()"
+				(timeChange)="onTimeChange($event, time)"
+			/>
+		</div>
+
+		<!-- Timezone -->
+		<div #timezoneRow class="pr-timezone-row">
+			<div
+				class="pr-timezone-select"
+				[class.disabled]="fieldsDisabled()"
+				(click)="!fieldsDisabled() && toggleOverlay('timezoneDropdown')"
+			>
+				<span class="pr-timezone-value">{{
+					time().timezoneOffset || 'Select timezone'
+				}}</span>
+				@if (time().timezoneName) {
+					<span class="pr-timezone-label">{{ time().timezoneName }}</span>
+				}
+				<span class="pr-icon-button pr-chevron">
+					<i class="material-icons">unfold_more</i>
+				</span>
+			</div>
+			@if (activeOverlay() === 'timezoneDropdown') {
+				<div class="pr-timezone-dropdown">
+					<input
+						type="text"
+						class="pr-timezone-search"
+						placeholder="Search timezone..."
+						[value]="timezoneFilter()"
+						(input)="timezoneFilter.set($any($event.target).value)"
+					/>
+					<div class="pr-timezone-options">
+						<div
+							class="pr-timezone-option"
+							[class.selected]="!time().timezoneOffset"
+							(click)="selectTimezone({ offset: '', name: '' }, time)"
+						>
+							<span class="pr-tz-name pr-placeholder">Select timezone</span>
+						</div>
+						@for (tz of filteredTimezones(); track tz.offset) {
+							<div
+								class="pr-timezone-option"
+								[class.selected]="tz.offset === time().timezoneOffset"
+								(click)="selectTimezone(tz, time)"
+							>
+								<span class="pr-tz-offset">{{ tz.offset }}</span>
+								<span class="pr-tz-name">{{ tz.name }}</span>
+							</div>
+						}
+					</div>
+				</div>
+			}
+		</div>
+
+		<!-- End date range (shown when useDateRange is on) -->
+		@if (useDateRange()) {
+			<div class="pr-range-label">TO</div>
+
+			<div class="pr-datetime-row">
+				<pr-datepicker-input
+					[date]="endDate()"
+					(dateChange)="endDate.set($event)"
+				/>
+
+				<pr-timepicker-input
+					[time]="endTime()"
+					(timeChange)="onTimeChange($event, endTime)"
+				/>
+			</div>
+
+			<!-- End timezone -->
+			<div #endTimezoneRow class="pr-timezone-row">
+				<div
+					class="pr-timezone-select"
+					(click)="toggleOverlay('endTimezoneDropdown')"
+				>
+					<span class="pr-timezone-value">{{
+						endTime().timezoneOffset || 'Select timezone'
+					}}</span>
+					@if (endTime().timezoneName) {
+						<span class="pr-timezone-label">{{ endTime().timezoneName }}</span>
+					}
+					<span class="pr-icon-button pr-chevron">
+						<i class="material-icons">unfold_more</i>
+					</span>
+				</div>
+				@if (activeOverlay() === 'endTimezoneDropdown') {
+					<div class="pr-timezone-dropdown">
+						<input
+							type="text"
+							class="pr-timezone-search"
+							placeholder="Search timezone..."
+							[value]="timezoneFilter()"
+							(input)="timezoneFilter.set($any($event.target).value)"
+						/>
+						<div class="pr-timezone-options">
+							<div
+								class="pr-timezone-option"
+								[class.selected]="!endTime().timezoneOffset"
+								(click)="selectTimezone({ offset: '', name: '' }, endTime)"
+							>
+								<span class="pr-tz-name pr-placeholder">Select timezone</span>
+							</div>
+							@for (tz of filteredTimezones(); track tz.offset) {
+								<div
+									class="pr-timezone-option"
+									[class.selected]="tz.offset === endTime().timezoneOffset"
+									(click)="selectTimezone(tz, endTime)"
+								>
+									<span class="pr-tz-offset">{{ tz.offset }}</span>
+									<span class="pr-tz-name">{{ tz.name }}</span>
+								</div>
+							}
+						</div>
+					</div>
+				}
+			</div>
+		}
+
+		<!-- Date range toggle -->
+		<div class="pr-date-range-row">
+			<span>Use a date range</span>
+			<label class="pr-toggle">
+				<input
+					type="checkbox"
+					[checked]="useDateRange()"
+					[disabled]="fieldsDisabled()"
+					(change)="toggleDateRange()"
+				/>
+				<span class="pr-toggle-slider"></span>
+			</label>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<div class="pr-dialog-footer">
+		<div class="pr-edtf-display">
+			<span class="pr-edtf-badge">EDTF</span>
+			<span class="pr-edtf-value">{{ edtfValue() }}</span>
+		</div>
+		<div class="pr-dialog-actions">
+			<button class="pr-btn-cancel" (click)="onCancel()">Cancel</button>
+			<button class="pr-btn-save" (click)="onSave()">Save</button>
+		</div>
+	</div>
+</div>
