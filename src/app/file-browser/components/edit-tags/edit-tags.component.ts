@@ -108,7 +108,11 @@ export class EditTagsComponent
 				.subscribe((tags) => {
 					if (this.tagType === 'keyword') {
 						this.dialogTags = tags?.filter(
-							(tag) => !tag.type.includes('type.tag.metadata'),
+							(tag) =>
+								!tag.type.includes('type.tag.metadata') &&
+								this.allTags.find(
+									(generalTag) => generalTag?.name === tag?.name,
+								),
 						);
 					} else {
 						this.dialogTags = tags?.filter((tag) =>
@@ -233,7 +237,8 @@ export class EditTagsComponent
 		this.itemTags = this.filterTagsByType(
 			(this.item?.TagVOs || []).filter(
 				// Filter out tags that are now null from deletion
-				(tag) => tag?.name,
+				(tag) =>
+					!!this.allTags?.find((genericTag) => genericTag?.name === tag?.name),
 			),
 		);
 
@@ -244,7 +249,7 @@ export class EditTagsComponent
 		for (const tag of this.itemTags) {
 			this.itemTagsById.add(tag.tagId);
 		}
-		this.tagsService.setItemTags(this.item.TagVOs);
+		this.tagsService.setItemTags(this.item?.TagVOs);
 	}
 
 	onManageTagsClick() {

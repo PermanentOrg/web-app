@@ -329,6 +329,7 @@ export class EditService {
 			throw err;
 		} finally {
 			this.accountService.refreshAccountDebounced();
+			this.dataService.refreshCurrentFolder();
 		}
 	}
 

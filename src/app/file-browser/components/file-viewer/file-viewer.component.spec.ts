@@ -81,8 +81,18 @@ interface ActivatedRouteSnapshotData {
 
 class MockTagsService {
 	public itemTagsObservable = new Subject<TagVOData[]>();
+	public tagsObservable = new Subject<TagVOData[]>();
+
 	public getItemTags$() {
 		return this.itemTagsObservable;
+	}
+
+	public getTags$() {
+		return this.tagsObservable;
+	}
+
+	public getTags() {
+		return defaultTagList;
 	}
 }
 
@@ -105,6 +115,14 @@ describe('FileViewerComponent', () => {
 		activatedRouteData.singleFile = false;
 	}
 
+	async function recreateComponent() {
+		fixture = TestBed.createComponent(FileViewerComponent);
+		component = fixture.componentInstance;
+		tagsService = TestBed.inject(TagsService) as unknown as MockTagsService;
+		fixture.detectChanges();
+		await fixture.whenStable();
+	}
+
 	beforeEach(async () => {
 		navigatedUrl = [];
 		activatedRouteData = {
@@ -113,7 +131,6 @@ describe('FileViewerComponent', () => {
 			currentRecord: defaultItem,
 		};
 		folderChildren = [];
-		tagsService = new MockTagsService();
 		savedProperty = undefined;
 		hasAccess = true;
 		openedDialogs = [];
@@ -187,7 +204,7 @@ describe('FileViewerComponent', () => {
 						},
 					},
 				},
-				{ provide: TagsService, useValue: tagsService },
+				{ provide: TagsService, useClass: MockTagsService },
 				{ provide: PublicProfileService, useValue: publicProfileService },
 				{
 					provide: ShareLinksService,
@@ -216,7 +233,9 @@ describe('FileViewerComponent', () => {
 
 		fixture = TestBed.createComponent(FileViewerComponent);
 		component = fixture.componentInstance;
+		tagsService = TestBed.inject(TagsService) as unknown as MockTagsService;
 		fixture.detectChanges();
+		await fixture.whenStable();
 	});
 
 	it('should create', () => {
@@ -273,18 +292,15 @@ describe('FileViewerComponent', () => {
 
 	it('should be able to load multiple record in a folder', async () => {
 		setUpMultipleRecords(defaultItem, secondItem);
-		// Need to recreate the component with the new data
-		fixture = TestBed.createComponent(FileViewerComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
+		recreateComponent();
 
 		expect(component).not.toBeNull();
 	});
 
 	it('should listen to tag updates from the tag service', () => {
 		tagsService.itemTagsObservable.next([
-			{ type: 'type.tag.metadata.customField', name: 'test:metadta' },
-			{ type: 'type.generic.placeholder', name: 'test' },
+			{ type: 'type.tag.metadata.customField', name: 'test:metadata' },
+			{ type: 'type.generic.placeholder', name: 'tagOne' },
 		]);
 
 		expect(component.keywords.length).toBe(1);
@@ -308,6 +324,78 @@ describe('FileViewerComponent', () => {
 		expect(component.allowDownloads).toBeFalsy();
 	});
 
+	describe('tagsSubscription and keyword filtering', () => {
+		it('should update allTags when getTags$ emits', () => {
+			const newTags: TagVOData[] = [
+				{ tagId: 10, name: 'newTag', type: 'type.generic.placeholder' },
+			];
+			tagsService.tagsObservable.next(newTags);
+
+			expect((component as any).allTags).toEqual(newTags);
+		});
+
+		it('should only include keywords that exist in allTags', async () => {
+			const recordTags: TagVOData[] = [
+				{ tagId: 1, name: 'tagOne', type: 'type.generic.placeholder' },
+				{ tagId: 5, name: 'orphanTag', type: 'type.generic.placeholder' },
+			];
+			activatedRouteData.currentRecord = new RecordVO({
+				displayName: 'Test',
+				TagVOs: recordTags,
+				type: 'document',
+				folder_linkId: 0,
+			});
+			await recreateComponent();
+
+			expect(component.keywords.find((t) => t.name === 'tagOne')).toBeTruthy();
+
+			expect(
+				component.keywords.find((t) => t.name === 'orphanTag'),
+			).toBeFalsy();
+		});
+
+		it('should exclude keywords not in allTags even after tag service updates', () => {
+			tagsService.tagsObservable.next([
+				{ tagId: 10, name: 'onlyThis', type: 'type.generic.placeholder' },
+			]);
+
+			tagsService.itemTagsObservable.next([
+				{ tagId: 10, name: 'onlyThis', type: 'type.generic.placeholder' },
+				{
+					tagId: 11,
+					name: 'notInAllTags',
+					type: 'type.generic.placeholder',
+				},
+			]);
+
+			expect(component.keywords.length).toBe(1);
+			expect(component.keywords[0].name).toBe('onlyThis');
+		});
+
+		it('should not filter custom metadata by allTags', () => {
+			tagsService.itemTagsObservable.next([
+				{
+					tagId: 20,
+					name: 'custom:value',
+					type: 'type.tag.metadata.custom',
+				},
+			]);
+
+			expect(component.customMetadata.length).toBe(1);
+			expect(component.customMetadata[0].name).toBe('custom:value');
+		});
+
+		it('should show no keywords when allTags is empty', () => {
+			tagsService.tagsObservable.next([]);
+
+			tagsService.itemTagsObservable.next([
+				{ tagId: 1, name: 'tagOne', type: 'type.generic.placeholder' },
+			]);
+
+			expect(component.keywords.length).toBe(0);
+		});
+	});
+
 	describe('Keyboard Input', () => {
 		function keyDown(
 			instance: FileViewerComponent,
@@ -318,10 +406,7 @@ describe('FileViewerComponent', () => {
 
 		it('should handle right arrow key input', async () => {
 			setUpMultipleRecords(defaultItem, secondItem);
-			// Recreate component with new data
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			keyDown(component, 'ArrowRight');
 
 			expect(component.currentIndex).toBe(1);
@@ -329,9 +414,7 @@ describe('FileViewerComponent', () => {
 
 		it('should handle left arrow key input', async () => {
 			setUpMultipleRecords(secondItem, defaultItem);
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			keyDown(component, 'ArrowLeft');
 
 			expect(component.currentIndex).toBe(0);
@@ -339,9 +422,7 @@ describe('FileViewerComponent', () => {
 
 		it('does not wrap around on right arrow', async () => {
 			setUpMultipleRecords(secondItem, defaultItem);
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			keyDown(component, 'ArrowRight');
 
 			expect(component.currentIndex).toBe(1);
@@ -349,9 +430,7 @@ describe('FileViewerComponent', () => {
 
 		it('does not wrap around on left arrow', async () => {
 			setUpMultipleRecords(defaultItem, secondItem);
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			keyDown(component, 'ArrowLeft');
 
 			expect(component.currentIndex).toBe(0);
@@ -363,9 +442,7 @@ describe('FileViewerComponent', () => {
 				secondItem,
 				new RecordVO({ folder_linkId: 2 }),
 			);
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			keyDown(component, 'ArrowRight');
 			keyDown(component, 'ArrowRight');
 
@@ -378,9 +455,7 @@ describe('FileViewerComponent', () => {
 					archiveNbr: '1234-1234',
 				});
 				setUpMultipleRecords(defaultItem, secondItemWithArchiveNbr);
-				fixture = TestBed.createComponent(FileViewerComponent);
-				component = fixture.componentInstance;
-				fixture.detectChanges();
+				recreateComponent();
 				keyDown(component, 'ArrowRight');
 				await fixture.whenStable();
 
@@ -395,9 +470,7 @@ describe('FileViewerComponent', () => {
 					}),
 				});
 				setUpMultipleRecords(defaultItem, secondItemFetching);
-				fixture = TestBed.createComponent(FileViewerComponent);
-				component = fixture.componentInstance;
-				fixture.detectChanges();
+				recreateComponent();
 				keyDown(component, 'ArrowRight');
 				secondItemFetching.archiveNbr = '1234-1234';
 				await fixture.whenStable();
@@ -449,27 +522,21 @@ describe('FileViewerComponent', () => {
 		}
 		it('can get the URL of a document', async () => {
 			setUpCurrentRecord('doc');
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			await fixture.whenStable();
 			expectSantizedUrlToContain(component, 'used');
 		});
 
 		it('will prefer the URL of the original if it is a PDF', async () => {
 			setUpCurrentRecord('pdf');
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			await fixture.whenStable();
 			expectSantizedUrlToContain(component, 'original');
 		});
 
 		it('will prefer the URL of the original if it is a TXT file', async () => {
 			setUpCurrentRecord('txt');
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			await fixture.whenStable();
 			expectSantizedUrlToContain(component, 'original');
 		});
@@ -480,9 +547,7 @@ describe('FileViewerComponent', () => {
 
 		it('will have a falsy document URL if the URL is falsy', async () => {
 			setUpCurrentRecord('pdf', false);
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			await fixture.whenStable();
 
 			expect(component.getDocumentUrl()).toBeFalsy();
@@ -508,9 +573,7 @@ describe('FileViewerComponent', () => {
 		it('should set replayUrl when replay-web feature flag is enabled', async () => {
 			featureFlagsEnabled.set('replay-web', true);
 			setUpWebArchiveRecord();
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			await fixture.whenStable();
 
 			expect(component.replayUrl).toBeTruthy();
@@ -519,9 +582,7 @@ describe('FileViewerComponent', () => {
 		it('should not set replayUrl when replay-web feature flag is disabled', async () => {
 			featureFlagsEnabled.set('replay-web', false);
 			setUpWebArchiveRecord();
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			await fixture.whenStable();
 
 			expect(component.replayUrl).toBeNull();
@@ -534,9 +595,7 @@ describe('FileViewerComponent', () => {
 				displayName: 'Test Document',
 				TagVOs: [],
 			});
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			await fixture.whenStable();
 
 			expect(component.replayUrl).toBeNull();
@@ -563,9 +622,7 @@ describe('FileViewerComponent', () => {
 
 		it('can open the location dialog with edit permissions', async () => {
 			setAccess(true);
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			component.canEdit = true;
 			component.onLocationClick();
 			await fixture.whenStable();
@@ -575,9 +632,7 @@ describe('FileViewerComponent', () => {
 
 		it('cannot open the location dialog without edit permissions', async () => {
 			setAccess(false);
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			component.onLocationClick();
 			await fixture.whenStable();
 
@@ -586,9 +641,7 @@ describe('FileViewerComponent', () => {
 
 		it('can open the tags dialog with edit permissions', async () => {
 			setAccess(true);
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			component.canEdit = true;
 			component.onTagsClick('keyword');
 			await fixture.whenStable();
@@ -598,9 +651,7 @@ describe('FileViewerComponent', () => {
 
 		it('cannot open the tags dialog with edit permissions', async () => {
 			setAccess(false);
-			fixture = TestBed.createComponent(FileViewerComponent);
-			component = fixture.componentInstance;
-			fixture.detectChanges();
+			recreateComponent();
 			component.onTagsClick('keyword');
 			await fixture.whenStable();
 
