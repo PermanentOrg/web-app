@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { FolderVO } from '@models/index';
 import { of } from 'rxjs';
+import { ShareLink } from '@root/app/share-links/models/share-link';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { HttpService } from '../http/http.service';
 import { FolderRepo } from './folder.repo';
@@ -153,5 +154,60 @@ describe('Folder repo', () => {
 		});
 
 		expect(result.Results[0].data[0].FolderVO).toBeDefined();
+	});
+
+	describe('getFolderShareLink', () => {
+		const mockShareLink: ShareLink = {
+			id: 'link1',
+			itemId: '123',
+			itemType: 'folder',
+			token: 'abc',
+			permissionsLevel: 'viewer',
+			accessRestrictions: 'none',
+			maxUses: null,
+			usesExpended: null,
+			createdAt: new Date('2024-01-01'),
+			updatedAt: new Date('2024-01-01'),
+		};
+
+		it('should fetch share links for a folder', async () => {
+			const folderVO = new FolderVO({ folderId: 123 });
+
+			httpV2Spy.get.and.returnValue(of([{ items: [mockShareLink] }]));
+
+			const result = await folderRepo.getFolderShareLink(folderVO);
+
+			expect(httpV2Spy.get).toHaveBeenCalledWith('v2/folder/123/share_links');
+			expect(result).toEqual([mockShareLink]);
+		});
+
+		it('should return empty array when no share links exist', async () => {
+			const folderVO = new FolderVO({ folderId: 456 });
+
+			httpV2Spy.get.and.returnValue(of([{ items: [] }]));
+
+			const result = await folderRepo.getFolderShareLink(folderVO);
+
+			expect(httpV2Spy.get).toHaveBeenCalledWith('v2/folder/456/share_links');
+			expect(result).toEqual([]);
+		});
+
+		it('should return multiple share links when they exist', async () => {
+			const folderVO = new FolderVO({ folderId: 789 });
+			const secondShareLink: ShareLink = {
+				...mockShareLink,
+				id: 'link2',
+				token: 'def',
+			};
+
+			httpV2Spy.get.and.returnValue(
+				of([{ items: [mockShareLink, secondShareLink] }]),
+			);
+
+			const result = await folderRepo.getFolderShareLink(folderVO);
+
+			expect(result).toEqual([mockShareLink, secondShareLink]);
+			expect(result.length).toBe(2);
+		});
 	});
 });

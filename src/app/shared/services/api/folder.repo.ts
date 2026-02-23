@@ -2,6 +2,7 @@ import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
+import { ShareLink } from '@root/app/share-links/models/share-link';
 import {
 	convertStelaLocationToLocnVOData,
 	convertStelaRecordToRecordVO,
@@ -251,6 +252,15 @@ export class FolderRepo extends BaseRepo {
 		}
 
 		return childrenResponse.items;
+	}
+
+	public async getFolderShareLink(folderVO: FolderVO): Promise<ShareLink[]> {
+		const response = await firstValueFrom(
+			this.httpV2.get<{ items: ShareLink[] }>(
+				`v2/folder/${folderVO.folderId}/share_links`,
+			),
+		);
+		return response[0].items;
 	}
 
 	public async getWithChildren(

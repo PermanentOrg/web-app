@@ -3,6 +3,7 @@ import {
 	HttpTestingController,
 	provideHttpClientTesting,
 } from '@angular/common/http/testing';
+import { of } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import { RecordRepo, RecordResponse } from '@shared/services/api/record.repo';
@@ -11,11 +12,14 @@ import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
+import { ShareLink } from '@root/app/share-links/models/share-link';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 
 describe('RecordRepo', () => {
 	let repo: RecordRepo;
 	let httpMock: HttpTestingController;
+	let httpService: HttpService;
+	let httpV2Service: HttpV2Service;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
@@ -28,10 +32,9 @@ describe('RecordRepo', () => {
 			],
 		});
 
-		repo = new RecordRepo(
-			TestBed.inject(HttpService),
-			TestBed.inject(HttpV2Service),
-		);
+		httpService = TestBed.inject(HttpService);
+		httpV2Service = TestBed.inject(HttpV2Service);
+		repo = new RecordRepo(httpService, httpV2Service);
 		httpMock = TestBed.inject(HttpTestingController);
 	});
 
@@ -153,5 +156,69 @@ describe('RecordRepo', () => {
 		expect(req.request.body.displayDt).toBe('2025-01-01T00:00:00.000Z');
 
 		req.flush(testRecord);
+	});
+
+	describe('getRecordShareLink', () => {
+		let httpV2GetSpy: jasmine.Spy;
+		let httpSendRequestPromiseSpy: jasmine.Spy;
+
+		const mockShareLink: ShareLink = {
+			id: 'link1',
+			itemId: '123',
+			itemType: 'record',
+			token: 'abc',
+			permissionsLevel: 'viewer',
+			accessRestrictions: 'none',
+			maxUses: null,
+			usesExpended: null,
+			createdAt: new Date('2024-01-01'),
+			updatedAt: new Date('2024-01-01'),
+		};
+
+		beforeEach(() => {
+			httpV2GetSpy = spyOn(httpV2Service, 'get');
+			httpSendRequestPromiseSpy = spyOn(httpService, 'sendRequestPromise');
+		});
+
+		it('should fetch share links using recordId when available', async () => {
+			const recordVO = new RecordVO({ recordId: 123 });
+
+			httpV2GetSpy.and.returnValue(of([{ items: [mockShareLink] }]));
+
+			const result = await repo.getRecordShareLink(recordVO);
+
+			expect(httpV2GetSpy).toHaveBeenCalledWith('v2/record/123/share-links');
+			expect(result).toEqual([mockShareLink]);
+		});
+
+		it('should fetch recordId by archiveNbr when recordId is not available', async () => {
+			const recordVO = new RecordVO({ archiveNbr: 'archive-456' });
+
+			httpSendRequestPromiseSpy.and.resolveTo({
+				getRecordVO: () => new RecordVO({ recordId: 789 }),
+			});
+			httpV2GetSpy.and.returnValue(of([{ items: [mockShareLink] }]));
+
+			const result = await repo.getRecordShareLink(recordVO);
+
+			expect(httpSendRequestPromiseSpy).toHaveBeenCalledWith(
+				'/record/get',
+				[{ RecordVO: jasmine.objectContaining({ archiveNbr: 'archive-456' }) }],
+				jasmine.any(Object),
+			);
+
+			expect(httpV2GetSpy).toHaveBeenCalledWith('v2/record/789/share-links');
+			expect(result).toEqual([mockShareLink]);
+		});
+
+		it('should return empty array when no share links exist', async () => {
+			const recordVO = new RecordVO({ recordId: 123 });
+
+			httpV2GetSpy.and.returnValue(of([{ items: [] }]));
+
+			const result = await repo.getRecordShareLink(recordVO);
+
+			expect(result).toEqual([]);
+		});
 	});
 });
