@@ -1,0 +1,109 @@
+@import 'colors';
+
+.pr-timezone-row {
+	position: relative;
+
+	.pr-timezone-select {
+		display: flex;
+		align-items: center;
+		background: $white;
+		border: 1px solid $PR-blue-100;
+		border-radius: 8px;
+		padding: 0 12px;
+		height: 40px;
+		cursor: pointer;
+
+		&:hover {
+			border-color: $PR-blue-300;
+		}
+
+		&.disabled {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+
+		.pr-timezone-value {
+			font-size: 14px;
+			font-weight: 600;
+			color: $PR-blue;
+			margin-right: 8px;
+		}
+
+		.pr-timezone-label {
+			font-size: 14px;
+			color: $PR-blue-600;
+		}
+
+		.pr-chevron {
+			margin-left: auto;
+			color: $PR-blue-600;
+		}
+	}
+
+	.pr-timezone-dropdown {
+		position: absolute;
+		top: 52px;
+		left: 0;
+		right: 0;
+		background: $white;
+		border: 1px solid $PR-blue-100;
+		border-radius: 8px;
+		box-shadow: 0 4px 16px rgba($black, 0.12);
+		z-index: 10;
+		overflow: hidden;
+
+		.pr-timezone-search {
+			width: 100%;
+			padding: 10px 12px;
+			border: none;
+			border-bottom: 1px solid $PR-blue-100;
+			font-size: 14px;
+			outline: none;
+			color: $PR-blue;
+			box-sizing: border-box;
+
+			&::placeholder {
+				color: $PR-blue-400;
+			}
+		}
+
+		.pr-timezone-options {
+			max-height: 200px;
+			overflow-y: auto;
+		}
+
+		.pr-timezone-option {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 10px 12px;
+			cursor: pointer;
+			transition: background 0.1s ease;
+
+			&:hover {
+				background: $PR-blue-25;
+			}
+
+			&.selected {
+				background: $PR-blue-25;
+			}
+
+			.pr-tz-offset {
+				font-size: 13px;
+				font-weight: 600;
+				color: $PR-blue;
+				min-width: 90px;
+			}
+
+			.pr-tz-name {
+				font-size: 13px;
+				color: $PR-blue-600;
+
+				&.pr-placeholder {
+					color: $PR-blue-400;
+					font-style: italic;
+				}
+			}
+		}
+	}
+}
