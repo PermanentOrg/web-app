@@ -1,0 +1,47 @@
+<div #dropdownContainer class="pr-timezone-row">
+	<div
+		class="pr-timezone-select"
+		[class.disabled]="disabled()"
+		(click)="toggle()"
+	>
+		<span class="pr-timezone-value">{{
+			selectedOffset() || 'Select timezone'
+		}}</span>
+		@if (selectedName()) {
+			<span class="pr-timezone-label">{{ selectedName() }}</span>
+		}
+		<span class="pr-icon-button pr-chevron">
+			<i class="material-icons">unfold_more</i>
+		</span>
+	</div>
+	@if (isOpen()) {
+		<div class="pr-timezone-dropdown">
+			<input
+				type="text"
+				class="pr-timezone-search"
+				placeholder="Search timezone..."
+				[value]="filter()"
+				(input)="filter.set($any($event.target).value)"
+			/>
+			<div class="pr-timezone-options">
+				<div
+					class="pr-timezone-option"
+					[class.selected]="!selectedOffset()"
+					(click)="select({ offset: '', name: '' })"
+				>
+					<span class="pr-tz-name pr-placeholder">Select timezone</span>
+				</div>
+				@for (tz of filteredTimezones(); track tz.offset) {
+					<div
+						class="pr-timezone-option"
+						[class.selected]="tz.offset === selectedOffset()"
+						(click)="select(tz)"
+					>
+						<span class="pr-tz-offset">{{ tz.offset }}</span>
+						<span class="pr-tz-name">{{ tz.name }}</span>
+					</div>
+				}
+			</div>
+		</div>
+	}
+</div>
