@@ -97,7 +97,7 @@ export class ArchiveRepo extends BaseRepo {
 		return await this.http.sendRequestPromise<ArchiveResponse>(
 			'/archive/post',
 			data,
-			{ ResponseClass: ArchiveResponse, useAuthorizationHeader: true },
+			{ ResponseClass: ArchiveResponse, useAuthorizationHeader: false },
 		);
 	}
 

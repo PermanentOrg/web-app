@@ -25,6 +25,7 @@ import {
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { PayerService } from '@shared/services/payer/payer.service';
 import { EventService } from '@shared/services/event/event.service';
@@ -67,6 +68,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 	constructor(
 		private accountService: AccountService,
 		private api: ApiService,
+		private filesystemService: FilesystemService,
 		private messageService: MessageService,
 		private router: Router,
 		private relationshipService: RelationshipService,
@@ -210,10 +212,9 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 			const apps = find(this.accountService.getRootFolder().ChildItemVOs, {
 				type: 'type.folder.root.app',
 			});
-			const folderResponse = await this.api.folder.getWithChildren([
+			const appsFolder = await this.filesystemService.getFolder(
 				new FolderVO(apps),
-			]);
-			const appsFolder = folderResponse.getFolderVO(true);
+			);
 			this.appsSubfolders = appsFolder.ChildItemVOs as FolderVO[];
 		} catch (err) {
 			Sentry.captureException(err);

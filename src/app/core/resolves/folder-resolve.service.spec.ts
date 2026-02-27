@@ -5,16 +5,16 @@ import { cloneDeep } from 'lodash';
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 
 describe('FolderResolveService', () => {
+	let service: FolderResolveService;
+
 	beforeEach(() => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
-		const providers = config.providers as any[];
-		providers.push(FolderResolveService);
+		config.providers.push(FolderResolveService);
 		TestBed.configureTestingModule(config);
+		service = TestBed.inject(FolderResolveService);
 	});
 
 	it('should be created', () => {
-		const service = TestBed.inject(FolderResolveService);
-
 		expect(service).toBeTruthy();
 	});
 });
