@@ -95,9 +95,18 @@ export const routes: RoutesWithData = [
 			},
 			{
 				path: 'choosearchive',
-				component: ArchiveSwitcherComponent,
-				data: { title: 'Choose Archive' },
+				component: RoutedDialogWrapperComponent,
+				outlet: 'dialog',
+				data: {
+					title: 'Choose Archive',
+					component: ArchiveSwitcherComponent,
+					dialogOptions: { width: 'fullscreen', height: 'auto' },
+				},
 				resolve: { archives: ArchivesResolveService },
+			},
+			{
+				path: 'choosearchive',
+				redirectTo: '/app/(private//dialog:choosearchive)',
 			},
 			{
 				path: 'archives',
