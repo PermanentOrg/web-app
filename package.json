@@ -131,7 +131,7 @@
 		"karma-junit-reporter": "^2.0.1",
 		"karma-spec-reporter": "^0.0.36",
 		"karma-verbose-reporter": "^0.0.8",
-		"ng-mocks": "^14.15.0",
+		"ng-mocks": "^14.15.1",
 		"prettier": "^3.6.2",
 		"storybook": "10.2.13",
 		"ts-node": "^10.9.1",
