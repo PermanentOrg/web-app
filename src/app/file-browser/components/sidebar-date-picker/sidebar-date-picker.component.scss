@@ -1,0 +1,171 @@
+@import 'colors';
+
+.pr-sidebar-date-picker {
+	position: relative;
+
+	.pr-sidebar-date-picker-header {
+		font-size: 13px;
+		color: $PR-blue-600;
+		margin-bottom: 4px;
+	}
+
+	.pr-sidebar-date-picker-label {
+		font-weight: 500;
+	}
+
+	.pr-sidebar-date-picker-qualifiers {
+		color: $PR-blue-400;
+	}
+
+	.pr-sidebar-date-picker-rows {
+		border-radius: 8px;
+		padding: 4px 8px;
+		transition: background-color 0.15s ease;
+
+		&.can-edit {
+			cursor: pointer;
+
+			&:hover {
+				background-color: $PR-blue-25;
+
+				.pr-sidebar-date-picker-edit-icon {
+					color: $PR-blue;
+				}
+			}
+		}
+	}
+
+	.pr-sidebar-date-picker-row {
+		display: flex;
+		align-items: center;
+	}
+
+	.pr-sidebar-date-picker-row-label {
+		font-size: 14px;
+		color: $PR-blue-400;
+		margin-right: 8px;
+		min-width: 36px;
+	}
+
+	.pr-sidebar-date-picker-row-value {
+		flex: 1;
+		font-size: 14px;
+		color: $PR-blue;
+		font-weight: 500;
+	}
+
+	.pr-sidebar-date-picker-row-placeholder {
+		flex: 1;
+		font-size: 14px;
+		color: $PR-blue-400;
+	}
+
+	.pr-sidebar-date-picker-edit-icon {
+		padding: 4px;
+		color: $PR-blue-400;
+		display: flex;
+		align-items: center;
+
+		.material-icons {
+			font-size: 18px;
+		}
+	}
+
+	.pr-sidebar-date-picker-to-row {
+		cursor: default;
+	}
+
+	// Dropdown panel
+	.pr-sidebar-date-picker-panel {
+		position: absolute;
+		top: 0;
+		left: -16px;
+		right: -16px;
+		z-index: 20;
+		background: $white;
+		border: 1px solid $PR-blue-100;
+		border-radius: 12px;
+		box-shadow: 0 8px 24px rgba($black, 0.12);
+		overflow: visible;
+	}
+
+	.pr-sidebar-date-picker-fields {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 16px;
+	}
+
+	.pr-sidebar-date-picker-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 12px 16px;
+		border-top: 1px solid $PR-blue-100;
+		background: $PR-blue-25;
+		border-radius: 0 0 12px 12px;
+	}
+
+	.pr-more-options-btn {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-size: 14px;
+		font-weight: 500;
+		color: $PR-blue;
+		padding: 0;
+
+		&:hover {
+			color: $PR-blue-800;
+		}
+
+		.material-icons {
+			font-size: 18px;
+		}
+	}
+
+	.pr-sidebar-date-picker-actions {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.pr-btn-cancel {
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-size: 14px;
+		font-weight: 500;
+		color: $PR-blue;
+		padding: 6px 12px;
+
+		&:hover {
+			color: $PR-blue-800;
+		}
+	}
+
+	.pr-btn-save {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: $PR-blue;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		color: $white;
+		width: 36px;
+		height: 36px;
+		padding: 0;
+
+		&:hover {
+			background: $PR-blue-800;
+		}
+
+		.material-icons {
+			font-size: 18px;
+		}
+	}
+}
