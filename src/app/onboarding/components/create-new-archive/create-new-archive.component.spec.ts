@@ -26,6 +26,9 @@ const mockApiService = {
 			};
 		},
 	},
+	account: {
+		updateAccountTags: jasmine.createSpy('updateAccountTags').and.resolveTo(),
+	},
 	share: {
 		requestShareAccess: jasmine.createSpy('requestShareAccess').and.resolveTo(),
 	},
@@ -43,6 +46,16 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	let component: CreateNewArchiveComponent;
 	let fixture: ComponentFixture<CreateNewArchiveComponent>;
 	let feature: FeatureFlagService;
+	let onboardingService: OnboardingService;
+
+	afterEach(() => {
+		sessionStorage.removeItem('archiveName');
+		sessionStorage.removeItem('archiveType');
+		sessionStorage.removeItem('archiveTypeTag');
+		sessionStorage.removeItem('goals');
+		sessionStorage.removeItem('reasons');
+		sessionStorage.removeItem('onboardingScreen');
+	});
 
 	beforeEach(async () => {
 		feature = new FeatureFlagService(undefined, new SecretsService());
@@ -65,6 +78,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		fixture = TestBed.createComponent(CreateNewArchiveComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
+		onboardingService = TestBed.inject(OnboardingService);
 	});
 
 	it('should exist', () => {
@@ -197,5 +211,24 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		await component.onSubmit();
 
 		expect(mockApiService.share.requestShareAccess).not.toHaveBeenCalled();
+	});
+
+	it('should not clear onboarding session storage when archive creation fails', async () => {
+		spyOn(onboardingService, 'clearOnboardingStorage');
+		spyOn(mockApiService.archive, 'create').and.rejectWith(
+			new Error('creation failed'),
+		);
+
+		await component.onSubmit();
+
+		expect(onboardingService.clearOnboardingStorage).not.toHaveBeenCalled();
+	});
+
+	it('should clear onboarding session storage after archive creation', async () => {
+		spyOn(onboardingService, 'clearOnboardingStorage');
+
+		await component.onSubmit();
+
+		expect(onboardingService.clearOnboardingStorage).toHaveBeenCalled();
 	});
 });

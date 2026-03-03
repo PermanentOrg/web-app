@@ -14,4 +14,18 @@ export class OnboardingService {
 	public getFinalArchives(): ArchiveVO[] {
 		return this.onboardedArchives;
 	}
+
+	public clearOnboardingStorage(): void {
+		sessionStorage.removeItem('archiveName');
+		sessionStorage.removeItem('archiveType');
+		sessionStorage.removeItem('archiveTypeTag');
+		sessionStorage.removeItem('goals');
+		sessionStorage.removeItem('reasons');
+		sessionStorage.removeItem('onboardingScreen');
+	}
+
+	public resetOnboardingState(): void {
+		this.onboardedArchives = [];
+		this.clearOnboardingStorage();
+	}
 }
