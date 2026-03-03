@@ -5,9 +5,6 @@ import {
 	signal,
 	computed,
 	WritableSignal,
-	HostListener,
-	ViewChild,
-	ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
@@ -17,17 +14,18 @@ import {
 	TimeInputObject,
 } from '@shared/components/timepicker-input/timepicker-input.component';
 import {
+	TimezoneDropdownComponent,
+	TimezoneOption,
+} from '@shared/components/timezone-dropdown/timezone-dropdown.component';
+import {
 	EditDateModel,
 	DateQualifierObject,
 	DateObject,
 	TimeObject,
-	TimezoneOption,
-	TIMEZONES,
 	DateQualifier,
 	Meridian,
 } from './edit-date-time.model';
-
-type OverlayKey = 'timezoneDropdown' | 'endTimezoneDropdown';
+import { EditDateTimeMappingService } from './edit-date-time-mapping.service';
 
 interface SavedFormState {
 	qualifiers: DateQualifierObject;
@@ -48,21 +46,20 @@ const DEFAULT_TIME: TimeObject = {
 };
 
 @Component({
-	selector: 'pr-edit-date-time',
+	selector: 'pr-edit-date-time-modal',
 	standalone: true,
-	imports: [CommonModule, DatepickerInputComponent, TimepickerInputComponent],
-	templateUrl: './edit-date-time.component.html',
-	styleUrls: ['./edit-date-time.component.scss'],
+	imports: [
+		CommonModule,
+		DatepickerInputComponent,
+		TimepickerInputComponent,
+		TimezoneDropdownComponent,
+	],
+	templateUrl: './edit-date-time-modal.component.html',
+	styleUrls: ['./edit-date-time-modal.component.scss'],
 })
-export class EditDateTimeComponent implements OnInit {
+export class EditDateTimeModalComponent implements OnInit {
 	readonly DateQualifier = DateQualifier;
-	timezones = TIMEZONES;
-	timezoneFilter = signal('');
 
-	activeOverlay = signal<OverlayKey | null>(null);
-
-	@ViewChild('timezoneRow') timezoneRow?: ElementRef<HTMLElement>;
-	@ViewChild('endTimezoneRow') endTimezoneRow?: ElementRef<HTMLElement>;
 	qualifiers = signal<DateQualifierObject>({
 		approximate: false,
 		uncertain: false,
@@ -87,38 +84,17 @@ export class EditDateTimeComponent implements OnInit {
 			return 'xxxx-xx-xx';
 		}
 
-		let computedEdtfValue = '';
-		const selectedDate = this.date();
-		const selectedTime = this.time();
-
-		computedEdtfValue = [
-			selectedDate.year,
-			selectedDate.month,
-			selectedDate.day,
-		]
-			.filter(Boolean)
-			.join('-');
-		const timePart = this.buildTimePart(selectedTime);
-
-		if (timePart) {
-			computedEdtfValue += `T${timePart}`;
-		}
+		let computedEdtfValue = EditDateTimeMappingService.buildEdtf(
+			this.date(),
+			this.time(),
+			this.qualifiers(),
+		);
 
 		if (this.useDateRange()) {
-			const selectedEndDate = this.endDate();
-			const selectedEndTime = this.endTime();
-			const endTimePart = this.buildTimePart(selectedEndTime);
-			let endEdtf = [
-				selectedEndDate.year,
-				selectedEndDate.month,
-				selectedEndDate.day,
-			]
-				.filter(Boolean)
-				.join('-');
-
-			if (endTimePart) {
-				endEdtf += `T${endTimePart}`;
-			}
+			const endEdtf = EditDateTimeMappingService.buildEdtf(
+				this.endDate(),
+				this.endTime(),
+			);
 
 			if (endEdtf) {
 				computedEdtfValue += `/${endEdtf}`;
@@ -127,33 +103,6 @@ export class EditDateTimeComponent implements OnInit {
 
 		return computedEdtfValue;
 	});
-
-	filteredTimezones = computed(() => {
-		const filter = this.timezoneFilter().toLowerCase();
-		if (!filter) return this.timezones;
-		return this.timezones.filter(
-			(tz) =>
-				tz.name.toLowerCase().includes(filter) ||
-				tz.offset.toLowerCase().includes(filter),
-		);
-	});
-
-	@HostListener('document:click', ['$event'])
-	onDocumentClick(event: MouseEvent): void {
-		const target = event.target as Node;
-		const insideTimezone = this.timezoneRow?.nativeElement.contains(target);
-		const insideEndTimezone =
-			this.endTimezoneRow?.nativeElement.contains(target);
-
-		if (!insideTimezone && !insideEndTimezone) {
-			this.closeAllOverlays();
-		}
-	}
-
-	closeAllOverlays(): void {
-		this.activeOverlay.set(null);
-		this.timezoneFilter.set('');
-	}
 
 	constructor(
 		public dialogRef: DialogRef<EditDateModel>,
@@ -190,6 +139,17 @@ export class EditDateTimeComponent implements OnInit {
 			minutes: timeInputValue.minutes,
 			seconds: timeInputValue.seconds,
 			amPm: timeInputValue.amPm,
+		}));
+	}
+
+	onTimezoneChange(
+		timezoneOption: TimezoneOption,
+		currentTime: WritableSignal<TimeObject>,
+	): void {
+		currentTime.update((t) => ({
+			...t,
+			timezoneOffset: timezoneOption.offset,
+			timezoneName: timezoneOption.name,
 		}));
 	}
 
@@ -262,41 +222,6 @@ export class EditDateTimeComponent implements OnInit {
 
 	toggleDateRange(): void {
 		this.useDateRange.update((v) => !v);
-	}
-
-	toggleOverlay(key: OverlayKey): void {
-		if (this.activeOverlay() === key) {
-			this.closeAllOverlays();
-		} else {
-			this.activeOverlay.set(key);
-			this.timezoneFilter.set('');
-		}
-	}
-
-	selectTimezone(
-		timezoneOption: TimezoneOption,
-		currentTimezone: WritableSignal<TimeObject>,
-	): void {
-		currentTimezone.update((t) => ({
-			...t,
-			timezoneOffset: timezoneOption.offset,
-			timezoneName: timezoneOption.name,
-		}));
-		this.closeAllOverlays();
-	}
-
-	private buildTimePart(time: TimeObject): string {
-		if (!time.hours) return '';
-		const hour12 = parseInt(time.hours, 10);
-		const hour24 = this.to24Hour(hour12, time.amPm);
-		const hours24 = String(hour24).padStart(2, '0');
-		const parts = [hours24, time.minutes, time.seconds].filter(Boolean);
-		return parts.length > 1 ? parts.join(':') : '';
-	}
-
-	private to24Hour(hour12: number, amPm: Meridian): number {
-		if (amPm === Meridian.AM) return hour12 === 12 ? 0 : hour12;
-		return hour12 === 12 ? 12 : hour12 + 12;
 	}
 
 	onCancel(): void {
