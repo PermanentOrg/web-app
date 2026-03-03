@@ -193,6 +193,7 @@ export class CreateNewArchiveComponent implements OnInit {
 			].filter((tag) => !!tag);
 
 			let createdArchive: ArchiveVO;
+			let acceptedPendingArchive = false;
 
 			try {
 				let response;
@@ -201,6 +202,7 @@ export class CreateNewArchiveComponent implements OnInit {
 					if (!this.isGlam) {
 						await this.api.archive.accept(this.pendingArchive);
 					}
+					acceptedPendingArchive = true;
 				} else {
 					response = await this.api.archive.create(archive);
 					createdArchive = response.getArchiveVO();
@@ -223,8 +225,11 @@ export class CreateNewArchiveComponent implements OnInit {
 			if (createdArchive) {
 				this.createdArchive.emit(createdArchive);
 			}
-			if (this.pendingArchive) {
+			if (acceptedPendingArchive) {
 				this.createdArchive.emit(this.pendingArchive);
+			}
+			if (createdArchive || acceptedPendingArchive) {
+				this.onboardingService.clearSessionStorage();
 			}
 		} catch (error) {
 			this.errorOccurred.emit('An error occurred. Please try again.');
@@ -352,13 +357,5 @@ export class CreateNewArchiveComponent implements OnInit {
 	public handleReasonsEmit(event): void {
 		this.selectedReasons = event.reasons;
 		this.setScreen(event.screen as NewArchiveScreen);
-	}
-
-	private clearSessionStorage(): void {
-		sessionStorage.removeItem('goals');
-		sessionStorage.removeItem('reasons');
-		sessionStorage.removeItem('archiveName');
-		sessionStorage.removeItem('archiveType');
-		sessionStorage.removeItem('archiveTypeTag');
 	}
 }

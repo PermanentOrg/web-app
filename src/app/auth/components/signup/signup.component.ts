@@ -21,6 +21,7 @@ import {
 } from '@models';
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 const NEW_ONBOARDING_CHANCE = 1;
@@ -56,6 +57,7 @@ export class SignupComponent {
 		private message: MessageService,
 		private device: DeviceService,
 		private ga: GoogleAnalyticsService,
+		private onboardingService: OnboardingService,
 	) {
 		const params = route.snapshot.queryParams;
 
@@ -131,6 +133,8 @@ export class SignupComponent {
 
 	onSubmit(formValue: any) {
 		this.waiting = true;
+
+		this.onboardingService.resetSessionState();
 
 		this.accountService
 			.signUp(
