@@ -1,24 +1,26 @@
 import { Injectable } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { EditDateTimeComponent } from './edit-date-time.component';
+import { EditDateTimeModalComponent } from './edit-date-time-modal.component';
 import { EditDateModel } from './edit-date-time.model';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class EditDateTimeService {
+export class EditDateTimeModalService {
 	constructor(private dialogCdkService: DialogCdkService) {}
 
-	open(data: EditDateModel): DialogRef<EditDateModel, EditDateTimeComponent> {
+	open(
+		data: EditDateModel,
+	): DialogRef<EditDateModel, EditDateTimeModalComponent> {
 		return this.dialogCdkService.open<
-			EditDateTimeComponent,
+			EditDateTimeModalComponent,
 			EditDateModel,
 			EditDateModel
-		>(EditDateTimeComponent, {
+		>(EditDateTimeModalComponent, {
 			data,
 			hasBackdrop: true,
-			panelClass: 'edit-date-time-dialog-panel',
+			panelClass: 'edit-date-time-modal-dialog-panel',
 		});
 	}
 }

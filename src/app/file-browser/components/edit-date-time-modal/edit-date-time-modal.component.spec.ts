@@ -1,16 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { EditDateTimeComponent } from './edit-date-time.component';
-import {
-	EditDateModel,
-	DateQualifier,
-	TIMEZONES,
-	Meridian,
-} from './edit-date-time.model';
+import { EditDateTimeModalComponent } from './edit-date-time-modal.component';
+import { EditDateModel, DateQualifier, Meridian } from './edit-date-time.model';
 
-describe('EditDateTimeComponent', () => {
-	let component: EditDateTimeComponent;
-	let fixture: ComponentFixture<EditDateTimeComponent>;
+describe('EditDateTimeModalComponent', () => {
+	let component: EditDateTimeModalComponent;
+	let fixture: ComponentFixture<EditDateTimeModalComponent>;
 	let dialogRefSpy: jasmine.SpyObj<DialogRef>;
 
 	const mockDialogData: EditDateModel = {
@@ -34,14 +29,14 @@ describe('EditDateTimeComponent', () => {
 		dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
 
 		await TestBed.configureTestingModule({
-			imports: [EditDateTimeComponent],
+			imports: [EditDateTimeModalComponent],
 			providers: [
 				{ provide: DialogRef, useValue: dialogRefSpy },
 				{ provide: DIALOG_DATA, useValue: mockDialogData },
 			],
 		}).compileComponents();
 
-		fixture = TestBed.createComponent(EditDateTimeComponent);
+		fixture = TestBed.createComponent(EditDateTimeModalComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});
@@ -123,6 +118,28 @@ describe('EditDateTimeComponent', () => {
 		expect(component.time().hours).toBe('11');
 		expect(component.time().timezoneOffset).toBe('GMT-05:00');
 		expect(component.time().timezoneName).toBe('Eastern Standard Time');
+	});
+
+	// --- Timezone updates via onTimezoneChange ---
+
+	it('should update timezone on time signal via onTimezoneChange', () => {
+		component.onTimezoneChange(
+			{ offset: 'GMT-05:00', name: 'Eastern Standard Time' },
+			component.time,
+		);
+
+		expect(component.time().timezoneOffset).toBe('GMT-05:00');
+		expect(component.time().timezoneName).toBe('Eastern Standard Time');
+	});
+
+	it('should update timezone on endTime signal via onTimezoneChange', () => {
+		component.onTimezoneChange(
+			{ offset: 'GMT+09:00', name: 'Japan Standard Time' },
+			component.endTime,
+		);
+
+		expect(component.endTime().timezoneOffset).toBe('GMT+09:00');
+		expect(component.endTime().timezoneName).toBe('Japan Standard Time');
 	});
 
 	// --- Date range toggle ---
@@ -279,86 +296,6 @@ describe('EditDateTimeComponent', () => {
 		component.onQualifierChange(DateQualifier.Unknown);
 
 		expect(component.edtfValue()).toBe('2026-02-18');
-	});
-
-	// --- Timezone dropdown ---
-
-	it('should open timezone dropdown', () => {
-		expect(component.activeOverlay()).toBeNull();
-		component.toggleOverlay('timezoneDropdown');
-
-		expect(component.activeOverlay()).toBe('timezoneDropdown');
-	});
-
-	it('should close timezone dropdown on second toggle', () => {
-		component.toggleOverlay('timezoneDropdown');
-		component.toggleOverlay('timezoneDropdown');
-
-		expect(component.activeOverlay()).toBeNull();
-	});
-
-	it('should close end timezone dropdown when opening start timezone dropdown', () => {
-		component.activeOverlay.set('endTimezoneDropdown');
-		component.toggleOverlay('timezoneDropdown');
-
-		expect(component.activeOverlay()).toBe('timezoneDropdown');
-	});
-
-	it('should close start timezone dropdown when opening end timezone dropdown', () => {
-		component.activeOverlay.set('timezoneDropdown');
-		component.toggleOverlay('endTimezoneDropdown');
-
-		expect(component.activeOverlay()).toBe('endTimezoneDropdown');
-	});
-
-	it('should reset filter when toggling timezone dropdown', () => {
-		component.timezoneFilter.set('pacific');
-		component.toggleOverlay('timezoneDropdown');
-
-		expect(component.timezoneFilter()).toBe('');
-	});
-
-	it('should select a timezone and update time signal', () => {
-		const tz = { offset: 'GMT-05:00', name: 'Eastern Standard Time' };
-		component.selectTimezone(tz, component.time);
-
-		expect(component.time().timezoneOffset).toBe('GMT-05:00');
-		expect(component.time().timezoneName).toBe('Eastern Standard Time');
-		expect(component.activeOverlay()).toBeNull();
-		expect(component.timezoneFilter()).toBe('');
-	});
-
-	it('should select an end timezone and update endTime signal', () => {
-		const tz = { offset: 'GMT+09:00', name: 'Japan Standard Time' };
-		component.selectTimezone(tz, component.endTime);
-
-		expect(component.endTime().timezoneOffset).toBe('GMT+09:00');
-		expect(component.endTime().timezoneName).toBe('Japan Standard Time');
-		expect(component.activeOverlay()).toBeNull();
-	});
-
-	it('should filter timezones by name', () => {
-		component.timezoneFilter.set('pacific');
-		const filtered = component.filteredTimezones();
-
-		expect(filtered.length).toBeGreaterThan(0);
-		expect(
-			filtered.every((tz) => tz.name.toLowerCase().includes('pacific')),
-		).toBeTrue();
-	});
-
-	it('should filter timezones by offset', () => {
-		component.timezoneFilter.set('GMT+09');
-		const filtered = component.filteredTimezones();
-
-		expect(filtered.length).toBeGreaterThan(0);
-		expect(filtered.every((tz) => tz.offset.includes('GMT+09'))).toBeTrue();
-	});
-
-	it('should return all timezones when filter is empty', () => {
-		component.timezoneFilter.set('');
-
-		expect(component.filteredTimezones().length).toBe(TIMEZONES.length);
 	});
 
 	// --- Dialog actions ---
