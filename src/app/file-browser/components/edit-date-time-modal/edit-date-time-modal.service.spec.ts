@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { DialogRef } from '@angular/cdk/dialog';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { EditDateTimeService } from './edit-date-time.service';
-import { EditDateTimeComponent } from './edit-date-time.component';
+import { EditDateTimeModalService } from './edit-date-time-modal.service';
+import { EditDateTimeModalComponent } from './edit-date-time-modal.component';
 import { EditDateModel, Meridian } from './edit-date-time.model';
 
-describe('EditDateTimeService', () => {
-	let service: EditDateTimeService;
+describe('EditDateTimeModalService', () => {
+	let service: EditDateTimeModalService;
 	let dialogCdkServiceSpy: jasmine.SpyObj<DialogCdkService>;
 	let mockDialogRef: jasmine.SpyObj<
-		DialogRef<EditDateModel, EditDateTimeComponent>
+		DialogRef<EditDateModel, EditDateTimeModalComponent>
 	>;
 
 	const mockData: EditDateModel = {
@@ -32,27 +32,27 @@ describe('EditDateTimeService', () => {
 
 		TestBed.configureTestingModule({
 			providers: [
-				EditDateTimeService,
+				EditDateTimeModalService,
 				{ provide: DialogCdkService, useValue: dialogCdkServiceSpy },
 			],
 		});
 
-		service = TestBed.inject(EditDateTimeService);
+		service = TestBed.inject(EditDateTimeModalService);
 	});
 
 	it('should be created', () => {
 		expect(service).toBeTruthy();
 	});
 
-	it('should open EditDateTimeComponent via DialogCdkService', () => {
+	it('should open EditDateTimeModalComponent via DialogCdkService', () => {
 		service.open(mockData);
 
 		expect(dialogCdkServiceSpy.open).toHaveBeenCalledWith(
-			EditDateTimeComponent,
+			EditDateTimeModalComponent,
 			jasmine.objectContaining({
 				data: mockData,
 				hasBackdrop: true,
-				panelClass: 'edit-date-time-dialog-panel',
+				panelClass: 'edit-date-time-modal-dialog-panel',
 			}),
 		);
 	});
