@@ -272,6 +272,15 @@ export class ArchiveRepo extends BaseRepo {
 		).toPromise();
 	}
 
+	public async patchArchive(
+		archiveId: string,
+		updatedValues: Partial<Pick<ArchiveVO, 'milestoneSortOrder'>>,
+	): Promise<void> {
+		await this.httpV2
+			.patch(`v2/archive/${archiveId}`, updatedValues)
+			.toPromise();
+	}
+
 	public async getPublicArchiveTags(archiveId: string) {
 		return await this.httpV2
 			.get<TagVOData>(`v2/archive/${archiveId}/tags/public`)

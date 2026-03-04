@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
-import { ArchiveType } from '@models/archive-vo';
+import { ArchiveType, MilestoneSortOrder } from '@models/archive-vo';
 import { Observable } from 'rxjs';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -17,6 +17,7 @@ export class PublicSettingsComponent implements OnInit {
 	@Input() public archive: ArchiveVO;
 	public updating: boolean = false;
 	public allowDownloadsToggle: number = 0;
+	public milestoneSortOrder: MilestoneSortOrder = 'reverse_chronological';
 	public supportLink: string =
 		'https://permanent.zohodesk.com/portal/en/newticket';
 
@@ -47,10 +48,29 @@ export class PublicSettingsComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.allowDownloadsToggle = +this.archive.allowPublicDownload;
+		this.milestoneSortOrder =
+			this.archive.milestoneSortOrder ?? 'reverse_chronological';
 		this.archiveType =
 			this.archive.type === 'type.archive.family'
 				? 'type.archive.group'
 				: this.archive.type;
+	}
+
+	public async onMilestoneSortOrderChange() {
+		const previousOrder =
+			this.archive.milestoneSortOrder ?? 'reverse_chronological';
+		this.updating = true;
+		try {
+			await this.api.archive.patchArchive(this.archive.archiveId, {
+				milestoneSortOrder: this.milestoneSortOrder,
+			});
+			this.archive.milestoneSortOrder = this.milestoneSortOrder;
+		} catch (err) {
+			this.milestoneSortOrder = previousOrder;
+			this.msg.showError({ message: err.error?.message, translate: true });
+		} finally {
+			this.updating = false;
+		}
 	}
 
 	public async onAllowDownloadsChange() {

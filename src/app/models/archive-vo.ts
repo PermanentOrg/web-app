@@ -5,6 +5,8 @@ import { DataStatus } from '@models/data-status.enum';
 import { AccessRoleType } from './access-role';
 import { ItemVO } from '.';
 
+export type MilestoneSortOrder = 'chronological' | 'reverse_chronological';
+
 export type ArchiveType =
 	| 'type.archive.person'
 	| 'type.archive.group'
@@ -43,6 +45,7 @@ export class ArchiveVO extends BaseVO implements DynamicListChild {
 	public allowPublicDownload: boolean;
 	public payerAccountId: string;
 	public public: number;
+	public milestoneSortOrder: MilestoneSortOrder;
 
 	constructor(voData: any) {
 		super(voData);
