@@ -17,6 +17,8 @@ export class PublicSettingsComponent implements OnInit {
 	@Input() public archive: ArchiveVO;
 	public updating: boolean = false;
 	public allowDownloadsToggle: number = 0;
+	public milestoneSortOrder: 'chronological' | 'reverse_chronological' =
+		'reverse_chronological';
 	public supportLink: string =
 		'https://permanent.zohodesk.com/portal/en/newticket';
 
@@ -47,10 +49,27 @@ export class PublicSettingsComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.allowDownloadsToggle = +this.archive.allowPublicDownload;
+		this.milestoneSortOrder =
+			this.archive.milestoneSortOrder ?? 'reverse_chronological';
 		this.archiveType =
 			this.archive.type === 'type.archive.family'
 				? 'type.archive.group'
 				: this.archive.type;
+	}
+
+	public async onMilestoneSortOrderChange() {
+		this.archive.milestoneSortOrder = this.milestoneSortOrder;
+		this.updating = true;
+		try {
+			await this.api.archive.patchArchive(
+				this.archive.archiveId,
+				this.milestoneSortOrder,
+			);
+		} catch (err) {
+			this.msg.showError({ message: err.error?.message, translate: true });
+		} finally {
+			this.updating = false;
+		}
 	}
 
 	public async onAllowDownloadsChange() {
