@@ -52,6 +52,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
 	canEdit: boolean;
 	loading = true;
+	isSavingMilestoneOrder = false;
 
 	isPublic = true;
 
@@ -253,6 +254,23 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 		} finally {
 			this.updateProgress();
 			this.trackProfileEdit(item);
+		}
+	}
+
+	async toggleMilestoneOrder(): Promise<void> {
+		if (!this.archive || this.isSavingMilestoneOrder) return;
+
+		const newOrder =
+			this.archive.milestoneSortOrder === 'chronological'
+				? 'reverse_chronological'
+				: 'chronological';
+
+		this.isSavingMilestoneOrder = true;
+		try {
+			await this.api.archive.patchArchive(this.archive.archiveId, newOrder);
+			this.archive.milestoneSortOrder = newOrder;
+		} finally {
+			this.isSavingMilestoneOrder = false;
 		}
 	}
 
