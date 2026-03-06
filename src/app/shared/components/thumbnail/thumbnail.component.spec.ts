@@ -45,6 +45,7 @@ class TestImage {
 const baseImageUrl = 'https://placehold.co';
 
 const image200 = `${baseImageUrl}/200`;
+const image256 = `${baseImageUrl}/256`;
 const image500 = `${baseImageUrl}/500`;
 const image1000 = `${baseImageUrl}/1000`;
 const image2000 = `${baseImageUrl}/2000`;
@@ -73,6 +74,19 @@ const fullItem = new RecordVO(
 	{ dataStatus: DataStatus.Full },
 );
 
+const fullItemWith256 = new RecordVO(
+	{
+		folder_linkId: 3,
+		thumbURL200: image200,
+		thumbnail256: image256,
+		thumbURL500: image500,
+		thumbURL1000: image1000,
+		thumbURL2000: image2000,
+		type: 'type.record.image',
+	},
+	{ dataStatus: DataStatus.Full },
+);
+
 const fullItem2 = new RecordVO(
 	{
 		folder_linkId: 2,
@@ -86,13 +100,12 @@ const fullItem2 = new RecordVO(
 @Component({
 	selector: 'pr-thumbnail-test-host',
 	template: `<div [style.width]="width" [style.height]="height">
-		<pr-thumbnail [item]="item" [maxWidth]="maxWidth"></pr-thumbnail>
+		<pr-thumbnail [item]="item"></pr-thumbnail>
 	</div>`,
 	standalone: false,
 })
 class ThumbnailTestHostComponent {
 	item: ItemVO = minItem;
-	maxWidth: number | undefined;
 	width: string = '200px';
 	height: string = '200px';
 }
@@ -104,7 +117,6 @@ describe('ThumbnailComponent', () => {
 
 	beforeEach(async () => {
 		TestImage.testError = false;
-		window.devicePixelRatio = 1;
 
 		await TestBed.configureTestingModule({
 			imports: [FontAwesomeModule],
@@ -127,29 +139,14 @@ describe('ThumbnailComponent', () => {
 			fixture.debugElement.children[0].children[0].componentInstance;
 	});
 
-	function setItem(item: ItemVO, size: number = 200, maxWidth?: number) {
+	function setItem(item: ItemVO) {
 		hostComponent.item = item.isFolder
 			? new FolderVO(item)
 			: new RecordVO(item);
-		hostComponent.width = `${size}px`;
-		hostComponent.height = `${size}px`;
-		hostComponent.maxWidth = maxWidth;
-
-		// Mock the clientWidth since it's 0 in headless test environments
-		const thumbnailElement =
-			fixture.debugElement.children[0].children[0].nativeElement;
-		Object.defineProperty(thumbnailElement, 'clientWidth', {
-			get: () => size,
-			configurable: true,
-		});
-
-		// Update dpiScale based on current devicePixelRatio (it's cached in constructor)
-		(thumbnailComponent as any).dpiScale =
-			window?.devicePixelRatio > 1.75 ? 2 : 1;
 
 		fixture.detectChanges();
 
-		// Force recalculation after mocking clientWidth
+		// Force recalculation
 		thumbnailComponent.resetImage();
 
 		// Update the view with the new state (isZip, etc.)
@@ -160,68 +157,40 @@ describe('ThumbnailComponent', () => {
 		expect(thumbnailComponent).toBeTruthy();
 	});
 
-	it('should use image 200 if item is lean at any DPI and width', async () => {
+	it('should use image 200 if item is lean (only has thumbURL200)', async () => {
 		setItem(leanItem);
 
 		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
 	});
 
-	it('should use image 200 for low DPI at width 100', async () => {
-		setItem(fullItem, 100);
+	it('should use image 500 for fullItem (no thumbnail256, prefers 500 over 200)', async () => {
+		setItem(fullItem);
 
-		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(200);
-		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
-	});
-
-	it('should use image 200 for high DPI at width 100', async () => {
-		window.devicePixelRatio = 2;
-		setItem(fullItem, 100);
-
-		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(200);
-		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
-	});
-
-	it('should use image 200 for low DPI at width 200', async () => {
-		setItem(fullItem, 200);
-
-		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(200);
-		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
-	});
-
-	it('should use image 500 for high DPI at width 200', async () => {
-		window.devicePixelRatio = 2;
-		setItem(fullItem, 200);
-
-		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(500);
 		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image500);
 	});
 
-	it('should use the maximum image size if there is no bigger thumbnail', async () => {
-		window.devicePixelRatio = 10000;
-		setItem(fullItem, 10000);
+	it('should prefer thumbnail256 when available', async () => {
+		setItem(fullItemWith256);
 
-		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(2000);
-		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image2000);
+		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(256);
+		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image256);
 	});
 
 	it('should use reset when changing records', async () => {
-		window.devicePixelRatio = 2;
-		setItem(fullItem, 200);
+		setItem(fullItem);
 
-		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(500);
 		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image500);
 
 		thumbnailComponent.item = fullItem2;
 		fixture.detectChanges();
 
-		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(500);
 		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(
 			fullItem2.thumbURL500,
 		);
 	});
 
 	it('should show a zip icon if the item is a .zip archive', async () => {
-		setItem(new RecordVO({ ...fullItem, type: 'type.record.archive' }), 200);
+		setItem(new RecordVO({ ...fullItem, type: 'type.record.archive' }));
 
 		const faIcons = fixture.nativeElement.querySelectorAll('fa-icon');
 		const visibleImages = fixture.nativeElement.querySelectorAll(
@@ -250,14 +219,6 @@ describe('ThumbnailComponent', () => {
 		expect(folderIcons.length).toBeGreaterThan(0);
 	});
 
-	it('can have a maximum width set', async () => {
-		window.devicePixelRatio = 2;
-		setItem(fullItem, 10000, 200);
-
-		expect(thumbnailComponent.getTargetThumbWidth()).toEqual(200);
-		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image200);
-	});
-
 	it('should show set the background image after it loads', fakeAsync(() => {
 		setItem(fullItem);
 
@@ -269,7 +230,7 @@ describe('ThumbnailComponent', () => {
 			'.pr-thumbnail-image',
 		);
 
-		expect(thumbnailImage.style.backgroundImage).toContain(image200);
+		expect(thumbnailImage.style.backgroundImage).toContain(image500);
 	}));
 
 	it('should be able to handle an image erroring out', async () => {

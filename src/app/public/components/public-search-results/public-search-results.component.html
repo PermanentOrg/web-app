@@ -12,7 +12,7 @@
 			@for (result of searchResults; track result) {
 				<div class="result" (click)="onSearchResultClick(result)">
 					<div class="result-archive-image">
-						<img class="result-nav" src="{{ result.thumbURL200 }}" />
+						<img class="result-nav" [src]="result | getThumbnail" />
 					</div>
 					<div class="result-archive-info">
 						<div class="result-archive-type-container">
