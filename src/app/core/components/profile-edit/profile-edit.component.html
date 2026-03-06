@@ -472,8 +472,8 @@
 						<div class="profile-section">
 							<em
 								>Milestones capture any significant event in the history of this
-								archive. They are shown on the public profile. </em
-							>
+								archive. They are shown on the public profile.
+							</em>
 						</div>
 						<div class="profile-section">
 							@for (profileItem of profileItems.milestone; track profileItem) {
@@ -547,7 +547,9 @@
 											<pr-inline-value-edit
 												[alwaysShow]="true"
 												[maxLength]="200"
-												[emptyMessage]="'More details and information about this milestone'"
+												[emptyMessage]="
+													'More details and information about this milestone'
+												"
 												[displayValue]="profileItem.string2"
 												type="textarea"
 												(doneEditing)="

@@ -9,7 +9,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 import { EventService } from '@shared/services/event/event.service';
 import { CookieService } from 'ngx-cookie-service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { FolderVO } from '@models/index';
+import { ArchiveVO, FolderVO } from '@models/index';
 import { RecordVO } from '@models/record-vo';
 import { FolderResponse } from '@shared/services/api/folder.repo';
 import { ProfileEditComponent } from './profile-edit.component';
@@ -45,6 +45,11 @@ describe('ProfileEditComponent', () => {
 		folder: {
 			updateRoot: jasmine
 				.createSpy('updateRoot')
+				.and.returnValue(Promise.resolve()),
+		},
+		archive: {
+			patchArchive: jasmine
+				.createSpy('patchArchive')
 				.and.returnValue(Promise.resolve()),
 		},
 	};
@@ -152,5 +157,87 @@ describe('ProfileEditComponent', () => {
 		await component.chooseBannerPicture();
 
 		expect(component.publicRoot.thumbArchiveNbr).toBe(originalValue);
+	});
+
+	describe('toggleMilestoneOrder', () => {
+		beforeEach(() => {
+			mockApiService.archive.patchArchive.calls.reset();
+		});
+
+		it('should do nothing when archive is not set', async () => {
+			component.archive = undefined;
+
+			await component.toggleMilestoneOrder();
+
+			expect(mockApiService.archive.patchArchive).not.toHaveBeenCalled();
+		});
+
+		it('should do nothing when isSavingMilestoneOrder is true', async () => {
+			component.archive = new ArchiveVO({ archiveId: '123' });
+			component.isSavingMilestoneOrder = true;
+
+			await component.toggleMilestoneOrder();
+
+			expect(mockApiService.archive.patchArchive).not.toHaveBeenCalled();
+		});
+
+		it('should toggle from reverse_chronological to chronological', async () => {
+			component.archive = new ArchiveVO({
+				archiveId: '123',
+				milestoneSortOrder: 'reverse_chronological',
+			});
+
+			await component.toggleMilestoneOrder();
+
+			expect(mockApiService.archive.patchArchive).toHaveBeenCalledWith(
+				'123',
+				'chronological',
+			);
+
+   expect(component.archive.milestoneSortOrder).toBe('chronological');
+		});
+
+		it('should toggle from chronological to reverse_chronological', async () => {
+			component.archive = new ArchiveVO({
+				archiveId: '456',
+				milestoneSortOrder: 'chronological',
+			});
+
+			await component.toggleMilestoneOrder();
+
+			expect(mockApiService.archive.patchArchive).toHaveBeenCalledWith(
+				'456',
+				'reverse_chronological',
+			);
+
+   expect(component.archive.milestoneSortOrder).toBe(
+				'reverse_chronological',
+			);
+		});
+
+		it('should default to reverse_chronological when milestoneSortOrder is not set', async () => {
+			component.archive = new ArchiveVO({ archiveId: '789' });
+
+			await component.toggleMilestoneOrder();
+
+			expect(mockApiService.archive.patchArchive).toHaveBeenCalledWith(
+				'789',
+				'chronological',
+			);
+		});
+
+		it('should set isSavingMilestoneOrder to true while saving and reset to false after', async () => {
+			let savedWhileSaving: boolean;
+			mockApiService.archive.patchArchive.and.callFake(async () => {
+				savedWhileSaving = component.isSavingMilestoneOrder;
+				return await Promise.resolve();
+			});
+			component.archive = new ArchiveVO({ archiveId: '999' });
+
+			await component.toggleMilestoneOrder();
+
+			expect(savedWhileSaving).toBeTrue();
+			expect(component.isSavingMilestoneOrder).toBeFalse();
+		});
 	});
 });
