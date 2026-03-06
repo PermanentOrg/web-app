@@ -455,12 +455,25 @@
 						</div>
 						<div class="profile-section-header" prScrollSection="milestones">
 							Milestones
+							@if (canEdit) {
+								<button
+									class="btn btn-alternate"
+									[disabled]="isSavingMilestoneOrder"
+									(click)="toggleMilestoneOrder()"
+								>
+									{{
+										archive?.milestoneSortOrder === 'chronological'
+											? 'Reorder to show newest first'
+											: 'Reorder to show oldest first'
+									}}
+								</button>
+							}
 						</div>
 						<div class="profile-section">
 							<em
 								>Milestones capture any significant event in the history of this
-								archive, and are ordered from most recent to least recent.</em
-							>
+								archive. They are shown on the public profile.
+							</em>
 						</div>
 						<div class="profile-section">
 							@for (profileItem of profileItems.milestone; track profileItem) {
@@ -534,7 +547,9 @@
 											<pr-inline-value-edit
 												[alwaysShow]="true"
 												[maxLength]="200"
-												[emptyMessage]="'More details and information about this milestone'"
+												[emptyMessage]="
+													'More details and information about this milestone'
+												"
 												[displayValue]="profileItem.string2"
 												type="textarea"
 												(doneEditing)="
