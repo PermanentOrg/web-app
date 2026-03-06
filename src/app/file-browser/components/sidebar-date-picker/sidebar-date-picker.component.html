@@ -1,0 +1,80 @@
+<div class="pr-sidebar-date-picker" #sidebarDatePickerContainer>
+	<div class="pr-sidebar-date-picker-header">
+		<span class="pr-sidebar-date-picker-label">Date</span>
+		@if (activeQualifiers().length) {
+			<span class="pr-sidebar-date-picker-qualifiers">
+				&middot; {{ activeQualifiers().join(', ') }}:
+			</span>
+		}
+	</div>
+
+	<div
+		class="pr-sidebar-date-picker-row"
+		[class.can-edit]="!disabled"
+		(click)="toggle()"
+	>
+		<span class="pr-sidebar-date-picker-row-label">From</span>
+		@if (formattedFromDate()) {
+			<span class="pr-sidebar-date-picker-row-value">
+				{{ formattedFromDate() }}
+			</span>
+		} @else {
+			<span class="pr-sidebar-date-picker-row-placeholder">
+				{{ disabled ? 'No date' : 'Click to add date' }}
+			</span>
+		}
+		@if (!disabled) {
+			<span class="pr-sidebar-date-picker-edit-icon">
+				<i class="material-icons">edit</i>
+			</span>
+		}
+	</div>
+
+	@if (formattedToDate()) {
+		<div class="pr-sidebar-date-picker-row pr-sidebar-date-picker-to-row">
+			<span class="pr-sidebar-date-picker-row-label">To</span>
+			<span class="pr-sidebar-date-picker-row-value">
+				{{ formattedToDate() }}
+			</span>
+		</div>
+	}
+
+	@if (isOpen()) {
+		<div
+			class="pr-sidebar-date-picker-panel"
+			(click)="$event.stopPropagation()"
+		>
+			<div class="pr-sidebar-date-picker-fields">
+				<pr-datepicker-input
+					[date]="_date()"
+					(dateChange)="onDateChange($event)"
+				/>
+
+				<pr-timepicker-input
+					[time]="_time()"
+					(timeChange)="onTimeChange($event)"
+				/>
+
+				<pr-timezone-dropdown
+					[selectedOffset]="_time().timezoneOffset"
+					[selectedName]="_time().timezoneName"
+					(timezoneChange)="onTimezoneChange($event)"
+				/>
+			</div>
+
+			<div class="pr-sidebar-date-picker-footer">
+				<button class="pr-more-options-btn" (click)="onMoreOptions()">
+					<i class="material-icons">tune</i>
+					<span>More options</span>
+				</button>
+
+				<div class="pr-sidebar-date-picker-actions">
+					<button class="pr-btn-cancel" (click)="onCancel()">Cancel</button>
+					<button class="pr-btn-save" (click)="onSave()">
+						<i class="material-icons">keyboard_return</i>
+					</button>
+				</div>
+			</div>
+		</div>
+	}
+</div>
