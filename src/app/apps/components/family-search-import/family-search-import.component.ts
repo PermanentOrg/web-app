@@ -27,7 +27,7 @@ interface FamilySearchPersonI {
 	standalone: false,
 })
 export class FamilySearchImportComponent {
-	public stage: 'people' | 'memories' | 'importing' = 'people';
+	public stage: 'people' | 'confirm' | 'memories' | 'importing' = 'people';
 	public importMemories = 'yes';
 	public familyMembers: FamilySearchPersonI[] = [];
 	public currentUser: FamilySearchPersonI;
@@ -144,7 +144,22 @@ export class FamilySearchImportComponent {
 	}
 
 	getSelectedCount() {
-		return this.familyMembers.filter((person) => person.isSelected).length;
+		return this.getSelectedMembers().length;
+	}
+
+	getSelectedMembers() {
+		return this.familyMembers.filter((person) => person.isSelected);
+	}
+
+	getReimportedMembers() {
+		return this.getSelectedMembers().filter((person) => person.permExists);
+	}
+
+	goToNextFromPeople() {
+		const hasReimports = this.getSelectedMembers().some(
+			(person) => person.permExists,
+		);
+		this.stage = hasReimports ? 'confirm' : 'memories';
 	}
 
 	getRelationshipFromAncestryNumber(ancestryNumber: number) {
