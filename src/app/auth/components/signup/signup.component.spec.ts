@@ -18,11 +18,13 @@ import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
+import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 
 describe('SignupComponent', () => {
 	let component: SignupComponent;
 	let fixture: ComponentFixture<SignupComponent>;
 	let accountService: AccountService;
+	let onboardingService: OnboardingService;
 
 	beforeEach(async () => {
 		TestBed.configureTestingModule({
@@ -33,6 +35,7 @@ describe('SignupComponent', () => {
 				MessageService,
 				ApiService,
 				AccountService,
+				OnboardingService,
 				{
 					provide: ActivatedRoute,
 					useValue: {
@@ -54,6 +57,7 @@ describe('SignupComponent', () => {
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 		accountService = TestBed.inject(AccountService);
+		onboardingService = TestBed.inject(OnboardingService);
 	});
 
 	it('should create', () => {
@@ -175,6 +179,24 @@ describe('SignupComponent', () => {
 		const loadingSpinner = compiled.querySelector('pr-loading-spinner');
 
 		expect(loadingSpinner).toBeTruthy();
+	});
+
+	it('should reset onboarding session state when onSubmit is called', () => {
+		spyOn(onboardingService, 'resetSessionState');
+
+		spyOn(accountService, 'signUp').and.returnValue(
+			Promise.resolve(new AccountVO({})),
+		);
+
+		component.onSubmit({
+			email: 'test@example.com',
+			name: 'Test User',
+			password: 'password123',
+			confirm: 'password123',
+			invitation: '',
+		});
+
+		expect(onboardingService.resetSessionState).toHaveBeenCalled();
 	});
 
 	it('should pass receiveUpdatesViaEmail to signUp correctly', () => {
