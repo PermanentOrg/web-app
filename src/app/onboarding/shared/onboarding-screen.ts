@@ -1,3 +1,12 @@
+export type NewArchiveScreen =
+	| 'goals'
+	| 'reasons'
+	| 'create'
+	| 'start'
+	| 'name-archive'
+	| 'create-archive-for-me'
+	| 'finalize';
+
 export enum OnboardingScreen {
 	welcomeScreen = 'welcomeScreen',
 	goals = 'goals',
