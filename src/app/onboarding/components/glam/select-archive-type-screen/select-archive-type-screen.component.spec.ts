@@ -1,17 +1,24 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { OnboardingService } from '../../../services/onboarding.service';
 import { SelectArchiveTypeScreenComponent } from './select-archive-type-screen.component';
 
 describe('SelectArchiveTypeScreenComponent', () => {
 	let component: SelectArchiveTypeScreenComponent;
 	let fixture: ComponentFixture<SelectArchiveTypeScreenComponent>;
+	let onboardingService: OnboardingService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			declarations: [SelectArchiveTypeScreenComponent],
+			providers: [OnboardingService],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
+
+		onboardingService = TestBed.inject(OnboardingService);
+		spyOn(onboardingService, 'getArchiveTypeTag').and.returnValue(null);
+		spyOn(onboardingService, 'getArchiveType').and.returnValue(null);
 
 		fixture = TestBed.createComponent(SelectArchiveTypeScreenComponent);
 		component = fixture.componentInstance;
@@ -83,7 +90,9 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	});
 
 	it('should set buttonText correctly in ngOnInit if tag is defined', () => {
-		// Create a new fixture to test with tag input
+		(onboardingService.getArchiveTypeTag as jasmine.Spy).and.returnValue(null);
+		(onboardingService.getArchiveType as jasmine.Spy).and.returnValue(null);
+
 		const testFixture = TestBed.createComponent(
 			SelectArchiveTypeScreenComponent,
 		);

@@ -49,12 +49,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	let onboardingService: OnboardingService;
 
 	afterEach(() => {
-		sessionStorage.removeItem('archiveName');
-		sessionStorage.removeItem('archiveType');
-		sessionStorage.removeItem('archiveTypeTag');
-		sessionStorage.removeItem('goals');
-		sessionStorage.removeItem('reasons');
-		sessionStorage.removeItem('onboardingScreen');
+		sessionStorage.clear();
 	});
 
 	beforeEach(async () => {

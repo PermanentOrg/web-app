@@ -39,7 +39,7 @@ export class NameArchiveScreenComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		const storageName = sessionStorage.getItem('archiveName');
+		const storageName = this.onboardingService.getArchiveName();
 		if (storageName) {
 			this.name = storageName;
 		}
@@ -48,7 +48,7 @@ export class NameArchiveScreenComponent implements OnInit, OnDestroy {
 		this.nameSubscription = this.nameForm
 			.get('archiveName')
 			.valueChanges.subscribe((value) => {
-				sessionStorage.setItem('archiveName', value);
+				this.onboardingService.setArchiveName(value);
 			});
 	}
 
