@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { goals } from '../../../shared/onboarding-screen';
+import { OnboardingService } from '../../../services/onboarding.service';
 
 interface OutputModel {
 	screen: string;
@@ -17,14 +18,14 @@ export class GlamGoalsScreenComponent implements OnInit {
 	@Input() selectedGoals: string[] = [];
 	@Output() goalsOutput = new EventEmitter<OutputModel>();
 
-	constructor() {
+	constructor(private onboardingService: OnboardingService) {
 		this.goals = goals;
 	}
 
 	ngOnInit(): void {
-		const storageGoals = sessionStorage.getItem('goals');
-		if (storageGoals) {
-			this.selectedGoals = JSON.parse(storageGoals);
+		const storageGoals = this.onboardingService.getGoals();
+		if (storageGoals.length) {
+			this.selectedGoals = storageGoals;
 		}
 	}
 
@@ -47,12 +48,12 @@ export class GlamGoalsScreenComponent implements OnInit {
 		} else {
 			this.selectedGoals.push(goal);
 		}
-		sessionStorage.setItem('goals', JSON.stringify(this.selectedGoals));
+		this.onboardingService.setGoals(this.selectedGoals);
 	}
 
 	public skipStep(): void {
 		this.selectedGoals = [];
-		sessionStorage.setItem('goals', JSON.stringify([]));
+		this.onboardingService.setGoals([]);
 		this.goalsOutput.emit({
 			screen: 'reasons',
 			goals: [],

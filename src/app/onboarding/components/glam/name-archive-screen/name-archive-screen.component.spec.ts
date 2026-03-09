@@ -8,7 +8,7 @@ import { NameArchiveScreenComponent } from './name-archive-screen.component';
 describe('NameArchiveScreenComponent', () => {
 	let component: NameArchiveScreenComponent;
 	let fixture: ComponentFixture<NameArchiveScreenComponent>;
-	const mockSessionStorage: { [key: string]: string } = {};
+	let onboardingService: OnboardingService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
@@ -18,22 +18,9 @@ describe('NameArchiveScreenComponent', () => {
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 
-		spyOn(sessionStorage, 'getItem').and.callFake(
-			(key: string) => mockSessionStorage[key] || null,
-		);
-		spyOn(sessionStorage, 'setItem').and.callFake(
-			(key: string, value: string) => {
-				mockSessionStorage[key] = value;
-			},
-		);
-		spyOn(sessionStorage, 'removeItem').and.callFake((key: string) => {
-			delete mockSessionStorage[key];
-		});
-
-		// Clear the mock session storage before each test
-		Object.keys(mockSessionStorage).forEach(
-			(key) => delete mockSessionStorage[key],
-		);
+		onboardingService = TestBed.inject(OnboardingService);
+		spyOn(onboardingService, 'getArchiveName').and.returnValue(null);
+		spyOn(onboardingService, 'setArchiveName');
 
 		fixture = TestBed.createComponent(NameArchiveScreenComponent);
 		component = fixture.componentInstance;
@@ -50,7 +37,7 @@ describe('NameArchiveScreenComponent', () => {
 	});
 
 	it('should patch the form value with input name on init', async () => {
-		// Create a new fixture to test with different input
+		(onboardingService.getArchiveName as jasmine.Spy).and.returnValue(null);
 		const testFixture = TestBed.createComponent(NameArchiveScreenComponent);
 		const testComponent = testFixture.componentInstance;
 		testComponent.name = 'Test Archive';
@@ -124,10 +111,11 @@ describe('NameArchiveScreenComponent', () => {
 		expect(component.createArchive).toHaveBeenCalled();
 	});
 
-	it('should initialize archiveName from sessionStorage if available', async () => {
-		mockSessionStorage.archiveName = 'Stored Archive Name';
+	it('should initialize archiveName from OnboardingService if available', async () => {
+		(onboardingService.getArchiveName as jasmine.Spy).and.returnValue(
+			'Stored Archive Name',
+		);
 
-		// Create a new fixture to test with session storage value
 		const testFixture = TestBed.createComponent(NameArchiveScreenComponent);
 		const testComponent = testFixture.componentInstance;
 		testFixture.detectChanges();
@@ -137,11 +125,10 @@ describe('NameArchiveScreenComponent', () => {
 		);
 	});
 
-	it('should update sessionStorage when archiveName value changes', () => {
+	it('should update OnboardingService when archiveName value changes', () => {
 		component.nameForm.controls.archiveName.setValue('Updated Archive Name');
 
-		expect(sessionStorage.setItem).toHaveBeenCalledWith(
-			'archiveName',
+		expect(onboardingService.setArchiveName).toHaveBeenCalledWith(
 			'Updated Archive Name',
 		);
 	});
