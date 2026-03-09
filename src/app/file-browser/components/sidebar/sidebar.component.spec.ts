@@ -4,8 +4,11 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
-import { of } from 'rxjs';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
+import { EditDateModel } from '../edit-date-time-modal/edit-date-time.model';
+import { Meridian } from '../edit-date-time-modal/edit-date-time.model';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -92,15 +95,10 @@ class MockSelectedItemPipe implements PipeTransform {
 	}
 }
 
+let selectedItemsSubject: BehaviorSubject<Set<any>>;
+
 const mockDataService = {
-	selectedItems$: () =>
-		of(
-			new Set([
-				new RecordVO({
-					accessRole: 'access.role.owner',
-				}),
-			]),
-		),
+	selectedItems$: () => selectedItemsSubject.asObservable(),
 	fetchFullItems: (_: any) => {},
 	currentFolder: {
 		type: 'folder',
@@ -109,6 +107,15 @@ const mockDataService = {
 
 const mockEditService = {
 	openLocationDialog: (_: any) => {},
+	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
+};
+
+let closedSubject: Subject<EditDateModel | undefined>;
+
+const mockModalService = {
+	open: (_data: EditDateModel) => ({
+		closed: closedSubject.asObservable(),
+	}),
 };
 
 class MockAccountService {
@@ -128,6 +135,16 @@ describe('SidebarComponent', () => {
 	let fixture: ComponentFixture<SidebarComponent>;
 
 	beforeEach(async () => {
+		closedSubject = new Subject<EditDateModel | undefined>();
+
+		selectedItemsSubject = new BehaviorSubject<Set<any>>(
+			new Set([
+				new RecordVO({
+					accessRole: 'access.role.owner',
+				}),
+			]),
+		);
+
 		await TestBed.configureTestingModule({
 			declarations: [
 				SidebarComponent,
@@ -157,6 +174,10 @@ describe('SidebarComponent', () => {
 				{
 					provide: AccountService,
 					useClass: MockAccountService,
+				},
+				{
+					provide: EditDateTimeModalService,
+					useValue: mockModalService,
 				},
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -332,6 +353,91 @@ describe('SidebarComponent', () => {
 			component.selectedItem = item;
 
 			expect(component.displayEndTime).toBe('');
+		});
+	});
+
+	describe('onDateMoreOptions', () => {
+		it('should open the edit date time modal with provided data', () => {
+			const openSpy = spyOn(mockModalService, 'open').and.callThrough();
+
+			const modalData: EditDateModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					amPm: Meridian.AM,
+					timezoneOffset: '',
+					timezoneName: '',
+				},
+			};
+
+			component.onDateMoreOptions(modalData);
+
+			expect(openSpy).toHaveBeenCalledWith(modalData);
+		});
+
+		it('should save displayDT when modal returns a result', () => {
+			const saveSpy = spyOn(
+				mockEditService,
+				'saveItemVoProperty',
+			).and.callThrough();
+
+			const modalData: EditDateModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					amPm: Meridian.AM,
+					timezoneOffset: '',
+					timezoneName: '',
+				},
+			};
+
+			component.onDateMoreOptions(modalData);
+
+			closedSubject.next({
+				date: { year: '2000', month: '03', day: '15' },
+				time: {
+					hours: '10',
+					minutes: '30',
+					seconds: '00',
+					amPm: Meridian.AM,
+					timezoneOffset: '',
+					timezoneName: '',
+				},
+			});
+
+			expect(saveSpy).toHaveBeenCalledWith(
+				component.selectedItem,
+				'displayDT',
+				jasmine.any(String),
+			);
+		});
+
+		it('should not save when modal is dismissed', () => {
+			const saveSpy = spyOn(
+				mockEditService,
+				'saveItemVoProperty',
+			).and.callThrough();
+
+			const modalData: EditDateModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					amPm: Meridian.AM,
+					timezoneOffset: '',
+					timezoneName: '',
+				},
+			};
+
+			component.onDateMoreOptions(modalData);
+			closedSubject.next(undefined);
+
+			expect(saveSpy).not.toHaveBeenCalled();
 		});
 	});
 });

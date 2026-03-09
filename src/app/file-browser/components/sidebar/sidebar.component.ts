@@ -13,6 +13,10 @@ import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
+import type { SaveDateResult } from '../sidebar-date-picker/sidebar-date-picker.component';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
+import { EditDateModel } from '../edit-date-time-modal/edit-date-time.model';
+import { EditDateTimeMappingService } from '../edit-date-time-modal/edit-date-time-mapping.service';
 
 type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
 @Component({
@@ -73,6 +77,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		private dataService: DataService,
 		private editService: EditService,
 		private accountService: AccountService,
+		private editDateTimeModalService: EditDateTimeModalService,
 		private cdr: ChangeDetectorRef,
 	) {
 		this.currentArchive = this.accountService.getArchive();
@@ -141,6 +146,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 					this.permanentFileExtension = '';
 					this.isRecord = !this.selectedItem.isFolder;
 				}
+
+				this.cdr.markForCheck();
 			}),
 		);
 	}
@@ -189,7 +196,45 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 
 	async onFinishEditing(property: KeysOfType<ItemVO, String>, value: string) {
 		this.editService.saveItemVoProperty(this.selectedItem, property, value);
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
+	}
+
+	async onDateSaved(result: SaveDateResult) {
+		this.editService.saveItemVoProperty(
+			this.selectedItem,
+			'displayDT',
+			result.displayDT,
+		);
+		if (result.displayEndDT !== undefined) {
+			this.editService.saveItemVoProperty(
+				this.selectedItem,
+				'displayEndDT',
+				result.displayEndDT,
+			);
+		}
+		this.cdr.markForCheck();
+	}
+
+	onDateMoreOptions(modalData: EditDateModel): void {
+		const dialogRef = this.editDateTimeModalService.open(modalData);
+
+		dialogRef.closed.subscribe((result) => {
+			if (result) {
+				const saveResult: SaveDateResult = {
+					displayDT: EditDateTimeMappingService.buildDisplayDT(
+						result.date,
+						result.time,
+					),
+					displayEndDT: result.endDate
+						? EditDateTimeMappingService.buildDisplayDT(
+								result.endDate,
+								result.endTime ?? result.time,
+							)
+						: null,
+				};
+				this.onDateSaved(saveResult);
+			}
+		});
 	}
 
 	onLocationClick() {
