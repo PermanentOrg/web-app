@@ -11,7 +11,7 @@
 				<div
 					class="banner-archive-thumb"
 					prBgImage
-					[bgSrc]="archive.thumbURL200"
+					[bgSrc]="archive | getThumbnail"
 					(click)="onArchiveThumbClick()"
 					[cover]="true"
 				></div>
