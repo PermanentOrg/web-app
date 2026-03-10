@@ -1,0 +1,56 @@
+<div class="pr-time-input-group">
+	<input
+		type="text"
+		class="pr-time-segment"
+		[value]="time.hours"
+		[disabled]="disabled"
+		(input)="updateTime($event, 'hours', minutesInput)"
+		placeholder="hh"
+		maxlength="2"
+	/>
+	<span class="pr-colon">:</span>
+	<input
+		#minutesInput
+		type="text"
+		class="pr-time-segment"
+		[value]="time.minutes"
+		[disabled]="disabled"
+		(input)="updateTime($event, 'minutes', secondsInput?.nativeElement)"
+		placeholder="mm"
+		maxlength="2"
+	/>
+	@if (showSeconds) {
+		<span class="pr-colon">:</span>
+		<input
+			#secondsInput
+			type="text"
+			class="pr-time-segment"
+			[value]="time.seconds"
+			[disabled]="disabled"
+			(input)="updateTime($event, 'seconds')"
+			placeholder="ss"
+			maxlength="2"
+		/>
+	}
+	<button class="pr-am-pm-toggle" [disabled]="disabled" (click)="toggleAmPm()">
+		{{ time.amPm }}
+	</button>
+	<span
+		class="pr-icon-button"
+		[class.disabled]="disabled"
+		(click)="toggleTimepicker()"
+	>
+		<i class="material-icons">access_time</i>
+	</span>
+</div>
+
+@if (showTimepicker()) {
+	<div class="pr-timepicker-dropdown">
+		<ngb-timepicker
+			[formControl]="timepickerControl"
+			[seconds]="showSeconds"
+			[meridian]="true"
+			[spinners]="true"
+		/>
+	</div>
+}
