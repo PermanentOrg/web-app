@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ArchiveVO } from '@models/index';
+import { StorageService } from '@shared/services/storage/storage.service';
 import { OnboardingTypes } from '../shared/onboarding-screen';
 import { OnboardingService } from './onboarding.service';
 
@@ -7,7 +8,9 @@ describe('OnboardingService', () => {
 	let service: OnboardingService;
 
 	beforeEach(() => {
-		TestBed.configureTestingModule({});
+		TestBed.configureTestingModule({
+			providers: [StorageService],
+		});
 		service = TestBed.inject(OnboardingService);
 	});
 
@@ -111,21 +114,21 @@ describe('OnboardingService', () => {
 
 	describe('clearOnboardingStorage', () => {
 		it('should clear all onboarding sessionStorage keys', () => {
-			const keys = [
-				'archiveName',
-				'archiveType',
-				'archiveTypeTag',
-				'goals',
-				'reasons',
-				'onboardingScreen',
-			];
-			keys.forEach((key) => sessionStorage.setItem(key, 'test-value'));
+			service.setArchiveName('test');
+			service.setArchiveType('type.archive.person');
+			service.setArchiveTypeTag(OnboardingTypes.myself);
+			service.setGoals(['goal:capture']);
+			service.setReasons(['why:safe']);
+			service.setOnboardingScreen('goals');
 
 			service.clearOnboardingStorage();
 
-			keys.forEach((key) => {
-				expect(sessionStorage.getItem(key)).toBeNull();
-			});
+			expect(service.getArchiveName()).toBeNull();
+			expect(service.getArchiveType()).toBeNull();
+			expect(service.getArchiveTypeTag()).toBeNull();
+			expect(service.getGoals()).toEqual([]);
+			expect(service.getReasons()).toEqual([]);
+			expect(service.getOnboardingScreen()).toBeNull();
 		});
 
 		it('should not clear unrelated sessionStorage keys', () => {
@@ -147,12 +150,12 @@ describe('OnboardingService', () => {
 
 	describe('resetOnboardingState', () => {
 		it('should clear sessionStorage and registered archives', () => {
-			sessionStorage.setItem('archiveName', 'test');
+			service.setArchiveName('test');
 			service.registerArchive(new ArchiveVO({ fullName: 'Test' }));
 
 			service.resetOnboardingState();
 
-			expect(sessionStorage.getItem('archiveName')).toBeNull();
+			expect(service.getArchiveName()).toBeNull();
 			expect(service.getFinalArchives().length).toBe(0);
 		});
 	});
