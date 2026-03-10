@@ -19,8 +19,6 @@ describe('GlamPendingArchivesComponent', () => {
 	let apiService: ApiService;
 
 	beforeEach(async () => {
-		onboardingService = new OnboardingService();
-
 		await TestBed.configureTestingModule({
 			declarations: [GlamPendingArchivesComponent],
 			providers: [
@@ -33,11 +31,12 @@ describe('GlamPendingArchivesComponent', () => {
 						},
 					},
 				},
-				{ provide: OnboardingService, useValue: onboardingService },
+				OnboardingService,
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 
+		onboardingService = TestBed.inject(OnboardingService);
 		apiService = TestBed.inject(ApiService);
 	});
 
