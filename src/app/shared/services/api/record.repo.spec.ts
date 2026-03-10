@@ -221,4 +221,90 @@ describe('RecordRepo', () => {
 			expect(result).toEqual([]);
 		});
 	});
+
+	describe('updateStelaRecord', () => {
+		let httpV2PatchSpy: jasmine.Spy;
+		let httpSendRequestPromiseSpy: jasmine.Spy;
+
+		const fakeStelaRecord = {
+			recordId: 42,
+			displayName: 'Test Record',
+			archiveNumber: 'arch-1',
+			displayDate: '2025-01-01',
+			folderLinkId: '1',
+			folderLinkType: 'type.folder_link.private',
+			parentFolderLinkId: '2',
+			thumbUrl200: '',
+			thumbUrl500: '',
+			thumbUrl1000: '',
+			thumbUrl2000: '',
+			location: null,
+			files: [],
+			createdAt: '2025-01-01',
+			updatedAt: '2025-01-01',
+			archive: { id: '1', name: 'Archive', thumbURL200: '' },
+			shares: null,
+			tags: null,
+		};
+
+		beforeEach(() => {
+			httpV2PatchSpy = spyOn(httpV2Service, 'patch');
+			httpSendRequestPromiseSpy = spyOn(httpService, 'sendRequestPromise');
+		});
+
+		it('should send a PATCH request with displayTimeInEDTF', async () => {
+			const recordVO = new RecordVO({
+				recordId: 42,
+				displayTimeInEDTF: '1985-05-20',
+			});
+
+			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+
+			const result = await repo.updateStelaRecord(recordVO);
+
+			expect(httpV2PatchSpy).toHaveBeenCalledWith('v2/records/42', {
+				displayTimeInEDTF: '1985-05-20',
+			});
+
+			expect(result).toBeInstanceOf(RecordResponse);
+		});
+
+		it('should look up recordId by archiveNbr when recordId is not available', async () => {
+			const recordVO = new RecordVO({
+				archiveNbr: 'archive-100',
+				displayTimeInEDTF: '2000-03',
+			});
+
+			httpSendRequestPromiseSpy.and.resolveTo({
+				getRecordVO: () => new RecordVO({ recordId: 99 }),
+			});
+			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+
+			await repo.updateStelaRecord(recordVO);
+
+			expect(httpSendRequestPromiseSpy).toHaveBeenCalledWith(
+				'/record/get',
+				[{ RecordVO: jasmine.objectContaining({ archiveNbr: 'archive-100' }) }],
+				jasmine.any(Object),
+			);
+
+			expect(httpV2PatchSpy).toHaveBeenCalledWith('v2/records/99', {
+				displayTimeInEDTF: '2000-03',
+			});
+		});
+
+		it('should return a RecordResponse with converted record data', async () => {
+			const recordVO = new RecordVO({
+				recordId: 42,
+				displayTimeInEDTF: '1985-05',
+			});
+
+			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+
+			const result = await repo.updateStelaRecord(recordVO);
+			const resultRecord = result.getRecordVO();
+
+			expect(resultRecord).toBeInstanceOf(RecordVO);
+		});
+	});
 });

@@ -662,4 +662,21 @@ export class EditService {
 				});
 		});
 	}
+
+	public async updateStelaRecord(record: RecordVO): Promise<void> {
+		const originalValue = record.displayTimeInEDTF;
+		try {
+			const response = await this.api.record.updateStelaRecord(record);
+			const updatedRecord = response.getRecordVO();
+			if (updatedRecord) {
+				record.update({
+					updatedDT: updatedRecord.updatedDT,
+				});
+			}
+		} catch (err) {
+			if (err instanceof RecordResponse) {
+				record.update({ displayTimeInEDTF: originalValue });
+			}
+		}
+	}
 }
