@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ArchiveVO } from '@models/index';
+import { StorageService } from '@shared/services/storage/storage.service';
 import { NewArchiveScreen, OnboardingTypes } from '../shared/onboarding-screen';
 
 const STORAGE_KEYS = {
@@ -17,6 +18,8 @@ const STORAGE_KEYS = {
 export class OnboardingService {
 	private onboardedArchives: ArchiveVO[] = [];
 
+	constructor(private storage: StorageService) {}
+
 	public registerArchive(archive: ArchiveVO): void {
 		this.onboardedArchives.push(archive);
 	}
@@ -26,66 +29,60 @@ export class OnboardingService {
 	}
 
 	public getArchiveName(): string | null {
-		return sessionStorage.getItem(STORAGE_KEYS.archiveName);
+		return this.storage.session.get(STORAGE_KEYS.archiveName) ?? null;
 	}
 
 	public setArchiveName(name: string): void {
-		sessionStorage.setItem(STORAGE_KEYS.archiveName, name);
+		this.storage.session.set(STORAGE_KEYS.archiveName, name);
 	}
 
 	public getArchiveType(): string | null {
-		return sessionStorage.getItem(STORAGE_KEYS.archiveType);
+		return this.storage.session.get(STORAGE_KEYS.archiveType) ?? null;
 	}
 
 	public setArchiveType(type: string): void {
-		sessionStorage.setItem(STORAGE_KEYS.archiveType, type);
+		this.storage.session.set(STORAGE_KEYS.archiveType, type);
 	}
 
 	public getArchiveTypeTag(): OnboardingTypes | null {
-		return sessionStorage.getItem(
-			STORAGE_KEYS.archiveTypeTag,
-		) as OnboardingTypes | null;
+		return this.storage.session.get(STORAGE_KEYS.archiveTypeTag) ?? null;
 	}
 
 	public setArchiveTypeTag(tag: OnboardingTypes): void {
-		sessionStorage.setItem(STORAGE_KEYS.archiveTypeTag, tag);
+		this.storage.session.set(STORAGE_KEYS.archiveTypeTag, tag);
 	}
 
 	public getGoals(): string[] {
-		const raw = sessionStorage.getItem(STORAGE_KEYS.goals);
-		return raw ? JSON.parse(raw) : [];
+		return this.storage.session.get(STORAGE_KEYS.goals) ?? [];
 	}
 
 	public setGoals(goals: string[]): void {
-		sessionStorage.setItem(STORAGE_KEYS.goals, JSON.stringify(goals));
+		this.storage.session.set(STORAGE_KEYS.goals, goals);
 	}
 
 	public getReasons(): string[] {
-		const raw = sessionStorage.getItem(STORAGE_KEYS.reasons);
-		return raw ? JSON.parse(raw) : [];
+		return this.storage.session.get(STORAGE_KEYS.reasons) ?? [];
 	}
 
 	public setReasons(reasons: string[]): void {
-		sessionStorage.setItem(STORAGE_KEYS.reasons, JSON.stringify(reasons));
+		this.storage.session.set(STORAGE_KEYS.reasons, reasons);
 	}
 
 	public getOnboardingScreen(): NewArchiveScreen | null {
-		return sessionStorage.getItem(
-			STORAGE_KEYS.onboardingScreen,
-		) as NewArchiveScreen | null;
+		return this.storage.session.get(STORAGE_KEYS.onboardingScreen) ?? null;
 	}
 
 	public setOnboardingScreen(screen: NewArchiveScreen): void {
-		sessionStorage.setItem(STORAGE_KEYS.onboardingScreen, screen);
+		this.storage.session.set(STORAGE_KEYS.onboardingScreen, screen);
 	}
 
 	public removeOnboardingScreen(): void {
-		sessionStorage.removeItem(STORAGE_KEYS.onboardingScreen);
+		this.storage.session.delete(STORAGE_KEYS.onboardingScreen);
 	}
 
 	public clearSessionStorage(): void {
 		Object.values(STORAGE_KEYS).forEach((key) =>
-			sessionStorage.removeItem(key),
+			this.storage.session.delete(key),
 		);
 	}
 
