@@ -1,4 +1,4 @@
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AccountService } from '@shared/services/account/account.service';
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { ArchiveType, ArchiveVO } from '@models/archive-vo';
@@ -6,9 +6,6 @@ import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
 import { AccountEventAction } from '@shared/services/event/event-types';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
-import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import {
 	reasons,
 	goals,
@@ -60,30 +57,19 @@ export class CreateNewArchiveComponent implements OnInit {
 		article: 'a',
 	};
 
-	public isGlam = false;
-
 	public name = '';
 
 	public buttonText = '';
-
-	skipOnboarding: Observable<{ name: string }>;
 
 	subscription: Subscription;
 
 	constructor(
 		private fb: UntypedFormBuilder,
 		private api: ApiService,
-		private dialog: DialogCdkService,
 		private accountService: AccountService,
 		private event: EventService,
 		private onboardingService: OnboardingService,
-		feature: FeatureFlagService,
 	) {
-		this.isGlam = feature.isEnabled('glam-onboarding');
-		if (!this.isGlam) {
-			this.screen = 'create';
-		}
-
 		const screen = this.onboardingService.getOnboardingScreen();
 		if (screen) {
 			this.screen = screen;
@@ -185,13 +171,11 @@ export class CreateNewArchiveComponent implements OnInit {
 			].filter((tag) => !!tag);
 
 			let createdArchive: ArchiveVO;
+			let acceptedPendingArchive = false;
 
 			try {
 				if (this.pendingArchive) {
-					if (!this.isGlam) {
-						await this.api.archive.accept(this.pendingArchive);
-					}
-					createdArchive = this.pendingArchive;
+					acceptedPendingArchive = true;
 				} else {
 					const response = await this.api.archive.create(archive);
 					createdArchive = response.getArchiveVO();
@@ -213,6 +197,11 @@ export class CreateNewArchiveComponent implements OnInit {
 
 			if (createdArchive) {
 				this.createdArchive.emit(createdArchive);
+			}
+			if (acceptedPendingArchive) {
+				this.createdArchive.emit(this.pendingArchive);
+			}
+			if (createdArchive || acceptedPendingArchive) {
 				this.onboardingService.clearOnboardingStorage();
 			}
 		} catch (error) {
@@ -235,25 +224,7 @@ export class CreateNewArchiveComponent implements OnInit {
 			entity: 'account',
 			action: 'skip_create_archive',
 		});
-		if (this.isGlam) {
-			this.screen = 'create-archive-for-me';
-		} else {
-			this.dialog
-				.open(SkipOnboardingDialogComponent, {
-					data: { skipOnboarding: this.skipOnboarding },
-					width: '600px',
-				})
-				.closed.subscribe((result: { action: string; name: string }) => {
-					if (result.action === 'confirm') {
-						this.name = result.name;
-						this.archiveType = 'type.archive.person';
-						this.archiveTypeTag = OnboardingTypes.myself;
-						this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
-						this.screen = 'goals';
-						this.progressUpdated.emit(1);
-					}
-				});
-		}
+		this.screen = 'create-archive-for-me';
 	}
 
 	public skipStep(): void {

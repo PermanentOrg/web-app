@@ -1,10 +1,4 @@
-import { Location } from '@angular/common';
-import {
-	ChangeDetectorRef,
-	Component,
-	HostBinding,
-	OnInit,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
@@ -13,7 +7,6 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { partition as lodashPartition } from 'lodash';
 import { EventService } from '@shared/services/event/event.service';
-import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 
 @Component({
 	selector: 'pr-onboarding',
@@ -34,25 +27,17 @@ export class OnboardingComponent implements OnInit {
 	public accountName: string = '';
 	public errorMessage: string = '';
 
-	public acceptedInvite: boolean = false;
-
-	public isGlam = false;
-
 	constructor(
 		route: ActivatedRoute,
-		private location: Location,
 		private router: Router,
 		private api: ApiService,
 		private account: AccountService,
 		private detector: ChangeDetectorRef,
 		private event: EventService,
-		feature: FeatureFlagService,
 	) {
 		if (route.snapshot.data.onboardingScreen) {
 			this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
 		}
-
-		this.isGlam = feature.isEnabled('glam-onboarding');
 	}
 
 	ngOnInit(): void {
@@ -76,26 +61,17 @@ export class OnboardingComponent implements OnInit {
 		});
 	}
 
-	@HostBinding('class.glam') get glamClass() {
-		return this.isGlam;
-	}
-
 	public setScreen(screen: OnboardingScreen): void {
 		this.screen = screen;
 		if (this.selectedPendingArchive) {
 			this.selectedPendingArchive = null;
 		}
 		if (screen === OnboardingScreen.done) {
-			if (!this.isGlam && this.acceptedInvite) {
-				this.router.navigate(['/app', 'welcome-invitation']);
-			}
 			if (localStorage.getItem('shareToken')) {
 				localStorage.removeItem('shareToken');
 				this.router.navigate(['/app', 'shares']);
-			} else if (this.isGlam) {
-				this.router.navigate(['/app']);
 			} else {
-				this.router.navigate(['/app', 'welcome']);
+				this.router.navigate(['/app']);
 			}
 		}
 	}
@@ -108,9 +84,6 @@ export class OnboardingComponent implements OnInit {
 		this.account.updateAccount(updateAccount).then(() => {
 			this.account.setArchive(archive);
 			this.api.archive.change(archive).then(() => {
-				if (this.selectedPendingArchive) {
-					this.acceptedInvite = true;
-				}
 				this.setScreen(OnboardingScreen.done);
 			});
 		});
@@ -131,8 +104,7 @@ export class OnboardingComponent implements OnInit {
 	public getProgressChunkClasses(num: number) {
 		return {
 			'progress-chunk': true,
-			completed: this.progress >= num && !this.isGlam,
-			'completed-glam': this.progress >= num && this.isGlam,
+			completed: this.progress >= num,
 		};
 	}
 
