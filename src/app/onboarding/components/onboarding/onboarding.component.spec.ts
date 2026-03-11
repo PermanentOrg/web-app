@@ -12,9 +12,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { EventService } from '@shared/services/event/event.service';
 import { MobileBannerComponent } from '@shared/components/mobile-banner/mobile-banner.component';
 import { PromptComponent } from '@shared/components/prompt/prompt.component';
-import { OnboardingHeaderComponent } from '../header/header.component';
 import { GlamOnboardingHeaderComponent } from '../glam/glam-header/glam-header.component';
-import { WelcomeScreenComponent } from '../welcome-screen/welcome-screen.component';
 import { GlamPendingArchivesComponent } from '../glam-pending-archives/glam-pending-archives.component';
 import { CreateNewArchiveComponent } from '../create-new-archive/create-new-archive.component';
 import { OnboardingComponent } from './onboarding.component';
@@ -66,9 +64,7 @@ describe('OnboardingComponent #onboarding', () => {
 		await TestBed.configureTestingModule({
 			declarations: [
 				OnboardingComponent,
-				MockComponent(OnboardingHeaderComponent),
 				MockComponent(GlamOnboardingHeaderComponent),
-				MockComponent(WelcomeScreenComponent),
 				MockComponent(GlamPendingArchivesComponent),
 				MockComponent(CreateNewArchiveComponent),
 				MockComponent(MobileBannerComponent),
@@ -114,10 +110,6 @@ describe('OnboardingComponent #onboarding', () => {
 		expect(
 			fixture.nativeElement.querySelectorAll('pr-create-new-archive').length,
 		).toBe(1);
-
-		expect(
-			fixture.nativeElement.querySelectorAll('pr-welcome-screen').length,
-		).toBe(0);
 	});
 
 	it('stores the newly created archive', async () => {
@@ -155,9 +147,7 @@ describe('OnboardingComponent #onboarding', () => {
 		await TestBed.configureTestingModule({
 			declarations: [
 				OnboardingComponent,
-				MockComponent(OnboardingHeaderComponent),
 				MockComponent(GlamOnboardingHeaderComponent),
-				MockComponent(WelcomeScreenComponent),
 				MockComponent(GlamPendingArchivesComponent),
 				MockComponent(CreateNewArchiveComponent),
 				MockComponent(MobileBannerComponent),
@@ -188,12 +178,13 @@ describe('OnboardingComponent #onboarding', () => {
 		}
 
 		expect(
-			fixture.nativeElement.querySelectorAll('pr-welcome-screen').length,
+			fixture.nativeElement.querySelectorAll('pr-glam-pending-archives')
+				.length,
 		).toBe(1);
 		ngMocks
-			.find('pr-welcome-screen')
+			.find('pr-glam-pending-archives')
 			.triggerEventHandler(
-				'selectInvitation',
+				'nextOutput',
 				new ArchiveVO({ fullName: 'Pending Test' }),
 			);
 		fixture.detectChanges();
@@ -232,9 +223,7 @@ describe('OnboardingComponent #onboarding', () => {
 		await TestBed.configureTestingModule({
 			declarations: [
 				OnboardingComponent,
-				MockComponent(OnboardingHeaderComponent),
 				MockComponent(GlamOnboardingHeaderComponent),
-				MockComponent(WelcomeScreenComponent),
 				MockComponent(GlamPendingArchivesComponent),
 				MockComponent(CreateNewArchiveComponent),
 				MockComponent(MobileBannerComponent),
@@ -283,27 +272,11 @@ describe('OnboardingComponent #onboarding', () => {
 		expect(removeItemSpy).toHaveBeenCalledWith('shareToken');
 	});
 
-	it('should navigate to /app/welcome if shareToken is not in localStorage and isGlam is false', async () => {
+	it('should navigate to /app if shareToken is not in localStorage', async () => {
 		const fixture = TestBed.createComponent(OnboardingComponent);
 		const instance = fixture.componentInstance;
 
 		spyOn(localStorage, 'getItem').and.returnValue(null);
-		instance.isGlam = false;
-		instance.acceptedInvite = false;
-		instance.setScreen(OnboardingScreen.done);
-		instance.selectedPendingArchive = null;
-		fixture.detectChanges();
-		await fixture.whenStable();
-
-		expect(mockRouter.navigate).toHaveBeenCalledWith(['/app', 'welcome']);
-	});
-
-	it('should navigate to /app if shareToken is not in localStorage and isGlam is true', async () => {
-		const fixture = TestBed.createComponent(OnboardingComponent);
-		const instance = fixture.componentInstance;
-
-		spyOn(localStorage, 'getItem').and.returnValue(null);
-		instance.isGlam = true;
 		instance.acceptedInvite = false;
 		instance.setScreen(OnboardingScreen.done);
 		instance.selectedPendingArchive = null;
@@ -311,23 +284,5 @@ describe('OnboardingComponent #onboarding', () => {
 		await fixture.whenStable();
 
 		expect(mockRouter.navigate).toHaveBeenCalledWith(['/app']);
-	});
-
-	it('should navigate to /app/welcome-invite if shareToken is not in localStorage and isGlam is true', async () => {
-		const fixture = TestBed.createComponent(OnboardingComponent);
-		const instance = fixture.componentInstance;
-
-		spyOn(localStorage, 'getItem').and.returnValue(null);
-		instance.isGlam = false;
-		instance.acceptedInvite = true;
-		instance.setScreen(OnboardingScreen.done);
-		instance.selectedPendingArchive = null;
-		fixture.detectChanges();
-		await fixture.whenStable();
-
-		expect(mockRouter.navigate).toHaveBeenCalledWith([
-			'/app',
-			'welcome-invitation',
-		]);
 	});
 });
