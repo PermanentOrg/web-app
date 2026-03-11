@@ -474,6 +474,39 @@ export class RecordRepo extends BaseRepo {
 		);
 	}
 
+	public async updateStelaRecord(recordVO: RecordVO): Promise<RecordResponse> {
+		const recordId =
+			recordVO.recordId ??
+			(await this.getRecordIdByArchiveNbr(recordVO.archiveNbr));
+
+		// For now we only send displayTimeInEDTF. This will evolve until we can
+		// update the whole record using this method.
+		const stelaRecord = await firstValueFrom(
+			this.httpV2.patch<StelaRecord>(`v2/records/${recordId}`, {
+				displayTimeInEDTF: recordVO.displayTimeInEDTF,
+			}),
+		);
+
+		const simulatedV1RecordResponseResults = stelaRecord.map((record) => ({
+			data: [
+				{
+					RecordVO: convertStelaRecordToRecordVO(record),
+				},
+			],
+			message: ['Record updated'],
+			status: true,
+			resultDT: new Date().toISOString(),
+			createdDT: null,
+			updatedDT: null,
+		}));
+
+		return new RecordResponse({
+			isSuccessful: true,
+			isSystemUp: true,
+			Results: simulatedV1RecordResponseResults,
+		});
+	}
+
 	private getThumbnailCache(): ThumbnailCache {
 		const storage = new StorageService();
 		return new ThumbnailCache(storage);

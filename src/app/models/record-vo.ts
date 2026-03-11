@@ -54,6 +54,7 @@ export class RecordVO
 	public description;
 	public displayDT;
 	public displayEndDT;
+	public displayTimeInEDTF;
 	public derivedDT;
 	public derivedEndDT;
 	public altText;
@@ -185,6 +186,7 @@ export interface RecordVOData extends BaseVOData {
 	description?: any;
 	displayDT?: any;
 	displayEndDT?: any;
+	displayTimeInEDTF?: any;
 	derivedDT?: any;
 	derivedEndDT?: any;
 	derivedCreatedDT?: any;
