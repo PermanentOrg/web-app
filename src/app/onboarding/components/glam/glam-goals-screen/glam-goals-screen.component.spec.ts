@@ -1,26 +1,24 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { goals } from '../../../shared/onboarding-screen';
+import { OnboardingService } from '../../../services/onboarding.service';
 import { GlamGoalsScreenComponent } from './glam-goals-screen.component';
 
 describe('GlamGoalsScreenComponent', () => {
 	let component: GlamGoalsScreenComponent;
 	let fixture: ComponentFixture<GlamGoalsScreenComponent>;
+	let onboardingService: OnboardingService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			declarations: [GlamGoalsScreenComponent],
+			providers: [OnboardingService],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 
-		spyOn(sessionStorage, 'getItem').and.callFake((key) => {
-			const store: { [key: string]: string } = {
-				goals: JSON.stringify(['Mock Goal']),
-			};
-			return store[key] || null;
-		});
-
-		spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {});
+		onboardingService = TestBed.inject(OnboardingService);
+		spyOn(onboardingService, 'getGoals').and.returnValue(['Mock Goal']);
+		spyOn(onboardingService, 'setGoals');
 
 		fixture = TestBed.createComponent(GlamGoalsScreenComponent);
 		component = fixture.componentInstance;
@@ -35,20 +33,20 @@ describe('GlamGoalsScreenComponent', () => {
 		expect(component.goals).toEqual(goals);
 	});
 
-	it('should initialize selectedGoals from sessionStorage', () => {
-		expect(sessionStorage.getItem).toHaveBeenCalledWith('goals');
+	it('should initialize selectedGoals from OnboardingService', () => {
+		expect(onboardingService.getGoals).toHaveBeenCalled();
 		expect(component.selectedGoals).toEqual(['Mock Goal']);
 	});
 
-	it('should update sessionStorage when addGoal is called', () => {
+	it('should update goals via OnboardingService when addGoal is called', () => {
 		const goal = 'Test Goal';
 
 		component.addGoal(goal);
 
-		expect(sessionStorage.setItem).toHaveBeenCalledWith(
-			'goals',
-			JSON.stringify(['Mock Goal', 'Test Goal']),
-		);
+		expect(onboardingService.setGoals).toHaveBeenCalledWith([
+			'Mock Goal',
+			'Test Goal',
+		]);
 	});
 
 	it('should add goal to selectedGoals when addGoal is called', () => {
@@ -88,16 +86,13 @@ describe('GlamGoalsScreenComponent', () => {
 		});
 	});
 
-	it('should clear selectedGoals and update sessionStorage when skipStep is called', () => {
+	it('should clear selectedGoals and update via OnboardingService when skipStep is called', () => {
 		expect(component.selectedGoals).toEqual(['Mock Goal']);
 
 		component.skipStep();
 
 		expect(component.selectedGoals).toEqual([]);
-		expect(sessionStorage.setItem).toHaveBeenCalledWith(
-			'goals',
-			JSON.stringify([]),
-		);
+		expect(onboardingService.setGoals).toHaveBeenCalledWith([]);
 	});
 
 	it('should emit goalsOutput with empty goals when skipStep is called', () => {

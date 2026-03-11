@@ -1,26 +1,24 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { reasons } from '../../../shared/onboarding-screen';
+import { OnboardingService } from '../../../services/onboarding.service';
 import { GlamReasonsScreenComponent } from './glam-reasons-screen.component';
 
 describe('GlamReasonsScreenComponent', () => {
 	let component: GlamReasonsScreenComponent;
 	let fixture: ComponentFixture<GlamReasonsScreenComponent>;
+	let onboardingService: OnboardingService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			declarations: [GlamReasonsScreenComponent],
+			providers: [OnboardingService],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 
-		spyOn(sessionStorage, 'getItem').and.callFake((key) => {
-			const store = {
-				reasons: JSON.stringify(['Mock Reason']),
-			};
-			return store[key] || null;
-		});
-
-		spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {});
+		onboardingService = TestBed.inject(OnboardingService);
+		spyOn(onboardingService, 'getReasons').and.returnValue(['Mock Reason']);
+		spyOn(onboardingService, 'setReasons');
 
 		fixture = TestBed.createComponent(GlamReasonsScreenComponent);
 		component = fixture.componentInstance;
@@ -35,20 +33,20 @@ describe('GlamReasonsScreenComponent', () => {
 		expect(component.reasons).toEqual(reasons);
 	});
 
-	it('should initialize selectedReasons from sessionStorage', () => {
-		expect(sessionStorage.getItem).toHaveBeenCalledWith('reasons');
+	it('should initialize selectedReasons from OnboardingService', () => {
+		expect(onboardingService.getReasons).toHaveBeenCalled();
 		expect(component.selectedReasons).toEqual(['Mock Reason']);
 	});
 
-	it('should update sessionStorage when addReason is called', () => {
+	it('should update reasons via OnboardingService when addReason is called', () => {
 		const reason = 'Test Reason';
 
 		component.addReason(reason);
 
-		expect(sessionStorage.setItem).toHaveBeenCalledWith(
-			'reasons',
-			JSON.stringify(['Mock Reason', 'Test Reason']),
-		);
+		expect(onboardingService.setReasons).toHaveBeenCalledWith([
+			'Mock Reason',
+			'Test Reason',
+		]);
 	});
 
 	it('should add reason to selectedReasons when addReason is called', () => {
@@ -90,16 +88,13 @@ describe('GlamReasonsScreenComponent', () => {
 		});
 	});
 
-	it('should clear selectedReasons and update sessionStorage when skipStep is called', () => {
+	it('should clear selectedReasons and update via OnboardingService when skipStep is called', () => {
 		expect(component.selectedReasons).toEqual(['Mock Reason']);
 
 		component.skipStep();
 
 		expect(component.selectedReasons).toEqual([]);
-		expect(sessionStorage.setItem).toHaveBeenCalledWith(
-			'reasons',
-			JSON.stringify([]),
-		);
+		expect(onboardingService.setReasons).toHaveBeenCalledWith([]);
 	});
 
 	it('should emit reasonOutput with empty reasons when skipStep is called', () => {
