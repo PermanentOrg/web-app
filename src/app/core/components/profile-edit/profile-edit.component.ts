@@ -23,6 +23,7 @@ import {
 	collapseAnimation,
 	ngIfScaleAnimationDynamic,
 } from '@shared/animations';
+import { GetBanner } from '@models/get-thumbnail';
 import debug from 'debug';
 import {
 	PromptService,
@@ -70,6 +71,10 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 		suffix: '%',
 		startValue: 0,
 	};
+
+	get bannerThumbnail(): string | null {
+		return this.publicRoot?.thumbArchiveNbr ? GetBanner(this.publicRoot) : null;
+	}
 
 	private debug = debug('component:profileEdit');
 

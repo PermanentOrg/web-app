@@ -9,12 +9,9 @@ import { SharedModule } from '@shared/shared.module';
 import { CoreModule } from '@core/core.module';
 import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
 import { ComponentsModule } from '../component-library/components.module';
-import { FeatureFlagModule } from '../feature-flag/feature-flag.module';
 import { OnboardingRoutingModule } from './onboarding.routes';
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
-import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
 import { CreateNewArchiveComponent } from './components/create-new-archive/create-new-archive.component';
-import { ArchiveTypeSelectComponent } from './components/archive-type-select/archive-type-select.component';
 import { ArchiveCreationStartScreenComponent } from './components/glam/archive-creation-start-screen/archive-creation-start-screen.component';
 import { SelectArchiveTypeScreenComponent } from './components/glam/select-archive-type-screen/select-archive-type-screen.component';
 import { NameArchiveScreenComponent } from './components/glam/name-archive-screen/name-archive-screen.component';
@@ -25,7 +22,6 @@ import { FinalizeArchiveCreationScreenComponent } from './components/glam/finali
 import { GlamReasonsScreenComponent } from './components/glam/glam-reasons-screen/glam-reasons-screen.component';
 import { GlamGoalsScreenComponent } from './components/glam/glam-goals-screen/glam-goals-screen.component';
 import { GlamUserSurveySquareComponent } from './components/glam/glam-user-survey-square/glam-user-survey-square.component';
-import { OnboardingHeaderComponent } from './components/header/header.component';
 import { GlamOnboardingHeaderComponent } from './components/glam/glam-header/glam-header.component';
 import { GlamPendingArchivesComponent } from './components/glam-pending-archives/glam-pending-archives.component';
 import { PendingArchiveComponent } from './components/glam/pending-archive/pending-archive.component';
@@ -35,9 +31,7 @@ import { OnboardingService } from './services/onboarding.service';
 @NgModule({
 	declarations: [
 		OnboardingComponent,
-		WelcomeScreenComponent,
 		CreateNewArchiveComponent,
-		ArchiveTypeSelectComponent,
 		ArchiveCreationStartScreenComponent,
 		SelectArchiveTypeScreenComponent,
 		NameArchiveScreenComponent,
@@ -46,7 +40,6 @@ import { OnboardingService } from './services/onboarding.service';
 		GlamReasonsScreenComponent,
 		GlamGoalsScreenComponent,
 		GlamUserSurveySquareComponent,
-		OnboardingHeaderComponent,
 		GlamOnboardingHeaderComponent,
 		GlamPendingArchivesComponent,
 		PendingArchiveComponent,
@@ -62,7 +55,6 @@ import { OnboardingService } from './services/onboarding.service';
 		ComponentsModule,
 		GlamArchiveTypeSelectComponent,
 		ArchiveTypeIconComponent,
-		FeatureFlagModule,
 	],
 	providers: [OnboardingService],
 })

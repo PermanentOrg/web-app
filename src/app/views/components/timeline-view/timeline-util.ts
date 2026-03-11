@@ -1,6 +1,7 @@
 import { DataItem, DateType } from 'vis-timeline/standalone';
 import moment from 'moment';
 import { RecordVO, FolderVO, ItemVO, TimezoneVOData } from '@models';
+import { GetThumbnail } from '@models/get-thumbnail';
 import { groupBy, minBy, maxBy, meanBy } from 'lodash';
 import { isMobileWidth } from '@shared/services/device/device.service';
 
@@ -85,9 +86,11 @@ export class TimelineItem implements DataItem, TimelineDataItem {
 	recordType?: string;
 	imageWidth?: string;
 	imageHeight?: string;
+	thumbnailUrl?: string;
 
 	constructor(item: ItemVO, timezone: TimezoneVOData = null) {
 		this.item = item;
+		this.thumbnailUrl = GetThumbnail(item);
 		this.content = item.displayName;
 		this.className = getAlternatingTimelineItemClass();
 		this.start = getTimezoneDateFromDisplayDate(
@@ -137,7 +140,7 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
 		timezone: TimezoneVOData = null,
 	) {
 		this.groupItems = items;
-		this.previewThumbs = getEvenSpreadItems(items.map((i) => i.thumbURL200));
+		this.previewThumbs = getEvenSpreadItems(items.map((i) => GetThumbnail(i)));
 		this.groupTimespan = timespan;
 		this.groupName = name;
 		this.content = name;

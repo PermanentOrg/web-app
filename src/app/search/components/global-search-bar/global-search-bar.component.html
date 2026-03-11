@@ -47,7 +47,7 @@
 								<div
 									class="thumbnail"
 									prBgImage
-									[bgSrc]="result.thumbURL200"
+									[bgSrc]="result | getThumbnail"
 								></div>
 							}
 						}
@@ -91,7 +91,7 @@
 									<div
 										class="thumbnail"
 										prBgImage
-										[bgSrc]="result.thumbURL200"
+										[bgSrc]="result | getThumbnail"
 									></div>
 								}
 							}

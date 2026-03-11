@@ -5,9 +5,7 @@
 	<div
 		class="profile-banner"
 		prBgImage
-		[bgSrc]="
-			this.publicRoot?.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null
-		"
+		[bgSrc]="bannerThumbnail"
 		[class.show-gradient]="!this.publicRoot?.thumbArchiveNbr"
 	></div>
 	<div
@@ -17,7 +15,7 @@
 		<div
 			class="profile-photo"
 			prBgImage
-			[bgSrc]="this.archive.thumbURL500"
+			[bgSrc]="this.archive | getThumbnail"
 		></div>
 		<div
 			class="profile-about-search"

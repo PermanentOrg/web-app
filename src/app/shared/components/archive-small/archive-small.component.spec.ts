@@ -7,6 +7,7 @@ import { ArchiveVO } from '@root/app/models';
 import { TEST_DATA } from '@core/core.module.spec';
 import { AccountService } from '@shared/services/account/account.service';
 import { StorageService } from '@shared/services/storage/storage.service';
+import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { ArchiveSmallComponent } from './archive-small.component';
 
 describe('ArchiveSmallComponent', () => {
@@ -18,6 +19,7 @@ describe('ArchiveSmallComponent', () => {
 
 		config.declarations.push(ArchiveSmallComponent);
 		config.declarations.push(BgImageSrcDirective);
+		config.declarations.push(GetThumbnailPipe);
 
 		TestBed.configureTestingModule(config).compileComponents();
 

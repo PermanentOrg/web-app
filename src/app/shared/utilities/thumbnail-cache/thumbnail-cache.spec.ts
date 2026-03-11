@@ -18,8 +18,7 @@ describe('ThumbnailCache', () => {
 			folder_linkId: 1234,
 		});
 		folderThumbData = {
-			folderThumb200: '200URL',
-			folderThumb500: '500URL?r=' + Math.random(),
+			folderThumb: '256URL?r=' + Math.random(),
 			folderContentsType: FolderContentsType.NORMAL,
 		};
 	});
@@ -31,8 +30,7 @@ describe('ThumbnailCache', () => {
 	it('should return an empty FolderThumbData object for uncached thumbnail', () => {
 		const thumbs = cache.getThumbnail(folder);
 
-		expect(thumbs.folderThumb200).toBeDefined();
-		expect(thumbs.folderThumb500).toBeDefined();
+		expect(thumbs.folderThumb).toBe('');
 		expect(thumbs.folderContentsType).toBe(
 			FolderContentsType.BROKEN_THUMBNAILS,
 		);
@@ -40,10 +38,9 @@ describe('ThumbnailCache', () => {
 
 	it('should be able to set and get thumbnail', () => {
 		cache.saveThumbnail(folder, folderThumbData);
-		const { folderThumb200, folderThumb500 } = cache.getThumbnail(folder);
+		const { folderThumb } = cache.getThumbnail(folder);
 
-		expect(folderThumb200).toBe(folderThumbData.folderThumb200);
-		expect(folderThumb500).toBe(folderThumbData.folderThumb500);
+		expect(folderThumb).toBe(folderThumbData.folderThumb);
 	});
 
 	it('should be able to test if thumbnail is cached', () => {
@@ -56,10 +53,9 @@ describe('ThumbnailCache', () => {
 	it('should use session storage to get this data', () => {
 		cache.saveThumbnail(folder, folderThumbData);
 		const cache2 = new ThumbnailCache(storage);
-		const { folderThumb200, folderThumb500 } = cache2.getThumbnail(folder);
+		const { folderThumb } = cache2.getThumbnail(folder);
 
-		expect(folderThumb200).toBe(folderThumbData.folderThumb200);
-		expect(folderThumb500).toBe(folderThumbData.folderThumb500);
+		expect(folderThumb).toBe(folderThumbData.folderThumb);
 	});
 
 	it('should store icon data instead if neccessary', () => {
@@ -73,11 +69,9 @@ describe('ThumbnailCache', () => {
 			folderThumbData.folderContentsType = icon;
 			folder.folder_linkId += 1;
 			cache.saveThumbnail(folder, folderThumbData);
-			const { folderThumb200, folderThumb500, folderContentsType } =
-				cache.getThumbnail(folder);
+			const { folderThumb, folderContentsType } = cache.getThumbnail(folder);
 
-			expect(folderThumb200).toBe('');
-			expect(folderThumb500).toBe('');
+			expect(folderThumb).toBe('');
 			expect(folderContentsType).toBe(icon);
 		}
 	});
@@ -96,13 +90,24 @@ describe('ThumbnailCache', () => {
 			expect(cache.hasThumbnail(folder)).toBeFalse();
 		});
 
-		it('handles linking another value instead of a string tuple', () => {
-			storage.session.set('folderThumbnailCache', [[1234, 'potato']]);
+		it('reports no cache hit for stale entries', () => {
+			storage.session.set('folderThumbnailCache', [
+				[1234, ['https://old200', 'https://old500']],
+			]);
+			cache = new ThumbnailCache(storage);
+
+			expect(cache.hasThumbnail(folder)).toBeFalse();
+			expect(storage.session.get('folderThumbnailCache').length).toBe(0);
+		});
+
+		it('wipes stale [thumb200, thumb500] tuples from old format', () => {
+			storage.session.set('folderThumbnailCache', [
+				[1234, ['https://old200', 'https://old500']],
+			]);
 			cache = new ThumbnailCache(storage);
 			const thumbz = cache.getThumbnail(folder);
 
-			expect(thumbz.folderThumb200).toBe('');
-			expect(thumbz.folderThumb500).toBe('');
+			expect(thumbz.folderThumb).toBe('');
 			expect(thumbz.folderContentsType).toBe(
 				FolderContentsType.BROKEN_THUMBNAILS,
 			);
@@ -110,14 +115,19 @@ describe('ThumbnailCache', () => {
 			expect(storage.session.get('folderThumbnailCache').length).toBe(0);
 		});
 
-		it('handles properly casting other values to string if a tuple is provided', () => {
-			storage.session.set('folderThumbnailCache', [[1234, [3.141, {}]]]);
+		it('wipes entries with unrecognized shape', () => {
+			storage.session.set('folderThumbnailCache', [
+				[1234, { something: 'unexpected' }],
+			]);
 			cache = new ThumbnailCache(storage);
 			const thumbz = cache.getThumbnail(folder);
 
-			expect(thumbz.folderThumb200).toBe('3.141');
-			expect(thumbz.folderThumb500).toBe('[object Object]');
-			expect(thumbz.folderContentsType).toBe(FolderContentsType.NORMAL);
+			expect(thumbz.folderThumb).toBe('');
+			expect(thumbz.folderContentsType).toBe(
+				FolderContentsType.BROKEN_THUMBNAILS,
+			);
+
+			expect(storage.session.get('folderThumbnailCache').length).toBe(0);
 		});
 	});
 });

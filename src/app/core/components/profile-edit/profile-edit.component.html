@@ -122,11 +122,7 @@
 						<div
 							class="profile-banner"
 							prBgImage
-							[bgSrc]="
-								this.publicRoot.thumbArchiveNbr
-									? this.publicRoot.thumbURL2000
-									: null
-							"
+							[bgSrc]="bannerThumbnail"
 							(click)="chooseBannerPicture()"
 							prScrollSection="about"
 							[class.show-gradient]="!this.publicRoot.thumbArchiveNbr"
@@ -140,7 +136,7 @@
 						<div
 							class="profile-photo"
 							prBgImage
-							[bgSrc]="this.archive.thumbURL500"
+							[bgSrc]="this.archive | getThumbnail"
 							(click)="onProfilePictureClick()"
 						>
 							<div class="change-thumbnail">

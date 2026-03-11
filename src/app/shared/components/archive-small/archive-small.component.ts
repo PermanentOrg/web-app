@@ -96,7 +96,7 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 
 	checkArchiveThumbnail() {
 		if (
-			!GetThumbnail(this.archive, 200) &&
+			!GetThumbnail(this.archive) &&
 			this.archive.status === 'status.archive.gen_avatar'
 		) {
 			setTimeout(async () => {
