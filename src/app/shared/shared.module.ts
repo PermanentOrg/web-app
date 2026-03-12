@@ -71,6 +71,7 @@ import { ZoomingImageViewerComponent } from './components/zooming-image-viewer/z
 import { GetFileTypePipe } from './pipes/get-file-type.pipe';
 import { GetThumbnailPipe } from './pipes/get-thumbnail.pipe';
 import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
+import { EdtfService } from './services/edtf-service/edtf.service';
 
 @NgModule({
 	imports: [
@@ -203,6 +204,7 @@ import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-
 		PrLocationPipe,
 		DatePipe,
 		DialogCdkService,
+		EdtfService,
 		{ provide: 'Image', useValue: Image },
 		{ provide: 'openseadragon', useValue: OpenSeadragon },
 	],
