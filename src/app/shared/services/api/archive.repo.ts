@@ -274,7 +274,7 @@ export class ArchiveRepo extends BaseRepo {
 
 	public async patchArchive(
 		archiveId: string,
-		milestoneSortOrder: string,
+		milestoneSortOrder: 'chronological' | 'reverse_chronological',
 	): Promise<void> {
 		await this.httpV2
 			.patch(`v2/archive/${archiveId}`, { milestoneSortOrder })

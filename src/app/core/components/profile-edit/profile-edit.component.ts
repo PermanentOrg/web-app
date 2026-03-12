@@ -269,6 +269,8 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 		try {
 			await this.api.archive.patchArchive(this.archive.archiveId, newOrder);
 			this.archive.milestoneSortOrder = newOrder;
+		} catch (err) {
+			this.message.showError({ message: err.error?.message, translate: true });
 		} finally {
 			this.isSavingMilestoneOrder = false;
 		}
