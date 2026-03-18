@@ -32,8 +32,8 @@ export class CreateArchiveForMeScreenComponent {
 		this.onboardingService.registerArchive(
 			new ArchiveVO({ fullName: this.name, accessRole: 'access.role.owner' }),
 		);
-		sessionStorage.setItem('archiveName', this.name);
-		sessionStorage.setItem('archiveType', this.TYPE);
+		this.onboardingService.setArchiveName(this.name);
+		this.onboardingService.setArchiveType(this.TYPE);
 		this.continueOutput.emit({
 			screen: 'goals',
 			type: this.TYPE,

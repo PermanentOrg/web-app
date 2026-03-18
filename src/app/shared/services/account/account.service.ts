@@ -421,6 +421,7 @@ export class AccountService {
 						this.clearAccount();
 						this.clearArchive();
 						this.clearRootFolder();
+						this.storage.session.clear();
 						this.accountChange.emit(null);
 					}
 					return response;

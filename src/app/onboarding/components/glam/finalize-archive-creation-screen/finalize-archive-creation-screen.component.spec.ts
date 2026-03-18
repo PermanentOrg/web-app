@@ -12,13 +12,13 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
 	let onboardingService: OnboardingService;
 
 	beforeEach(async () => {
-		onboardingService = new OnboardingService();
-
 		await TestBed.configureTestingModule({
 			declarations: [FinalizeArchiveCreationScreenComponent, AccessRolePipe],
-			providers: [{ provide: OnboardingService, useValue: onboardingService }],
+			providers: [OnboardingService],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
+
+		onboardingService = TestBed.inject(OnboardingService);
 
 		fixture = TestBed.createComponent(FinalizeArchiveCreationScreenComponent);
 		component = fixture.componentInstance;
