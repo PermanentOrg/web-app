@@ -11,13 +11,9 @@
 			<div class="family-member-list">
 				@for (family of familyMembers; track family) {
 					<div class="family-member">
-						<div class="select" [ngClass]="{ exists: family.permExists }">
+						<div class="select">
 							<label>
-								<input
-									type="checkbox"
-									[(ngModel)]="family.isSelected"
-									[disabled]="family.permExists"
-								/>
+								<input type="checkbox" [(ngModel)]="family.isSelected" />
 								@if (family.isSelected) {
 									<div class="select-active"></div>
 								}
@@ -31,7 +27,7 @@
 								<em>{{ family.display.lifespan }}</em>
 							}
 							@if (family.permExists) {
-								<em>Imported</em>
+								<em>Imported, select to re-import</em>
 							}
 						</div>
 					</div>
@@ -42,7 +38,7 @@
 			<button class="btn btn-secondary" (click)="cancel()">Cancel</button>
 			<button
 				class="btn btn-primary"
-				(click)="stage = 'memories'"
+				(click)="goToNextFromPeople()"
 				[disabled]="!getSelectedCount()"
 			>
 				Next

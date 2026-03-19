@@ -5,6 +5,7 @@ import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { CreateArchivesComplete } from '@shared/services/guided-tour/tours/familysearch.tour';
 import { GuidedTourEvent } from '@shared/services/guided-tour/events';
 import { timeout } from '@shared/utilities/timeout';
@@ -40,6 +41,7 @@ export class FamilySearchImportComponent {
 		private api: ApiService,
 		private message: MessageService,
 		private guidedTour: GuidedTourService,
+		private promptService: PromptService,
 	) {
 		this.currentUser = data.currentUserData;
 		this.familyMembers = filter(
@@ -144,7 +146,52 @@ export class FamilySearchImportComponent {
 	}
 
 	getSelectedCount() {
-		return this.familyMembers.filter((person) => person.isSelected).length;
+		return this.getSelectedMembers().length;
+	}
+
+	getSelectedMembers() {
+		return this.familyMembers.filter((person) => person.isSelected);
+	}
+
+	getReimportedMembers() {
+		return this.getSelectedMembers().filter((person) => person.permExists);
+	}
+
+	async goToNextFromPeople() {
+		const reimported = this.getReimportedMembers();
+		if (!reimported.length) {
+			this.stage = 'memories';
+			return;
+		}
+
+		const membersList = reimported
+			.map((p) => `<li>${p.display.name}</li>`)
+			.join('');
+		const template = `<p>The following family members have been previously imported. Continuing will create a new archive for each of them, possibly resulting in duplicates.</p><ul>${membersList}</ul>`;
+
+		const result = await this.promptService
+			.promptButtons(
+				[
+					{
+						buttonName: 'go-back',
+						buttonText: 'Go Back',
+						class: 'btn-secondary',
+					},
+					{
+						buttonName: 'continue',
+						buttonText: 'Continue',
+						class: 'btn-primary',
+					},
+				],
+				'Continue with re-import?',
+				undefined,
+				template,
+			)
+			.catch(() => 'go-back');
+
+		if (result === 'continue') {
+			this.stage = 'memories';
+		}
 	}
 
 	getRelationshipFromAncestryNumber(ancestryNumber: number) {
