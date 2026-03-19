@@ -46,31 +46,6 @@
 		</div>
 	</div>
 }
-@if (stage === 'confirm') {
-	<div class="dialog-content">
-		<div class="dialog-body">
-			<div class="page-title">Continue with re-import?</div>
-			<p>
-				The following family members have been previously imported. Continuing
-				will create a new archive for each of them, possibly resulting in
-				duplicates.
-			</p>
-			<ul>
-				@for (person of getReimportedMembers(); track person) {
-					<li>{{ person.display.name }}</li>
-				}
-			</ul>
-		</div>
-		<div class="dialog-footer">
-			<button class="btn btn-secondary" (click)="stage = 'people'">
-				Go Back
-			</button>
-			<button class="btn btn-primary" (click)="stage = 'memories'">
-				Continue
-			</button>
-		</div>
-	</div>
-}
 @if (stage === 'memories') {
 	<div class="dialog-content">
 		<div class="dialog-body">

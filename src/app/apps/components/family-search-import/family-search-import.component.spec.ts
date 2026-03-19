@@ -4,6 +4,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { FamilySearchImportComponent } from './family-search-import.component';
 
 describe('FamilySearchImportComponent', () => {
@@ -36,6 +37,12 @@ describe('FamilySearchImportComponent', () => {
 		markStepComplete: jasmine.createSpy('markStepComplete'),
 	};
 
+	const mockPromptService = {
+		promptButtons: jasmine
+			.createSpy('promptButtons')
+			.and.returnValue(Promise.resolve('go-back')),
+	};
+
 	const currentUserData = {
 		id: 'user-1',
 		display: { name: 'Test User', lifespan: '1900–1980', ascendancyNumber: 1 },
@@ -56,6 +63,7 @@ describe('FamilySearchImportComponent', () => {
 				{ provide: ApiService, useValue: mockApiService },
 				{ provide: MessageService, useValue: mockMessageService },
 				{ provide: GuidedTourService, useValue: mockGuidedTourService },
+				{ provide: PromptService, useValue: mockPromptService },
 			],
 		}).compileComponents();
 
@@ -86,23 +94,55 @@ describe('FamilySearchImportComponent', () => {
 			expect(component.stage).toBe('memories');
 		});
 
-		it('goes to confirm stage when a selected member has permExists', async () => {
+		it('shows a confirmation prompt when a selected member has permExists', async () => {
 			await setup([reimportMember]);
 			component.familyMembers[0].isSelected = true;
 
-			component.goToNextFromPeople();
+			await component.goToNextFromPeople();
 
-			expect(component.stage).toBe('confirm');
+			expect(mockPromptService.promptButtons).toHaveBeenCalledWith(
+				jasmine.arrayContaining([
+					jasmine.objectContaining({ buttonName: 'go-back' }),
+					jasmine.objectContaining({ buttonName: 'continue' }),
+				]),
+				'Continue with re-import?',
+				undefined,
+				jasmine.stringContaining('John Doe'),
+			);
 		});
 
-		it('goes to confirm stage when selection includes both new and previously imported members', async () => {
+		it('shows a confirmation prompt when selection includes both new and previously imported members', async () => {
 			await setup([newMember, reimportMember]);
 			component.familyMembers[0].isSelected = true;
 			component.familyMembers[1].isSelected = true;
 
-			component.goToNextFromPeople();
+			await component.goToNextFromPeople();
 
-			expect(component.stage).toBe('confirm');
+			expect(mockPromptService.promptButtons).toHaveBeenCalled();
+		});
+
+		it('goes to memories stage when user confirms reimport', async () => {
+			await setup([reimportMember]);
+			component.familyMembers[0].isSelected = true;
+			mockPromptService.promptButtons.and.returnValue(
+				Promise.resolve('continue'),
+			);
+
+			await component.goToNextFromPeople();
+
+			expect(component.stage).toBe('memories');
+		});
+
+		it('stays on people stage when user dismisses reimport confirmation', async () => {
+			await setup([reimportMember]);
+			component.familyMembers[0].isSelected = true;
+			mockPromptService.promptButtons.and.returnValue(
+				Promise.resolve('go-back'),
+			);
+
+			await component.goToNextFromPeople();
+
+			expect(component.stage).toBe('people');
 		});
 
 		it('goes to memories stage when a member with permExists is not selected', async () => {
@@ -139,49 +179,6 @@ describe('FamilySearchImportComponent', () => {
 			await setup([newMember, reimportMember]);
 
 			expect(component.getSelectedMembers().length).toBe(0);
-		});
-	});
-
-	describe('confirm stage template', () => {
-		beforeEach(async () => {
-			await setup([newMember, reimportMember]);
-			component.familyMembers[0].isSelected = true;
-			component.familyMembers[1].isSelected = true;
-			component.stage = 'confirm';
-			fixture.detectChanges();
-		});
-
-		it('renders the confirm stage with the correct title', () => {
-			const title = fixture.nativeElement.querySelector('.page-title');
-
-			expect(title.textContent).toContain('Continue with re-import?');
-		});
-
-		it('lists members to be reimported', () => {
-			const items = fixture.nativeElement.querySelectorAll('li');
-			const names = Array.from(items).map((li: Element) =>
-				li.textContent.trim(),
-			);
-
-			expect(names).toContain('John Doe');
-		});
-
-		it('Go Back button returns to people stage', () => {
-			const goBackBtn =
-				fixture.nativeElement.querySelector('.btn.btn-secondary');
-			goBackBtn.click();
-			fixture.detectChanges();
-
-			expect(component.stage).toBe('people');
-		});
-
-		it('Continue button advances to memories stage', () => {
-			const continueBtn =
-				fixture.nativeElement.querySelector('.btn.btn-primary');
-			continueBtn.click();
-			fixture.detectChanges();
-
-			expect(component.stage).toBe('memories');
 		});
 	});
 });
