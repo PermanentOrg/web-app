@@ -108,7 +108,7 @@
 		<div class="sidebar-item">
 			<label>{{ selectedItem.isFolder ? 'Start date' : 'Date' }}</label>
 			<pr-inline-value-edit
-				[displayValue]="selectedItem.displayDT"
+				[displayValue]="selectedItem.displayTime || selectedItem.displayDT"
 				[canEdit]="canEdit"
 				[item]="selectedItem"
 				[itemId]="selectedItem.folder_linkId"
