@@ -41,6 +41,8 @@ describe('EditService', () => {
 		]);
 		apiService.record = {
 			update: jasmine.createSpy('update'),
+			updateStelaRecord: jasmine.createSpy('updateStelaRecord'),
+			get: jasmine.createSpy('get'),
 			getRecordShareLink: jasmine.createSpy('getRecordShareLink'),
 		} as unknown as RecordRepo;
 		apiService.folder = {
@@ -93,13 +95,23 @@ describe('EditService', () => {
 	it('should call update when there are records', async () => {
 		const record = new RecordVO({ recordId: 1, displayName: 'Test' });
 		const mockRecords = [record];
+		const updatedRecord = new RecordVO({
+			recordId: 1,
+			updatedDT: '2024-03-03',
+		});
+		const mockResponse = {
+			getRecordVOs: () => [updatedRecord],
+		};
 		(apiService.record.update as jasmine.Spy).and.returnValue(
 			Promise.resolve([{ updatedDT: '2024-03-03' }]),
+		);
+		(apiService.record.get as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockResponse),
 		);
 		await service.updateItems(mockRecords);
 
 		expect(apiService.record.update).toHaveBeenCalledWith(mockRecords, 123);
-		expect(record.updatedDT).toBe('2024-03-03');
+		expect(apiService.record.get).toHaveBeenCalledWith(mockRecords);
 	});
 
 	it('should handle empty records array and not call update', async () => {
@@ -110,9 +122,97 @@ describe('EditService', () => {
 		expect(apiService.record.update).not.toHaveBeenCalled();
 	});
 
+	it('should call updateStelaRecord when recordKey is displayDT', async () => {
+		const record = new RecordVO({ recordId: 1, displayDT: '2024-01-01' });
+		const updatedRecord = new RecordVO({
+			recordId: 1,
+			updatedDT: '2024-03-03',
+			displayTime: '2024-01-01',
+		});
+		const mockResponse = {
+			getRecordVO: () => updatedRecord,
+			getRecordVOs: () => [updatedRecord],
+		};
+		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockResponse),
+		);
+		(apiService.record.update as jasmine.Spy).and.returnValue(
+			Promise.resolve([{ updatedDT: '2024-03-03' }]),
+		);
+		(apiService.record.get as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockResponse),
+		);
+
+		await service.updateItems([record], ['displayDT']);
+
+		expect(apiService.record.updateStelaRecord).toHaveBeenCalledWith(record);
+		expect(apiService.record.update).toHaveBeenCalled();
+		expect(apiService.record.get).toHaveBeenCalledWith([record]);
+	});
+
+	it('should not call updateStelaRecord when recordKey does not contain displayDT', async () => {
+		const record = new RecordVO({ recordId: 1, displayName: 'Test' });
+		const updatedRecord = new RecordVO({
+			recordId: 1,
+			updatedDT: '2024-03-03',
+		});
+		const mockResponse = {
+			getRecordVOs: () => [updatedRecord],
+		};
+		(apiService.record.update as jasmine.Spy).and.returnValue(
+			Promise.resolve([{ updatedDT: '2024-03-03' }]),
+		);
+		(apiService.record.get as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockResponse),
+		);
+
+		await service.updateItems([record], ['displayName']);
+
+		expect(apiService.record.updateStelaRecord).not.toHaveBeenCalled();
+		expect(apiService.record.update).toHaveBeenCalled();
+		expect(apiService.record.get).toHaveBeenCalledWith([record]);
+	});
+
+	it('should call both updateStelaRecord and update when recordKey has displayDT with other properties', async () => {
+		const record = new RecordVO({
+			recordId: 1,
+			displayDT: '2024-01-01',
+			displayName: 'Test',
+		});
+		const updatedRecord = new RecordVO({
+			recordId: 1,
+			updatedDT: '2024-03-03',
+			displayTime: '2024-01-01',
+		});
+		const mockResponse = {
+			getRecordVOs: () => [updatedRecord],
+		};
+		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockResponse),
+		);
+		(apiService.record.update as jasmine.Spy).and.returnValue(
+			Promise.resolve([{ updatedDT: '2024-03-03' }]),
+		);
+		(apiService.record.get as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockResponse),
+		);
+
+		await service.updateItems([record], ['displayDT', 'displayName']);
+
+		expect(apiService.record.updateStelaRecord).toHaveBeenCalledWith(record);
+		expect(apiService.record.update).toHaveBeenCalled();
+		expect(apiService.record.get).toHaveBeenCalledWith([record]);
+	});
+
 	it('should NOT update record when recordResponse is empty', async () => {
 		const recordMock = new RecordVO({ recordId: 1, folder_linkId: 10 });
 		recordMock.update = jasmine.createSpy('update');
+		const mockResponse = {
+			getRecordVOs: () => [],
+		};
+		(apiService.record.get as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockResponse),
+		);
 
 		await service.updateItems([recordMock]);
 
