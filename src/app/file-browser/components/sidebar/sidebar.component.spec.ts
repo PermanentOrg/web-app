@@ -248,4 +248,70 @@ describe('SidebarComponent', () => {
 
 		expect(unknownTypeContainer).toBeFalsy();
 	});
+
+	describe('displayTime getter', () => {
+		it('should return empty string when selectedItem is null', () => {
+			component.selectedItem = null;
+
+			expect(component.displayTime).toBe('');
+		});
+
+		it('should return displayDT when displayTime property does not exist', () => {
+			component.selectedItem = new RecordVO({
+				displayDT: '1985-05-20T00:00:00Z',
+			});
+
+			expect(component.displayTime).toBe('1985-05-20T00:00:00Z');
+		});
+
+		it('should parse start date from EDTF interval', () => {
+			const item = new RecordVO({});
+			(item as any).displayTime = '1985-05-20/1990-06-15';
+			component.selectedItem = item;
+
+			expect(component.displayTime).toBe('1985-05-20');
+		});
+
+		it('should return full displayTime when no interval separator', () => {
+			const item = new RecordVO({});
+			(item as any).displayTime = '1985-05-20';
+			component.selectedItem = item;
+
+			expect(component.displayTime).toBe('1985-05-20');
+		});
+	});
+
+	describe('displayEndTime getter', () => {
+		it('should return displayEndDT when displayTime property does not exist', () => {
+			component.selectedItem = new RecordVO({
+				displayEndDT: '1990-06-15T00:00:00Z',
+			});
+
+			expect(component.displayEndTime).toBe('1990-06-15T00:00:00Z');
+		});
+
+		it('should parse end date from EDTF interval', () => {
+			const item = new RecordVO({});
+			(item as any).displayTime = '1985-05-20/1990-06-15';
+			component.selectedItem = item;
+
+			expect(component.displayEndTime).toBe('1990-06-15');
+		});
+
+		it('should return empty string when displayTime has no interval', () => {
+			const item = new RecordVO({});
+			(item as any).displayTime = '1985-05-20';
+			component.selectedItem = item;
+
+			expect(component.displayEndTime).toBe('');
+		});
+
+		it('should return empty string when displayTime interval has no end date', () => {
+			const item = new RecordVO({});
+			(item as any).displayTime = '1985-05-20/';
+			component.selectedItem = item;
+
+			expect(component.displayEndTime).toBe('');
+		});
+	});
 });
