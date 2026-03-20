@@ -47,7 +47,7 @@
 			</div>
 		}
 		@if (!item.isFolder && !isZip) {
-			<div prBgImage [bgSrc]="item | getThumbnail" [cover]="inGridView"></div>
+			<div prBgImage [bgSrc]="recordThumbnailUrl" [cover]="inGridView"></div>
 		}
 	</ng-container>
 	@if (inGridView && item.isFolder ? item.view : true) {
