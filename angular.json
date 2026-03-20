@@ -142,7 +142,10 @@
 				"serve": {
 					"builder": "@angular/build:dev-server",
 					"options": {
-						"buildTarget": "mdot:build"
+						"buildTarget": "mdot:build",
+						"prebundle": {
+							"exclude": ["edtf"]
+						}
 					},
 					"configurations": {
 						"local": {
