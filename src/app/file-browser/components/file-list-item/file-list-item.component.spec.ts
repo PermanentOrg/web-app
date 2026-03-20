@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ElementRef, Pipe, PipeTransform } from '@angular/core';
 import { of } from 'rxjs';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
@@ -310,5 +310,36 @@ describe('FileListItemComponent', () => {
 		component.onMouseLeaveName();
 
 		expect(component.isNameHovered).toBeFalse();
+	});
+
+	it('should set random preview thumbnail for non-unlisted share records', async () => {
+		const router = TestBed.inject(Router);
+		(router.routerState.snapshot as any).url = '/share/test';
+
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+			Promise.resolve(false),
+		);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBeDefined();
+		expect(component.recordThumbnailUrl).toMatch(
+			/^assets\/img\/preview\/preview-\d+\.jpg$/,
+		);
+
+		(router.routerState.snapshot as any).url = '/';
+	});
+
+	it('should always set real thumbnail URL on init', async () => {
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+
+		await component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
 	});
 });
