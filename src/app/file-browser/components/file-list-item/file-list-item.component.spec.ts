@@ -311,4 +311,34 @@ describe('FileListItemComponent', () => {
 
 		expect(component.isNameHovered).toBeFalse();
 	});
+
+	it('should set random preview thumbnail for non-unlisted share records', async () => {
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+			Promise.resolve(false),
+		);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBeDefined();
+		expect(component.recordThumbnailUrl).toMatch(
+			/^assets\/img\/preview\/preview-\d+\.jpg$/,
+		);
+	});
+
+	it('should set real thumbnail for unlisted share records', async () => {
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+			Promise.resolve(true),
+		);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+
+		await component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
+	});
 });

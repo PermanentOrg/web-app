@@ -204,9 +204,16 @@ export class FileListItemComponent
 	public isZip = false;
 	public date: string = '';
 	public isUnlistedShare = false;
+	public recordThumbnailUrl: string | undefined;
 
 	private folderThumb: string;
 	private folderContentsType: FolderContentsType = FolderContentsType.NORMAL;
+
+	private getRandomPreviewImage(): string {
+		const previewCount = 10;
+		const randomIndex = Math.floor(Math.random() * previewCount) + 1;
+		return `assets/img/preview/preview-${randomIndex}.jpg`;
+	}
 
 	private isInShares: boolean;
 	private isInApps: boolean;
@@ -247,6 +254,12 @@ export class FileListItemComponent
 		this.date = getFormattedDate(date);
 
 		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+
+		if (this.isUnlistedShare) {
+			this.recordThumbnailUrl = GetThumbnail(this.item);
+		} else {
+			this.recordThumbnailUrl = this.getRandomPreviewImage();
+		}
 
 		this.dataService.registerItem(this.item);
 		if (this.item.type.includes('app')) {
