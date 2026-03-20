@@ -675,4 +675,31 @@ describe('FileViewerComponent', () => {
 			expect(locationSpan.textContent.trim()).toBe('Click to add location');
 		});
 	});
+
+	describe('displayTime fallback', () => {
+		it('should prefer displayTime over displayDT when both are set', () => {
+			component.currentRecord = new RecordVO({
+				displayTime: '1985-05-20',
+				displayDT: '1985-05-20T00:00:00',
+			});
+
+			const displayValue =
+				component.currentRecord.displayTime ||
+				component.currentRecord.displayDT;
+
+			expect(displayValue).toBe('1985-05-20');
+		});
+
+		it('should fall back to displayDT when displayTime is not set', () => {
+			component.currentRecord = new RecordVO({
+				displayDT: '2024-01-01T00:00:00',
+			});
+
+			const displayValue =
+				component.currentRecord.displayTime ||
+				component.currentRecord.displayDT;
+
+			expect(displayValue).toBe('2024-01-01T00:00:00.000Z');
+		});
+	});
 });
