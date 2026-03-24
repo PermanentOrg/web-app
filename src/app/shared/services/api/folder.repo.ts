@@ -201,7 +201,7 @@ export class FolderRepo extends BaseRepo {
 		const queryData = {
 			folderIds: folderVOs.map((currentFolder) => currentFolder.folderId),
 		};
-		let folderResponse: PagedStelaResponse<StelaFolder>;
+		let folderResponse: PagedStelaResponse<StelaFolder> | any;
 		if (shareToken) {
 			folderResponse = (
 				await firstValueFrom(
