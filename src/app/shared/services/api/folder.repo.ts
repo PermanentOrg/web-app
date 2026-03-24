@@ -60,6 +60,7 @@ interface StelaFolder {
 	description: string;
 	displayTimestamp: string;
 	displayEndTimestamp: string;
+	displayTime?: string;
 	displayName: string;
 	downloadName: string;
 	imageRatio: number;
@@ -105,6 +106,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		displayName: stelaFolder.displayName,
 		displayDT: stelaFolder.displayTimestamp,
 		displayEndDT: stelaFolder.displayEndTimestamp,
+		displayTime: stelaFolder.displayTime,
 		derivedDT: stelaFolder.displayTimestamp,
 		derivedEndDT: stelaFolder.displayEndTimestamp,
 		note: '',
@@ -192,7 +194,7 @@ export class FolderRepo extends BaseRepo {
 		const queryData = {
 			folderIds: folderVOs.map((currentFolder) => currentFolder.folderId),
 		};
-		let folderResponse: PagedStelaResponse<StelaFolder> | any;
+		let folderResponse: PagedStelaResponse<StelaFolder>;
 		if (shareToken) {
 			folderResponse = (
 				await firstValueFrom(

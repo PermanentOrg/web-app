@@ -672,7 +672,7 @@ export class EditService {
 		recordKey?: (keyof ItemVO)[],
 	): Promise<RecordVO[] | void> {
 		if (!records.length) {
-			return await Promise.resolve();
+			return;
 		}
 
 		const promises: Array<Promise<unknown[] | RecordResponse[]>> = [];
@@ -699,7 +699,7 @@ export class EditService {
 		folderKeys?: (keyof ItemVO)[],
 	): Promise<FolderResponse | void> {
 		if (!folders.length) {
-			return await Promise.resolve();
+			return;
 		}
 
 		const promises: Array<Promise<FolderResponse | FolderResponse[]>> = [];

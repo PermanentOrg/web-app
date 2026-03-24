@@ -42,6 +42,33 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	originalFileExtension: string = '';
 	permanentFileExtension: string = '';
 
+	get displayTime(): string {
+		return this.parseEdtfInterval('start');
+	}
+
+	get displayEndTime(): string {
+		return this.parseEdtfInterval('end');
+	}
+
+	private parseEdtfInterval(part: 'start' | 'end'): string {
+		const item = this.selectedItem;
+		if (!item) {
+			return '';
+		}
+
+		const displayTimeValue = item.displayTime;
+		if (!displayTimeValue) {
+			return part === 'start' ? item.displayDT || '' : item.displayEndDT || '';
+		}
+
+		if (displayTimeValue.includes('/')) {
+			const parts = displayTimeValue.split('/');
+			return part === 'start' ? parts[0] : parts[1] || '';
+		}
+
+		return part === 'start' ? displayTimeValue : '';
+	}
+
 	constructor(
 		private dataService: DataService,
 		private editService: EditService,
