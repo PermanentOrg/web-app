@@ -391,11 +391,7 @@ export class EditService {
 
 		const promises: Array<Promise<any>> = [];
 
-		if (folders.length) {
-			promises.push(this.api.folder.update(folders, whitelist));
-		} else {
-			promises.push(Promise.resolve());
-		}
+		promises.push(this.updateFolders(folders, whitelist));
 
 		promises.push(this.updateRecords(records, whitelist));
 
@@ -412,6 +408,18 @@ export class EditService {
 
 					if (updatedItem.TimezoneVO) {
 						newData.TimezoneVO = updatedItem.TimezoneVO;
+					}
+
+					if (updatedItem.displayTime) {
+						newData.displayTime = updatedItem.displayTime;
+					}
+
+					if (updatedItem.displayDT) {
+						newData.displayDT = updatedItem.displayDT;
+					}
+
+					if (updatedItem.displayEndDT) {
+						newData.displayEndDT = updatedItem.displayEndDT;
 					}
 
 					const folder =
@@ -684,5 +692,35 @@ export class EditService {
 
 		await Promise.all(promises);
 		return (await this.api.record.get(records)).getRecordVOs();
+	}
+
+	private async updateFolders(
+		folders: FolderVO[],
+		folderKeys?: (keyof ItemVO)[],
+	): Promise<FolderResponse | void> {
+		if (!folders.length) {
+			return await Promise.resolve();
+		}
+
+		const promises: Array<Promise<FolderResponse | FolderResponse[]>> = [];
+
+		if (
+			folderKeys?.includes('displayDT') ||
+			folderKeys?.includes('displayEndDT')
+		) {
+			promises.push(
+				Promise.all(
+					folders.map(
+						async (folder) => await this.api.folder.updateStelaFolder(folder),
+					),
+				),
+			);
+		}
+
+		promises.push(this.api.folder.update(folders, folderKeys));
+
+		await Promise.all(promises);
+
+		return await this.api.folder.getStelaFolderVOs(folders);
 	}
 }
