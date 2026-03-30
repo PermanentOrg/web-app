@@ -6,9 +6,9 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
+import { MessageService } from '@shared/services/message/message.service';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
-import { EditDateModel } from '../edit-date-time-modal/edit-date-time.model';
-import { Meridian } from '../edit-date-time-modal/edit-date-time.model';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -110,10 +110,10 @@ const mockEditService = {
 	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
 };
 
-let closedSubject: Subject<EditDateModel | undefined>;
+let closedSubject: Subject<DateTimeModel | undefined>;
 
 const mockModalService = {
-	open: (_data: EditDateModel) => ({
+	open: (_data: DateTimeModel) => ({
 		closed: closedSubject.asObservable(),
 	}),
 };
@@ -135,7 +135,7 @@ describe('SidebarComponent', () => {
 	let fixture: ComponentFixture<SidebarComponent>;
 
 	beforeEach(async () => {
-		closedSubject = new Subject<EditDateModel | undefined>();
+		closedSubject = new Subject<DateTimeModel | undefined>();
 
 		selectedItemsSubject = new BehaviorSubject<Set<any>>(
 			new Set([
@@ -178,6 +178,13 @@ describe('SidebarComponent', () => {
 				{
 					provide: EditDateTimeModalService,
 					useValue: mockModalService,
+				},
+				{
+					provide: MessageService,
+					useValue: {
+						showError: () => {},
+						showMessage: () => {},
+					},
 				},
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -360,13 +367,14 @@ describe('SidebarComponent', () => {
 		it('should open the edit date time modal with provided data', () => {
 			const openSpy = spyOn(mockModalService, 'open').and.callThrough();
 
-			const modalData: EditDateModel = {
+			const modalData: DateTimeModel = {
 				date: { year: '1985', month: '05', day: '' },
 				time: {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					amPm: Meridian.AM,
+					am: true,
+					pm: false,
 					timezoneOffset: '',
 					timezoneName: '',
 				},
@@ -377,19 +385,20 @@ describe('SidebarComponent', () => {
 			expect(openSpy).toHaveBeenCalledWith(modalData);
 		});
 
-		it('should save displayDT when modal returns a result', () => {
+		it('should save displayTime when modal returns a result', () => {
 			const saveSpy = spyOn(
 				mockEditService,
 				'saveItemVoProperty',
 			).and.callThrough();
 
-			const modalData: EditDateModel = {
+			const modalData: DateTimeModel = {
 				date: { year: '1985', month: '05', day: '' },
 				time: {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					amPm: Meridian.AM,
+					am: true,
+					pm: false,
 					timezoneOffset: '',
 					timezoneName: '',
 				},
@@ -403,7 +412,8 @@ describe('SidebarComponent', () => {
 					hours: '10',
 					minutes: '30',
 					seconds: '00',
-					amPm: Meridian.AM,
+					am: true,
+					pm: false,
 					timezoneOffset: '',
 					timezoneName: '',
 				},
@@ -411,7 +421,7 @@ describe('SidebarComponent', () => {
 
 			expect(saveSpy).toHaveBeenCalledWith(
 				component.selectedItem,
-				'displayDT',
+				'displayTime',
 				jasmine.any(String),
 			);
 		});
@@ -422,13 +432,14 @@ describe('SidebarComponent', () => {
 				'saveItemVoProperty',
 			).and.callThrough();
 
-			const modalData: EditDateModel = {
+			const modalData: DateTimeModel = {
 				date: { year: '1985', month: '05', day: '' },
 				time: {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					amPm: Meridian.AM,
+					am: true,
+					pm: false,
 					timezoneOffset: '',
 					timezoneName: '',
 				},

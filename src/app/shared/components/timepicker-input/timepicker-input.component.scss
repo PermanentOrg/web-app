@@ -1,33 +1,25 @@
 @import 'colors';
+@import 'mixins';
 
 :host {
 	position: relative;
 	display: block;
+	height: 40px;
 }
 
 .pr-time-input-group {
-	display: flex;
-	align-items: center;
-	background: $white;
-	border: 1px solid $PR-blue-100;
-	border-radius: 8px;
-	padding: 0 12px;
-	height: 40px;
-	flex: 1;
+	@include input-container;
+	padding: 0 0 0 12px;
+
+	&:focus-within,
+	&.active {
+		@include input-focus-state;
+	}
 }
 
 .pr-time-segment {
-	border: none;
-	background: transparent;
-	text-align: center;
-	font-size: 14px;
-	color: $PR-blue;
-	outline: none;
+	@include input-segment;
 	width: 32px;
-
-	&::placeholder {
-		color: $PR-blue-400;
-	}
 }
 
 .pr-colon {
@@ -36,16 +28,31 @@
 	margin: 0 2px;
 }
 
+.pr-time-icon-wrapper {
+	@include icon-wrapper;
+}
+
 .pr-am-pm-toggle {
-	background: $PR-blue-50;
+	background: $PR-blue-25;
 	border: 1px solid $PR-blue-100;
 	border-radius: 4px;
-	padding: 4px 8px;
-	font-size: 12px;
-	font-weight: 600;
-	color: $PR-blue;
+	padding: 0 8px;
+	font-family: 'Usual', sans-serif;
+	font-weight: 400;
+	font-style: normal;
+	font-size: 10px;
+	line-height: 8px;
+	letter-spacing: 0.16em;
+	text-align: center;
+	text-transform: uppercase;
+	color: $PR-blue-900;
 	cursor: pointer;
-	margin-left: 4px;
+	margin-left: auto;
+	margin-right: 4px;
+	width: 40px;
+	height: 24px;
+	gap: 4px;
+	opacity: 1;
 
 	&:hover {
 		background: $PR-blue-100;
@@ -65,7 +72,6 @@
 	color: $PR-blue-600;
 	display: flex;
 	align-items: center;
-	margin-left: auto;
 
 	&:hover {
 		color: $PR-blue;
@@ -84,7 +90,8 @@
 .pr-timepicker-dropdown {
 	position: absolute;
 	top: 100%;
-	left: 0;
+	left: 50%;
+	transform: translateX(-50%);
 	z-index: 10;
 	margin-top: 4px;
 	width: fit-content;

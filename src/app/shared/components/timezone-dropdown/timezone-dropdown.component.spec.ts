@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TIMEZONES } from '@shared/services/edtf-service/edtf.service';
 import { TimezoneDropdownComponent } from './timezone-dropdown.component';
-import { TIMEZONES } from './timezone-dropdown.component';
 
 describe('TimezoneDropdownComponent', () => {
 	let component: TimezoneDropdownComponent;
