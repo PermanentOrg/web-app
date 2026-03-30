@@ -6,7 +6,11 @@ import {
 import { of } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
-import { RecordRepo, RecordResponse } from '@shared/services/api/record.repo';
+import {
+	convertStelaRecordToRecordVO,
+	RecordRepo,
+	RecordResponse,
+} from '@shared/services/api/record.repo';
 import { RecordVO } from '@root/app/models';
 import {
 	provideHttpClient,
@@ -231,6 +235,7 @@ describe('RecordRepo', () => {
 			displayName: 'Test Record',
 			archiveNumber: 'arch-1',
 			displayDate: '2025-01-01',
+			displayTime: '1985-05-20T10:00:00+05:30',
 			folderLinkId: '1',
 			folderLinkType: 'type.folder_link.private',
 			parentFolderLinkId: '2',
@@ -305,6 +310,46 @@ describe('RecordRepo', () => {
 			const resultRecord = result.getRecordVO();
 
 			expect(resultRecord).toBeInstanceOf(RecordVO);
+		});
+	});
+
+	describe('convertStelaRecordToRecordVO', () => {
+		const baseStelaRecord = {
+			recordId: 42,
+			displayName: 'Test Record',
+			archiveNumber: 'arch-1',
+			displayDate: '2025-01-01',
+			folderLinkId: '1',
+			folderLinkType: 'type.folder_link.private' as any,
+			parentFolderLinkId: '2',
+			thumbUrl200: '',
+			thumbUrl500: '',
+			thumbUrl1000: '',
+			thumbUrl2000: '',
+			location: null,
+			files: [],
+			createdAt: '2025-01-01',
+			updatedAt: '2025-01-01',
+			archive: { id: '1', name: 'Archive', thumbURL200: '' },
+			shares: null,
+			tags: null,
+		};
+
+		it('should map displayTime from the stela record', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				displayTime: '1985-05-20T10:00:00+05:30',
+			} as any);
+
+			expect(record.displayTime).toBe('1985-05-20T10:00:00+05:30');
+		});
+
+		it('should leave displayTime undefined when not present in stela record', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+			} as any);
+
+			expect(record.displayTime).toBeUndefined();
 		});
 	});
 });

@@ -1,12 +1,22 @@
 @import 'colors';
+@import 'mixins';
 
 .pr-sidebar-date-picker {
 	position: relative;
 
 	.pr-sidebar-date-picker-header {
+		display: flex;
+		align-items: center;
+		gap: 2px;
 		font-size: 13px;
 		color: $PR-blue-600;
 		margin-bottom: 4px;
+
+		.pr-header-dot {
+			font-size: 6px;
+			color: $PR-blue-400;
+			margin: 0 2px;
+		}
 	}
 
 	.pr-sidebar-date-picker-label {
@@ -37,7 +47,7 @@
 
 	.pr-sidebar-date-picker-row {
 		display: flex;
-		align-items: center;
+		align-items: baseline;
 	}
 
 	.pr-sidebar-date-picker-row-label {
@@ -49,9 +59,31 @@
 
 	.pr-sidebar-date-picker-row-value {
 		flex: 1;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px;
 		font-size: 14px;
 		color: $PR-blue;
 		font-weight: 500;
+
+		.pr-time-group {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			white-space: nowrap;
+		}
+
+		.pr-dot {
+			font-size: 6px;
+			color: $PR-blue;
+			vertical-align: middle;
+			margin-left: 2px;
+		}
+
+		.pr-muted {
+			color: $PR-blue-400;
+		}
 	}
 
 	.pr-sidebar-date-picker-row-placeholder {
@@ -96,14 +128,22 @@
 		padding: 16px;
 	}
 
+	.pr-clear-btn {
+		@include clear-btn;
+		margin-top: 4px;
+
+		i {
+			font-size: 16px;
+		}
+
+		span {
+			font-size: 13px;
+		}
+	}
+
 	.pr-sidebar-date-picker-footer {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
+		@include panel-footer;
 		padding: 12px 16px;
-		border-top: 1px solid $PR-blue-100;
-		background: $PR-blue-25;
-		border-radius: 0 0 12px 12px;
 	}
 
 	.pr-more-options-btn {

@@ -7,49 +7,29 @@ import {
 	WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
+import { TimepickerInputComponent } from '@shared/components/timepicker-input/timepicker-input.component';
+import { TimezoneDropdownComponent } from '@shared/components/timezone-dropdown/timezone-dropdown.component';
 import {
-	TimepickerInputComponent,
-	TimeInputObject,
-} from '@shared/components/timepicker-input/timepicker-input.component';
-import {
-	TimezoneDropdownComponent,
-	TimezoneOption,
-} from '@shared/components/timezone-dropdown/timezone-dropdown.component';
-import {
-	EditDateModel,
-	DateQualifierObject,
-	DateObject,
-	TimeObject,
+	EdtfService,
 	DateQualifier,
-	Meridian,
-} from './edit-date-time.model';
-import { EditDateTimeMappingService } from './edit-date-time-mapping.service';
-
-interface SavedFormState {
-	qualifiers: DateQualifierObject;
-	date: DateObject;
-	time: TimeObject;
-	endDate: DateObject;
-	endTime: TimeObject;
-	useDateRange: boolean;
-}
-
-const DEFAULT_TIME: TimeObject = {
-	hours: '',
-	minutes: '',
-	seconds: '',
-	amPm: Meridian.AM,
-	timezoneOffset: '',
-	timezoneName: '',
-};
+	DateQualifierFlags,
+	DateModel,
+	TimeModel,
+	DateTimeModel,
+	DEFAULT_TIME,
+	UNKNOWN_VALUE,
+	TimezoneOption,
+} from '@shared/services/edtf-service/edtf.service';
 
 @Component({
 	selector: 'pr-edit-date-time-modal',
 	standalone: true,
 	imports: [
 		CommonModule,
+		NgbTooltipModule,
 		DatepickerInputComponent,
 		TimepickerInputComponent,
 		TimezoneDropdownComponent,
@@ -60,53 +40,75 @@ const DEFAULT_TIME: TimeObject = {
 export class EditDateTimeModalComponent implements OnInit {
 	readonly DateQualifier = DateQualifier;
 
-	qualifiers = signal<DateQualifierObject>({
+	qualifiers = signal<DateQualifierFlags>({
 		approximate: false,
 		uncertain: false,
 		unknown: false,
 	});
 
-	savedFormState = signal<SavedFormState | null>(null);
+	savedFormState = signal<{
+		qualifiers: DateQualifierFlags;
+		date: DateModel;
+		time: TimeModel;
+		endDate: DateModel;
+		endTime: TimeModel;
+		useDateRange: boolean;
+	} | null>(null);
 	fieldsDisabled = computed(() => this.qualifiers().unknown);
 
-	date = signal<DateObject>({ year: '', month: '', day: '' });
+	date = signal<DateModel>({ year: '', month: '', day: '' });
 
-	time = signal<TimeObject>({ ...DEFAULT_TIME });
+	time = signal<TimeModel>({ ...DEFAULT_TIME });
 
 	useDateRange = signal(false);
 
-	endDate = signal<DateObject>({ year: '', month: '', day: '' });
+	endDate = signal<DateModel>({ year: '', month: '', day: '' });
 
-	endTime = signal<TimeObject>({ ...DEFAULT_TIME });
+	endTime = signal<TimeModel>({ ...DEFAULT_TIME });
 
-	edtfValue = computed(() => {
+	private edtfResult = computed<{
+		value: string;
+		valid: boolean;
+		errorMessage: string;
+	}>(() => {
 		if (this.qualifiers().unknown) {
-			return 'xxxx-xx-xx';
+			return { value: UNKNOWN_VALUE, valid: true, errorMessage: '' };
 		}
 
-		let computedEdtfValue = EditDateTimeMappingService.buildEdtf(
-			this.date(),
-			this.time(),
-			this.qualifiers(),
-		);
+		const dateTimeModel: DateTimeModel = {
+			date: this.date(),
+			time: this.time(),
+			qualifiers: {
+				approximate: this.qualifiers().approximate,
+				uncertain: this.qualifiers().uncertain,
+				unknown: this.qualifiers().unknown,
+			},
+		};
 
 		if (this.useDateRange()) {
-			const endEdtf = EditDateTimeMappingService.buildEdtf(
-				this.endDate(),
-				this.endTime(),
-			);
-
-			if (endEdtf) {
-				computedEdtfValue += `/${endEdtf}`;
-			}
+			dateTimeModel.endDate = this.endDate();
+			dateTimeModel.endTime = this.endTime();
 		}
-
-		return computedEdtfValue;
+		try {
+			const edtfDate = this.edtfService.toEdtfDate(dateTimeModel);
+			return { value: edtfDate, valid: true, errorMessage: '' };
+		} catch (error) {
+			return {
+				value: '',
+				valid: false,
+				errorMessage: error instanceof Error ? error.message : 'Invalid date',
+			};
+		}
 	});
 
+	edtfValue = computed(() => this.edtfResult().value);
+	isEdtfValid = computed(() => this.edtfResult().valid);
+	edtfErrorMessage = computed(() => this.edtfResult().errorMessage);
+
 	constructor(
-		public dialogRef: DialogRef<EditDateModel>,
-		@Inject(DIALOG_DATA) public data: EditDateModel,
+		public dialogRef: DialogRef<DateTimeModel>,
+		@Inject(DIALOG_DATA) public data: DateTimeModel,
+		private edtfService: EdtfService,
 	) {}
 
 	ngOnInit(): void {
@@ -126,25 +128,37 @@ export class EditDateTimeModalComponent implements OnInit {
 				this.endDate.set(this.data.endDate);
 				this.endTime.set(this.data.endTime ?? { ...DEFAULT_TIME });
 			}
+
+			if (this.data.qualifiers?.unknown) {
+				this.savedFormState.set({
+					qualifiers: { approximate: false, uncertain: false, unknown: false },
+					date: { ...this.date() },
+					time: { ...this.time() },
+					endDate: { ...this.endDate() },
+					endTime: { ...this.endTime() },
+					useDateRange: this.useDateRange(),
+				});
+			}
 		}
 	}
 
 	onTimeChange(
-		timeInputValue: TimeInputObject,
-		currentTime: WritableSignal<TimeObject>,
+		timeInputValue: TimeModel,
+		currentTime: WritableSignal<TimeModel>,
 	): void {
 		currentTime.update((t) => ({
 			...t,
 			hours: timeInputValue.hours,
 			minutes: timeInputValue.minutes,
 			seconds: timeInputValue.seconds,
-			amPm: timeInputValue.amPm,
+			am: timeInputValue.am,
+			pm: timeInputValue.pm,
 		}));
 	}
 
 	onTimezoneChange(
 		timezoneOption: TimezoneOption,
-		currentTime: WritableSignal<TimeObject>,
+		currentTime: WritableSignal<TimeModel>,
 	): void {
 		currentTime.update((t) => ({
 			...t,
@@ -224,12 +238,22 @@ export class EditDateTimeModalComponent implements OnInit {
 		this.useDateRange.update((v) => !v);
 	}
 
+	clearAll(): void {
+		this.qualifiers.set({
+			approximate: false,
+			uncertain: false,
+			unknown: false,
+		});
+		this.resetForm();
+		this.savedFormState.set(null);
+	}
+
 	onCancel(): void {
 		this.dialogRef.close();
 	}
 
 	onSave(): void {
-		const newDateModel: EditDateModel = {
+		const newDateModel: DateTimeModel = {
 			qualifiers: { ...this.qualifiers() },
 			date: { ...this.date() },
 			time: { ...this.time() },
