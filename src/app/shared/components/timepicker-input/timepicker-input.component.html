@@ -1,8 +1,8 @@
-<div class="pr-time-input-group">
+<div class="pr-time-input-group" [class.active]="showTimepicker()">
 	<input
 		type="text"
 		class="pr-time-segment"
-		[value]="time.hours"
+		[value]="time.hours ?? ''"
 		[disabled]="disabled"
 		(input)="updateTime($event, 'hours', minutesInput)"
 		placeholder="hh"
@@ -13,7 +13,7 @@
 		#minutesInput
 		type="text"
 		class="pr-time-segment"
-		[value]="time.minutes"
+		[value]="time.minutes ?? ''"
 		[disabled]="disabled"
 		(input)="updateTime($event, 'minutes', secondsInput?.nativeElement)"
 		placeholder="mm"
@@ -25,7 +25,7 @@
 			#secondsInput
 			type="text"
 			class="pr-time-segment"
-			[value]="time.seconds"
+			[value]="time.seconds ?? ''"
 			[disabled]="disabled"
 			(input)="updateTime($event, 'seconds')"
 			placeholder="ss"
@@ -33,15 +33,17 @@
 		/>
 	}
 	<button class="pr-am-pm-toggle" [disabled]="disabled" (click)="toggleAmPm()">
-		{{ time.amPm }}
+		{{ time.pm ? 'PM' : 'AM' }}
 	</button>
-	<span
-		class="pr-icon-button"
-		[class.disabled]="disabled"
-		(click)="toggleTimepicker()"
-	>
-		<i class="material-icons">access_time</i>
-	</span>
+	<div class="pr-time-icon-wrapper">
+		<span
+			class="pr-icon-button"
+			[class.disabled]="disabled"
+			(click)="toggleTimepicker()"
+		>
+			<i class="material-icons">access_time</i>
+		</span>
+	</div>
 </div>
 
 @if (showTimepicker()) {

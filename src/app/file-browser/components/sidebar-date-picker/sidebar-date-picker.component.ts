@@ -14,47 +14,31 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-	parseEdtf,
-	formatEdtfDate,
-} from '@shared/services/edtf-date/edtf-date.service';
-import {
-	DatepickerInputComponent,
-	DateInputObject,
-} from '@shared/components/datepicker-input/datepicker-input.component';
-import {
-	TimepickerInputComponent,
-	TimeInputObject,
-} from '@shared/components/timepicker-input/timepicker-input.component';
-import {
-	TimezoneDropdownComponent,
-	TimezoneOption,
-} from '@shared/components/timezone-dropdown/timezone-dropdown.component';
-import {
+	EdtfService,
 	Meridian,
-	EditDateModel,
-	DateObject,
-	TimeObject,
-	DateQualifierObject,
-} from '../edit-date-time-modal/edit-date-time.model';
-import { EditDateTimeMappingService } from '../edit-date-time-modal/edit-date-time-mapping.service';
+	DateTimeModel,
+	DateModel,
+	TimeModel,
+	DateQualifierFlags,
+	TimezoneOption,
+} from '@shared/services/edtf-service/edtf.service';
+import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
+import { TimepickerInputComponent } from '@shared/components/timepicker-input/timepicker-input.component';
+import { TimezoneDropdownComponent } from '@shared/components/timezone-dropdown/timezone-dropdown.component';
 
-export interface SaveDateResult {
-	displayDT: string;
-	displayEndDT?: string | null;
-}
+const EMPTY_DATE: DateModel = { year: '', month: '', day: '' };
 
-const EMPTY_DATE: DateObject = { year: '', month: '', day: '' };
-
-const EMPTY_TIME: TimeObject = {
+const EMPTY_TIME: TimeModel = {
 	hours: '',
 	minutes: '',
 	seconds: '',
-	amPm: Meridian.AM,
+	am: true,
+	pm: false,
 	timezoneOffset: '',
 	timezoneName: '',
 };
 
-const EMPTY_QUALIFIERS: DateQualifierObject = {
+const EMPTY_QUALIFIERS: DateQualifierFlags = {
 	approximate: false,
 	uncertain: false,
 	unknown: false,
@@ -73,23 +57,26 @@ const EMPTY_QUALIFIERS: DateQualifierObject = {
 	styleUrls: ['./sidebar-date-picker.component.scss'],
 })
 export class SidebarDatePickerComponent implements OnInit, OnChanges {
-	@Input() displayDT: string | null = null;
-	@Input() displayEndDT: string | null = null;
+	@Input() displayTime: DateTimeModel | null;
 	@Input() disabled = false;
 
-	@Output() saveClicked = new EventEmitter<SaveDateResult>();
-	@Output() moreOptionsClicked = new EventEmitter<EditDateModel>();
+	constructor(private edtfService: EdtfService) {}
+
+	@Output() saveClicked = new EventEmitter<DateTimeModel>();
+	@Output() moreOptionsClicked = new EventEmitter<DateTimeModel>();
 
 	@ViewChild('sidebarDatePickerContainer')
 	container?: ElementRef<HTMLElement>;
 
 	isDropdownOpen = signal(false);
 
-	_date = signal<DateObject>({ ...EMPTY_DATE });
-	_time = signal<TimeObject>({ ...EMPTY_TIME });
-	_endDate = signal<DateObject>({ ...EMPTY_DATE });
-	_endTime = signal<TimeObject>({ ...EMPTY_TIME });
-	_qualifiers = signal<DateQualifierObject>({ ...EMPTY_QUALIFIERS });
+	_date = signal<DateModel>({ ...EMPTY_DATE });
+	_time = signal<TimeModel>({ ...EMPTY_TIME });
+	_endDate = signal<DateModel>({ ...EMPTY_DATE });
+	_endTime = signal<TimeModel>({ ...EMPTY_TIME });
+	_qualifiers = signal<DateQualifierFlags>({ ...EMPTY_QUALIFIERS });
+	_isOpenStart = signal(false);
+	_isOpenEnd = signal(false);
 
 	activeQualifiers = computed(() => {
 		const q = this._qualifiers();
@@ -100,22 +87,68 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		return active;
 	});
 
-	stringStartDate = computed(() => {
-		if (this._qualifiers().unknown) return 'xxxx-xx-xx';
-		return this.computeDateString(this._date(), this._time());
+	// Start date/time computed properties
+	hasStartDate = computed(() => {
+		if (this._qualifiers().unknown) return true;
+		if (this._isOpenStart()) return true;
+		const date = this._date();
+		return !!(date.year || date.month || date.day);
 	});
 
-	stringEndDate = computed(() =>
-		this.computeDateString(this._endDate(), this._endTime()),
+	formattedStartDate = computed(() => {
+		if (this._qualifiers().unknown) return 'Unknown date and time';
+		if (this._isOpenStart()) return '..';
+		return this.formatDate(this._date());
+	});
+
+	formattedStartTime = computed(() => this.formatTime(this._time()));
+	startMeridian = computed(() =>
+		this._time().hours ? (this._time().pm ? Meridian.PM : Meridian.AM) : '',
 	);
 
+	startTimezone = computed(() => {
+		const offset = this._time().timezoneOffset;
+		return offset ? EdtfService.offsetToAbbreviation(offset) : '';
+	});
+
+	dropdownTimezoneLabel = computed(() => {
+		const offset = this._time().timezoneOffset;
+		return offset ? EdtfService.offsetToAbbreviation(offset) : '';
+	});
+
+	// End date/time computed properties
+	hasEndDate = computed(() => {
+		if (this._isOpenEnd()) return true;
+		const date = this._endDate();
+		return !!(date.year || date.month || date.day);
+	});
+
+	formattedEndDate = computed(() => {
+		if (this._isOpenEnd()) return '..';
+		return this.formatDate(this._endDate());
+	});
+
+	formattedEndTime = computed(() => this.formatTime(this._endTime()));
+	endMeridian = computed(() =>
+		this._endTime().hours
+			? this._endTime().pm
+				? Meridian.PM
+				: Meridian.AM
+			: '',
+	);
+
+	endTimezone = computed(() => {
+		const offset = this._endTime().timezoneOffset;
+		return offset ? EdtfService.offsetToAbbreviation(offset) : '';
+	});
+
 	ngOnInit(): void {
-		this.updateDateValue();
+		this.updateFromDisplayTime();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes.displayDT || changes.displayEndDT) {
-			this.updateDateValue();
+		if (changes.displayTime && !this.isDropdownOpen()) {
+			this.updateFromDisplayTime();
 		}
 	}
 
@@ -134,6 +167,11 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 	toggle(): void {
 		if (this.disabled) return;
+		const q = this._qualifiers();
+		if (this.hasEndDate() || q.unknown || q.approximate || q.uncertain) {
+			this.onMoreOptions();
+			return;
+		}
 		if (this.isDropdownOpen()) {
 			this.onCancel();
 		} else {
@@ -143,21 +181,18 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 	open(): void {
 		if (this.disabled) return;
-		this.updateDateValue();
+		this.updateFromDisplayTime();
 		this.isDropdownOpen.set(true);
 	}
 
-	onDateChange(newDate: DateInputObject): void {
+	onDateChange(newDate: DateModel): void {
 		this._date.set(newDate);
 	}
 
-	onTimeChange(newTime: TimeInputObject): void {
+	onTimeChange(newTime: TimeModel): void {
 		this._time.update((t) => ({
 			...t,
-			hours: newTime.hours,
-			minutes: newTime.minutes,
-			seconds: newTime.seconds,
-			amPm: newTime.amPm,
+			...newTime,
 		}));
 	}
 
@@ -169,18 +204,27 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		}));
 	}
 
+	clearAll(): void {
+		this._date.set({ ...EMPTY_DATE });
+		this._time.set({ ...EMPTY_TIME });
+		this._endDate.set({ ...EMPTY_DATE });
+		this._endTime.set({ ...EMPTY_TIME });
+		this._qualifiers.set({ ...EMPTY_QUALIFIERS });
+		this._isOpenStart.set(false);
+		this._isOpenEnd.set(false);
+	}
+
 	onMoreOptions(): void {
-		const currentValue = this.buildDateTimeObject();
 		this.isDropdownOpen.set(false);
 
-		const modalData: EditDateModel = {
+		const modalData: DateTimeModel = {
 			qualifiers: { ...this._qualifiers() },
-			date: { ...currentValue.date },
-			time: { ...currentValue.time },
+			date: { ...this._date() },
+			time: { ...this._time() },
 		};
 
 		const endDate = this._endDate();
-		if (endDate.year || endDate.month || endDate.day) {
+		if (endDate.year || endDate.month || endDate.day || this._isOpenEnd()) {
 			modalData.endDate = { ...endDate };
 			modalData.endTime = { ...this._endTime() };
 		}
@@ -189,161 +233,112 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	}
 
 	onCancel(): void {
-		this.updateDateValue();
+		this.updateFromDisplayTime();
 		this.isDropdownOpen.set(false);
 	}
 
 	onSave(): void {
-		const newValue = this.buildDateTimeObject();
-		const saveResult: SaveDateResult = {
-			displayDT: this.buildDisplayDT(newValue.date, newValue.time),
-		};
-
-		const endDate = this._endDate();
-		if (endDate.year || endDate.month || endDate.day) {
-			saveResult.displayEndDT = this.buildDisplayDT(endDate, this._endTime());
-		}
-
-		this.saveClicked.emit(saveResult);
-		this.isDropdownOpen.set(false);
-	}
-
-	private updateDateValue(): void {
-		const parsed = this.parseDate(this.displayDT);
-		this._date.set(parsed?.date ?? { ...EMPTY_DATE });
-		this._time.set(parsed?.time ?? { ...EMPTY_TIME });
-
-		const parsedQualifiers = parsed?.qualifiers;
-		if (
-			parsedQualifiers &&
-			(parsedQualifiers.approximate ||
-				parsedQualifiers.uncertain ||
-				parsedQualifiers.unknown)
-		) {
-			this._qualifiers.set(parsedQualifiers);
-		}
-
-		const parsedEnd = this.parseDate(this.displayEndDT);
-		this._endDate.set(parsedEnd?.date ?? { ...EMPTY_DATE });
-		this._endTime.set(parsedEnd?.time ?? { ...EMPTY_TIME });
-	}
-
-	private parseDate(input: string | null): {
-		date: DateObject;
-		time: TimeObject;
-		qualifiers: DateQualifierObject;
-	} | null {
-		try {
-			const parsed = parseEdtf(input);
-			const values = parsed.values;
-
-			const year = values[0] == null ? '' : String(values[0]);
-			const month =
-				values[1] == null ? '' : String(values[1] + 1).padStart(2, '0');
-			const day = values[2] == null ? '' : String(values[2]).padStart(2, '0');
-
-			let hours = '';
-			let minutes = '';
-			let seconds = '';
-			let amPm = Meridian.AM;
-			let timezoneOffset = '';
-			let timezoneName = '';
-
-			if (values.length > 3) {
-				const converted = EditDateTimeMappingService.to12Hour(values[3]);
-				hours = converted.hours;
-				amPm = converted.amPm;
-				minutes = values[4] == null ? '' : String(values[4]).padStart(2, '0');
-				seconds = values[5] == null ? '' : String(values[5]).padStart(2, '0');
-			}
-
-			if (parsed.offset !== undefined && parsed.offset !== null) {
-				const totalMinutes = Math.abs(parsed.offset);
-				const hrs = Math.floor(totalMinutes / 60);
-				const mins = totalMinutes % 60;
-				const sign = parsed.offset >= 0 ? '+' : '-';
-				timezoneOffset = `GMT${sign}${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
-				timezoneName =
-					EditDateTimeMappingService.offsetToAbbreviation(timezoneOffset);
-			}
-
-			return {
-				date: { year, month, day },
-				time: {
-					hours,
-					minutes,
-					seconds,
-					amPm,
-					timezoneOffset,
-					timezoneName,
-				},
-				qualifiers: {
-					approximate: !!parsed.approximate,
-					uncertain: !!parsed.uncertain,
-					unknown: false,
-				},
-			};
-		} catch {
-			return null;
-		}
-	}
-
-	private buildDateTimeObject(): EditDateModel {
-		return {
+		const dateTimeModel: DateTimeModel = {
+			qualifiers: { ...this._qualifiers() },
 			date: { ...this._date() },
 			time: { ...this._time() },
 		};
+
+		const endDate = this._endDate();
+		if (endDate.year || endDate.month || endDate.day || this._isOpenEnd()) {
+			dateTimeModel.endDate = { ...endDate };
+			dateTimeModel.endTime = { ...this._endTime() };
+		}
+
+		this.saveClicked.emit(dateTimeModel);
+		this.isDropdownOpen.set(false);
 	}
 
-	private computeDateString(date: DateObject, time: TimeObject): string {
+	private updateFromDisplayTime(): void {
+		if (!this.displayTime) {
+			this._date.set({ ...EMPTY_DATE });
+			this._time.set({ ...EMPTY_TIME });
+			this._endDate.set({ ...EMPTY_DATE });
+			this._endTime.set({ ...EMPTY_TIME });
+			this._qualifiers.set({ ...EMPTY_QUALIFIERS });
+			this._isOpenStart.set(false);
+			this._isOpenEnd.set(false);
+			return;
+		}
+
+		const startDate = this.displayTime.date ?? { ...EMPTY_DATE };
+		const endDate = this.displayTime.endDate;
+		const isInterval = !!endDate;
+		const isStartEmpty = !startDate.year && !startDate.month && !startDate.day;
+		const isEndEmpty =
+			isInterval && !endDate.year && !endDate.month && !endDate.day;
+
+		this._isOpenStart.set(isInterval && isStartEmpty);
+		this._isOpenEnd.set(isEndEmpty);
+
+		this._date.set({ ...startDate });
+		this._time.set(
+			this.displayTime.time ? { ...this.displayTime.time } : { ...EMPTY_TIME },
+		);
+		this._qualifiers.set(
+			this.displayTime.qualifiers
+				? { ...this.displayTime.qualifiers }
+				: { ...EMPTY_QUALIFIERS },
+		);
+		this._endDate.set(endDate ? { ...endDate } : { ...EMPTY_DATE });
+		this._endTime.set(
+			this.displayTime.endTime
+				? { ...this.displayTime.endTime }
+				: { ...EMPTY_TIME },
+		);
+	}
+
+	private formatDate(date: DateModel): string {
 		const hasYear = !!date.year;
 		const hasMonth = !!date.month;
 		const hasDay = !!date.day && parseInt(date.day, 10) > 0;
 
 		if (!hasYear && !hasMonth && !hasDay) return '';
 
-		let dateStr = '';
-
 		if (hasYear) {
-			const parts = [date.year.padStart(4, '0')];
-			if (hasMonth) parts.push(date.month.padStart(2, '0'));
-			if (hasDay) parts.push(date.day.padStart(2, '0'));
+			const yearNum = parseInt(date.year, 10);
+			const monthNum = hasMonth ? parseInt(date.month, 10) - 1 : 0;
+			const dayNum = hasDay ? parseInt(date.day, 10) : 1;
 
-			dateStr = formatEdtfDate(
-				parts.join('-'),
-				'en-US',
-				hasMonth ? { month: 'long' } : {},
-			);
-		} else {
-			const dateParts: string[] = [];
-			if (hasMonth) {
-				const monthIdx = parseInt(date.month, 10) - 1;
-				if (monthIdx >= 0 && monthIdx < 12) {
-					dateParts.push(
-						new Intl.DateTimeFormat('en-US', {
-							month: 'long',
-						}).format(new Date(2000, monthIdx)),
-					);
-				}
+			const formatOptions: Intl.DateTimeFormatOptions = {};
+			formatOptions.year = 'numeric';
+			if (hasMonth) formatOptions.month = 'long';
+			if (hasDay) formatOptions.day = 'numeric';
+
+			const dateObj = new Date(yearNum, monthNum, dayNum);
+			if (yearNum >= 0 && yearNum < 100) {
+				dateObj.setFullYear(yearNum);
 			}
-			if (hasDay) dateParts.push(date.day);
-			dateStr = dateParts.join(' ');
+
+			return new Intl.DateTimeFormat('en-US', formatOptions).format(dateObj);
 		}
 
-		if (time?.hours) {
-			const h = parseInt(time.hours, 10);
-			const m = (time.minutes || '00').padStart(2, '0');
-			const s = (time.seconds || '00').padStart(2, '0');
-			const timeStr = `${h}:${m}:${s} ${time.amPm}`;
-			const tz = time.timezoneName || '';
-			const fullTime = tz ? `${timeStr} ${tz}` : timeStr;
-			return dateStr ? `${dateStr} \u00B7 ${fullTime}` : fullTime;
+		const dateParts: string[] = [];
+		if (hasMonth) {
+			const monthIdx = parseInt(date.month, 10) - 1;
+			if (monthIdx >= 0 && monthIdx < 12) {
+				dateParts.push(
+					new Intl.DateTimeFormat('en-US', {
+						month: 'long',
+					}).format(new Date(2000, monthIdx)),
+				);
+			}
 		}
-
-		return dateStr;
+		if (hasDay) dateParts.push(date.day);
+		return dateParts.join(' ');
 	}
 
-	private buildDisplayDT(date: DateObject, time: TimeObject): string {
-		return EditDateTimeMappingService.buildDisplayDT(date, time);
+	private formatTime(time: TimeModel): string {
+		if (!time?.hours) return '';
+
+		const h = parseInt(time.hours, 10);
+		const m = (time.minutes || '00').padStart(2, '0');
+		const s = (time.seconds || '00').padStart(2, '0');
+		return `${h}:${m}:${s}`;
 	}
 }
