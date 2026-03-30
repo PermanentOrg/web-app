@@ -677,7 +677,7 @@ export class EditService {
 
 		const promises: Array<Promise<unknown[] | RecordResponse[]>> = [];
 
-		if (recordKey?.[0] === 'displayDT') {
+		if (recordKey?.[0] === 'displayTime') {
 			promises.push(
 				Promise.all(
 					records.map(
@@ -705,8 +705,7 @@ export class EditService {
 		const promises: Array<Promise<FolderResponse | FolderResponse[]>> = [];
 
 		if (
-			folderKeys?.includes('displayDT') ||
-			folderKeys?.includes('displayEndDT')
+			folderKeys?.includes('displayTime')
 		) {
 			promises.push(
 				Promise.all(

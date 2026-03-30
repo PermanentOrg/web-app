@@ -11,39 +11,22 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
 import {
 	TimepickerInputComponent,
-	TimeInputObject,
 } from '@shared/components/timepicker-input/timepicker-input.component';
 import {
 	TimezoneDropdownComponent,
-	TimezoneOption,
 } from '@shared/components/timezone-dropdown/timezone-dropdown.component';
 import {
-	EditDateModel,
-	DateQualifierObject,
-	DateObject,
-	TimeObject,
+	EdtfService,
 	DateQualifier,
-	Meridian,
-} from './edit-date-time.model';
-import { EditDateTimeMappingService } from './edit-date-time-mapping.service';
+	DateQualifierFlags,
+	DateModel,
+	TimeModel,
+	DateTimeModel,
+	DEFAULT_TIME,
+	TimezoneOption,
+} from '@shared/services/edtf-service/edtf.service';
 
-interface SavedFormState {
-	qualifiers: DateQualifierObject;
-	date: DateObject;
-	time: TimeObject;
-	endDate: DateObject;
-	endTime: TimeObject;
-	useDateRange: boolean;
-}
 
-const DEFAULT_TIME: TimeObject = {
-	hours: '',
-	minutes: '',
-	seconds: '',
-	amPm: Meridian.AM,
-	timezoneOffset: '',
-	timezoneName: '',
-};
 
 @Component({
 	selector: 'pr-edit-date-time-modal',
@@ -60,53 +43,67 @@ const DEFAULT_TIME: TimeObject = {
 export class EditDateTimeModalComponent implements OnInit {
 	readonly DateQualifier = DateQualifier;
 
-	qualifiers = signal<DateQualifierObject>({
+	qualifiers = signal<DateQualifierFlags>({
 		approximate: false,
 		uncertain: false,
 		unknown: false,
 	});
 
-	savedFormState = signal<SavedFormState | null>(null);
+	savedFormState = signal<{
+		qualifiers: DateQualifierFlags;
+		date: DateModel;
+		time: TimeModel;
+		endDate: DateModel;
+		endTime: TimeModel;
+		useDateRange: boolean;
+	} | null>(null);
 	fieldsDisabled = computed(() => this.qualifiers().unknown);
 
-	date = signal<DateObject>({ year: '', month: '', day: '' });
+	date = signal<DateModel>({ year: '', month: '', day: '' });
 
-	time = signal<TimeObject>({ ...DEFAULT_TIME });
+	time = signal<TimeModel>({ ...DEFAULT_TIME });
 
 	useDateRange = signal(false);
 
-	endDate = signal<DateObject>({ year: '', month: '', day: '' });
+	endDate = signal<DateModel>({ year: '', month: '', day: '' });
 
-	endTime = signal<TimeObject>({ ...DEFAULT_TIME });
+	endTime = signal<TimeModel>({ ...DEFAULT_TIME });
 
 	edtfValue = computed(() => {
 		if (this.qualifiers().unknown) {
 			return 'xxxx-xx-xx';
 		}
 
-		let computedEdtfValue = EditDateTimeMappingService.buildEdtf(
-			this.date(),
-			this.time(),
-			this.qualifiers(),
-		);
+		const dateTimeModel: any = {
+			date: {
+				year: this.date().year,
+				month: this.date().month,
+				day: this.date().day,
+			},
+			time: this.time(),
+			qualifiers: {
+				approximate: this.qualifiers().approximate,
+				uncertain: this.qualifiers().uncertain,
+				unknown: this.qualifiers().unknown,
+			},
+		};
 
 		if (this.useDateRange()) {
-			const endEdtf = EditDateTimeMappingService.buildEdtf(
-				this.endDate(),
-				this.endTime(),
-			);
-
-			if (endEdtf) {
-				computedEdtfValue += `/${endEdtf}`;
-			}
+			dateTimeModel.endDate = {
+				year: this.endDate().year,
+				month: this.endDate().month,
+				day: this.endDate().day,
+			};
+			dateTimeModel.endTime = this.endTime();
 		}
 
-		return computedEdtfValue;
+		return this.edtfService.toEdtfDate(dateTimeModel);
 	});
 
 	constructor(
-		public dialogRef: DialogRef<EditDateModel>,
-		@Inject(DIALOG_DATA) public data: EditDateModel,
+		public dialogRef: DialogRef<DateTimeModel>,
+		@Inject(DIALOG_DATA) public data: DateTimeModel,
+		private edtfService: EdtfService,
 	) {}
 
 	ngOnInit(): void {
@@ -130,21 +127,22 @@ export class EditDateTimeModalComponent implements OnInit {
 	}
 
 	onTimeChange(
-		timeInputValue: TimeInputObject,
-		currentTime: WritableSignal<TimeObject>,
+		timeInputValue: TimeModel,
+		currentTime: WritableSignal<TimeModel>,
 	): void {
 		currentTime.update((t) => ({
 			...t,
 			hours: timeInputValue.hours,
 			minutes: timeInputValue.minutes,
 			seconds: timeInputValue.seconds,
-			amPm: timeInputValue.amPm,
+			am: timeInputValue.am,
+			pm: timeInputValue.pm,
 		}));
 	}
 
 	onTimezoneChange(
 		timezoneOption: TimezoneOption,
-		currentTime: WritableSignal<TimeObject>,
+		currentTime: WritableSignal<TimeModel>,
 	): void {
 		currentTime.update((t) => ({
 			...t,
@@ -229,7 +227,7 @@ export class EditDateTimeModalComponent implements OnInit {
 	}
 
 	onSave(): void {
-		const newDateModel: EditDateModel = {
+		const newDateModel: DateTimeModel = {
 			qualifiers: { ...this.qualifiers() },
 			date: { ...this.date() },
 			time: { ...this.time() },

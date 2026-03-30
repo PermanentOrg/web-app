@@ -13,10 +13,8 @@ import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
-import type { SaveDateResult } from '../sidebar-date-picker/sidebar-date-picker.component';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
-import { EditDateModel } from '../edit-date-time-modal/edit-date-time.model';
-import { EditDateTimeMappingService } from '../edit-date-time-modal/edit-date-time-mapping.service';
+import { DateTimeModel, EdtfService } from '@shared/services/edtf-service/edtf.service';
 
 type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
 @Component({
@@ -28,6 +26,7 @@ type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
 export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	currentTab: SidebarTab = 'info';
 	selectedItem: ItemVO = this.dataService.currentFolder;
+	displayTimeObject: DateTimeModel | null;
 	selectedItems: ItemVO[];
 
 	subscriptions: Subscription[] = [];
@@ -46,36 +45,10 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	originalFileExtension: string = '';
 	permanentFileExtension: string = '';
 
-	get displayTime(): string {
-		return this.parseEdtfInterval('start');
-	}
-
-	get displayEndTime(): string {
-		return this.parseEdtfInterval('end');
-	}
-
-	private parseEdtfInterval(part: 'start' | 'end'): string {
-		const item = this.selectedItem;
-		if (!item) {
-			return '';
-		}
-
-		const displayTimeValue = item.displayTime;
-		if (!displayTimeValue) {
-			return part === 'start' ? item.displayDT || '' : item.displayEndDT || '';
-		}
-
-		if (displayTimeValue.includes('/')) {
-			const parts = displayTimeValue.split('/');
-			return part === 'start' ? parts[0] : parts[1] || '';
-		}
-
-		return part === 'start' ? displayTimeValue : '';
-	}
-
 	constructor(
 		private dataService: DataService,
 		private editService: EditService,
+		private edtfService: EdtfService,
 		private accountService: AccountService,
 		private editDateTimeModalService: EditDateTimeModalService,
 		private cdr: ChangeDetectorRef,
@@ -94,6 +67,10 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 					this.selectedItem = null;
 					this.selectedItems = Array.from(selectedItems.keys());
 				}
+
+				this.displayTimeObject = this.selectedItem?.displayTime 
+					? this.edtfService.toDateTimeModel(this.selectedItem.displayTime)
+					: null;
 
 				this.isRootFolder = this.selectedItem?.type?.includes('root');
 				this.isPublicItem =
@@ -199,40 +176,18 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		this.cdr.markForCheck();
 	}
 
-	async onDateSaved(result: SaveDateResult) {
-		this.editService.saveItemVoProperty(
-			this.selectedItem,
-			'displayDT',
-			result.displayDT,
-		);
-		if (result.displayEndDT !== undefined) {
-			this.editService.saveItemVoProperty(
-				this.selectedItem,
-				'displayEndDT',
-				result.displayEndDT,
-			);
-		}
-		this.cdr.markForCheck();
+	async onDateSaved(result: DateTimeModel) {
+		const newDisplayTime = this.edtfService.toEdtfDate(result);
+		this.onFinishEditing('displayTime', newDisplayTime);
 	}
 
-	onDateMoreOptions(modalData: EditDateModel): void {
+	async onDateMoreOptions(modalData: DateTimeModel): Promise<void> {
 		const dialogRef = this.editDateTimeModalService.open(modalData);
 
 		dialogRef.closed.subscribe((result) => {
 			if (result) {
-				const saveResult: SaveDateResult = {
-					displayDT: EditDateTimeMappingService.buildDisplayDT(
-						result.date,
-						result.time,
-					),
-					displayEndDT: result.endDate
-						? EditDateTimeMappingService.buildDisplayDT(
-								result.endDate,
-								result.endTime ?? result.time,
-							)
-						: null,
-				};
-				this.onDateSaved(saveResult);
+				const newDisplayTime = this.edtfService.toEdtfDate(result);
+				this.onFinishEditing('displayTime', newDisplayTime);
 			}
 		});
 	}

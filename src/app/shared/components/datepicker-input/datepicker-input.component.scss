@@ -1,36 +1,28 @@
 @import 'colors';
+@import 'mixins';
 
 :host {
 	position: relative;
 	display: block;
+	height: 40px;
 }
 
 .pr-date-input-group {
-	display: flex;
-	align-items: center;
-	background: $white;
-	border: 1px solid $PR-blue-100;
-	border-radius: 8px;
-	padding: 0 12px;
-	height: 40px;
-	flex: 1;
+	@include input-container;
+	padding: 0 0 0 12px;
+
+	&:focus-within,
+	&.active {
+		@include input-focus-state;
+	}
 }
 
 .pr-date-segment {
-	border: none;
-	background: transparent;
-	text-align: center;
-	font-size: 14px;
-	color: $PR-blue;
-	outline: none;
+	@include input-segment;
 	width: 36px;
 
 	&.year {
 		width: 48px;
-	}
-
-	&::placeholder {
-		color: $PR-blue-400;
 	}
 }
 
@@ -38,6 +30,11 @@
 	color: $PR-blue-400;
 	font-size: 14px;
 	margin: 0 2px;
+}
+
+.pr-calendar-icon-wrapper {
+	@include icon-wrapper;
+	margin-left: auto;
 }
 
 .pr-icon-button {
@@ -48,7 +45,6 @@
 	color: $PR-blue-600;
 	display: flex;
 	align-items: center;
-	margin-left: auto;
 
 	&:hover {
 		color: $PR-blue;

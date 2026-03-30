@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import {
-	DatepickerInputComponent,
-	DateInputObject,
-} from './datepicker-input.component';
+import { DatepickerInputComponent } from './datepicker-input.component';
+import { DateModel } from '@shared/services/edtf-service/edtf.service';
 
 @Component({
 	standalone: true,
@@ -15,11 +13,11 @@ import {
 	/>`,
 })
 class TestHostComponent {
-	date: DateInputObject = { year: '', month: '', day: '' };
+	date: DateModel = { year: '', month: '', day: '' };
 	disabled = false;
-	lastEmittedDate: DateInputObject | null = null;
+	lastEmittedDate: DateModel | null = null;
 
-	onDateChange(newDate: DateInputObject): void {
+	onDateChange(newDate: DateModel): void {
 		this.lastEmittedDate = newDate;
 		this.date = newDate;
 	}
@@ -48,12 +46,17 @@ describe('DatepickerInputComponent', () => {
 	const mockEvent = (value: string): Event =>
 		({ target: { value } }) as unknown as Event;
 
-	// --- Year validation ---
 
-	it('should accept valid year', () => {
+	it('should accept valid 4-digit year and emit', () => {
 		component.updateYear(mockEvent('2026'));
 
 		expect(hostComponent.lastEmittedDate?.year).toBe('2026');
+	});
+
+	it('should not emit for incomplete year', () => {
+		component.updateYear(mockEvent('202'));
+
+		expect(hostComponent.lastEmittedDate).toBeNull();
 	});
 
 	it('should reject non-numeric year', () => {
@@ -68,15 +71,19 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate).toBeNull();
 	});
 
-	// --- Month validation ---
-
-	it('should accept valid month', () => {
+	it('should accept valid 2-digit month and emit', () => {
 		component.updateMonth(mockEvent('06'));
 
 		expect(hostComponent.lastEmittedDate?.month).toBe('06');
 	});
 
-	it('should reject month greater than 12', () => {
+	it('should not emit for single digit month', () => {
+		component.updateMonth(mockEvent('6'));
+
+		expect(hostComponent.lastEmittedDate).toBeNull();
+	});
+
+	it('should not emit or auto-focus for invalid month', () => {
 		component.updateMonth(mockEvent('13'));
 
 		expect(hostComponent.lastEmittedDate).toBeNull();
@@ -88,9 +95,7 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate).toBeNull();
 	});
 
-	// --- Day validation ---
-
-	it('should accept valid day for month', () => {
+	it('should accept valid 2-digit day for month and emit', () => {
 		hostComponent.date = { year: '2026', month: '01', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('31'));
@@ -98,12 +103,20 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate?.day).toBe('31');
 	});
 
-	it('should reject day greater than max for month', () => {
+	it('should not emit for single digit day', () => {
+		hostComponent.date = { year: '2026', month: '01', day: '' };
+		fixture.detectChanges();
+		component.updateDay(mockEvent('3'));
+
+		expect(hostComponent.lastEmittedDate).toBeNull();
+	});
+
+	it('should not emit day greater than max for month', () => {
 		hostComponent.date = { year: '2026', month: '02', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('30'));
 
-		expect(hostComponent.lastEmittedDate?.day).toBeUndefined();
+		expect(hostComponent.lastEmittedDate).toBeNull();
 	});
 
 	it('should accept day 29 for February in leap year', () => {
@@ -114,51 +127,45 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate?.day).toBe('29');
 	});
 
-	it('should reject day 29 for February in non-leap year', () => {
+	it('should not emit day 29 for February in non-leap year', () => {
 		hostComponent.date = { year: '2025', month: '02', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('29'));
 
-		expect(hostComponent.lastEmittedDate?.day).toBeUndefined();
+		expect(hostComponent.lastEmittedDate).toBeNull();
 	});
 
-	it('should reject day 31 for 30-day months', () => {
+	it('should not emit day 31 for 30-day months', () => {
 		hostComponent.date = { year: '2026', month: '04', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('31'));
 
-		expect(hostComponent.lastEmittedDate?.day).toBeUndefined();
+		expect(hostComponent.lastEmittedDate).toBeNull();
 	});
 
-	// --- Day clamping ---
+	it('should allow typing first digit 0 or 1 for month', () => {
+		const input = { value: '0' } as HTMLInputElement;
+		component.updateMonth({ target: input } as unknown as Event);
 
-	it('should clamp day when month changes to shorter month', () => {
-		hostComponent.date = { year: '2026', month: '01', day: '31' };
+		expect(input.value).toBe('0');
+	});
+
+	it('should reject first digit > 1 for month', () => {
+		hostComponent.date = { year: '', month: '', day: '' };
 		fixture.detectChanges();
-		component.updateMonth(mockEvent('02'));
+		const input = { value: '5' } as HTMLInputElement;
+		component.updateMonth({ target: input } as unknown as Event);
 
-		expect(hostComponent.lastEmittedDate?.day).toBe('28');
+		expect(input.value).toBe('');
 	});
 
-	it('should clamp day when year changes making Feb shorter', () => {
-		hostComponent.date = { year: '2024', month: '02', day: '29' };
-		fixture.detectChanges();
-		component.updateYear(mockEvent('2025'));
-
-		expect(hostComponent.lastEmittedDate?.day).toBe('28');
-	});
-
-	// --- Empty values ---
-
-	it('should allow clearing fields', () => {
+	it('should not emit when clearing year field', () => {
 		hostComponent.date = { year: '2026', month: '02', day: '18' };
 		fixture.detectChanges();
 		component.updateYear(mockEvent(''));
 
-		expect(hostComponent.lastEmittedDate?.year).toBe('');
+		expect(hostComponent.lastEmittedDate).toBeNull();
 	});
-
-	// --- Datepicker ---
 
 	it('should toggle datepicker', () => {
 		component.toggleDatepicker();

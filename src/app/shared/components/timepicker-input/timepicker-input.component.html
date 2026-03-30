@@ -1,4 +1,4 @@
-<div class="pr-time-input-group">
+<div class="pr-time-input-group" [class.active]="showTimepicker()">
 	<input
 		type="text"
 		class="pr-time-segment"
@@ -33,15 +33,17 @@
 		/>
 	}
 	<button class="pr-am-pm-toggle" [disabled]="disabled" (click)="toggleAmPm()">
-		{{ time.amPm }}
+		{{ time.pm ? 'PM' : 'AM' }}
 	</button>
-	<span
-		class="pr-icon-button"
-		[class.disabled]="disabled"
-		(click)="toggleTimepicker()"
-	>
-		<i class="material-icons">access_time</i>
-	</span>
+	<div class="pr-time-icon-wrapper">
+		<span
+			class="pr-icon-button"
+			[class.disabled]="disabled"
+			(click)="toggleTimepicker()"
+		>
+			<i class="material-icons">access_time</i>
+		</span>
+	</div>
 </div>
 
 @if (showTimepicker()) {

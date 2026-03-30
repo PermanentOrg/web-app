@@ -14,10 +14,17 @@
 		(click)="toggle()"
 	>
 		<div class="pr-sidebar-date-picker-row">
-			<span class="pr-sidebar-date-picker-row-label">From</span>
-			@if (stringStartDate()) {
+			@if (hasEndDate()) {<span class="pr-sidebar-date-picker-row-label">From</span>}
+			@if (hasStartDate()) {
 				<span class="pr-sidebar-date-picker-row-value">
-					{{ stringStartDate() }}
+					<span class="pr-date-part">{{ formattedStartDate() }}</span>
+					@if (formattedStartTime()) {
+						<span class="pr-separator">&middot;</span>
+						<span class="pr-time-part">{{ formattedStartTime() }}</span>
+						@if (startTimezone()) {
+							<span class="pr-timezone-part">{{ startTimezone() }}</span>
+						}
+					}
 				</span>
 			} @else {
 				<span class="pr-sidebar-date-picker-row-placeholder">
@@ -31,11 +38,18 @@
 			}
 		</div>
 
-		@if (stringEndDate()) {
+		@if (hasEndDate()) {
 			<div class="pr-sidebar-date-picker-row pr-sidebar-date-picker-to-row">
 				<span class="pr-sidebar-date-picker-row-label">To</span>
 				<span class="pr-sidebar-date-picker-row-value">
-					{{ stringEndDate() }}
+					<span class="pr-date-part">{{ formattedEndDate() }}</span>
+					@if (formattedEndTime()) {
+						<span class="pr-separator">&middot;</span>
+						<span class="pr-time-part">{{ formattedEndTime() }}</span>
+						@if (endTimezone()) {
+							<span class="pr-timezone-part">{{ endTimezone() }}</span>
+						}
+					}
 				</span>
 			</div>
 		}

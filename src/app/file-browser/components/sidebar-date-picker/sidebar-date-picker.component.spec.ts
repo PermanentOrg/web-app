@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
-import { Meridian } from '@shared/components/timepicker-input/timepicker-input.component';
-import { EditDateModel } from '../edit-date-time-modal/edit-date-time.model';
+import { Meridian, EditDateModel } from '@shared/services/edtf-service/edtf.service';
 import { SidebarDatePickerComponent } from './sidebar-date-picker.component';
 
 @Component({

@@ -3,7 +3,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { EditDateTimeModalService } from './edit-date-time-modal.service';
 import { EditDateTimeModalComponent } from './edit-date-time-modal.component';
-import { EditDateModel, Meridian } from './edit-date-time.model';
+import { EditDateModel, Meridian } from '@shared/services/edtf-service/edtf.service';
 
 describe('EditDateTimeModalService', () => {
 	let service: EditDateTimeModalService;

@@ -7,8 +7,7 @@ import { ArchiveVO, RecordVO } from '@models/index';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
-import { EditDateModel } from '../edit-date-time-modal/edit-date-time.model';
-import { Meridian } from '../edit-date-time-modal/edit-date-time.model';
+import { DateTimeModel, Meridian } from '@shared/services/edtf-service/edtf.service';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -110,10 +109,10 @@ const mockEditService = {
 	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
 };
 
-let closedSubject: Subject<EditDateModel | undefined>;
+let closedSubject: Subject<DateTimeModel | undefined>;
 
 const mockModalService = {
-	open: (_data: EditDateModel) => ({
+	open: (_data: DateTimeModel) => ({
 		closed: closedSubject.asObservable(),
 	}),
 };
@@ -135,7 +134,7 @@ describe('SidebarComponent', () => {
 	let fixture: ComponentFixture<SidebarComponent>;
 
 	beforeEach(async () => {
-		closedSubject = new Subject<EditDateModel | undefined>();
+		closedSubject = new Subject<DateTimeModel | undefined>();
 
 		selectedItemsSubject = new BehaviorSubject<Set<any>>(
 			new Set([
@@ -360,13 +359,14 @@ describe('SidebarComponent', () => {
 		it('should open the edit date time modal with provided data', () => {
 			const openSpy = spyOn(mockModalService, 'open').and.callThrough();
 
-			const modalData: EditDateModel = {
+			const modalData: DateTimeModel = {
 				date: { year: '1985', month: '05', day: '' },
 				time: {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					amPm: Meridian.AM,
+					am: true,
+					pm: false,
 					timezoneOffset: '',
 					timezoneName: '',
 				},
@@ -383,13 +383,14 @@ describe('SidebarComponent', () => {
 				'saveItemVoProperty',
 			).and.callThrough();
 
-			const modalData: EditDateModel = {
+			const modalData: DateTimeModel = {
 				date: { year: '1985', month: '05', day: '' },
 				time: {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					amPm: Meridian.AM,
+					am: true,
+					pm: false,
 					timezoneOffset: '',
 					timezoneName: '',
 				},
@@ -403,7 +404,8 @@ describe('SidebarComponent', () => {
 					hours: '10',
 					minutes: '30',
 					seconds: '00',
-					amPm: Meridian.AM,
+					am: true,
+					pm: false,
 					timezoneOffset: '',
 					timezoneName: '',
 				},
@@ -422,13 +424,14 @@ describe('SidebarComponent', () => {
 				'saveItemVoProperty',
 			).and.callThrough();
 
-			const modalData: EditDateModel = {
+			const modalData: DateTimeModel = {
 				date: { year: '1985', month: '05', day: '' },
 				time: {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					amPm: Meridian.AM,
+					am: true,
+					pm: false,
 					timezoneOffset: '',
 					timezoneName: '',
 				},

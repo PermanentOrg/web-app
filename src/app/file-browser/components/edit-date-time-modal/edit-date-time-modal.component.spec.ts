@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { EditDateTimeModalComponent } from './edit-date-time-modal.component';
-import { EditDateModel, DateQualifier, Meridian } from './edit-date-time.model';
+import { EditDateModel, DateQualifier, Meridian } from '@shared/services/edtf-service/edtf.service';
 
 describe('EditDateTimeModalComponent', () => {
 	let component: EditDateTimeModalComponent;

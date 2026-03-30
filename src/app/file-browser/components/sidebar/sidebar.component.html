@@ -107,8 +107,7 @@
 		</div>
 		<div class="sidebar-item">
 			<pr-sidebar-date-picker
-				[displayDT]="selectedItem.displayDT"
-				[displayEndDT]="selectedItem.displayEndDT"
+				[displayTime]="displayTimeObject"
 				[disabled]="!canEdit"
 				(saveClicked)="onDateSaved($event)"
 				(moreOptionsClicked)="onDateMoreOptions($event)"

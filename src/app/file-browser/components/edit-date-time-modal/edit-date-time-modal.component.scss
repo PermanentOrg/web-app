@@ -1,9 +1,10 @@
 @import 'colors';
+@import 'mixins';
 
 .pr-edit-date-time-dialog {
 	background: $white;
 	border-radius: 12px;
-	min-width: 650px;
+	min-width: 658px;
 	box-shadow: 0 8px 32px rgba($black, 0.12);
 	font-family: 'Inter', sans-serif;
 
@@ -52,28 +53,32 @@
 		display: flex;
 		align-items: center;
 		gap: 0;
+		width: 100%;
 
 		.pr-qualifiers-label {
 			font-size: 14px;
 			color: $PR-blue-600;
 			white-space: nowrap;
-			margin-right: 16px;
+			margin-right: 22px;
 		}
 
 		.pr-qualifier-option {
 			display: flex;
 			align-items: center;
-			gap: 8px;
+			gap: 24px;
 			padding: 0 20px;
 			border-right: 1px solid $PR-blue-100;
+			flex: 1;
 
 			&:last-child {
 				border-right: none;
+				padding-right: 0;
 			}
 
 			span {
 				font-size: 14px;
 				color: $PR-blue;
+				white-space: nowrap;
 			}
 		}
 	}
@@ -130,6 +135,11 @@
 		display: flex;
 		gap: 16px;
 		position: relative;
+
+		pr-datepicker-input,
+		pr-timepicker-input {
+			flex: 1;
+		}
 	}
 
 	.pr-icon-button {
@@ -184,8 +194,14 @@
 			gap: 10px;
 
 			.pr-edtf-badge {
-				font-size: 12px;
+				font-family: 'Usual', sans-serif;
 				font-weight: 400;
+				font-style: normal;
+				font-size: 10px;
+				line-height: 8px;
+				letter-spacing: 16%;
+				text-align: center;
+				text-transform: uppercase;
 				color: $PR-blue;
 				background: $white;
 				border-radius: 4px;
@@ -193,13 +209,17 @@
 				height: 20px;
 				display: flex;
 				align-items: center;
-				letter-spacing: 1px;
 			}
 
 			.pr-edtf-value {
-				font-size: 13px;
+				font-family: 'DM Mono', monospace;
+				font-weight: 400;
+				font-style: normal;
+				font-size: 12px;
+				line-height: 16px;
+				letter-spacing: -1%;
+				text-align: right;
 				color: $PR-blue-600;
-				font-family: monospace;
 			}
 		}
 

@@ -1,4 +1,4 @@
-<div class="pr-date-input-group">
+<div class="pr-date-input-group" [class.active]="showDatepicker()">
 	<input
 		type="text"
 		class="pr-date-segment year"
@@ -30,19 +30,21 @@
 		placeholder="DD"
 		maxlength="2"
 	/>
-	<span
-		class="pr-icon-button"
-		[class.disabled]="disabled"
-		(click)="toggleDatepicker()"
-	>
-		<i class="material-icons">calendar_today</i>
-	</span>
+	<div class="pr-calendar-icon-wrapper">
+		<span
+			class="pr-icon-button"
+			[class.disabled]="disabled"
+			(click)="toggleDatepicker()"
+		>
+			<i class="material-icons">calendar_today</i>
+		</span>
+	</div>
 </div>
 
 @if (showDatepicker()) {
 	<div class="pr-datepicker-dropdown">
 		<ngb-datepicker
-			[startDate]="datepickerModel() || { year: 2026, month: 1 }"
+			[startDate]="datepickerModel()"
 			(dateSelect)="onDateSelect($event)"
 		/>
 	</div>

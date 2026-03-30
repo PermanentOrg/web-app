@@ -4,21 +4,16 @@ import {
 	Output,
 	EventEmitter,
 	signal,
-	computed,
 	HostListener,
 	ElementRef,
 	ViewChild,
+	OnChanges,
+	SimpleChanges,
+	OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-
-export interface DateInputObject {
-	year: string;
-	month: string;
-	day: string;
-}
-
-const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+import { DateModel, EdtfService } from '@shared/services/edtf-service/edtf.service';
 
 @Component({
 	selector: 'pr-datepicker-input',
@@ -27,29 +22,43 @@ const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	templateUrl: './datepicker-input.component.html',
 	styleUrls: ['./datepicker-input.component.scss'],
 })
-export class DatepickerInputComponent {
-	@Input() date: DateInputObject = { year: '', month: '', day: '' };
+export class DatepickerInputComponent implements OnInit, OnChanges {
+	@Input() date: DateModel = { year: '', month: '', day: '' };
 	@Input() disabled = false;
 
-	@Output() dateChange = new EventEmitter<DateInputObject>();
+	@Output() dateChange = new EventEmitter<DateModel>();
 
 	@ViewChild('monthInput') monthInput!: ElementRef<HTMLInputElement>;
 	@ViewChild('dayInput') dayInput!: ElementRef<HTMLInputElement>;
 
 	showDatepicker = signal(false);
+	datepickerModel = signal<NgbDateStruct | null>(null);
 
-	constructor(private elementRef: ElementRef) {}
+	constructor(
+		private elementRef: ElementRef,
+		private edtfService: EdtfService,
+	) {}
 
-	datepickerModel = computed<NgbDateStruct | null>(() => {
-		const d = this.date;
-		const year = parseInt(d.year, 10);
-		const month = parseInt(d.month, 10);
-		const day = parseInt(d.day, 10);
-		if (year && month && day) {
-			return { year, month, day };
+	ngOnInit(): void {
+		this.updateDatepickerModel(this.date);
+	}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['date']) {
+			this.updateDatepickerModel(this.date);
 		}
-		return null;
-	});
+	}
+
+	private updateDatepickerModel(date: DateModel): void {
+		const year = parseInt(date.year, 10);
+		const month = parseInt(date.month || '', 10);
+		const day = parseInt(date.day || '', 10);
+		if (year && month && day) {
+			this.datepickerModel.set({ year, month, day });
+		} else {
+			this.datepickerModel.set(null);
+		}
+	}
 
 	@HostListener('document:click', ['$event'])
 	onDocumentClick(event: MouseEvent): void {
@@ -67,20 +76,14 @@ export class DatepickerInputComponent {
 		const input = event.target as HTMLInputElement;
 		const value = input.value;
 
-		if (value !== '' && !this.isValidYear(value)) {
+		const testDate = { ...this.date, year: value };
+		if (!this.edtfService.isValidYear(testDate)) {
 			input.value = this.date.year;
 			return;
 		}
 
-		const updated: DateInputObject = { ...this.date, year: value };
-		const maxDay = this.getMaxDaysInMonth(updated.year, updated.month);
-		if (updated.day && parseInt(updated.day, 10) > maxDay) {
-			updated.day = String(maxDay).padStart(2, '0');
-		}
-
-		this.dateChange.emit(updated);
-
-		if (value.length === 4) {
+		if (value.length === 4 || value.length === 0) {
+			this.dateChange.emit({ ...this.date, year: value });
 			this.monthInput.nativeElement.focus();
 		}
 	}
@@ -89,21 +92,14 @@ export class DatepickerInputComponent {
 		const input = event.target as HTMLInputElement;
 		const value = input.value;
 
-		if (value !== '' && !this.isValidMonth(value)) {
+		const testDate = { ...this.date, month: value };
+		if (!this.edtfService.isValidMonth(testDate)) {
 			input.value = this.date.month;
 			return;
 		}
 
-		const updated: DateInputObject = { ...this.date, month: value };
-		const maxDay = this.getMaxDaysInMonth(updated.year, updated.month);
-		if (updated.day && parseInt(updated.day, 10) > maxDay) {
-			updated.day = String(maxDay).padStart(2, '0');
-		}
-
-		this.dateChange.emit(updated);
-
-		const num = parseInt(value, 10);
-		if (value.length === 2 && num >= 1 && num <= 12) {
+		if (value.length === 2 || value.length === 0) {
+			this.dateChange.emit({ ...this.date, month: value });
 			this.dayInput.nativeElement.focus();
 		}
 	}
@@ -112,60 +108,27 @@ export class DatepickerInputComponent {
 		const input = event.target as HTMLInputElement;
 		const value = input.value;
 
-		if (value !== '' && !this.isValidDay(this.date, value)) {
+		const testDate = { ...this.date, day: value };
+		if (!this.edtfService.isValidDay(testDate)) {
 			input.value = this.date.day;
 			return;
 		}
 
-		this.dateChange.emit({ ...this.date, day: value });
+		if (value.length === 2 || value.length === 0) {
+			this.dateChange.emit({ ...this.date, day: value });
+		}
 	}
 
 	onDateSelect(newDate: NgbDateStruct): void {
-		this.dateChange.emit({
+
+		this.datepickerModel.set(newDate);
+		const updatedDate = {
 			year: String(newDate.year),
 			month: String(newDate.month).padStart(2, '0'),
 			day: String(newDate.day).padStart(2, '0'),
-		});
+		};
+		this.date = updatedDate;
+		this.dateChange.emit(updatedDate);
 		this.showDatepicker.set(false);
-	}
-
-	private isValidYear(value: string): boolean {
-		return this.isNumeric(value) && value.length <= 4 && !value.startsWith('0');
-	}
-
-	private isValidMonth(value: string): boolean {
-		if (!this.isNumeric(value) || value.length > 2) return false;
-		const num = parseInt(value, 10);
-		if (value.length === 1) return num >= 0 && num <= 1;
-		return num >= 1 && num <= 12;
-	}
-
-	private isValidDay(currentDate: DateInputObject, value: string): boolean {
-		if (!this.isNumeric(value) || value.length > 2) return false;
-		const num = parseInt(value, 10);
-		const maxDay = this.getMaxDaysInMonth(currentDate.year, currentDate.month);
-		if (value.length === 1) return num >= 0 && num <= Math.floor(maxDay / 10);
-		return num >= 1 && num <= maxDay;
-	}
-
-	private getMaxDaysInMonth(year: string, month: string): number {
-		const y = parseInt(year, 10);
-		const m = parseInt(month, 10);
-
-		if (!m || m < 1 || m > 12) return 31;
-
-		if (m === 2 && y) {
-			return this.isLeapYear(y) ? 29 : 28;
-		}
-
-		return DAYS_IN_MONTH[m - 1];
-	}
-
-	private isNumeric(value: string): boolean {
-		return /^\d+$/.test(value);
-	}
-
-	private isLeapYear(year: number): boolean {
-		return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 	}
 }
