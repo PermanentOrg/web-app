@@ -5,6 +5,7 @@ import {
 	archiveCreationHeaderText,
 	archiveOptions,
 } from '../types/archive-types';
+import { OnboardingService } from '../../../services/onboarding.service';
 
 @Component({
 	selector: 'pr-select-archive-type-screen',
@@ -21,9 +22,11 @@ export class SelectArchiveTypeScreenComponent implements OnInit {
 
 	@Output() submitEmitter = new EventEmitter<Record<string, string>>();
 
+	constructor(private onboardingService: OnboardingService) {}
+
 	ngOnInit(): void {
-		const storageTag = sessionStorage.getItem('archiveTypeTag');
-		const storageType = sessionStorage.getItem('archiveType');
+		const storageTag = this.onboardingService.getArchiveTypeTag();
+		const storageType = this.onboardingService.getArchiveType();
 
 		if (storageTag && storageType) {
 			this.tag = storageTag;
