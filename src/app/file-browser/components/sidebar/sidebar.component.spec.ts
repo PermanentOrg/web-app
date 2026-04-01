@@ -238,6 +238,31 @@ describe('SidebarComponent', () => {
 		expect(component.canShare).toBe(true);
 	});
 
+	it('should prefer displayTime over displayDT when both are set', () => {
+		component.selectedItem = new RecordVO({
+			accessRole: 'access.role.owner',
+			displayTime: '1985-05-20',
+			displayDT: '1985-05-20T00:00:00',
+		});
+
+		const displayValue =
+			component.selectedItem.displayTime || component.selectedItem.displayDT;
+
+		expect(displayValue).toBe('1985-05-20');
+	});
+
+	it('should fall back to displayDT when displayTime is not set', () => {
+		component.selectedItem = new RecordVO({
+			accessRole: 'access.role.owner',
+			displayDT: '2024-01-01T00:00:00',
+		});
+
+		const displayValue =
+			component.selectedItem.displayTime || component.selectedItem.displayDT;
+
+		expect(displayValue).toBe('2024-01-01T00:00:00.000Z');
+	});
+
 	it('should hide the original format for folders', () => {
 		component.isRecord = false;
 

@@ -130,7 +130,9 @@
 					<td>Date</td>
 					<td>
 						<pr-inline-value-edit
-							[displayValue]="currentRecord.displayDT"
+							[displayValue]="
+								currentRecord.displayTime || currentRecord.displayDT
+							"
 							[canEdit]="canEdit"
 							[item]="currentRecord"
 							[itemId]="currentRecord.folder_linkId"

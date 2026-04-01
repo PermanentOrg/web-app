@@ -397,12 +397,7 @@ export class EditService {
 			promises.push(Promise.resolve());
 		}
 
-		if (records.length) {
-			const archiveId = this.accountService.getArchive().archiveId;
-			promises.push(this.api.record.update(records, archiveId));
-		} else {
-			promises.push(Promise.resolve());
-		}
+		promises.push(this.updateRecords(records, whitelist));
 
 		return await Promise.all(promises).then((results) => {
 			const [folderResponse, recordResponse] = results as [
@@ -431,6 +426,7 @@ export class EditService {
 
 				const newData: RecordVOData = {
 					updatedDT: res.updatedDT,
+					displayTime: res.displayTime,
 				};
 
 				if (res.TimezoneVO) {
@@ -661,5 +657,32 @@ export class EditService {
 					});
 				});
 		});
+	}
+
+	private async updateRecords(
+		records: RecordVO[],
+		recordKey?: (keyof ItemVO)[],
+	): Promise<RecordVO[] | void> {
+		if (!records.length) {
+			return await Promise.resolve();
+		}
+
+		const promises: Array<Promise<unknown[] | RecordResponse[]>> = [];
+
+		if (recordKey?.[0] === 'displayDT') {
+			promises.push(
+				Promise.all(
+					records.map(
+						async (record) => await this.api.record.updateStelaRecord(record),
+					),
+				),
+			);
+		}
+
+		const archiveId = this.accountService.getArchive().archiveId;
+		promises.push(this.api.record.update(records, archiveId));
+
+		await Promise.all(promises);
+		return (await this.api.record.get(records)).getRecordVOs();
 	}
 }
