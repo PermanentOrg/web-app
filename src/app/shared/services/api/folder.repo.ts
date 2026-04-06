@@ -179,11 +179,11 @@ export class FolderRepo extends BaseRepo {
 		const stelaFolders = await this.getStelaFolders(folderVOs, shareToken);
 
 		const folderVOsData = stelaFolders.map((stelaFolder) => ({
-			FolderVO: convertStelaFolderToFolderVO(stelaFolder),
+			data: [{ FolderVO: convertStelaFolderToFolderVO(stelaFolder) }],
 		}));
 
 		return new FolderResponse({
-			Results: [folderVOsData],
+			Results: folderVOsData,
 		});
 	}
 
@@ -228,13 +228,8 @@ export class FolderRepo extends BaseRepo {
 	}
 
 	public async updateStelaFolder(folderVO: FolderVO): Promise<FolderResponse> {
-		const displayTime = this.buildEdtfInterval(
-			folderVO.displayDT,
-			folderVO.displayEndDT,
-		);
-
 		const payload = {
-			displayTime,
+			displayTime: folderVO.displayTime,
 		};
 
 		const response = await firstValueFrom(
@@ -247,21 +242,6 @@ export class FolderRepo extends BaseRepo {
 		return new FolderResponse({
 			Results: [[{ FolderVO: updatedFolderVO }]],
 		});
-	}
-
-	private buildEdtfInterval(
-		displayDT: string,
-		displayEndDT: string,
-	): string | null {
-		if (!displayDT) {
-			return null;
-		}
-
-		if (!displayEndDT) {
-			return displayDT;
-		}
-
-		return `${displayDT}/${displayEndDT}`;
 	}
 
 	private async getStelaFolderChildren(

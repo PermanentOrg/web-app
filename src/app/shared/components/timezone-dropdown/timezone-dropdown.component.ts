@@ -10,7 +10,10 @@ import {
 	HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TimezoneOption, TIMEZONES } from '@shared/services/edtf-service/edtf.service';
+import {
+	TimezoneOption,
+	TIMEZONES,
+} from '@shared/services/edtf-service/edtf.service';
 
 @Component({
 	selector: 'pr-timezone-dropdown',

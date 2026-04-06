@@ -16,7 +16,11 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { NgbTimepicker, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, takeUntil } from 'rxjs';
-import { Meridian, TimeModel, DEFAULT_TIME, EdtfService } from '@shared/services/edtf-service/edtf.service';
+import {
+	TimeModel,
+	DEFAULT_TIME,
+	EdtfService,
+} from '@shared/services/edtf-service/edtf.service';
 
 @Component({
 	selector: 'pr-timepicker-input',

@@ -4,10 +4,10 @@
 		[class.disabled]="disabled"
 		(click)="toggle()"
 	>
-		<span class="pr-timezone-value">{{
-			selectedOffset
+		<span class="pr-timezone-value">{{ selectedOffset }}</span>
+		<span class="pr-timezone-label">{{
+			selectedName || 'Select timezone'
 		}}</span>
-			<span class="pr-timezone-label">{{ selectedName  || 'Select timezone'}}</span>
 		<span class="pr-icon-button pr-chevron">
 			<i class="material-icons">unfold_more</i>
 		</span>

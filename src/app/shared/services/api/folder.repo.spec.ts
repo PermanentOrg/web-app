@@ -241,11 +241,10 @@ describe('Folder repo', () => {
 			view: 'grid',
 		};
 
-		it('should send PATCH request with displayTime as EDTF interval', async () => {
+		it('should send PATCH request with the displayTime EDTF string', async () => {
 			const folderVO = new FolderVO({
 				folderId: 123,
-				displayDT: '1985-05-20T00:00:00Z',
-				displayEndDT: '1990-06-15T00:00:00Z',
+				displayTime: '1985-05-20T10:00:00+05:30/1990-06-15T12:00:00+05:30',
 			});
 
 			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
@@ -253,16 +252,16 @@ describe('Folder repo', () => {
 			const result = await folderRepo.updateStelaFolder(folderVO);
 
 			expect(httpV2Spy.patch).toHaveBeenCalledWith('v2/folder/123', {
-				displayTime: '1985-05-20T00:00:00Z/1990-06-15T00:00:00Z',
+				displayTime: '1985-05-20T10:00:00+05:30/1990-06-15T12:00:00+05:30',
 			});
 
 			expect(result.Results[0][0].FolderVO).toBeDefined();
 		});
 
-		it('should send displayTime without end date when displayEndDT is not provided', async () => {
+		it('should send displayTime without end date', async () => {
 			const folderVO = new FolderVO({
 				folderId: 456,
-				displayDT: '1985-05-20T00:00:00Z',
+				displayTime: '1985-05-20T10:00:00+01:00',
 			});
 
 			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
@@ -270,14 +269,14 @@ describe('Folder repo', () => {
 			await folderRepo.updateStelaFolder(folderVO);
 
 			expect(httpV2Spy.patch).toHaveBeenCalledWith('v2/folder/456', {
-				displayTime: '1985-05-20T00:00:00Z',
+				displayTime: '1985-05-20T10:00:00+01:00',
 			});
 		});
 
 		it('should convert response StelaFolder to FolderVO', async () => {
 			const folderVO = new FolderVO({
 				folderId: 123,
-				displayDT: '1985-05-20T00:00:00Z',
+				displayTime: '1985-05-20T00:00:00+00:00',
 			});
 
 			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
@@ -331,9 +330,9 @@ describe('Folder repo', () => {
 				folderIds: [123],
 			});
 
-			expect(result.Results[0].length).toBe(1);
-			expect(result.Results[0][0].FolderVO).toBeDefined();
-			expect(result.Results[0][0].FolderVO.folderId).toBe('123');
+			expect(result.Results.length).toBe(1);
+			expect(result.Results[0].data[0].FolderVO).toBeDefined();
+			expect(result.Results[0].data[0].FolderVO.folderId).toBe('123');
 		});
 
 		it('should fetch multiple folders and return FolderResponse', async () => {
@@ -351,9 +350,9 @@ describe('Folder repo', () => {
 				folderIds: [123, 456],
 			});
 
-			expect(result.Results[0].length).toBe(2);
-			expect(result.Results[0][0].FolderVO.folderId).toBe('123');
-			expect(result.Results[0][1].FolderVO.folderId).toBe('456');
+			expect(result.Results.length).toBe(2);
+			expect(result.Results[0].data[0].FolderVO.folderId).toBe('123');
+			expect(result.Results[1].data[0].FolderVO.folderId).toBe('456');
 		});
 
 		it('should use share token when provided', async () => {
@@ -396,7 +395,7 @@ describe('Folder repo', () => {
 				folderIds: [123],
 			});
 
-			expect(result.Results[0][0].FolderVO).toBeDefined();
+			expect(result.Results[0].data[0].FolderVO).toBeDefined();
 		});
 	});
 });

@@ -97,7 +97,7 @@
 			/>
 		}
 
-		<!-- Date range toggle -->
+		<!-- Date range toggle + clear -->
 		<div class="pr-date-range-row">
 			<span>Use a date range</span>
 			<label class="pr-toggle">
@@ -109,14 +109,23 @@
 				/>
 				<span class="pr-toggle-slider"></span>
 			</label>
+
+			<button class="pr-clear-btn" (click)="clearAll()">
+				<i class="material-icons">delete_outline</i>
+				<span>Clear date and time</span>
+			</button>
 		</div>
 	</div>
 
 	<!-- Footer -->
 	<div class="pr-dialog-footer">
 		<div class="pr-edtf-display">
-			<span class="pr-edtf-badge">EDTF</span>
-			<span class="pr-edtf-value">{{ edtfValue() }}</span>
+			<span
+				class="pr-edtf-value"
+				[ngbTooltip]="'Formatted EDTF date and time'"
+				placement="top"
+				>{{ edtfValue() }}</span
+			>
 		</div>
 		<div class="pr-dialog-actions">
 			<button class="pr-btn-cancel" (click)="onCancel()">Cancel</button>

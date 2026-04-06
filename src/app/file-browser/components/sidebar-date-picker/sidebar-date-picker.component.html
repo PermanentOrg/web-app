@@ -2,8 +2,9 @@
 	<div class="pr-sidebar-date-picker-header">
 		<span class="pr-sidebar-date-picker-label">Date</span>
 		@if (activeQualifiers().length) {
+			<i class="material-icons pr-header-dot">fiber_manual_record</i>
 			<span class="pr-sidebar-date-picker-qualifiers">
-				&middot; {{ activeQualifiers().join(', ') }}:
+				{{ activeQualifiers().join(', ') }}:
 			</span>
 		}
 	</div>
@@ -14,16 +15,25 @@
 		(click)="toggle()"
 	>
 		<div class="pr-sidebar-date-picker-row">
-			@if (hasEndDate()) {<span class="pr-sidebar-date-picker-row-label">From</span>}
+			@if (hasEndDate()) {
+				<span class="pr-sidebar-date-picker-row-label">From</span>
+			}
 			@if (hasStartDate()) {
 				<span class="pr-sidebar-date-picker-row-value">
-					<span class="pr-date-part">{{ formattedStartDate() }}</span>
-					@if (formattedStartTime()) {
-						<span class="pr-separator">&middot;</span>
-						<span class="pr-time-part">{{ formattedStartTime() }}</span>
-						@if (startTimezone()) {
-							<span class="pr-timezone-part">{{ startTimezone() }}</span>
+					<span class="pr-date-part"
+						>{{ formattedStartDate() }}
+						@if (formattedStartTime()) {
+							<i class="material-icons pr-dot">fiber_manual_record</i>
 						}
+					</span>
+					@if (formattedStartTime()) {
+						<span class="pr-time-group">
+							<span class="pr-time-part">{{ formattedStartTime() }}</span>
+							<span class="pr-muted">{{ startMeridian() }}</span>
+							@if (startTimezone()) {
+								<span class="pr-muted">{{ startTimezone() }}</span>
+							}
+						</span>
 					}
 				</span>
 			} @else {
@@ -42,13 +52,20 @@
 			<div class="pr-sidebar-date-picker-row pr-sidebar-date-picker-to-row">
 				<span class="pr-sidebar-date-picker-row-label">To</span>
 				<span class="pr-sidebar-date-picker-row-value">
-					<span class="pr-date-part">{{ formattedEndDate() }}</span>
-					@if (formattedEndTime()) {
-						<span class="pr-separator">&middot;</span>
-						<span class="pr-time-part">{{ formattedEndTime() }}</span>
-						@if (endTimezone()) {
-							<span class="pr-timezone-part">{{ endTimezone() }}</span>
+					<span class="pr-date-part"
+						>{{ formattedEndDate() }}
+						@if (formattedEndTime()) {
+							<i class="material-icons pr-dot">fiber_manual_record</i>
 						}
+					</span>
+					@if (formattedEndTime()) {
+						<span class="pr-time-group">
+							<span class="pr-time-part">{{ formattedEndTime() }}</span>
+							<span class="pr-muted">{{ endMeridian() }}</span>
+							@if (endTimezone()) {
+								<span class="pr-muted">{{ endTimezone() }}</span>
+							}
+						</span>
 					}
 				</span>
 			</div>
@@ -70,9 +87,14 @@
 
 				<pr-timezone-dropdown
 					[selectedOffset]="_time().timezoneOffset"
-					[selectedName]="_time().timezoneName"
+					[selectedName]="dropdownTimezoneLabel()"
 					(timezoneChange)="onTimezoneChange($event)"
 				/>
+
+				<button class="pr-clear-btn" (click)="clearAll()">
+					<i class="material-icons">delete_outline</i>
+					<span>Clear date and time</span>
+				</button>
 			</div>
 
 			<div class="pr-sidebar-date-picker-footer">

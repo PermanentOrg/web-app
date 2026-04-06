@@ -1,10 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import {
-	TimepickerInputComponent,
-	TimeInputObject,
-	Meridian,
-} from './timepicker-input.component';
+import { TimeModel } from '@shared/services/edtf-service/edtf.service';
+import { TimepickerInputComponent } from './timepicker-input.component';
 
 @Component({
 	template: `<pr-timepicker-input
@@ -17,17 +14,18 @@ import {
 	imports: [TimepickerInputComponent],
 })
 class TestHostComponent {
-	time: TimeInputObject = {
+	time: TimeModel = {
 		hours: '',
 		minutes: '',
 		seconds: '',
-		amPm: Meridian.AM,
+		am: true,
+		pm: false,
 	};
 	disabled = false;
 	showSeconds = true;
-	lastEmittedTime: TimeInputObject | null = null;
+	lastEmittedTime: TimeModel | null = null;
 
-	onTimeChange(time: TimeInputObject): void {
+	onTimeChange(time: TimeModel): void {
 		this.lastEmittedTime = time;
 		this.time = time;
 	}
@@ -172,7 +170,8 @@ describe('TimepickerInputComponent', () => {
 			hours: '10',
 			minutes: '30',
 			seconds: '00',
-			amPm: Meridian.AM,
+			am: true,
+			pm: false,
 		};
 		fixture.detectChanges();
 		component.updateTime(mockEvent(''), 'hours');
@@ -187,12 +186,13 @@ describe('TimepickerInputComponent', () => {
 			hours: '10',
 			minutes: '30',
 			seconds: '',
-			amPm: Meridian.AM,
+			am: true,
+			pm: false,
 		};
 		fixture.detectChanges();
 		component.toggleAmPm();
 
-		expect(hostComponent.lastEmittedTime?.amPm).toBe(Meridian.PM);
+		expect(hostComponent.lastEmittedTime?.pm).toBeTrue();
 	});
 
 	it('should toggle PM to AM', () => {
@@ -200,12 +200,13 @@ describe('TimepickerInputComponent', () => {
 			hours: '10',
 			minutes: '30',
 			seconds: '',
-			amPm: Meridian.PM,
+			am: false,
+			pm: true,
 		};
 		fixture.detectChanges();
 		component.toggleAmPm();
 
-		expect(hostComponent.lastEmittedTime?.amPm).toBe(Meridian.AM);
+		expect(hostComponent.lastEmittedTime?.am).toBeTrue();
 	});
 
 	// --- Outside click ---
@@ -226,7 +227,8 @@ describe('TimepickerInputComponent', () => {
 			hours: '02',
 			minutes: '30',
 			seconds: '15',
-			amPm: Meridian.PM,
+			am: false,
+			pm: true,
 		};
 		fixture.detectChanges();
 
@@ -242,7 +244,8 @@ describe('TimepickerInputComponent', () => {
 			hours: '12',
 			minutes: '00',
 			seconds: '00',
-			amPm: Meridian.AM,
+			am: true,
+			pm: false,
 		};
 		fixture.detectChanges();
 
@@ -258,7 +261,8 @@ describe('TimepickerInputComponent', () => {
 			hours: '12',
 			minutes: '00',
 			seconds: '00',
-			amPm: Meridian.PM,
+			am: false,
+			pm: true,
 		};
 		fixture.detectChanges();
 
@@ -269,16 +273,21 @@ describe('TimepickerInputComponent', () => {
 		});
 	});
 
-	it('should set FormControl to null for empty time', () => {
+	it('should set FormControl to midnight for empty time', () => {
 		hostComponent.time = {
 			hours: '',
 			minutes: '',
 			seconds: '',
-			amPm: Meridian.AM,
+			am: true,
+			pm: false,
 		};
 		fixture.detectChanges();
 
-		expect(component.timepickerControl.value).toBeNull();
+		expect(component.timepickerControl.value).toEqual({
+			hour: 0,
+			minute: 0,
+			second: 0,
+		});
 	});
 
 	// --- NgbTimepicker selection ---
@@ -290,7 +299,8 @@ describe('TimepickerInputComponent', () => {
 			hours: '09',
 			minutes: '15',
 			seconds: '30',
-			amPm: Meridian.AM,
+			am: true,
+			pm: false,
 		});
 	});
 
@@ -301,7 +311,8 @@ describe('TimepickerInputComponent', () => {
 			hours: '02',
 			minutes: '45',
 			seconds: '00',
-			amPm: Meridian.PM,
+			am: false,
+			pm: true,
 		});
 	});
 
@@ -309,14 +320,14 @@ describe('TimepickerInputComponent', () => {
 		component.onTimeSelect({ hour: 12, minute: 0, second: 0 });
 
 		expect(hostComponent.lastEmittedTime?.hours).toBe('12');
-		expect(hostComponent.lastEmittedTime?.amPm).toBe(Meridian.PM);
+		expect(hostComponent.lastEmittedTime?.pm).toBeTrue();
 	});
 
 	it('should emit 12 AM for hour 0', () => {
 		component.onTimeSelect({ hour: 0, minute: 0, second: 0 });
 
 		expect(hostComponent.lastEmittedTime?.hours).toBe('12');
-		expect(hostComponent.lastEmittedTime?.amPm).toBe(Meridian.AM);
+		expect(hostComponent.lastEmittedTime?.am).toBeTrue();
 	});
 
 	it('should not emit on null ngb-timepicker value', () => {

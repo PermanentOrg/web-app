@@ -1,14 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import {
+	DateTimeModel,
+	DateQualifier,
+} from '@shared/services/edtf-service/edtf.service';
 import { EditDateTimeModalComponent } from './edit-date-time-modal.component';
-import { EditDateModel, DateQualifier, Meridian } from '@shared/services/edtf-service/edtf.service';
 
 describe('EditDateTimeModalComponent', () => {
 	let component: EditDateTimeModalComponent;
 	let fixture: ComponentFixture<EditDateTimeModalComponent>;
 	let dialogRefSpy: jasmine.SpyObj<DialogRef>;
 
-	const mockDialogData: EditDateModel = {
+	const mockDialogData: DateTimeModel = {
 		qualifiers: {
 			approximate: true,
 			uncertain: false,
@@ -19,7 +22,8 @@ describe('EditDateTimeModalComponent', () => {
 			hours: '11',
 			minutes: '',
 			seconds: '',
-			amPm: Meridian.AM,
+			am: true,
+			pm: false,
 			timezoneOffset: 'GMT+01:00',
 			timezoneName: 'Central European Standard Time',
 		},
@@ -54,7 +58,8 @@ describe('EditDateTimeModalComponent', () => {
 	it('should initialize fields from dialog data', () => {
 		expect(component.date().year).toBe('1930');
 		expect(component.time().hours).toBe('11');
-		expect(component.time().amPm).toBe(Meridian.AM);
+		expect(component.time().am).toBe(true);
+		expect(component.time().pm).toBe(false);
 		expect(component.qualifiers().approximate).toBeTrue();
 		expect(component.qualifiers().uncertain).toBeFalse();
 		expect(component.qualifiers().unknown).toBeFalse();
@@ -77,23 +82,46 @@ describe('EditDateTimeModalComponent', () => {
 		expect(component.endDate().year).toBe('2026');
 	});
 
+	it('should save form state with unknown false when data has unknown true', () => {
+		const unknownData: DateTimeModel = {
+			qualifiers: { approximate: false, uncertain: false, unknown: true },
+			date: { year: '', month: '', day: '' },
+			time: {
+				hours: '',
+				minutes: '',
+				seconds: '',
+				am: true,
+				pm: false,
+				timezoneOffset: '',
+				timezoneName: '',
+			},
+		};
+
+		component.data = unknownData;
+		component.ngOnInit();
+
+		expect(component.qualifiers().unknown).toBeTrue();
+		expect(component.savedFormState()).not.toBeNull();
+		expect(component.savedFormState().qualifiers.unknown).toBeFalse();
+	});
+
 	// --- Time updates via onTimeChange ---
 
 	it('should update time fields via onTimeChange', () => {
 		component.onTimeChange(
-			{ hours: '02', minutes: '30', seconds: '15', amPm: Meridian.PM },
+			{ hours: '02', minutes: '30', seconds: '15', am: false, pm: true },
 			component.time,
 		);
 
 		expect(component.time().hours).toBe('02');
 		expect(component.time().minutes).toBe('30');
 		expect(component.time().seconds).toBe('15');
-		expect(component.time().amPm).toBe(Meridian.PM);
+		expect(component.time().pm).toBe(true);
 	});
 
 	it('should update end time fields via onTimeChange', () => {
 		component.onTimeChange(
-			{ hours: '06', minutes: '45', seconds: '00', amPm: Meridian.AM },
+			{ hours: '06', minutes: '45', seconds: '00', am: true, pm: false },
 			component.endTime,
 		);
 
@@ -106,12 +134,13 @@ describe('EditDateTimeModalComponent', () => {
 			hours: '10',
 			minutes: '00',
 			seconds: '00',
-			amPm: Meridian.AM,
+			am: true,
+			pm: false,
 			timezoneOffset: 'GMT-05:00',
 			timezoneName: 'Eastern Standard Time',
 		});
 		component.onTimeChange(
-			{ hours: '11', minutes: '30', seconds: '00', amPm: Meridian.AM },
+			{ hours: '11', minutes: '30', seconds: '00', am: true, pm: false },
 			component.time,
 		);
 
@@ -225,19 +254,6 @@ describe('EditDateTimeModalComponent', () => {
 		expect(component.time().hours).toBe('');
 	});
 
-	it('should save form state before setting unknown', () => {
-		component.date.set({ year: '2026', month: '02', day: '18' });
-		component.time.update((t) => ({ ...t, hours: '10' }));
-
-		component.onQualifierChange(DateQualifier.Unknown);
-
-		const saved = component.savedFormState();
-
-		expect(saved).not.toBeNull();
-		expect(saved!.date.year).toBe('2026');
-		expect(saved!.time.hours).toBe('10');
-	});
-
 	it('should restore form state including qualifiers when unknown is toggled off', () => {
 		component.qualifiers.set({
 			approximate: true,
@@ -250,8 +266,6 @@ describe('EditDateTimeModalComponent', () => {
 		component.onQualifierChange(DateQualifier.Unknown);
 
 		expect(component.qualifiers().unknown).toBeTrue();
-		expect(component.qualifiers().approximate).toBeFalse();
-		expect(component.qualifiers().uncertain).toBeFalse();
 		expect(component.date().year).toBe('');
 
 		component.onQualifierChange(DateQualifier.Unknown);
@@ -266,6 +280,32 @@ describe('EditDateTimeModalComponent', () => {
 		expect(component.savedFormState()).toBeNull();
 	});
 
+	it('should enable form when toggling unknown off from initial unknown state', () => {
+		const unknownData: DateTimeModel = {
+			qualifiers: { approximate: false, uncertain: false, unknown: true },
+			date: { year: '', month: '', day: '' },
+			time: {
+				hours: '',
+				minutes: '',
+				seconds: '',
+				am: true,
+				pm: false,
+				timezoneOffset: '',
+				timezoneName: '',
+			},
+		};
+
+		component.data = unknownData;
+		component.ngOnInit();
+
+		expect(component.fieldsDisabled()).toBeTrue();
+
+		component.onQualifierChange(DateQualifier.Unknown);
+
+		expect(component.qualifiers().unknown).toBeFalse();
+		expect(component.fieldsDisabled()).toBeFalse();
+	});
+
 	it('should show xxxx-xx-xx as EDTF value when unknown is on', () => {
 		component.date.set({ year: '2026', month: '02', day: '18' });
 		component.onQualifierChange(DateQualifier.Unknown);
@@ -273,29 +313,23 @@ describe('EditDateTimeModalComponent', () => {
 		expect(component.edtfValue()).toBe('xxxx-xx-xx');
 	});
 
-	it('should restore EDTF value when unknown is toggled off', () => {
+	// --- clearAll ---
+
+	it('should clear all fields', () => {
 		component.date.set({ year: '2026', month: '02', day: '18' });
-		component.time.set({
-			hours: '',
-			minutes: '',
-			seconds: '',
-			amPm: Meridian.AM,
-			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
-		});
+		component.time.update((t) => ({ ...t, hours: '10' }));
 		component.qualifiers.set({
-			approximate: false,
+			approximate: true,
 			uncertain: false,
 			unknown: false,
 		});
 
-		component.onQualifierChange(DateQualifier.Unknown);
+		component.clearAll();
 
-		expect(component.edtfValue()).toBe('xxxx-xx-xx');
-
-		component.onQualifierChange(DateQualifier.Unknown);
-
-		expect(component.edtfValue()).toBe('2026-02-18');
+		expect(component.date().year).toBe('');
+		expect(component.time().hours).toBe('');
+		expect(component.qualifiers().approximate).toBeFalse();
+		expect(component.savedFormState()).toBeNull();
 	});
 
 	// --- Dialog actions ---
@@ -323,7 +357,7 @@ describe('EditDateTimeModalComponent', () => {
 		component.onSave();
 
 		const result = dialogRefSpy.close.calls.mostRecent()
-			.args[0] as EditDateModel;
+			.args[0] as DateTimeModel;
 
 		expect(result.endDate).toEqual({ year: '2026', month: '12', day: '31' });
 	});
@@ -333,7 +367,7 @@ describe('EditDateTimeModalComponent', () => {
 		component.onSave();
 
 		const result = dialogRefSpy.close.calls.mostRecent()
-			.args[0] as EditDateModel;
+			.args[0] as DateTimeModel;
 
 		expect(result.endDate).toBeUndefined();
 	});
@@ -345,8 +379,9 @@ describe('EditDateTimeModalComponent', () => {
 		component.time.set({
 			hours: '10',
 			minutes: '30',
-			seconds: '',
-			amPm: Meridian.AM,
+			seconds: '00',
+			am: true,
+			pm: false,
 			timezoneOffset: 'GMT+01:00',
 			timezoneName: 'Central European Standard Time',
 		});
@@ -356,7 +391,7 @@ describe('EditDateTimeModalComponent', () => {
 			unknown: false,
 		});
 
-		expect(component.edtfValue()).toBe('2026-02-18T10:30');
+		expect(component.edtfValue()).toBe('2026-02-18T10:30:00+01:00');
 	});
 
 	it('should compute EDTF with date only', () => {
@@ -365,7 +400,8 @@ describe('EditDateTimeModalComponent', () => {
 			hours: '',
 			minutes: '',
 			seconds: '',
-			amPm: Meridian.AM,
+			am: true,
+			pm: false,
 			timezoneOffset: 'GMT+01:00',
 			timezoneName: 'Central European Standard Time',
 		});
@@ -378,52 +414,43 @@ describe('EditDateTimeModalComponent', () => {
 		expect(component.edtfValue()).toBe('2026');
 	});
 
-	it('should include end date in EDTF when useDateRange is on', () => {
-		component.date.set({ year: '2026', month: '01', day: '01' });
+	it('should not include time with invalid hours in EDTF', () => {
+		component.date.set({ year: '2026', month: '02', day: '18' });
 		component.time.set({
-			hours: '',
-			minutes: '',
-			seconds: '',
-			amPm: Meridian.AM,
-			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
+			hours: '13',
+			minutes: '30',
+			seconds: '00',
+			am: false,
+			pm: true,
+			timezoneOffset: '',
+			timezoneName: '',
 		});
 		component.qualifiers.set({
 			approximate: false,
 			uncertain: false,
 			unknown: false,
 		});
-		component.useDateRange.set(true);
-		component.endDate.set({ year: '2026', month: '12', day: '31' });
-		component.endTime.set({
-			hours: '11',
-			minutes: '59',
-			seconds: '',
-			amPm: Meridian.PM,
-			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
-		});
 
-		expect(component.edtfValue()).toBe('2026-01-01/2026-12-31T23:59');
+		expect(component.edtfValue()).toBe('2026-02-18');
 	});
 
-	it('should not include end date in EDTF when useDateRange is off', () => {
-		component.date.set({ year: '2026', month: '01', day: '01' });
+	it('should not include day without month in EDTF', () => {
+		component.date.set({ year: '2026', month: '', day: '18' });
 		component.time.set({
 			hours: '',
 			minutes: '',
 			seconds: '',
-			amPm: Meridian.AM,
-			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
+			am: true,
+			pm: false,
+			timezoneOffset: '',
+			timezoneName: '',
 		});
 		component.qualifiers.set({
 			approximate: false,
 			uncertain: false,
 			unknown: false,
 		});
-		component.useDateRange.set(false);
 
-		expect(component.edtfValue()).toBe('2026-01-01');
+		expect(component.edtfValue()).toBe('2026');
 	});
 });

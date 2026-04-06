@@ -356,10 +356,23 @@ export class EditService {
 				item.update(newData);
 				await this.updateItems([item], [property]);
 			} catch (err) {
+				const revertData: Partial<ItemVO> = {};
+				revertData[property] = originalValue;
+				item.update(revertData);
+
 				if (err instanceof FolderResponse || err instanceof RecordResponse) {
-					const revertData: Partial<ItemVO> = {};
-					revertData[property] = originalValue;
-					item.update(revertData);
+					this.message.showError({
+						message: err.getMessage(),
+						translate: true,
+					});
+				} else {
+					this.message.showError({
+						message:
+							err?.error?.message ||
+							err?.error?.error ||
+							err?.message ||
+							'Failed to save changes',
+					});
 				}
 			}
 		}
@@ -704,9 +717,7 @@ export class EditService {
 
 		const promises: Array<Promise<FolderResponse | FolderResponse[]>> = [];
 
-		if (
-			folderKeys?.includes('displayTime')
-		) {
+		if (folderKeys?.includes('displayTime')) {
 			promises.push(
 				Promise.all(
 					folders.map(

@@ -7,14 +7,11 @@ import {
 	WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
-import {
-	TimepickerInputComponent,
-} from '@shared/components/timepicker-input/timepicker-input.component';
-import {
-	TimezoneDropdownComponent,
-} from '@shared/components/timezone-dropdown/timezone-dropdown.component';
+import { TimepickerInputComponent } from '@shared/components/timepicker-input/timepicker-input.component';
+import { TimezoneDropdownComponent } from '@shared/components/timezone-dropdown/timezone-dropdown.component';
 import {
 	EdtfService,
 	DateQualifier,
@@ -26,13 +23,12 @@ import {
 	TimezoneOption,
 } from '@shared/services/edtf-service/edtf.service';
 
-
-
 @Component({
 	selector: 'pr-edit-date-time-modal',
 	standalone: true,
 	imports: [
 		CommonModule,
+		NgbTooltipModule,
 		DatepickerInputComponent,
 		TimepickerInputComponent,
 		TimezoneDropdownComponent,
@@ -74,13 +70,9 @@ export class EditDateTimeModalComponent implements OnInit {
 			return 'xxxx-xx-xx';
 		}
 
-		const dateTimeModel: any = {
-			date: {
-				year: this.date().year,
-				month: this.date().month,
-				day: this.date().day,
-			},
-			time: this.time(),
+		const dateTimeModel: DateTimeModel = {
+			date: this.sanitizeDate(this.date()),
+			time: this.sanitizeTime(this.time()),
 			qualifiers: {
 				approximate: this.qualifiers().approximate,
 				uncertain: this.qualifiers().uncertain,
@@ -89,12 +81,8 @@ export class EditDateTimeModalComponent implements OnInit {
 		};
 
 		if (this.useDateRange()) {
-			dateTimeModel.endDate = {
-				year: this.endDate().year,
-				month: this.endDate().month,
-				day: this.endDate().day,
-			};
-			dateTimeModel.endTime = this.endTime();
+			dateTimeModel.endDate = this.sanitizeDate(this.endDate());
+			dateTimeModel.endTime = this.sanitizeTime(this.endTime());
 		}
 
 		return this.edtfService.toEdtfDate(dateTimeModel);
@@ -122,6 +110,17 @@ export class EditDateTimeModalComponent implements OnInit {
 				this.useDateRange.set(true);
 				this.endDate.set(this.data.endDate);
 				this.endTime.set(this.data.endTime ?? { ...DEFAULT_TIME });
+			}
+
+			if (this.data.qualifiers?.unknown) {
+				this.savedFormState.set({
+					qualifiers: { approximate: false, uncertain: false, unknown: false },
+					date: { ...this.date() },
+					time: { ...this.time() },
+					endDate: { ...this.endDate() },
+					endTime: { ...this.endTime() },
+					useDateRange: this.useDateRange(),
+				});
 			}
 		}
 	}
@@ -220,6 +219,35 @@ export class EditDateTimeModalComponent implements OnInit {
 
 	toggleDateRange(): void {
 		this.useDateRange.update((v) => !v);
+	}
+
+	clearAll(): void {
+		this.qualifiers.set({
+			approximate: false,
+			uncertain: false,
+			unknown: false,
+		});
+		this.resetForm();
+		this.savedFormState.set(null);
+	}
+
+	private sanitizeDate(date: DateModel): DateModel {
+		return {
+			year: date.year,
+			month: date.year ? date.month : '',
+			day: date.year && date.month ? date.day : '',
+		};
+	}
+
+	private sanitizeTime(time: TimeModel): TimeModel {
+		if (!time.hours || !this.edtfService.isValidTime(time)) {
+			return { ...time, hours: '', minutes: '', seconds: '' };
+		}
+		return {
+			...time,
+			minutes: time.minutes || '',
+			seconds: time.hours && time.minutes ? time.seconds : '',
+		};
 	}
 
 	onCancel(): void {

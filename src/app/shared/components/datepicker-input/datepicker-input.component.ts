@@ -13,7 +13,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { DateModel, EdtfService } from '@shared/services/edtf-service/edtf.service';
+import {
+	DateModel,
+	EdtfService,
+} from '@shared/services/edtf-service/edtf.service';
 
 @Component({
 	selector: 'pr-datepicker-input',
@@ -44,7 +47,7 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['date']) {
+		if (changes.date) {
 			this.updateDatepickerModel(this.date);
 		}
 	}
@@ -76,15 +79,24 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 		const input = event.target as HTMLInputElement;
 		const value = input.value;
 
-		const testDate = { ...this.date, year: value };
-		if (!this.edtfService.isValidYear(testDate)) {
+		if (
+			value !== '' &&
+			(!this.edtfService.isNumeric(value) || value.length > 4)
+		) {
 			input.value = this.date.year;
 			return;
 		}
 
-		if (value.length === 4 || value.length === 0) {
+		if (value.length === 4) {
+			const testDate = { ...this.date, year: value };
+			if (!this.edtfService.isValidYear(testDate)) {
+				input.value = this.date.year;
+				return;
+			}
 			this.dateChange.emit({ ...this.date, year: value });
 			this.monthInput.nativeElement.focus();
+		} else if (value.length === 0) {
+			this.dateChange.emit({ ...this.date, year: value });
 		}
 	}
 
@@ -120,7 +132,6 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 	}
 
 	onDateSelect(newDate: NgbDateStruct): void {
-
 		this.datepickerModel.set(newDate);
 		const updatedDate = {
 			year: String(newDate.year),

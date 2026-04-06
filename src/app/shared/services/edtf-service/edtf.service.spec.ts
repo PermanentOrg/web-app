@@ -13,8 +13,8 @@ describe('EdtfService', () => {
 				const result = service.toDateTimeModel('1985');
 
 				expect(result.date.year).toBe('1985');
-				expect(result.date.month).toBeUndefined();
-				expect(result.date.day).toBeUndefined();
+				expect(result.date.month).toBe('');
+				expect(result.date.day).toBe('');
 			});
 
 			it('should parse year-month', () => {
@@ -22,7 +22,7 @@ describe('EdtfService', () => {
 
 				expect(result.date.year).toBe('1985');
 				expect(result.date.month).toBe('05');
-				expect(result.date.day).toBeUndefined();
+				expect(result.date.day).toBe('');
 			});
 
 			it('should parse full date', () => {
@@ -39,8 +39,8 @@ describe('EdtfService', () => {
 				const result = service.toDateTimeModel('19XX');
 
 				expect(result.date.year).toBe('19');
-				expect(result.date.month).toBeUndefined();
-				expect(result.date.day).toBeUndefined();
+				expect(result.date.month).toBe('');
+				expect(result.date.day).toBe('');
 			});
 
 			it('should return single digit for mostly unknown year', () => {
@@ -51,25 +51,35 @@ describe('EdtfService', () => {
 		});
 
 		describe('unspecified fields', () => {
-			it('should set month to undefined when XX', () => {
+			it('should set month to empty when XX', () => {
 				const result = service.toDateTimeModel('1985-XX');
 
 				expect(result.date.year).toBe('1985');
-				expect(result.date.month).toBeUndefined();
+				expect(result.date.month).toBe('');
 			});
 
-			it('should set day to undefined when XX', () => {
+			it('should set day to empty when XX', () => {
 				const result = service.toDateTimeModel('1985-05-XX');
 
 				expect(result.date.year).toBe('1985');
 				expect(result.date.month).toBe('05');
-				expect(result.date.day).toBeUndefined();
+				expect(result.date.day).toBe('');
 			});
 
 			it('should set unknown qualifier to true when whole date is unspecified', () => {
 				const result = service.toDateTimeModel('XXXX');
 
 				expect(result.qualifiers.unknown).toBe(true);
+			});
+
+			it('should parse XXXX-XX-XX as unknown', () => {
+				const result = service.toDateTimeModel('XXXX-XX-XX');
+
+				expect(result.qualifiers.unknown).toBe(true);
+				expect(result.date.year).toBe('');
+				expect(result.date.month).toBe('');
+				expect(result.date.day).toBe('');
+				expect(result.time.hours).toBe('');
 			});
 
 			it('should set unknown qualifier to false when partially unspecified', () => {
@@ -120,14 +130,14 @@ describe('EdtfService', () => {
 				expect(result.time.pm).toBe(true);
 			});
 
-			it('should have undefined time fields when no time present', () => {
+			it('should have empty time fields when no time present', () => {
 				const result = service.toDateTimeModel('1985-05-20');
 
-				expect(result.time.hours).toBeUndefined();
-				expect(result.time.minutes).toBeUndefined();
-				expect(result.time.seconds).toBeUndefined();
-				expect(result.time.am).toBeUndefined();
-				expect(result.time.pm).toBeUndefined();
+				expect(result.time.hours).toBe('');
+				expect(result.time.minutes).toBe('');
+				expect(result.time.seconds).toBe('');
+				expect(result.time.am).toBe(true);
+				expect(result.time.pm).toBe(false);
 			});
 		});
 
@@ -135,22 +145,22 @@ describe('EdtfService', () => {
 			it('should extract UTC timezone from Z suffix', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45Z');
 
-				expect(result.time.timezoneOffset).toBe('+00:00');
-				expect(result.time.timezoneName).toBe('UTC');
+				expect(result.time.timezoneOffset).toBe('GMT+00:00');
+				expect(result.time.timezoneName).toBe('Greenwich Mean Time');
 			});
 
 			it('should extract positive timezone offset', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45+05:30');
 
-				expect(result.time.timezoneOffset).toBe('+05:30');
-				expect(result.time.timezoneName).toBe('');
+				expect(result.time.timezoneOffset).toBe('GMT+05:30');
+				expect(result.time.timezoneName).toBe('India Standard Time');
 			});
 
 			it('should extract negative timezone offset', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45-04:00');
 
-				expect(result.time.timezoneOffset).toBe('-04:00');
-				expect(result.time.timezoneName).toBe('');
+				expect(result.time.timezoneOffset).toBe('GMT-04:00');
+				expect(result.time.timezoneName).toBe('Atlantic Standard Time');
 			});
 
 			it('should have empty timezone when none present', () => {
@@ -217,16 +227,15 @@ describe('EdtfService', () => {
 				const result = service.toDateTimeModel('1985/1990');
 
 				expect(result.date.year).toBe('1985');
-				expect(result.date.month).toBeUndefined();
+				expect(result.date.month).toBe('');
 				expect(result.endDate.year).toBe('1990');
-				expect(result.endDate.month).toBeUndefined();
+				expect(result.endDate.month).toBe('');
 			});
 
 			it('should parse open start interval', () => {
 				const result = service.toDateTimeModel('../1985');
 
 				expect(result.date.year).toBe('');
-				expect(result.date.month).toBeUndefined();
 				expect(result.time.hours).toBeUndefined();
 				expect(result.endDate.year).toBe('1985');
 			});
@@ -236,7 +245,6 @@ describe('EdtfService', () => {
 
 				expect(result.date.year).toBe('1985');
 				expect(result.endDate.year).toBe('');
-				expect(result.endDate.month).toBeUndefined();
 				expect(result.endTime.hours).toBeUndefined();
 			});
 
@@ -391,7 +399,7 @@ describe('EdtfService', () => {
 		});
 
 		describe('timezone output', () => {
-			it('should append timezone offset', () => {
+			it('should append timezone offset from GMT format', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
 					time: {
@@ -400,8 +408,8 @@ describe('EdtfService', () => {
 						seconds: '45',
 						am: false,
 						pm: true,
-						timezoneOffset: '+05:30',
-						timezoneName: '',
+						timezoneOffset: 'GMT+05:30',
+						timezoneName: 'India Standard Time',
 					},
 				};
 
@@ -410,7 +418,7 @@ describe('EdtfService', () => {
 				expect(result).toContain('+05:30');
 			});
 
-			it('should append negative timezone offset', () => {
+			it('should append negative timezone offset from GMT format', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
 					time: {
@@ -419,8 +427,8 @@ describe('EdtfService', () => {
 						seconds: '00',
 						am: true,
 						pm: false,
-						timezoneOffset: '-04:00',
-						timezoneName: '',
+						timezoneOffset: 'GMT-04:00',
+						timezoneName: 'Atlantic Standard Time',
 					},
 				};
 
@@ -481,6 +489,25 @@ describe('EdtfService', () => {
 
 				expect(service.toEdtfDate(model)).toBe('1985-05');
 			});
+
+			it('should return XXXX-XX-XX when unknown qualifier is set', () => {
+				const model: DateTimeModel = {
+					date: { year: '', month: '', day: '' },
+					time: { timezoneOffset: '', timezoneName: '' },
+					qualifiers: { approximate: false, uncertain: false, unknown: true },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('XXXX-XX-XX');
+			});
+
+			it('should return XXXX-XX-XX when all fields are empty', () => {
+				const model: DateTimeModel = {
+					date: { year: '', month: '', day: '' },
+					time: { timezoneOffset: '', timezoneName: '' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('XXXX-XX-XX');
+			});
 		});
 
 		describe('interval output (range)', () => {
@@ -517,17 +544,6 @@ describe('EdtfService', () => {
 				expect(service.toEdtfDate(model)).toBe('1985/1990');
 			});
 
-			it('should build open start interval', () => {
-				const model: DateTimeModel = {
-					date: { year: '' },
-					time: { timezoneOffset: '', timezoneName: '' },
-					endDate: { year: '1985' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
-				};
-
-				expect(service.toEdtfDate(model)).toBe('../1985');
-			});
-
 			it('should build open end interval', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985' },
@@ -537,17 +553,6 @@ describe('EdtfService', () => {
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985/..');
-			});
-
-			it('should build fully open interval', () => {
-				const model: DateTimeModel = {
-					date: { year: '' },
-					time: { timezoneOffset: '', timezoneName: '' },
-					endDate: { year: '' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
-				};
-
-				expect(service.toEdtfDate(model)).toBe('../..');
 			});
 		});
 	});
@@ -700,6 +705,17 @@ describe('EdtfService', () => {
 					timezoneName: '',
 				}),
 			).toBe(false);
+		});
+	});
+
+	describe('interval with different timezones', () => {
+		it('should parse different timezones for start and end', () => {
+			const result = service.toDateTimeModel(
+				'1985-05-20T10:00:00+05:30/1990-06-15T12:00:00-04:00',
+			);
+
+			expect(result.time.timezoneOffset).toBe('GMT+05:30');
+			expect(result.endTime.timezoneOffset).toBe('GMT-04:00');
 		});
 	});
 

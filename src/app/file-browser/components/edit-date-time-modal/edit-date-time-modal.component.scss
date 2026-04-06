@@ -163,9 +163,22 @@
 		align-items: center;
 		gap: 12px;
 
-		span {
+		> span {
 			font-size: 14px;
 			color: $PR-blue;
+		}
+
+		.pr-clear-btn {
+			@include clear-btn;
+			margin-left: auto;
+
+			i {
+				font-size: 18px;
+			}
+
+			span {
+				font-size: 14px;
+			}
 		}
 	}
 
@@ -180,13 +193,8 @@
 
 	// Footer
 	.pr-dialog-footer {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
+		@include panel-footer;
 		padding: 24px;
-		border-top: 1px solid $PR-blue-100;
-		background: $PR-blue-25;
-		border-radius: 0 0 12px 12px;
 
 		.pr-edtf-display {
 			display: flex;

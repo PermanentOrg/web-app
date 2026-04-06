@@ -6,8 +6,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
-import { DateTimeModel, Meridian } from '@shared/services/edtf-service/edtf.service';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -377,7 +377,7 @@ describe('SidebarComponent', () => {
 			expect(openSpy).toHaveBeenCalledWith(modalData);
 		});
 
-		it('should save displayDT when modal returns a result', () => {
+		it('should save displayTime when modal returns a result', () => {
 			const saveSpy = spyOn(
 				mockEditService,
 				'saveItemVoProperty',
@@ -413,7 +413,7 @@ describe('SidebarComponent', () => {
 
 			expect(saveSpy).toHaveBeenCalledWith(
 				component.selectedItem,
-				'displayDT',
+				'displayTime',
 				jasmine.any(String),
 			);
 		});

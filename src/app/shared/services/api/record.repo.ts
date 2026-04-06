@@ -101,6 +101,7 @@ export type StelaRecord = Omit<RecordVO, 'files'> & {
 	tags: Array<StelaTag> | null;
 	archiveNumber: string;
 	displayDate: string;
+	displayTime?: string;
 	folderLinkId: string;
 	folderLinkType: FolderLinkType;
 	parentFolderLinkId: string;
@@ -180,6 +181,7 @@ export const convertStelaRecordToRecordVO = (
 		),
 		archiveNbr: stelaRecord.archiveNumber,
 		displayDT: stelaRecord.displayDate,
+		displayTime: stelaRecord.displayTime,
 		folder_linkId: Number.parseInt(stelaRecord.folderLinkId, 10),
 		folder_linkType: stelaRecord.folderLinkType,
 		LocnVO: convertStelaLocationToLocnVOData(stelaRecord.location),
@@ -483,7 +485,7 @@ export class RecordRepo extends BaseRepo {
 		// update the whole record using this method.
 		const stelaRecord = await firstValueFrom(
 			this.httpV2.patch<StelaRecord>(`v2/records/${recordId}`, {
-				displayTime: recordVO.displayDT,
+				displayTime: recordVO.displayTime,
 			}),
 		);
 

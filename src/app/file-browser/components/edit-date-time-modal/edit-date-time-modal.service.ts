@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { EditDateTimeModalComponent } from './edit-date-time-modal.component';
 import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
+import { EditDateTimeModalComponent } from './edit-date-time-modal.component';
 
 @Injectable({
 	providedIn: 'root',

@@ -138,7 +138,6 @@ export interface DateTimeModel {
 	providedIn: 'root',
 })
 export class EdtfService {
-
 	static offsetToAbbreviation(offset: string): string {
 		if (OFFSET_ABBREVIATIONS[offset]) {
 			return OFFSET_ABBREVIATIONS[offset];
@@ -171,16 +170,22 @@ export class EdtfService {
 			return null;
 		}
 
-		const { timezoneOffset, timezoneName } = this.extractTimezone(edtfString);
-		const edtfObject = edtf(edtfString);
-
-		if (edtfObject instanceof Interval) {
-			return this.intervalToDateTimeModel(
-				edtfObject,
-				timezoneOffset,
-				timezoneName,
-			);
+		if (/^X{4}-X{2}-X{2}$/i.test(edtfString)) {
+			return {
+				qualifiers: { approximate: false, uncertain: false, unknown: true },
+				date: { year: '', month: '', day: '' },
+				time: { ...DEFAULT_TIME },
+			};
 		}
+
+		if (edtfString.includes('/')) {
+			return this.parseInterval(edtfString);
+		}
+
+		const { timezoneOffset, timezoneName } = this.extractTimezone(edtfString);
+		const normalizedString = this.normalizeForParsing(edtfString);
+		const edtfObject = edtf(normalizedString);
+
 		if (!(edtfObject instanceof Date)) {
 			return null;
 		}
@@ -192,16 +197,42 @@ export class EdtfService {
 		);
 	}
 
+	private parseInterval(edtfString: string): DateTimeModel | null {
+		const [startPart, endPart] = edtfString.split('/');
+
+		const startTz = this.extractTimezone(startPart);
+		const endTz = this.extractTimezone(endPart);
+
+		const normalizedStart =
+			startPart === '..' ? '..' : this.normalizeForParsing(startPart);
+		const normalizedEnd =
+			endPart === '..' ? '..' : this.normalizeForParsing(endPart);
+
+		const edtfObject = edtf(`${normalizedStart}/${normalizedEnd}`);
+
+		if (!(edtfObject instanceof Interval)) {
+			return null;
+		}
+
+		return this.intervalToDateTimeModel(edtfObject, startTz, endTz);
+	}
+
+	private normalizeForParsing(edtfString: string): string {
+		// Replace +hh:mm / -hh:mm timezone offset with Z so the edtf library
+		// can parse it — the library requires a UTC designator and throws on offsets.
+		return edtfString.replace(/T([\d:]+)[+-]\d{2}:\d{2}/, 'T$1Z');
+	}
+
 	toEdtfDate(model: DateTimeModel): string {
 		const { date, time, qualifiers, endDate, endTime } = model;
 
-		const isOpenStart = this.isEmptyDateTime(date, time);
+		if (qualifiers?.unknown || this.isEmptyDateTime(date, time)) {
+			return 'XXXX-XX-XX';
+		}
+
+		const startPart = this.normalizeEdtfString(date, time, qualifiers);
+
 		const isOpenEnd = endDate && this.isEmptyDateTime(endDate, endTime);
-
-		const startPart = isOpenStart
-			? '..'
-			: this.normalizeEdtfString(date, time, qualifiers);
-
 		const endPart = isOpenEnd
 			? '..'
 			: endDate
@@ -244,36 +275,23 @@ export class EdtfService {
 		}
 	}
 
-	private buildRawEdtfString(
-		date: DateModel,
-		time: TimeModel,
-	): string {
-		const dateStr = this.buildDateString(date);
-		const hasCompleteDate = !!(date.year && date.month && date.day);
-		const timeStr = hasCompleteDate ? this.buildTimeString(time) : '';
-		const utcSuffix = timeStr ? 'Z' : '';
-		
-		return `${dateStr}${timeStr}${utcSuffix}`;
-	}
-
 	private normalizeEdtfString(
 		date: DateModel,
 		time: TimeModel,
 		qualifiers?: DateQualifierFlags,
 	): string {
-		const rawString = this.buildRawEdtfString(date, time);
-		const timeStr = this.buildTimeString(time);
-		const hasCompleteDate = !!(date.year && date.month && date.day);
-		const timezone = timeStr && hasCompleteDate ? this.formatTimezoneForEdtf(time?.timezoneOffset || '') : '';
+		const dateStr = this.buildDateString(date);
+		const edtfObject = edtf(dateStr);
+		// Strip any time/timezone the library may append (e.g. T00:00:00.000Z)
+		let result = edtfObject.toEDTF().replace(/T.*$/, '');
 
-		const edtfObject = edtf(rawString);
-		let edtfString = edtfObject.toEDTF();
+		const hasCompleteDate = !!(date.year && date.month && date.day);
+		const timeStr = hasCompleteDate ? this.buildTimeString(time) : '';
 
 		if (timeStr) {
-			edtfString = edtfString.replace(/\.000Z$/g, '').replace(/Z$/g, '');
+			const timezone = this.formatTimezoneForEdtf(time?.timezoneOffset || '');
+			result = `${result}${timeStr}${timezone}`;
 		}
-
-		let result = timezone ? `${edtfString}${timezone}` : edtfString;
 
 		// Add qualifiers after the complete date-time string (including timezone)
 		if (qualifiers?.approximate && qualifiers?.uncertain) {
@@ -289,18 +307,18 @@ export class EdtfService {
 
 	private formatTimezoneForEdtf(timezoneOffset: string): string {
 		if (!timezoneOffset) return '';
-		
+
 		// Convert GMT+hh:mm or GMT-hh:mm to +hh:mm or -hh:mm
 		const match = timezoneOffset.match(/GMT([+-]\d{2}:\d{2})/);
 		if (match) {
 			return match[1];
 		}
-		
+
 		// If already in +hh:mm or -hh:mm format, return as is
 		if (/^[+-]\d{2}:\d{2}$/.test(timezoneOffset)) {
 			return timezoneOffset;
 		}
-		
+
 		return '';
 	}
 
@@ -354,11 +372,10 @@ export class EdtfService {
 
 		const offset = timezoneMatch[1];
 
-		if (offset === 'Z') {
-			return { timezoneOffset: '+00:00', timezoneName: 'UTC' };
-		}
-
-		return { timezoneOffset: offset, timezoneName: '' };
+		// Normalise to GMT+hh:mm format so it matches the TIMEZONES list
+		const gmtOffset = offset === 'Z' ? 'GMT+00:00' : `GMT${offset}`;
+		const tz = TIMEZONES.find((t) => t.offset === gmtOffset);
+		return { timezoneOffset: gmtOffset, timezoneName: tz?.name || '' };
 	}
 
 	private extDateToDateTimeModel(
@@ -372,8 +389,10 @@ export class EdtfService {
 		const yearStr = edtfStr.match(/^-?\d*X*/)?.[0] || String(extDate.year);
 		const year = yearStr.replace(/X/g, '');
 
-		const hasMonth = precision >= EdtfPrecision.Month;
-		const hasDay = precision >= EdtfPrecision.Day;
+		const hasMonth =
+			precision === EdtfPrecision.Time || precision >= EdtfPrecision.Month;
+		const hasDay =
+			precision === EdtfPrecision.Time || precision >= EdtfPrecision.Day;
 
 		const monthPart = hasMonth
 			? edtfStr.split('-')[1]?.replace(/[^0-9X]/g, '')
@@ -385,8 +404,8 @@ export class EdtfService {
 					.substring(0, 2)
 			: undefined;
 
-		const month = monthPart === 'XX' ? undefined : monthPart;
-		const day = dayPart === 'XX' ? undefined : dayPart;
+		const month = monthPart === 'XX' ? '' : (monthPart ?? '');
+		const day = dayPart === 'XX' ? '' : (dayPart ?? '');
 
 		const hasTime = precision === EdtfPrecision.Time || edtfStr.includes('T');
 		const hours24 = extDate.hours;
@@ -405,11 +424,11 @@ export class EdtfService {
 				day,
 			},
 			time: {
-				hours: hasTime ? String(hours12).padStart(2, '0') : undefined,
-				minutes: hasTime ? String(extDate.minutes).padStart(2, '0') : undefined,
-				seconds: hasTime ? String(extDate.seconds).padStart(2, '0') : undefined,
-				am: hasTime ? !isPm : undefined,
-				pm: hasTime ? isPm : undefined,
+				hours: hasTime ? String(hours12).padStart(2, '0') : '',
+				minutes: hasTime ? String(extDate.minutes).padStart(2, '0') : '',
+				seconds: hasTime ? String(extDate.seconds).padStart(2, '0') : '',
+				am: hasTime ? !isPm : true,
+				pm: hasTime ? isPm : false,
 				timezoneOffset,
 				timezoneName,
 			},
@@ -422,8 +441,8 @@ export class EdtfService {
 
 	private intervalToDateTimeModel(
 		interval: Interval,
-		timezoneOffset: string,
-		timezoneName: string,
+		startTz: { timezoneOffset: string; timezoneName: string },
+		endTz: { timezoneOffset: string; timezoneName: string },
 	): DateTimeModel {
 		const lower = interval.lower;
 		const upper = interval.upper;
@@ -431,23 +450,22 @@ export class EdtfService {
 		const openStart = typeof lower === 'number' || lower === null;
 		const openEnd = typeof upper === 'number' || upper === null;
 
-		const emptyDateTime = {
-			date: { year: '' } as DateModel,
-			time: { timezoneOffset, timezoneName } as TimeModel,
-		};
-
 		const model: DateTimeModel = openStart
-			? { ...emptyDateTime }
-			: this.extDateToDateTimeModel(lower, timezoneOffset, timezoneName);
+			? { date: { year: '' } as DateModel, time: { ...startTz } as TimeModel }
+			: this.extDateToDateTimeModel(
+					lower,
+					startTz.timezoneOffset,
+					startTz.timezoneName,
+				);
 
 		if (openEnd) {
-			model.endDate = { ...emptyDateTime.date };
-			model.endTime = { ...emptyDateTime.time };
+			model.endDate = { year: '' } as DateModel;
+			model.endTime = { ...endTz } as TimeModel;
 		} else if (upper) {
 			const upperModel = this.extDateToDateTimeModel(
 				upper,
-				timezoneOffset,
-				timezoneName,
+				endTz.timezoneOffset,
+				endTz.timezoneName,
 			);
 			model.endDate = upperModel.date;
 			model.endTime = upperModel.time;
@@ -479,78 +497,86 @@ export class EdtfService {
 
 	isValidYear(date: DateModel): boolean {
 		const year = date.year;
-		
+
 		// Empty is valid (optional field)
 		if (year === '') return true;
-		
+
 		// Must be numeric
 		if (!this.isNumeric(year)) return false;
-		
+
 		// Must be 4 digits and not start with 0
 		if (year.length !== 4 || year.startsWith('0')) return false;
-		
+
 		return true;
 	}
 
 	isValidMonth(date: DateModel): boolean {
 		const month = date.month;
-		
+
 		// Empty is valid (optional field)
 		if (!month || month === '') return true;
-		
+
 		// Must be numeric
 		if (!this.isNumeric(month)) return false;
-		
+
 		// Must be 1 or 2 digits
 		if (month.length > 2) return false;
-		
+
 		// First digit must be 0 or 1
 		if (month.length === 1) {
 			const firstDigit = parseInt(month, 10);
 			if (firstDigit > 1) return false;
 		}
-		
+
 		// If 2 digits, must be between 01 and 12
 		if (month.length === 2) {
 			const num = parseInt(month, 10);
 			if (num < 1 || num > 12) return false;
 		}
-		
+
 		return true;
 	}
 
 	isValidDay(date: DateModel): boolean {
 		const day = date.day;
-		
+
 		// Empty is valid (optional field)
 		if (!day || day === '') return true;
-		
+
 		// Must be numeric
 		if (!this.isNumeric(day)) return false;
-		
+
 		// Must be 1 or 2 digits
 		if (day.length > 2) return false;
-		
+
 		// Validate first digit based on max days in month
 		const maxDay = this.getMaxDaysInMonth(date.year, date.month || '');
 		if (day.length === 1) {
 			const firstDigit = parseInt(day, 10);
 			if (firstDigit > Math.floor(maxDay / 10)) return false;
 		}
-		
+
 		// If 2 digits, must be between 01 and maxDay
 		if (day.length === 2) {
 			const num = parseInt(day, 10);
 			if (num < 1 || num > maxDay) return false;
 		}
-		
+
 		return true;
 	}
 
-	to24HourTime(time: TimeModel): { hour: number; minute: number; second: number } | null {
+	to24HourTime(
+		time: TimeModel,
+	): { hour: number; minute: number; second: number } | null {
 		const hour12 = parseInt(time.hours || '0', 10);
 		const isPm = time.pm === true;
-		const hour = isPm ? (hour12 === 12 ? 12 : hour12 + 12) : (hour12 === 12 ? 0 : hour12);
+		const hour = isPm
+			? hour12 === 12
+				? 12
+				: hour12 + 12
+			: hour12 === 12
+				? 0
+				: hour12;
 		const minute = parseInt(time.minutes || '0', 10);
 		const second = parseInt(time.seconds || '0', 10);
 

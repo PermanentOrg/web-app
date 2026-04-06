@@ -23,12 +23,8 @@ import {
 	TimezoneOption,
 } from '@shared/services/edtf-service/edtf.service';
 import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
-import {
-	TimepickerInputComponent,
-} from '@shared/components/timepicker-input/timepicker-input.component';
-import {
-	TimezoneDropdownComponent,
-} from '@shared/components/timezone-dropdown/timezone-dropdown.component';
+import { TimepickerInputComponent } from '@shared/components/timepicker-input/timepicker-input.component';
+import { TimezoneDropdownComponent } from '@shared/components/timezone-dropdown/timezone-dropdown.component';
 
 const EMPTY_DATE: DateModel = { year: '', month: '', day: '' };
 
@@ -91,6 +87,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 	// Start date/time computed properties
 	hasStartDate = computed(() => {
+		if (this._qualifiers().unknown) return true;
 		const date = this._date();
 		return !!(date.year || date.month || date.day);
 	});
@@ -101,8 +98,19 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	});
 
 	formattedStartTime = computed(() => this.formatTime(this._time()));
+	startMeridian = computed(() =>
+		this._time().hours ? (this._time().pm ? Meridian.PM : Meridian.AM) : '',
+	);
 
-	startTimezone = computed(() => this._time().timezoneName || '');
+	startTimezone = computed(() => {
+		const offset = this._time().timezoneOffset;
+		return offset ? EdtfService.offsetToAbbreviation(offset) : '';
+	});
+
+	dropdownTimezoneLabel = computed(() => {
+		const offset = this._time().timezoneOffset;
+		return offset ? EdtfService.offsetToAbbreviation(offset) : '';
+	});
 
 	// End date/time computed properties
 	hasEndDate = computed(() => {
@@ -113,15 +121,25 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	formattedEndDate = computed(() => this.formatDate(this._endDate()));
 
 	formattedEndTime = computed(() => this.formatTime(this._endTime()));
+	endMeridian = computed(() =>
+		this._endTime().hours
+			? this._endTime().pm
+				? Meridian.PM
+				: Meridian.AM
+			: '',
+	);
 
-	endTimezone = computed(() => this._endTime().timezoneName || '');
+	endTimezone = computed(() => {
+		const offset = this._endTime().timezoneOffset;
+		return offset ? EdtfService.offsetToAbbreviation(offset) : '';
+	});
 
 	ngOnInit(): void {
 		this.updateFromDisplayTime();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['displayTime']) {
+		if (changes.displayTime) {
 			this.updateFromDisplayTime();
 		}
 	}
@@ -141,6 +159,10 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 	toggle(): void {
 		if (this.disabled) return;
+		if (this.hasEndDate() || this._qualifiers().unknown) {
+			this.onMoreOptions();
+			return;
+		}
 		if (this.isDropdownOpen()) {
 			this.onCancel();
 		} else {
@@ -161,7 +183,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	onTimeChange(newTime: TimeModel): void {
 		this._time.update((t) => ({
 			...t,
-			...newTime
+			...newTime,
 		}));
 	}
 
@@ -171,6 +193,14 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 			timezoneOffset: tz.offset,
 			timezoneName: tz.name,
 		}));
+	}
+
+	clearAll(): void {
+		this._date.set({ ...EMPTY_DATE });
+		this._time.set({ ...EMPTY_TIME });
+		this._endDate.set({ ...EMPTY_DATE });
+		this._endTime.set({ ...EMPTY_TIME });
+		this._qualifiers.set({ ...EMPTY_QUALIFIERS });
 	}
 
 	onMoreOptions(): void {
@@ -223,13 +253,28 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 			return;
 		}
 
-		this._date.set(this.displayTime.date ? { ...this.displayTime.date } : { ...EMPTY_DATE });
-		this._time.set(this.displayTime.time ? { ...this.displayTime.time } : { ...EMPTY_TIME });
-		this._qualifiers.set(this.displayTime.qualifiers ? { ...this.displayTime.qualifiers } : { ...EMPTY_QUALIFIERS });
-		this._endDate.set(this.displayTime.endDate ? { ...this.displayTime.endDate } : { ...EMPTY_DATE });
-		this._endTime.set(this.displayTime.endTime ? { ...this.displayTime.endTime } : { ...EMPTY_TIME });
+		this._date.set(
+			this.displayTime.date ? { ...this.displayTime.date } : { ...EMPTY_DATE },
+		);
+		this._time.set(
+			this.displayTime.time ? { ...this.displayTime.time } : { ...EMPTY_TIME },
+		);
+		this._qualifiers.set(
+			this.displayTime.qualifiers
+				? { ...this.displayTime.qualifiers }
+				: { ...EMPTY_QUALIFIERS },
+		);
+		this._endDate.set(
+			this.displayTime.endDate
+				? { ...this.displayTime.endDate }
+				: { ...EMPTY_DATE },
+		);
+		this._endTime.set(
+			this.displayTime.endTime
+				? { ...this.displayTime.endTime }
+				: { ...EMPTY_TIME },
+		);
 	}
-
 
 	private formatDate(date: DateModel): string {
 		const hasYear = !!date.year;
@@ -277,8 +322,6 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		const h = parseInt(time.hours, 10);
 		const m = (time.minutes || '00').padStart(2, '0');
 		const s = (time.seconds || '00').padStart(2, '0');
-		const meridian = time.pm ? Meridian.PM : Meridian.AM;
-		return `${h}:${m}:${s} ${meridian}`;
+		return `${h}:${m}:${s}`;
 	}
-
 }

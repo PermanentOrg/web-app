@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { DatepickerInputComponent } from './datepicker-input.component';
 import { DateModel } from '@shared/services/edtf-service/edtf.service';
+import { DatepickerInputComponent } from './datepicker-input.component';
 
 @Component({
 	standalone: true,
@@ -45,7 +45,6 @@ describe('DatepickerInputComponent', () => {
 
 	const mockEvent = (value: string): Event =>
 		({ target: { value } }) as unknown as Event;
-
 
 	it('should accept valid 4-digit year and emit', () => {
 		component.updateYear(mockEvent('2026'));
@@ -159,10 +158,17 @@ describe('DatepickerInputComponent', () => {
 		expect(input.value).toBe('');
 	});
 
-	it('should not emit when clearing year field', () => {
+	it('should emit when clearing year field', () => {
 		hostComponent.date = { year: '2026', month: '02', day: '18' };
 		fixture.detectChanges();
 		component.updateYear(mockEvent(''));
+
+		expect(hostComponent.lastEmittedDate).toBeTruthy();
+		expect(hostComponent.lastEmittedDate.year).toBe('');
+	});
+
+	it('should allow typing intermediate digits without emitting', () => {
+		component.updateYear(mockEvent('19'));
 
 		expect(hostComponent.lastEmittedDate).toBeNull();
 	});

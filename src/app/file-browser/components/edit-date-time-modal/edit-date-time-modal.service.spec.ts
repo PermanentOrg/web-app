@@ -1,25 +1,26 @@
 import { TestBed } from '@angular/core/testing';
 import { DialogRef } from '@angular/cdk/dialog';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
 import { EditDateTimeModalService } from './edit-date-time-modal.service';
 import { EditDateTimeModalComponent } from './edit-date-time-modal.component';
-import { EditDateModel, Meridian } from '@shared/services/edtf-service/edtf.service';
 
 describe('EditDateTimeModalService', () => {
 	let service: EditDateTimeModalService;
 	let dialogCdkServiceSpy: jasmine.SpyObj<DialogCdkService>;
 	let mockDialogRef: jasmine.SpyObj<
-		DialogRef<EditDateModel, EditDateTimeModalComponent>
+		DialogRef<DateTimeModel, EditDateTimeModalComponent>
 	>;
 
-	const mockData: EditDateModel = {
+	const mockData: DateTimeModel = {
 		qualifiers: { approximate: false, uncertain: false, unknown: false },
 		date: { year: '2026', month: '02', day: '18' },
 		time: {
 			hours: '10',
 			minutes: '30',
 			seconds: '',
-			amPm: Meridian.AM,
+			am: true,
+			pm: false,
 			timezoneOffset: 'GMT+01:00',
 			timezoneName: 'Central European Standard Time',
 		},

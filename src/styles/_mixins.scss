@@ -41,7 +41,7 @@
 }
 
 @mixin input-focus-state {
-	box-shadow: 0px 0px 0px 4px #131B4A08;
+	box-shadow: 0px 0px 0px 4px #131b4a08;
 }
 
 @mixin icon-wrapper {
@@ -56,6 +56,38 @@
 	opacity: 1;
 }
 
+@mixin clear-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+
+	i {
+		color: $red;
+	}
+
+	span {
+		font-weight: 500;
+		color: $red;
+	}
+
+	&:hover {
+		opacity: 0.8;
+	}
+}
+
+@mixin panel-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-top: 1px solid $PR-blue-100;
+	background: $PR-blue-25;
+	border-radius: 0 0 12px 12px;
+}
+
 @mixin input-segment {
 	border: none;
 	background: transparent;
@@ -63,11 +95,11 @@
 	@include usual-text;
 	color: $PR-blue;
 	outline: none;
-	
+
 	&::placeholder {
 		color: $PR-blue-400;
 	}
-	
+
 	&:disabled {
 		color: $PR-blue-400;
 		cursor: not-allowed;
