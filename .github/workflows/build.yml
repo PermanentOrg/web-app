@@ -68,7 +68,7 @@ jobs:
         run: npm run ${{ inputs.build-command }}
 
       - name: Archive `dist`
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.artifact-name }}
           path: dist
