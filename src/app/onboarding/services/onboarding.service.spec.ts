@@ -8,6 +8,7 @@ describe('OnboardingService', () => {
 	let service: OnboardingService;
 
 	beforeEach(() => {
+		sessionStorage.clear();
 		TestBed.configureTestingModule({
 			providers: [StorageService],
 		});
