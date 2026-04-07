@@ -28,17 +28,17 @@
 		>
 			<span class="value-name">{{ displayName }}</span>
 			<div class="edit-delete-trigger" (click)="openMenu($event)">
-				<fa-icon icon="ellipsis-h"></fa-icon>
+				<i class="material-icons">more_horiz</i>
 			</div>
 		</div>
 	}
 	@if (menuOpen) {
 		<div #menu class="edit-delete-menu">
 			<div class="edit" (click)="openEditor($event)">
-				<fa-icon icon="edit"></fa-icon> Edit
+				<i class="material-icons">edit</i> Edit
 			</div>
 			<div class="delete" (click)="deleteTag($event)">
-				<fa-icon icon="trash"></fa-icon> Delete
+				<i class="material-icons">delete</i> Delete
 			</div>
 		</div>
 	}
