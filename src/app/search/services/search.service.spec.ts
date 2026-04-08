@@ -7,6 +7,8 @@ import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { SearchService } from './search.service';
 
+import { vi } from 'vitest';
+
 interface ItemVOData {
 	displayName: string;
 }
@@ -223,14 +225,14 @@ describe('SearchService', () => {
 	});
 
 	it('can do a complete archive search', () => {
-		const apiSpy = spyOn(api.search, 'itemsByNameObservable');
+		const apiSpy = vi.spyOn(api.search, 'itemsByNameObservable');
 		service.getResultsInCurrentArchive('Test', []);
 
 		expect(apiSpy).toHaveBeenCalled();
 	});
 
 	it('can do a public archive search', () => {
-		const apiSpy = spyOn(api.search, 'itemsByNameInPublicArchiveObservable');
+		const apiSpy = vi.spyOn(api.search, 'itemsByNameInPublicArchiveObservable');
 		service.getResultsInPublicArchive('Test', [], '1');
 
 		expect(apiSpy).toHaveBeenCalled();

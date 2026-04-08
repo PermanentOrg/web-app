@@ -8,6 +8,8 @@ import { Component, ViewChild } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ConnectorComponent } from './connector.component';
 
+import { vi } from 'vitest';
+
 @Component({
 	selector: `pr-test-host-component`,
 	template: `@if (connector) {
@@ -192,7 +194,7 @@ describe('ConnectorComponent', () => {
 		const connectorComponentInstance = fixture.debugElement.query(
 			By.directive(ConnectorComponent),
 		).componentInstance;
-		spyOn(connectorComponentInstance, 'connect');
+		vi.spyOn(connectorComponentInstance, 'connect');
 
 		const button = fixture.debugElement.nativeElement.querySelector(
 			'button#connector-connect',

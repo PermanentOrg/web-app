@@ -4,12 +4,14 @@ import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
 import { GlamOnboardingHeaderComponent } from './glam-header.component';
 
+import { vi } from 'vitest';
+
 const mockAccountService = {
-	clear: jasmine.createSpy('clear'),
+	clear: vi.fn(),
 };
 
 const mockRouter = {
-	navigate: jasmine.createSpy('navigate').and.resolveTo(true),
+	navigate: vi.fn().mockResolvedValue(true),
 };
 
 describe('GlamHeaderComponent', () => {
@@ -17,8 +19,8 @@ describe('GlamHeaderComponent', () => {
 	let fixture: ComponentFixture<GlamOnboardingHeaderComponent>;
 
 	beforeEach(async () => {
-		mockAccountService.clear.calls.reset();
-		mockRouter.navigate.calls.reset();
+		mockAccountService.clear.mockClear();
+		mockRouter.navigate.mockClear();
 
 		await TestBed.configureTestingModule({
 			declarations: [GlamOnboardingHeaderComponent],

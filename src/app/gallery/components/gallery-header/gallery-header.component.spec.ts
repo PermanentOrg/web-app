@@ -1,17 +1,8 @@
-import { NgModule } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { AccountService } from '@shared/services/account/account.service';
-import { AccountDropdownComponent } from '@shared/components/account-dropdown/account-dropdown.component';
+import { GalleryModule } from '../../gallery.module';
 import { GalleryHeaderComponent } from './gallery-header.component';
-
-@NgModule({
-	declarations: [GalleryHeaderComponent, AccountDropdownComponent],
-	imports: [],
-	providers: [AccountService],
-	bootstrap: [],
-})
-class DummyModule {}
 
 let isLoggedIn: boolean;
 const accountMock = {
@@ -21,7 +12,7 @@ const accountMock = {
 describe('GalleryHeaderComponent', () => {
 	beforeEach(async () => {
 		isLoggedIn = true;
-		await MockBuilder(GalleryHeaderComponent, DummyModule).provide({
+		await MockBuilder(GalleryHeaderComponent, GalleryModule).provide({
 			provide: AccountService,
 			useValue: accountMock,
 		});

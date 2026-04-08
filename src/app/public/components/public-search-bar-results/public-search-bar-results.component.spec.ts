@@ -6,6 +6,8 @@ import { GetFileTypePipe } from '@shared/pipes/get-file-type.pipe';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { PublicSearchBarResultsComponent } from './public-search-bar-results.component';
 
+import { vi } from 'vitest';
+
 describe('PublicSearchBarResultsComponent', () => {
 	let component: PublicSearchBarResultsComponent;
 	let fixture: ComponentFixture<PublicSearchBarResultsComponent>;
@@ -30,7 +32,7 @@ describe('PublicSearchBarResultsComponent', () => {
 	});
 
 	it('should emit "searchTriggered" when viewAllResults is called', () => {
-		spyOn(component.searchTriggered, 'emit');
+		vi.spyOn(component.searchTriggered, 'emit');
 
 		component.viewAllResults();
 
@@ -39,7 +41,7 @@ describe('PublicSearchBarResultsComponent', () => {
 
 	it('should emit tagClickOutput with the correct tag when onTagClick is called', () => {
 		const testTag = { name: 'Test Tag' };
-		spyOn(component.tagClickOutput, 'emit');
+		vi.spyOn(component.tagClickOutput, 'emit');
 
 		component.onTagClick(testTag);
 
@@ -47,7 +49,7 @@ describe('PublicSearchBarResultsComponent', () => {
 	});
 
 	it('should navigate to folder route when goToFile is called with a public folder', () => {
-		const routerSpy = spyOn(component.router, 'navigate');
+		const routerSpy = vi.spyOn(component.router, 'navigate');
 		const testItem = {
 			type: 'type.folder.public',
 			archiveNbr: 123,
@@ -62,7 +64,7 @@ describe('PublicSearchBarResultsComponent', () => {
 	});
 
 	it('should navigate to record route when goToFile is called with a record item', () => {
-		const routerSpy = spyOn(component.router, 'navigate');
+		const routerSpy = vi.spyOn(component.router, 'navigate');
 		const testItem = {
 			type: 'type.record.image',
 			parentArchiveNbr: '789',

@@ -11,6 +11,8 @@ import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { OnboardingService } from '../../services/onboarding.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
+import { vi } from 'vitest';
+
 let calledAccept: boolean = false;
 let acceptedArchive: ArchiveVO | undefined;
 const mockApiService = {
@@ -27,10 +29,10 @@ const mockApiService = {
 		},
 	},
 	account: {
-		updateAccountTags: jasmine.createSpy('updateAccountTags').and.resolveTo(),
+		updateAccountTags: vi.fn().mockResolvedValue(undefined),
 	},
 	share: {
-		requestShareAccess: jasmine.createSpy('requestShareAccess').and.resolveTo(),
+		requestShareAccess: vi.fn().mockResolvedValue(undefined),
 	},
 };
 
@@ -56,7 +58,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		feature = new FeatureFlagService(undefined, new SecretsService());
 		calledAccept = false;
 		acceptedArchive = null;
-		mockApiService.share.requestShareAccess.calls.reset();
+		mockApiService.share.requestShareAccess.mockClear();
 
 		await TestBed.configureTestingModule({
 			declarations: [CreateNewArchiveComponent],
@@ -81,12 +83,12 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	});
 
 	it('should emit a progress bar change event on mount', () => {
-		spyOn(component.progressUpdated, 'emit');
+		vi.spyOn(component.progressUpdated, 'emit');
 
 		// Recreate fixture to capture mount event
 		const testFixture = TestBed.createComponent(CreateNewArchiveComponent);
 		const testComponent = testFixture.componentInstance;
-		spyOn(testComponent.progressUpdated, 'emit');
+		vi.spyOn(testComponent.progressUpdated, 'emit');
 		testFixture.detectChanges();
 
 		expect(testComponent.progressUpdated.emit).toHaveBeenCalledWith(0);
@@ -146,7 +148,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		component.pendingArchive = new ArchiveVO({ archiveId: 1234 });
 		await component.onSubmit();
 
-		expect(calledAccept).toBeTrue();
+		expect(calledAccept).toBe(true);
 		expect(acceptedArchive.archiveId).toBe(1234);
 	});
 
@@ -156,12 +158,12 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		component.pendingArchive = new ArchiveVO({ archiveId: 1234 });
 		await component.onSubmit();
 
-		expect(calledAccept).toBeFalse();
+		expect(calledAccept).toBe(false);
 		expect(acceptedArchive).toBeNull();
 	});
 
 	it('should call requestShareAccess with shareToken from localStorage', async () => {
-		spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+		vi.spyOn(localStorage, 'getItem').mockImplementation((key: string) => {
 			if (key === 'shareToken') return 'test-share-token';
 			return null;
 		});
@@ -174,7 +176,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	});
 
 	it('should call requestShareAccess with shareTokenFromCopy when shareToken is not present', async () => {
-		spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+		vi.spyOn(localStorage, 'getItem').mockImplementation((key: string) => {
 			if (key === 'shareTokenFromCopy') return 'test-share-token-from-copy';
 			return null;
 		});
@@ -187,7 +189,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	});
 
 	it('should prefer shareToken over shareTokenFromCopy when both are present', async () => {
-		spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+		vi.spyOn(localStorage, 'getItem').mockImplementation((key: string) => {
 			if (key === 'shareToken') return 'primary-token';
 			if (key === 'shareTokenFromCopy') return 'secondary-token';
 			return null;
@@ -201,7 +203,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	});
 
 	it('should not call requestShareAccess when no share token exists in localStorage', async () => {
-		spyOn(localStorage, 'getItem').and.returnValue(null);
+		vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
 
 		await component.onSubmit();
 
@@ -209,8 +211,8 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	});
 
 	it('should not clear onboarding session storage when archive creation fails', async () => {
-		spyOn(onboardingService, 'clearOnboardingStorage');
-		spyOn(mockApiService.archive, 'create').and.rejectWith(
+		vi.spyOn(onboardingService, 'clearOnboardingStorage');
+		vi.spyOn(mockApiService.archive, 'create').mockRejectedValue(
 			new Error('creation failed'),
 		);
 
@@ -220,7 +222,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	});
 
 	it('should clear onboarding session storage after archive creation', async () => {
-		spyOn(onboardingService, 'clearOnboardingStorage');
+		vi.spyOn(onboardingService, 'clearOnboardingStorage');
 
 		await component.onSubmit();
 

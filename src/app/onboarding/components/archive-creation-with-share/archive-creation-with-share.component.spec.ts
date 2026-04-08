@@ -5,6 +5,8 @@ import { InviteVO, InviteVOData } from '@models/invite-vo';
 import { InviteResponse } from '@shared/services/api/invite.repo';
 import { ArchiveCreationWithShareComponent } from './archive-creation-with-share.component';
 
+import { vi } from 'vitest';
+
 class MockInviteApiResponse extends InviteResponse {
 	public inviteVo: InviteVO | undefined;
 
@@ -42,7 +44,7 @@ describe('ArchiveCreationWithShareToken', () => {
 	let mockInvite: MockInviteRepo;
 
 	function setLocalStorage(token: string) {
-		spyOn(localStorage, 'getItem').and.returnValue(token);
+		vi.spyOn(localStorage, 'getItem').mockReturnValue(token);
 	}
 
 	beforeEach(async () => {
@@ -138,7 +140,7 @@ describe('ArchiveCreationWithShareToken', () => {
 
 	it('should fetch invite data and set sharer and shared item names when copyToken is present', async () => {
 		const mockShareApi = {
-			checkShareLink: jasmine.createSpy().and.returnValue(
+			checkShareLink: vi.fn().mockReturnValue(
 				Promise.resolve({
 					Results: [
 						{
@@ -171,7 +173,7 @@ describe('ArchiveCreationWithShareToken', () => {
 		fixture = TestBed.createComponent(ArchiveCreationWithShareComponent);
 		instance = fixture.componentInstance;
 
-		spyOn(localStorage, 'getItem').and.callFake((key) => {
+		vi.spyOn(localStorage, 'getItem').mockImplementation((key) => {
 			if (key === 'shareTokenFromCopy') return 'copyToken';
 			return null;
 		});
@@ -188,7 +190,7 @@ describe('ArchiveCreationWithShareToken', () => {
 
 	it('should set sharedItemName using FolderVO if RecordVO is missing', async () => {
 		const mockShareApi = {
-			checkShareLink: jasmine.createSpy().and.returnValue(
+			checkShareLink: vi.fn().mockReturnValue(
 				Promise.resolve({
 					Results: [
 						{
@@ -221,7 +223,7 @@ describe('ArchiveCreationWithShareToken', () => {
 		fixture = TestBed.createComponent(ArchiveCreationWithShareComponent);
 		instance = fixture.componentInstance;
 
-		spyOn(localStorage, 'getItem').and.callFake((key) => {
+		vi.spyOn(localStorage, 'getItem').mockImplementation((key) => {
 			if (key === 'shareTokenFromCopy') return 'copyToken';
 			return null;
 		});

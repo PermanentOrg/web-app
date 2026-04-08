@@ -12,20 +12,17 @@ import { ArchiveVO, TagVO } from '@models/index';
 import { Router } from '@angular/router';
 import { ArchiveSearchComponent } from './archive-search.component';
 
+import { vi } from 'vitest';
+
 describe('ArchiveSearchComponent', () => {
 	let component: ArchiveSearchComponent;
 	let fixture: ComponentFixture<ArchiveSearchComponent>;
-	let searchService: jasmine.SpyObj<SearchService>;
-	let publicProfileService: jasmine.SpyObj<PublicProfileService>;
+	let searchService: any;
+	let publicProfileService: any;
 
 	beforeEach(async () => {
-		publicProfileService = jasmine.createSpyObj('PublicProfileService', [
-			'archive$',
-		]);
-		searchService = jasmine.createSpyObj('SearchService', [
-			'getPublicArchiveTags',
-			'getResultsInPublicArchive',
-		]);
+		publicProfileService = { archive$: vi.fn() } as any;
+		searchService = { getPublicArchiveTags: vi.fn(), getResultsInPublicArchive: vi.fn() } as any;
 
 		await TestBed.configureTestingModule({
 			declarations: [ArchiveSearchComponent],
@@ -36,17 +33,17 @@ describe('ArchiveSearchComponent', () => {
 				{ provide: PublicProfileService, useValue: publicProfileService },
 				{
 					provide: Router,
-					useValue: jasmine.createSpyObj('Router', ['navigate']),
+					useValue: { navigate: vi.fn() } as any,
 				},
 				provideHttpClient(withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();
 
-		publicProfileService.archive$.and.returnValue(
+		publicProfileService.archive$.mockReturnValue(
 			of(new ArchiveVO({ archiveId: '123' })),
 		);
-		searchService.getPublicArchiveTags.and.returnValue(of([]));
+		searchService.getPublicArchiveTags.mockReturnValue(of([]));
 
 		fixture = TestBed.createComponent(ArchiveSearchComponent);
 		component = fixture.componentInstance;
@@ -57,10 +54,10 @@ describe('ArchiveSearchComponent', () => {
 
 		fixture.detectChanges();
 
-		publicProfileService.archive$.and.returnValue(
+		publicProfileService.archive$.mockReturnValue(
 			of(new ArchiveVO({ archiveId: '123' })),
 		);
-		searchService.getPublicArchiveTags.and.returnValue(
+		searchService.getPublicArchiveTags.mockReturnValue(
 			of([{ name: 'Tag1', tagId: 1 }]),
 		);
 
@@ -76,7 +73,7 @@ describe('ArchiveSearchComponent', () => {
 	});
 
 	it('should fetch tags on initialization', () => {
-		searchService.getPublicArchiveTags.and.returnValue(
+		searchService.getPublicArchiveTags.mockReturnValue(
 			of([{ name: 'Tag1', tagId: 1 }]),
 		);
 
@@ -88,7 +85,7 @@ describe('ArchiveSearchComponent', () => {
 	});
 
 	it('should emit searchSubmitted event on handleSearch', () => {
-		spyOn(component.searchSubmitted, 'emit');
+		vi.spyOn(component.searchSubmitted, 'emit');
 		component.searchForm.patchValue({ query: 'test query' });
 
 		component.onHandleSearch();
@@ -121,7 +118,7 @@ describe('ArchiveSearchComponent', () => {
 	});
 
 	it('should emit searchByTag event on tagClick', () => {
-		spyOn(component.searchByTag, 'emit');
+		vi.spyOn(component.searchByTag, 'emit');
 		component.searchForm.patchValue({ query: 'test query' });
 
 		component.onTagClick([new TagVO({ name: 'Tag1', tagId: 1 })]);

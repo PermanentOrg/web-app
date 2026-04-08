@@ -5,6 +5,8 @@ import { ArchiveVO, AccountVO } from '@models/index';
 import { MessageService } from '../../../shared/services/message/message.service';
 import { ArchivePayerComponent } from './archive-payer.component';
 
+import { vi } from 'vitest';
+
 describe('ArchivePayerComponent', () => {
 	let component: ArchivePayerComponent;
 	let fixture: ComponentFixture<ArchivePayerComponent>;
@@ -12,12 +14,10 @@ describe('ArchivePayerComponent', () => {
 
 	beforeEach(async () => {
 		mockAccountService = {
-			getAccount: jasmine
-				.createSpy('getAccount')
-				.and.returnValue({ accountId: '1' }),
-			getArchive: jasmine
-				.createSpy('getArchive')
-				.and.returnValue({ accessRole: 'access.role.manager' }),
+			getAccount: vi.fn()
+				.mockReturnValue({ accountId: '1' }),
+			getArchive: vi.fn()
+				.mockReturnValue({ accessRole: 'access.role.manager' }),
 		};
 
 		await TestBed.configureTestingModule({

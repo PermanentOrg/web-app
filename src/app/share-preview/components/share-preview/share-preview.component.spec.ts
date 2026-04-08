@@ -29,41 +29,32 @@ import { MessageService } from '@shared/services/message/message.service';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 import { SharePreviewComponent } from './share-preview.component';
 
-export const mockAccountService = jasmine.createSpyObj('AccountService', [
-	'getAccount',
-	'getArchive',
-	'isLoggedIn',
-	'signUp',
-	'logIn',
-	'refreshArchives',
-	'getArchives',
-	'changeArchive',
-	'promptForArchiveChange',
-	'setRedirect',
-]);
+import { vi } from 'vitest';
+
+export const mockAccountService = { getAccount: vi.fn(), getArchive: vi.fn(), isLoggedIn: vi.fn(), signUp: vi.fn(), logIn: vi.fn(), refreshArchives: vi.fn(), getArchives: vi.fn(), changeArchive: vi.fn(), promptForArchiveChange: vi.fn(), setRedirect: vi.fn() } as any;
 
 // Provide default return values
 const defaultAccount = new AccountVO({ primaryEmail: 'test@example.com' });
 const defaultArchive = new ArchiveVO({ archiveId: 123 });
 
 const mockGoogleAnalyticsService = {
-	sendEvent: jasmine.createSpy(),
+	sendEvent: vi.fn(),
 };
 
-mockAccountService.getAccount.and.returnValue(defaultAccount);
-mockAccountService.getArchive.and.returnValue(defaultArchive);
-mockAccountService.isLoggedIn.and.returnValue(true);
-mockAccountService.signUp.and.returnValue(Promise.resolve(defaultAccount));
+mockAccountService.getAccount.mockReturnValue(defaultAccount);
+mockAccountService.getArchive.mockReturnValue(defaultArchive);
+mockAccountService.isLoggedIn.mockReturnValue(true);
+mockAccountService.signUp.mockReturnValue(Promise.resolve(defaultAccount));
 
 const authResponse = new AuthResponse({});
 authResponse.needsMFA = () => false;
-mockAccountService.logIn.and.returnValue(Promise.resolve(authResponse));
+mockAccountService.logIn.mockReturnValue(Promise.resolve(authResponse));
 
-mockAccountService.refreshArchives.and.returnValue(Promise.resolve());
-mockAccountService.getArchives.and.returnValue([defaultArchive]);
-mockAccountService.changeArchive.and.returnValue(Promise.resolve());
-mockAccountService.promptForArchiveChange.and.returnValue(Promise.resolve());
-mockAccountService.setRedirect.and.stub();
+mockAccountService.refreshArchives.mockReturnValue(Promise.resolve());
+mockAccountService.getArchives.mockReturnValue([defaultArchive]);
+mockAccountService.changeArchive.mockReturnValue(Promise.resolve());
+mockAccountService.promptForArchiveChange.mockReturnValue(Promise.resolve());
+mockAccountService.setRedirect.mockImplementation(() => {});
 
 // Subjects for subscriptions
 mockAccountService.archiveChange = new Subject<ArchiveVO>();
@@ -75,11 +66,11 @@ const mockShareLinksService = {
 };
 
 const mockFilesystemService = {
-	getFolder: jasmine.createSpy().and.returnValue(Promise.resolve({})),
+	getFolder: vi.fn().mockReturnValue(Promise.resolve({})),
 };
 
 const mockMessageService = {
-	showMessage: jasmine.createSpy(),
+	showMessage: vi.fn(),
 };
 
 describe('SharePreviewComponent', () => {
@@ -111,12 +102,12 @@ describe('SharePreviewComponent', () => {
 
 		const firstChild = new ActivatedRouteSnapshot();
 		firstChild.data = { sharePreviewView: {} };
-		spyOnProperty(mockRoute.snapshot, 'firstChild', 'get').and.returnValue(
+		vi.spyOn(mockRoute.snapshot, 'firstChild', 'get').mockReturnValue(
 			firstChild,
 		);
 
 		const parent = new ActivatedRoute();
-		spyOnProperty(mockRoute, 'parent', 'get').and.returnValue(parent);
+		vi.spyOn(mockRoute, 'parent', 'get').mockReturnValue(parent);
 
 		config.providers.push({
 			provide: ActivatedRoute,
@@ -148,7 +139,7 @@ describe('SharePreviewComponent', () => {
 		dialog = TestBed.inject(DialogCdkService);
 		router = TestBed.inject(Router);
 		apiService = TestBed.inject(ApiService);
-		spyOn(router, 'navigate');
+		vi.spyOn(router, 'navigate');
 
 		fixture = TestBed.createComponent(SharePreviewComponent);
 		component = fixture.componentInstance;
@@ -160,7 +151,7 @@ describe('SharePreviewComponent', () => {
 	});
 
 	it('should mark it as unlisted share if restrictions are none', fakeAsync(() => {
-		spyOn(mockShareLinksService, 'isUnlistedShare').and.returnValue(true);
+		vi.spyOn(mockShareLinksService, 'isUnlistedShare').mockReturnValue(true);
 		component.ngOnInit();
 
 		expect(mockShareLinksService.isUnlistedShare).toHaveBeenCalled();
@@ -170,8 +161,8 @@ describe('SharePreviewComponent', () => {
 	}));
 
 	it('should open dialog shortly after loading if user is logged out and it is not an unlisted share', fakeAsync(() => {
-		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
-		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
+		const dialogRefSpy = { close: vi.fn() } as any;
+		const dialogSpy = vi.spyOn(dialog, 'open').mockReturnValue(dialogRefSpy);
 
 		component.isLoggedIn = false;
 		component.isUnlistedShare = false;
@@ -184,8 +175,8 @@ describe('SharePreviewComponent', () => {
 	}));
 
 	it('should not open dialog if user is logged out, but it is an unlisted share', fakeAsync(() => {
-		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
-		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
+		const dialogRefSpy = { close: vi.fn() } as any;
+		const dialogSpy = vi.spyOn(dialog, 'open').mockReturnValue(dialogRefSpy);
 
 		component.isLoggedIn = false;
 		component.isUnlistedShare = true;
@@ -196,8 +187,8 @@ describe('SharePreviewComponent', () => {
 	}));
 
 	it('should not open dialog if user is logged in and it is not an unlisted share', fakeAsync(() => {
-		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
-		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
+		const dialogRefSpy = { close: vi.fn() } as any;
+		const dialogSpy = vi.spyOn(dialog, 'open').mockReturnValue(dialogRefSpy);
 
 		component.isLoggedIn = true;
 		component.isUnlistedShare = false;
@@ -208,7 +199,7 @@ describe('SharePreviewComponent', () => {
 	}));
 
 	it('should not open dialog shortly after loading if user is logged in and share is unlisted', fakeAsync(() => {
-		const dialogSpy = spyOn(dialog, 'open');
+		const dialogSpy = vi.spyOn(dialog, 'open');
 		component.isLoggedIn = true;
 		component.isUnlistedShare = true;
 		tick(1005);
@@ -217,7 +208,7 @@ describe('SharePreviewComponent', () => {
 	}));
 
 	it('should not open dialog if already open', () => {
-		const dialogSpy = spyOn(dialog, 'open');
+		const dialogSpy = vi.spyOn(dialog, 'open');
 		component.createAccountDialogIsOpen = true;
 
 		component.showCreateAccountDialog();
@@ -226,8 +217,8 @@ describe('SharePreviewComponent', () => {
 	});
 
 	it('should open dialog when a thumbnail is clicked', fakeAsync(() => {
-		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
-		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
+		const dialogRefSpy = { close: vi.fn() } as any;
+		const dialogSpy = vi.spyOn(dialog, 'open').mockReturnValue(dialogRefSpy);
 
 		const mockFileList = { itemClicked: new EventEmitter<any>() };
 
@@ -247,7 +238,7 @@ describe('SharePreviewComponent', () => {
 	it('should unsubscribe from item clicks', () => {
 		const mockFileList = { itemClicked: new EventEmitter<any>() };
 		component.subscribeToItemClicks(mockFileList);
-		const unsubscribeSpy = spyOn(
+		const unsubscribeSpy = vi.spyOn(
 			component.fileListClickListener,
 			'unsubscribe',
 		);
@@ -260,15 +251,15 @@ describe('SharePreviewComponent', () => {
 		component.showCover = false;
 		component.toggleCover();
 
-		expect(component.showCover).toBeTrue();
+		expect(component.showCover).toBe(true);
 
 		component.toggleCover();
 
-		expect(component.showCover).toBeFalse();
+		expect(component.showCover).toBe(false);
 	});
 
 	it('should stop event propagation', () => {
-		const event = jasmine.createSpyObj('Event', ['stopPropagation']);
+		const event = { stopPropagation: vi.fn() } as any;
 		component.stopPropagation(event);
 
 		expect(event.stopPropagation).toHaveBeenCalled();
@@ -293,14 +284,14 @@ describe('SharePreviewComponent', () => {
 		component.isRelationshipShare = false;
 
 		const mockVO = { ShareVO: { status: 'ok', accessRole: 'editor' } };
-		spyOn(apiService.share, 'checkShareLink').and.returnValue(
+		vi.spyOn(apiService.share, 'checkShareLink').mockReturnValue(
 			Promise.resolve({
 				isSuccessful: true,
 				getShareByUrlVO: () => mockVO,
 			} as unknown as ShareResponse),
 		);
 
-		spyOn(component, 'checkAccess');
+		vi.spyOn(component, 'checkAccess');
 
 		component.reloadSharePreviewData();
 		tick(1005);
@@ -312,7 +303,7 @@ describe('SharePreviewComponent', () => {
 
 	it('should reload share preview data for relationship share', fakeAsync(() => {
 		const mockVO = { ShareVO: { status: 'ok', accessRole: 'owner' } };
-		spyOn(apiService.share, 'getShareForPreview').and.returnValue(
+		vi.spyOn(apiService.share, 'getShareForPreview').mockReturnValue(
 			Promise.resolve({
 				getShareVO: () => mockVO,
 			} as unknown as ShareResponse),
@@ -320,7 +311,7 @@ describe('SharePreviewComponent', () => {
 		component.isLinkShare = false;
 		component.isRelationshipShare = true;
 
-		spyOn(component, 'checkAccess');
+		vi.spyOn(component, 'checkAccess');
 
 		component.reloadSharePreviewData();
 		tick(1005);
@@ -341,15 +332,15 @@ describe('SharePreviewComponent', () => {
 		component.onRequestAccessClick();
 		tick(2005);
 
-		expect(component.hasRequested).toBeTrue();
-		expect(component.showCover).toBeFalse();
+		expect(component.hasRequested).toBe(true);
+		expect(component.showCover).toBe(false);
 	}));
 
 	it('should request access and show pending message when status is pending', fakeAsync(() => {
 		const mockResponse = {
 			getShareVO: () => ({ status: 'status.generic.pending' }),
 		};
-		spyOn(apiService.share, 'requestShareAccess').and.returnValue(
+		vi.spyOn(apiService.share, 'requestShareAccess').mockReturnValue(
 			Promise.resolve(mockResponse as any),
 		);
 
@@ -368,18 +359,18 @@ describe('SharePreviewComponent', () => {
 			style: 'success',
 		});
 
-		expect(component.showCover).toBeFalse();
-		expect(component.hasRequested).toBeTrue();
+		expect(component.showCover).toBe(false);
+		expect(component.hasRequested).toBe(true);
 	}));
 
 	it('should show access granted message and navigate when status is not pending', fakeAsync(() => {
 		const mockResponse = {
 			getShareVO: () => ({ status: 'ok' }),
 		};
-		spyOn(apiService.share, 'requestShareAccess').and.returnValue(
+		vi.spyOn(apiService.share, 'requestShareAccess').mockReturnValue(
 			Promise.resolve(mockResponse as any),
 		);
-		const routerSpy = spyOn(router, 'navigate');
+		const routerSpy = vi.spyOn(router, 'navigate');
 		component.shareToken = 'mock-token';
 		component.requestShareAccess();
 		tick();

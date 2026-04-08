@@ -3,6 +3,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { ArchiveVO } from '@models/archive-vo';
 import { WelcomeScreenComponent } from './welcome-screen.component';
 
+import { vi } from 'vitest';
+
 @NgModule()
 class DummyModule {}
 
@@ -41,7 +43,7 @@ describe('WelcomeScreenComponent #onboarding', () => {
 		];
 		const fixture = await defaultRender(pendingArchives);
 		const instance = fixture.point.componentInstance;
-		const selectInvitationSpy = spyOn(
+		const selectInvitationSpy = vi.spyOn(
 			fixture.point.componentInstance.selectInvitation,
 			'emit',
 		);

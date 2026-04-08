@@ -1,42 +1,42 @@
 import { AccountVO } from '@models/account-vo';
+import { vi } from 'vitest';
+
 import {
 	savePropertyOnAccount,
 	AccountChange,
 } from './account.service.helpers';
 
 describe('savePropertyOnAccount', () => {
-	let mockAccount: jasmine.SpyObj<AccountVO>;
+	let mockAccount: any;
 	let mockApiService: any;
 	let mockAccountService: any;
 	let mockMessageService: any;
 
 	beforeEach(() => {
-		mockAccount = jasmine.createSpyObj<AccountVO>('AccountVO', ['update'], {
-			primaryEmail: 'test@example.com',
+		mockAccount = { update: vi.fn(), primaryEmail: 'test@example.com',
 			phoneStatus: 'status.auth.verified',
-			primaryPhone: '1234567890',
-		});
+			primaryPhone: '1234567890', } as any;
 
 		mockApiService = {
 			account: {
-				update: jasmine.createSpy(),
+				update: vi.fn(),
 			},
 		};
 
 		mockAccountService = {
-			setAccount: jasmine.createSpy(),
+			setAccount: vi.fn(),
 		};
 
 		mockMessageService = {
-			showMessage: jasmine.createSpy(),
-			showError: jasmine.createSpy(),
+			showMessage: vi.fn(),
+			showError: vi.fn(),
 		};
 	});
 
 	it('should update the account and show success message on success', async () => {
 		const change: AccountChange = { prop: 'primaryPhone', value: '9876543210' };
 
-		mockApiService.account.update.and.resolveTo({
+		mockApiService.account.update.mockResolvedValue({
 			primaryPhone: '9876543210',
 			phoneStatus: 'status.auth.verified',
 		});
@@ -48,7 +48,7 @@ describe('savePropertyOnAccount', () => {
 		});
 
 		expect(mockAccount.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
+			expect.objectContaining({
 				primaryEmail: 'test@example.com',
 				primaryPhone: '9876543210',
 				phoneStatus: 'status.auth.verified',
@@ -56,7 +56,7 @@ describe('savePropertyOnAccount', () => {
 		);
 
 		expect(mockApiService.account.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
+			expect.objectContaining({
 				primaryEmail: 'test@example.com',
 				primaryPhone: '9876543210',
 				phoneStatus: 'status.auth.verified',
@@ -73,7 +73,7 @@ describe('savePropertyOnAccount', () => {
 	it('should revert changes and show error message on failure', async () => {
 		const change: AccountChange = { prop: 'primaryPhone', value: '9876543210' };
 
-		mockApiService.account.update.and.rejectWith(new Error('API Error'));
+		mockApiService.account.update.mockRejectedValue(new Error('API Error'));
 
 		await savePropertyOnAccount(mockAccount, change, {
 			messageService: mockMessageService,
@@ -96,7 +96,7 @@ describe('savePropertyOnAccount', () => {
 			value: '',
 		};
 
-		mockApiService.account.update.and.returnValue(
+		mockApiService.account.update.mockReturnValue(
 			Promise.resolve({
 				primaryPhone: '',
 				phoneStatus: 'status.auth.unverified',
@@ -110,7 +110,7 @@ describe('savePropertyOnAccount', () => {
 		});
 
 		expect(mockAccount.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
+			expect.objectContaining({
 				primaryPhone: '',
 				phoneStatus: 'status.auth.unverified',
 				primaryEmail: 'test@example.com',
@@ -118,7 +118,7 @@ describe('savePropertyOnAccount', () => {
 		);
 
 		expect(mockApiService.account.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
+			expect.objectContaining({
 				primaryPhone: '',
 				phoneStatus: 'status.auth.unverified',
 				primaryEmail: 'test@example.com',
@@ -126,7 +126,7 @@ describe('savePropertyOnAccount', () => {
 		);
 
 		expect(mockAccount.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
+			expect.objectContaining({
 				primaryPhone: '',
 				phoneStatus: 'status.auth.unverified',
 			}),

@@ -7,6 +7,8 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { EventService } from '@shared/services/event/event.service';
 import { StorageDialogComponent } from './storage-dialog.component';
 
+import { vi } from 'vitest';
+
 @NgModule()
 class DummyModule {}
 
@@ -59,7 +61,7 @@ describe('StorageDialogComponent', () => {
 		const fixture = MockRender(StorageDialogComponent);
 		const instance = fixture.point.componentInstance;
 		const dialogRef = TestBed.inject(DialogRef);
-		const spy = spyOn(dialogRef, 'close');
+		const spy = vi.spyOn(dialogRef, 'close');
 		instance.onDoneClick();
 
 		expect(spy).toHaveBeenCalled();
@@ -78,6 +80,6 @@ describe('StorageDialogComponent', () => {
 		instance.setTab('promo');
 		await fixture.whenStable();
 
-		expect(eventCalled).toBeTrue();
+		expect(eventCalled).toBe(true);
 	});
 });

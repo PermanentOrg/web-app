@@ -4,12 +4,14 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { DeviceService } from './device.service';
 
+import { vi } from 'vitest';
+
 describe('DeviceService', () => {
-	let cookieServiceMock: jasmine.SpyObj<CookieService>;
+	let cookieServiceMock: any;
 
 	beforeEach(async () => {
-		cookieServiceMock = jasmine.createSpyObj('CookieService', ['check']);
-		cookieServiceMock.check.and.returnValue(false);
+		cookieServiceMock = { check: vi.fn() } as any;
+		cookieServiceMock.check.mockReturnValue(false);
 
 		await MockBuilder(DeviceService).provide({
 			provide: CookieService,
@@ -24,7 +26,7 @@ describe('DeviceService', () => {
 	});
 
 	it('should detect mobile width correctly', () => {
-		spyOn(window, 'matchMedia').and.callFake(
+		vi.spyOn(window, 'matchMedia').mockImplementation(
 			(query: string) =>
 				({
 					matches: query !== '(min-width: 900px)',
@@ -33,7 +35,7 @@ describe('DeviceService', () => {
 
 		const instance = TestBed.inject(DeviceService);
 
-		expect(instance.isMobileWidth()).toBeTrue();
+		expect(instance.isMobileWidth()).toBe(true);
 	});
 
 	it('should detect mobile device correctly', () => {
@@ -44,7 +46,7 @@ describe('DeviceService', () => {
 
 		const instance = TestBed.inject(DeviceService);
 
-		expect(instance.isMobile()).toBeTrue();
+		expect(instance.isMobile()).toBe(true);
 	});
 
 	it('should detect iOS device correctly', () => {
@@ -55,14 +57,14 @@ describe('DeviceService', () => {
 
 		const instance = TestBed.inject(DeviceService);
 
-		expect(instance.isIos()).toBeTrue();
+		expect(instance.isIos()).toBe(true);
 	});
 
 	it('should handle cookie check for opt-out correctly', () => {
-		cookieServiceMock.check.and.returnValue(true);
+		cookieServiceMock.check.mockReturnValue(true);
 
 		const instance = TestBed.inject(DeviceService);
 
-		expect(instance.didOptOut()).toBeTrue();
+		expect(instance.didOptOut()).toBe(true);
 	});
 });

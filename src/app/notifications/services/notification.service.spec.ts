@@ -20,6 +20,8 @@ import { NotificationVOData } from '@models/notification-vo';
 import { cloneDeep } from 'lodash';
 import { NotificationService } from './notification.service';
 
+import { vi } from 'vitest';
+
 const allNotificationsData: NotificationVOData[] = [
 	{
 		notificationId: 1,
@@ -51,9 +53,9 @@ describe('NotificationService', () => {
 	let apiService: ApiService;
 
 	let service: NotificationService;
-	let getNotificationsSpy: jasmine.Spy;
-	let getNotificationsSinceSpy: jasmine.Spy;
-	let updateSpy: jasmine.Spy;
+	let getNotificationsSpy: any;
+	let getNotificationsSinceSpy: any;
+	let updateSpy: any;
 
 	let allNotificationsResponse: NotificationResponse;
 	let newNotificationsResponse: NotificationResponse;
@@ -90,7 +92,7 @@ describe('NotificationService', () => {
 	});
 
 	it('should be created', () => {
-		spyOn(accountService, 'isLoggedIn').and.returnValue(false);
+		vi.spyOn(accountService, 'isLoggedIn').mockReturnValue(false);
 
 		service = TestBed.inject(NotificationService);
 
@@ -98,8 +100,8 @@ describe('NotificationService', () => {
 	});
 
 	it('should not attempt to load notifications if not logged in', () => {
-		spyOn(accountService, 'isLoggedIn').and.returnValue(false);
-		getNotificationsSpy = spyOn(apiService.notification, 'getNotifications');
+		vi.spyOn(accountService, 'isLoggedIn').mockReturnValue(false);
+		getNotificationsSpy = vi.spyOn(apiService.notification, 'getNotifications');
 
 		service = TestBed.inject(NotificationService);
 
@@ -109,12 +111,12 @@ describe('NotificationService', () => {
 	});
 
 	it('should load notifications if logged in and set unread count', fakeAsync(() => {
-		spyOn(accountService, 'isLoggedIn').and.returnValue(true);
+		vi.spyOn(accountService, 'isLoggedIn').mockReturnValue(true);
 
-		getNotificationsSpy = spyOn(
+		getNotificationsSpy = vi.spyOn(
 			apiService.notification,
 			'getNotifications',
-		).and.returnValue(Promise.resolve(allNotificationsResponse));
+		).mockReturnValue(Promise.resolve(allNotificationsResponse));
 
 		service = TestBed.inject(NotificationService);
 
@@ -129,17 +131,17 @@ describe('NotificationService', () => {
 	}));
 
 	it('should load new notifications and update the unread count', fakeAsync(() => {
-		spyOn(accountService, 'isLoggedIn').and.returnValue(true);
+		vi.spyOn(accountService, 'isLoggedIn').mockReturnValue(true);
 
-		getNotificationsSpy = spyOn(
+		getNotificationsSpy = vi.spyOn(
 			apiService.notification,
 			'getNotifications',
-		).and.returnValue(Promise.resolve(allNotificationsResponse));
+		).mockReturnValue(Promise.resolve(allNotificationsResponse));
 
-		getNotificationsSinceSpy = spyOn(
+		getNotificationsSinceSpy = vi.spyOn(
 			apiService.notification,
 			'getNotificationsSince',
-		).and.returnValue(Promise.resolve(newNotificationsResponse));
+		).mockReturnValue(Promise.resolve(newNotificationsResponse));
 
 		service = TestBed.inject(NotificationService);
 
@@ -162,14 +164,14 @@ describe('NotificationService', () => {
 	}));
 
 	it('should mark notifications as seen and update the unread count', fakeAsync(() => {
-		spyOn(accountService, 'isLoggedIn').and.returnValue(true);
+		vi.spyOn(accountService, 'isLoggedIn').mockReturnValue(true);
 
-		getNotificationsSpy = spyOn(
+		getNotificationsSpy = vi.spyOn(
 			apiService.notification,
 			'getNotifications',
-		).and.returnValue(Promise.resolve(allNotificationsResponse));
+		).mockReturnValue(Promise.resolve(allNotificationsResponse));
 
-		updateSpy = spyOn(apiService.notification, 'update').and.callFake(
+		updateSpy = vi.spyOn(apiService.notification, 'update').mockImplementation(
 			async (notifications) => {
 				expect(notifications.length).toBe(countBeforeMarkSeen);
 				const response = new NotificationResponse();
@@ -196,14 +198,14 @@ describe('NotificationService', () => {
 	}));
 
 	it('should mark notifications as read and update the unread count', fakeAsync(() => {
-		spyOn(accountService, 'isLoggedIn').and.returnValue(true);
+		vi.spyOn(accountService, 'isLoggedIn').mockReturnValue(true);
 
-		getNotificationsSpy = spyOn(
+		getNotificationsSpy = vi.spyOn(
 			apiService.notification,
 			'getNotifications',
-		).and.returnValue(Promise.resolve(allNotificationsResponse));
+		).mockReturnValue(Promise.resolve(allNotificationsResponse));
 
-		updateSpy = spyOn(apiService.notification, 'update').and.callFake(
+		updateSpy = vi.spyOn(apiService.notification, 'update').mockImplementation(
 			async (notifications) => {
 				expect(notifications.length).toBe(allNotificationsData.length);
 				const response = new NotificationResponse();

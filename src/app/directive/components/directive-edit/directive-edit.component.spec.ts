@@ -9,6 +9,8 @@ import { EventService } from '@shared/services/event/event.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { MockAccountService } from '../directive-display/test-utils';
 import { DirectiveEditComponent } from './directive-edit.component';
+import { vi } from 'vitest';
+
 import {
 	MockDirectiveRepo,
 	MockMessageService,
@@ -104,7 +106,7 @@ describe('DirectiveEditComponent', () => {
 		fixture.detectChanges();
 
 		// Check that form is enabled after save
-		expect(instance.waiting).toBeFalse();
+		expect(instance.waiting).toBe(false);
 		expect(MockDirectiveRepo.createdDirective).not.toBeNull();
 	});
 
@@ -135,13 +137,13 @@ describe('DirectiveEditComponent', () => {
 		fixture.detectChanges();
 
 		// Check that form is disabled during save
-		expect(instance.waiting).toBeTrue();
+		expect(instance.waiting).toBe(true);
 		await fixture.whenStable();
 		fixture.detectChanges();
 
 		// Check that form is enabled after save
-		expect(instance.waiting).toBeFalse();
-		expect(ngMocks.find('.save-btn').nativeElement.disabled).toBeFalse();
+		expect(instance.waiting).toBe(false);
+		expect(ngMocks.find('.save-btn').nativeElement.disabled).toBe(false);
 		expect(MockDirectiveRepo.createdDirective).toBeNull();
 		expect(MockDirectiveRepo.editedDirective).not.toBeNull();
 	});
@@ -157,7 +159,7 @@ describe('DirectiveEditComponent', () => {
 
 		expect(MockDirectiveRepo.createdDirective).toBeNull();
 		expect(ngMocks.findAll('.account-not-found').length).toBe(0);
-		expect(MockMessageService.errorShown).toBeTrue();
+		expect(MockMessageService.errorShown).toBe(true);
 	});
 
 	it('should handle API errors on editing', async () => {
@@ -175,16 +177,15 @@ describe('DirectiveEditComponent', () => {
 
 		expect(MockDirectiveRepo.editedDirective).toBeNull();
 		expect(ngMocks.findAll('.account-not-found').length).toBe(0);
-		expect(MockMessageService.errorShown).toBeTrue();
+		expect(MockMessageService.errorShown).toBe(true);
 	});
 
 	it('should emit an output when a directive is created', async () => {
 		const fixture = MockRender(DirectiveEditComponent);
 		const instance = fixture.point.componentInstance;
 		let savedDirective: DirectiveData;
-		instance.savedDirective.emit = jasmine
-			.createSpy()
-			.and.callFake((dir: DirectiveData) => {
+		instance.savedDirective.emit = vi.fn()
+			.mockImplementation((dir: DirectiveData) => {
 				savedDirective = dir;
 			});
 		fillOutForm('test@example.com', 'Test Memo');
@@ -204,9 +205,8 @@ describe('DirectiveEditComponent', () => {
 		const fixture = MockRender(DirectiveEditComponent, { directive });
 		const instance = fixture.point.componentInstance;
 		let savedDirective: DirectiveData;
-		instance.savedDirective.emit = jasmine
-			.createSpy()
-			.and.callFake((dir: DirectiveData) => {
+		instance.savedDirective.emit = vi.fn()
+			.mockImplementation((dir: DirectiveData) => {
 				savedDirective = dir;
 			});
 		fillOutForm('test@example.com', 'Test Memo');
@@ -238,7 +238,7 @@ describe('DirectiveEditComponent', () => {
 		MockDirectiveRepo.accountExists = false;
 		const fixture = MockRender(DirectiveEditComponent);
 		const instance = fixture.point.componentInstance;
-		const savedDirectiveSpy = spyOn(instance.savedDirective, 'emit');
+		const savedDirectiveSpy = vi.spyOn(instance.savedDirective, 'emit');
 		fillOutForm('notfound@example.com', 'Test Memo');
 
 		expect(ngMocks.findAll('.account-not-found').length).toBe(0);
@@ -267,7 +267,7 @@ describe('DirectiveEditComponent', () => {
 		);
 		const fixture = MockRender(DirectiveEditComponent, { directive });
 		const instance = fixture.point.componentInstance;
-		const savedDirectiveSpy = spyOn(instance.savedDirective, 'emit');
+		const savedDirectiveSpy = vi.spyOn(instance.savedDirective, 'emit');
 		fillOutForm('notfound@example.com', 'Test Memo');
 
 		expect(ngMocks.findAll('.account-not-found').length).toBe(0);

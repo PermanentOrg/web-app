@@ -8,6 +8,8 @@ import { FormCreateComponent } from '../form-create/form-create.component';
 import { ManageMetadataModule } from '../../manage-metadata.module';
 import { AddNewCategoryComponent } from './add-new-category.component';
 
+import { vi } from 'vitest';
+
 describe('AddNewCategoryComponent', () => {
 	let createdTag: TagVOData = null;
 	let error = false;
@@ -68,8 +70,8 @@ describe('AddNewCategoryComponent', () => {
 	it('should be able to create a new category', async () => {
 		const fixture = MockRender(AddNewCategoryComponent);
 		const instance = fixture.point.componentInstance;
-		const tagsUpdateSpy = spyOn(instance.tagsUpdate, 'emit');
-		const newCategorySpy = spyOn(instance.newCategory, 'emit');
+		const tagsUpdateSpy = vi.spyOn(instance.tagsUpdate, 'emit');
+		const newCategorySpy = vi.spyOn(instance.newCategory, 'emit');
 
 		firstValueName = 'potato';
 		await instance.createNewCategory('vegetable');
@@ -84,16 +86,16 @@ describe('AddNewCategoryComponent', () => {
 		const instance = fixture.point.componentInstance;
 
 		firstValueName = 'test';
-		await expectAsync(instance.createNewCategory('a:b')).toBeRejected();
+		await expect(instance.createNewCategory('a:b')).rejects.toThrow();
 
 		expect(createdTag).toBeNull();
-		expect(messageShown).toBeTrue();
+		expect(messageShown).toBe(true);
 	});
 
 	it('should be able to cancel out of creating a category', async () => {
 		const fixture = MockRender(AddNewCategoryComponent);
 		const instance = fixture.point.componentInstance;
-		const tagsUpdateSpy = spyOn(instance.tagsUpdate, 'emit');
+		const tagsUpdateSpy = vi.spyOn(instance.tagsUpdate, 'emit');
 
 		acceptPrompt = false;
 		firstValueName = 'test';
@@ -106,14 +108,14 @@ describe('AddNewCategoryComponent', () => {
 	it('should show an error message when it errors out', async () => {
 		const fixture = MockRender(AddNewCategoryComponent);
 		const instance = fixture.point.componentInstance;
-		const tagsUpdateSpy = spyOn(instance.tagsUpdate, 'emit');
+		const tagsUpdateSpy = vi.spyOn(instance.tagsUpdate, 'emit');
 
 		error = true;
 		firstValueName = 'potato';
-		await expectAsync(instance.createNewCategory('abc')).toBeRejected();
+		await expect(instance.createNewCategory('abc')).rejects.toThrow();
 
 		expect(createdTag).toBeNull();
-		expect(messageShown).toBeTrue();
+		expect(messageShown).toBe(true);
 		expect(tagsUpdateSpy).not.toHaveBeenCalled();
 	});
 });

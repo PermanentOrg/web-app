@@ -7,6 +7,8 @@ import { ManageMetadataModule } from '../../manage-metadata.module';
 import { FormCreateComponent } from '../form-create/form-create.component';
 import { AddNewValueComponent } from './add-new-value.component';
 
+import { vi } from 'vitest';
+
 describe('AddNewValueComponent', () => {
 	let category: string = 'test';
 	let createdTag: TagVOData = null;
@@ -60,7 +62,7 @@ describe('AddNewValueComponent', () => {
 	it('should be able to create a new tag', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(AddNewValueComponent);
-		const tagsUpdateSpy = spyOn(instance.tagsUpdate, 'emit');
+		const tagsUpdateSpy = vi.spyOn(instance.tagsUpdate, 'emit');
 
 		expect(tagsUpdateSpy).not.toHaveBeenCalled();
 		await instance.createNewTag('abc');
@@ -72,13 +74,13 @@ describe('AddNewValueComponent', () => {
 	it('should show an error message when it errors out', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(AddNewValueComponent);
-		const tagsUpdateSpy = spyOn(instance.tagsUpdate, 'emit');
+		const tagsUpdateSpy = vi.spyOn(instance.tagsUpdate, 'emit');
 
 		error = true;
-		await expectAsync(instance.createNewTag('abc')).toBeRejected();
+		await expect(instance.createNewTag('abc')).rejects.toThrow();
 
 		expect(createdTag).toBeNull();
-		expect(messageShown).toBeTrue();
+		expect(messageShown).toBe(true);
 		expect(tagsUpdateSpy).not.toHaveBeenCalled();
 	});
 });

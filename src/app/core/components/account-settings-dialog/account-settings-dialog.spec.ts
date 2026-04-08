@@ -7,26 +7,24 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AccountSettingsDialogComponent } from './account-settings-dialog.component';
 
+import { vi } from 'vitest';
+
 describe('AccountSettingsDialogComponent', () => {
 	let component: AccountSettingsDialogComponent;
 	let fixture: ComponentFixture<AccountSettingsDialogComponent>;
 
-	let mockDialogRef: jasmine.SpyObj<DialogRef>;
-	let mockAccountService: jasmine.SpyObj<AccountService>;
-	let mockApiService: jasmine.SpyObj<ApiService>;
-	let mockMessageService: jasmine.SpyObj<MessageService>;
+	let mockDialogRef: any;
+	let mockAccountService: any;
+	let mockApiService: any;
+	let mockMessageService: any;
 
 	beforeEach(async () => {
-		mockDialogRef = jasmine.createSpyObj('DialogRef', ['close']);
-		mockAccountService = jasmine.createSpyObj('AccountService', [
-			'getAccount',
-			'logOut',
-			'isEmailOrPhoneUnverified',
-		]);
-		mockApiService = jasmine.createSpyObj('ApiService', [], {
-			account: { delete: jasmine.createSpy() },
-		});
-		mockMessageService = jasmine.createSpyObj('MessageService', ['showError']);
+		mockDialogRef = { close: vi.fn() } as any;
+		mockAccountService = { getAccount: vi.fn(), logOut: vi.fn(), isEmailOrPhoneUnverified: vi.fn() } as any;
+		mockApiService = {
+			account: { delete: vi.fn() },
+		} as any;
+		mockMessageService = { showError: vi.fn() } as any;
 
 		await TestBed.configureTestingModule({
 			declarations: [AccountSettingsDialogComponent],

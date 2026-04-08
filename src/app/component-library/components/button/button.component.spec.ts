@@ -3,6 +3,8 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 import { ComponentsModule } from '../../components.module';
 import { ButtonComponent } from './button.component';
 
+import { vi } from 'vitest';
+
 describe('ButtonComponent', () => {
 	let fixture: ComponentFixture<ButtonComponent>;
 	let instance: ButtonComponent;
@@ -52,11 +54,11 @@ describe('ButtonComponent', () => {
 		instance.disabled = true;
 		fixture.detectChanges();
 
-		expect(button.nativeElement.disabled).toBeTrue();
+		expect(button.nativeElement.disabled).toBe(true);
 	});
 
 	it('should emit the @Output when clicking the button', () => {
-		spyOn(instance.buttonClick, 'emit');
+		vi.spyOn(instance.buttonClick, 'emit');
 		const button = ngMocks.find('.button').nativeElement;
 
 		button.click();

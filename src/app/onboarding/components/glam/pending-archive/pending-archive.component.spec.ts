@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ArchiveVO } from '@models/index';
 import { PendingArchiveComponent } from './pending-archive.component';
 
+import { vi } from 'vitest';
+
 describe('PendingArchiveComponent', () => {
 	let component: PendingArchiveComponent;
 	let fixture: ComponentFixture<PendingArchiveComponent>;
@@ -55,7 +57,7 @@ describe('PendingArchiveComponent', () => {
 		component.archive = archiveData;
 		fixture.detectChanges();
 
-		spyOn(component.acceptArchiveOutput, 'emit');
+		vi.spyOn(component.acceptArchiveOutput, 'emit');
 
 		component.acceptArchive(archiveData);
 

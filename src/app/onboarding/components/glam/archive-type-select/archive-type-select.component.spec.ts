@@ -6,11 +6,13 @@ import { OnboardingTypes } from '@root/app/onboarding/shared/onboarding-screen';
 import { archiveDescriptions } from '../types/archive-types';
 import { GlamArchiveTypeSelectComponent } from './archive-type-select.component';
 
+import { vi } from 'vitest';
+
 describe('ArchiveTypeSelectComponent', () => {
 	let component: GlamArchiveTypeSelectComponent;
 	let fixture: ComponentFixture<GlamArchiveTypeSelectComponent>;
 	let dialogRef: Subject<OnboardingTypes | undefined>;
-	let mockDialogService: { open: jasmine.Spy };
+	let mockDialogService: { open: any };
 
 	function expectCommunityDisplayed() {
 		const typeNameElement = fixture.nativeElement.querySelector('.type-name');
@@ -29,7 +31,7 @@ describe('ArchiveTypeSelectComponent', () => {
 		}
 		dialogRef = new Subject<OnboardingTypes | undefined>();
 		mockDialogService = {
-			open: jasmine.createSpy('open').and.returnValue({
+			open: vi.fn().mockReturnValue({
 				closed: dialogRef,
 			}),
 		};
@@ -96,7 +98,7 @@ describe('ArchiveTypeSelectComponent', () => {
 	});
 
 	it('emits the selected archive type', () => {
-		spyOn(component.typeSelected, 'emit');
+		vi.spyOn(component.typeSelected, 'emit');
 		component.onClick();
 		dialogRef.next(OnboardingTypes.famhist);
 

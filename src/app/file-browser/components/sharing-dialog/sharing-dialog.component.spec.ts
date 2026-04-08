@@ -26,6 +26,8 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { SharingDialogComponent } from './sharing-dialog.component';
+import { vi } from 'vitest';
+
 import {
 	MockAccountService,
 	MockShareLinksApiService,
@@ -103,16 +105,16 @@ describe('SharingDialogComponent', () => {
 		});
 		await TestBed.configureTestingModule(config).compileComponents();
 
-		relationUpdateSpy = spyOn(
+		relationUpdateSpy = vi.spyOn(
 			TestBed.inject(RelationshipService),
 			'update',
-		).and.returnValue(Promise.resolve());
+		).mockReturnValue(Promise.resolve());
 
-		showMessageSpy = spyOn(
+		showMessageSpy = vi.spyOn(
 			TestBed.inject(MessageService),
 			'showMessage',
-		).and.returnValue(undefined);
-		spyOn(TestBed.inject(MessageService), 'showError').and.returnValue(
+		).mockReturnValue(undefined);
+		vi.spyOn(TestBed.inject(MessageService), 'showError').mockReturnValue(
 			undefined,
 		);
 
@@ -162,7 +164,7 @@ describe('SharingDialogComponent', () => {
 			},
 		];
 
-		const apiSpy = spyOn(apiService.share, 'upsert').and.returnValue(
+		const apiSpy = vi.spyOn(apiService.share, 'upsert').mockReturnValue(
 			Promise.resolve(shareResponse),
 		);
 
@@ -194,7 +196,7 @@ describe('SharingDialogComponent', () => {
 			},
 		];
 
-		const apiSpy = spyOn(apiService.share, 'upsert').and.returnValue(
+		const apiSpy = vi.spyOn(apiService.share, 'upsert').mockReturnValue(
 			Promise.resolve(shareResponse),
 		);
 
@@ -216,7 +218,7 @@ describe('SharingDialogComponent', () => {
 		component.shareItem = new RecordVO({ ...item, ShareVOs: [shareViewer] });
 		component.ngOnInit();
 
-		const confirmSpy = spyOn(component, 'confirmRemove').and.returnValue(
+		const confirmSpy = vi.spyOn(component, 'confirmRemove').mockReturnValue(
 			Promise.reject(false),
 		);
 
@@ -236,7 +238,7 @@ describe('SharingDialogComponent', () => {
 		component.shareItem = new RecordVO({ ...item, ShareVOs: [shareViewer] });
 		component.ngOnInit();
 
-		const confirmSpy = spyOn(component, 'confirmOwnerAdd').and.returnValue(
+		const confirmSpy = vi.spyOn(component, 'confirmOwnerAdd').mockReturnValue(
 			Promise.reject(false),
 		);
 
@@ -270,15 +272,15 @@ describe('SharingDialogComponent', () => {
 		component.newShareLink = mockShareLink;
 		component.showLinkSettings = true;
 
-		const confirmSpy = spyOn(
+		const confirmSpy = vi.spyOn(
 			TestBed.inject(PromptService),
 			'confirm',
-		).and.returnValue(Promise.resolve(true));
+		).mockReturnValue(Promise.resolve(true));
 
-		const deleteShareLinkSpy = spyOn(
+		const deleteShareLinkSpy = vi.spyOn(
 			TestBed.inject(ShareLinksApiService),
 			'deleteShareLink',
-		).and.returnValue(Promise.resolve());
+		).mockReturnValue(Promise.resolve());
 
 		component.removeShareLink();
 
@@ -287,7 +289,7 @@ describe('SharingDialogComponent', () => {
 		expect(confirmSpy).toHaveBeenCalledWith(
 			'Remove link',
 			'Are you sure you want to remove this link?',
-			jasmine.any(Promise),
+			expect.any(Promise),
 			'btn-danger',
 		);
 
@@ -314,15 +316,15 @@ describe('SharingDialogComponent', () => {
 		component.newShareLink = mockShareLink;
 		component.showLinkSettings = true;
 
-		const confirmSpy = spyOn(
+		const confirmSpy = vi.spyOn(
 			TestBed.inject(PromptService),
 			'confirm',
-		).and.returnValue(Promise.reject(false));
+		).mockReturnValue(Promise.reject(false));
 
-		const deleteShareLinkSpy = spyOn(
+		const deleteShareLinkSpy = vi.spyOn(
 			TestBed.inject(ShareLinksApiService),
 			'deleteShareLink',
-		).and.returnValue(Promise.resolve());
+		).mockReturnValue(Promise.resolve());
 
 		component.removeShareLink();
 

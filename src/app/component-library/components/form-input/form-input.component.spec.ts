@@ -4,6 +4,8 @@ import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { ComponentsModule } from '../../components.module';
 import { FormInputComponent, FormInputConfig } from './form-input.component';
 
+import { vi } from 'vitest';
+
 describe('FormInputComponent', () => {
 	let fixture: ComponentFixture<FormInputComponent>;
 	let instance: FormInputComponent;
@@ -56,7 +58,7 @@ describe('FormInputComponent', () => {
 		instance.type = 'number';
 		fixture.detectChanges();
 
-		expect(instance.isLabelHidden()).toBeTrue();
+		expect(instance.isLabelHidden()).toBe(true);
 	});
 
 	it('should show label for non-empty text inputs', () => {
@@ -64,7 +66,7 @@ describe('FormInputComponent', () => {
 		instance.type = 'text';
 		fixture.detectChanges();
 
-		expect(instance.isLabelHidden()).toBeFalse();
+		expect(instance.isLabelHidden()).toBe(false);
 	});
 
 	it('should set input attributes based on config', () => {
@@ -93,7 +95,7 @@ describe('FormInputComponent', () => {
 		fixture.detectChanges();
 
 		const mockValue = 'test value';
-		const spy = spyOn(instance.valueChangeSubject, 'next');
+		const spy = vi.spyOn(instance.valueChangeSubject, 'next');
 
 		instance.onInputChange(mockValue);
 
@@ -105,7 +107,7 @@ describe('FormInputComponent', () => {
 		instance.config = { textAlign: 'right' };
 		fixture.detectChanges();
 
-		expect(instance.rightAlign).toBeTrue();
+		expect(instance.rightAlign).toBe(true);
 	});
 
 	it('should bind the placeholder attribute to the input element', () => {

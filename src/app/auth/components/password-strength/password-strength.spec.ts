@@ -3,16 +3,16 @@ import { By } from '@angular/platform-browser';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { PasswordStrengthComponent } from './password-strength';
 
+import { vi } from 'vitest';
+
 describe('PasswordStrengthComponent', () => {
 	let component: PasswordStrengthComponent;
 	let fixture: ComponentFixture<PasswordStrengthComponent>;
-	let mockFeatureFlagService: jasmine.SpyObj<FeatureFlagService>;
+	let mockFeatureFlagService: any;
 
 	beforeEach(async () => {
-		mockFeatureFlagService = jasmine.createSpyObj('FeatureFlagService', [
-			'isEnabled',
-		]);
-		mockFeatureFlagService.isEnabled.and.returnValue(true);
+		mockFeatureFlagService = { isEnabled: vi.fn() } as any;
+		mockFeatureFlagService.isEnabled.mockReturnValue(true);
 
 		await TestBed.configureTestingModule({
 			declarations: [PasswordStrengthComponent],
@@ -82,7 +82,7 @@ describe('PasswordStrengthComponent', () => {
 	});
 
 	it('should not display anything when feature flag is disabled', () => {
-		mockFeatureFlagService.isEnabled.and.returnValue(false);
+		mockFeatureFlagService.isEnabled.mockReturnValue(false);
 		component.enabledPasswordCheckStrength = false;
 		fixture.detectChanges();
 

@@ -16,6 +16,8 @@ import { TagResponse } from '@shared/services/api/tag.repo';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { EditTagsComponent, TagType } from './edit-tags.component';
 
+import { vi } from 'vitest';
+
 const defaultTagList: TagVOData[] = [
 	{
 		tagId: 1,
@@ -43,10 +45,10 @@ const defaultItem: ItemVO = new RecordVO({ TagVOs: defaultTagList });
 describe('EditTagsComponent', () => {
 	let component: EditTagsComponent;
 	let fixture: ComponentFixture<EditTagsComponent>;
-	let dialogCdkServiceSpy: jasmine.SpyObj<DialogCdkService>;
+	let dialogCdkServiceSpy: any;
 
 	beforeEach(async () => {
-		dialogCdkServiceSpy = jasmine.createSpyObj('DialogCdkService', ['open']);
+		dialogCdkServiceSpy = { open: vi.fn() } as any;
 
 		await TestBed.configureTestingModule({
 			declarations: [EditTagsComponent],
@@ -206,7 +208,7 @@ describe('EditTagsComponent', () => {
 	it('should not create custom metadata in keyword mode', async () => {
 		setupComponent();
 		const apiService = TestBed.inject(ApiService);
-		const tagCreateSpy = spyOn(apiService.tag, 'create');
+		const tagCreateSpy = vi.spyOn(apiService.tag, 'create');
 		await component.onInputEnter('key:value');
 
 		expect(component.newTagInputError).toBeTruthy();
@@ -216,7 +218,7 @@ describe('EditTagsComponent', () => {
 	it('should not create keyword in custom metadata mode', async () => {
 		setupComponent(defaultItem, 'customMetadata');
 		const apiService = TestBed.inject(ApiService);
-		const tagCreateSpy = spyOn(apiService.tag, 'create');
+		const tagCreateSpy = vi.spyOn(apiService.tag, 'create');
 		await component.onInputEnter('keyword');
 
 		expect(component.newTagInputError).toBeTruthy();
@@ -423,8 +425,8 @@ describe('EditTagsComponent', () => {
 			});
 			setupComponent(item, 'keyword');
 
-			expect(component.itemTagsById.has(1)).toBeTrue();
-			expect(component.itemTagsById.has(99)).toBeFalse();
+			expect(component.itemTagsById.has(1)).toBe(true);
+			expect(component.itemTagsById.has(99)).toBe(false);
 		});
 	});
 

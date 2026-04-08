@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
 	MessageService,
 	MessageDisplayOptions,
@@ -19,7 +20,7 @@ interface Message {
 	selector: 'pr-message',
 	templateUrl: './message.component.html',
 	styleUrls: ['./message.component.scss'],
-	standalone: false,
+	imports: [CommonModule],
 })
 export class MessageComponent {
 	displayText: string;

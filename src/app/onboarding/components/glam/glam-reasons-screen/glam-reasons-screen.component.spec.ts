@@ -4,6 +4,8 @@ import { reasons } from '../../../shared/onboarding-screen';
 import { OnboardingService } from '../../../services/onboarding.service';
 import { GlamReasonsScreenComponent } from './glam-reasons-screen.component';
 
+import { vi } from 'vitest';
+
 describe('GlamReasonsScreenComponent', () => {
 	let component: GlamReasonsScreenComponent;
 	let fixture: ComponentFixture<GlamReasonsScreenComponent>;
@@ -17,8 +19,8 @@ describe('GlamReasonsScreenComponent', () => {
 		}).compileComponents();
 
 		onboardingService = TestBed.inject(OnboardingService);
-		spyOn(onboardingService, 'getReasons').and.returnValue(['Mock Reason']);
-		spyOn(onboardingService, 'setReasons');
+		vi.spyOn(onboardingService, 'getReasons').mockReturnValue(['Mock Reason']);
+		vi.spyOn(onboardingService, 'setReasons');
 
 		fixture = TestBed.createComponent(GlamReasonsScreenComponent);
 		component = fixture.componentInstance;
@@ -65,7 +67,7 @@ describe('GlamReasonsScreenComponent', () => {
 	});
 
 	it('should emit reasonsEmit with selectedReasons when finalizeArchive is called', () => {
-		spyOn(component.reasonsEmit, 'emit');
+		vi.spyOn(component.reasonsEmit, 'emit');
 		const reason = 'Test Reason';
 		component.addReason(reason);
 		component.finalizeArchive();
@@ -77,7 +79,7 @@ describe('GlamReasonsScreenComponent', () => {
 	});
 
 	it('should emit reasonsEmit with selectedReasons when backToGoals is called', () => {
-		spyOn(component.reasonsEmit, 'emit');
+		vi.spyOn(component.reasonsEmit, 'emit');
 		const reason = 'Test Reason';
 		component.addReason(reason);
 		component.backToGoals();
@@ -98,7 +100,7 @@ describe('GlamReasonsScreenComponent', () => {
 	});
 
 	it('should emit reasonOutput with empty reasons when skipStep is called', () => {
-		spyOn(component.reasonsEmit, 'emit');
+		vi.spyOn(component.reasonsEmit, 'emit');
 
 		component.skipStep();
 

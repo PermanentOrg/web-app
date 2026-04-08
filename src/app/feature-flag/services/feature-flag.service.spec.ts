@@ -49,21 +49,21 @@ describe('FeatureFlagService', () => {
 	});
 
 	it('should be able to test a feature flag that is not set', () => {
-		expect(service.isEnabled('potato')).toBeFalse();
+		expect(service.isEnabled('potato')).toBe(false);
 	});
 
 	it('should be able to test a feature flag that is set', () => {
 		service.set('test', true);
 
-		expect(service.isEnabled('test')).toBeTrue();
+		expect(service.isEnabled('test')).toBe(true);
 	});
 
 	it('should fetch from the API on init', async () => {
 		mockApi.flags = [{ name: 'api0', globallyEnabled: true }, { name: 'api1' }];
 		await service.fetchFromApi();
 
-		expect(service.isEnabled('api0')).toBeTrue();
-		expect(service.isEnabled('api1')).toBeTrue();
+		expect(service.isEnabled('api0')).toBe(true);
+		expect(service.isEnabled('api1')).toBe(true);
 	});
 
 	it('should fetch from Secrets on local environment', async () => {
@@ -71,7 +71,7 @@ describe('FeatureFlagService', () => {
 		secrets.set('TEST2', '');
 		await service.fetchFromApi();
 
-		expect(service.isEnabled('TEST')).toBeTrue();
-		expect(service.isEnabled('TEST2')).toBeFalse();
+		expect(service.isEnabled('TEST')).toBe(true);
+		expect(service.isEnabled('TEST2')).toBe(false);
 	});
 });

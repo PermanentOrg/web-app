@@ -6,6 +6,8 @@ import { ArchiveVO } from '@models/index';
 import { AccessRolePipe } from '@shared/pipes/access-role.pipe';
 import { FinalizeArchiveCreationScreenComponent } from './finalize-archive-creation-screen.component';
 
+import { vi } from 'vitest';
+
 describe('FinalizeArchiveCreationScreenComponent', () => {
 	let component: FinalizeArchiveCreationScreenComponent;
 	let fixture: ComponentFixture<FinalizeArchiveCreationScreenComponent>;
@@ -76,7 +78,7 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
 	});
 
 	it('should emit finalizeArchiveOutput when finalizeArchive is called', () => {
-		spyOn(component.finalizeArchiveOutput, 'emit');
+		vi.spyOn(component.finalizeArchiveOutput, 'emit');
 		component.finalizeArchive();
 
 		expect(component.finalizeArchiveOutput.emit).toHaveBeenCalled();
@@ -84,7 +86,7 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
 
 	it('should call finalizeArchive when the Done button is clicked', () => {
 		const doneButton = fixture.debugElement.query(By.css('pr-button'));
-		spyOn(component, 'finalizeArchive');
+		vi.spyOn(component, 'finalizeArchive');
 		doneButton.triggerEventHandler('buttonClick', null);
 
 		expect(component.finalizeArchive).toHaveBeenCalled();

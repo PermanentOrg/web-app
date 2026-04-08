@@ -16,6 +16,8 @@ import { StorageService } from '../../storage/storage.service';
 import { EditService } from '../../../../core/services/edit/edit.service';
 import { EventService } from '../../event/event.service';
 
+import { vi } from 'vitest';
+
 const mockApiService = {
 	account: {
 		signUp: (
@@ -247,14 +249,14 @@ describe('AccountService', () => {
 
 	describe('Log out on token expiration', () => {
 		it('HttpV2Service', async () => {
-			const logOut = spyOn(instance, 'logOut').and.rejectWith(false);
+			const logOut = vi.spyOn(instance, 'logOut').mockRejectedValue(false);
 			httpV2Service.tokenExpired.next();
 
 			expect(logOut).toHaveBeenCalled();
 		});
 
 		it('HttpService', async () => {
-			const spy = spyOn(instance, 'logOut').and.rejectWith(false);
+			const spy = vi.spyOn(instance, 'logOut').mockRejectedValue(false);
 			httpService.tokenExpired.next();
 
 			expect(spy).toHaveBeenCalled();

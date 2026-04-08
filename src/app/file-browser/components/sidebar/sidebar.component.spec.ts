@@ -8,6 +8,8 @@ import { of } from 'rxjs';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { SidebarComponent } from './sidebar.component';
 
+import { vi } from 'vitest';
+
 @Pipe({ name: 'prTooltip', standalone: false })
 class MockPrTooltipPipe implements PipeTransform {
 	transform(value: any): any {
@@ -172,10 +174,10 @@ describe('SidebarComponent', () => {
 	});
 
 	it('should open location dialog on Enter key press if editable', () => {
-		const locationDialogSpy = spyOn(
+		const locationDialogSpy = vi.spyOn(
 			mockEditService,
 			'openLocationDialog',
-		).and.callThrough();
+		).mockRestore();
 
 		component.onLocationEnterPress(
 			new KeyboardEvent('keydown', { key: 'Enter' }),
@@ -200,7 +202,7 @@ describe('SidebarComponent', () => {
 
 	it('should call editService.openLocationDialog when onLocationClick is called if editable', () => {
 		const editService = TestBed.inject(EditService);
-		spyOn(editService, 'openLocationDialog');
+		vi.spyOn(editService, 'openLocationDialog');
 
 		component.canEdit = true;
 		component.selectedItem = new RecordVO({});

@@ -10,10 +10,12 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import * as Testing from '@root/test/testbedConfig';
 import { CreateAccountDialogComponent } from './create-account-dialog.component';
 
+import { vi } from 'vitest';
+
 describe('CreateAccountDialogComponent', () => {
 	let component: CreateAccountDialogComponent;
 	let fixture: ComponentFixture<CreateAccountDialogComponent>;
-	let dialogRefSpy: jasmine.SpyObj<DialogRef<CreateAccountDialogComponent>>;
+	let dialogRefSpy: any;
 
 	beforeEach(async () => {
 		const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -32,7 +34,7 @@ describe('CreateAccountDialogComponent', () => {
 			},
 		});
 
-		dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
+		dialogRefSpy = { close: vi.fn() } as any;
 
 		config.providers.push({
 			provide: DialogRef,
@@ -85,7 +87,7 @@ describe('CreateAccountDialogComponent', () => {
 	function expectLinkClosesDialog(
 		link: HTMLAnchorElement,
 		expectedPath: string,
-		dialogRefSpy: jasmine.Spy<jasmine.Func>,
+		dialogRefSpy: any,
 	) {
 		expect(link.href).toContain(expectedPath);
 		link.click();

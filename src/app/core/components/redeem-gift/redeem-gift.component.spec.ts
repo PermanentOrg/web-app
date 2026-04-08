@@ -64,7 +64,7 @@ describe('StorageDialogComponent', () => {
 		await instance.onPromoFormSubmit(promoData);
 
 		expect(mockApiService.billing.calledRedeemPromoCode).toBeTruthy();
-		expect(instance.resultMessage.successful).toBeTrue();
+		expect(instance.resultMessage.successful).toBe(true);
 	});
 
 	it('should update the account after redeeming a promo code', async () => {
@@ -74,7 +74,7 @@ describe('StorageDialogComponent', () => {
 		await instance.onPromoFormSubmit(promoData);
 
 		expect(mockAccountService.addedStorage).toBe(5000 * 1024 * 1024);
-		expect(instance.resultMessage.successful).toBeTrue();
+		expect(instance.resultMessage.successful).toBe(true);
 	});
 
 	it('should enable the submit button after adding a promo code', () => {
@@ -96,7 +96,7 @@ describe('StorageDialogComponent', () => {
 		mockApiService.billing.isSuccessful = false;
 		await instance.onPromoFormSubmit({ code: 'potato' });
 
-		expect(instance.resultMessage.successful).toBeFalse();
+		expect(instance.resultMessage.successful).toBe(false);
 	});
 
 	it('should handle any other unexpected errors when redeeming promo code', async () => {
@@ -105,7 +105,7 @@ describe('StorageDialogComponent', () => {
 		mockAccountService.failRefresh = true;
 		await instance.onPromoFormSubmit({ code: 'potato' });
 
-		expect(instance.resultMessage.successful).toBeFalse();
+		expect(instance.resultMessage.successful).toBe(false);
 	});
 
 	it('should not bump up account storage if it has already been done on the server side', async () => {

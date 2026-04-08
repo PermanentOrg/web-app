@@ -14,6 +14,8 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { ArchiveVO } from '@models/index';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
+import { vi } from 'vitest';
+
 const testEmail = 'unittest@example.com';
 
 class MockAccountService {
@@ -64,7 +66,7 @@ class MockMessageService {
 
 class LoginTestingHarness {
 	private component: LoginComponent;
-	public navigateSpy: jasmine.Spy;
+	public navigateSpy: any;
 	constructor(
 		private account: MockAccountService,
 		private route: MockActivatedRoute,
@@ -125,7 +127,7 @@ class LoginTestingHarness {
 	}
 
 	public getMessageSpy() {
-		return spyOn(ngMocks.get(MessageService), 'showMessage').and.callThrough();
+		return vi.spyOn(ngMocks.get(MessageService), 'showMessage').mockRestore();
 	}
 
 	public hasPasswordBeenCleared(): boolean {
@@ -171,7 +173,7 @@ describe('LoginComponent', () => {
 		fixture = TestBed.createComponent(LoginComponent);
 		instance = fixture.componentInstance;
 		const router = TestBed.inject(Router);
-		harness.navigateSpy = spyOn(router, 'navigate').and.returnValue(
+		harness.navigateSpy = vi.spyOn(router, 'navigate').mockReturnValue(
 			Promise.resolve(true),
 		);
 		fixture.detectChanges();
@@ -244,8 +246,8 @@ describe('LoginComponent', () => {
 		harness.setupNormalLogin();
 		await harness.testLogin();
 
-		expect(harness.navigateSpy).toHaveBeenCalledWith(['/'], jasmine.anything());
-		expect(accountService.switchedToDefaultArchive).toBeTrue();
+		expect(harness.navigateSpy).toHaveBeenCalledWith(['/'], expect.anything());
+		expect(accountService.switchedToDefaultArchive).toBe(true);
 	});
 
 	it('should redirect to onboarding if the user has no archives', async () => {
@@ -263,7 +265,7 @@ describe('LoginComponent', () => {
 
 		expect(harness.navigateSpy).toHaveBeenCalledWith(
 			['/public'],
-			jasmine.objectContaining({ queryParams: { cta: 'timeline' } }),
+			expect.objectContaining({ queryParams: { cta: 'timeline' } }),
 		);
 	});
 
@@ -282,7 +284,7 @@ describe('LoginComponent', () => {
 
 		expect(harness.navigateSpy).toHaveBeenCalledWith(
 			['..', 'verify'],
-			jasmine.anything(),
+			expect.anything(),
 		);
 	});
 
@@ -293,7 +295,7 @@ describe('LoginComponent', () => {
 
 		expect(harness.navigateSpy).toHaveBeenCalledWith(
 			['..', 'mfa'],
-			jasmine.anything(),
+			expect.anything(),
 		);
 	});
 
@@ -304,7 +306,7 @@ describe('LoginComponent', () => {
 		await harness.testLogin();
 
 		expect(messageSpy).toHaveBeenCalled();
-		expect(harness.hasPasswordBeenCleared()).toBeFalse();
+		expect(harness.hasPasswordBeenCleared()).toBe(false);
 	});
 
 	it('should show an error message in case of wrong username/password', async () => {
@@ -314,7 +316,7 @@ describe('LoginComponent', () => {
 		await harness.testLogin();
 
 		expect(messageSpy).toHaveBeenCalled();
-		expect(harness.hasPasswordBeenCleared()).toBeTrue();
+		expect(harness.hasPasswordBeenCleared()).toBe(true);
 	});
 
 	it('should display the loading spinner', () => {

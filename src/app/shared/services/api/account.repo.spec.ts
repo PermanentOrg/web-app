@@ -64,7 +64,7 @@ describe('AccountRepo', () => {
 		req.flush(expected);
 	});
 
-	it('update should call v2 of /account/update', (done) => {
+	it('update should call v2 of /account/update', () => new Promise<void>((resolve, reject) => {
 		const update = {
 			primaryEmail: 'test@example.com',
 			fullName: 'Dr. Test User',
@@ -77,24 +77,24 @@ describe('AccountRepo', () => {
 				expect(account.fullName).toBe(update.fullName);
 			})
 			.catch(() => {
-				done.fail();
+				reject(new Error('Test failed'));
 			})
-			.finally(() => done());
+			.finally(() => resolve());
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/account/update`);
 
 		expect(req.request.method).toBe('POST');
 		expect(req.request.headers.get('Request-Version')).toBe('2');
 		req.flush(update);
-	});
+	}));
 
-	it('should map the `zip` propety to `postalCode` when calling /account/update', (done) => {
+	it('should map the `zip` propety to `postalCode` when calling /account/update', () => new Promise<void>((resolve, reject) => {
 		const update = {
 			primaryEmail: 'test@example.com',
 			zip: '12345',
 		};
 
-		repo.update(update).finally(() => done());
+		repo.update(update).finally(() => resolve());
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/account/update`);
 
@@ -103,5 +103,5 @@ describe('AccountRepo', () => {
 		expect(req.request.body.zip).toBeUndefined();
 		expect(req.request.body.postalCode).toBe('12345');
 		req.flush(update);
-	});
+	}));
 });

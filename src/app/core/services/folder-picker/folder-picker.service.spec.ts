@@ -57,15 +57,13 @@ describe('FolderPickerService', () => {
 	it('should throw an error when choosing a folder if the component is not registered', async () => {
 		service.unregisterComponent();
 
-		await expectAsync(
-			service.chooseFolder(new FolderVO({}), FolderPickerOperations.Move),
-		).toBeRejected();
+		await expect(service.chooseFolder(new FolderVO({}), FolderPickerOperations.Move),).rejects.toThrow();
 	});
 
 	it('should throw an error when choosing a record if the component is not registered', async () => {
 		service.unregisterComponent();
 
-		await expectAsync(service.chooseRecord(new FolderVO({}))).toBeRejected();
+		await expect(service.chooseRecord(new FolderVO({}))).rejects.toThrow();
 	});
 
 	it('cannot register a FolderPickerComponent twice', () => {

@@ -102,7 +102,7 @@ const fullItem2 = new RecordVO(
 	template: `<div [style.width]="width" [style.height]="height">
 		<pr-thumbnail [item]="item"></pr-thumbnail>
 	</div>`,
-	standalone: false,
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 class ThumbnailTestHostComponent {
 	item: ItemVO = minItem;

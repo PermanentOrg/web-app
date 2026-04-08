@@ -13,6 +13,8 @@ import { DataStatus } from '@models/data-status.enum';
 import { of } from 'rxjs';
 import { FolderPickerComponent } from './folder-picker.component';
 
+import { vi } from 'vitest';
+
 describe('FolderPickerComponent', () => {
 	let component: FolderPickerComponent;
 	let fixture: ComponentFixture<FolderPickerComponent>;
@@ -49,7 +51,7 @@ describe('FolderPickerComponent', () => {
 		const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
 		const myFiles = new FolderResponse(navigateMinExpected).getFolderVO();
 
-		spyOn(api.folder, 'navigate').and.returnValue(
+		vi.spyOn(api.folder, 'navigate').mockReturnValue(
 			of(new FolderResponse(navigateMinExpected)),
 		);
 
@@ -64,7 +66,7 @@ describe('FolderPickerComponent', () => {
 		expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
 
 		const getLeanItemsExpected = require('@root/test/responses/folder.getLeanItems.folderPicker.myFiles.success.json');
-		spyOn(api.folder, 'getWithChildren').and.returnValue(
+		vi.spyOn(api.folder, 'getWithChildren').mockReturnValue(
 			Promise.resolve(new FolderResponse(getLeanItemsExpected)),
 		);
 

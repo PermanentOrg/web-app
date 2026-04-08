@@ -5,6 +5,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MobileBannerService } from '@shared/services/mobile-banner/mobile-banner.service';
 import { MobileBannerComponent } from './mobile-banner.component';
 
+import { vi } from 'vitest';
+
 const mockBannerService = {
 	get isIos() {
 		return true;
@@ -64,7 +66,7 @@ describe('MobileBannerComponent', () => {
 	});
 
 	it('should close the banner when close icon is clicked', () => {
-		spyOn(instance.bannerService, 'hideBanner');
+		vi.spyOn(instance.bannerService, 'hideBanner');
 		const mockEvent = { stopPropagation: () => {} };
 		const closeIcon = ngMocks.find('.material-icons');
 		closeIcon.triggerEventHandler('click', mockEvent);

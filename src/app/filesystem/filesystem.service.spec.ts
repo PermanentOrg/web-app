@@ -32,6 +32,6 @@ describe('FilesystemService', () => {
 	it('can get a folder through the API', async () => {
 		await service.getFolder({ folderId: 1 });
 
-		expect(fetchedFolder).toBeTrue();
+		expect(fetchedFolder).toBe(true);
 	});
 });

@@ -49,21 +49,21 @@ describe('DirectiveRepo', () => {
 		expect(repo).not.toBeNull();
 	});
 
-	it('can get a Directive from an Archive', (done) => {
+	it('can get a Directive from an Archive', () => new Promise<void>((resolve, reject) => {
 		repo.httpV2.setAuthToken('test_token');
 		repo
 			.get(testArchive)
 			.then((directive) => {
 				expect(directive).not.toBeNull();
 				expect(directive.note).toBe('Test Note');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(apiUrl('/v2/directive/archive/1234'));
 
 		expect(req.request.method).toBe('GET');
-		expect(req.request.headers.has('Authorization')).toBeTrue();
+		expect(req.request.headers.has('Authorization')).toBe(true);
 		req.flush([
 			{
 				directiveId: 'abcd1234',
@@ -83,9 +83,9 @@ describe('DirectiveRepo', () => {
 				executionDt: null,
 			},
 		]);
-	});
+	}));
 
-	it('can create a new Directive for an archive', (done) => {
+	it('can create a new Directive for an archive', () => new Promise<void>((resolve, reject) => {
 		const newDirectiveData: DirectiveCreateRequest = {
 			archiveId: 1,
 			stewardEmail: 'test@test.test',
@@ -98,20 +98,20 @@ describe('DirectiveRepo', () => {
 		repo
 			.create(newDirectiveData)
 			.then((directive) => {
-				expect(directive instanceof Directive).toBeTrue();
+				expect(directive instanceof Directive).toBe(true);
 				expect(directive.archiveId).toBe(1);
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(apiUrl('/v2/directive'));
 
 		expect(req.request.method).toBe('POST');
-		expect(req.request.headers.has('Authorization')).toBeTrue();
+		expect(req.request.headers.has('Authorization')).toBe(true);
 		req.flush(new Directive(newDirectiveData));
-	});
+	}));
 
-	it('can update an existing directive', (done) => {
+	it('can update an existing directive', () => new Promise<void>((resolve, reject) => {
 		const directiveUpdate: DirectiveUpdateRequest = {
 			directiveId: 'test-id',
 			note: 'New Note',
@@ -120,28 +120,26 @@ describe('DirectiveRepo', () => {
 		repo
 			.update(directiveUpdate)
 			.then((directive) => {
-				expect(directive instanceof Directive).toBeTrue();
+				expect(directive instanceof Directive).toBe(true);
 				expect(directive.directiveId).toBe('test-id');
 				expect(directive.note).toBe('New Note');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(apiUrl('/v2/directive/test-id'));
 
 		expect(req.request.method).toBe('PUT');
-		expect(req.request.headers.has('Authorization')).toBeTrue();
+		expect(req.request.headers.has('Authorization')).toBe(true);
 		expect(req.request.body.directiveId).toBeUndefined();
 		req.flush(new Directive(directiveUpdate));
-	});
+	}));
 
 	it('will throw an error if no directiveId is specified in update', async () => {
-		await expectAsync(
-			repo.update({ note: 'New Note' } as DirectiveUpdateRequest),
-		).toBeRejected();
+		await expect(repo.update({ note: 'New Note' } as DirectiveUpdateRequest),).rejects.toThrow();
 	});
 
-	it('can get a legacy contact', (done) => {
+	it('can get a legacy contact', () => new Promise<void>((resolve, reject) => {
 		repo
 			.getLegacyContact()
 			.then((legacyContact) => {
@@ -149,14 +147,14 @@ describe('DirectiveRepo', () => {
 				expect(legacyContact.accountId).toBe('test-accountid');
 				expect(legacyContact.name).toBe('Test Legacy Contact');
 				expect(legacyContact.email).toBe('test@example.com');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(apiUrl('/v2/legacy-contact'));
 
 		expect(req.request.method).toBe('GET');
-		expect(req.request.headers.has('Authorization')).toBeTrue();
+		expect(req.request.headers.has('Authorization')).toBe(true);
 		req.flush([
 			{
 				legacyContactId: 'test-id',
@@ -165,9 +163,9 @@ describe('DirectiveRepo', () => {
 				email: 'test@example.com',
 			},
 		]);
-	});
+	}));
 
-	it('can create a legacy contact', (done) => {
+	it('can create a legacy contact', () => new Promise<void>((resolve, reject) => {
 		repo
 			.createLegacyContact({
 				name: 'New User',
@@ -178,14 +176,14 @@ describe('DirectiveRepo', () => {
 				expect(legacyContact.accountId).toBe('test-accountid');
 				expect(legacyContact.name).toBe('New User');
 				expect(legacyContact.email).toBe('new@example.com');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(apiUrl('/v2/legacy-contact'));
 
 		expect(req.request.method).toBe('POST');
-		expect(req.request.headers.has('Authorization')).toBeTrue();
+		expect(req.request.headers.has('Authorization')).toBe(true);
 		expect(req.request.body.name).toBe('New User');
 		expect(req.request.body.email).toBe('new@example.com');
 		req.flush({
@@ -194,9 +192,9 @@ describe('DirectiveRepo', () => {
 			name: 'New User',
 			email: 'new@example.com',
 		});
-	});
+	}));
 
-	it('can update a legacy contact', (done) => {
+	it('can update a legacy contact', () => new Promise<void>((resolve, reject) => {
 		repo
 			.updateLegacyContact({
 				legacyContactId: 'test-id',
@@ -208,14 +206,14 @@ describe('DirectiveRepo', () => {
 				expect(legacyContact.accountId).toBe('test-accountid');
 				expect(legacyContact.name).toBe('Updated User');
 				expect(legacyContact.email).toBe('updated@example.com');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(apiUrl('/v2/legacy-contact/test-id'));
 
 		expect(req.request.method).toBe('PUT');
-		expect(req.request.headers.has('Authorization')).toBeTrue();
+		expect(req.request.headers.has('Authorization')).toBe(true);
 		expect(req.request.body.name).toBe('Updated User');
 		expect(req.request.body.email).toBe('updated@example.com');
 		expect(req.request.body.legacyContactId).toBeUndefined();
@@ -225,14 +223,12 @@ describe('DirectiveRepo', () => {
 			name: 'Updated User',
 			email: 'updated@example.com',
 		});
-	});
+	}));
 
 	it('will throw an error if no legacyContactId is specified in update', async () => {
-		await expectAsync(
-			repo.updateLegacyContact({
+		await expect(repo.updateLegacyContact({
 				name: 'throw error',
 				email: 'error@example.com',
-			}),
-		).toBeRejected();
+			}),).rejects.toThrow();
 	});
 });

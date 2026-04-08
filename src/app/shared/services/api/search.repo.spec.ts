@@ -157,7 +157,7 @@ describe('SearchRepo', () => {
 		const archiveId = 'invalid-id';
 
 		repo.getPublicArchiveTags(archiveId).subscribe(
-			() => fail('should have failed with a 404 error'),
+			() => { throw new Error('should have failed with a 404 error'); },
 			(error) => {
 				expect(error.status).toBe(404);
 			},

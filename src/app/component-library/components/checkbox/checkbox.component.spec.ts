@@ -3,6 +3,8 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 import { ComponentsModule } from '../../components.module';
 import { CheckboxComponent } from './checkbox.component';
 
+import { vi } from 'vitest';
+
 describe('CheckboxCompoent', () => {
 	let fixture: ComponentFixture<CheckboxComponent>;
 	let instance: CheckboxComponent;
@@ -44,7 +46,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it('should emit the correct value when the checkbox is clicked', () => {
-		spyOn(instance.isCheckedChange, 'emit');
+		vi.spyOn(instance.isCheckedChange, 'emit');
 		instance.value = 'value';
 		fixture.detectChanges();
 		const checkbox = ngMocks.find('.checkbox-container').nativeElement;
@@ -55,7 +57,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it("should not emit any value when the checkbox is clicked and it's disabled ", () => {
-		spyOn(instance.isCheckedChange, 'emit');
+		vi.spyOn(instance.isCheckedChange, 'emit');
 		instance.disabled = true;
 		instance.value = 'value';
 		fixture.detectChanges();

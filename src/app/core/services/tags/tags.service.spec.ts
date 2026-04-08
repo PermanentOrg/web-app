@@ -64,38 +64,38 @@ describe('TagsService', () => {
 		service = TestBed.inject(TagsService);
 	});
 
-	it('should fetch tags once on creation', (done) => {
+	it('should fetch tags once on creation', () => new Promise<void>((resolve, reject) => {
 		service.getTags$().subscribe((tags) => {
 			expect(tags.length).toBe(2);
 			expect(api.tag.apiCalls).toBe(1);
-			done();
+			resolve();
 		});
-	});
+	}));
 
-	it('should fetch tags once on archive update', (done) => {
+	it('should fetch tags once on archive update', () => new Promise<void>((resolve, reject) => {
 		let created = false;
 		service.getTags$().subscribe((tags) => {
 			if (created) {
 				expect(tags.length).toBe(2);
 				expect(api.tag.apiCalls).toBe(1);
-				done();
+				resolve();
 			} else {
 				created = true;
 				api.tag.apiCalls = 0;
 				account.archiveChange.next(new ArchiveVO({}));
 			}
 		});
-	});
+	}));
 
-	it('should reset tags on archive update if no archive is set', (done) => {
+	it('should reset tags on archive update if no archive is set', () => new Promise<void>((resolve, reject) => {
 		service.getTags$().subscribe(async () => {
 			account.archive = undefined;
 			await service.refreshTags();
 
 			expect(service.getTags().length).toBe(0);
-			done();
+			resolve();
 		});
-	});
+	}));
 
 	it('should only cache tags from the current archive', () => {
 		const item = new RecordVO({

@@ -32,7 +32,7 @@ describe('FeatureFlagApiService', () => {
 		expect(service).toBeTruthy();
 	});
 
-	it('can fetch feature flags from the back end', (done) => {
+	it('can fetch feature flags from the back end', () => new Promise<void>((resolve, reject) => {
 		const expectedFlags = {
 			items: [{ name: 'potato' }, { name: 'tomato' }],
 		};
@@ -41,10 +41,10 @@ describe('FeatureFlagApiService', () => {
 			.getFeatureFlags()
 			.then((flags) => {
 				expect(flags).toEqual(expectedFlags.items);
-				done();
+				resolve();
 			})
 			.catch(() => {
-				done.fail();
+				reject(new Error('Test failed'));
 			});
 
 		const req = http.expectOne(`${environment.apiUrl}/v2/feature-flags`);
@@ -53,20 +53,20 @@ describe('FeatureFlagApiService', () => {
 		expect(req.request.headers.get('Request-Version')).toBe('2');
 		expect(req.request.headers.get('Authorization')).toBeFalsy();
 		req.flush(expectedFlags);
-	});
+	}));
 
-	it('can silently handles errors from the server', (done) => {
+	it('can silently handles errors from the server', () => new Promise<void>((resolve, reject) => {
 		service
 			.getFeatureFlags()
 			.then((flags) => {
 				expect(flags.length).toBe(0);
-				done();
+				resolve();
 			})
 			.catch(() => {
-				done.fail();
+				reject(new Error('Test failed'));
 			});
 
 		const req = http.expectOne(`${environment.apiUrl}/v2/feature-flags`);
 		req.flush({}, { status: 400, statusText: 'Bad Request' });
-	});
+	}));
 });

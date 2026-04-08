@@ -81,7 +81,7 @@ describe('GalleryComponent', () => {
 		fixture.detectChanges();
 		await fixture.whenStable();
 
-		expect(dummyApi.fetchedFromApi).toBeTrue();
+		expect(dummyApi.fetchedFromApi).toBe(true);
 	});
 
 	it('displays the list of featured archives', async () => {

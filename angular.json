@@ -171,19 +171,20 @@
 					}
 				},
 				"test": {
-					"builder": "@angular/build:karma",
+					"builder": "@angular/build:unit-test",
 					"options": {
-						"main": "src/test.ts",
-						"polyfills": ["src/polyfills.ts"],
+						"buildTarget": "mdot:build",
 						"tsConfig": "src/tsconfig.spec.json",
-						"karmaConfig": "karma.conf.js",
-						"sourceMap": true,
-						"styles": ["src/styles/main.scss"],
-						"stylePreprocessorOptions": {
-							"includePaths": ["src/styles"]
-						},
-						"scripts": ["node_modules/gsap/dist/gsap.js"],
-						"assets": ["src/favicon.ico", "src/assets"]
+						"runner": "vitest",
+						"setupFiles": ["src/test-setup.ts"],
+						"include": ["src/**/*.spec.ts"]
+					},
+					"configurations": {
+						"ci": {
+							"watch": false,
+							"coverage": true,
+							"coverageReporters": ["html", "lcov", "text-summary"]
+						}
 					}
 				},
 				"lint": {

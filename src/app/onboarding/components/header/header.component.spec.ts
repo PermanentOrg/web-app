@@ -4,6 +4,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
 import { OnboardingHeaderComponent } from './header.component';
 
+import { vi } from 'vitest';
+
 @NgModule()
 class DummyModule {}
 
@@ -42,8 +44,8 @@ describe('OnboardingHeaderComponent', () => {
 
 		const accountService = ngMocks.get(AccountService);
 		const router = ngMocks.get(Router);
-		const accountClearSpy = spyOn(accountService, 'clear');
-		const navigateSpy = spyOn(router, 'navigate');
+		const accountClearSpy = vi.spyOn(accountService, 'clear');
+		const navigateSpy = vi.spyOn(router, 'navigate');
 		ngMocks.find('.banner-logout button').triggerEventHandler('click', null);
 
 		expect(accountClearSpy).toHaveBeenCalled();

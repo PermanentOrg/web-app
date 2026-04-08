@@ -64,16 +64,16 @@ describe('HttpService', () => {
 		).toBe(0);
 	});
 
-	it('should trigger an event if it receives a 401 response', (done) => {
+	it('should trigger an event if it receives a 401 response', () => new Promise<void>((resolve, reject) => {
 		let expirationObserved = false;
 		const subscription = service.tokenExpired.subscribe(() => {
 			expirationObserved = true;
 		});
 
 		service.sendRequestPromise('/test').catch(() => {
-			expect(expirationObserved).toBeTrue();
+			expect(expirationObserved).toBe(true);
 			subscription.unsubscribe();
-			done();
+			resolve();
 		});
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/test`);
@@ -84,5 +84,5 @@ describe('HttpService', () => {
 				statusText: 'unauthorized',
 			},
 		);
-	});
+	}));
 });

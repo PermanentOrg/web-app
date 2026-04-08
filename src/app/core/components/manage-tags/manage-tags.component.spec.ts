@@ -6,6 +6,8 @@ import { ApiService } from '@shared/services/api/api.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ManageTagsComponent } from './manage-tags.component';
 
+import { vi } from 'vitest';
+
 // Keep DummyModule "empty" to avoid extra mocking surfaces.
 @NgModule({
 	declarations: [],
@@ -118,7 +120,7 @@ describe('ManageTagsComponent #manage-tags (ng-mocks)', () => {
 		const instance = ngMocks.findInstance(ManageTagsComponent);
 
 		expect(ngMocks.findAll('.delete').length).toBeGreaterThan(0);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
 
 		expect(refreshTagsSpy).not.toHaveBeenCalled();
 	});
@@ -128,13 +130,13 @@ describe('ManageTagsComponent #manage-tags (ng-mocks)', () => {
 		await setupMockBuilder();
 		const fixture = render();
 		const instance = ngMocks.findInstance(ManageTagsComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
 
 		ngMocks.findAll('.delete')[0].nativeElement.click();
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(state.deleted).toBeTrue();
+		expect(state.deleted).toBe(true);
 		expect(state.deletedTag!.name).toBe('Potato');
 		expect(refreshTagsSpy).toHaveBeenCalled();
 		expect(ngMocks.findAll('.tag').length).toBe(1);
@@ -149,7 +151,7 @@ describe('ManageTagsComponent #manage-tags (ng-mocks)', () => {
 
 		try {
 			await instance.deleteTag(state.tags[0]);
-			fail('expected deleteTag to throw');
+			{ throw new Error('expected deleteTag to throw'); };
 		} catch {
 			// expected
 		} finally {
@@ -182,7 +184,7 @@ describe('ManageTagsComponent #manage-tags (ng-mocks)', () => {
 		await setupMockBuilder();
 		const fixture = render();
 		const instance = ngMocks.findInstance(ManageTagsComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
 
 		ngMocks.findAll('.edit')[0].nativeElement.click();
 		fixture.detectChanges();
@@ -196,7 +198,7 @@ describe('ManageTagsComponent #manage-tags (ng-mocks)', () => {
 		fixture.detectChanges();
 
 		expect(ngMocks.findAll('.tag input').length).toBe(0);
-		expect(state.renamed).toBeTrue();
+		expect(state.renamed).toBe(true);
 		expect(state.renamedTag!.name).toBe('Starchy Tuber');
 		expect(refreshTagsSpy).toHaveBeenCalled();
 	});

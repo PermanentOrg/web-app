@@ -10,6 +10,8 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 import { EventService } from '@shared/services/event/event.service';
 import { BillingSettingsComponent } from './billing-settings.component';
 
+import { vi } from 'vitest';
+
 @NgModule()
 class DummyModule {}
 
@@ -63,16 +65,16 @@ describe('BillingSettingsComponent', () => {
 		const instance = fixture.point.componentInstance;
 
 		const accountService = TestBed.inject(AccountService);
-		const setAccountSpy = spyOn(accountService, 'setAccount').and.callThrough();
-		const accountUpdateSpy = spyOn(
+		const setAccountSpy = vi.spyOn(accountService, 'setAccount').mockRestore();
+		const accountUpdateSpy = vi.spyOn(
 			TestBed.inject(ApiService).account,
 			'update',
-		).and.resolveTo(new AccountVO({ zip: null }));
-		const successfulMessageSpy = spyOn(
+		).mockResolvedValue(new AccountVO({ zip: null }));
+		const successfulMessageSpy = vi.spyOn(
 			TestBed.inject(MessageService),
 			'showMessage',
 		);
-		const errorMessageSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		const errorMessageSpy = vi.spyOn(TestBed.inject(MessageService), 'showError');
 
 		try {
 			await instance.onSaveInfo('fullName', 'New Name');
@@ -94,16 +96,16 @@ describe('BillingSettingsComponent', () => {
 		const instance = fixture.point.componentInstance;
 
 		const accountService = TestBed.inject(AccountService);
-		const setAccountSpy = spyOn(accountService, 'setAccount').and.callThrough();
-		const accountUpdateSpy = spyOn(
+		const setAccountSpy = vi.spyOn(accountService, 'setAccount').mockRestore();
+		const accountUpdateSpy = vi.spyOn(
 			TestBed.inject(ApiService).account,
 			'update',
-		).and.rejectWith({});
-		const successfulMessageSpy = spyOn(
+		).mockRejectedValue({});
+		const successfulMessageSpy = vi.spyOn(
 			TestBed.inject(MessageService),
 			'showMessage',
 		);
-		const errorMessageSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		const errorMessageSpy = vi.spyOn(TestBed.inject(MessageService), 'showError');
 
 		try {
 			await instance.onSaveInfo('fullName', 'New Name');

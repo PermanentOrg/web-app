@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import { SearchBoxComponent } from './search-box.component';
 
+import { vi } from 'vitest';
+
 const mockApiService = {
 	search: {
 		archiveByNameObservable: () => {},
@@ -12,7 +14,7 @@ const mockApiService = {
 };
 
 const mockRouter = {
-	navigate: jasmine.createSpy('navigate'),
+	navigate: vi.fn(),
 };
 
 describe('SearchBoxComponent', () => {

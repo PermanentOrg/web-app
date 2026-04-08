@@ -3,14 +3,14 @@ import { ShareLink } from '../models/share-link';
 import { ShareLinksService } from './share-links.service';
 import { ShareLinksApiService } from './share-links-api.service';
 
+import { vi } from 'vitest';
+
 describe('ShareLinksService', () => {
 	let service: ShareLinksService;
-	let apiSpy: jasmine.SpyObj<ShareLinksApiService>;
+	let apiSpy: any;
 
 	beforeEach(() => {
-		apiSpy = jasmine.createSpyObj('ShareLinksApiService', [
-			'getShareLinksByToken',
-		]);
+		apiSpy = { getShareLinksByToken: vi.fn() } as any;
 
 		TestBed.configureTestingModule({
 			providers: [
@@ -36,52 +36,52 @@ describe('ShareLinksService', () => {
 		service.currentShareToken = '';
 		const result = await service.isUnlistedShare();
 
-		expect(result).toBeFalse();
+		expect(result).toBe(false);
 		expect(apiSpy.getShareLinksByToken).not.toHaveBeenCalled();
 	});
 
 	it('should return false if no share links are returned', async () => {
 		service.currentShareToken = 'abc123';
-		apiSpy.getShareLinksByToken.and.resolveTo([]);
+		apiSpy.getShareLinksByToken.mockResolvedValue([]);
 		const result = await service.isUnlistedShare();
 
-		expect(result).toBeFalse();
+		expect(result).toBe(false);
 	});
 
 	it('should return true if accessRestrictions is "none"', async () => {
 		service.currentShareToken = 'abc123';
-		apiSpy.getShareLinksByToken.and.resolveTo([
+		apiSpy.getShareLinksByToken.mockResolvedValue([
 			{ accessRestrictions: 'none' } as ShareLink,
 		]);
 		const result = await service.isUnlistedShare();
 
-		expect(result).toBeTrue();
+		expect(result).toBe(true);
 	});
 
 	it('should return false if accessRestrictions is not "none"', async () => {
 		service.currentShareToken = 'abc123';
-		apiSpy.getShareLinksByToken.and.resolveTo([
+		apiSpy.getShareLinksByToken.mockResolvedValue([
 			{ accessRestrictions: 'read-only' } as unknown as ShareLink,
 		]);
 		const result = await service.isUnlistedShare();
 
-		expect(result).toBeFalse();
+		expect(result).toBe(false);
 	});
 
 	it('should cache shareLinks after first fetch', async () => {
 		service.currentShareToken = 'abc123';
-		apiSpy.getShareLinksByToken.and.resolveTo([
+		apiSpy.getShareLinksByToken.mockResolvedValue([
 			{ accessRestrictions: 'none' } as ShareLink,
 		]);
 
 		const firstCall = await service.isUnlistedShare();
 
-		expect(firstCall).toBeTrue();
+		expect(firstCall).toBe(true);
 		expect(apiSpy.getShareLinksByToken).toHaveBeenCalledTimes(1);
 
 		const secondCall = await service.isUnlistedShare();
 
-		expect(secondCall).toBeTrue();
+		expect(secondCall).toBe(true);
 		expect(apiSpy.getShareLinksByToken).toHaveBeenCalledTimes(1); // no second fetch
 	});
 });

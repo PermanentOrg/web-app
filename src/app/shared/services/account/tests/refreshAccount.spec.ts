@@ -15,6 +15,8 @@ import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { HttpService } from '@shared/services/http/http.service';
 import { AccountService } from '../account.service';
 
+import { vi } from 'vitest';
+
 class AccountRepoStub {
 	public static failRequest: boolean = false;
 	public async get(_account: AccountVO) {
@@ -109,7 +111,7 @@ describe('AccountService: refreshAccount', () => {
 				{ provide: StorageService, useValue: dummyStorageService },
 				{
 					provide: Router,
-					useValue: { navigate: jasmine.createSpy('router.navigate') },
+					useValue: { navigate: vi.fn() },
 				},
 				{
 					provide: LocationStrategy,
@@ -140,16 +142,16 @@ describe('AccountService: refreshAccount', () => {
 		url: string = '/app/private',
 		withStorage: boolean = false,
 	) {
-		const logOutSpy = spyOn(apiService.auth, 'logOut').and.callThrough();
-		spyOn(location, 'path').and.returnValue(url);
+		const logOutSpy = vi.spyOn(apiService.auth, 'logOut').mockRestore();
+		vi.spyOn(location, 'path').mockReturnValue(url);
 
 		instance.setArchive(new ArchiveVO({}));
 		instance.setAccount(new AccountVO({}));
 
 		let localStorageSpy;
 		if (withStorage) {
-			localStorageSpy = spyOn(storageService.local, 'set').and.callThrough();
-			spyOn(instance, 'getStorage').and.returnValue(
+			localStorageSpy = vi.spyOn(storageService.local, 'set').mockRestore();
+			vi.spyOn(instance, 'getStorage').mockReturnValue(
 				new AccountVO({ keepLoggedIn: true }),
 			);
 		}

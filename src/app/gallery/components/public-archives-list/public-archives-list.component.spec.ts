@@ -7,6 +7,8 @@ import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { ArchiveVO } from '../../../models/archive-vo';
 import { PublicArchivesListComponent } from './public-archives-list.component';
 
+import { vi } from 'vitest';
+
 @Pipe({ name: 'accessRole', standalone: false })
 class MockAccessRolePipe implements PipeTransform {
 	transform(value: string): string {
@@ -23,9 +25,8 @@ const mockMessageService = {
 };
 
 const mockRouter = {
-	navigate: jasmine
-		.createSpy('navigate')
-		.and.returnValue(Promise.resolve(true)),
+	navigate: vi.fn()
+		.mockReturnValue(Promise.resolve(true)),
 };
 
 describe('PublicArchivesComponent', () => {
@@ -33,7 +34,7 @@ describe('PublicArchivesComponent', () => {
 	let component: PublicArchivesListComponent;
 
 	beforeEach(async () => {
-		mockRouter.navigate.calls.reset();
+		mockRouter.navigate.mockClear();
 
 		await TestBed.configureTestingModule({
 			declarations: [
@@ -101,7 +102,7 @@ describe('PublicArchivesComponent', () => {
 		component.toggleArchives();
 		fixture.detectChanges();
 
-		expect(component.expanded).toBeTrue();
+		expect(component.expanded).toBe(true);
 
 		const archiveList = fixture.nativeElement.querySelector(
 			'.public-archives-list',

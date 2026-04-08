@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 // import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 // import * as Testing from '@root/test/testbedConfig';
 
@@ -24,7 +25,7 @@
 //     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 //     dialogRef = {
 //       id: 0,
-//       close: jasmine.createSpy()
+//       close: vi.fn()
 //     };
 
 //     config.imports.push(SharedModule);
@@ -72,7 +73,7 @@
 //     const shareItem = shares[1];
 //     await init(shareItem);
 //     expect(component.shareItem).toBe(shareItem);
-//     spyOn(messageService, 'showMessage');
+//     vi.spyOn(messageService, 'showMessage');
 //     component.onShareMemberClick(shareItem.ShareVOs[0]);
 //     expect(messageService.showMessage).toHaveBeenCalled();
 //   });
@@ -82,7 +83,7 @@
 //     shareItem.accessRole = 'access.role.viewer';
 //     await init(shareItem);
 //     expect(component.shareItem).toBe(shareItem);
-//     spyOn(messageService, 'showMessage');
+//     vi.spyOn(messageService, 'showMessage');
 //     component.onShareMemberClick(shareItem.ShareVOs[0]);
 //     expect(messageService.showMessage).toHaveBeenCalled();
 //   });
@@ -91,7 +92,7 @@
 //     const shareItem = shares[0];
 //     await init(shareItem);
 //     expect(component.shareItem).toBe(shareItem);
-//     spyOn(promptService, 'promptButtons');
+//     vi.spyOn(promptService, 'promptButtons');
 //     try {
 //       component.onShareMemberClick(shareItem.ShareVOs[0]);
 //     } catch (e) {

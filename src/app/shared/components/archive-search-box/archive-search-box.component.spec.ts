@@ -14,6 +14,8 @@ import { SearchResponse } from '@shared/services/api/index.repo';
 import { of } from 'rxjs';
 import { ArchiveSearchBoxComponent } from './archive-search-box.component';
 
+import { vi } from 'vitest';
+
 describe('ArchiveSearchBoxComponent', () => {
 	let relationshipService: RelationshipService;
 	let apiService: ApiService;
@@ -53,10 +55,10 @@ describe('ArchiveSearchBoxComponent', () => {
 	});
 
 	it('should search RelationshipService when a non-email value is entered', fakeAsync(() => {
-		const searchSpy = spyOn(
+		const searchSpy = vi.spyOn(
 			relationshipService,
 			'searchRelationsByName',
-		).and.returnValue([]);
+		).mockReturnValue([]);
 
 		const sub = component.searchResults$.subscribe((results) => {
 			expect(results).toEqual([]);
@@ -86,7 +88,7 @@ describe('ArchiveSearchBoxComponent', () => {
 		const relation2 = new RelationVO({});
 		relation2.RelationArchiveVO = archive2;
 
-		const getAllSpy = spyOn(relationshipService, 'getSync').and.returnValue([
+		const getAllSpy = vi.spyOn(relationshipService, 'getSync').mockReturnValue([
 			relation1,
 			relation2,
 		]);
@@ -120,10 +122,10 @@ describe('ArchiveSearchBoxComponent', () => {
 			},
 		];
 
-		const emailSearchSpy = spyOn(
+		const emailSearchSpy = vi.spyOn(
 			apiService.search,
 			'archiveByEmail',
-		).and.returnValue(of(searchResponse));
+		).mockReturnValue(of(searchResponse));
 
 		const sub = component.searchResults$.subscribe((results) => {
 			expect(emailSearchSpy).toHaveBeenCalled();
@@ -154,7 +156,7 @@ describe('ArchiveSearchBoxComponent', () => {
 		const relation2 = new RelationVO({});
 		relation2.RelationArchiveVO = archive2;
 
-		const getAllSpy = spyOn(relationshipService, 'getSync').and.returnValue([
+		const getAllSpy = vi.spyOn(relationshipService, 'getSync').mockReturnValue([
 			relation1,
 			relation2,
 		]);
@@ -187,7 +189,7 @@ describe('ArchiveSearchBoxComponent', () => {
 		const relation2 = new RelationVO({});
 		relation2.RelationArchiveVO = archive2;
 
-		spyOn(relationshipService, 'getSync').and.returnValue([
+		vi.spyOn(relationshipService, 'getSync').mockReturnValue([
 			relation1,
 			relation2,
 		]);

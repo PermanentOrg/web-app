@@ -7,40 +7,37 @@ import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.serv
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { FamilySearchImportComponent } from './family-search-import.component';
 
+import { vi } from 'vitest';
+
 describe('FamilySearchImportComponent', () => {
 	let component: FamilySearchImportComponent;
 	let fixture: ComponentFixture<FamilySearchImportComponent>;
 
-	const mockDialogRef = { close: jasmine.createSpy('close') };
+	const mockDialogRef = { close: vi.fn() };
 
 	const mockApiService = {
-		archive: { create: jasmine.createSpy('create') },
+		archive: { create: vi.fn() },
 		connector: {
-			familysearchFactImportRequest: jasmine.createSpy(
-				'familysearchFactImportRequest',
-			),
-			familysearchMemoryImportRequest: jasmine.createSpy(
-				'familysearchMemoryImportRequest',
-			),
+			familysearchFactImportRequest: vi.fn(),
+			familysearchMemoryImportRequest: vi.fn(),
 		},
 	};
 
 	const mockMessageService = {
-		showMessage: jasmine.createSpy('showMessage'),
-		showError: jasmine.createSpy('showError'),
+		showMessage: vi.fn(),
+		showError: vi.fn(),
 	};
 
 	const mockGuidedTourService = {
-		isStepComplete: jasmine.createSpy('isStepComplete').and.returnValue(true),
-		startTour: jasmine.createSpy('startTour'),
-		emit: jasmine.createSpy('emit'),
-		markStepComplete: jasmine.createSpy('markStepComplete'),
+		isStepComplete: vi.fn().mockReturnValue(true),
+		startTour: vi.fn(),
+		emit: vi.fn(),
+		markStepComplete: vi.fn(),
 	};
 
 	const mockPromptService = {
-		promptButtons: jasmine
-			.createSpy('promptButtons')
-			.and.returnValue(Promise.resolve('go-back')),
+		promptButtons: vi.fn()
+			.mockReturnValue(Promise.resolve('go-back')),
 	};
 
 	const currentUserData = {
@@ -101,13 +98,13 @@ describe('FamilySearchImportComponent', () => {
 			await component.goToNextFromPeople();
 
 			expect(mockPromptService.promptButtons).toHaveBeenCalledWith(
-				jasmine.arrayContaining([
-					jasmine.objectContaining({ buttonName: 'go-back' }),
-					jasmine.objectContaining({ buttonName: 'continue' }),
+				expect.arrayContaining([
+					expect.objectContaining({ buttonName: 'go-back' }),
+					expect.objectContaining({ buttonName: 'continue' }),
 				]),
 				'Continue with re-import?',
 				undefined,
-				jasmine.stringContaining('John Doe'),
+				expect.stringContaining('John Doe'),
 			);
 		});
 
@@ -124,7 +121,7 @@ describe('FamilySearchImportComponent', () => {
 		it('goes to memories stage when user confirms reimport', async () => {
 			await setup([reimportMember]);
 			component.familyMembers[0].isSelected = true;
-			mockPromptService.promptButtons.and.returnValue(
+			mockPromptService.promptButtons.mockReturnValue(
 				Promise.resolve('continue'),
 			);
 
@@ -136,7 +133,7 @@ describe('FamilySearchImportComponent', () => {
 		it('stays on people stage when user dismisses reimport confirmation', async () => {
 			await setup([reimportMember]);
 			component.familyMembers[0].isSelected = true;
-			mockPromptService.promptButtons.and.returnValue(
+			mockPromptService.promptButtons.mockReturnValue(
 				Promise.resolve('go-back'),
 			);
 

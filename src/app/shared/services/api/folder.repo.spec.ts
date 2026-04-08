@@ -6,6 +6,8 @@ import { HttpV2Service } from '../http-v2/http-v2.service';
 import { HttpService } from '../http/http.service';
 import { FolderRepo } from './folder.repo';
 
+import { vi } from 'vitest';
+
 const emptyResponse = { items: [] };
 const fakeFolderResponse = {
 	items: [
@@ -29,15 +31,12 @@ const fakeChildrenResponse = {
 
 describe('Folder repo', () => {
 	let folderRepo: FolderRepo;
-	let httpSpy: jasmine.SpyObj<HttpService>;
-	let httpV2Spy: jasmine.SpyObj<HttpV2Service>;
+	let httpSpy: any;
+	let httpV2Spy: any;
 
 	beforeEach(() => {
-		httpSpy = jasmine.createSpyObj('HttpService', [
-			'sendRequest',
-			'sendRequestPromise',
-		]);
-		httpV2Spy = jasmine.createSpyObj('HttpV2Service', ['get']);
+		httpSpy = { sendRequest: vi.fn(), sendRequestPromise: vi.fn() } as any;
+		httpV2Spy = { get: vi.fn() } as any;
 
 		TestBed.configureTestingModule({
 			providers: [
@@ -55,22 +54,22 @@ describe('Folder repo', () => {
 		const folder2 = new FolderVO({ folderId: 2 });
 		const mockResponse = { success: true } as any;
 
-		httpSpy.sendRequestPromise.and.resolveTo(mockResponse);
+		httpSpy.sendRequestPromise.mockResolvedValue(mockResponse);
 		const result = await folderRepo.post([folder1, folder2]);
 
 		expect(httpSpy.sendRequestPromise).toHaveBeenCalledWith(
 			'/folder/post',
 			[
-				{ FolderVO: jasmine.any(FolderVO) },
-				{ FolderVO: jasmine.any(FolderVO) },
+				{ FolderVO: expect.any(FolderVO) },
+				{ FolderVO: expect.any(FolderVO) },
 			],
-			{ ResponseClass: jasmine.any(Function) },
+			{ ResponseClass: expect.any(Function) },
 		);
 
-		const callArgs = httpSpy.sendRequestPromise.calls.mostRecent().args[1];
+		const callArgs = httpSpy.sendRequestPromise.mock.lastCall[1];
 
-		expect(callArgs[0].FolderVO instanceof FolderVO).toBeTrue();
-		expect(callArgs[1].FolderVO instanceof FolderVO).toBeTrue();
+		expect(callArgs[0].FolderVO instanceof FolderVO).toBe(true);
+		expect(callArgs[1].FolderVO instanceof FolderVO).toBe(true);
 
 		expect(result).toBe(mockResponse);
 	});
@@ -93,7 +92,7 @@ describe('Folder repo', () => {
 			pageSize: 99999999,
 		});
 
-		expect(result.isSuccessful).toBeTrue();
+		expect(result.isSuccessful).toBe(true);
 		expect(result.Results[0].data[0].FolderVO).toBeDefined();
 	});
 
@@ -119,7 +118,7 @@ describe('Folder repo', () => {
 
 		expect(httpV2Spy.get).toHaveBeenCalledWith(
 			'v2/folder/42/children',
-			jasmine.anything(),
+			expect.anything(),
 			null,
 			{ authToken: false, shareToken: 'share-token-123' },
 		);
@@ -173,7 +172,7 @@ describe('Folder repo', () => {
 		it('should fetch share links for a folder', async () => {
 			const folderVO = new FolderVO({ folderId: 123 });
 
-			httpV2Spy.get.and.returnValue(of([{ items: [mockShareLink] }]));
+			httpV2Spy.get.mockReturnValue(of([{ items: [mockShareLink] }]));
 
 			const result = await folderRepo.getFolderShareLink(folderVO);
 
@@ -184,7 +183,7 @@ describe('Folder repo', () => {
 		it('should return empty array when no share links exist', async () => {
 			const folderVO = new FolderVO({ folderId: 456 });
 
-			httpV2Spy.get.and.returnValue(of([{ items: [] }]));
+			httpV2Spy.get.mockReturnValue(of([{ items: [] }]));
 
 			const result = await folderRepo.getFolderShareLink(folderVO);
 
@@ -200,7 +199,7 @@ describe('Folder repo', () => {
 				token: 'def',
 			};
 
-			httpV2Spy.get.and.returnValue(
+			httpV2Spy.get.mockReturnValue(
 				of([{ items: [mockShareLink, secondShareLink] }]),
 			);
 

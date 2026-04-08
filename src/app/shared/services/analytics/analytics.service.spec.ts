@@ -893,13 +893,13 @@ describe('AnalyticsService Integration Tests', () => {
 		expectNoAnalyticsCall({ entity: 'account', action: 'login' });
 	});
 
-	it('should clear the auth token if a 401 error happens', (done) => {
+	it('should clear the auth token if a 401 error happens', () => new Promise<void>((resolve, reject) => {
 		analytics.update({ entity: 'account', action: 'login' }).finally(() => {
 			expect(httpv2.isAuthTokenSet()).toBeFalsy();
-			done();
+			resolve();
 		});
 
 		const req = http.expectOne(`${environment.apiUrl}/v2/event`);
 		req.flush({}, { status: 401, statusText: 'Simulated 401 error' });
-	});
+	}));
 });

@@ -18,6 +18,8 @@ import { SharingComponent } from '@fileBrowser/components/sharing/sharing.compon
 import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
+import { vi } from 'vitest';
+
 const mockDataService = {
 	refreshCurrentFolder: async () => await Promise.resolve(),
 	downloadFile: async () => await Promise.resolve(),
@@ -27,45 +29,36 @@ const mockDataService = {
 
 describe('EditService', () => {
 	let service: EditService;
-	let apiService: jasmine.SpyObj<ApiService>;
-	let accountService: jasmine.SpyObj<AccountService>;
-	let shareLinksApiService: jasmine.SpyObj<ShareLinksApiService>;
-	let deviceService: jasmine.SpyObj<DeviceService>;
-	let dialogService: jasmine.SpyObj<DialogCdkService>;
+	let apiService: any;
+	let accountService: any;
+	let shareLinksApiService: any;
+	let deviceService: any;
+	let dialogService: any;
 
 	beforeEach(() => {
-		apiService = jasmine.createSpyObj('ApiService', [
-			'record',
-			'folder',
-			'share',
-		]);
+		apiService = { record: vi.fn(), folder: vi.fn(), share: vi.fn() } as any;
 		apiService.record = {
-			update: jasmine.createSpy('update'),
-			updateStelaRecord: jasmine.createSpy('updateStelaRecord'),
-			get: jasmine.createSpy('get'),
-			getRecordShareLink: jasmine.createSpy('getRecordShareLink'),
+			update: vi.fn(),
+			updateStelaRecord: vi.fn(),
+			get: vi.fn(),
+			getRecordShareLink: vi.fn(),
 		} as unknown as RecordRepo;
 		apiService.folder = {
-			getFolderShareLink: jasmine.createSpy('getFolderShareLink'),
+			getFolderShareLink: vi.fn(),
 		} as unknown as FolderRepo;
 		apiService.share = {
-			getShareLink: jasmine.createSpy('getShareLink'),
+			getShareLink: vi.fn(),
 		} as any;
 
-		accountService = jasmine.createSpyObj('AccountService', ['getArchive']);
-		accountService.getArchive.and.returnValue(
+		accountService = { getArchive: vi.fn() } as any;
+		accountService.getArchive.mockReturnValue(
 			new ArchiveVO({ archiveId: 123 }),
 		);
 
-		shareLinksApiService = jasmine.createSpyObj('ShareLinksApiService', [
-			'generateShareLink',
-			'getShareLinksById',
-			'updateShareLink',
-			'deleteShareLink',
-		]);
+		shareLinksApiService = { generateShareLink: vi.fn(), getShareLinksById: vi.fn(), updateShareLink: vi.fn(), deleteShareLink: vi.fn() } as any;
 
-		deviceService = jasmine.createSpyObj('DeviceService', ['isMobile']);
-		dialogService = jasmine.createSpyObj('DialogCdkService', ['open']);
+		deviceService = { isMobile: vi.fn() } as any;
+		dialogService = { open: vi.fn() } as any;
 
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 		config.imports.push(NgbTooltipModule);
@@ -102,10 +95,10 @@ describe('EditService', () => {
 		const mockResponse = {
 			getRecordVOs: () => [updatedRecord],
 		};
-		(apiService.record.update as jasmine.Spy).and.returnValue(
+		(apiService.record.update as any).mockReturnValue(
 			Promise.resolve([{ updatedDT: '2024-03-03' }]),
 		);
-		(apiService.record.get as jasmine.Spy).and.returnValue(
+		(apiService.record.get as any).mockReturnValue(
 			Promise.resolve(mockResponse),
 		);
 		await service.updateItems(mockRecords);
@@ -133,13 +126,13 @@ describe('EditService', () => {
 			getRecordVO: () => updatedRecord,
 			getRecordVOs: () => [updatedRecord],
 		};
-		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+		(apiService.record.updateStelaRecord as any).mockReturnValue(
 			Promise.resolve(mockResponse),
 		);
-		(apiService.record.update as jasmine.Spy).and.returnValue(
+		(apiService.record.update as any).mockReturnValue(
 			Promise.resolve([{ updatedDT: '2024-03-03' }]),
 		);
-		(apiService.record.get as jasmine.Spy).and.returnValue(
+		(apiService.record.get as any).mockReturnValue(
 			Promise.resolve(mockResponse),
 		);
 
@@ -159,10 +152,10 @@ describe('EditService', () => {
 		const mockResponse = {
 			getRecordVOs: () => [updatedRecord],
 		};
-		(apiService.record.update as jasmine.Spy).and.returnValue(
+		(apiService.record.update as any).mockReturnValue(
 			Promise.resolve([{ updatedDT: '2024-03-03' }]),
 		);
-		(apiService.record.get as jasmine.Spy).and.returnValue(
+		(apiService.record.get as any).mockReturnValue(
 			Promise.resolve(mockResponse),
 		);
 
@@ -187,13 +180,13 @@ describe('EditService', () => {
 		const mockResponse = {
 			getRecordVOs: () => [updatedRecord],
 		};
-		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+		(apiService.record.updateStelaRecord as any).mockReturnValue(
 			Promise.resolve(mockResponse),
 		);
-		(apiService.record.update as jasmine.Spy).and.returnValue(
+		(apiService.record.update as any).mockReturnValue(
 			Promise.resolve([{ updatedDT: '2024-03-03' }]),
 		);
-		(apiService.record.get as jasmine.Spy).and.returnValue(
+		(apiService.record.get as any).mockReturnValue(
 			Promise.resolve(mockResponse),
 		);
 
@@ -206,11 +199,11 @@ describe('EditService', () => {
 
 	it('should NOT update record when recordResponse is empty', async () => {
 		const recordMock = new RecordVO({ recordId: 1, folder_linkId: 10 });
-		recordMock.update = jasmine.createSpy('update');
+		recordMock.update = vi.fn();
 		const mockResponse = {
 			getRecordVOs: () => [],
 		};
-		(apiService.record.get as jasmine.Spy).and.returnValue(
+		(apiService.record.get as any).mockReturnValue(
 			Promise.resolve(mockResponse),
 		);
 
@@ -236,12 +229,12 @@ describe('EditService', () => {
 
 		describe('desktop', () => {
 			beforeEach(() => {
-				deviceService.isMobile.and.returnValue(false);
+				deviceService.isMobile.mockReturnValue(false);
 			});
 
 			it('should open SharingDialogComponent for a record', async () => {
 				const record = new RecordVO({ recordId: 123 });
-				(apiService.record.getRecordShareLink as jasmine.Spy).and.resolveTo([
+				(apiService.record.getRecordShareLink as any).mockResolvedValue([
 					mockShareLink,
 				]);
 
@@ -266,7 +259,7 @@ describe('EditService', () => {
 
 			it('should open SharingDialogComponent for a folder', async () => {
 				const folder = new FolderVO({ folderId: 456 });
-				(apiService.folder.getFolderShareLink as jasmine.Spy).and.resolveTo([
+				(apiService.folder.getFolderShareLink as any).mockResolvedValue([
 					mockShareLink,
 				]);
 
@@ -291,7 +284,7 @@ describe('EditService', () => {
 
 			it('should pass undefined as newShare when no share links exist', async () => {
 				const record = new RecordVO({ recordId: 123 });
-				(apiService.record.getRecordShareLink as jasmine.Spy).and.resolveTo([]);
+				(apiService.record.getRecordShareLink as any).mockResolvedValue([]);
 
 				await service.openShareDialog(record);
 
@@ -310,7 +303,7 @@ describe('EditService', () => {
 
 			it('should not open dialog when getShareLinkByItemId throws an error', async () => {
 				const record = new RecordVO({ recordId: 123 });
-				(apiService.record.getRecordShareLink as jasmine.Spy).and.rejectWith(
+				(apiService.record.getRecordShareLink as any).mockRejectedValue(
 					new Error('API error'),
 				);
 
@@ -322,7 +315,7 @@ describe('EditService', () => {
 
 		describe('mobile', () => {
 			beforeEach(() => {
-				deviceService.isMobile.and.returnValue(true);
+				deviceService.isMobile.mockReturnValue(true);
 			});
 
 			it('should open SharingComponent for a record', async () => {
@@ -332,10 +325,10 @@ describe('EditService', () => {
 					getShareByUrlVO: () => mockShareByUrlVO,
 				};
 
-				(apiService.share.getShareLink as jasmine.Spy).and.resolveTo(
+				(apiService.share.getShareLink as any).mockResolvedValue(
 					mockResponse,
 				);
-				shareLinksApiService.getShareLinksById.and.resolveTo([mockShareLink]);
+				shareLinksApiService.getShareLinksById.mockResolvedValue([mockShareLink]);
 
 				await service.openShareDialog(record);
 
@@ -356,7 +349,7 @@ describe('EditService', () => {
 
 			it('should not open dialog when getShareLink throws an error', async () => {
 				const record = new RecordVO({ recordId: 123 });
-				(apiService.share.getShareLink as jasmine.Spy).and.rejectWith(
+				(apiService.share.getShareLink as any).mockRejectedValue(
 					new Error('API error'),
 				);
 
@@ -371,7 +364,7 @@ describe('EditService', () => {
 					getShareByUrlVO: () => null,
 				};
 
-				(apiService.share.getShareLink as jasmine.Spy).and.resolveTo(
+				(apiService.share.getShareLink as any).mockResolvedValue(
 					mockResponse,
 				);
 
@@ -392,19 +385,16 @@ describe('EditService', () => {
 
 	it('should call refreshAccountDebounced and refreshCurrentFolder after successful deletion', async () => {
 		const record = new RecordVO({ recordId: 1 });
-		(apiService as any).record.delete = jasmine
-			.createSpy('delete')
-			.and.returnValue(Promise.resolve());
+		(apiService as any).record.delete = vi.fn()
+			.mockReturnValue(Promise.resolve());
 		accountService.refreshAccountDebounced = Object.assign(
-			jasmine.createSpy('refreshAccountDebounced'),
+			vi.fn(),
 			{
-				cancel: jasmine.createSpy('cancel'),
-				flush: jasmine.createSpy('flush'),
+				cancel: vi.fn(),
+				flush: vi.fn(),
 			},
 		) as any;
-		(mockDataService as any).refreshCurrentFolder = jasmine.createSpy(
-			'refreshCurrentFolder',
-		);
+		(mockDataService as any).refreshCurrentFolder = vi.fn();
 
 		await service.deleteItems([record]);
 
@@ -414,19 +404,16 @@ describe('EditService', () => {
 
 	it('should call refreshAccountDebounced and refreshCurrentFolder even when deletion fails', async () => {
 		const record = new RecordVO({ recordId: 1 });
-		(apiService as any).record.delete = jasmine
-			.createSpy('delete')
-			.and.returnValue(Promise.reject(new Error('API error')));
+		(apiService as any).record.delete = vi.fn()
+			.mockReturnValue(Promise.reject(new Error('API error')));
 		accountService.refreshAccountDebounced = Object.assign(
-			jasmine.createSpy('refreshAccountDebounced'),
+			vi.fn(),
 			{
-				cancel: jasmine.createSpy('cancel'),
-				flush: jasmine.createSpy('flush'),
+				cancel: vi.fn(),
+				flush: vi.fn(),
 			},
 		) as any;
-		(mockDataService as any).refreshCurrentFolder = jasmine.createSpy(
-			'refreshCurrentFolder',
-		);
+		(mockDataService as any).refreshCurrentFolder = vi.fn();
 
 		try {
 			await service.deleteItems([record]);

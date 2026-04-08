@@ -1,6 +1,8 @@
 import { FolderVO } from '@models/index';
 import { FolderCache } from './folder-cache';
 
+import { vi } from 'vitest';
+
 describe('FolderCache', () => {
 	let cache: FolderCache;
 	beforeEach(() => {
@@ -37,7 +39,7 @@ describe('FolderCache', () => {
 	it('should not update a folder if its API value equals its cached value', () => {
 		// This tests preventing unnecessary rerenders if no changes are found
 		const folder = new FolderVO({ folder_linkId: 1 });
-		const updateSpy = spyOn(folder, 'update').and.callThrough();
+		const updateSpy = vi.spyOn(folder, 'update').mockRestore();
 		cache.saveFolder(folder);
 		cache.saveFolder(new FolderVO({ folder_linkId: 1 }));
 

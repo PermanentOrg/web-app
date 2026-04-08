@@ -4,6 +4,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventObserver, EventService } from './event.service';
 import { PermanentEvent } from './event-types';
 
+import { vi } from 'vitest';
+
 describe('EventService', () => {
 	beforeEach(async () => {
 		await MockBuilder(EventService).keep(HttpClientTestingModule, {
@@ -31,10 +33,10 @@ describe('EventService', () => {
 	it('should notify all observers', () => {
 		const instance = TestBed.inject(EventService);
 		const mockObserver1: EventObserver = {
-			update: jasmine.createSpy('update'),
+			update: vi.fn(),
 		};
 		const mockObserver2: EventObserver = {
-			update: jasmine.createSpy('update'),
+			update: vi.fn(),
 		};
 
 		instance.addObserver(mockObserver1);
@@ -53,7 +55,7 @@ describe('EventService', () => {
 	it('should remove an observer', () => {
 		const instance = TestBed.inject(EventService);
 		const mockObserver: EventObserver = {
-			update: jasmine.createSpy('update'),
+			update: vi.fn(),
 		};
 
 		instance.addObserver(mockObserver);
@@ -69,10 +71,10 @@ describe('EventService', () => {
 	it('should not notify removed observers', () => {
 		const instance = TestBed.inject(EventService);
 		const mockObserver: EventObserver = {
-			update: jasmine.createSpy('update'),
+			update: vi.fn(),
 		};
 		const mockObserver2: EventObserver = {
-			update: jasmine.createSpy('update'),
+			update: vi.fn(),
 		};
 
 		instance.addObserver(mockObserver);

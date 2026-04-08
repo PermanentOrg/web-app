@@ -143,7 +143,7 @@ describe('AuthRepo', () => {
 		);
 
 		expect(req.request.method).toBe('POST');
-		expect(req.request.headers.has('Request-Version')).toBeFalse();
+		expect(req.request.headers.has('Request-Version')).toBe(false);
 		req.flush({
 			isSuccessful: true,
 			isSystemUp: true,

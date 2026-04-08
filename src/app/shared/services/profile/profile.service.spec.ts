@@ -10,6 +10,8 @@ import { MessageService } from '../message/message.service';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
 import { ProfileService } from './profile.service';
 
+import { vi } from 'vitest';
+
 const PROFILE_TEMPLATE = require('../../../../../constants/profile_template.json');
 
 const mockApiService = {
@@ -188,24 +190,24 @@ describe('ProfileService', () => {
 		} as any);
 
 		const mockArchive = new ArchiveVO({ archiveId: 1 });
-		mockArchive.update = jasmine.createSpy('update');
+		mockArchive.update = vi.fn();
 
-		const apiUpdateSpy = spyOn(
+		const apiUpdateSpy = vi.spyOn(
 			mockApiService.archive,
 			'update',
-		).and.callThrough();
-		const chooseRecordSpy = spyOn(
+		).mockRestore();
+		const chooseRecordSpy = vi.spyOn(
 			mockFolderPickerService,
 			'chooseRecord',
-		).and.resolveTo(mockRecord);
-		const getArchiveSpy = spyOn(
+		).mockResolvedValue(mockRecord);
+		const getArchiveSpy = vi.spyOn(
 			mockAccountService,
 			'getArchive',
-		).and.returnValue(mockArchive);
-		const getPrivateRootSpy = spyOn(
+		).mockReturnValue(mockArchive);
+		const getPrivateRootSpy = vi.spyOn(
 			mockAccountService,
 			'getPrivateRoot',
-		).and.returnValue('root');
+		).mockReturnValue('root');
 
 		const instance = TestBed.inject(ProfileService);
 

@@ -24,11 +24,11 @@ describe('ApiService', () => {
 	it('should have the correct repos attached', () => {
 		const service = TestBed.inject(ApiService);
 
-		expect(service.account).toEqual(jasmine.any(Repo.AccountRepo));
-		expect(service.archive).toEqual(jasmine.any(Repo.ArchiveRepo));
-		expect(service.auth).toEqual(jasmine.any(Repo.AuthRepo));
-		expect(service.connector).toEqual(jasmine.any(Repo.ConnectorRepo));
-		expect(service.folder).toEqual(jasmine.any(Repo.FolderRepo));
-		expect(service.record).toEqual(jasmine.any(Repo.RecordRepo));
+		expect(service.account).toEqual(expect.any(Repo.AccountRepo));
+		expect(service.archive).toEqual(expect.any(Repo.ArchiveRepo));
+		expect(service.auth).toEqual(expect.any(Repo.AuthRepo));
+		expect(service.connector).toEqual(expect.any(Repo.ConnectorRepo));
+		expect(service.folder).toEqual(expect.any(Repo.FolderRepo));
+		expect(service.record).toEqual(expect.any(Repo.RecordRepo));
 	});
 });

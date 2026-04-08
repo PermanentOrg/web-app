@@ -14,6 +14,8 @@ import { ElementRef } from '@angular/core';
 import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 import { FileListControlsComponent } from './file-list-controls.component';
 
+import { vi } from 'vitest';
+
 describe('FileListControlsComponent', () => {
 	let component: FileListControlsComponent;
 	let fixture: ComponentFixture<FileListControlsComponent>;
@@ -24,47 +26,42 @@ describe('FileListControlsComponent', () => {
 			accessRole: AccessRole.Manager,
 		},
 		selectedItems$: () => of([]),
-		refreshCurrentFolder: jasmine
-			.createSpy('refreshCurrentFolder')
-			.and.returnValue(Promise.resolve(true)),
+		refreshCurrentFolder: vi.fn()
+			.mockReturnValue(Promise.resolve(true)),
 	};
 
 	const editServiceMock = {
-		deleteItems: jasmine.createSpy('deleteItems'),
-		unshareItem: jasmine.createSpy('unshareItem'),
-		openFolderPicker: jasmine.createSpy('openFolderPicker'),
-		openShareDialog: jasmine.createSpy('openShareDialog'),
-		openPublishDialog: jasmine.createSpy('openPublishDialog'),
+		deleteItems: vi.fn(),
+		unshareItem: vi.fn(),
+		openFolderPicker: vi.fn(),
+		openShareDialog: vi.fn(),
+		openPublishDialog: vi.fn(),
 	};
 
 	const accountServiceMock = {
-		checkMinimumAccess: jasmine
-			.createSpy('checkMinimumAccess')
-			.and.returnValue(true),
-		checkMinimumArchiveAccess: jasmine
-			.createSpy('checkMinimumArchiveAccess')
-			.and.returnValue(true),
-		getArchive: jasmine
-			.createSpy('getArchive')
-			.and.returnValue({ accessRole: AccessRole.Manager }),
-		deductAccountStorage: jasmine.createSpy('deductAccountStorage'),
+		checkMinimumAccess: vi.fn()
+			.mockReturnValue(true),
+		checkMinimumArchiveAccess: vi.fn()
+			.mockReturnValue(true),
+		getArchive: vi.fn()
+			.mockReturnValue({ accessRole: AccessRole.Manager }),
+		deductAccountStorage: vi.fn(),
 	};
 
 	const apiServiceMock = {
 		folder: {
-			sort: jasmine.createSpy('sort').and.returnValue(Promise.resolve(true)),
+			sort: vi.fn().mockReturnValue(Promise.resolve(true)),
 		},
 	};
 
 	const promptServiceMock = {
-		confirmBoolean: jasmine
-			.createSpy('confirmBoolean')
-			.and.returnValue(Promise.resolve(true)),
+		confirmBoolean: vi.fn()
+			.mockReturnValue(Promise.resolve(true)),
 	};
 
 	const messageServiceMock = {
-		showError: jasmine.createSpy('showError'),
-		showMessage: jasmine.createSpy('showMessage'),
+		showError: vi.fn(),
+		showMessage: vi.fn(),
 	};
 
 	const folderViewServiceMock = {
@@ -73,7 +70,7 @@ describe('FileListControlsComponent', () => {
 	};
 
 	const eventServiceMock = {
-		dispatch: jasmine.createSpy('dispatch'),
+		dispatch: vi.fn(),
 	};
 
 	beforeEach(async () => {

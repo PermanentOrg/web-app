@@ -20,6 +20,8 @@ import {
 } from '@angular/common/http';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 
+import { vi } from 'vitest';
+
 describe('SignupComponent', () => {
 	let component: SignupComponent;
 	let fixture: ComponentFixture<SignupComponent>;
@@ -182,9 +184,9 @@ describe('SignupComponent', () => {
 	});
 
 	it('should reset onboarding session state when onSubmit is called', () => {
-		spyOn(onboardingService, 'resetOnboardingState');
+		vi.spyOn(onboardingService, 'resetOnboardingState');
 
-		spyOn(accountService, 'signUp').and.returnValue(
+		vi.spyOn(accountService, 'signUp').mockReturnValue(
 			Promise.resolve(new AccountVO({})),
 		);
 
@@ -211,7 +213,7 @@ describe('SignupComponent', () => {
 		component.receiveUpdatesViaEmail = true;
 		component.agreedTerms = true; // assuming agreedTerms is needed
 
-		spyOn(accountService, 'signUp').and.returnValue(
+		vi.spyOn(accountService, 'signUp').mockReturnValue(
 			Promise.resolve(new AccountVO({})),
 		);
 

@@ -19,6 +19,8 @@ import { GlamPendingArchivesComponent } from '../glam-pending-archives/glam-pend
 import { CreateNewArchiveComponent } from '../create-new-archive/create-new-archive.component';
 import { OnboardingComponent } from './onboarding.component';
 
+import { vi } from 'vitest';
+
 class NullRoute {
 	public snapshot = {
 		data: {},
@@ -57,12 +59,12 @@ const mockMessageService = {
 };
 
 const mockRouter = {
-	navigate: jasmine.createSpy('navigate'),
+	navigate: vi.fn(),
 };
 
 describe('OnboardingComponent #onboarding', () => {
 	beforeEach(async () => {
-		mockRouter.navigate.calls.reset();
+		mockRouter.navigate.mockClear();
 		await TestBed.configureTestingModule({
 			declarations: [
 				OnboardingComponent,
@@ -141,12 +143,10 @@ describe('OnboardingComponent #onboarding', () => {
 		const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
 
 		const localMockAccountService = {
-			refreshArchives: jasmine
-				.createSpy('refreshArchives')
-				.and.returnValue(Promise.resolve([mockPendingArchive])),
-			getAccount: jasmine
-				.createSpy('getAccount')
-				.and.returnValue(
+			refreshArchives: vi.fn()
+				.mockReturnValue(Promise.resolve([mockPendingArchive])),
+			getAccount: vi.fn()
+				.mockReturnValue(
 					new AccountVO({ accountId: 1, fullName: 'Test Account' }),
 				),
 		};
@@ -218,12 +218,10 @@ describe('OnboardingComponent #onboarding', () => {
 		const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
 
 		const localMockAccountService = {
-			refreshArchives: jasmine
-				.createSpy('refreshArchives')
-				.and.returnValue(Promise.resolve([mockPendingArchive])),
-			getAccount: jasmine
-				.createSpy('getAccount')
-				.and.returnValue(
+			refreshArchives: vi.fn()
+				.mockReturnValue(Promise.resolve([mockPendingArchive])),
+			getAccount: vi.fn()
+				.mockReturnValue(
 					new AccountVO({ accountId: 1, fullName: 'Test Account' }),
 				),
 		};
@@ -267,10 +265,10 @@ describe('OnboardingComponent #onboarding', () => {
 		const fixture = TestBed.createComponent(OnboardingComponent);
 		const instance = fixture.componentInstance;
 
-		const getItemSpy = spyOn(localStorage, 'getItem').and.returnValue(
+		const getItemSpy = vi.spyOn(localStorage, 'getItem').mockReturnValue(
 			'someToken',
 		);
-		const removeItemSpy = spyOn(localStorage, 'removeItem');
+		const removeItemSpy = vi.spyOn(localStorage, 'removeItem');
 
 		instance.screen = OnboardingScreen.done;
 		instance.acceptedInvite = true;
@@ -287,7 +285,7 @@ describe('OnboardingComponent #onboarding', () => {
 		const fixture = TestBed.createComponent(OnboardingComponent);
 		const instance = fixture.componentInstance;
 
-		spyOn(localStorage, 'getItem').and.returnValue(null);
+		vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
 		instance.isGlam = false;
 		instance.acceptedInvite = false;
 		instance.setScreen(OnboardingScreen.done);
@@ -302,7 +300,7 @@ describe('OnboardingComponent #onboarding', () => {
 		const fixture = TestBed.createComponent(OnboardingComponent);
 		const instance = fixture.componentInstance;
 
-		spyOn(localStorage, 'getItem').and.returnValue(null);
+		vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
 		instance.isGlam = true;
 		instance.acceptedInvite = false;
 		instance.setScreen(OnboardingScreen.done);
@@ -317,7 +315,7 @@ describe('OnboardingComponent #onboarding', () => {
 		const fixture = TestBed.createComponent(OnboardingComponent);
 		const instance = fixture.componentInstance;
 
-		spyOn(localStorage, 'getItem').and.returnValue(null);
+		vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
 		instance.isGlam = false;
 		instance.acceptedInvite = true;
 		instance.setScreen(OnboardingScreen.done);

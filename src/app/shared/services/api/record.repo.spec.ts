@@ -15,6 +15,8 @@ import {
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 
+import { vi } from 'vitest';
+
 describe('RecordRepo', () => {
 	let repo: RecordRepo;
 	let httpMock: HttpTestingController;
@@ -69,7 +71,7 @@ describe('RecordRepo', () => {
 		});
 	}));
 
-	it('should use a V2 request for registerRecord', (done) => {
+	it('should use a V2 request for registerRecord', () => new Promise<void>((resolve, reject) => {
 		const testRecord = new RecordVO({
 			displayName: 'test',
 			parentFolderId: 1,
@@ -81,9 +83,9 @@ describe('RecordRepo', () => {
 		repo
 			.registerRecord(testRecord, testUrl, '1')
 			.then((_) => {
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(
 			`${environment.apiUrl}/record/registerRecord`,
@@ -100,9 +102,9 @@ describe('RecordRepo', () => {
 			archiveId: '1',
 		});
 		req.flush(testRecord);
-	});
+	}));
 
-	it('should send a POST request for update', (done) => {
+	it('should send a POST request for update', () => new Promise<void>((resolve, reject) => {
 		const testData = {
 			recordId: 1,
 			displayName: 'Updated Test',
@@ -116,9 +118,9 @@ describe('RecordRepo', () => {
 		repo
 			.update([testRecord], archiveId)
 			.then((_) => {
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/record/update`);
 
@@ -133,9 +135,9 @@ describe('RecordRepo', () => {
 		expect(req.request.body.archiveId).toBe(archiveId);
 
 		req.flush(testRecord);
-	});
+	}));
 
-	it('should adjust property names properly for v2 update', (done) => {
+	it('should adjust property names properly for v2 update', () => new Promise<void>((resolve, reject) => {
 		const testRecord = new RecordVO({
 			recordId: 1,
 			displayDT: '2025-01-01T00:00:00.000Z',
@@ -145,9 +147,9 @@ describe('RecordRepo', () => {
 		repo
 			.update([testRecord], archiveId)
 			.then((_) => {
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/record/update`);
 
@@ -156,11 +158,11 @@ describe('RecordRepo', () => {
 		expect(req.request.body.displayDt).toBe('2025-01-01T00:00:00.000Z');
 
 		req.flush(testRecord);
-	});
+	}));
 
 	describe('getRecordShareLink', () => {
-		let httpV2GetSpy: jasmine.Spy;
-		let httpSendRequestPromiseSpy: jasmine.Spy;
+		let httpV2GetSpy: any;
+		let httpSendRequestPromiseSpy: any;
 
 		const mockShareLink: ShareLink = {
 			id: 'link1',
@@ -176,14 +178,14 @@ describe('RecordRepo', () => {
 		};
 
 		beforeEach(() => {
-			httpV2GetSpy = spyOn(httpV2Service, 'get');
-			httpSendRequestPromiseSpy = spyOn(httpService, 'sendRequestPromise');
+			httpV2GetSpy = vi.spyOn(httpV2Service, 'get');
+			httpSendRequestPromiseSpy = vi.spyOn(httpService, 'sendRequestPromise');
 		});
 
 		it('should fetch share links using recordId when available', async () => {
 			const recordVO = new RecordVO({ recordId: 123 });
 
-			httpV2GetSpy.and.returnValue(of([{ items: [mockShareLink] }]));
+			httpV2GetSpy.mockReturnValue(of([{ items: [mockShareLink] }]));
 
 			const result = await repo.getRecordShareLink(recordVO);
 
@@ -194,17 +196,17 @@ describe('RecordRepo', () => {
 		it('should fetch recordId by archiveNbr when recordId is not available', async () => {
 			const recordVO = new RecordVO({ archiveNbr: 'archive-456' });
 
-			httpSendRequestPromiseSpy.and.resolveTo({
+			httpSendRequestPromiseSpy.mockResolvedValue({
 				getRecordVO: () => new RecordVO({ recordId: 789 }),
 			});
-			httpV2GetSpy.and.returnValue(of([{ items: [mockShareLink] }]));
+			httpV2GetSpy.mockReturnValue(of([{ items: [mockShareLink] }]));
 
 			const result = await repo.getRecordShareLink(recordVO);
 
 			expect(httpSendRequestPromiseSpy).toHaveBeenCalledWith(
 				'/record/get',
-				[{ RecordVO: jasmine.objectContaining({ archiveNbr: 'archive-456' }) }],
-				jasmine.any(Object),
+				[{ RecordVO: expect.objectContaining({ archiveNbr: 'archive-456' }) }],
+				expect.any(Object),
 			);
 
 			expect(httpV2GetSpy).toHaveBeenCalledWith('v2/record/789/share-links');
@@ -214,7 +216,7 @@ describe('RecordRepo', () => {
 		it('should return empty array when no share links exist', async () => {
 			const recordVO = new RecordVO({ recordId: 123 });
 
-			httpV2GetSpy.and.returnValue(of([{ items: [] }]));
+			httpV2GetSpy.mockReturnValue(of([{ items: [] }]));
 
 			const result = await repo.getRecordShareLink(recordVO);
 
@@ -223,8 +225,8 @@ describe('RecordRepo', () => {
 	});
 
 	describe('updateStelaRecord', () => {
-		let httpV2PatchSpy: jasmine.Spy;
-		let httpSendRequestPromiseSpy: jasmine.Spy;
+		let httpV2PatchSpy: any;
+		let httpSendRequestPromiseSpy: any;
 
 		const fakeStelaRecord = {
 			recordId: 42,
@@ -248,8 +250,8 @@ describe('RecordRepo', () => {
 		};
 
 		beforeEach(() => {
-			httpV2PatchSpy = spyOn(httpV2Service, 'patch');
-			httpSendRequestPromiseSpy = spyOn(httpService, 'sendRequestPromise');
+			httpV2PatchSpy = vi.spyOn(httpV2Service, 'patch');
+			httpSendRequestPromiseSpy = vi.spyOn(httpService, 'sendRequestPromise');
 		});
 
 		it('should send a PATCH request with displayTime derived from displayDT', async () => {
@@ -258,7 +260,7 @@ describe('RecordRepo', () => {
 				displayDT: '1985-05-20T00:00:00.000Z',
 			});
 
-			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+			httpV2PatchSpy.mockReturnValue(of([fakeStelaRecord]));
 
 			const result = await repo.updateStelaRecord(recordVO);
 
@@ -275,17 +277,17 @@ describe('RecordRepo', () => {
 				displayDT: '2000-03-01T00:00:00.000Z',
 			});
 
-			httpSendRequestPromiseSpy.and.resolveTo({
+			httpSendRequestPromiseSpy.mockResolvedValue({
 				getRecordVO: () => new RecordVO({ recordId: 99 }),
 			});
-			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+			httpV2PatchSpy.mockReturnValue(of([fakeStelaRecord]));
 
 			await repo.updateStelaRecord(recordVO);
 
 			expect(httpSendRequestPromiseSpy).toHaveBeenCalledWith(
 				'/record/get',
-				[{ RecordVO: jasmine.objectContaining({ archiveNbr: 'archive-100' }) }],
-				jasmine.any(Object),
+				[{ RecordVO: expect.objectContaining({ archiveNbr: 'archive-100' }) }],
+				expect.any(Object),
 			);
 
 			expect(httpV2PatchSpy).toHaveBeenCalledWith('v2/records/99', {
@@ -299,7 +301,7 @@ describe('RecordRepo', () => {
 				displayDT: '1985-05-01T00:00:00.000Z',
 			});
 
-			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+			httpV2PatchSpy.mockReturnValue(of([fakeStelaRecord]));
 
 			const result = await repo.updateStelaRecord(recordVO);
 			const resultRecord = result.getRecordVO();

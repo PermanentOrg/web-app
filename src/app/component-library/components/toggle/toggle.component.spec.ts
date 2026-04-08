@@ -3,6 +3,8 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 import { ComponentsModule } from '../../components.module';
 import { ToggleComponent } from './toggle.component';
 
+import { vi } from 'vitest';
+
 describe('ToggleComponent', () => {
 	let fixture: ComponentFixture<ToggleComponent>;
 	let instance: ToggleComponent;
@@ -36,7 +38,7 @@ describe('ToggleComponent', () => {
 	});
 
 	it('should emit the correct value when the toggle is clicked', () => {
-		spyOn(instance.isCheckedChange, 'emit');
+		vi.spyOn(instance.isCheckedChange, 'emit');
 		fixture.detectChanges();
 		const toggle = ngMocks.find('.toggle-container').nativeElement;
 		toggle.click();
@@ -51,7 +53,7 @@ describe('ToggleComponent', () => {
 	});
 
 	it('should not emit when the toggle is disabled', () => {
-		spyOn(instance.isCheckedChange, 'emit');
+		vi.spyOn(instance.isCheckedChange, 'emit');
 		instance.disabled = true;
 		fixture.detectChanges();
 		const toggle = ngMocks.find('.toggle-container').nativeElement;

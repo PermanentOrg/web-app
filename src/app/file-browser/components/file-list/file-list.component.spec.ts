@@ -24,6 +24,8 @@ import { Component } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { FileListComponent } from './file-list.component';
 
+import { vi } from 'vitest';
+
 @Component({ template: '' })
 class DummyComponent {}
 
@@ -58,22 +60,22 @@ describe('FileListComponent', () => {
 	const mockRouter = {
 		events: routerEvents$,
 		url: '/folder',
-		navigateByUrl: jasmine.createSpy(),
-		navigate: jasmine.createSpy(),
+		navigateByUrl: vi.fn(),
+		navigate: vi.fn(),
 	};
 
 	const mockDataService = {
-		setCurrentFolder: jasmine.createSpy(),
-		onSelectEvent: jasmine.createSpy(),
+		setCurrentFolder: vi.fn(),
+		onSelectEvent: vi.fn(),
 		folderUpdate: of(mockFolder),
 		multiSelectChange: of(true),
 		selectedItems$: () => of(new Set()),
 		itemToShow$: () => of(mockFolder.ChildItemVOs[0]),
-		fetchLeanItems: jasmine.createSpy().and.returnValue(Promise.resolve()),
+		fetchLeanItems: vi.fn().mockReturnValue(Promise.resolve()),
 	};
 
 	const mockDeviceService = {
-		isMobileWidth: jasmine.createSpy().and.returnValue(false),
+		isMobileWidth: vi.fn().mockReturnValue(false),
 	};
 
 	const mockFolderViewService = {
@@ -86,20 +88,19 @@ describe('FileListComponent', () => {
 	};
 
 	const mockEventService = {
-		dispatch: jasmine.createSpy(),
+		dispatch: vi.fn(),
 	};
 
 	const mockShareLinksService = {
-		isUnlistedShare: jasmine
-			.createSpy()
-			.and.returnValue(Promise.resolve(false)),
+		isUnlistedShare: vi.fn()
+			.mockReturnValue(Promise.resolve(false)),
 	};
 
 	const mockApiService = {
 		folder: {
-			getWithChildren: jasmine.createSpy().and.returnValue(
+			getWithChildren: vi.fn().mockReturnValue(
 				of({
-					getFolderVO: jasmine.createSpy(),
+					getFolderVO: vi.fn(),
 				}),
 			),
 		},
@@ -129,7 +130,7 @@ describe('FileListComponent', () => {
 				{ provide: DeviceService, useValue: mockDeviceService },
 				{ provide: EventService, useValue: mockEventService },
 				{ provide: ShareLinksService, useValue: mockShareLinksService },
-				{ provide: Location, useValue: { replaceState: jasmine.createSpy() } },
+				{ provide: Location, useValue: { replaceState: vi.fn() } },
 				{ provide: DOCUMENT, useValue: document },
 				{ provide: ApiService, useValue: mockApiService },
 			],
@@ -150,7 +151,7 @@ describe('FileListComponent', () => {
 
 	it('should handle ngAfterViewInit and scroll to item', fakeAsync(() => {
 		component = fixture.componentInstance;
-		spyOn(component, 'scrollToItem');
+		vi.spyOn(component, 'scrollToItem');
 		component.listItemsQuery = {
 			toArray: () => [],
 		} as any;
@@ -170,7 +171,7 @@ describe('FileListComponent', () => {
 
 	it('should clean up on ngOnDestroy', () => {
 		const sub = new Subscription();
-		spyOn(sub, 'unsubscribe');
+		vi.spyOn(sub, 'unsubscribe');
 		component.subscriptions = [sub];
 
 		component.ngOnDestroy();
@@ -187,7 +188,7 @@ describe('FileListComponent', () => {
 			event: { ctrlKey: true },
 		};
 
-		spyOn(component.itemClicked, 'emit');
+		vi.spyOn(component.itemClicked, 'emit');
 		component.showSidebar = true;
 
 		component.onItemClick(clickEvent);
@@ -202,7 +203,7 @@ describe('FileListComponent', () => {
 
 	it('should handle keyboard arrow selection', () => {
 		const event = new KeyboardEvent('keydown', { keyCode: UP_ARROW });
-		spyOn(component, 'checkKeyEvent').and.returnValue(true);
+		vi.spyOn(component, 'checkKeyEvent').mockReturnValue(true);
 
 		component.onWindowKeydown(event);
 
@@ -214,7 +215,7 @@ describe('FileListComponent', () => {
 
 	it('should handle ctrl+a selection', () => {
 		const event = new KeyboardEvent('keydown', { ctrlKey: true });
-		spyOn(component, 'checkKeyEvent').and.returnValue(true);
+		vi.spyOn(component, 'checkKeyEvent').mockReturnValue(true);
 
 		component.onSelectAllKeypress(event);
 
@@ -232,10 +233,10 @@ describe('FileListComponent', () => {
 
 		component.onItemVisible(visibleEvent);
 
-		expect(component.visibleItems.has(mockComponent)).toBeTrue();
+		expect(component.visibleItems.has(mockComponent)).toBe(true);
 
 		component.onItemVisible(hiddenEvent);
 
-		expect(component.visibleItems.has(mockComponent)).toBeFalse();
+		expect(component.visibleItems.has(mockComponent)).toBe(false);
 	});
 });

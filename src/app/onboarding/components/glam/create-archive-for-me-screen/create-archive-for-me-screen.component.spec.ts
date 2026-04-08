@@ -5,6 +5,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 import { CreateArchiveForMeScreenComponent } from './create-archive-for-me-screen.component';
 
+import { vi } from 'vitest';
+
 const mockAccountService = {
 	getAccount: () => ({ fullName: 'John Doe' }),
 };
@@ -44,7 +46,7 @@ describe('CreateArchiveForMeScreenComponent', () => {
 	});
 
 	it('should emit goBackOutput when the Back button is clicked', () => {
-		spyOn(component.goBackOutput, 'emit');
+		vi.spyOn(component.goBackOutput, 'emit');
 		const backButton = fixture.debugElement.query(By.css('.back'));
 
 		backButton.triggerEventHandler('buttonClick', null);
@@ -53,7 +55,7 @@ describe('CreateArchiveForMeScreenComponent', () => {
 	});
 
 	it('should emit continueOutput with correct payload when the Yes, create archive button is clicked', () => {
-		spyOn(component.continueOutput, 'emit');
+		vi.spyOn(component.continueOutput, 'emit');
 		const continueButton = fixture.debugElement.query(By.css('.continue'));
 
 		continueButton.triggerEventHandler('buttonClick', null);

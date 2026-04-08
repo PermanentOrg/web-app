@@ -4,6 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 import { GiftingResponse } from '@shared/services/api/billing.repo';
 import { ConfirmGiftDialogComponent } from './confirm-gift-dialog.component';
 
+import { vi } from 'vitest';
+
 class MockDialogRef {
 	close(value?: any): void {}
 }
@@ -30,7 +32,7 @@ describe('ConfirmGiftDialogComponent', () => {
 		fixture = TestBed.createComponent(ConfirmGiftDialogComponent);
 		component = fixture.componentInstance;
 		dialogRef = TestBed.inject(DialogRef) as unknown as MockDialogRef;
-		spyOn(dialogRef, 'close').and.callThrough();
+		vi.spyOn(dialogRef, 'close').mockRestore();
 		fixture.detectChanges();
 	});
 

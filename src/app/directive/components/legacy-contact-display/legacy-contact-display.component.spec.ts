@@ -8,6 +8,8 @@ import { MockMessageService } from '../directive-edit/test-utils';
 import { LegacyContactDisplayComponent } from './legacy-contact-display.component';
 import { MockApiService, MockDirectiveRepo } from './test-utils';
 
+import { vi } from 'vitest';
+
 @NgModule()
 class DummyModule {}
 
@@ -86,7 +88,7 @@ describe('LegacyContactDisplayComponent', () => {
 	it('should emit an event when the edit button is pressed', () => {
 		const fixture = MockRender(LegacyContactDisplayComponent);
 		const instance = fixture.point.componentInstance;
-		const beginEditSpy = spyOn(instance.beginEdit, 'emit');
+		const beginEditSpy = vi.spyOn(instance.beginEdit, 'emit');
 		ngMocks.find('button').nativeElement.dispatchEvent(new Event('click'));
 
 		expect(beginEditSpy).toHaveBeenCalled();
@@ -95,7 +97,7 @@ describe('LegacyContactDisplayComponent', () => {
 	it('should emit an event when the legacy contact is fetched', async () => {
 		const fixture = MockRender(LegacyContactDisplayComponent);
 		const instance = fixture.point.componentInstance;
-		const loadedLegacyContactSpy = spyOn(instance.loadedLegacyContact, 'emit');
+		const loadedLegacyContactSpy = vi.spyOn(instance.loadedLegacyContact, 'emit');
 		await fixture.whenStable();
 
 		expect(loadedLegacyContactSpy).toHaveBeenCalled();

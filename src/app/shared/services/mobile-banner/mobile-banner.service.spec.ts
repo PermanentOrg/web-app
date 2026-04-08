@@ -24,9 +24,9 @@ describe('BannerService', () => {
 		it('should be visible on Android', () => {
 			const instance = TestBed.inject(MobileBannerService);
 
-			expect(instance.isVisible).toBeTrue();
+			expect(instance.isVisible).toBe(true);
 
-			expect(instance.isIos).toBeFalse();
+			expect(instance.isIos).toBe(false);
 		});
 	});
 
@@ -41,9 +41,9 @@ describe('BannerService', () => {
 		it('should be visible on iOS', () => {
 			const instance = TestBed.inject(MobileBannerService);
 
-			expect(instance.isVisible).toBeTrue();
+			expect(instance.isVisible).toBe(true);
 
-			expect(instance.isIos).toBeTrue();
+			expect(instance.isIos).toBe(true);
 		});
 	});
 });

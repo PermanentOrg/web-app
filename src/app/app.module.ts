@@ -146,9 +146,10 @@ export class PermErrorHandler implements ErrorHandler {
 
 @NgModule({
 	exports: [],
-	declarations: [AppComponent, MessageComponent],
+	declarations: [AppComponent],
 	bootstrap: [AppComponent],
 	imports: [
+		MessageComponent,
 		AppRoutingModule,
 		RouterModule,
 		BrowserModule,

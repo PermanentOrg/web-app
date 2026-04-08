@@ -18,6 +18,6 @@ describe('BaseRepo', () => {
 		const http = TestBed.inject(HttpService);
 		const authRepo = new BaseRepo(http);
 
-		expect(authRepo.http).toEqual(jasmine.any(HttpService));
+		expect(authRepo.http).toEqual(expect.any(HttpService));
 	});
 });

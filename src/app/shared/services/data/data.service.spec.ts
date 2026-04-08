@@ -14,6 +14,8 @@ import { DataStatus } from '@models/data-status.enum';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '@shared/services/api/api.service';
 
+import { vi } from 'vitest';
+
 const navigateMinData = require('@root/test/responses/folder.navigateMin.success.json');
 const getLeanItemsData = require('@root/test/responses/folder.getLeanItems.success.json');
 const getFullRecordsData = require('@root/test/responses/record.get.multiple.success.json');
@@ -101,10 +103,10 @@ describe('DataService', () => {
 		).toBeUndefined();
 	});
 
-	it('should fetch lean data for placeholder items', (done) => {
+	it('should fetch lean data for placeholder items', () => new Promise<void>((resolve, reject) => {
 		const service = TestBed.inject(DataService);
 		const api = TestBed.inject(ApiService);
-		spyOn(api.folder, 'getWithChildren').and.returnValue(
+		vi.spyOn(api.folder, 'getWithChildren').mockReturnValue(
 			Promise.resolve({
 				isSuccessful: true,
 				getFolderVO: () => ({ ChildItemVOs: childItemVOsMock }),
@@ -125,12 +127,12 @@ describe('DataService', () => {
 				currentFolder.ChildItemVOs.forEach((item) => {
 					expect(item.dataStatus).toEqual(DataStatus.Lean);
 				});
-				done();
+				resolve();
 			})
-			.catch(done.fail);
-	});
+			.catch(reject);
+	}));
 
-	it('should handle an empty array when fetching lean data', (done) => {
+	it('should handle an empty array when fetching lean data', () => new Promise<void>((resolve, reject) => {
 		const service = TestBed.inject(DataService);
 		const navigateResponse = new FolderResponse(navigateMinData);
 		const currentFolder = navigateResponse.getFolderVO(true);
@@ -140,17 +142,17 @@ describe('DataService', () => {
 			.fetchLeanItems([])
 			.then((count) => {
 				expect(count).toBe(0);
-				done();
+				resolve();
 			})
 			.catch(() => {
-				fail();
+				{ throw new Error(); };
 			});
-	});
+	}));
 
-	it('should return 0 and reset items when fetchLeanItems response is unsuccessful', (done) => {
+	it('should return 0 and reset items when fetchLeanItems response is unsuccessful', () => new Promise<void>((resolve, reject) => {
 		const service = TestBed.inject(DataService);
 		const api = TestBed.inject(ApiService);
-		spyOn(api.folder, 'getWithChildren').and.returnValue(
+		vi.spyOn(api.folder, 'getWithChildren').mockReturnValue(
 			Promise.resolve({
 				isSuccessful: false,
 			} as unknown as FolderResponse),
@@ -178,13 +180,13 @@ describe('DataService', () => {
 			.then((count) => {
 				expect(count).toBe(0);
 				currentFolder.ChildItemVOs.forEach((item) => {
-					expect(item.isFetching).toBeFalse();
+					expect(item.isFetching).toBe(false);
 					expect(item.fetched).toBeNull();
 				});
-				done();
+				resolve();
 			})
-			.catch(done.fail);
-	});
+			.catch(reject);
+	}));
 
 	// the method fetchFullItems uses both the record.repo and the folder.repo
 	// and the data service test suite does not create mocks for them
@@ -193,8 +195,8 @@ describe('DataService', () => {
 	// taking into account the above, the best solution would be to disable
 	// this test, to avoid it from failing on future changes in the dependecies
 
-	/* eslint-disable jasmine/no-disabled-tests */
-	xit('should fetch full data for placeholder items', async () => {
+	
+	it.skip('should fetch full data for placeholder items', async () => {
 		const service = TestBed.inject(DataService);
 		const navigateResponse = new FolderResponse(navigateMinData);
 		const currentFolder = navigateResponse.getFolderVO(true);
@@ -207,13 +209,13 @@ describe('DataService', () => {
 		const records = currentFolder.ChildItemVOs.filter((item) => item.isRecord);
 
 		const httpV2Service = TestBed.inject(HttpV2Service);
-		spyOn(httpV2Service, 'get').and.returnValue(of(getFullRecordsData));
+		vi.spyOn(httpV2Service, 'get').mockReturnValue(of(getFullRecordsData));
 
 		await service.fetchFullItems(records);
 
 		expect(httpV2Service.get).toHaveBeenCalledWith(
 			'v2/record',
-			jasmine.any(Object),
+			expect.any(Object),
 		);
 		// using timeout is not ideal and 3000ms is just by trial and error to make sure that
 		// the records reference has been updated, because we do not have real control over
@@ -225,7 +227,7 @@ describe('DataService', () => {
 			});
 		}, 3000);
 	});
-	/* eslint-enable jasmine/no-disabled-tests */
+	
 
 	it('should handle an empty array when fetching full data', async () => {
 		const service = TestBed.inject(DataService);
@@ -236,7 +238,7 @@ describe('DataService', () => {
 		await service.fetchFullItems([]);
 	});
 
-	it('should refresh the current folder with latest data', (done) => {
+	it('should refresh the current folder with latest data', () => new Promise<void>((resolve, reject) => {
 		const service = TestBed.inject(DataService);
 		const httpMock = TestBed.inject(HttpTestingController);
 		const navigateResponse = new FolderResponse(navigateMinData);
@@ -250,15 +252,15 @@ describe('DataService', () => {
 			.refreshCurrentFolder()
 			.then(() => {
 				expect(currentFolder.ChildItemVOs.length).toBe(childItemCount);
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/folder/navigateMin`);
 		req.flush(navigateMinData);
-	});
+	}));
 
-	it('should add items to thumbRefreshQueue that meet the criteria', (done) => {
+	it('should add items to thumbRefreshQueue that meet the criteria', () => new Promise<void>((resolve, reject) => {
 		const service = TestBed.inject(DataService);
 		const httpMock = TestBed.inject(HttpTestingController);
 		const navigateResponse = new FolderResponse(navigateMinData);
@@ -275,13 +277,13 @@ describe('DataService', () => {
 				currentFolder.ChildItemVOs.forEach((item) => {
 					expect(service.getThumbRefreshQueue()).not.toContain(item);
 				});
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const req = httpMock.expectOne(
 			`${environment.apiUrl}/v2/folder?folderIds[]=149612`,
 		);
 		req.flush(getLeanItemsData);
-	});
+	}));
 });

@@ -7,6 +7,8 @@ import { of } from 'rxjs';
 import { ShareLinksService } from '../share-links/services/share-links.service';
 import { FilesystemApiService } from './filesystem-api.service';
 
+import { vi } from 'vitest';
+
 const folderId = 42;
 
 const mockFolderVO = {
@@ -30,10 +32,9 @@ const mockResponse = new FolderResponse({
 
 const mockApiService = {
 	folder: {
-		getWithChildren: jasmine
-			.createSpy('getWithChildren')
-			.and.returnValue(Promise.resolve(mockResponse)),
-		navigateLean: jasmine.createSpy('navigateLean').and.returnValue(
+		getWithChildren: vi.fn()
+			.mockReturnValue(Promise.resolve(mockResponse)),
+		navigateLean: vi.fn().mockReturnValue(
 			of({
 				isSuccessful: true,
 				getFolderVO: () => mockFolderVO,
@@ -44,13 +45,10 @@ const mockApiService = {
 
 describe('FilesystemApiService', () => {
 	let service: FilesystemApiService;
-	let shareLinksServiceSpy: jasmine.SpyObj<ShareLinksService>;
+	let shareLinksServiceSpy: any;
 
 	beforeEach(() => {
-		shareLinksServiceSpy = jasmine.createSpyObj('ShareLinksService', [
-			'isUnlistedShare',
-			'currentShareToken',
-		]);
+		shareLinksServiceSpy = { isUnlistedShare: vi.fn(), currentShareToken: vi.fn() } as any;
 
 		TestBed.configureTestingModule({
 			providers: [
@@ -68,8 +66,8 @@ describe('FilesystemApiService', () => {
 	});
 
 	it('should navigate using navigateLean', async () => {
-		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
-		mockApiService.folder.navigateLean.and.returnValue(
+		shareLinksServiceSpy.isUnlistedShare.mockResolvedValue(false);
+		mockApiService.folder.navigateLean.mockReturnValue(
 			of({
 				isSuccessful: true,
 				getFolderVO: () => mockFolderVO,
@@ -79,7 +77,7 @@ describe('FilesystemApiService', () => {
 		const folder = await service.navigate({ folderId });
 
 		expect(mockApiService.folder.navigateLean).toHaveBeenCalledWith(
-			jasmine.any(FolderVO),
+			expect.any(FolderVO),
 		);
 
 		expect(folder.folderId).toBe(folderId);
@@ -88,13 +86,13 @@ describe('FilesystemApiService', () => {
 	});
 
 	it('should navigate using getWithChildren when in unlisted share', async () => {
-		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(true);
+		shareLinksServiceSpy.isUnlistedShare.mockResolvedValue(true);
 		shareLinksServiceSpy.currentShareToken = 'mock-token';
 
 		const folder = await service.navigate({ folderId });
 
 		expect(mockApiService.folder.getWithChildren).toHaveBeenCalledWith(
-			[jasmine.any(FolderVO)],
+			[expect.any(FolderVO)],
 			'mock-token',
 		);
 
@@ -104,8 +102,8 @@ describe('FilesystemApiService', () => {
 	});
 
 	it('should throw FolderResponse error if response is unsuccessful', async () => {
-		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
-		mockApiService.folder.navigateLean.and.resolveTo(
+		shareLinksServiceSpy.isUnlistedShare.mockResolvedValue(false);
+		mockApiService.folder.navigateLean.mockResolvedValue(
 			of({ isSuccessful: false }),
 		);
 
@@ -113,7 +111,7 @@ describe('FilesystemApiService', () => {
 
 		try {
 			await promise;
-			fail('Expected promise to reject');
+			{ throw new Error('Expected promise to reject'); };
 		} catch (error) {
 			expect(error).toBeDefined();
 		}

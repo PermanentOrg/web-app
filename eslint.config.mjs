@@ -1,5 +1,5 @@
 import { globalIgnores } from 'eslint/config';
-import jasmine from 'eslint-plugin-jasmine';
+import vitest from 'eslint-plugin-vitest';
 import globals from 'globals';
 import js from '@eslint/js';
 import typescriptEslint from 'typescript-eslint';
@@ -38,36 +38,22 @@ export default typescriptEslint.config([
 	},
 	globalIgnores(['projects/**/*']),
 	{
-		plugins: {
-			jasmine,
-		},
-	},
-	{
 		files: ['src/**/*.spec.ts'],
 
-		languageOptions: {
-			globals: {
-				...globals.jasmine,
-			},
+		plugins: {
+			vitest,
 		},
 
-		extends: compat.extends('plugin:jasmine/recommended'),
-
 		rules: {
-			'jasmine/new-line-before-expect': 'error',
-			'jasmine/no-disabled-tests': 'error',
-			'jasmine/new-line-between-declarations': 'error',
-			'jasmine/no-spec-dupes': 'error',
-			'jasmine/no-promise-without-done-fail': 'error',
-			'jasmine/no-unsafe-spy': 'off',
-			'jasmine/prefer-promise-strategies': 'off',
-			'jasmine/prefer-toHaveBeenCalledWith': 'off',
+			...vitest.configs.recommended.rules,
+			'vitest/no-disabled-tests': 'error',
+			'vitest/no-duplicate-hooks': 'error',
 		},
 	},
 	{
 		files: [
 			'src/**/*.spec.ts',
-			'src/**/test.ts',
+			'src/**/test-setup.ts',
 			'src/**/*.stories.ts',
 			'src/**/shared-test-classes.ts',
 			'src/**/shared-mocks.ts',

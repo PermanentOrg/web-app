@@ -6,6 +6,8 @@ import { ApiService } from '@shared/services/api/api.service';
 import { OnboardingService } from '../../services/onboarding.service';
 import { GlamPendingArchivesComponent } from './glam-pending-archives.component';
 
+import { vi } from 'vitest';
+
 const mockAccountService = {
 	getAccount: () => ({
 		fullName: 'John Doe',
@@ -78,7 +80,7 @@ describe('GlamPendingArchivesComponent', () => {
 		instance = fixture.componentInstance;
 		fixture.detectChanges();
 
-		spyOn(instance.createNewArchiveOutput, 'emit');
+		vi.spyOn(instance.createNewArchiveOutput, 'emit');
 		instance.createNewArchive();
 
 		expect(instance.createNewArchiveOutput.emit).toHaveBeenCalled();
@@ -89,7 +91,7 @@ describe('GlamPendingArchivesComponent', () => {
 		instance = fixture.componentInstance;
 		fixture.detectChanges();
 
-		spyOn(instance.nextOutput, 'emit');
+		vi.spyOn(instance.nextOutput, 'emit');
 		const selectedArchive: ArchiveVO = new ArchiveVO({
 			archiveId: 1,
 			fullName: 'Test Archive',
@@ -106,7 +108,7 @@ describe('GlamPendingArchivesComponent', () => {
 		instance = fixture.componentInstance;
 		fixture.detectChanges();
 
-		spyOn(apiService.archive, 'accept').and.callThrough();
+		vi.spyOn(apiService.archive, 'accept').mockRestore();
 
 		const archive: ArchiveVO = new ArchiveVO({
 			archiveId: 1,
@@ -162,7 +164,7 @@ describe('GlamPendingArchivesComponent', () => {
 
 		await instance.selectArchive(archive);
 
-		expect(instance.isSelected(1)).toBeTrue();
+		expect(instance.isSelected(1)).toBe(true);
 	});
 
 	it('should return false when isSelected is called for a non-accepted archive', async () => {
@@ -170,7 +172,7 @@ describe('GlamPendingArchivesComponent', () => {
 		instance = fixture.componentInstance;
 		fixture.detectChanges();
 
-		expect(instance.isSelected(1)).toBeFalse();
+		expect(instance.isSelected(1)).toBe(false);
 	});
 
 	it('should register accepted archives with the onboardingservice', async () => {

@@ -5,6 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 import { NameArchiveScreenComponent } from './name-archive-screen.component';
 
+import { vi } from 'vitest';
+
 describe('NameArchiveScreenComponent', () => {
 	let component: NameArchiveScreenComponent;
 	let fixture: ComponentFixture<NameArchiveScreenComponent>;
@@ -19,8 +21,8 @@ describe('NameArchiveScreenComponent', () => {
 		}).compileComponents();
 
 		onboardingService = TestBed.inject(OnboardingService);
-		spyOn(onboardingService, 'getArchiveName').and.returnValue(null);
-		spyOn(onboardingService, 'setArchiveName');
+		vi.spyOn(onboardingService, 'getArchiveName').mockReturnValue(null);
+		vi.spyOn(onboardingService, 'setArchiveName');
 
 		fixture = TestBed.createComponent(NameArchiveScreenComponent);
 		component = fixture.componentInstance;
@@ -37,7 +39,7 @@ describe('NameArchiveScreenComponent', () => {
 	});
 
 	it('should patch the form value with input name on init', async () => {
-		(onboardingService.getArchiveName as jasmine.Spy).and.returnValue(null);
+		(onboardingService.getArchiveName as any).mockReturnValue(null);
 		const testFixture = TestBed.createComponent(NameArchiveScreenComponent);
 		const testComponent = testFixture.componentInstance;
 		testComponent.name = 'Test Archive';
@@ -49,14 +51,14 @@ describe('NameArchiveScreenComponent', () => {
 	});
 
 	it('should emit backToCreate event when backToCreate is called', () => {
-		spyOn(component.backToCreateEmitter, 'emit');
+		vi.spyOn(component.backToCreateEmitter, 'emit');
 		component.backToCreate();
 
 		expect(component.backToCreateEmitter.emit).toHaveBeenCalledWith('create');
 	});
 
 	it('should emit archiveCreated event with form value when createArchive is called and form is valid', () => {
-		spyOn(component.archiveCreatedEmitter, 'emit');
+		vi.spyOn(component.archiveCreatedEmitter, 'emit');
 		component.nameForm.controls.archiveName.setValue('Valid Archive Name');
 		component.createArchive();
 
@@ -66,7 +68,7 @@ describe('NameArchiveScreenComponent', () => {
 	});
 
 	it('should not emit archiveCreated event when createArchive is called and form is invalid', () => {
-		spyOn(component.archiveCreatedEmitter, 'emit');
+		vi.spyOn(component.archiveCreatedEmitter, 'emit');
 		component.nameForm.controls.archiveName.setValue('');
 		component.createArchive();
 
@@ -74,7 +76,7 @@ describe('NameArchiveScreenComponent', () => {
 	});
 
 	it('should call backToCreate when Back button is clicked', () => {
-		spyOn(component, 'backToCreate');
+		vi.spyOn(component, 'backToCreate');
 		const backButton = fixture.debugElement.query(
 			By.css('.back-button-component'),
 		);
@@ -84,7 +86,7 @@ describe('NameArchiveScreenComponent', () => {
 	});
 
 	it('should call createArchive when create archive button is clicked', () => {
-		spyOn(component, 'createArchive');
+		vi.spyOn(component, 'createArchive');
 		component.nameForm.controls.archiveName.setValue('Valid Archive Name');
 		fixture.detectChanges();
 
@@ -100,7 +102,7 @@ describe('NameArchiveScreenComponent', () => {
 		component.nameForm.controls.archiveName.setValue('Valid Archive Name');
 		fixture.detectChanges();
 
-		spyOn(component, 'createArchive');
+		vi.spyOn(component, 'createArchive');
 
 		const createButton = fixture.debugElement.query(
 			By.css('.create-archive-button'),
@@ -112,7 +114,7 @@ describe('NameArchiveScreenComponent', () => {
 	});
 
 	it('should initialize archiveName from OnboardingService if available', async () => {
-		(onboardingService.getArchiveName as jasmine.Spy).and.returnValue(
+		(onboardingService.getArchiveName as any).mockReturnValue(
 			'Stored Archive Name',
 		);
 

@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 
 import { MessageComponent } from '@shared/components/message/message.component';
 
+import { vi } from 'vitest';
+
 describe('MessageComponent', () => {
 	let component: MessageComponent;
 	let fixture: ComponentFixture<MessageComponent>;
@@ -35,8 +37,8 @@ describe('MessageComponent', () => {
 
 	it('should only dismiss when click if no navigation URL given', () => {
 		const router = TestBed.inject(Router);
-		spyOn(router, 'navigate');
-		spyOn(component, 'dismiss');
+		vi.spyOn(router, 'navigate');
+		vi.spyOn(component, 'dismiss');
 
 		component.display({ message: 'test' });
 
@@ -50,8 +52,8 @@ describe('MessageComponent', () => {
 
 	it('should navigate and dismiss when clicked if navigation URL given', () => {
 		const router = TestBed.inject(Router);
-		spyOn(router, 'navigate');
-		spyOn(component, 'dismiss');
+		vi.spyOn(router, 'navigate');
+		vi.spyOn(component, 'dismiss');
 
 		component.display({ message: 'test', navigateTo: testUrl });
 
@@ -66,8 +68,8 @@ describe('MessageComponent', () => {
 
 	it('should navigate and dismiss when clicked if navigation URL and param given', () => {
 		const router = TestBed.inject(Router);
-		spyOn(router, 'navigate');
-		spyOn(component, 'dismiss');
+		vi.spyOn(router, 'navigate');
+		vi.spyOn(component, 'dismiss');
 
 		component.display({
 			message: 'test',
@@ -85,7 +87,7 @@ describe('MessageComponent', () => {
 	});
 
 	it('should dismiss the component when clicking on the X icon', () => {
-		spyOn(component, 'dismiss');
+		vi.spyOn(component, 'dismiss');
 
 		const closeIcon =
 			fixture.debugElement.nativeElement.querySelector('.material-icons');

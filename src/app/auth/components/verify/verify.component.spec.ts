@@ -19,6 +19,8 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@shared/services/event/event.service';
 
+import { vi } from 'vitest';
+
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
 
 describe('VerifyComponent', () => {
@@ -50,8 +52,8 @@ describe('VerifyComponent', () => {
 		config.providers.push({
 			provide: Router,
 			useValue: {
-				navigate: jasmine.createSpy('navigate'),
-				navigateByUrl: jasmine.createSpy('navigateByUrl'),
+				navigate: vi.fn(),
+				navigateByUrl: vi.fn(),
 			},
 		});
 
@@ -86,8 +88,8 @@ describe('VerifyComponent', () => {
 		await init(defaultAuthData, { sendEmail: true });
 
 		expect(component.currentVerifyFlow).toBe('email');
-		expect(component.needsEmail).toBeTrue();
-		expect(component.needsPhone).toBeFalse();
+		expect(component.needsEmail).toBe(true);
+		expect(component.needsPhone).toBe(false);
 	});
 
 	it('should require only phone verification if only phone unverified', async () => {
@@ -95,8 +97,8 @@ describe('VerifyComponent', () => {
 		await init(unverifiedPhoneData, { sendSms: true });
 
 		expect(component.currentVerifyFlow).toBe('phone');
-		expect(component.needsPhone).toBeTrue();
-		expect(component.needsEmail).toBeFalse();
+		expect(component.needsPhone).toBe(true);
+		expect(component.needsEmail).toBe(false);
 	});
 
 	it('should require verification of both if both unverified, and verify email first', async () => {
@@ -104,8 +106,8 @@ describe('VerifyComponent', () => {
 		await init(unverifiedBothData);
 
 		expect(component.currentVerifyFlow).toBe('email');
-		expect(component.needsEmail).toBeTrue();
-		expect(component.needsPhone).toBeTrue();
+		expect(component.needsEmail).toBe(true);
+		expect(component.needsPhone).toBe(true);
 	});
 
 	it('should verify email and then switch to phone verification if needed', async () => {
@@ -114,17 +116,17 @@ describe('VerifyComponent', () => {
 
 		const account = accountService.getAccount();
 
-		expect(account.emailNeedsVerification()).toBeTrue();
-		expect(account.phoneNeedsVerification()).toBeTrue();
+		expect(account.emailNeedsVerification()).toBe(true);
+		expect(account.phoneNeedsVerification()).toBe(true);
 
 		component.onSubmit(component.verifyForm.value).then(() => {
-			expect(component.waiting).toBeFalse();
+			expect(component.waiting).toBe(false);
 			expect(component.currentVerifyFlow).toBe('phone');
-			expect(component.needsEmail).toBeFalse();
-			expect(component.needsPhone).toBeTrue();
+			expect(component.needsEmail).toBe(false);
+			expect(component.needsPhone).toBe(true);
 		});
 
-		expect(component.waiting).toBeTrue();
+		expect(component.waiting).toBe(true);
 
 		const verifyEmailResponse = require('@root/test/responses/auth.verify.verifyEmailThenPhone.success.json');
 		const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
@@ -135,7 +137,7 @@ describe('VerifyComponent', () => {
 		const unverifiedEmailData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
 		await init(unverifiedEmailData, { sendEmail: true });
 
-		const finishSpy = spyOn(component, 'finish');
+		const finishSpy = vi.spyOn(component, 'finish');
 		component.onSubmit(component.verifyForm.value).then(() => {
 			expect(component.waiting).toBeFalsy();
 			expect(component.needsEmail).toBeFalsy();
@@ -154,7 +156,7 @@ describe('VerifyComponent', () => {
 		const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
 		await init(unverifiedPhoneData, { sendSms: true });
 
-		const finishSpy = spyOn(component, 'finish');
+		const finishSpy = vi.spyOn(component, 'finish');
 		component.onSubmit(component.verifyForm.value).then(() => {
 			expect(component.waiting).toBeFalsy();
 			expect(component.needsEmail).toBeFalsy();

@@ -28,21 +28,21 @@ describe('Permanent Filesystem (Folder Caching)', () => {
 		const root = await fs.getArchiveRoot({ archiveId: 0 });
 
 		expect(root).toBeTruthy();
-		expect(api.methodWasCalled('getRoot')).toBeTrue();
+		expect(api.methodWasCalled('getRoot')).toBe(true);
 	});
 
 	it('should be able to fetch an arbitrary folder', async () => {
 		const folder = await fs.getFolder({ folder_linkId: 0 });
 
 		expect(folder).toBeTruthy();
-		expect(api.methodWasCalled('navigate')).toBeTrue();
+		expect(api.methodWasCalled('navigate')).toBe(true);
 	});
 
 	it('should be able to fetch an arbitrary record', async () => {
 		const record = await fs.getRecord({ recordId: 0 });
 
 		expect(record).toBeTruthy();
-		expect(api.methodWasCalled('recordGet')).toBeTrue();
+		expect(api.methodWasCalled('recordGet')).toBe(true);
 	});
 
 	it('should save fetched values to the cache', async () => {

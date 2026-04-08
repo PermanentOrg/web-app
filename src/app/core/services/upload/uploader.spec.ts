@@ -7,6 +7,8 @@ import { RecordResponse } from '@shared/services/api/record.repo';
 import { Uploader } from './uploader';
 import { UploadItem } from './uploadItem';
 
+import { vi } from 'vitest';
+
 class MockApiService {
 	public static gotPresigned: boolean = false;
 	public static registeredRecord: RecordVO = null;
@@ -132,7 +134,7 @@ describe('Uploader', () => {
 		);
 		await uploader.uploadFile(uploadItem, () => {});
 
-		expect(MockApiService.gotPresigned).toBeTrue();
+		expect(MockApiService.gotPresigned).toBe(true);
 		expect(http.hitUrl).toBe('presignedTesturl');
 		expect(MockApiService.registeredRecord.displayName).toBe('test.txt');
 		expect(MockApiService.registeredRecord.parentFolderId).toBe(1);
@@ -146,9 +148,9 @@ describe('Uploader', () => {
 			new FolderVO({ folderId: 2, folder_linkId: 2 }),
 		);
 
-		const progressSpy = jasmine.createSpy();
+		const progressSpy = vi.fn();
 
-		spyOn<any>(uploader, 'uploadToMultipartUrl').and.callFake(
+		vi.spyOn<any, any>(uploader as any, 'uploadToMultipartUrl').mockImplementation(
 			async (
 				_url: string,
 				_item: UploadItem,

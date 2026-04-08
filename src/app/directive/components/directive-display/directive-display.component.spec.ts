@@ -132,7 +132,7 @@ describe('DirectiveDisplayComponent', () => {
 		await instance.ngOnInit();
 		fixture.detectChanges();
 
-		expect(instance.noPlan).toBeTrue();
+		expect(instance.noPlan).toBe(true);
 		expect(
 			fixture.nativeElement.querySelectorAll('.no-plan-warning').length,
 		).toBe(1);
@@ -175,7 +175,7 @@ describe('DirectiveDisplayComponent', () => {
 		await instance.ngOnInit();
 		fixture.detectChanges();
 
-		expect(instance.error).toBeTrue();
+		expect(instance.error).toBe(true);
 		expect(fixture.nativeElement.querySelectorAll('.error').length).toBe(1);
 		expect(
 			fixture.nativeElement.querySelectorAll('.archive-steward-table').length,

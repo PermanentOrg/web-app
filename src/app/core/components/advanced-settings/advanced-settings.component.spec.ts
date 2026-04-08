@@ -8,6 +8,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { AdvancedSettingsComponent } from './advanced-settings.component';
 
+import { vi } from 'vitest';
+
 @NgModule()
 class DummyModule {}
 
@@ -61,7 +63,7 @@ describe('AdvancedSettingsComponent', () => {
 	it('updates account on calling onAllowSFTPDeletion', async () => {
 		const fixture = MockRender(AdvancedSettingsComponent);
 		const apiService = TestBed.inject(ApiService);
-		const spy = spyOn(apiService.account, 'update').and.resolveTo(
+		const spy = vi.spyOn(apiService.account, 'update').mockResolvedValue(
 			new AccountVO({}),
 		);
 
@@ -74,7 +76,7 @@ describe('AdvancedSettingsComponent', () => {
 		const fixture = MockRender(AdvancedSettingsComponent);
 		const apiService = TestBed.inject(ApiService);
 
-		spyOn(apiService.account, 'update').and.throwError('test error');
+		vi.spyOn(apiService.account, 'update').mockImplementation(() => { throw 'test error'; });
 
 		await fixture.point.componentInstance.onAllowSFTPDeletion();
 

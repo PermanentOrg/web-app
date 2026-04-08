@@ -9,6 +9,8 @@ import { cloneDeep } from 'lodash';
 import { SharedModule } from '../../../shared/shared.module';
 import { ConfirmPayerDialogComponent } from './confirm-payer-dialog.component';
 
+import { vi } from 'vitest';
+
 class MockDialogRef {
 	close() {}
 }
@@ -17,12 +19,12 @@ describe('ConfirmPayerDialogComponent', () => {
 	let component: ConfirmPayerDialogComponent;
 	let fixture: ComponentFixture<ConfirmPayerDialogComponent>;
 	let dialogRef: MockDialogRef;
-	let cancelAccountPayerSet: jasmine.Spy;
-	let handleAccountInfoChange: jasmine.Spy;
+	let cancelAccountPayerSet: any;
+	let handleAccountInfoChange: any;
 
 	beforeEach(async () => {
-		handleAccountInfoChange = jasmine.createSpy('handleAccountInfoChange');
-		cancelAccountPayerSet = jasmine.createSpy('cancelAccountPayerSet');
+		handleAccountInfoChange = vi.fn();
+		cancelAccountPayerSet = vi.fn();
 		const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
 
 		config.imports.push(SharedModule);
@@ -45,7 +47,7 @@ describe('ConfirmPayerDialogComponent', () => {
 		fixture = TestBed.createComponent(ConfirmPayerDialogComponent);
 		component = fixture.componentInstance;
 		dialogRef = TestBed.inject(DialogRef) as unknown as MockDialogRef;
-		spyOn(dialogRef, 'close').and.callThrough();
+		vi.spyOn(dialogRef, 'close').mockRestore();
 		fixture.detectChanges();
 	});
 

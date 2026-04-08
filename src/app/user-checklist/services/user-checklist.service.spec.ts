@@ -42,7 +42,7 @@ describe('UserChecklistService', () => {
 		expect(service).toBeTruthy();
 	});
 
-	it('can fetch the checklist contents', (done) => {
+	it('can fetch the checklist contents', () => new Promise<void>((resolve, reject) => {
 		const expected: ChecklistApiResponse = {
 			checklistItems: [
 				{
@@ -58,10 +58,10 @@ describe('UserChecklistService', () => {
 			.then((items) => {
 				expect(items.length).toBe(1);
 				expect(items[0]).toEqual(expected.checklistItems[0]);
-				done();
+				resolve();
 			})
 			.catch(() => {
-				done.fail();
+				reject(new Error('Test failed'));
 			});
 
 		const req = http.expectOne(`${environment.apiUrl}/v2/event/checklist`);
@@ -70,22 +70,22 @@ describe('UserChecklistService', () => {
 		expect(req.request.headers.get('Request-Version')).toBe('2');
 		expect(req.request.headers.get('Authorization')).not.toBeNull();
 		req.flush(expected);
-	});
+	}));
 
 	it('can check if the user is hiding the checklist', () => {
 		account.setAccount(new AccountVO({ hideChecklist: false }));
 
-		expect(service.isAccountHidingChecklist()).toBeFalse();
+		expect(service.isAccountHidingChecklist()).toBe(false);
 
 		account.setAccount(new AccountVO({ hideChecklist: true }));
 
-		expect(service.isAccountHidingChecklist()).toBeTrue();
+		expect(service.isAccountHidingChecklist()).toBe(true);
 	});
 
 	it('will hide the checklist if the account is not set', () => {
 		account.clear();
 
-		expect(service.isAccountHidingChecklist()).toBeTrue();
+		expect(service.isAccountHidingChecklist()).toBe(true);
 	});
 
 	it('can check if the current account has Owner access to the current archive', () => {
@@ -97,13 +97,13 @@ describe('UserChecklistService', () => {
 			new ArchiveVO({ accessRole: 'access.role.viewer', archiveId: 1 }),
 		);
 
-		expect(service.isDefaultArchiveOwnedByAccount()).toBeFalse();
+		expect(service.isDefaultArchiveOwnedByAccount()).toBe(false);
 
 		account.setArchive(
 			new ArchiveVO({ accessRole: 'access.role.owner', archiveId: 1 }),
 		);
 
-		expect(service.isDefaultArchiveOwnedByAccount()).toBeTrue();
+		expect(service.isDefaultArchiveOwnedByAccount()).toBe(true);
 	});
 
 	it('will also check if the current account has the current archive as its default', () => {
@@ -115,60 +115,60 @@ describe('UserChecklistService', () => {
 			new ArchiveVO({ accessRole: 'access.role.owner', archiveId: 98765 }),
 		);
 
-		expect(service.isDefaultArchiveOwnedByAccount()).toBeFalse();
+		expect(service.isDefaultArchiveOwnedByAccount()).toBe(false);
 	});
 
-	it('can update the current account to hide the checklist', (done) => {
+	it('can update the current account to hide the checklist', () => new Promise<void>((resolve, reject) => {
 		account.setAccount(new AccountVO({ hideChecklist: false }));
 
 		service
 			.setChecklistHidden()
 			.catch(() => {
-				done.fail();
+				reject(new Error('Test failed'));
 			})
 			.finally(() => {
-				done();
+				resolve();
 			});
 
 		const req = http.expectOne(`${environment.apiUrl}/account/update`);
 
 		expect(req.request.method).toBe('POST');
-		expect(req.request.body.hideChecklist).toBeTrue();
+		expect(req.request.body.hideChecklist).toBe(true);
 		req.flush({
 			hideChecklist: true,
 		});
-	});
+	}));
 
-	it('binds its recheck archive event to the accountservice', (done) => {
+	it('binds its recheck archive event to the accountservice', () => new Promise<void>((resolve, reject) => {
 		service.getArchiveChangedEvent().subscribe(() => {
 			service.getArchiveChangedEvent().unsubscribe();
-			done();
+			resolve();
 		});
 
 		account.archiveChange.next(new ArchiveVO({}));
-	});
+	}));
 
-	it('unsubscribes from the accountservice when it is destroyed', (done) => {
+	it('unsubscribes from the accountservice when it is destroyed', () => new Promise<void>((resolve, reject) => {
 		service.getArchiveChangedEvent().subscribe(() => {
-			done.fail('Service is still subscribed to AccountService');
+			reject(new Error('Service is still subscribed to AccountService'));
 		});
 
 		service.ngOnDestroy();
 
 		account.archiveChange.next(new ArchiveVO({}));
 		setTimeout(() => {
-			done();
+			resolve();
 		}, 1);
-	});
+	}));
 
-	it('binds to the checklist analytics observer service', (done) => {
+	it('binds to the checklist analytics observer service', () => new Promise<void>((resolve, reject) => {
 		service.getRefreshChecklistEvent().subscribe(() => {
-			done();
+			resolve();
 		});
 
 		TestBed.inject(ChecklistEventObserverService).update({
 			action: 'initiate_upload',
 			entity: 'account',
 		});
-	});
+	}));
 });

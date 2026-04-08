@@ -27,6 +27,8 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { InlineValueEditComponent } from './inline-value-edit.component';
 
+import { vi } from 'vitest';
+
 describe('InlineValueEditComponent', () => {
 	let component: InlineValueEditComponent;
 	let fixture: ComponentFixture<InlineValueEditComponent>;
@@ -97,7 +99,7 @@ describe('InlineValueEditComponent', () => {
 	});
 
 	it('should stop editing on cancel', async () => {
-		const saveSpy = spyOn(component.doneEditing, 'emit');
+		const saveSpy = vi.spyOn(component.doneEditing, 'emit');
 		component.displayValue = TEST_TEXT;
 		component.startEdit();
 
@@ -110,7 +112,7 @@ describe('InlineValueEditComponent', () => {
 	});
 
 	it('should not save on cancel button click', async () => {
-		const doneEditingSpy = spyOn(component.doneEditing, 'emit');
+		const doneEditingSpy = vi.spyOn(component.doneEditing, 'emit');
 		component.displayValue = null;
 		component.startEdit();
 
@@ -297,7 +299,7 @@ describe('InlineValueEditComponent', () => {
 
 		const timePicker = fixture.debugElement.query(By.css('ngb-timepicker'));
 
-		expect(component.dateOnly).toBeFalse();
+		expect(component.dateOnly).toBe(false);
 		expect(timePicker).toBeTruthy();
 	});
 
@@ -324,7 +326,7 @@ describe('InlineValueEditComponent', () => {
 
 		const timePicker = fixture.debugElement.query(By.css('ngb-timepicker'));
 
-		expect(component.dateOnly).toBeTrue();
+		expect(component.dateOnly).toBe(true);
 		expect(timePicker).toBeNull();
 	});
 
@@ -411,7 +413,7 @@ describe('InlineValueEditComponent', () => {
 			{ text: 'test1', value: 'test1' },
 			{ text: 'test2', value: 'test2' },
 		];
-		const saveSpy = spyOn(component.doneEditing, 'emit');
+		const saveSpy = vi.spyOn(component.doneEditing, 'emit');
 		fixture.detectChanges();
 		const select = fixture.debugElement.query(By.css('select')).nativeElement;
 		select.value = 'test1';
@@ -433,7 +435,7 @@ describe('InlineValueEditComponent', () => {
 		fixture.detectChanges();
 
 		const select = fixture.debugElement.query(By.css('select')).nativeElement;
-		const saveSpy = spyOn(component.doneEditing, 'emit');
+		const saveSpy = vi.spyOn(component.doneEditing, 'emit');
 
 		select.value = 'test1';
 		component.editValue = 'test1';
@@ -459,7 +461,7 @@ describe('InlineValueEditComponent', () => {
 
 		fixture.detectChanges();
 
-		expect(component.isEditing).toBeTrue();
+		expect(component.isEditing).toBe(true);
 	});
 
 	it('should NOT start editing when clicking on a link', () => {
@@ -482,6 +484,6 @@ describe('InlineValueEditComponent', () => {
 
 		fixture.detectChanges();
 
-		expect(component.isEditing).toBeFalse();
+		expect(component.isEditing).toBe(false);
 	});
 });

@@ -4,6 +4,8 @@ import { goals } from '../../../shared/onboarding-screen';
 import { OnboardingService } from '../../../services/onboarding.service';
 import { GlamGoalsScreenComponent } from './glam-goals-screen.component';
 
+import { vi } from 'vitest';
+
 describe('GlamGoalsScreenComponent', () => {
 	let component: GlamGoalsScreenComponent;
 	let fixture: ComponentFixture<GlamGoalsScreenComponent>;
@@ -17,8 +19,8 @@ describe('GlamGoalsScreenComponent', () => {
 		}).compileComponents();
 
 		onboardingService = TestBed.inject(OnboardingService);
-		spyOn(onboardingService, 'getGoals').and.returnValue(['Mock Goal']);
-		spyOn(onboardingService, 'setGoals');
+		vi.spyOn(onboardingService, 'getGoals').mockReturnValue(['Mock Goal']);
+		vi.spyOn(onboardingService, 'setGoals');
 
 		fixture = TestBed.createComponent(GlamGoalsScreenComponent);
 		component = fixture.componentInstance;
@@ -65,7 +67,7 @@ describe('GlamGoalsScreenComponent', () => {
 	});
 
 	it('should emit backToNameArchiveOutput when backToNameArchive is called', () => {
-		spyOn(component.goalsOutput, 'emit');
+		vi.spyOn(component.goalsOutput, 'emit');
 		component.backToNameArchive();
 
 		expect(component.goalsOutput.emit).toHaveBeenCalledWith({
@@ -75,7 +77,7 @@ describe('GlamGoalsScreenComponent', () => {
 	});
 
 	it('should emit goToNextReasonsOutput with selectedGoals when goToNextReasons is called', () => {
-		spyOn(component.goalsOutput, 'emit');
+		vi.spyOn(component.goalsOutput, 'emit');
 		const goal = 'Test Goal';
 		component.addGoal(goal);
 		component.goToNextReasons();
@@ -96,7 +98,7 @@ describe('GlamGoalsScreenComponent', () => {
 	});
 
 	it('should emit goalsOutput with empty goals when skipStep is called', () => {
-		spyOn(component.goalsOutput, 'emit');
+		vi.spyOn(component.goalsOutput, 'emit');
 
 		component.skipStep();
 

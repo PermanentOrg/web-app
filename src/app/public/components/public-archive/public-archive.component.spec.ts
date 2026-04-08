@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { PublicArchiveComponent } from './public-archive.component';
 
+import { vi } from 'vitest';
+
 const publicProfileServiceMock = {
 	publicRoot$: () => of({}),
 	archive$: () => of({}),
@@ -17,7 +19,7 @@ const publicProfileServiceMock = {
 const mockRouter = {
 	events: of(),
 	url: '/test',
-	navigate: jasmine.createSpy('navigate'),
+	navigate: vi.fn(),
 };
 
 const mockActivatedRoute = {};
@@ -27,7 +29,7 @@ describe('PublicArchiveComponent', () => {
 	let component: PublicArchiveComponent;
 
 	beforeEach(async () => {
-		mockRouter.navigate.calls.reset();
+		mockRouter.navigate.mockClear();
 
 		await TestBed.configureTestingModule({
 			imports: [BrowserAnimationsModule],
@@ -81,7 +83,7 @@ describe('PublicArchiveComponent', () => {
 
 		expect(mockRouter.navigate).toHaveBeenCalledWith(
 			['search', '123', 'test-query'],
-			jasmine.any(Object),
+			expect.any(Object),
 		);
 	});
 
@@ -92,7 +94,7 @@ describe('PublicArchiveComponent', () => {
 
 		expect(mockRouter.navigate).toHaveBeenCalledWith(
 			['search-tag', '123', 'example-tag-id', 'tag-name'],
-			jasmine.any(Object),
+			expect.any(Object),
 		);
 	});
 });

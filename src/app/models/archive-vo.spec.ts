@@ -7,19 +7,19 @@ describe('ArchiveVO', () => {
 	});
 
 	it('can check pending status', () => {
-		expect(new ArchiveVO({}).isPending()).toBeFalse();
+		expect(new ArchiveVO({}).isPending()).toBe(false);
 
 		expect(
 			new ArchiveVO({ status: 'status.generic.ok' }).isPending(),
-		).toBeFalse();
+		).toBe(false);
 
 		expect(
 			new ArchiveVO({ status: 'status.generic.deleted' }).isPending(),
-		).toBeFalse();
+		).toBe(false);
 
 		expect(
 			new ArchiveVO({ status: 'status.generic.pending' }).isPending(),
-		).toBeTrue();
+		).toBe(true);
 	});
 
 	describe('ItemVO conversion', () => {

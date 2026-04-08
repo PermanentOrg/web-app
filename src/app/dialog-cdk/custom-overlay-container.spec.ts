@@ -36,7 +36,7 @@ describe('CustomOverlayContainer', () => {
 		const container = mockBodyNode.querySelector('.cdk-overlay-container');
 
 		expect(container).toBeTruthy();
-		expect(mockAppRoot.contains(container!)).toBeTrue();
+		expect(mockAppRoot.contains(container!)).toBe(true);
 	});
 
 	it('should append the container to document.body if pr-app-root does not exist', () => {
@@ -46,6 +46,6 @@ describe('CustomOverlayContainer', () => {
 		const container = mockBodyNode.querySelector('.cdk-overlay-container');
 
 		expect(container).toBeTruthy();
-		expect(mockBodyNode.contains(container!)).toBeTrue();
+		expect(mockBodyNode.contains(container!)).toBe(true);
 	});
 });

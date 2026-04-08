@@ -150,7 +150,7 @@ describe('UserChecklistComponent', () => {
 
 		expectComponentToBeInvisible();
 
-		expect(DummyChecklistApi.savedAccount).toBeTrue();
+		expect(DummyChecklistApi.savedAccount).toBe(true);
 	}));
 
 	it('should fail silently if the account save fails', async () => {
@@ -160,8 +160,8 @@ describe('UserChecklistComponent', () => {
 		DummyChecklistApi.error = true;
 
 		const api = TestBed.inject(CHECKLIST_API);
-		await expectAsync(api.setChecklistHidden()).toBeRejected();
-		await expectAsync(instance.hideChecklistForever()).not.toBeRejected();
+		await expect(api.setChecklistHidden()).rejects.toThrow();
+		await expect(instance.hideChecklistForever()).resolves.toBeDefined();
 	});
 
 	it('should be able to watch for archive info changes and hide when archive is not owned', fakeAsync(() => {

@@ -28,6 +28,8 @@ import { MultiSelectStatusComponent } from '../multi-select-status/multi-select-
 import { FolderVO } from '../../../models/folder-vo';
 import { PromptService } from '../../../shared/services/prompt/prompt.service';
 
+import { vi } from 'vitest';
+
 const defaultAuthData =
 	require('@root/test/responses/auth.login.success.json') as any;
 
@@ -38,18 +40,15 @@ describe('MainComponent', () => {
 	let accountService: AccountService;
 	let messageService: MessageService;
 	let promptService: PromptService;
-	let mockDragService: jasmine.SpyObj<DragService>;
+	let mockDragService: any;
 	let mockDragEvents: Subject<DragServiceEvent>;
 
 	async function init(authResponseData = defaultAuthData) {
 		TestBed.resetTestingModule();
 		mockDragEvents = new Subject<DragServiceEvent>();
-		mockDragService = jasmine.createSpyObj('DragService', [
-			'getDestinationFromDropTarget',
-			'events',
-		]);
-		mockDragService.events.and.returnValue(mockDragEvents.asObservable());
-		mockDragService.getDestinationFromDropTarget.and.returnValue(
+		mockDragService = { getDestinationFromDropTarget: vi.fn(), events: vi.fn() } as any;
+		mockDragService.events.mockReturnValue(mockDragEvents.asObservable());
+		mockDragService.getDestinationFromDropTarget.mockReturnValue(
 			new FolderVO({ type: 'type.folder.public' }),
 		);
 
@@ -85,10 +84,10 @@ describe('MainComponent', () => {
 		accountService.setArchive(authResponse.getArchiveVO());
 
 		messageService = TestBed.inject(MessageService);
-		spyOn(messageService, 'showMessage');
+		vi.spyOn(messageService, 'showMessage');
 
 		promptService = TestBed.inject(PromptService);
-		spyOn(promptService, 'confirm');
+		vi.spyOn(promptService, 'confirm');
 
 		fixture = TestBed.createComponent(MainComponent);
 		component = fixture.componentInstance;
@@ -97,8 +96,8 @@ describe('MainComponent', () => {
 
 	afterEach(() => {
 		const service = messageService as any;
-		if (service && service.calls) {
-			(service as any).calls.reset();
+		if (service && service.mockClear) {
+			service.mockClear();
 		}
 	});
 
@@ -163,7 +162,7 @@ describe('MainComponent', () => {
 		});
 
 		expect(messageService.showMessage).not.toHaveBeenCalledWith({
-			message: jasmine.stringMatching('email and phone') as unknown as string,
+			message: expect.stringMatching('email and phone') as unknown as string,
 		});
 	});
 
@@ -181,7 +180,7 @@ describe('MainComponent', () => {
 		const mockDragEvent = createMockDragEvent(mockFiles);
 
 		const targetFolder = { isDropTarget: true };
-		mockDragService.getDestinationFromDropTarget.and.returnValue(
+		mockDragService.getDestinationFromDropTarget.mockReturnValue(
 			new FolderVO({ type: 'type.folder.public' }),
 		);
 		await component.onDrop(targetFolder, mockDragEvent);

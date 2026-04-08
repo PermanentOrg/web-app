@@ -2,6 +2,8 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GlamUserSurveySquareComponent } from './glam-user-survey-square.component';
 
+import { vi } from 'vitest';
+
 @Component({
 	selector: 'pr-checkbox',
 	template: '',
@@ -46,17 +48,17 @@ describe('GlamUserSurveySquareComponent', () => {
 		component.tag = tag;
 		fixture.detectChanges();
 
-		spyOn(component.selectedChange, 'emit');
+		vi.spyOn(component.selectedChange, 'emit');
 
 		const squareElement = fixture.nativeElement.querySelector('.square');
 		squareElement.click();
 
-		expect(component.selected).toBeTrue();
+		expect(component.selected).toBe(true);
 		expect(component.selectedChange.emit).toHaveBeenCalledWith(tag);
 
 		squareElement.click();
 
-		expect(component.selected).toBeFalse();
+		expect(component.selected).toBe(false);
 		expect(component.selectedChange.emit).toHaveBeenCalledWith(tag);
 	});
 
@@ -66,6 +68,6 @@ describe('GlamUserSurveySquareComponent', () => {
 
 		const squareElement = fixture.nativeElement.querySelector('.square');
 
-		expect(squareElement.classList.contains('selected')).toBeTrue();
+		expect(squareElement.classList.contains('selected')).toBe(true);
 	});
 });

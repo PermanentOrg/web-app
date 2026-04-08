@@ -11,6 +11,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { TwoFactorAuthComponent } from './two-factor-auth.component';
 
+import { vi } from 'vitest';
+
 @NgModule()
 class DummyModule {}
 
@@ -118,7 +120,7 @@ describe('TwoFactorAuthComponent', () => {
 		const instance = fixture.point.componentInstance;
 		instance.form.setValue({ code: '1234', contactInfo: 'user@example.com' });
 
-		const submitDataSpy = spyOn(instance, 'submitData').and.callThrough();
+		const submitDataSpy = vi.spyOn(instance, 'submitData').mockRestore();
 		instance.submitData(instance.form.value);
 
 		expect(submitDataSpy).toHaveBeenCalledWith({
@@ -204,10 +206,10 @@ describe('TwoFactorAuthComponent', () => {
 			value: 'janedoe@example.com',
 		};
 
-		spyOn(mockApiService.idpuser, 'disableTwoFactor').and.returnValue(
+		vi.spyOn(mockApiService.idpuser, 'disableTwoFactor').mockReturnValue(
 			Promise.resolve(),
 		);
-		spyOn(mockApiService.idpuser, 'getTwoFactorMethods').and.returnValue(
+		vi.spyOn(mockApiService.idpuser, 'getTwoFactorMethods').mockReturnValue(
 			Promise.resolve([
 				{ methodId: 'sms', method: 'sms', value: '(123) 456-7890' },
 			]),

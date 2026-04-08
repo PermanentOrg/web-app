@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { OnboardingService } from '../../../services/onboarding.service';
 import { SelectArchiveTypeScreenComponent } from './select-archive-type-screen.component';
 
+import { vi } from 'vitest';
+
 describe('SelectArchiveTypeScreenComponent', () => {
 	let component: SelectArchiveTypeScreenComponent;
 	let fixture: ComponentFixture<SelectArchiveTypeScreenComponent>;
@@ -17,8 +19,8 @@ describe('SelectArchiveTypeScreenComponent', () => {
 		}).compileComponents();
 
 		onboardingService = TestBed.inject(OnboardingService);
-		spyOn(onboardingService, 'getArchiveTypeTag').and.returnValue(null);
-		spyOn(onboardingService, 'getArchiveType').and.returnValue(null);
+		vi.spyOn(onboardingService, 'getArchiveTypeTag').mockReturnValue(null);
+		vi.spyOn(onboardingService, 'getArchiveType').mockReturnValue(null);
 
 		fixture = TestBed.createComponent(SelectArchiveTypeScreenComponent);
 		component = fixture.componentInstance;
@@ -38,7 +40,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	});
 
 	it('should emit navigation event when navigate is called with start', () => {
-		spyOn(component.submitEmitter, 'emit');
+		vi.spyOn(component.submitEmitter, 'emit');
 		component.type = 'mockType';
 		component.tag = 'mockTag';
 		component.headerText = 'mockHeaderText';
@@ -53,7 +55,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	});
 
 	it('should emit submit event when navigate is called with other screen', () => {
-		spyOn(component.submitEmitter, 'emit');
+		vi.spyOn(component.submitEmitter, 'emit');
 		component.type = 'mockType';
 		component.tag = 'mockTag';
 		component.headerText = 'mockHeaderText';
@@ -69,7 +71,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	});
 
 	it('should call navigate with start when Back button is clicked', () => {
-		spyOn(component, 'navigate');
+		vi.spyOn(component, 'navigate');
 		const backButton = fixture.debugElement.query(By.css('.back-button'));
 		backButton.triggerEventHandler('buttonClick', null);
 
@@ -77,7 +79,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	});
 
 	it('should call navigate with name-archive when create archive button is clicked', () => {
-		spyOn(component, 'navigate');
+		vi.spyOn(component, 'navigate');
 		component.selectedValue = 'someValue';
 		fixture.detectChanges();
 
@@ -90,8 +92,8 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	});
 
 	it('should set buttonText correctly in ngOnInit if tag is defined', () => {
-		(onboardingService.getArchiveTypeTag as jasmine.Spy).and.returnValue(null);
-		(onboardingService.getArchiveType as jasmine.Spy).and.returnValue(null);
+		(onboardingService.getArchiveTypeTag as any).mockReturnValue(null);
+		(onboardingService.getArchiveType as any).mockReturnValue(null);
 
 		const testFixture = TestBed.createComponent(
 			SelectArchiveTypeScreenComponent,

@@ -77,7 +77,7 @@ describe('ShareLinksApiService', () => {
 		);
 		req.flush({}, { status: 400, statusText: 'Bad Request' });
 
-		await expectAsync(promise).toBeRejected();
+		await expect(promise).rejects.toThrow();
 	});
 
 	it('should get share links by token', async () => {
@@ -105,7 +105,7 @@ describe('ShareLinksApiService', () => {
 		);
 		req.flush({}, { status: 400, statusText: 'Bad Request' });
 
-		await expectAsync(promise).toBeRejected();
+		await expect(promise).rejects.toThrow();
 	});
 
 	it('should generate a share link', async () => {
@@ -148,7 +148,7 @@ describe('ShareLinksApiService', () => {
 		const req = http.expectOne(`${environment.apiUrl}/v2/share-links`);
 		req.flush({}, { status: 400, statusText: 'Bad Request' });
 
-		await expectAsync(promise).toBeRejected();
+		await expect(promise).rejects.toThrow();
 	});
 
 	it('should delete a share link', async () => {
@@ -160,7 +160,7 @@ describe('ShareLinksApiService', () => {
 		expect(req.request.headers.get('Request-Version')).toBe('2');
 
 		req.flush({}, { status: 204, statusText: 'No Content' });
-		await expectAsync(promise).toBeResolved();
+		await expect(promise).resolves.toBeDefined();
 	});
 
 	it('should handle error when deleting share link', async () => {
@@ -169,7 +169,7 @@ describe('ShareLinksApiService', () => {
 		const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
 		req.flush({}, { status: 400, statusText: 'Bad Request' });
 
-		await expectAsync(promise).toBeRejected();
+		await expect(promise).rejects.toThrow();
 	});
 
 	it('should update a share link', async () => {
@@ -210,6 +210,6 @@ describe('ShareLinksApiService', () => {
 		const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
 		req.flush({}, { status: 400, statusText: 'Bad Request' });
 
-		await expectAsync(promise).toBeRejected();
+		await expect(promise).rejects.toThrow();
 	});
 });

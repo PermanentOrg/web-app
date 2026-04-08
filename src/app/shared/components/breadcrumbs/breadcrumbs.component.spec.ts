@@ -8,14 +8,15 @@ import { Router } from '@angular/router';
 import { FolderVO } from '@root/app/models';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 
+import { vi } from 'vitest';
+
 describe('BreadcrumbsComponent', () => {
 	let component: BreadcrumbsComponent;
 	let fixture: ComponentFixture<BreadcrumbsComponent>;
 	let dataService: DataService;
 	const mockShareLinkService = {
-		isUnlistedShare: jasmine
-			.createSpy()
-			.and.returnValue(Promise.resolve(false)),
+		isUnlistedShare: vi.fn()
+			.mockReturnValue(Promise.resolve(false)),
 	};
 
 	async function init(currentUrl?: string) {

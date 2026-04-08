@@ -12,6 +12,8 @@ import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
 import { ManageMetadataModule } from '../../manage-metadata.module';
 import { EditValueComponent } from './value-edit.component';
 
+import { vi } from 'vitest';
+
 describe('EditValueComponent', () => {
 	let deleted: boolean;
 	let updated: boolean;
@@ -91,12 +93,12 @@ describe('EditValueComponent', () => {
 	it('should be able to delete a tag', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(EditValueComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
-		const deletedTagSpy = spyOn(instance.deletedTag, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
+		const deletedTagSpy = vi.spyOn(instance.deletedTag, 'emit');
 
 		await instance.delete();
 
-		expect(deleted).toBeTrue();
+		expect(deleted).toBe(true);
 		expect(refreshTagsSpy).toHaveBeenCalled();
 		expect(deletedTagSpy).toHaveBeenCalled();
 	});
@@ -104,11 +106,11 @@ describe('EditValueComponent', () => {
 	it('should be able to edit a value', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(EditValueComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
 
 		await instance.save('potato');
 
-		expect(updated).toBeTrue();
+		expect(updated).toBe(true);
 		expect(newTagName).toBe('abc:potato');
 		expect(refreshTagsSpy).toHaveBeenCalled();
 	});
@@ -116,24 +118,24 @@ describe('EditValueComponent', () => {
 	it('should deal with errors while deleting', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(EditValueComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
 
 		error = true;
-		await expectAsync(instance.delete()).toBeRejected();
+		await expect(instance.delete()).rejects.toThrow();
 
-		expect(messageShown).toBeTrue();
+		expect(messageShown).toBe(true);
 		expect(refreshTagsSpy).not.toHaveBeenCalled();
 	});
 
 	it('should deal with errors while editing', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(EditValueComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
 
 		error = true;
-		await expectAsync(instance.save('test')).toBeRejected();
+		await expect(instance.save('test')).rejects.toThrow();
 
-		expect(messageShown).toBeTrue();
+		expect(messageShown).toBe(true);
 		expect(refreshTagsSpy).not.toHaveBeenCalled();
 	});
 
@@ -141,7 +143,7 @@ describe('EditValueComponent', () => {
 		rejectDelete = true;
 		defaultRender();
 		const instance = ngMocks.findInstance(EditValueComponent);
-		const deletedTagSpy = spyOn(instance.deletedTag, 'emit');
+		const deletedTagSpy = vi.spyOn(instance.deletedTag, 'emit');
 
 		await instance.delete();
 

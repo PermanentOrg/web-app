@@ -14,14 +14,14 @@ describe('ChecklistEventObserverService', () => {
 		expect(service).toBeTruthy();
 	});
 
-	it('should convert update() calls to a Subject.next() call', (done) => {
+	it('should convert update() calls to a Subject.next() call', () => new Promise<void>((resolve, reject) => {
 		service.getSubject().subscribe(() => {
-			done();
+			resolve();
 		});
 
 		service.update({
 			action: 'initiate_upload',
 			entity: 'account',
 		});
-	});
+	}));
 });

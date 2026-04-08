@@ -9,6 +9,8 @@ import { MockDirectiveRepo } from '../legacy-contact-display/test-utils';
 import { MockMessageService } from '../directive-edit/test-utils';
 import { LegacyContactEditComponent } from './legacy-contact-edit.component';
 
+import { vi } from 'vitest';
+
 @NgModule()
 class DummyModule {}
 
@@ -81,7 +83,7 @@ describe('LegacyContactEditComponent', () => {
 
 		expect(MockDirectiveRepo.savedLegacyContact.email).toBe('save@example.com');
 		expect(MockDirectiveRepo.savedLegacyContact.name).toBe('Save Test');
-		expect(MockDirectiveRepo.createdLegacyContact).toBeTrue();
+		expect(MockDirectiveRepo.createdLegacyContact).toBe(true);
 	});
 
 	it('should be able to have existing legacy contact data passed in', () => {
@@ -113,8 +115,8 @@ describe('LegacyContactEditComponent', () => {
 			'Existing Updated Contact',
 		);
 
-		expect(MockDirectiveRepo.createdLegacyContact).toBeFalse();
-		expect(MockDirectiveRepo.updatedLegacyContact).toBeTrue();
+		expect(MockDirectiveRepo.createdLegacyContact).toBe(false);
+		expect(MockDirectiveRepo.updatedLegacyContact).toBe(true);
 	});
 
 	it('should handle API errors on creation', async () => {
@@ -127,7 +129,7 @@ describe('LegacyContactEditComponent', () => {
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(MockMessageService.errorShown).toBeTrue();
+		expect(MockMessageService.errorShown).toBe(true);
 		expect(MockDirectiveRepo.savedLegacyContact).toBeUndefined();
 	});
 
@@ -145,14 +147,14 @@ describe('LegacyContactEditComponent', () => {
 		await fixture.whenStable();
 		fixture.detectChanges();
 
-		expect(MockMessageService.errorShown).toBeTrue();
+		expect(MockMessageService.errorShown).toBe(true);
 		expect(MockDirectiveRepo.savedLegacyContact).toBeUndefined();
 	});
 
 	it('should emit an output after saving (creation)', async () => {
 		const fixture = MockRender(LegacyContactEditComponent);
 		const instance = fixture.point.componentInstance;
-		const savedLegacyContactSpy = spyOn(instance.savedLegacyContact, 'emit');
+		const savedLegacyContactSpy = vi.spyOn(instance.savedLegacyContact, 'emit');
 
 		fillOutForm('output@example.com', 'Test Output');
 
@@ -172,7 +174,7 @@ describe('LegacyContactEditComponent', () => {
 			},
 		});
 		const instance = fixture.point.componentInstance;
-		const savedLegacyContactSpy = spyOn(instance.savedLegacyContact, 'emit');
+		const savedLegacyContactSpy = vi.spyOn(instance.savedLegacyContact, 'emit');
 
 		fillOutForm('output@example.com', 'Test Update Output');
 

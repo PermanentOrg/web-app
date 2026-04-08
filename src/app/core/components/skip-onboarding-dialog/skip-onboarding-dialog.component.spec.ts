@@ -10,6 +10,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { DialogRef } from '@angular/cdk/dialog';
 import { SkipOnboardingDialogComponent } from './skip-onboarding-dialog.component';
 
+import { vi } from 'vitest';
+
 class MockDialogRef {
 	close() {}
 }
@@ -19,9 +21,8 @@ describe('SkipOnboardingDialogComponent', () => {
 	let fixture: ComponentFixture<SkipOnboardingDialogComponent>;
 
 	const mockAccountService = {
-		getAccount: jasmine
-			.createSpy('getAccount')
-			.and.returnValue({ fullName: 'Mocked Name' }),
+		getAccount: vi.fn()
+			.mockReturnValue({ fullName: 'Mocked Name' }),
 	};
 
 	beforeEach(async () => {

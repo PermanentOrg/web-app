@@ -44,10 +44,10 @@ describe('ThumbnailCache', () => {
 	});
 
 	it('should be able to test if thumbnail is cached', () => {
-		expect(cache.hasThumbnail(folder)).toBeFalse();
+		expect(cache.hasThumbnail(folder)).toBe(false);
 		cache.saveThumbnail(folder, folderThumbData);
 
-		expect(cache.hasThumbnail(folder)).toBeTrue();
+		expect(cache.hasThumbnail(folder)).toBe(true);
 	});
 
 	it('should use session storage to get this data', () => {
@@ -79,7 +79,7 @@ describe('ThumbnailCache', () => {
 	it('should be able to clear the cache for a specific folder', () => {
 		cache.invalidateFolder(1234);
 
-		expect(cache.hasThumbnail(folder)).toBeFalse();
+		expect(cache.hasThumbnail(folder)).toBe(false);
 	});
 
 	describe('malformed session storage', () => {
@@ -87,7 +87,7 @@ describe('ThumbnailCache', () => {
 			storage.session.set('folderThumbnailCache', 'potato');
 			cache = new ThumbnailCache(storage);
 
-			expect(cache.hasThumbnail(folder)).toBeFalse();
+			expect(cache.hasThumbnail(folder)).toBe(false);
 		});
 
 		it('reports no cache hit for stale entries', () => {
@@ -96,7 +96,7 @@ describe('ThumbnailCache', () => {
 			]);
 			cache = new ThumbnailCache(storage);
 
-			expect(cache.hasThumbnail(folder)).toBeFalse();
+			expect(cache.hasThumbnail(folder)).toBe(false);
 			expect(storage.session.get('folderThumbnailCache').length).toBe(0);
 		});
 

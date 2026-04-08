@@ -9,6 +9,8 @@ import { DataStatus } from '@models/data-status.enum';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import { RecordResponse } from '@shared/services/api/record.repo';
+import { vi } from 'vitest';
+
 import {
 	MessageDisplayOptions,
 	MessageService,
@@ -53,8 +55,8 @@ describe('RecordResolveService', () => {
 			{ displayName: 'Test Record', archiveNbr: '1234-abcd' },
 			{ dataStatus: DataStatus.Full },
 		);
-		const spy = spyOn(data, 'getItemByArchiveNbr').and.returnValue(record);
-		const fetchSpy = spyOn(data, 'fetchFullItems');
+		const spy = vi.spyOn(data, 'getItemByArchiveNbr').mockReturnValue(record);
+		const fetchSpy = vi.spyOn(data, 'fetchFullItems');
 		const result = await service.resolve(route.snapshot, null);
 
 		expect(result).toEqual(record);
@@ -67,8 +69,8 @@ describe('RecordResolveService', () => {
 			{ displayName: 'Test Record', archiveNbr: '1234-abcd' },
 			{ dataStatus: DataStatus.Lean },
 		);
-		const spy = spyOn(data, 'getItemByArchiveNbr').and.returnValue(record);
-		spyOn(data, 'fetchFullItems').and.callFake(async () => {
+		const spy = vi.spyOn(data, 'getItemByArchiveNbr').mockReturnValue(record);
+		vi.spyOn(data, 'fetchFullItems').mockImplementation(async () => {
 			record.displayName = 'Fetched Record';
 			record.dataStatus = DataStatus.Full;
 			return true;
@@ -81,8 +83,8 @@ describe('RecordResolveService', () => {
 	});
 
 	it('should call record/get if a record is not cached', async () => {
-		spyOn(data, 'getItemByArchiveNbr').and.returnValue(undefined);
-		const apiSpy = spyOn(api.record, 'get').and.resolveTo(
+		vi.spyOn(data, 'getItemByArchiveNbr').mockReturnValue(undefined);
+		const apiSpy = vi.spyOn(api.record, 'get').mockResolvedValue(
 			new RecordResponse({
 				isSuccessful: true,
 				Results: [
@@ -105,8 +107,8 @@ describe('RecordResolveService', () => {
 	});
 
 	it('should display an error message if an error is thrown', async () => {
-		spyOn(data, 'getItemByArchiveNbr').and.returnValue(undefined);
-		spyOn(api.record, 'get').and.rejectWith(
+		vi.spyOn(data, 'getItemByArchiveNbr').mockReturnValue(undefined);
+		vi.spyOn(api.record, 'get').mockRejectedValue(
 			new RecordResponse({
 				isSuccessful: false,
 				Results: [
@@ -117,11 +119,11 @@ describe('RecordResolveService', () => {
 			}),
 		);
 		let displayedErrorMessage: string;
-		spyOn(message, 'showError').and.callFake((data: MessageDisplayOptions) => {
+		vi.spyOn(message, 'showError').mockImplementation((data: MessageDisplayOptions) => {
 			displayedErrorMessage = data.message;
 		});
 
-		await expectAsync(service.resolve(route.snapshot, null)).toBeRejected();
+		await expect(service.resolve(route.snapshot, null)).rejects.toThrow();
 
 		expect(displayedErrorMessage).toBe('Test Error');
 	});

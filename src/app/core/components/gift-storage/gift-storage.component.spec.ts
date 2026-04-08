@@ -11,6 +11,8 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
 
+import { vi } from 'vitest';
+
 describe('GiftStorageComponent', () => {
 	const mockAccount = new AccountVO({ accountId: 1 });
 
@@ -20,18 +22,18 @@ describe('GiftStorageComponent', () => {
 
 	beforeEach(async () => {
 		mockAccountService = {
-			getAccount: jasmine.createSpy('getAccount').and.returnValue(mockAccount),
-			setAccount: jasmine.createSpy('setAccount'),
+			getAccount: vi.fn().mockReturnValue(mockAccount),
+			setAccount: vi.fn(),
 		};
 
-		mockDialog = jasmine.createSpyObj('DialogCdkService', ['open']);
-		mockDialog.open.and.returnValue({
+		mockDialog = { open: vi.fn() } as any;
+		mockDialog.open.mockReturnValue({
 			closed: of(true),
 		});
 
 		mockApiService = {
 			billing: {
-				giftStorage: jasmine.createSpy('giftStorage').and.returnValue(
+				giftStorage: vi.fn().mockReturnValue(
 					Promise.resolve(
 						new GiftingResponse({
 							storageGifted: 50,
@@ -227,7 +229,7 @@ describe('GiftStorageComponent', () => {
 		instance.giftForm.controls.amount.setValue(5);
 		instance.giftForm.updateValueAndValidity();
 
-		spyOn(instance, 'submitStorageGiftForm').and.callThrough();
+		vi.spyOn(instance, 'submitStorageGiftForm').mockRestore();
 
 		instance.submitStorageGiftForm(instance.giftForm.value);
 

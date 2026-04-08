@@ -5,6 +5,8 @@ import { GetAltTextPipe } from '@shared/pipes/get-alt-text.pipe';
 import { RecordVO } from '@models/index';
 import { ZoomingImageViewerComponent } from './zooming-image-viewer.component';
 
+import { vi } from 'vitest';
+
 class MockOpenSeaDragon {
 	private handlers = new Map<string, (any) => void>();
 
@@ -142,7 +144,7 @@ describe('ZoomingImageViewerComponent', () => {
 
 	it('should output an event when going fullscreen', async () => {
 		renderWithRecord(getValidTestRecord());
-		const isFullScreenSpy = spyOn(instance.isFullScreen, 'emit');
+		const isFullScreenSpy = vi.spyOn(instance.isFullScreen, 'emit');
 
 		const viewer = instance.viewer;
 
@@ -157,7 +159,7 @@ describe('ZoomingImageViewerComponent', () => {
 
 	it('should output an event if the user zooms in', async () => {
 		renderWithRecord(getValidTestRecord());
-		const disableSwipeSpy = spyOn(instance.disableSwipe, 'emit');
+		const disableSwipeSpy = vi.spyOn(instance.disableSwipe, 'emit');
 
 		const viewer = instance.viewer;
 		viewer.raiseEvent('zoom', { zoom: 2 });

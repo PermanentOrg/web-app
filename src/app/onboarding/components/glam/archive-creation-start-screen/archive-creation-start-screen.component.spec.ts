@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveCreationStartScreenComponent } from './archive-creation-start-screen.component';
 
+import { vi } from 'vitest';
+
 const mockAccountService = {
 	getAccount: () => ({ fullName: 'John Doe' }),
 };
@@ -41,8 +43,8 @@ describe('ArchiveCreationStartScreenComponent', () => {
 	});
 
 	it('should emit getStartedOutput event when Get Started button is clicked', () => {
-		spyOn(component, 'getStarted').and.callThrough();
-		spyOn(component.getStartedOutput, 'emit');
+		vi.spyOn(component, 'getStarted').mockRestore();
+		vi.spyOn(component.getStartedOutput, 'emit');
 
 		const getStartedButton = fixture.debugElement.query(By.css('.get-started'));
 
@@ -53,8 +55,8 @@ describe('ArchiveCreationStartScreenComponent', () => {
 	});
 
 	it('should emit createArchiveForMeOutput event when Create Archive for Me button is clicked', () => {
-		spyOn(component, 'createArchiveForMe').and.callThrough();
-		spyOn(component.createArchiveForMeOutput, 'emit');
+		vi.spyOn(component, 'createArchiveForMe').mockRestore();
+		vi.spyOn(component.createArchiveForMeOutput, 'emit');
 
 		const createArchiveButton = fixture.debugElement.query(
 			By.css('.create-archive-for-me'),
@@ -66,20 +68,20 @@ describe('ArchiveCreationStartScreenComponent', () => {
 	});
 
 	it('should set hasToken to true if there is a token in the local storage', () => {
-		spyOn(localStorage, 'getItem').and.returnValue('someToken');
+		vi.spyOn(localStorage, 'getItem').mockReturnValue('someToken');
 
 		component.ngOnInit();
 		fixture.detectChanges();
 
-		expect(component.hasShareToken).toBeTrue();
+		expect(component.hasShareToken).toBe(true);
 	});
 
 	it('should not set hasShareToken if shareToken does not exist in localStorage', () => {
-		spyOn(localStorage, 'getItem').and.returnValue(null);
+		vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
 
 		component.ngOnInit();
 		fixture.detectChanges();
 
-		expect(component.hasShareToken).toBeFalse();
+		expect(component.hasShareToken).toBe(false);
 	});
 });

@@ -86,16 +86,16 @@ describe('PublicSettingsComponent', () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(PublicSettingsComponent);
 
-		expect(updated).toBeFalse();
+		expect(updated).toBe(false);
 		instance.allowDownloadsToggle = 0;
 		await instance.onAllowDownloadsChange();
 
-		expect(updated).toBeTrue();
-		expect(updatedDownload).toBeFalse();
+		expect(updated).toBe(true);
+		expect(updatedDownload).toBe(false);
 		instance.allowDownloadsToggle = 1;
 		await instance.onAllowDownloadsChange();
 
-		expect(updatedDownload).toBeTrue();
+		expect(updatedDownload).toBe(true);
 	});
 
 	it('should fail silently', async () => {
@@ -106,6 +106,6 @@ describe('PublicSettingsComponent', () => {
 		instance.allowDownloadsToggle = 0;
 		await instance.onAllowDownloadsChange();
 
-		expect(updated).toBeFalse();
+		expect(updated).toBe(false);
 	});
 });

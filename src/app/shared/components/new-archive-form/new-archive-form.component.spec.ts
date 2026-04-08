@@ -3,6 +3,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
 import { ApiService } from '@shared/services/api/api.service';
+import { vi } from 'vitest';
+
 import {
 	ArchiveFormData,
 	NewArchiveFormComponent,
@@ -50,8 +52,8 @@ describe('NewArchiveFormComponent #onboarding', () => {
 	});
 
 	it('should not submit when form is invalid', () => {
-		spyOn(instance.success, 'emit');
-		spyOn(instance.errorOccurred, 'emit');
+		vi.spyOn(instance.success, 'emit');
+		vi.spyOn(instance.errorOccurred, 'emit');
 
 		expect(ngMocks.find('button').nativeElement.disabled).toBeFalsy();
 		ngMocks.find('button').nativeElement.click();
@@ -74,23 +76,23 @@ describe('NewArchiveFormComponent #onboarding', () => {
 			type: 'type.archive.person',
 		};
 		// Mock isFormValid to bypass native validation check
-		spyOn(instance, 'isFormValid').and.returnValue(true);
+		vi.spyOn(instance, 'isFormValid').mockReturnValue(true);
 		fixture.detectChanges();
 		// Call onSubmit directly
 		await instance.onSubmit();
 
-		expect(created).toBeTrue();
+		expect(created).toBe(true);
 	});
 
 	it('should output new archiveVO when submitted', async () => {
-		spyOn(instance.success, 'emit');
-		spyOn(instance.errorOccurred, 'emit');
+		vi.spyOn(instance.success, 'emit');
+		vi.spyOn(instance.errorOccurred, 'emit');
 		instance.formData = {
 			fullName: 'Test User',
 			type: 'type.archive.person',
 			relationType: null,
 		};
-		spyOn(instance, 'isFormValid').and.returnValue(true);
+		vi.spyOn(instance, 'isFormValid').mockReturnValue(true);
 		fixture.detectChanges();
 		await instance.onSubmit();
 
@@ -103,13 +105,13 @@ describe('NewArchiveFormComponent #onboarding', () => {
 
 	it('should output errors if they occur', async () => {
 		throwError = true;
-		spyOn(instance.success, 'emit');
-		spyOn(instance.errorOccurred, 'emit');
+		vi.spyOn(instance.success, 'emit');
+		vi.spyOn(instance.errorOccurred, 'emit');
 		instance.formData = {
 			fullName: 'Test User',
 			type: 'type.archive.person',
 		};
-		spyOn(instance, 'isFormValid').and.returnValue(true);
+		vi.spyOn(instance, 'isFormValid').mockReturnValue(true);
 		fixture.detectChanges();
 		await instance.onSubmit();
 
@@ -159,7 +161,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 			type: 'type.archive.person',
 			relationType: 'relation.other',
 		};
-		spyOn(componentInstance, 'isFormValid').and.returnValue(true);
+		vi.spyOn(componentInstance, 'isFormValid').mockReturnValue(true);
 		renderFixture.detectChanges();
 		await componentInstance.onSubmit();
 

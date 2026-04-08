@@ -664,7 +664,7 @@ describe('FileViewerComponent', () => {
 			component.onDownloadClick();
 			await fixture.whenStable();
 
-			expect(downloaded).toBeTrue();
+			expect(downloaded).toBe(true);
 		});
 
 		it('should display "Click to add location" on fullscreen view', () => {

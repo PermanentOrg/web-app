@@ -4,13 +4,15 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { archiveOptions } from '../types/archive-types';
 import { ArchiveTypeSelectDialogComponent } from './archive-type-select-dialog.component';
 
+import { vi } from 'vitest';
+
 describe('ArchiveTypeSelectDialogComponent', () => {
 	let component: ArchiveTypeSelectDialogComponent;
 	let fixture: ComponentFixture<ArchiveTypeSelectDialogComponent>;
-	let dialogRefSpy: jasmine.SpyObj<DialogRef>;
+	let dialogRefSpy: any;
 
 	beforeEach(async () => {
-		dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
+		dialogRefSpy = { close: vi.fn() } as any;
 
 		await TestBed.configureTestingModule({
 			imports: [ArchiveTypeSelectDialogComponent],

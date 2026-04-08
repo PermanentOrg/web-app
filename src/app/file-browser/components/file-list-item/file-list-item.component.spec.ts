@@ -16,6 +16,8 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { FileListItemComponent } from './file-list-item.component';
 
+import { vi } from 'vitest';
+
 @Pipe({ name: 'itemTypeIcon' })
 class MockItemTypeIconPipe implements PipeTransform {
 	transform(value: any): any {
@@ -58,12 +60,12 @@ describe('FileListItemComponent', () => {
 	};
 
 	const mockEditService = {
-		moveItems: jasmine.createSpy().and.returnValue(Promise.resolve()),
-		updateItems: jasmine.createSpy().and.returnValue(Promise.resolve()),
+		moveItems: vi.fn().mockReturnValue(Promise.resolve()),
+		updateItems: vi.fn().mockReturnValue(Promise.resolve()),
 	};
 
 	const mockDeviceService = {
-		isMobileWidth: jasmine.createSpy().and.returnValue(false),
+		isMobileWidth: vi.fn().mockReturnValue(false),
 	};
 
 	beforeEach(async () => {
@@ -78,33 +80,32 @@ describe('FileListItemComponent', () => {
 				{
 					provide: DataService,
 					useValue: {
-						registerItem: jasmine.createSpy(),
-						unregisterItem: jasmine.createSpy(),
+						registerItem: vi.fn(),
+						unregisterItem: vi.fn(),
 						getSelectedItems: () => new Map(),
-						beginPreparingForNavigate: jasmine.createSpy(),
-						fetchLeanItems: jasmine.createSpy(),
-						setItemMultiSelectStatus: jasmine.createSpy(),
+						beginPreparingForNavigate: vi.fn(),
+						fetchLeanItems: vi.fn(),
+						setItemMultiSelectStatus: vi.fn(),
 						currentFolder: { type: '' },
 					},
 				},
 				{
 					provide: PromptService,
 					useValue: {
-						prompt: jasmine
-							.createSpy()
-							.and.returnValue(
+						prompt: vi.fn()
+							.mockReturnValue(
 								Promise.resolve({ displayName: 'Updated Name' }),
 							),
-						confirm: jasmine.createSpy().and.returnValue(Promise.resolve()),
+						confirm: vi.fn().mockReturnValue(Promise.resolve()),
 					},
 				},
 				{
 					provide: ApiService,
-					useValue: { folder: { getWithChildren: jasmine.createSpy() } },
+					useValue: { folder: { getWithChildren: vi.fn() } },
 				},
 				{
 					provide: MessageService,
-					useValue: { showError: jasmine.createSpy() },
+					useValue: { showError: vi.fn() },
 				},
 				{
 					provide: AccountService,
@@ -117,7 +118,7 @@ describe('FileListItemComponent', () => {
 					provide: DragService,
 					useValue: {
 						events: () => of(),
-						dispatch: jasmine.createSpy(),
+						dispatch: vi.fn(),
 						getDestinationFromDropTarget: () => ({
 							displayName: 'Target Folder',
 						}),
@@ -148,7 +149,7 @@ describe('FileListItemComponent', () => {
 			isRecord: false,
 			dataStatus: 0,
 			isFetching: false,
-			update: jasmine.createSpy(),
+			update: vi.fn(),
 			fetched: Promise.resolve(true),
 		} as any;
 
@@ -176,7 +177,7 @@ describe('FileListItemComponent', () => {
 		component.item.isFolder = true;
 		component.onDragServiceEvent(dragEvent);
 
-		expect(component.isDragTarget).toBeTrue();
+		expect(component.isDragTarget).toBe(true);
 	});
 
 	it('should handle drop and confirm move', async () => {
@@ -186,9 +187,8 @@ describe('FileListItemComponent', () => {
 	});
 
 	it('should reject drop and show error', async () => {
-		editService.moveItems = jasmine
-			.createSpy()
-			.and.returnValue(Promise.reject({ getMessage: () => 'Error' }));
+		editService.moveItems = vi.fn()
+			.mockReturnValue(Promise.reject({ getMessage: () => 'Error' }));
 		await component.onDrop({} as any).catch(() => {
 			expect(TestBed.inject(MessageService).showError).toHaveBeenCalledWith({
 				message: 'Error occurred',
@@ -199,7 +199,7 @@ describe('FileListItemComponent', () => {
 	it('should preview unlisted record', () => {
 		component.isUnlistedShare = true;
 		component.item.isFolder = false;
-		spyOn(component, 'goToItem');
+		vi.spyOn(component, 'goToItem');
 		component.onItemClick({} as MouseEvent);
 
 		expect(component.goToItem).toHaveBeenCalled();
@@ -208,9 +208,9 @@ describe('FileListItemComponent', () => {
 	it('should emit itemClicked on mobile or non-selectable', () => {
 		component.isUnlistedShare = false;
 		component.canSelect = false;
-		mockDeviceService.isMobileWidth.and.returnValue(true);
-		spyOn(component.itemClicked, 'emit');
-		spyOn(component, 'goToItem');
+		mockDeviceService.isMobileWidth.mockReturnValue(true);
+		vi.spyOn(component.itemClicked, 'emit');
+		vi.spyOn(component, 'goToItem');
 		component.onItemClick(new MouseEvent('click'));
 
 		expect(component.goToItem).toHaveBeenCalled();
@@ -219,21 +219,21 @@ describe('FileListItemComponent', () => {
 
 	it('should handle double click and clear timeout', () => {
 		(component as any).singleClickTimeout = setTimeout(() => {}, 100);
-		spyOn(component, 'goToItem');
+		vi.spyOn(component, 'goToItem');
 		component.onItemDoubleClick();
 
 		expect((component as any).singleClickTimeout).toBeNull();
 		expect(component.goToItem).toHaveBeenCalled();
 	});
 
-	it('should emit itemClicked on single click', (done) => {
-		spyOn(component.itemClicked, 'emit');
+	it('should emit itemClicked on single click', () => new Promise<void>((resolve, reject) => {
+		vi.spyOn(component.itemClicked, 'emit');
 		component.onItemSingleClick(new MouseEvent('click'));
 		setTimeout(() => {
 			expect(component.itemClicked.emit).toHaveBeenCalled();
-			done();
+			resolve();
 		}, 150);
-	});
+	}));
 
 	it('should handle touch click', () => {
 		const mockTouch = { clientX: 100, clientY: 100 };
@@ -247,7 +247,7 @@ describe('FileListItemComponent', () => {
 				},
 			},
 		};
-		spyOn(component, 'onItemClick');
+		vi.spyOn(component, 'onItemClick');
 		component.onItemTouchStart(touchStartEvent);
 		component.onItemTouchEnd(touchEndEvent as any);
 
@@ -272,9 +272,8 @@ describe('FileListItemComponent', () => {
 
 	it('should reject update and restore original data', async () => {
 		const { promise, resolve, reject } = Promise.withResolvers();
-		editService.updateItems = jasmine
-			.createSpy()
-			.and.returnValue(Promise.reject({ getMessage: () => 'Error' }));
+		editService.updateItems = vi.fn()
+			.mockReturnValue(Promise.reject({ getMessage: () => 'Error' }));
 		component.saveUpdates({ displayName: 'New' }, { resolve, reject });
 		try {
 			await promise;
@@ -297,7 +296,7 @@ describe('FileListItemComponent', () => {
 	});
 
 	it('should emit itemVisible on intersection', () => {
-		spyOn(component.itemVisible, 'emit');
+		vi.spyOn(component.itemVisible, 'emit');
 		component.onIntersection({ target: {} as Element, visible: true });
 
 		expect(component.itemVisible.emit).toHaveBeenCalled();
@@ -306,9 +305,9 @@ describe('FileListItemComponent', () => {
 	it('should toggle hover flags', () => {
 		component.onMouseOverName();
 
-		expect(component.isNameHovered).toBeTrue();
+		expect(component.isNameHovered).toBe(true);
 		component.onMouseLeaveName();
 
-		expect(component.isNameHovered).toBeFalse();
+		expect(component.isNameHovered).toBe(false);
 	});
 });

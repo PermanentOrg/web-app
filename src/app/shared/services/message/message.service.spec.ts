@@ -7,6 +7,8 @@ import {
 import { MessageComponent } from '@shared/components/message/message.component';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
 
+import { vi } from 'vitest';
+
 describe('MessageService', () => {
 	let service: MessageService;
 	let mockPrConstantsService: Partial<PrConstantsService>;
@@ -18,7 +20,7 @@ describe('MessageService', () => {
 		};
 
 		mockMessageComponent = {
-			display: jasmine.createSpy('display'),
+			display: vi.fn(),
 		};
 
 		TestBed.configureTestingModule({

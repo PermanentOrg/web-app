@@ -3,6 +3,8 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Component } from '@angular/core';
 import { DialogCdkService } from './dialog-cdk.service';
 
+import { vi } from 'vitest';
+
 @Component({
 	selector: 'pr-dummy',
 	imports: [],
@@ -25,7 +27,7 @@ describe('DialogCdkService', () => {
 	});
 
 	it('it wraps around Angular CDK dialog.open', () => {
-		const open = spyOn(dialog, 'open').and.stub();
+		const open = vi.spyOn(dialog, 'open').mockImplementation((() => {}) as any);
 		const config = {
 			width: '640px',
 			height: '480px',

@@ -15,43 +15,38 @@ import { FolderResponse } from '@shared/services/api/folder.repo';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { ProfileEditComponent } from './profile-edit.component';
 
+import { vi } from 'vitest';
+
 describe('ProfileEditComponent', () => {
 	let component: ProfileEditComponent;
 	let fixture: ComponentFixture<ProfileEditComponent>;
 
-	const mockDialogRef = { close: jasmine.createSpy('close') };
-	const mockDialogService = jasmine.createSpyObj('DialogCdkService', ['open']);
-	mockDialogService.open.and.returnValue(mockDialogRef);
+	const mockDialogRef = { close: vi.fn() };
+	const mockDialogService = { open: vi.fn() } as any;
+	mockDialogService.open.mockReturnValue(mockDialogRef);
 
-	const mockCookieService = jasmine.createSpyObj('CookieService', ['check']);
-	mockCookieService.check.and.returnValue(false);
+	const mockCookieService = { check: vi.fn() } as any;
+	mockCookieService.check.mockReturnValue(false);
 
-	const mockProfileService = jasmine.createSpyObj('ProfileService', [
-		'calculateProfileProgress',
-		'getProfileItemDictionary',
-		'fetchProfileItems',
-		'checkProfilePublic',
-	]);
-	mockProfileService.calculateProfileProgress.and.returnValue(0);
-	mockProfileService.getProfileItemDictionary.and.returnValue({});
-	mockProfileService.fetchProfileItems.and.returnValue(Promise.resolve());
-	mockProfileService.checkProfilePublic.and.returnValue(true);
+	const mockProfileService = { calculateProfileProgress: vi.fn(), getProfileItemDictionary: vi.fn(), fetchProfileItems: vi.fn(), checkProfilePublic: vi.fn() } as any;
+	mockProfileService.calculateProfileProgress.mockReturnValue(0);
+	mockProfileService.getProfileItemDictionary.mockReturnValue({});
+	mockProfileService.fetchProfileItems.mockReturnValue(Promise.resolve());
+	mockProfileService.checkProfilePublic.mockReturnValue(true);
 	const mockAccountService = {
-		getPrivateRoot: jasmine
-			.createSpy('getPrivateRoot')
-			.and.returnValue('root-folder'),
+		getPrivateRoot: vi.fn()
+			.mockReturnValue('root-folder'),
 	};
 
 	const mockApiService = {
 		folder: {
-			updateRoot: jasmine
-				.createSpy('updateRoot')
-				.and.returnValue(Promise.resolve()),
+			updateRoot: vi.fn()
+				.mockReturnValue(Promise.resolve()),
 		},
 	};
 
 	const mockFolderPickerService = {
-		chooseRecord: jasmine.createSpy('chooseRecord'),
+		chooseRecord: vi.fn(),
 	};
 
 	beforeEach(async () => {
@@ -96,11 +91,11 @@ describe('ProfileEditComponent', () => {
 
 	it('should open ProfileEditFirstTimeDialogComponent when showFirstTimeDialog is called', () => {
 		component.totalProgress = 0; // Ensure the condition to open the dialog is met
-		mockCookieService.check.and.returnValue(false);
+		mockCookieService.check.mockReturnValue(false);
 
 		component.showFirstTimeDialog();
 
-		expect(mockDialogService.open).toHaveBeenCalledWith(jasmine.any(Function), {
+		expect(mockDialogService.open).toHaveBeenCalledWith(expect.any(Function), {
 			width: '760px',
 			height: 'auto',
 		});
@@ -110,7 +105,7 @@ describe('ProfileEditComponent', () => {
 		const item = {} as any;
 		await component.chooseLocationForItem(item);
 
-		expect(mockDialogService.open).toHaveBeenCalledWith(jasmine.any(Function), {
+		expect(mockDialogService.open).toHaveBeenCalledWith(expect.any(Function), {
 			data: { profileItem: item },
 			height: 'auto',
 			width: '600px',
@@ -125,13 +120,13 @@ describe('ProfileEditComponent', () => {
 			thumbURL2000: 'new2000',
 			archiveNbr: 999,
 		});
-		mockFolderPickerService.chooseRecord.and.resolveTo(mockRecord);
+		mockFolderPickerService.chooseRecord.mockResolvedValue(mockRecord);
 
 		await component.chooseBannerPicture();
 
 		expect(mockApiService.folder.updateRoot).toHaveBeenCalled();
 		const [foldersArg, fieldsArg] =
-			mockApiService.folder.updateRoot.calls.mostRecent().args;
+			mockApiService.folder.updateRoot.mock.lastCall;
 
 		expect(fieldsArg).toEqual(['thumbArchiveNbr', 'view', 'viewProperty']);
 		expect(foldersArg[0].thumbArchiveNbr).toBe(999);
@@ -146,7 +141,7 @@ describe('ProfileEditComponent', () => {
 	it('should restore original thumbArchiveNbr when chooseBannerPicture throws FolderResponse', async () => {
 		const originalValue = component.publicRoot.thumbArchiveNbr;
 
-		mockFolderPickerService.chooseRecord.and.callFake(() => {
+		mockFolderPickerService.chooseRecord.mockImplementation(() => {
 			throw new FolderResponse({});
 		});
 

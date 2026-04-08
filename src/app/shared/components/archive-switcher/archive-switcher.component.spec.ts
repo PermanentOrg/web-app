@@ -16,6 +16,8 @@ import { Component } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { ArchiveSwitcherComponent } from './archive-switcher.component';
 
+import { vi } from 'vitest';
+
 @Component({
 	selector: 'pr-archive-small',
 	template: '',
@@ -35,35 +37,34 @@ describe('ArchiveSwitcherComponent', () => {
 	let fixture: ComponentFixture<ArchiveSwitcherComponent>;
 
 	const mockAccountService = {
-		getArchive: jasmine
-			.createSpy()
-			.and.returnValue(
+		getArchive: vi.fn()
+			.mockReturnValue(
 				new ArchiveVO({ archiveId: '123', fullName: 'Current Archive' }),
 			),
-		refreshArchives: jasmine.createSpy().and.returnValue(
+		refreshArchives: vi.fn().mockReturnValue(
 			Promise.resolve([
 				{ archiveId: '123', fullName: 'Current Archive' },
 				{ archiveId: '456', fullName: 'Other Archive' },
 			]),
 		),
-		setArchive: jasmine.createSpy(),
-		changeArchive: jasmine.createSpy().and.returnValue(Promise.resolve()),
+		setArchive: vi.fn(),
+		changeArchive: vi.fn().mockReturnValue(Promise.resolve()),
 	};
 
 	const mockDialogRef = {
-		close: jasmine.createSpy(),
+		close: vi.fn(),
 	};
 
 	const mockApiService = {
 		archive: {
-			get: jasmine.createSpy().and.returnValue(
+			get: vi.fn().mockReturnValue(
 				Promise.resolve({
 					getArchiveVO: () =>
 						new ArchiveVO({ archiveId: '789', fullName: 'New Archive' }),
 				}),
 			),
-			accept: jasmine.createSpy().and.returnValue(Promise.resolve()),
-			create: jasmine.createSpy().and.returnValue(
+			accept: vi.fn().mockReturnValue(Promise.resolve()),
+			create: vi.fn().mockReturnValue(
 				Promise.resolve({
 					getArchiveVO: () =>
 						new ArchiveVO({ archiveId: '789', fullName: 'New Archive' }),
@@ -73,14 +74,13 @@ describe('ArchiveSwitcherComponent', () => {
 	};
 
 	const mockDataService = {
-		setCurrentFolder: jasmine.createSpy(),
+		setCurrentFolder: vi.fn(),
 	};
 
 	const mockPromptService = {
-		promptButtons: jasmine
-			.createSpy()
-			.and.returnValue(Promise.resolve('switch')),
-		prompt: jasmine.createSpy().and.returnValue(
+		promptButtons: vi.fn()
+			.mockReturnValue(Promise.resolve('switch')),
+		prompt: vi.fn().mockReturnValue(
 			Promise.resolve({
 				fullName: 'New Archive',
 				type: 'type.archive.person',
@@ -89,15 +89,15 @@ describe('ArchiveSwitcherComponent', () => {
 	};
 
 	const mockMessageService = {
-		showError: jasmine.createSpy(),
+		showError: vi.fn(),
 	};
 
 	const mockRouter = {
-		navigate: jasmine.createSpy(),
+		navigate: vi.fn(),
 	};
 
 	const mockPrConstants = {
-		translate: jasmine.createSpy().and.returnValue('Translated Role'),
+		translate: vi.fn().mockReturnValue('Translated Role'),
 	};
 
 	beforeEach(async () => {
@@ -129,12 +129,12 @@ describe('ArchiveSwitcherComponent', () => {
 		tick();
 
 		expect(mockDataService.setCurrentFolder).toHaveBeenCalledWith(
-			jasmine.any(FolderVO),
+			expect.any(FolderVO),
 		);
 
 		expect(mockAccountService.refreshArchives).toHaveBeenCalled();
 		expect(component.archives.length).toBe(1);
-		expect(component.archivesLoading).toBeFalse();
+		expect(component.archivesLoading).toBe(false);
 	}));
 
 	it('should trigger animation in ngAfterViewInit', () => {
@@ -146,7 +146,7 @@ describe('ArchiveSwitcherComponent', () => {
 				callback(document.createElement('div'), 0, mockNodeList),
 		} as unknown as NodeListOf<Element>;
 
-		spyOn(document, 'querySelectorAll').and.returnValue(mockNodeList);
+		vi.spyOn(document, 'querySelectorAll').mockReturnValue(mockNodeList);
 		component.ngAfterViewInit();
 
 		expect(document.querySelectorAll).toHaveBeenCalledWith(
@@ -159,7 +159,7 @@ describe('ArchiveSwitcherComponent', () => {
 			archiveId: '456',
 			fullName: 'Other Archive',
 		});
-		spyOn(archive, 'isPending').and.returnValue(false);
+		vi.spyOn(archive, 'isPending').mockReturnValue(false);
 
 		component.archiveClick(archive);
 		tick();
@@ -171,7 +171,7 @@ describe('ArchiveSwitcherComponent', () => {
 	}));
 
 	it('should handle createArchiveClick and push new archive', fakeAsync(() => {
-		spyOn(component, 'archiveClick');
+		vi.spyOn(component, 'archiveClick');
 		component.createArchiveClick();
 		tick();
 
@@ -218,7 +218,7 @@ describe('ArchiveSwitcherComponent', () => {
 	}));
 
 	it('should call createArchiveClick on button click', () => {
-		spyOn(component, 'createArchiveClick');
+		vi.spyOn(component, 'createArchiveClick');
 		fixture.detectChanges();
 
 		const buttons = fixture.nativeElement.querySelectorAll(

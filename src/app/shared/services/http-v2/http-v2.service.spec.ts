@@ -73,22 +73,22 @@ describe('HttpV2Service', () => {
 		expect(service).toBeTruthy();
 	});
 
-	it('should be able to make a request as a promise', (done) => {
+	it('should be able to make a request as a promise', () => new Promise<void>((resolve, reject) => {
 		getFirst(service.post('/api/v2/health', {}))
 			.toPromise()
 			.then((response: any) => {
 				expect(response.status).toBe('available');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 
 		expect(request.request.method).toEqual('POST');
 		expect(request.request.headers.get('Request-Version')).toBe('2');
-		expect(request.request.headers.has('Authorization')).toBeFalse();
+		expect(request.request.headers.has('Authorization')).toBe(false);
 		request.flush({ status: 'available' });
-	});
+	}));
 
 	it('should be able to pass in CSRF token in POST requests', () => {
 		service.post('/api/v2/health', {}, null, { csrf: true }).toPromise();
@@ -99,25 +99,25 @@ describe('HttpV2Service', () => {
 		request.flush({ status: 'available' });
 	});
 
-	it('should be able to pass in a response class', (done) => {
+	it('should be able to pass in a response class', () => new Promise<void>((resolve, reject) => {
 		service
 			.post('/api/v2/health', {}, HealthResponse)
 			.toPromise()
 			.then((response) => {
 				const resp = response[0];
 
-				expect(resp instanceof HealthResponse).toBeTrue();
+				expect(resp instanceof HealthResponse).toBe(true);
 				expect(resp.status).toBe('available');
-				expect(resp.constructorCalled).toBeTrue();
-				done();
+				expect(resp.constructorCalled).toBe(true);
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 		request.flush({ status: 'available' });
-	});
+	}));
 
-	it('should set the new csrf token', (done) => {
+	it('should set the new csrf token', () => new Promise<void>((resolve, reject) => {
 		const response = {
 			status: 'available',
 			csrf: 'potato',
@@ -128,22 +128,22 @@ describe('HttpV2Service', () => {
 			.toPromise()
 			.then(() => {
 				expect(storage.session.get('CSRF')).toBe('potato');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 		const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 		request.flush(response);
-	});
+	}));
 
-	it('should be able to make a GET request', (done) => {
+	it('should be able to make a GET request', () => new Promise<void>((resolve, reject) => {
 		service
 			.get('/api/v2/health', { test: 'potato' })
 			.toPromise()
 			.then(() => {
 				expect(storage.session.get('CSRF')).toBe('csrf_token');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const request = httpTestingController.expectOne(
 			apiUrl('/api/v2/health?test=potato'),
@@ -153,17 +153,17 @@ describe('HttpV2Service', () => {
 		expect(request.request.headers.get('Request-Version')).toBe('2');
 		expect(request.request.body).toBeNull();
 		request.flush({ status: 'available' });
-	});
+	}));
 
-	it('should be able to make a DELETE request', (done) => {
+	it('should be able to make a DELETE request', () => new Promise<void>((resolve, reject) => {
 		service
 			.delete('/api/v2/health', { id: 32 })
 			.toPromise()
 			.then(() => {
 				expect(storage.session.get('CSRF')).toBe('csrf_token');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const request = httpTestingController.expectOne(
 			apiUrl('/api/v2/health?id=32'),
@@ -173,17 +173,17 @@ describe('HttpV2Service', () => {
 		expect(request.request.headers.get('Request-Version')).toBe('2');
 		expect(request.request.body).toBeNull();
 		request.flush({ status: 'available' });
-	});
+	}));
 
-	it('should be able to make a PUT request', (done) => {
+	it('should be able to make a PUT request', () => new Promise<void>((resolve, reject) => {
 		service
 			.put('/api/v2/health', { id: 32, test: 'potato' })
 			.toPromise()
 			.then(() => {
 				expect(storage.session.get('CSRF')).toBe('1234');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 
@@ -191,7 +191,7 @@ describe('HttpV2Service', () => {
 		expect(request.request.headers.get('Request-Version')).toBe('2');
 		expect(request.request.body).not.toBeNull();
 		request.flush({ status: 'available', csrf: '1234' });
-	});
+	}));
 
 	it('should not add a ? to an empty GET request', () => {
 		service.get('/api/v2/health', {}).toPromise();
@@ -214,19 +214,19 @@ describe('HttpV2Service', () => {
 		request.flush({});
 	});
 
-	it('should be able to handle being passed an array', (done) => {
+	it('should be able to handle being passed an array', () => new Promise<void>((resolve, reject) => {
 		service
 			.get('/api/v2/health', {}, HealthResponse)
 			.toPromise()
 			.then((resp) => {
 				expect(resp.length).toBe(2);
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 		request.flush([{ status: 'available' }, { status: 'unavailable' }]);
-	});
+	}));
 
 	it('can prevent csrf from being sent', () => {
 		service.post('/api/v2/health', {}, HealthResponse).toPromise();
@@ -236,7 +236,7 @@ describe('HttpV2Service', () => {
 		expect(req.request.body.csrf).toBeUndefined();
 	});
 
-	it('should emit an event on a 401 Unauthorized response code', (done) => {
+	it('should emit an event on a 401 Unauthorized response code', () => new Promise<void>((resolve, reject) => {
 		let expirationObserved = false;
 		const subscription = service.tokenExpired.subscribe(() => {
 			expirationObserved = true;
@@ -246,9 +246,9 @@ describe('HttpV2Service', () => {
 			.get('/api/v2/health', {}, HealthResponse)
 			.toPromise()
 			.catch(() => {
-				expect(expirationObserved).toBeTrue();
+				expect(expirationObserved).toBe(true);
 				subscription.unsubscribe();
-				done();
+				resolve();
 			});
 
 		const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
@@ -259,7 +259,7 @@ describe('HttpV2Service', () => {
 				statusText: 'unauthorized',
 			},
 		);
-	});
+	}));
 
 	it('can have its stela domain configured', () => {
 		MockSecretService.stelaDomain = 'https://api.local.permanent.org/api/';
@@ -288,7 +288,7 @@ describe('HttpV2Service', () => {
 		);
 	});
 
-	it('should correctly handle responseType: text', (done) => {
+	it('should correctly handle responseType: text', () => new Promise<void>((resolve, reject) => {
 		service
 			.post('/api/v2/health', {}, undefined, {
 				responseType: 'text',
@@ -297,9 +297,9 @@ describe('HttpV2Service', () => {
 			.then((response) => {
 				expect(typeof response[0]).toBe('string');
 				expect(response[0]).toBe('OK');
-				done();
+				resolve();
 			})
-			.catch(done.fail);
+			.catch(reject);
 
 		const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 
@@ -307,7 +307,7 @@ describe('HttpV2Service', () => {
 		expect(request.request.headers.get('Request-Version')).toBe('2');
 
 		request.flush('OK', { status: 200, statusText: 'OK' });
-	});
+	}));
 
 	it('should be able to test if the auth token is defined', () => {
 		service.setAuthToken('potato');
@@ -319,9 +319,9 @@ describe('HttpV2Service', () => {
 		expect(service.isAuthTokenSet()).toBeFalsy();
 	});
 
-	it('should be able to add array parameters to GET requests', (done) => {
+	it('should be able to add array parameters to GET requests', () => new Promise<void>((resolve, reject) => {
 		firstValueFrom(service.get('v2/health', { arrayVals: [1, 2, 3] })).finally(
-			() => done(),
+			() => resolve(),
 		);
 
 		const req = httpTestingController.expectOne(
@@ -332,7 +332,7 @@ describe('HttpV2Service', () => {
 		expect(req.request.headers.get('Request-Version')).toBe('2');
 
 		req.flush('OK', { status: 200, statusText: 'OK' });
-	});
+	}));
 
 	it('should add X-Permanent-Share-Token header in POST request', () => {
 		service
@@ -361,7 +361,7 @@ describe('HttpV2Service', () => {
 
 		const req = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 
-		expect(req.request.headers.has('X-Permanent-Share-Token')).toBeFalse();
+		expect(req.request.headers.has('X-Permanent-Share-Token')).toBe(false);
 		req.flush({ status: 'available' });
 	});
 });

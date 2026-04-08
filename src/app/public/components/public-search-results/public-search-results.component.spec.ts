@@ -11,6 +11,8 @@ import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { DataService } from '../../../shared/services/data/data.service';
 import { PublicSearchResultsComponent } from './public-search-results.component';
 
+import { vi } from 'vitest';
+
 describe('PublicSearchResultsComponent', () => {
 	let component: PublicSearchResultsComponent;
 	let fixture: ComponentFixture<PublicSearchResultsComponent>;
@@ -21,10 +23,8 @@ describe('PublicSearchResultsComponent', () => {
 	} as any;
 
 	beforeEach(async () => {
-		mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-		mockSearchService = jasmine.createSpyObj('SearchService', [
-			'getResultsInPublicArchive',
-		]);
+		mockRouter = { navigate: vi.fn() } as any;
+		mockSearchService = { getResultsInPublicArchive: vi.fn() } as any;
 
 		await TestBed.configureTestingModule({
 			declarations: [PublicSearchResultsComponent, GetThumbnailPipe],

@@ -10,6 +10,8 @@ import { FormEditComponent } from '../form-edit/form-edit.component';
 import { ManageMetadataModule } from '../../manage-metadata.module';
 import { CategoryEditComponent } from './category-edit.component';
 
+import { vi } from 'vitest';
+
 describe('CategoryEditComponent', () => {
 	let category: string;
 	let tags: TagVO[];
@@ -111,8 +113,8 @@ describe('CategoryEditComponent', () => {
 	it('should be able to delete a category', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(CategoryEditComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
-		const deletedCategorySpy = spyOn(instance.deletedCategory, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
+		const deletedCategorySpy = vi.spyOn(instance.deletedCategory, 'emit');
 
 		await instance.delete();
 
@@ -126,13 +128,13 @@ describe('CategoryEditComponent', () => {
 	it('should deal with errors while deleting', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(CategoryEditComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
-		const deletedCategorySpy = spyOn(instance.deletedCategory, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
+		const deletedCategorySpy = vi.spyOn(instance.deletedCategory, 'emit');
 
 		error = true;
-		await expectAsync(instance.delete()).toBeRejected();
+		await expect(instance.delete()).rejects.toThrow();
 
-		expect(messageShown).toBeTrue();
+		expect(messageShown).toBe(true);
 		expect(refreshTagsSpy).not.toHaveBeenCalled();
 		expect(deletedCategorySpy).not.toHaveBeenCalled();
 	});
@@ -140,14 +142,14 @@ describe('CategoryEditComponent', () => {
 	it('should be able to save a category', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(CategoryEditComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
 
 		await instance.save('potato');
 
 		expect(savedTags.length).toBe(2);
 		savedTags.forEach((tag) => {
-			expect(tag.name.startsWith('potato')).toBeTrue(); // Verify category name changed
-			expect(tag.name.substring(6).includes('potato')).toBeFalse(); // Verify value name not changed
+			expect(tag.name.startsWith('potato')).toBe(true); // Verify category name changed
+			expect(tag.name.substring(6).includes('potato')).toBe(false); // Verify value name not changed
 		});
 
 		expect(refreshTagsSpy).toHaveBeenCalled();
@@ -156,12 +158,12 @@ describe('CategoryEditComponent', () => {
 	it('should deal with errors while saving', async () => {
 		defaultRender();
 		const instance = ngMocks.findInstance(CategoryEditComponent);
-		const refreshTagsSpy = spyOn(instance.refreshTags, 'emit');
+		const refreshTagsSpy = vi.spyOn(instance.refreshTags, 'emit');
 
 		error = true;
-		await expectAsync(instance.save('potato')).toBeRejected();
+		await expect(instance.save('potato')).rejects.toThrow();
 
-		expect(messageShown).toBeTrue();
+		expect(messageShown).toBe(true);
 		expect(refreshTagsSpy).not.toHaveBeenCalled();
 	});
 
@@ -169,7 +171,7 @@ describe('CategoryEditComponent', () => {
 		rejectDelete = true;
 		defaultRender();
 		const instance = ngMocks.findInstance(CategoryEditComponent);
-		const deletedCategorySpy = spyOn(instance.deletedCategory, 'emit');
+		const deletedCategorySpy = vi.spyOn(instance.deletedCategory, 'emit');
 
 		await instance.delete();
 

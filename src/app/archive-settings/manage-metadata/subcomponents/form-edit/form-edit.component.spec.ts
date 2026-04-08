@@ -79,7 +79,7 @@ describe('FormEditComponent', () => {
 		fixture.detectChanges();
 		await fixture.whenStable();
 
-		expect(deleted).toBeTrue();
+		expect(deleted).toBe(true);
 	});
 
 	it('should be able to open the value editor', () => {
@@ -125,7 +125,7 @@ describe('FormEditComponent', () => {
 		fixture.detectChanges();
 
 		expect(ngMocks.findAll('.value-editor').length).toBe(0);
-		expect(updated).toBeTrue();
+		expect(updated).toBe(true);
 		expect(newTagName).toBe('potato');
 		expect(instance.newValueName).toBe('potato');
 	});
@@ -181,7 +181,7 @@ describe('FormEditComponent', () => {
 
 		ngMocks.findAll('.edit-delete-trigger')[0].triggerEventHandler('click', {});
 
-		expect(emitted).toBeTrue();
+		expect(emitted).toBe(true);
 	});
 
 	it('should open the editor directly if double clicked', () => {
