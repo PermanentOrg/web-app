@@ -3,7 +3,7 @@ import { Environment } from './environment-interface';
 
 export const environment: Environment = {
 	production: true,
-	apiUrl: 'https://www.permanent.org/api',
+	apiUrl: 'https://app.permanent.org/api',
 	hmr: false,
 	firebase: {
 		authDomain: 'prpledgeprod.firebaseapp.com',
