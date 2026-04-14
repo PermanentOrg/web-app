@@ -60,6 +60,7 @@ interface StelaFolder {
 	description: string;
 	displayTimestamp: string;
 	displayEndTimestamp: string;
+	displayTime?: string;
 	displayName: string;
 	downloadName: string;
 	imageRatio: number;
@@ -105,6 +106,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		displayName: stelaFolder.displayName,
 		displayDT: stelaFolder.displayTimestamp,
 		displayEndDT: stelaFolder.displayEndTimestamp,
+		displayTime: stelaFolder.displayTime,
 		derivedDT: stelaFolder.displayTimestamp,
 		derivedEndDT: stelaFolder.displayEndTimestamp,
 		note: '',
@@ -170,12 +172,27 @@ export class FolderRepo extends BaseRepo {
 		);
 	}
 
-	private async getStelaFolder(
-		folderVO: FolderVO,
+	public async getStelaFolderVOs(
+		folderVOs: FolderVO[],
 		shareToken: string = null,
-	): Promise<StelaFolder> {
+	): Promise<FolderResponse> {
+		const stelaFolders = await this.getStelaFolders(folderVOs, shareToken);
+
+		const folderVOsData = stelaFolders.map((stelaFolder) => ({
+			data: [{ FolderVO: convertStelaFolderToFolderVO(stelaFolder) }],
+		}));
+
+		return new FolderResponse({
+			Results: folderVOsData,
+		});
+	}
+
+	private async getStelaFolders(
+		folderVOs: FolderVO[],
+		shareToken: string = null,
+	): Promise<StelaFolder[]> {
 		const queryData = {
-			folderIds: [folderVO.folderId],
+			folderIds: folderVOs.map((currentFolder) => currentFolder.folderId),
 		};
 		let folderResponse: PagedStelaResponse<StelaFolder>;
 		if (shareToken) {
@@ -199,16 +216,32 @@ export class FolderRepo extends BaseRepo {
 		// it just responds with a 200 and an empty array and if we get an empty array,
 		// we try as a fallback and see if maybe we can get the files as an authenticated user
 		if (!folderResponse?.items?.[0]) {
-			folderResponse = (
-				await firstValueFrom(
-					this.httpV2.get<PagedStelaResponse<StelaFolder>>(
-						`v2/folder`,
-						queryData,
-					),
-				)
-			)[0];
+			const response = await firstValueFrom(
+				this.httpV2.get<PagedStelaResponse<StelaFolder>>(
+					`v2/folder`,
+					queryData,
+				),
+			);
+			folderResponse = response[0];
 		}
-		return folderResponse.items[0];
+		return folderResponse?.items || [];
+	}
+
+	public async updateStelaFolder(folderVO: FolderVO): Promise<FolderResponse> {
+		const payload = {
+			displayTime: folderVO.displayTime,
+		};
+
+		const response = await firstValueFrom(
+			this.httpV2.patch<StelaFolder>(`v2/folder/${folderVO.folderId}`, payload),
+		);
+
+		const stelaFolder = response[0];
+		const updatedFolderVO = convertStelaFolderToFolderVO(stelaFolder);
+
+		return new FolderResponse({
+			Results: [[{ FolderVO: updatedFolderVO }]],
+		});
 	}
 
 	private async getStelaFolderChildren(
@@ -269,11 +302,15 @@ export class FolderRepo extends BaseRepo {
 	): Promise<FolderResponse> {
 		// Stela has two separate endpoints -- one for loading the folder, one for loading the children.
 		const requests = folderVOs.map(async (folderVO) => {
-			const stelaFolder = await this.getStelaFolder(folderVO, shareToken);
+			const stelaFolders = await this.getStelaFolders([folderVO], shareToken);
 			const stelaFolderChildren = await this.getStelaFolderChildren(
 				folderVO,
 				shareToken,
 			);
+			const stelaFolder = stelaFolders[0];
+			if (!stelaFolder) {
+				throw new Error('No folder returned from getStelaFolders');
+			}
 			return {
 				...stelaFolder,
 				children: stelaFolderChildren,

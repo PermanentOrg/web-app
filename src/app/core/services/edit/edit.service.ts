@@ -356,10 +356,23 @@ export class EditService {
 				item.update(newData);
 				await this.updateItems([item], [property]);
 			} catch (err) {
+				const revertData: Partial<ItemVO> = {};
+				revertData[property] = originalValue;
+				item.update(revertData);
+
 				if (err instanceof FolderResponse || err instanceof RecordResponse) {
-					const revertData: Partial<ItemVO> = {};
-					revertData[property] = originalValue;
-					item.update(revertData);
+					this.message.showError({
+						message: err.getMessage(),
+						translate: true,
+					});
+				} else {
+					this.message.showError({
+						message:
+							err?.error?.message ||
+							err?.error?.error ||
+							err?.message ||
+							'Failed to save changes',
+					});
 				}
 			}
 		}
@@ -391,11 +404,7 @@ export class EditService {
 
 		const promises: Array<Promise<any>> = [];
 
-		if (folders.length) {
-			promises.push(this.api.folder.update(folders, whitelist));
-		} else {
-			promises.push(Promise.resolve());
-		}
+		promises.push(this.updateFolders(folders, whitelist));
 
 		promises.push(this.updateRecords(records, whitelist));
 
@@ -412,6 +421,18 @@ export class EditService {
 
 					if (updatedItem.TimezoneVO) {
 						newData.TimezoneVO = updatedItem.TimezoneVO;
+					}
+
+					if (updatedItem.displayTime) {
+						newData.displayTime = updatedItem.displayTime;
+					}
+
+					if (updatedItem.displayDT) {
+						newData.displayDT = updatedItem.displayDT;
+					}
+
+					if (updatedItem.displayEndDT) {
+						newData.displayEndDT = updatedItem.displayEndDT;
 					}
 
 					const folder =
@@ -664,12 +685,12 @@ export class EditService {
 		recordKey?: (keyof ItemVO)[],
 	): Promise<RecordVO[] | void> {
 		if (!records.length) {
-			return await Promise.resolve();
+			return;
 		}
 
 		const promises: Array<Promise<unknown[] | RecordResponse[]>> = [];
 
-		if (recordKey?.[0] === 'displayDT') {
+		if (recordKey?.[0] === 'displayTime') {
 			promises.push(
 				Promise.all(
 					records.map(
@@ -684,5 +705,32 @@ export class EditService {
 
 		await Promise.all(promises);
 		return (await this.api.record.get(records)).getRecordVOs();
+	}
+
+	private async updateFolders(
+		folders: FolderVO[],
+		folderKeys?: (keyof ItemVO)[],
+	): Promise<FolderResponse | void> {
+		if (!folders.length) {
+			return;
+		}
+
+		const promises: Array<Promise<FolderResponse | FolderResponse[]>> = [];
+
+		if (folderKeys?.includes('displayTime')) {
+			promises.push(
+				Promise.all(
+					folders.map(
+						async (folder) => await this.api.folder.updateStelaFolder(folder),
+					),
+				),
+			);
+		}
+
+		promises.push(this.api.folder.update(folders, folderKeys));
+
+		await Promise.all(promises);
+
+		return await this.api.folder.getStelaFolderVOs(folders);
 	}
 }

@@ -37,7 +37,7 @@ describe('Folder repo', () => {
 			'sendRequest',
 			'sendRequestPromise',
 		]);
-		httpV2Spy = jasmine.createSpyObj('HttpV2Service', ['get']);
+		httpV2Spy = jasmine.createSpyObj('HttpV2Service', ['get', 'patch']);
 
 		TestBed.configureTestingModule({
 			providers: [
@@ -208,6 +208,194 @@ describe('Folder repo', () => {
 
 			expect(result).toEqual([mockShareLink, secondShareLink]);
 			expect(result.length).toBe(2);
+		});
+	});
+
+	describe('updateStelaFolder', () => {
+		const mockStelaFolder = {
+			folderId: '123',
+			size: 1024,
+			location: { id: '1', name: 'Test Location' },
+			parentFolder: { id: '456' },
+			shares: [],
+			tags: [],
+			archive: { id: 'arch1', name: 'Test Archive' },
+			createdAt: '2024-01-01T00:00:00Z',
+			updatedAt: '2024-01-02T00:00:00Z',
+			description: 'Test folder',
+			displayName: 'Test Folder',
+			downloadName: 'test-folder',
+			imageRatio: 1.5,
+			paths: { names: ['path1', 'path2'] },
+			publicAt: null,
+			sort: 'name',
+			thumbnailUrls: {
+				'200': 'url200',
+				'256': 'url256',
+				'500': 'url500',
+				'1000': 'url1000',
+				'2000': 'url2000',
+			},
+			type: 'folder',
+			status: 'ok',
+			view: 'grid',
+		};
+
+		it('should send PATCH request with the displayTime EDTF string', async () => {
+			const folderVO = new FolderVO({
+				folderId: 123,
+				displayTime: '1985-05-20T10:00:00+05:30/1990-06-15T12:00:00+05:30',
+			});
+
+			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
+
+			const result = await folderRepo.updateStelaFolder(folderVO);
+
+			expect(httpV2Spy.patch).toHaveBeenCalledWith('v2/folder/123', {
+				displayTime: '1985-05-20T10:00:00+05:30/1990-06-15T12:00:00+05:30',
+			});
+
+			expect(result.Results[0][0].FolderVO).toBeDefined();
+		});
+
+		it('should send displayTime without end date', async () => {
+			const folderVO = new FolderVO({
+				folderId: 456,
+				displayTime: '1985-05-20T10:00:00+01:00',
+			});
+
+			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
+
+			await folderRepo.updateStelaFolder(folderVO);
+
+			expect(httpV2Spy.patch).toHaveBeenCalledWith('v2/folder/456', {
+				displayTime: '1985-05-20T10:00:00+01:00',
+			});
+		});
+
+		it('should convert response StelaFolder to FolderVO', async () => {
+			const folderVO = new FolderVO({
+				folderId: 123,
+				displayTime: '1985-05-20T00:00:00+00:00',
+			});
+
+			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
+
+			const result = await folderRepo.updateStelaFolder(folderVO);
+
+			expect(result.Results[0][0].FolderVO).toBeDefined();
+			expect(result.Results[0][0].FolderVO.folderId).toBe('123');
+			expect(result.Results[0][0].FolderVO.displayName).toBe('Test Folder');
+		});
+	});
+
+	describe('getStelaFolderVOs', () => {
+		const mockStelaFolder = {
+			folderId: '123',
+			size: 1024,
+			location: { id: '1', name: 'Test Location' },
+			parentFolder: { id: '456' },
+			shares: [],
+			tags: [],
+			archive: { id: 'arch1', name: 'Test Archive' },
+			createdAt: '2024-01-01T00:00:00Z',
+			updatedAt: '2024-01-02T00:00:00Z',
+			description: 'Test folder',
+			displayName: 'Test Folder',
+			downloadName: 'test-folder',
+			imageRatio: 1.5,
+			paths: { names: ['path1', 'path2'] },
+			publicAt: null,
+			sort: 'name',
+			thumbnailUrls: {
+				'200': 'url200',
+				'256': 'url256',
+				'500': 'url500',
+				'1000': 'url1000',
+				'2000': 'url2000',
+			},
+			type: 'folder',
+			status: 'ok',
+			view: 'grid',
+		};
+
+		it('should fetch single folder and return FolderResponse', async () => {
+			const folderVO = new FolderVO({ folderId: 123 });
+
+			httpV2Spy.get.and.returnValue(of([{ items: [mockStelaFolder] }]));
+
+			const result = await folderRepo.getStelaFolderVOs([folderVO]);
+
+			expect(httpV2Spy.get).toHaveBeenCalledWith('v2/folder', {
+				folderIds: [123],
+			});
+
+			expect(result.Results.length).toBe(1);
+			expect(result.Results[0].data[0].FolderVO).toBeDefined();
+			expect(result.Results[0].data[0].FolderVO.folderId).toBe('123');
+		});
+
+		it('should fetch multiple folders and return FolderResponse', async () => {
+			const folderVO1 = new FolderVO({ folderId: 123 });
+			const folderVO2 = new FolderVO({ folderId: 456 });
+			const mockStelaFolder2 = { ...mockStelaFolder, folderId: '456' };
+
+			httpV2Spy.get.and.returnValue(
+				of([{ items: [mockStelaFolder, mockStelaFolder2] }]),
+			);
+
+			const result = await folderRepo.getStelaFolderVOs([folderVO1, folderVO2]);
+
+			expect(httpV2Spy.get).toHaveBeenCalledWith('v2/folder', {
+				folderIds: [123, 456],
+			});
+
+			expect(result.Results.length).toBe(2);
+			expect(result.Results[0].data[0].FolderVO.folderId).toBe('123');
+			expect(result.Results[1].data[0].FolderVO.folderId).toBe('456');
+		});
+
+		it('should use share token when provided', async () => {
+			const folderVO = new FolderVO({ folderId: 123 });
+
+			httpV2Spy.get.and.returnValue(of([{ items: [mockStelaFolder] }]));
+
+			await folderRepo.getStelaFolderVOs([folderVO], 'share-token-abc');
+
+			expect(httpV2Spy.get).toHaveBeenCalledWith(
+				'v2/folder',
+				{ folderIds: [123] },
+				null,
+				{ authToken: false, shareToken: 'share-token-abc' },
+			);
+		});
+
+		it('should fallback to auth token when share token returns empty', async () => {
+			const folderVO = new FolderVO({ folderId: 123 });
+
+			httpV2Spy.get.and.returnValues(
+				of([{ items: [] }]),
+				of([{ items: [mockStelaFolder] }]),
+			);
+
+			const result = await folderRepo.getStelaFolderVOs(
+				[folderVO],
+				'bad-share-token',
+			);
+
+			expect(httpV2Spy.get).toHaveBeenCalledTimes(2);
+			expect(httpV2Spy.get).toHaveBeenCalledWith(
+				'v2/folder',
+				{ folderIds: [123] },
+				null,
+				{ authToken: false, shareToken: 'bad-share-token' },
+			);
+
+			expect(httpV2Spy.get).toHaveBeenCalledWith('v2/folder', {
+				folderIds: [123],
+			});
+
+			expect(result.Results[0].data[0].FolderVO).toBeDefined();
 		});
 	});
 });

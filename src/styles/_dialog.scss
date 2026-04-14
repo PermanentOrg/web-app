@@ -218,3 +218,12 @@ $header-height: 3 * $grid-unit;
 		}
 	}
 }
+
+// Edit Date Time Modal positioning - center relative to main content area
+.edit-date-time-modal-dialog-panel {
+	.cdk-overlay-pane {
+		// Shift the modal to the right to account for the left menu
+		// This centers it relative to the main content area instead of the full viewport
+		margin-left: 120px; // Adjust this value to match your left menu width
+	}
+}

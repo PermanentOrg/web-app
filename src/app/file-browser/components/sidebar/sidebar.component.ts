@@ -13,6 +13,11 @@ import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
+import {
+	DateTimeModel,
+	EdtfService,
+} from '@shared/services/edtf-service/edtf.service';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
 
 type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
 @Component({
@@ -42,10 +47,45 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	originalFileExtension: string = '';
 	permanentFileExtension: string = '';
 
+	get displayTimeObject(): DateTimeModel | null {
+		const timeSource =
+			this.selectedItem?.displayTime || this.selectedItem?.displayDT;
+		return timeSource ? this.edtfService.toDateTimeModel(timeSource) : null;
+	}
+
+	get displayTime(): string {
+		return this.parseEdtfInterval('start');
+	}
+
+	get displayEndTime(): string {
+		return this.parseEdtfInterval('end');
+	}
+
+	private parseEdtfInterval(part: 'start' | 'end'): string {
+		const item = this.selectedItem;
+		if (!item) {
+			return '';
+		}
+
+		const displayTimeValue = item.displayTime;
+		if (!displayTimeValue) {
+			return part === 'start' ? item.displayDT || '' : item.displayEndDT || '';
+		}
+
+		if (displayTimeValue.includes('/')) {
+			const parts = displayTimeValue.split('/');
+			return part === 'start' ? parts[0] : parts[1] || '';
+		}
+
+		return part === 'start' ? displayTimeValue : '';
+	}
+
 	constructor(
 		private dataService: DataService,
 		private editService: EditService,
+		private edtfService: EdtfService,
 		private accountService: AccountService,
+		private editDateTimeModalService: EditDateTimeModalService,
 		private cdr: ChangeDetectorRef,
 	) {
 		this.currentArchive = this.accountService.getArchive();
@@ -91,7 +131,13 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 						await this.dataService.fetchFullItems(items);
 						this.isLoading = false;
 					}
+				} else if (
+					this.selectedItem?.isFolder &&
+					!this.selectedItem?.displayTime
+				) {
+					await this.dataService.fetchFullItems([this.selectedItem]);
 				}
+
 				if (
 					this.selectedItem instanceof RecordVO &&
 					this.selectedItem.FileVOs &&
@@ -114,6 +160,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 					this.permanentFileExtension = '';
 					this.isRecord = !this.selectedItem.isFolder;
 				}
+
+				this.cdr.markForCheck();
 			}),
 		);
 	}
@@ -161,8 +209,28 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	}
 
 	async onFinishEditing(property: KeysOfType<ItemVO, String>, value: string) {
-		this.editService.saveItemVoProperty(this.selectedItem, property, value);
-		this.cdr.detectChanges();
+		await this.editService.saveItemVoProperty(
+			this.selectedItem,
+			property,
+			value,
+		);
+		this.cdr.markForCheck();
+	}
+
+	async onDateSaved(result: DateTimeModel) {
+		const newDisplayTime = this.edtfService.toEdtfDate(result);
+		this.onFinishEditing('displayTime', newDisplayTime);
+	}
+
+	async onDateMoreOptions(modalData: DateTimeModel): Promise<void> {
+		const dialogRef = this.editDateTimeModalService.open(modalData);
+
+		dialogRef.closed.subscribe((result) => {
+			if (result) {
+				const newDisplayTime = this.edtfService.toEdtfDate(result);
+				this.onFinishEditing('displayTime', newDisplayTime);
+			}
+		});
 	}
 
 	onLocationClick() {

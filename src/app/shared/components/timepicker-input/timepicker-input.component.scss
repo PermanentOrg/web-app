@@ -1,0 +1,162 @@
+@import 'colors';
+@import 'mixins';
+
+:host {
+	position: relative;
+	display: block;
+	height: 40px;
+}
+
+.pr-time-input-group {
+	@include input-container;
+	padding: 0 0 0 12px;
+
+	&:focus-within,
+	&.active {
+		@include input-focus-state;
+	}
+}
+
+.pr-time-segment {
+	@include input-segment;
+	width: 32px;
+}
+
+.pr-colon {
+	color: $PR-blue-400;
+	font-size: 14px;
+	margin: 0 2px;
+}
+
+.pr-time-icon-wrapper {
+	@include icon-wrapper;
+}
+
+.pr-am-pm-toggle {
+	background: $PR-blue-25;
+	border: 1px solid $PR-blue-100;
+	border-radius: 4px;
+	padding: 0 8px;
+	font-family: 'Usual', sans-serif;
+	font-weight: 400;
+	font-style: normal;
+	font-size: 10px;
+	line-height: 8px;
+	letter-spacing: 0.16em;
+	text-align: center;
+	text-transform: uppercase;
+	color: $PR-blue-900;
+	cursor: pointer;
+	margin-left: auto;
+	margin-right: 4px;
+	width: 40px;
+	height: 24px;
+	gap: 4px;
+	opacity: 1;
+
+	&:hover {
+		background: $PR-blue-100;
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+}
+
+.pr-icon-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 4px;
+	color: $PR-blue-600;
+	display: flex;
+	align-items: center;
+
+	&:hover {
+		color: $PR-blue;
+	}
+
+	&.disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+
+	.material-icons {
+		font-size: 20px;
+	}
+}
+
+.pr-timepicker-dropdown {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+	margin-top: 4px;
+	width: fit-content;
+	background: $white;
+	border: 1px solid $PR-blue-100;
+	border-radius: 8px;
+	box-shadow: 0 4px 16px rgba($black, 0.12);
+	padding: 12px;
+
+	::ng-deep ngb-timepicker {
+		.visually-hidden {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0;
+		}
+
+		.ngb-tp {
+			align-items: center;
+		}
+
+		.ngb-tp-input-container {
+			width: 4em;
+		}
+
+		.ngb-tp-input {
+			font-size: 14px;
+			text-align: center;
+			border: 1px solid $PR-blue-100;
+			border-radius: 6px;
+			padding: 4px;
+
+			&:focus {
+				border-color: $PR-blue;
+				outline: none;
+			}
+		}
+
+		.btn-link {
+			color: $PR-blue-600;
+
+			&:hover {
+				color: $PR-blue;
+			}
+		}
+
+		.ngb-tp-meridian {
+			button {
+				background: $PR-blue-50;
+				border: 1px solid $PR-blue-100;
+				border-radius: 4px;
+				padding: 4px 12px;
+				font-size: 12px;
+				font-weight: 600;
+				color: $PR-blue;
+
+				&:hover {
+					background: $PR-blue-100;
+				}
+			}
+		}
+	}
+}

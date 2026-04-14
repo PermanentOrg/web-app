@@ -1,0 +1,51 @@
+<div class="pr-date-input-group" [class.active]="showDatepicker()">
+	<input
+		type="text"
+		class="pr-date-segment year"
+		[value]="date.year"
+		[disabled]="disabled"
+		(input)="updateYear($event)"
+		placeholder="YYYY"
+		maxlength="4"
+	/>
+	<span class="pr-separator">/</span>
+	<input
+		#monthInput
+		type="text"
+		class="pr-date-segment"
+		[value]="date.month"
+		[disabled]="disabled"
+		(input)="updateMonth($event)"
+		placeholder="MM"
+		maxlength="2"
+	/>
+	<span class="pr-separator">/</span>
+	<input
+		#dayInput
+		type="text"
+		class="pr-date-segment"
+		[value]="date.day"
+		[disabled]="disabled"
+		(input)="updateDay($event)"
+		placeholder="DD"
+		maxlength="2"
+	/>
+	<div class="pr-calendar-icon-wrapper">
+		<span
+			class="pr-icon-button"
+			[class.disabled]="disabled"
+			(click)="toggleDatepicker()"
+		>
+			<i class="material-icons">calendar_today</i>
+		</span>
+	</div>
+</div>
+
+@if (showDatepicker()) {
+	<div class="pr-datepicker-dropdown">
+		<ngb-datepicker
+			[startDate]="datepickerModel()"
+			(dateSelect)="onDateSelect($event)"
+		/>
+	</div>
+}

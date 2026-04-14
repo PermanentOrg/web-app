@@ -47,6 +47,9 @@ describe('EditService', () => {
 		} as unknown as RecordRepo;
 		apiService.folder = {
 			getFolderShareLink: jasmine.createSpy('getFolderShareLink'),
+			update: jasmine.createSpy('update'),
+			updateStelaFolder: jasmine.createSpy('updateStelaFolder'),
+			getStelaFolderVOs: jasmine.createSpy('getStelaFolderVOs'),
 		} as unknown as FolderRepo;
 		apiService.share = {
 			getShareLink: jasmine.createSpy('getShareLink'),
@@ -122,8 +125,8 @@ describe('EditService', () => {
 		expect(apiService.record.update).not.toHaveBeenCalled();
 	});
 
-	it('should call updateStelaRecord when recordKey is displayDT', async () => {
-		const record = new RecordVO({ recordId: 1, displayDT: '2024-01-01' });
+	it('should call updateStelaRecord when recordKey is displayTime', async () => {
+		const record = new RecordVO({ recordId: 1, displayTime: '2024-01-01' });
 		const updatedRecord = new RecordVO({
 			recordId: 1,
 			updatedDT: '2024-03-03',
@@ -143,7 +146,7 @@ describe('EditService', () => {
 			Promise.resolve(mockResponse),
 		);
 
-		await service.updateItems([record], ['displayDT']);
+		await service.updateItems([record], ['displayTime']);
 
 		expect(apiService.record.updateStelaRecord).toHaveBeenCalledWith(record);
 		expect(apiService.record.update).toHaveBeenCalled();
@@ -173,10 +176,10 @@ describe('EditService', () => {
 		expect(apiService.record.get).toHaveBeenCalledWith([record]);
 	});
 
-	it('should call both updateStelaRecord and update when recordKey has displayDT with other properties', async () => {
+	it('should call both updateStelaRecord and update when recordKey has displayTime with other properties', async () => {
 		const record = new RecordVO({
 			recordId: 1,
-			displayDT: '2024-01-01',
+			displayTime: '2024-01-01',
 			displayName: 'Test',
 		});
 		const updatedRecord = new RecordVO({
@@ -197,7 +200,7 @@ describe('EditService', () => {
 			Promise.resolve(mockResponse),
 		);
 
-		await service.updateItems([record], ['displayDT', 'displayName']);
+		await service.updateItems([record], ['displayTime', 'displayName']);
 
 		expect(apiService.record.updateStelaRecord).toHaveBeenCalledWith(record);
 		expect(apiService.record.update).toHaveBeenCalled();
@@ -218,6 +221,238 @@ describe('EditService', () => {
 
 		expect(apiService.record.update).toHaveBeenCalled();
 		expect(recordMock.update).not.toHaveBeenCalled();
+	});
+
+	it('should call folder.update and getStelaFolderVOs when updating folders', async () => {
+		const folder = new FolderVO({ folderId: 1, displayName: 'Test Folder' });
+		const mockFolders = [folder];
+		const mockFolderResponse = {
+			getFolderVOs: jasmine
+				.createSpy('getFolderVOs')
+				.and.returnValue([
+					new FolderVO({ folderId: 1, updatedDT: '2024-03-03' }),
+				]),
+		};
+
+		(apiService.folder.update as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+		(apiService.folder.getStelaFolderVOs as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+
+		await service.updateItems(mockFolders);
+
+		expect(apiService.folder.update).toHaveBeenCalledWith(
+			mockFolders,
+			undefined,
+		);
+
+		expect(apiService.folder.getStelaFolderVOs).toHaveBeenCalledWith(
+			mockFolders,
+		);
+
+		expect(apiService.folder.updateStelaFolder).not.toHaveBeenCalled();
+	});
+
+	it('should update folder with displayTime from server response', async () => {
+		const folder = new FolderVO({
+			folderId: 1,
+			folder_linkId: 100,
+			displayName: 'Test Folder',
+		});
+		const mockFolders = [folder];
+		const updatedFolderVO = new FolderVO({
+			folderId: 1,
+			folder_linkId: 100,
+			updatedDT: '2024-03-03',
+			displayDT: '1985-05-20',
+			displayEndDT: '1990-06-15',
+			displayTime: '1985-05-20/1990-06-15',
+		});
+
+		const mockFolderResponse = {
+			getFolderVOs: jasmine
+				.createSpy('getFolderVOs')
+				.and.returnValue([updatedFolderVO]),
+		};
+
+		(apiService.folder.update as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+		(apiService.folder.getStelaFolderVOs as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+
+		folder.update = jasmine.createSpy('update');
+
+		await service.updateItems(mockFolders);
+
+		expect(folder.update).toHaveBeenCalledWith(
+			jasmine.objectContaining({
+				updatedDT: '2024-03-03',
+				displayTime: '1985-05-20/1990-06-15',
+				displayDT: '1985-05-20T00:00:00.000Z',
+				displayEndDT: '1990-06-15T00:00:00.000Z',
+			}),
+		);
+	});
+
+	it('should update folder with displayDT and displayEndDT when present in response', async () => {
+		const folder = new FolderVO({
+			folderId: 1,
+			folder_linkId: 100,
+			displayName: 'Test Folder',
+		});
+		const mockFolders = [folder];
+		const updatedFolderVO = new FolderVO({
+			folderId: 1,
+			folder_linkId: 100,
+			updatedDT: '2024-03-03',
+			displayDT: '1985-05-20',
+			displayEndDT: '1990-06-15',
+		});
+
+		const mockFolderResponse = {
+			getFolderVOs: jasmine
+				.createSpy('getFolderVOs')
+				.and.returnValue([updatedFolderVO]),
+		};
+
+		(apiService.folder.update as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+		(apiService.folder.getStelaFolderVOs as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+
+		folder.update = jasmine.createSpy('update');
+
+		await service.updateItems(mockFolders);
+
+		expect(folder.update).toHaveBeenCalledWith(
+			jasmine.objectContaining({
+				displayDT: '1985-05-20T00:00:00.000Z',
+				displayEndDT: '1990-06-15T00:00:00.000Z',
+			}),
+		);
+	});
+
+	it('should call updateStelaFolder when whitelist contains displayTime', async () => {
+		const folder = new FolderVO({
+			folderId: 1,
+			displayTime: '1985-05-20T00:00:00+00:00',
+		});
+		const mockFolders = [folder];
+		const mockFolderResponse = {
+			getFolderVOs: jasmine
+				.createSpy('getFolderVOs')
+				.and.returnValue([
+					new FolderVO({ folderId: 1, updatedDT: '2024-03-03' }),
+				]),
+		};
+
+		(apiService.folder.updateStelaFolder as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+		(apiService.folder.update as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+		(apiService.folder.getStelaFolderVOs as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+
+		await service.updateItems(mockFolders, ['displayTime']);
+
+		expect(apiService.folder.updateStelaFolder).toHaveBeenCalledWith(folder);
+		expect(apiService.folder.update).toHaveBeenCalledWith(mockFolders, [
+			'displayTime',
+		]);
+
+		expect(apiService.folder.getStelaFolderVOs).toHaveBeenCalledWith(
+			mockFolders,
+		);
+	});
+
+	it('should handle empty folders array and not call folder methods', async () => {
+		const mockFolders: FolderVO[] = [];
+
+		await service.updateItems(mockFolders);
+
+		expect(apiService.folder.update).not.toHaveBeenCalled();
+		expect(apiService.folder.updateStelaFolder).not.toHaveBeenCalled();
+		expect(apiService.folder.getStelaFolderVOs).not.toHaveBeenCalled();
+	});
+
+	it('should revert property and show error when updateStelaRecord fails', async () => {
+		const messageService = TestBed.inject(MessageService);
+		spyOn(messageService, 'showError');
+
+		const record = new RecordVO({ recordId: 1, displayTime: 'original-value' });
+		const httpError = {
+			error: { message: 'Invalid date format' },
+			message: 'Http failure',
+		};
+
+		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+			Promise.reject(httpError),
+		);
+		(apiService.record.update as jasmine.Spy).and.returnValue(
+			Promise.resolve([]),
+		);
+
+		await service.saveItemVoProperty(record, 'displayTime', 'new-value');
+
+		expect(record.displayTime).toBe('original-value');
+		expect(messageService.showError).toHaveBeenCalledWith({
+			message: 'Invalid date format',
+		});
+	});
+
+	it('should show fallback error when updateStelaRecord fails without error body', async () => {
+		const messageService = TestBed.inject(MessageService);
+		spyOn(messageService, 'showError');
+
+		const record = new RecordVO({ recordId: 1, displayTime: 'original-value' });
+
+		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+			Promise.reject({}),
+		);
+		(apiService.record.update as jasmine.Spy).and.returnValue(
+			Promise.resolve([]),
+		);
+
+		await service.saveItemVoProperty(record, 'displayTime', 'new-value');
+
+		expect(record.displayTime).toBe('original-value');
+		expect(messageService.showError).toHaveBeenCalledWith({
+			message: 'Failed to save changes',
+		});
+	});
+
+	it('should revert property and show error when updateStelaFolder fails', async () => {
+		const messageService = TestBed.inject(MessageService);
+		spyOn(messageService, 'showError');
+
+		const folder = new FolderVO({ folderId: 1, displayTime: 'original-value' });
+		const httpError = { error: { error: 'Invalid EDTF string' } };
+
+		(apiService.folder.updateStelaFolder as jasmine.Spy).and.returnValue(
+			Promise.reject(httpError),
+		);
+		(apiService.folder.update as jasmine.Spy).and.returnValue(
+			Promise.resolve({}),
+		);
+		(apiService.folder.getStelaFolderVOs as jasmine.Spy).and.returnValue(
+			Promise.resolve({ getFolderVOs: () => [] }),
+		);
+
+		await service.saveItemVoProperty(folder, 'displayTime', 'new-value');
+
+		expect(folder.displayTime).toBe('original-value');
+		expect(messageService.showError).toHaveBeenCalledWith({
+			message: 'Invalid EDTF string',
+		});
 	});
 
 	describe('openShareDialog', () => {
