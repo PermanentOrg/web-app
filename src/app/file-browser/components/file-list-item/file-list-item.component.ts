@@ -204,9 +204,16 @@ export class FileListItemComponent
 	public isZip = false;
 	public date: string = '';
 	public isUnlistedShare = false;
+	public recordThumbnailUrl: string | undefined;
 
 	private folderThumb: string;
 	private folderContentsType: FolderContentsType = FolderContentsType.NORMAL;
+
+	private getRandomPreviewImage(): string {
+		const previewCount = 10;
+		const randomIndex = Math.floor(Math.random() * previewCount) + 1;
+		return `assets/img/preview/preview-${randomIndex}.jpg`;
+	}
 
 	private isInShares: boolean;
 	private isInApps: boolean;
@@ -243,6 +250,7 @@ export class FileListItemComponent
 	) {}
 
 	async ngOnInit() {
+		this.recordThumbnailUrl = GetThumbnail(this.item);
 		const date = new Date(this.item.displayDT);
 		this.date = getFormattedDate(date);
 
@@ -259,6 +267,9 @@ export class FileListItemComponent
 		}
 
 		if (this.router.routerState.snapshot.url.includes('/share/')) {
+			if (!this.isUnlistedShare) {
+				this.recordThumbnailUrl = this.getRandomPreviewImage();
+			}
 			this.allowActions = false;
 			this.isInSharePreview = true;
 		}
