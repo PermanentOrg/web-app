@@ -3,7 +3,7 @@
 $mobile-breakpoint: 950px;
 $mobile-transition-breakpoint: 1200px;
 
-:host(.glam) {
+:host {
 	background: $linear-gradient-background;
 	display: block;
 	min-height: 100vh;
@@ -26,15 +26,16 @@ $mobile-transition-breakpoint: 1200px;
 	margin: 0 auto;
 }
 
-.onboarding-header-container {
-	margin: 0 auto;
-}
-
-.onboarding-glam {
+.onboarding {
 	height: auto;
+
 	@include beforeDesktop {
 		height: auto;
 	}
+}
+
+.onboarding-header-container {
+	margin: 0 auto;
 }
 
 .progress-bar {
@@ -47,11 +48,6 @@ $mobile-transition-breakpoint: 1200px;
 .progress-chunk {
 	opacity: 0.1;
 	&.completed {
-		background-color: #5261b7;
-		opacity: 1;
-	}
-
-	&.completed-glam {
 		background: linear-gradient(90deg, #8d0085 0%, #ff9400 100%);
 		opacity: 1;
 	}

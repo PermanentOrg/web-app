@@ -48,14 +48,11 @@ import { TransactionHistoryComponent } from './components/transaction-history/tr
 import { BillingSettingsComponent } from './components/billing-settings/billing-settings.component';
 import { ArchiveSettingsDialogComponent } from './components/archive-settings-dialog/archive-settings-dialog.component';
 import { ManageTagsComponent } from './components/manage-tags/manage-tags.component';
-import { WelcomeDialogComponent } from './components/welcome-dialog/welcome-dialog.component';
-import { WelcomeInvitationDialogComponent } from './components/welcome-invitation-dialog/welcome-invitation-dialog.component';
 import { PublicSettingsComponent } from './components/public-settings/public-settings.component';
 import { ArchiveTypeChangeDialogComponent } from './components/archive-type-change-dialog/archive-type-change-dialog.component';
 import { ArchivePayerComponent } from './components/archive-payer/archive-payer.component';
 import { ConfirmPayerDialogComponent } from './components/confirm-payer-dialog/confirm-payer-dialog.component';
 import { ArchiveStoragePayerComponent } from './components/archive-storage-payer/archive-storage-payer.component';
-import { SkipOnboardingDialogComponent } from './components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 import { GiftStorageComponent } from './components/gift-storage/gift-storage.component';
 import { ConfirmGiftDialogComponent } from './components/confirm-gift-dialog/confirm-gift-dialog.component';
 import { AdvancedSettingsComponent } from './components/advanced-settings/advanced-settings.component';
@@ -107,14 +104,11 @@ import { RedeemGiftComponent } from './components/redeem-gift/redeem-gift.compon
 		TransactionHistoryComponent,
 		ArchiveSettingsDialogComponent,
 		ManageTagsComponent,
-		WelcomeDialogComponent,
-		WelcomeInvitationDialogComponent,
 		PublicSettingsComponent,
 		ArchiveTypeChangeDialogComponent,
 		ArchivePayerComponent,
 		ConfirmPayerDialogComponent,
 		ArchiveStoragePayerComponent,
-		SkipOnboardingDialogComponent,
 		GiftStorageComponent,
 		ConfirmGiftDialogComponent,
 		AdvancedSettingsComponent,
