@@ -79,13 +79,13 @@ describe('PublicSearchBarResultsComponent', () => {
 	});
 
 	it('should display search results when searchResults have items', () => {
-		component.searchResults = [
+		fixture.componentRef.setInput('searchResults', [
 			new RecordVO({
 				thumbURL200: 'image1.png',
 				displayName: 'Image 1',
 				type: 'type.record.image',
 			}),
-		];
+		]);
 		fixture.detectChanges();
 
 		const resultElements = fixture.debugElement.queryAll(By.css('.result'));
@@ -95,7 +95,7 @@ describe('PublicSearchBarResultsComponent', () => {
 	});
 
 	it('should display tags when tags are provided', () => {
-		component.tags = [{ name: 'Tag 1' }, { name: 'Tag 2' }];
+		fixture.componentRef.setInput('tags', [{ name: 'Tag 1' }, { name: 'Tag 2' }]);
 		fixture.detectChanges();
 
 		const tagElements = fixture.debugElement.queryAll(By.css('.tag'));
@@ -106,7 +106,7 @@ describe('PublicSearchBarResultsComponent', () => {
 	});
 
 	it('should not display search results section when searchResults is empty', () => {
-		component.searchResults = [];
+		fixture.componentRef.setInput('searchResults', []);
 		fixture.detectChanges();
 
 		const searchResultsSection = fixture.debugElement.query(
@@ -117,7 +117,7 @@ describe('PublicSearchBarResultsComponent', () => {
 	});
 
 	it('should not display tag results section when tags array is empty', () => {
-		component.tags = [];
+		fixture.componentRef.setInput('tags', []);
 		fixture.detectChanges();
 
 		const tagResultsSection = fixture.debugElement.query(

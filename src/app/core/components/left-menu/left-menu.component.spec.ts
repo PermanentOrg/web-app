@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
@@ -32,7 +33,7 @@ describe('LeftMenuComponent', () => {
 		config.imports.push(NgbTooltipModule);
 		config.imports.push(NoopAnimationsModule);
 
-		TestBed.configureTestingModule(config).compileComponents();
+		TestBed.configureTestingModule({...config, schemas: [CUSTOM_ELEMENTS_SCHEMA]}).compileComponents();
 
 		accountService = TestBed.inject(AccountService);
 		accountService.setAccount(new AccountVO(TEST_DATA.account));
@@ -62,6 +63,7 @@ describe('LeftMenuComponent', () => {
 		component.payer = payer;
 		component.showArchiveOptions = showArchiveOptions;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const prArchiveStoragePayerDebugElement = fixture.debugElement.query(
@@ -77,6 +79,7 @@ describe('LeftMenuComponent', () => {
 		component.payer = payer;
 		component.showArchiveOptions = showArchiveOptions;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const prArchiveStoragePayerDebugElement = fixture.debugElement.query(

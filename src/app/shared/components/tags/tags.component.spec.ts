@@ -26,7 +26,7 @@ describe('TagsComponent', () => {
 
 	it('should create tagType and tagValue elements', () => {
 		const tags = [{ name: 'type:value' }];
-		component.tags = tags;
+		fixture.componentRef.setInput('tags', tags);
 		component.ngOnChanges();
 		fixture.detectChanges();
 
@@ -45,9 +45,9 @@ describe('TagsComponent', () => {
 
 	it('should display the add tags button even if there are tags selected', () => {
 		const tags = [{ name: 'type:value' }];
-		component.isEditing = false;
-		component.tags = tags;
-		component.canEdit = true;
+		fixture.componentRef.setInput('isEditing', false);
+		fixture.componentRef.setInput('tags', tags);
+		fixture.componentRef.setInput('canEdit', true);
 		component.ngOnChanges();
 		fixture.detectChanges();
 		const addTags = fixture.debugElement.query(By.css('.not-empty'));
@@ -57,8 +57,8 @@ describe('TagsComponent', () => {
 
 	it('should display the "Click to add" text when in fullscreen view', () => {
 		const tags = [];
-		component.tags = tags;
-		component.canEdit = true;
+		fixture.componentRef.setInput('tags', tags);
+		fixture.componentRef.setInput('canEdit', true);
 		component.ngOnChanges();
 		fixture.detectChanges();
 		const div = fixture.debugElement.query(By.css('.empty'));
@@ -68,8 +68,8 @@ describe('TagsComponent', () => {
 
 	it('should display the "No tags" text when in fullscreen view, but on the public archive', () => {
 		const tags = [];
-		component.tags = tags;
-		component.canEdit = false;
+		fixture.componentRef.setInput('tags', tags);
+		fixture.componentRef.setInput('canEdit', false);
 		component.ngOnChanges();
 		fixture.detectChanges();
 		const div = fixture.debugElement.query(By.css('.empty'));

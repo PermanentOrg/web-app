@@ -66,7 +66,7 @@ describe('GlamPendingArchivesComponent', () => {
 
 		fixture = TestBed.createComponent(GlamPendingArchivesComponent);
 		instance = fixture.componentInstance;
-		instance.pendingArchives = pendingArchives;
+		fixture.componentRef.setInput('pendingArchives', pendingArchives);
 		fixture.detectChanges();
 
 		const archiveElements =
@@ -108,7 +108,7 @@ describe('GlamPendingArchivesComponent', () => {
 		instance = fixture.componentInstance;
 		fixture.detectChanges();
 
-		vi.spyOn(apiService.archive, 'accept').mockRestore();
+		vi.spyOn(apiService.archive, 'accept');
 
 		const archive: ArchiveVO = new ArchiveVO({
 			archiveId: 1,
@@ -208,7 +208,7 @@ describe('GlamPendingArchivesComponent', () => {
 
 		fixture = TestBed.createComponent(GlamPendingArchivesComponent);
 		instance = fixture.componentInstance;
-		instance.pendingArchives = [archive];
+		fixture.componentRef.setInput('pendingArchives', [archive]);
 		fixture.detectChanges();
 
 		expect(instance.acceptedArchives.length).toBe(1);

@@ -144,12 +144,14 @@ describe('ThumbnailComponent', () => {
 			? new FolderVO(item)
 			: new RecordVO(item);
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		// Force recalculation
 		thumbnailComponent.resetImage();
 
 		// Update the view with the new state (isZip, etc.)
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 	}
 
@@ -182,6 +184,7 @@ describe('ThumbnailComponent', () => {
 		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(image500);
 
 		thumbnailComponent.item = fullItem2;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(thumbnailComponent.getCurrentThumbUrl()).toEqual(
@@ -224,6 +227,7 @@ describe('ThumbnailComponent', () => {
 
 		// Wait for the TestImage setTimeout to fire
 		tick(100);
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const thumbnailImage = fixture.nativeElement.querySelector(
@@ -239,6 +243,7 @@ describe('ThumbnailComponent', () => {
 
 		thumbnailComponent.item.update(fullItem);
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const thumbnailImage = fixture.nativeElement.querySelector(

@@ -16,7 +16,7 @@ describe('MessageComponent', () => {
 	beforeEach(async () => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
-		config.declarations.push(MessageComponent);
+		config.imports.push(MessageComponent);
 
 		TestBed.configureTestingModule(config).compileComponents();
 
@@ -101,6 +101,7 @@ describe('MessageComponent', () => {
 		component.externalUrl = 'https://www.example.com';
 		component.externalMessage = 'test message';
 		component.visible = true;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const externalLink = fixture.debugElement.nativeElement.querySelector('a');

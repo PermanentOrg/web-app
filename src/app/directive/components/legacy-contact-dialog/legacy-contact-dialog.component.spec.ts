@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -29,6 +30,7 @@ describe('LegacyContactDialogComponent', () => {
 				provideHttpClient(withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(LegacyContactDialogComponent);

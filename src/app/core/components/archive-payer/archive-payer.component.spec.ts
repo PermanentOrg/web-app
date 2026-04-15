@@ -1,7 +1,11 @@
 import { AccountService } from '@shared/services/account/account.service';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ArchiveVO, AccountVO } from '@models/index';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { PayerService } from '@shared/services/payer/payer.service';
+import { ApiService } from '../../../shared/services/api/api.service';
 import { MessageService } from '../../../shared/services/message/message.service';
 import { ArchivePayerComponent } from './archive-payer.component';
 
@@ -22,8 +26,12 @@ describe('ArchivePayerComponent', () => {
 
 		await TestBed.configureTestingModule({
 			declarations: [ArchivePayerComponent],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 			providers: [
 				{ provide: AccountService, useValue: mockAccountService },
+				{ provide: DialogCdkService, useValue: {} },
+				{ provide: ApiService, useValue: { archive: { update: vi.fn() } } },
+				{ provide: PayerService, useValue: { payerId: null } },
 				HttpClient,
 				HttpHandler,
 				MessageService,
@@ -41,6 +49,7 @@ describe('ArchivePayerComponent', () => {
 
 	it('displays no payer when there is no payer id assigned to the account', () => {
 		component.hasPayer = false;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const divElement = fixture.nativeElement.querySelector('#no-payer');
 
@@ -53,9 +62,10 @@ describe('ArchivePayerComponent', () => {
 		payer.primaryEmail = 'test@email.com';
 		payer.accessRole = 'access.role.owner';
 
-		component.payer = payer;
+		fixture.componentRef.setInput('payer', payer);
 		component.hasPayer = true;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const divElement = fixture.nativeElement.querySelector('#with-payer');
 
@@ -65,6 +75,7 @@ describe('ArchivePayerComponent', () => {
 	it('displays the component even if no payer was found for unknown reasons', () => {
 		component.hasPayer = true;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const divElement = fixture.nativeElement.querySelector('#with-payer');
 
@@ -81,8 +92,9 @@ describe('ArchivePayerComponent', () => {
 
 		component.hasPayer = true;
 		component.isPayerDifferentThanLoggedUser = true;
-		component.payer = payer;
+		fixture.componentRef.setInput('payer', payer);
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const div = fixture.nativeElement.querySelector('#is-not-payer');
 
@@ -98,6 +110,7 @@ describe('ArchivePayerComponent', () => {
 		payer.primaryEmail = 'test@email.com';
 		payer.accessRole = 'access.role.owner';
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const div = fixture.nativeElement.querySelector('#is-payer');
 
@@ -113,10 +126,11 @@ describe('ArchivePayerComponent', () => {
 		payer.primaryEmail = 'test@email.com';
 		payer.accessRole = 'access.role.owner';
 
-		component.archive = archive;
-		component.payer = payer;
+		fixture.componentRef.setInput('archive', archive);
+		fixture.componentRef.setInput('payer', payer);
 		component.ngOnInit();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.hasPayer).toEqual(true);
@@ -128,10 +142,11 @@ describe('ArchivePayerComponent', () => {
 
 		const payer = undefined;
 
-		component.archive = archive;
-		component.payer = payer;
+		fixture.componentRef.setInput('archive', archive);
+		fixture.componentRef.setInput('payer', payer);
 
 		component.ngOnInit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.hasPayer).toEqual(false);
@@ -140,16 +155,17 @@ describe('ArchivePayerComponent', () => {
 	it('should check if the payer is the same as the account id', () => {
 		const archive = new ArchiveVO({});
 		archive.payerAccountId = '1';
-		component.archive = archive;
+		fixture.componentRef.setInput('archive', archive);
 
 		const payer = new AccountVO({});
 		payer.fullName = 'Test name';
 		payer.primaryEmail = 'test@email.com';
 		payer.accessRole = 'access.role.owner';
 
-		component.payer = payer;
+		fixture.componentRef.setInput('payer', payer);
 
 		component.ngOnInit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.isPayerDifferentThanLoggedUser).toEqual(false);
@@ -158,16 +174,17 @@ describe('ArchivePayerComponent', () => {
 	it('should check if the payer is not the same as the account id', () => {
 		const archive = new ArchiveVO({});
 		archive.payerAccountId = '2';
-		component.archive = archive;
+		fixture.componentRef.setInput('archive', archive);
 
 		const payer = new AccountVO({});
 		payer.fullName = 'Test name';
 		payer.primaryEmail = 'test@email.com';
 		payer.accessRole = 'access.role.owner';
 
-		component.payer = payer;
+		fixture.componentRef.setInput('payer', payer);
 
 		component.ngOnInit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.isPayerDifferentThanLoggedUser).toEqual(true);

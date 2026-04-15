@@ -77,10 +77,9 @@ describe('Folder repo', () => {
 	it('should get folder with children using the auth token', async () => {
 		const mockFolderVO = { folderId: 42 } as FolderVO;
 
-		httpV2Spy.get.and.returnValues(
-			of([fakeFolderResponse]),
-			of([fakeChildrenResponse]),
-		);
+		httpV2Spy.get
+			.mockReturnValueOnce(of([fakeFolderResponse]))
+			.mockReturnValueOnce(of([fakeChildrenResponse]));
 
 		const result = await folderRepo.getWithChildren([mockFolderVO]);
 
@@ -99,10 +98,9 @@ describe('Folder repo', () => {
 	it('should get folder with children using the share token', async () => {
 		const mockFolderVO = { folderId: 42 } as FolderVO;
 
-		httpV2Spy.get.and.returnValues(
-			of([fakeFolderResponse]),
-			of([fakeChildrenResponse]),
-		);
+		httpV2Spy.get
+			.mockReturnValueOnce(of([fakeFolderResponse]))
+			.mockReturnValueOnce(of([fakeChildrenResponse]));
 
 		const result = await folderRepo.getWithChildren(
 			[mockFolderVO],
@@ -129,12 +127,11 @@ describe('Folder repo', () => {
 	it('should get folder with children using fallback to auth token', async () => {
 		const mockFolderVO = { folderId: 42 } as FolderVO;
 
-		httpV2Spy.get.and.returnValues(
-			of([emptyResponse]),
-			of([fakeFolderResponse]),
-			of([emptyResponse]),
-			of([fakeChildrenResponse]),
-		);
+		httpV2Spy.get
+			.mockReturnValueOnce(of([emptyResponse]))
+			.mockReturnValueOnce(of([fakeFolderResponse]))
+			.mockReturnValueOnce(of([emptyResponse]))
+			.mockReturnValueOnce(of([fakeChildrenResponse]));
 
 		const result = await folderRepo.getWithChildren(
 			[mockFolderVO],

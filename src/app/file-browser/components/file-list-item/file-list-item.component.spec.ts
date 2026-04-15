@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ElementRef, Pipe, PipeTransform } from '@angular/core';
+import { ElementRef, NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { of } from 'rxjs';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 
@@ -39,6 +39,13 @@ export class MockPrConstantsPipe implements PipeTransform {
 	}
 }
 
+@Pipe({ name: 'prTooltip' })
+export class MockPrTooltipPipe implements PipeTransform {
+	transform(value: string): string {
+		return value;
+	}
+}
+
 describe('FileListItemComponent', () => {
 	let component: FileListItemComponent;
 	let fixture: ComponentFixture<FileListItemComponent>;
@@ -70,7 +77,7 @@ describe('FileListItemComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [MockItemTypeIconPipe, MockPrDatePipe, MockPrConstantsPipe],
+			imports: [MockItemTypeIconPipe, MockPrDatePipe, MockPrConstantsPipe, MockPrTooltipPipe],
 			declarations: [FileListItemComponent, GetThumbnailPipe],
 			providers: [
 				provideNoopAnimations(),
@@ -133,13 +140,14 @@ describe('FileListItemComponent', () => {
 				{ provide: EditService, useValue: mockEditService },
 				{ provide: DeviceService, useValue: mockDeviceService },
 			],
+			schemas: [NO_ERRORS_SCHEMA],
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(FileListItemComponent);
 		component = fixture.componentInstance;
 		editService = TestBed.inject(EditService);
 
-		component.item = {
+		fixture.componentRef.setInput('item', {
 			displayDT: new Date().toISOString(),
 			displayName: 'Test Item',
 			archiveNbr: '123',
@@ -151,9 +159,9 @@ describe('FileListItemComponent', () => {
 			isFetching: false,
 			update: vi.fn(),
 			fetched: Promise.resolve(true),
-		} as any;
+		} as any);
 
-		component.folderView = '' as any;
+		fixture.componentRef.setInput('folderView', '' as any);
 		fixture.detectChanges();
 	});
 

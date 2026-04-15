@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
@@ -62,6 +63,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 
 		await TestBed.configureTestingModule({
 			declarations: [CreateNewArchiveComponent],
+			imports: [FormsModule],
 			providers: [
 				{ provide: ApiService, useValue: mockApiService },
 				{ provide: AccountService, useValue: mockAccountService },
@@ -98,6 +100,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		component.screen = 'goals';
 		component.selectedGoals = [];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const button = fixture.nativeElement.querySelector('.goals-next');
@@ -109,11 +112,13 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		component.screen = 'goals';
 		component.selectedGoals = ['goal 1', 'goal 2'];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const goalsNextButton = fixture.nativeElement.querySelector('.goals-next');
 		goalsNextButton.click();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.screen).toBe('reasons'); // Expecting the overlay to be present
@@ -123,6 +128,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		component.screen = 'reasons';
 		component.selectedReasons = [];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const button = fixture.nativeElement.querySelector('.create-archive');
@@ -134,6 +140,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		component.screen = 'reasons';
 		component.isArchiveSubmitted = true;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const submitButton = fixture.nativeElement.querySelector('.create-archive');
 
@@ -145,7 +152,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 
 	it('should accept pending archives in the old flow', async () => {
 		feature.set('glam-onboarding', false);
-		component.pendingArchive = new ArchiveVO({ archiveId: 1234 });
+		fixture.componentRef.setInput('pendingArchive', new ArchiveVO({ archiveId: 1234 }));
 		await component.onSubmit();
 
 		expect(calledAccept).toBe(true);
@@ -155,7 +162,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	it('should not accept pending archives in the glam flow (they are already accepted in an earlier step)', async () => {
 		// Feature flag is read in constructor, so we must set isGlam directly
 		component.isGlam = true;
-		component.pendingArchive = new ArchiveVO({ archiveId: 1234 });
+		fixture.componentRef.setInput('pendingArchive', new ArchiveVO({ archiveId: 1234 }));
 		await component.onSubmit();
 
 		expect(calledAccept).toBe(false);

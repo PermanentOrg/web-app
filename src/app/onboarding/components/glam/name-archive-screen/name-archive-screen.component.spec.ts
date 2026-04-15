@@ -42,7 +42,7 @@ describe('NameArchiveScreenComponent', () => {
 		(onboardingService.getArchiveName as any).mockReturnValue(null);
 		const testFixture = TestBed.createComponent(NameArchiveScreenComponent);
 		const testComponent = testFixture.componentInstance;
-		testComponent.name = 'Test Archive';
+		testFixture.componentRef.setInput('name', 'Test Archive');
 		testFixture.detectChanges();
 
 		expect(testComponent.nameForm.controls.archiveName.value).toBe(
@@ -88,6 +88,7 @@ describe('NameArchiveScreenComponent', () => {
 	it('should call createArchive when create archive button is clicked', () => {
 		vi.spyOn(component, 'createArchive');
 		component.nameForm.controls.archiveName.setValue('Valid Archive Name');
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const createButton = fixture.debugElement.query(
@@ -100,6 +101,7 @@ describe('NameArchiveScreenComponent', () => {
 
 	it('should call createArchive when create archive button is clicked and form is valid', () => {
 		component.nameForm.controls.archiveName.setValue('Valid Archive Name');
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		vi.spyOn(component, 'createArchive');

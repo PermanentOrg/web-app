@@ -1,6 +1,9 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
@@ -17,7 +20,9 @@ describe('NavComponent', () => {
 		config.declarations.push(LeftMenuComponent);
 		config.declarations.push(RightMenuComponent);
 
-		TestBed.configureTestingModule(config).compileComponents();
+		config.imports.push(NgbTooltipModule);
+		config.imports.push(NoopAnimationsModule);
+		TestBed.configureTestingModule({...config, schemas: [CUSTOM_ELEMENTS_SCHEMA]}).compileComponents();
 
 		fixture = TestBed.createComponent(NavComponent);
 		component = fixture.componentInstance;

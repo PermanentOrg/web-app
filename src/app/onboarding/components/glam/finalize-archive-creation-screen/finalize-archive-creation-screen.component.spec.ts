@@ -96,6 +96,7 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
 		const doneButton = fixture.debugElement.query(By.css('pr-button'));
 		doneButton.triggerEventHandler('buttonClick', null);
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.isArchiveSubmitted).toBe(true);

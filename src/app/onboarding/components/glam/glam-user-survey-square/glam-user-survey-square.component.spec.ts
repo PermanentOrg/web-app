@@ -36,7 +36,7 @@ describe('GlamUserSurveySquareComponent', () => {
 
 	it('should display the text correctly', () => {
 		const text = 'Test Text';
-		component.text = text;
+		fixture.componentRef.setInput('text', text);
 		fixture.detectChanges();
 		const textElement = fixture.nativeElement.querySelector('.text');
 
@@ -45,7 +45,7 @@ describe('GlamUserSurveySquareComponent', () => {
 
 	it('should toggle selected state and emit selectedChange when clicked', () => {
 		const tag = 'test-tag';
-		component.tag = tag;
+		fixture.componentRef.setInput('tag', tag);
 		fixture.detectChanges();
 
 		vi.spyOn(component.selectedChange, 'emit');
@@ -63,7 +63,7 @@ describe('GlamUserSurveySquareComponent', () => {
 	});
 
 	it('should add selected class when selected is true', () => {
-		component.selected = true;
+		fixture.componentRef.setInput('selected', true);
 		fixture.detectChanges();
 
 		const squareElement = fixture.nativeElement.querySelector('.square');

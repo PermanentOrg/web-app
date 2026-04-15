@@ -106,8 +106,8 @@ describe('EditTagsComponent', () => {
 		item: ItemVO = defaultItem,
 		tagType: TagType = 'keyword',
 	) {
-		component.item = item;
-		component.tagType = tagType;
+		fixture.componentRef.setInput('item', item);
+		fixture.componentRef.setInput('tagType', tagType);
 		fixture.detectChanges();
 	}
 
@@ -230,6 +230,7 @@ describe('EditTagsComponent', () => {
 
 		component.isEditing = true;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
 
@@ -248,6 +249,7 @@ describe('EditTagsComponent', () => {
 
 		component.isEditing = true;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
 
@@ -266,6 +268,7 @@ describe('EditTagsComponent', () => {
 
 		component.isEditing = true;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const tag = fixture.debugElement.query(By.css('.edit-tag'));
 
@@ -285,6 +288,7 @@ describe('EditTagsComponent', () => {
 		setupComponent();
 
 		component.isEditing = true;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const manageTagsLink = fixture.debugElement.query(
@@ -383,8 +387,8 @@ describe('EditTagsComponent', () => {
 					{ tagId: 1, name: 'tagOne', type: 'type.generic.placeholder' },
 				],
 			});
-			component.item = item;
-			component.tagType = 'keyword';
+			fixture.componentRef.setInput('item', item);
+			fixture.componentRef.setInput('tagType', 'keyword');
 			fixture.detectChanges();
 
 			expect(component.itemTags.length).toBe(0);

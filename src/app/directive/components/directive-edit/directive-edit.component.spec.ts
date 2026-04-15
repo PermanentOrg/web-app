@@ -99,10 +99,12 @@ describe('DirectiveEditComponent', () => {
 		// Fill out form manually
 		instance.email = 'test@example.com';
 		instance.note = 'Test Memo';
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		// Call submitForm directly and await it
 		await instance.submitForm();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		// Check that form is enabled after save

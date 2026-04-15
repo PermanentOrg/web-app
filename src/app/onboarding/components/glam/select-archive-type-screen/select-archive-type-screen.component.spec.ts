@@ -42,7 +42,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	it('should emit navigation event when navigate is called with start', () => {
 		vi.spyOn(component.submitEmitter, 'emit');
 		component.type = 'mockType';
-		component.tag = 'mockTag';
+		fixture.componentRef.setInput('tag', 'mockTag');
 		component.headerText = 'mockHeaderText';
 		component.navigate('start');
 
@@ -57,7 +57,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	it('should emit submit event when navigate is called with other screen', () => {
 		vi.spyOn(component.submitEmitter, 'emit');
 		component.type = 'mockType';
-		component.tag = 'mockTag';
+		fixture.componentRef.setInput('tag', 'mockTag');
 		component.headerText = 'mockHeaderText';
 
 		component.navigate('name-archive');
@@ -81,6 +81,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	it('should call navigate with name-archive when create archive button is clicked', () => {
 		vi.spyOn(component, 'navigate');
 		component.selectedValue = 'someValue';
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const createButton = fixture.debugElement.query(
@@ -99,7 +100,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
 			SelectArchiveTypeScreenComponent,
 		);
 		const testComponent = testFixture.componentInstance;
-		testComponent.tag = 'type:community';
+		testFixture.componentRef.setInput('tag', 'type:community');
 		testFixture.detectChanges();
 
 		testComponent.ngOnInit();
@@ -108,7 +109,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
 	});
 
 	it('should not call generateElementText if tag is not defined', () => {
-		component.tag = '';
+		fixture.componentRef.setInput('tag', '');
 
 		fixture.detectChanges();
 

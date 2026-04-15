@@ -74,6 +74,7 @@ describe('InvitationsDialog', () => {
 		instance.activeTab = 'pending';
 		instance.pendingInvites = [new InviteVO({ email: 'testEmail1@test.com' })];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const table = ngMocks.findAll('.invitation');
@@ -87,6 +88,7 @@ describe('InvitationsDialog', () => {
 		instance.activeTab = 'pending';
 		instance.pendingInvites = [];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const message = ngMocks.find('.text-muted');
@@ -100,6 +102,7 @@ describe('InvitationsDialog', () => {
 		instance.activeTab = 'accepted';
 		instance.acceptedInvites = [new InviteVO({ email: 'testEmail1@test.com' })];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const table = ngMocks.findAll('.invitation');
@@ -113,6 +116,7 @@ describe('InvitationsDialog', () => {
 		instance.activeTab = 'accepted';
 		instance.acceptedInvites = [];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const message = ngMocks.find('.text-muted');
@@ -132,6 +136,7 @@ describe('InvitationsDialog', () => {
 			new InviteVO({ email: 'test5@example.com', giftSizeInMB: 1024 }),
 		];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const invitesWithGift = ngMocks.findAll('.has-amount');
@@ -151,6 +156,7 @@ describe('InvitationsDialog', () => {
 			new InviteVO({ email: 'test3@example.com', giftSizeInMB: 1024 }),
 		];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const invitesWithGift = ngMocks.findAll('.has-amount');
@@ -172,6 +178,7 @@ describe('InvitationsDialog', () => {
 			new InviteVO({ email: 'test3@example.com', giftSizeInMB: 1024 }),
 		];
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const invitesWithGift = ngMocks.findAll('.invitation .amount');

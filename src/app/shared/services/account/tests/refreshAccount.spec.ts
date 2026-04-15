@@ -142,7 +142,7 @@ describe('AccountService: refreshAccount', () => {
 		url: string = '/app/private',
 		withStorage: boolean = false,
 	) {
-		const logOutSpy = vi.spyOn(apiService.auth, 'logOut').mockRestore();
+		const logOutSpy = vi.spyOn(apiService.auth, 'logOut');
 		vi.spyOn(location, 'path').mockReturnValue(url);
 
 		instance.setArchive(new ArchiveVO({}));
@@ -150,7 +150,7 @@ describe('AccountService: refreshAccount', () => {
 
 		let localStorageSpy;
 		if (withStorage) {
-			localStorageSpy = vi.spyOn(storageService.local, 'set').mockRestore();
+			localStorageSpy = vi.spyOn(storageService.local, 'set');
 			vi.spyOn(instance, 'getStorage').mockReturnValue(
 				new AccountVO({ keepLoggedIn: true }),
 			);

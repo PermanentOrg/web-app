@@ -22,7 +22,7 @@ describe('ToggleComponent', () => {
 	});
 
 	it('should have the checked class when the toggle is checked', () => {
-		instance.isChecked = true;
+		fixture.componentRef.setInput('isChecked', true);
 		fixture.detectChanges();
 		const toggle = ngMocks.find('.toggle-container').nativeElement;
 
@@ -30,7 +30,7 @@ describe('ToggleComponent', () => {
 	});
 
 	it('should have the disabled class when the toggle is disabled', () => {
-		instance.disabled = true;
+		fixture.componentRef.setInput('disabled', true);
 		fixture.detectChanges();
 		const toggle = ngMocks.find('.toggle-container').nativeElement;
 
@@ -45,7 +45,7 @@ describe('ToggleComponent', () => {
 
 		expect(instance.isCheckedChange.emit).toHaveBeenCalledWith(true);
 
-		instance.isChecked = true;
+		fixture.componentRef.setInput('isChecked', true);
 		fixture.detectChanges();
 		toggle.click();
 
@@ -54,7 +54,7 @@ describe('ToggleComponent', () => {
 
 	it('should not emit when the toggle is disabled', () => {
 		vi.spyOn(instance.isCheckedChange, 'emit');
-		instance.disabled = true;
+		fixture.componentRef.setInput('disabled', true);
 		fixture.detectChanges();
 		const toggle = ngMocks.find('.toggle-container').nativeElement;
 		toggle.click();

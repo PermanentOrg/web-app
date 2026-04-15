@@ -31,7 +31,7 @@ describe('FeaturedArchiveComponent', () => {
 
 		fixture = TestBed.createComponent(FeaturedArchiveComponent);
 		component = fixture.componentInstance;
-		component.archive = testArchive;
+		fixture.componentRef.setInput('archive', testArchive);
 		fixture.detectChanges();
 	});
 

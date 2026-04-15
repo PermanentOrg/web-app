@@ -10,7 +10,7 @@ import { EventService } from '@shared/services/event/event.service';
 import { Subject, of } from 'rxjs';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { AccessRole } from '@models';
-import { ElementRef } from '@angular/core';
+import { ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 import { FileListControlsComponent } from './file-list-controls.component';
 
@@ -24,6 +24,7 @@ describe('FileListControlsComponent', () => {
 		currentFolder: {
 			sort: 'sort.alphabetical_asc',
 			accessRole: AccessRole.Manager,
+			type: 'type.folder.private',
 		},
 		selectedItems$: () => of([]),
 		refreshCurrentFolder: vi.fn()
@@ -90,6 +91,7 @@ describe('FileListControlsComponent', () => {
 					useValue: new ElementRef({ nativeElement: {} }),
 				},
 			],
+			schemas: [NO_ERRORS_SCHEMA],
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(FileListControlsComponent);

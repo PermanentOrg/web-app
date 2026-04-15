@@ -71,6 +71,7 @@ describe('ArchiveCreationStartScreenComponent', () => {
 		vi.spyOn(localStorage, 'getItem').mockReturnValue('someToken');
 
 		component.ngOnInit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.hasShareToken).toBe(true);
@@ -80,6 +81,7 @@ describe('ArchiveCreationStartScreenComponent', () => {
 		vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
 
 		component.ngOnInit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.hasShareToken).toBe(false);

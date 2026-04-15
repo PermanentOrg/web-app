@@ -128,6 +128,7 @@ describe('AccountSettingsComponent', () => {
 
 		instance.account.primaryPhone = '';
 		instance.account.phoneStatus = '';
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const button = ngMocks.find('.verify-phone-button');
@@ -141,6 +142,7 @@ describe('AccountSettingsComponent', () => {
 
 		instance.account.primaryPhone = '1234567890';
 		instance.account.phoneStatus = '';
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const button = ngMocks.find('.verify-phone-button');

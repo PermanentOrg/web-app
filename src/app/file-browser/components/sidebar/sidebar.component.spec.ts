@@ -188,6 +188,7 @@ describe('SidebarComponent', () => {
 
 	it('should set currentTab correctly when setCurrentTab is called', () => {
 		component.setCurrentTab('info');
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.currentTab).toBe('info');
@@ -195,6 +196,7 @@ describe('SidebarComponent', () => {
 		component.isRootFolder = false;
 		component.isPublicItem = false;
 		component.setCurrentTab('sharing');
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.currentTab).toBe('sharing');
@@ -268,6 +270,7 @@ describe('SidebarComponent', () => {
 	it('should hide the original format for folders', () => {
 		component.isRecord = false;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const unknownTypeContainer =

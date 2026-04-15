@@ -100,6 +100,7 @@ describe('OnboardingComponent #onboarding', () => {
 		const fixture = TestBed.createComponent(OnboardingComponent);
 		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(
@@ -111,6 +112,7 @@ describe('OnboardingComponent #onboarding', () => {
 		const fixture = TestBed.createComponent(OnboardingComponent);
 		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(
@@ -129,6 +131,7 @@ describe('OnboardingComponent #onboarding', () => {
 		expect(instance.currentArchive).toBeUndefined();
 		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const child = ngMocks.find('pr-create-new-archive');
@@ -179,8 +182,10 @@ describe('OnboardingComponent #onboarding', () => {
 		const instance = fixture.componentInstance;
 
 		instance.ngOnInit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		if (instance.pendingArchives.length > 0) {
@@ -196,6 +201,7 @@ describe('OnboardingComponent #onboarding', () => {
 				'selectInvitation',
 				new ArchiveVO({ fullName: 'Pending Test' }),
 			);
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -254,6 +260,7 @@ describe('OnboardingComponent #onboarding', () => {
 		const instance = fixture.componentInstance;
 
 		instance.ngOnInit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		if (instance.pendingArchives.length > 0) {
@@ -274,6 +281,7 @@ describe('OnboardingComponent #onboarding', () => {
 		instance.acceptedInvite = true;
 
 		instance.setScreen(OnboardingScreen.done);
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -290,6 +298,7 @@ describe('OnboardingComponent #onboarding', () => {
 		instance.acceptedInvite = false;
 		instance.setScreen(OnboardingScreen.done);
 		instance.selectedPendingArchive = null;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -305,6 +314,7 @@ describe('OnboardingComponent #onboarding', () => {
 		instance.acceptedInvite = false;
 		instance.setScreen(OnboardingScreen.done);
 		instance.selectedPendingArchive = null;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -320,6 +330,7 @@ describe('OnboardingComponent #onboarding', () => {
 		instance.acceptedInvite = true;
 		instance.setScreen(OnboardingScreen.done);
 		instance.selectedPendingArchive = null;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 

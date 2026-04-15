@@ -88,6 +88,7 @@ describe('GalleryComponent', () => {
 		DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
 		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const featuredArchives = fixture.nativeElement.querySelectorAll(
@@ -101,6 +102,7 @@ describe('GalleryComponent', () => {
 		DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
 		fixture.detectChanges();
 		component.loading = true;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const nullMessage = fixture.nativeElement.querySelector('.null-message');
@@ -111,6 +113,7 @@ describe('GalleryComponent', () => {
 	it('displays an error message if no featured archives exist', async () => {
 		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const featuredArchives = fixture.nativeElement.querySelectorAll(
@@ -127,6 +130,7 @@ describe('GalleryComponent', () => {
 		DummyFeaturedArchiveAPI.failRequest = true;
 		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const nullMessage = fixture.nativeElement.querySelector('.null-message');
@@ -137,6 +141,7 @@ describe('GalleryComponent', () => {
 	it("does not display the user's public archives list if logged out", async () => {
 		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const publicArchivesList = fixture.nativeElement.querySelector(
@@ -153,6 +158,7 @@ describe('GalleryComponent', () => {
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 		await fixture.whenStable();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const publicArchivesList = fixture.nativeElement.querySelector(

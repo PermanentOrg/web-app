@@ -1,4 +1,5 @@
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
@@ -59,7 +60,7 @@ describe('MainComponent', () => {
 
 		config.declarations.push(MainComponent);
 		config.declarations.push(NavComponent);
-		config.declarations.push(MessageComponent);
+		config.imports.push(MessageComponent);
 		config.declarations.push(LeftMenuComponent);
 		config.declarations.push(RightMenuComponent);
 		config.declarations.push(UploadProgressComponent);
@@ -75,7 +76,7 @@ describe('MainComponent', () => {
 		config.providers.push(TagsService);
 		config.providers.push({ provide: DragService, useValue: mockDragService });
 
-		await TestBed.configureTestingModule(config).compileComponents();
+		await TestBed.configureTestingModule({...config, schemas: [CUSTOM_ELEMENTS_SCHEMA]}).compileComponents();
 
 		const authResponse = new AuthResponse(authResponseData);
 		accountService = TestBed.inject(AccountService);

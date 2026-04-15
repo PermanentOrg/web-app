@@ -31,8 +31,7 @@ describe('PasswordStrengthComponent', () => {
 	});
 
 	it('should display "weak" password strength correctly when feature flag is enabled', () => {
-		component.password = '123';
-		component.ngOnChanges();
+		fixture.componentRef.setInput('password', '123');
 		fixture.detectChanges();
 
 		expect(component.strength).toBe('weak');
@@ -48,8 +47,7 @@ describe('PasswordStrengthComponent', () => {
 	});
 
 	it('should display "medium" password strength correctly when feature flag is enabled', () => {
-		component.password = 'password123';
-		component.ngOnChanges();
+		fixture.componentRef.setInput('password', 'password123');
 		fixture.detectChanges();
 
 		expect(component.strength).toBe('medium');
@@ -65,8 +63,7 @@ describe('PasswordStrengthComponent', () => {
 	});
 
 	it('should display "strong" password strength correctly when feature flag is enabled', () => {
-		component.password = 'StrongPass123!';
-		component.ngOnChanges();
+		fixture.componentRef.setInput('password', 'StrongPass123!');
 		fixture.detectChanges();
 
 		expect(component.strength).toBe('strong');
@@ -84,6 +81,7 @@ describe('PasswordStrengthComponent', () => {
 	it('should not display anything when feature flag is disabled', () => {
 		mockFeatureFlagService.isEnabled.mockReturnValue(false);
 		component.enabledPasswordCheckStrength = false;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const container = fixture.debugElement.query(By.css('.strength-container'));

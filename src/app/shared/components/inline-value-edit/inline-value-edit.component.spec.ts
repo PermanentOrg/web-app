@@ -122,6 +122,7 @@ describe('InlineValueEditComponent', () => {
 		expect(document.activeElement).toBe(inputElem);
 		inputElem.value = 'new value!';
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const rootElement = fixture.debugElement.nativeElement as HTMLElement;
@@ -130,6 +131,7 @@ describe('InlineValueEditComponent', () => {
 		) as HTMLButtonElement;
 		cancelButton.dispatchEvent(new Event('mousedown'));
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -137,7 +139,7 @@ describe('InlineValueEditComponent', () => {
 	});
 
 	it('should not allow editing if canEdit is false', async () => {
-		component.canEdit = false;
+		fixture.componentRef.setInput('canEdit', false);
 
 		fixture.detectChanges();
 		component.startEdit();
@@ -147,8 +149,8 @@ describe('InlineValueEditComponent', () => {
 
 	it('should set initial date and time based on local time with no timezone passed', () => {
 		const displayDT = formatDateISOString('2017-05-13T16:36:29.000000');
-		component.displayValue = displayDT;
-		component.type = 'date';
+		fixture.componentRef.setInput('displayValue', displayDT);
+		fixture.componentRef.setInput('type', 'date');
 		fixture.detectChanges();
 
 		component.startEdit();
@@ -173,9 +175,9 @@ describe('InlineValueEditComponent', () => {
 			},
 		};
 		const record = new RecordVO(voData);
-		component.item = record;
-		component.displayValue = record.displayDT;
-		component.type = 'date';
+		fixture.componentRef.setInput('item', record);
+		fixture.componentRef.setInput('displayValue', record.displayDT);
+		fixture.componentRef.setInput('type', 'date');
 		fixture.detectChanges();
 
 		component.startEdit();
@@ -203,9 +205,9 @@ describe('InlineValueEditComponent', () => {
 			},
 		};
 		const record = new RecordVO(voData);
-		component.item = record;
-		component.displayValue = record.displayDT;
-		component.type = 'date';
+		fixture.componentRef.setInput('item', record);
+		fixture.componentRef.setInput('displayValue', record.displayDT);
+		fixture.componentRef.setInput('type', 'date');
 		fixture.detectChanges();
 
 		const nowUtc = moment.utc();
@@ -227,9 +229,9 @@ describe('InlineValueEditComponent', () => {
 		};
 
 		const record = new RecordVO(voData);
-		component.item = record;
-		component.displayValue = record.displayDT;
-		component.type = 'date';
+		fixture.componentRef.setInput('item', record);
+		fixture.componentRef.setInput('displayValue', record.displayDT);
+		fixture.componentRef.setInput('type', 'date');
 		fixture.detectChanges();
 
 		const offset = moment.utc().local();
@@ -254,9 +256,9 @@ describe('InlineValueEditComponent', () => {
 			},
 		};
 		const record = new RecordVO(voData);
-		component.item = record;
-		component.displayValue = record.displayDT;
-		component.type = 'date';
+		fixture.componentRef.setInput('item', record);
+		fixture.componentRef.setInput('displayValue', record.displayDT);
+		fixture.componentRef.setInput('type', 'date');
 		fixture.detectChanges();
 
 		component.startEdit();
@@ -290,11 +292,12 @@ describe('InlineValueEditComponent', () => {
 			},
 		};
 		const record = new RecordVO(voData);
-		component.item = record;
-		component.displayValue = record.displayDT;
-		component.type = 'date';
+		fixture.componentRef.setInput('item', record);
+		fixture.componentRef.setInput('displayValue', record.displayDT);
+		fixture.componentRef.setInput('type', 'date');
 		fixture.detectChanges();
 		component.startEdit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const timePicker = fixture.debugElement.query(By.css('ngb-timepicker'));
@@ -315,13 +318,14 @@ describe('InlineValueEditComponent', () => {
 			},
 		};
 		const record = new RecordVO(voData);
-		component.item = record;
-		component.displayValue = record.displayDT;
-		component.type = 'date';
-		component.dateOnly = true;
+		fixture.componentRef.setInput('item', record);
+		fixture.componentRef.setInput('displayValue', record.displayDT);
+		fixture.componentRef.setInput('type', 'date');
+		fixture.componentRef.setInput('dateOnly', true);
 
 		fixture.detectChanges();
 		component.startEdit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const timePicker = fixture.debugElement.query(By.css('ngb-timepicker'));
@@ -331,9 +335,9 @@ describe('InlineValueEditComponent', () => {
 	});
 
 	it('should update edit value with just date when date is changed and timeOnly = true', () => {
-		component.displayValue = '2020-05-02';
-		component.type = 'date';
-		component.dateOnly = true;
+		fixture.componentRef.setInput('displayValue', '2020-05-02');
+		fixture.componentRef.setInput('type', 'date');
+		fixture.componentRef.setInput('dateOnly', true);
 		fixture.detectChanges();
 
 		component.startEdit();
@@ -360,9 +364,9 @@ describe('InlineValueEditComponent', () => {
 			},
 		};
 		const record = new RecordVO(voData);
-		component.item = record;
-		component.displayValue = record.displayDT;
-		component.type = 'date';
+		fixture.componentRef.setInput('item', record);
+		fixture.componentRef.setInput('displayValue', record.displayDT);
+		fixture.componentRef.setInput('type', 'date');
 		fixture.detectChanges();
 
 		component.startEdit();
@@ -392,14 +396,15 @@ describe('InlineValueEditComponent', () => {
 	});
 
 	it('should expand the title when hovering with the mouse over it', async () => {
-		component.type = 'text';
-		component.isPublicArchive = true;
+		fixture.componentRef.setInput('type', 'text');
+		fixture.componentRef.setInput('isPublicArchive', true);
 		fixture.detectChanges();
 
 		const nameContainer = fixture.debugElement.query(
 			By.css('.inline-value-text'),
 		).nativeElement;
 		nameContainer.dispatchEvent(new Event('mouseenter'));
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		await fixture.whenStable();
@@ -408,29 +413,30 @@ describe('InlineValueEditComponent', () => {
 	});
 
 	it('should support save a select element on change', async () => {
-		component.type = 'select';
-		component.selectOptions = [
+		fixture.componentRef.setInput('type', 'select');
+		fixture.componentRef.setInput('selectOptions', [
 			{ text: 'test1', value: 'test1' },
 			{ text: 'test2', value: 'test2' },
-		];
+		]);
 		const saveSpy = vi.spyOn(component.doneEditing, 'emit');
 		fixture.detectChanges();
 		const select = fixture.debugElement.query(By.css('select')).nativeElement;
 		select.value = 'test1';
 		component.editValue = 'test1';
 		select.dispatchEvent(new Event('change'));
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(saveSpy).toHaveBeenCalled();
 	});
 
 	it('should not save a select element if the value has not changed', async () => {
-		component.type = 'select';
-		component.selectOptions = [
+		fixture.componentRef.setInput('type', 'select');
+		fixture.componentRef.setInput('selectOptions', [
 			{ text: 'test1', value: 'test1' },
 			{ text: 'test2', value: 'test2' },
-		];
-		component.displayValue = 'test1';
+		]);
+		fixture.componentRef.setInput('displayValue', 'test1');
 		component.editValue = 'test1';
 		fixture.detectChanges();
 
@@ -440,15 +446,16 @@ describe('InlineValueEditComponent', () => {
 		select.value = 'test1';
 		component.editValue = 'test1';
 		select.dispatchEvent(new Event('change'));
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(saveSpy).not.toHaveBeenCalled();
 	});
 
 	it('should start editing when clicking a non-link element', () => {
-		component.canEdit = true;
-		component.type = 'textarea';
-		component.displayValue = 'Some content without a link';
+		fixture.componentRef.setInput('canEdit', true);
+		fixture.componentRef.setInput('type', 'textarea');
+		fixture.componentRef.setInput('displayValue', 'Some content without a link');
 		fixture.detectChanges();
 
 		const displayEl = fixture.debugElement.query(
@@ -459,15 +466,16 @@ describe('InlineValueEditComponent', () => {
 			target: document.createElement('span'),
 		});
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.isEditing).toBe(true);
 	});
 
 	it('should NOT start editing when clicking on a link', () => {
-		component.canEdit = true;
-		component.type = 'textarea';
-		component.displayValue = 'Some <a href="#">link</a> inside text';
+		fixture.componentRef.setInput('canEdit', true);
+		fixture.componentRef.setInput('type', 'textarea');
+		fixture.componentRef.setInput('displayValue', 'Some <a href="#">link</a> inside text');
 		fixture.detectChanges();
 
 		const displayEl = fixture.debugElement.query(
@@ -482,6 +490,7 @@ describe('InlineValueEditComponent', () => {
 			target: anchor,
 		});
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.isEditing).toBe(false);

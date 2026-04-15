@@ -20,7 +20,7 @@ import { EventService } from '@shared/services/event/event.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { FileListComponent } from './file-list.component';
 
@@ -134,6 +134,7 @@ describe('FileListComponent', () => {
 				{ provide: DOCUMENT, useValue: document },
 				{ provide: ApiService, useValue: mockApiService },
 			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(FileListComponent);

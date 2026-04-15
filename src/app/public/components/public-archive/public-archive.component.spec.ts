@@ -66,6 +66,7 @@ describe('PublicArchiveComponent', () => {
 		const icon = fixture.nativeElement.querySelector('.icon-expand');
 		icon.click();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const archiveDescription = fixture.nativeElement.querySelector(

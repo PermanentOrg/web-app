@@ -127,7 +127,7 @@ class LoginTestingHarness {
 	}
 
 	public getMessageSpy() {
-		return vi.spyOn(ngMocks.get(MessageService), 'showMessage').mockRestore();
+		return vi.spyOn(ngMocks.get(MessageService), 'showMessage');
 	}
 
 	public hasPasswordBeenCleared(): boolean {
@@ -321,6 +321,7 @@ describe('LoginComponent', () => {
 
 	it('should display the loading spinner', () => {
 		instance.waiting = true;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const compiled = fixture.debugElement.nativeElement;
 		const loadingSpinner = compiled.querySelector('pr-loading-spinner');

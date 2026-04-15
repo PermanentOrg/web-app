@@ -65,6 +65,7 @@ describe('UploadProgressComponent', () => {
 
 		mockUploadService.uploadSession.progress.emit(progressEvent);
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(ngMocks.find('.current-file').nativeElement.textContent.trim()).toBe(
@@ -97,6 +98,7 @@ describe('UploadProgressComponent', () => {
 
 		mockUploadService.uploadSession.progress.emit(progressEvent);
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(ngMocks.find('.current-file').nativeElement.textContent.trim()).toBe(

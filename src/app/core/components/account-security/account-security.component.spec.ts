@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
@@ -11,6 +12,7 @@ describe('AccountSecurityComponent', () => {
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			declarations: [AccountSecurityComponent],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 			providers: [
 				{
 					provide: ActivatedRoute,

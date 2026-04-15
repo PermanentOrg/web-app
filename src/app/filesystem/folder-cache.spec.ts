@@ -39,7 +39,7 @@ describe('FolderCache', () => {
 	it('should not update a folder if its API value equals its cached value', () => {
 		// This tests preventing unnecessary rerenders if no changes are found
 		const folder = new FolderVO({ folder_linkId: 1 });
-		const updateSpy = vi.spyOn(folder, 'update').mockRestore();
+		const updateSpy = vi.spyOn(folder, 'update');
 		cache.saveFolder(folder);
 		cache.saveFolder(new FolderVO({ folder_linkId: 1 }));
 

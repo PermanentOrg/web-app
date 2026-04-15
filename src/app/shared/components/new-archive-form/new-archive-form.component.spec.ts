@@ -64,6 +64,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 
 	it('should disable button when form is waiting', () => {
 		instance.waiting = true;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(ngMocks.find('button').nativeElement.disabled).toBeTruthy();
@@ -134,12 +135,14 @@ describe('NewArchiveFormComponent #onboarding', () => {
 			fullName: 'Test User',
 			type: 'type.archive.person',
 		};
+		renderFixture.changeDetectorRef.markForCheck();
 		renderFixture.detectChanges();
 
 		expect(ngMocks.findAll('select[name="relation"]')).toHaveFoundOne();
 
 		// Change to group type (hides relations)
 		componentInstance.formData.type = 'type.archive.group';
+		renderFixture.changeDetectorRef.markForCheck();
 		renderFixture.detectChanges();
 
 		expect(ngMocks.findAll('select[name="relation"]')).not.toHaveFoundOne();
@@ -162,6 +165,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 			relationType: 'relation.other',
 		};
 		vi.spyOn(componentInstance, 'isFormValid').mockReturnValue(true);
+		renderFixture.changeDetectorRef.markForCheck();
 		renderFixture.detectChanges();
 		await componentInstance.onSubmit();
 

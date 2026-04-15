@@ -58,9 +58,7 @@ describe('VerifyComponent', () => {
 		});
 
 		config.providers.push(EventService);
-		config.schemas = [CUSTOM_ELEMENTS_SCHEMA];
-
-		await TestBed.configureTestingModule(config).compileComponents();
+		await TestBed.configureTestingModule({...config, schemas: [CUSTOM_ELEMENTS_SCHEMA]}).compileComponents();
 
 		httpMock = TestBed.inject(HttpTestingController);
 		accountService = TestBed.inject(AccountService);

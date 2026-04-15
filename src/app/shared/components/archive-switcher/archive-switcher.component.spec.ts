@@ -184,6 +184,7 @@ describe('ArchiveSwitcherComponent', () => {
 	it('should show empty message when no archives and not loading', () => {
 		component.archives = [];
 		component.archivesLoading = false;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const emptyMessage = fixture.nativeElement.querySelector('.archives-empty');
@@ -194,6 +195,7 @@ describe('ArchiveSwitcherComponent', () => {
 
 	it('should show loading spinner when archivesLoading is true', () => {
 		component.archivesLoading = true;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const spinner = fixture.nativeElement.querySelector(
@@ -209,6 +211,7 @@ describe('ArchiveSwitcherComponent', () => {
 			new ArchiveVO({ archiveId: '2', fullName: 'Archive Two' }),
 		];
 		component.archivesLoading = false;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const archiveItems =

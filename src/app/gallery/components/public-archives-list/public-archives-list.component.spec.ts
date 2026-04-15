@@ -65,6 +65,7 @@ describe('PublicArchivesComponent', () => {
 			new ArchiveVO({ archiveNbr: 1, name: 'test', public: 1 }),
 			new ArchiveVO({ archiveNbr: 2, name: 'test2', public: 1 }),
 		];
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const archives = fixture.nativeElement.querySelectorAll('.public-archive');
@@ -75,6 +76,7 @@ describe('PublicArchivesComponent', () => {
 	it('should display the "no archives" element', async () => {
 		await fixture.whenStable();
 		component.publicArchives = [];
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const element = fixture.nativeElement.querySelector('.no-archives');
@@ -100,6 +102,7 @@ describe('PublicArchivesComponent', () => {
 			new ArchiveVO({ archiveNbr: 2, name: 'test2', public: 1 }),
 		];
 		component.toggleArchives();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(component.expanded).toBe(true);

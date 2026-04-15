@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
@@ -122,6 +122,7 @@ describe('DirectiveDisplayComponent', () => {
 				{ provide: AccountService, useValue: new MockAccountService() },
 				{ provide: ApiService, useValue: new MockApiService() },
 			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 
 		const fixture = TestBed.createComponent(DirectiveDisplayComponent);
@@ -130,6 +131,7 @@ describe('DirectiveDisplayComponent', () => {
 
 		// Wait for ngOnInit to complete
 		await instance.ngOnInit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(instance.noPlan).toBe(true);
@@ -165,6 +167,7 @@ describe('DirectiveDisplayComponent', () => {
 				{ provide: AccountService, useValue: new MockAccountService() },
 				{ provide: ApiService, useValue: new MockApiService() },
 			],
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 
 		const fixture = TestBed.createComponent(DirectiveDisplayComponent);
@@ -173,6 +176,7 @@ describe('DirectiveDisplayComponent', () => {
 
 		// Wait for ngOnInit to complete
 		await instance.ngOnInit();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(instance.error).toBe(true);

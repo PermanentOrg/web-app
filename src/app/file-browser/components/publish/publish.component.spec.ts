@@ -99,6 +99,7 @@ describe('PublishComponent', () => {
 		component.publishIa = null;
 		component.publicLink = null;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const button = fixture.nativeElement.querySelector('.publish-to-archive');

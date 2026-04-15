@@ -152,6 +152,7 @@ describe('TwoFactorAuthComponent', () => {
 
 		instance.methods = methods;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const methodRows = ngMocks.findAll('.method');
@@ -173,6 +174,7 @@ describe('TwoFactorAuthComponent', () => {
 		instance.codeSent = true;
 		instance.turnOn = true;
 		instance.method = 'sms';
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const codeContainer = ngMocks.findAll('.code-container');
@@ -186,6 +188,7 @@ describe('TwoFactorAuthComponent', () => {
 
 		instance.turnOn = true;
 		instance.method = 'sms';
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const codeContainer = ngMocks.findAll('.code-container');

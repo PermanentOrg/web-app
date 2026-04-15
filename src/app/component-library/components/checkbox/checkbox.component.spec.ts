@@ -22,7 +22,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it('should have the disabled class if the checkbox is disabled', () => {
-		instance.disabled = true;
+		fixture.componentRef.setInput('disabled', true);
 		fixture.detectChanges();
 		const checkbox = ngMocks.find('.checkbox-container').nativeElement;
 
@@ -38,7 +38,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it('should have the checked class if the checkbox is checked', () => {
-		instance.isChecked = true;
+		fixture.componentRef.setInput('isChecked', true);
 		fixture.detectChanges();
 		const checkbox = ngMocks.find('.checkbox').nativeElement;
 
@@ -47,7 +47,7 @@ describe('CheckboxCompoent', () => {
 
 	it('should emit the correct value when the checkbox is clicked', () => {
 		vi.spyOn(instance.isCheckedChange, 'emit');
-		instance.value = 'value';
+		fixture.componentRef.setInput('value', 'value');
 		fixture.detectChanges();
 		const checkbox = ngMocks.find('.checkbox-container').nativeElement;
 
@@ -58,8 +58,8 @@ describe('CheckboxCompoent', () => {
 
 	it("should not emit any value when the checkbox is clicked and it's disabled ", () => {
 		vi.spyOn(instance.isCheckedChange, 'emit');
-		instance.disabled = true;
-		instance.value = 'value';
+		fixture.componentRef.setInput('disabled', true);
+		fixture.componentRef.setInput('value', 'value');
 		fixture.detectChanges();
 		const checkbox = ngMocks.find('.checkbox-container').nativeElement;
 
@@ -69,7 +69,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it('should have the primary class if the variant is set to primary', () => {
-		instance.variant = 'primary';
+		fixture.componentRef.setInput('variant', 'primary');
 		fixture.detectChanges();
 		const checkbox = ngMocks.find('.checkbox-container').nativeElement;
 
@@ -77,7 +77,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it('should have the secondary class if the variant is set to secondary', () => {
-		instance.variant = 'secondary';
+		fixture.componentRef.setInput('variant', 'secondary');
 		fixture.detectChanges();
 		const checkbox = ngMocks.find('.checkbox-container').nativeElement;
 
@@ -94,7 +94,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it('should toggle checked state on Enter key press', () => {
-		instance.isChecked = false;
+		fixture.componentRef.setInput('isChecked', false);
 		fixture.detectChanges();
 
 		const checkboxContainer = ngMocks.find('.checkbox-container').nativeElement;
@@ -105,7 +105,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it('should toggle checked state on Space key press', () => {
-		instance.isChecked = false;
+		fixture.componentRef.setInput('isChecked', false);
 		fixture.detectChanges();
 
 		const checkboxContainer = ngMocks.find('.checkbox-container').nativeElement;
@@ -116,7 +116,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it('should not toggle checked state when disabled and Enter key is pressed', () => {
-		instance.disabled = true;
+		fixture.componentRef.setInput('disabled', true);
 		fixture.detectChanges();
 
 		const checkboxContainer = ngMocks.find('.checkbox-container').nativeElement;
@@ -128,7 +128,7 @@ describe('CheckboxCompoent', () => {
 	});
 
 	it("should have aria-disabled set to 'true' when disabled", () => {
-		instance.disabled = true;
+		fixture.componentRef.setInput('disabled', true);
 		fixture.detectChanges();
 		const checkboxContainer = ngMocks.find('.checkbox').nativeElement;
 

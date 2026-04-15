@@ -88,6 +88,7 @@ describe('GiftStorageComponent', () => {
 		instance.isAsyncValidating = false;
 
 		instance.giftForm.updateValueAndValidity();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -107,6 +108,7 @@ describe('GiftStorageComponent', () => {
 		instance.giftForm.controls.amount.setValue('1');
 
 		instance.giftForm.updateValueAndValidity();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const button: HTMLButtonElement =
@@ -127,6 +129,7 @@ describe('GiftStorageComponent', () => {
 		instance.giftForm.controls.amount.setValue('1');
 
 		instance.giftForm.updateValueAndValidity();
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const button: HTMLButtonElement =
@@ -146,6 +149,7 @@ describe('GiftStorageComponent', () => {
 
 		instance.giftForm.updateValueAndValidity();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -168,6 +172,7 @@ describe('GiftStorageComponent', () => {
 
 		instance.giftForm.updateValueAndValidity();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 
@@ -187,6 +192,7 @@ describe('GiftStorageComponent', () => {
 
 		instance.giftForm.updateValueAndValidity();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		await fixture.whenStable();
 

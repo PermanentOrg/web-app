@@ -26,12 +26,12 @@ describe('ButtonComponent', () => {
 
 		expect(button.nativeElement.classList).toContain('button-primary');
 
-		instance.variant = 'secondary';
+		fixture.componentRef.setInput('variant', 'secondary');
 		fixture.detectChanges();
 
 		expect(button.nativeElement.classList).toContain('button-secondary');
 
-		instance.variant = 'tertiary';
+		fixture.componentRef.setInput('variant', 'tertiary');
 		fixture.detectChanges();
 
 		expect(button.nativeElement.classList).toContain('button-tertiary');
@@ -42,7 +42,7 @@ describe('ButtonComponent', () => {
 
 		expect(button.nativeElement.classList).toContain('button-hug');
 
-		instance.size = 'fill';
+		fixture.componentRef.setInput('size', 'fill');
 		fixture.detectChanges();
 
 		expect(button.nativeElement.classList).toContain('button-fill');
@@ -51,7 +51,7 @@ describe('ButtonComponent', () => {
 	it('should disable the button', () => {
 		const button = ngMocks.find('.button');
 
-		instance.disabled = true;
+		fixture.componentRef.setInput('disabled', true);
 		fixture.detectChanges();
 
 		expect(button.nativeElement.disabled).toBe(true);
@@ -71,7 +71,7 @@ describe('ButtonComponent', () => {
 
 		expect(button.nativeElement.classList).toContain('button-light');
 
-		instance.mode = 'dark';
+		fixture.componentRef.setInput('mode', 'dark');
 		fixture.detectChanges();
 
 		expect(button.nativeElement.classList).toContain('button-dark');
@@ -80,7 +80,7 @@ describe('ButtonComponent', () => {
 	it('should have the correct class based on orientation', () => {
 		const button = ngMocks.find('.button');
 
-		instance.orientation = 'right';
+		fixture.componentRef.setInput('orientation', 'right');
 		fixture.detectChanges();
 
 		expect(button.nativeElement.classList).toContain('button-reverse');
@@ -91,7 +91,7 @@ describe('ButtonComponent', () => {
 
 		expect(button.nativeElement.classList).toContain('button-medium');
 
-		instance.height = 'large';
+		fixture.componentRef.setInput('height', 'large');
 		fixture.detectChanges();
 
 		expect(button.nativeElement.classList).toContain('button-large');
@@ -102,12 +102,12 @@ describe('ButtonComponent', () => {
 
 		expect(button.nativeElement.type).toEqual('button');
 
-		instance.buttonType = 'submit';
+		fixture.componentRef.setInput('buttonType', 'submit');
 		fixture.detectChanges();
 
 		expect(button.nativeElement.type).toEqual('submit');
 
-		instance.buttonType = 'reset';
+		fixture.componentRef.setInput('buttonType', 'reset');
 		fixture.detectChanges();
 
 		expect(button.nativeElement.type).toEqual('reset');

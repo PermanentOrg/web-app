@@ -60,6 +60,7 @@ describe('ArchiveTypeSelectComponent', () => {
 	it('should change displayed archive type when the dialog returns with a type', () => {
 		component.onClick();
 		dialogRef.next(OnboardingTypes.community);
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expectCommunityDisplayed();
@@ -70,6 +71,7 @@ describe('ArchiveTypeSelectComponent', () => {
 		dialogRef.next(OnboardingTypes.famhist);
 		component.onClick();
 		dialogRef.next(OnboardingTypes.community);
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expectCommunityDisplayed();
@@ -81,6 +83,7 @@ describe('ArchiveTypeSelectComponent', () => {
 		component.onClick();
 		dialogRef.next(undefined);
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expectCommunityDisplayed();
@@ -92,6 +95,7 @@ describe('ArchiveTypeSelectComponent', () => {
 		component.onClick();
 		dialogRef.next('not-valid-type' as OnboardingTypes);
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expectCommunityDisplayed();

@@ -669,6 +669,7 @@ describe('FileViewerComponent', () => {
 
 		it('should display "Click to add location" on fullscreen view', () => {
 			component.canEdit = true;
+			fixture.changeDetectorRef.markForCheck();
 			fixture.detectChanges();
 			const locationSpan = fixture.nativeElement.querySelector('.add-location');
 

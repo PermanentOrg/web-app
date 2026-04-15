@@ -5,7 +5,7 @@ import {
 	TestModuleMetadata,
 	tick,
 } from '@angular/core/testing';
-import { EventEmitter } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, EventEmitter } from '@angular/core';
 import {
 	Router,
 	ActivatedRoute,
@@ -134,7 +134,7 @@ describe('SharePreviewComponent', () => {
 			useValue: mockMessageService,
 		});
 
-		await TestBed.configureTestingModule(config).compileComponents();
+		await TestBed.configureTestingModule({...config, schemas: [CUSTOM_ELEMENTS_SCHEMA]}).compileComponents();
 
 		dialog = TestBed.inject(DialogCdkService);
 		router = TestBed.inject(Router);

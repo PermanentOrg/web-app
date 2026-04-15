@@ -68,6 +68,7 @@ describe('ConnectorComponent', () => {
 			archiveId: 1,
 			type: 'type.connector.facebook',
 		});
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(hostComponent.component).toBeTruthy();
@@ -79,6 +80,7 @@ describe('ConnectorComponent', () => {
 			archiveId: 1,
 			type: 'type.connector.familysearch',
 		});
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		component = hostComponent.component;
 
@@ -99,6 +101,7 @@ describe('ConnectorComponent', () => {
 			type: 'type.connector.familysearch',
 			status: 'status.connector.connected',
 		});
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		component = hostComponent.component;
 
@@ -137,6 +140,7 @@ describe('ConnectorComponent', () => {
 			type: 'type.connector.familysearch',
 			status: 'status.connector.connected',
 		});
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		component = hostComponent.component;
 
@@ -171,6 +175,7 @@ describe('ConnectorComponent', () => {
 		hostComponent.connector = new ConnectorOverviewVO({
 			type: 'type.connector.familysearch',
 		});
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 		const connectorComponentInstance = hostComponent.component;
 
@@ -189,6 +194,7 @@ describe('ConnectorComponent', () => {
 			archiveId: 1,
 			type: 'type.connector.familysearch',
 		});
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const connectorComponentInstance = fixture.debugElement.query(

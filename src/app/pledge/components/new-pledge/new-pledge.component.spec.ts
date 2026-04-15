@@ -100,6 +100,7 @@ describe('NewPledgeComponent', () => {
 
 		instance.pledgeForm.updateValueAndValidity();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(button.disabled).toBeFalsy();
@@ -118,6 +119,7 @@ describe('NewPledgeComponent', () => {
 
 		instance.pledgeForm.updateValueAndValidity();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(button.disabled).toBeTruthy();
@@ -136,6 +138,7 @@ describe('NewPledgeComponent', () => {
 
 		instance.pledgeForm.updateValueAndValidity();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(button.disabled).toBeTruthy();
@@ -153,6 +156,7 @@ describe('NewPledgeComponent', () => {
 
 		instance.pledgeForm.updateValueAndValidity();
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(button.disabled).toBeTruthy();
@@ -180,6 +184,7 @@ describe('NewPledgeComponent', () => {
 
 	it('should display the loading spinner', async () => {
 		instance.waiting = true;
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		expect(
@@ -191,6 +196,7 @@ describe('NewPledgeComponent', () => {
 		instance.isSuccessful = true;
 		instance.amountInGb = 5;
 
+		fixture.changeDetectorRef.markForCheck();
 		fixture.detectChanges();
 
 		const displayedMessage =
