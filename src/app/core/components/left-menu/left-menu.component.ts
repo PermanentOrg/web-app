@@ -141,7 +141,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 		this.isVisible = false;
 		this.isVisibleChange.emit(this.isVisible);
 
-		if (!(event.target as HTMLElement).getAttribute('href')) {
+		if (!(event.target as HTMLElement).closest('a[href]')) {
 			event.stopPropagation();
 			return false;
 		}
