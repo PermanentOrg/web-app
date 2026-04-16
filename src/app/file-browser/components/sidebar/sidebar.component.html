@@ -108,7 +108,7 @@
 		<div class="sidebar-item">
 			<label>{{ selectedItem.isFolder ? 'Start date' : 'Date' }}</label>
 			<pr-inline-value-edit
-				[displayValue]="selectedItem.displayTime || selectedItem.displayDT"
+				[displayValue]="displayTime"
 				[canEdit]="canEdit"
 				[item]="selectedItem"
 				[itemId]="selectedItem.folder_linkId"
@@ -116,7 +116,7 @@
 				[readOnlyEmptyMessage]="
 					selectedItem.isFolder ? 'No start date' : 'No date'
 				"
-				(doneEditing)="onFinishEditing('displayDT', $event)"
+				(doneEditing)="onDateEditing('start', $event)"
 				type="date"
 			></pr-inline-value-edit>
 		</div>
@@ -124,13 +124,13 @@
 			<div class="sidebar-item">
 				<label>End date</label>
 				<pr-inline-value-edit
-					[displayValue]="selectedItem.displayEndDT"
+					[displayValue]="displayEndTime"
 					[canEdit]="canEdit"
 					[item]="selectedItem"
 					[itemId]="selectedItem.folder_linkId"
 					emptyMessage="Click to add date"
 					readOnlyEmptyMessage="No end date"
-					(doneEditing)="onFinishEditing('displayEndDT', $event)"
+					(doneEditing)="onDateEditing('end', $event)"
 					type="date"
 				></pr-inline-value-edit>
 			</div>
