@@ -15,7 +15,8 @@ const mockFolderVO = {
 	ChildItemVOs: [],
 	dataStatus: DataStatus.Lean,
 };
-const mockResponse = new FolderResponse({
+
+const mockSuccessResponse = new FolderResponse({
 	isSuccessful: true,
 	Results: [
 		{
@@ -28,25 +29,29 @@ const mockResponse = new FolderResponse({
 	],
 });
 
-const mockApiService = {
-	folder: {
-		getWithChildren: jasmine
-			.createSpy('getWithChildren')
-			.and.returnValue(Promise.resolve(mockResponse)),
-		navigateLean: jasmine.createSpy('navigateLean').and.returnValue(
-			of({
-				isSuccessful: true,
-				getFolderVO: () => mockFolderVO,
-			}),
-		),
-	},
-};
+const mockUnsuccessfulResponse = new FolderResponse({
+	isSuccessful: false,
+	Results: [],
+});
+
+let mockApiService: any;
 
 describe('FilesystemApiService', () => {
 	let service: FilesystemApiService;
 	let shareLinksServiceSpy: jasmine.SpyObj<ShareLinksService>;
 
 	beforeEach(() => {
+		mockApiService = {
+			folder: {
+				getWithChildren: jasmine
+					.createSpy('getWithChildren')
+					.and.returnValue(Promise.resolve(mockSuccessResponse)),
+				navigateLean: jasmine
+					.createSpy('navigateLean')
+					.and.returnValue(of(mockSuccessResponse)),
+			},
+		};
+
 		shareLinksServiceSpy = jasmine.createSpyObj('ShareLinksService', [
 			'isUnlistedShare',
 			'currentShareToken',
@@ -69,12 +74,6 @@ describe('FilesystemApiService', () => {
 
 	it('should navigate using navigateLean', async () => {
 		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
-		mockApiService.folder.navigateLean.and.returnValue(
-			of({
-				isSuccessful: true,
-				getFolderVO: () => mockFolderVO,
-			}),
-		);
 
 		const folder = await service.navigate({ folderId });
 
@@ -105,14 +104,12 @@ describe('FilesystemApiService', () => {
 
 	it('should throw FolderResponse error if response is unsuccessful', async () => {
 		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
-		mockApiService.folder.navigateLean.and.resolveTo(
-			of({ isSuccessful: false }),
+		mockApiService.folder.navigateLean.and.returnValue(
+			of(mockUnsuccessfulResponse),
 		);
 
-		const promise = service.navigate({ folderId: 0 });
-
 		try {
-			await promise;
+			await service.navigate({ folderId: 0 });
 			fail('Expected promise to reject');
 		} catch (error) {
 			expect(error).toBeDefined();
