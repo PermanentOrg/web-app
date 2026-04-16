@@ -318,7 +318,9 @@ export class DataService {
 			);
 		} else {
 			promises.push(
-				folders.length ? this.api.folder.get(folders) : Promise.resolve(),
+				folders.length
+					? this.api.folder.getStelaFolderVOs(folders)
+					: Promise.resolve(),
 			);
 		}
 		return await Promise.all(promises)
