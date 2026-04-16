@@ -5,7 +5,7 @@ import {
 	ProfileItemVOData,
 } from '@models/profile-item-vo';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 import {
 	HasSubscriptions,
 	unsubscribeAll,
@@ -39,14 +39,19 @@ export class PublicProfileComponent
 				.subscribe((items) => (this.profileItems = items)),
 		);
 
-		this.milestones$ = this.publicProfile.profileItemsDictionary$().pipe(
-			map((profileItems) => {
+		this.milestones$ = combineLatest([
+			this.publicProfile.archive$(),
+			this.publicProfile.profileItemsDictionary$(),
+		]).pipe(
+			map(([archive, profileItems]) => {
 				const milestones = concat(
 					profileItems.job || [],
 					profileItems.home || [],
 					profileItems.milestone || [],
 				);
-				return orderBy(milestones, (i) => i.day1, 'desc');
+				const order =
+					archive?.milestoneSortOrder === 'chronological' ? 'asc' : 'desc';
+				return orderBy(milestones, (i) => i.day1, order);
 			}),
 		);
 	}

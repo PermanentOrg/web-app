@@ -43,6 +43,7 @@ export class ArchiveVO extends BaseVO implements DynamicListChild {
 	public allowPublicDownload: boolean;
 	public payerAccountId: string;
 	public public: number;
+	public milestoneSortOrder: 'chronological' | 'reverse_chronological';
 
 	constructor(voData: any) {
 		super(voData);

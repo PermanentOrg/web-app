@@ -34,6 +34,7 @@ import { copyFromInputElement } from '@shared/utilities/forms';
 import { EventService } from '@shared/services/event/event.service';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { ArchiveSettingsDialogComponent } from '@core/components/archive-settings-dialog/archive-settings-dialog.component';
 import {
 	PROFILE_ONBOARDING_COOKIE,
 	ProfileEditFirstTimeDialogComponent,
@@ -259,6 +260,10 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 			this.updateProgress();
 			this.trackProfileEdit(item);
 		}
+	}
+
+	openArchiveSettings() {
+		this.dialog.open(ArchiveSettingsDialogComponent, { width: '1000px' });
 	}
 
 	async onShareClick() {

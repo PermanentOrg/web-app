@@ -272,6 +272,15 @@ export class ArchiveRepo extends BaseRepo {
 		).toPromise();
 	}
 
+	public async patchArchive(
+		archiveId: string,
+		milestoneSortOrder: 'chronological' | 'reverse_chronological',
+	): Promise<void> {
+		await this.httpV2
+			.patch(`v2/archive/${archiveId}`, { milestoneSortOrder })
+			.toPromise();
+	}
+
 	public async getPublicArchiveTags(archiveId: string) {
 		return await this.httpV2
 			.get<TagVOData>(`v2/archive/${archiveId}/tags/public`)
