@@ -42,6 +42,33 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	originalFileExtension: string = '';
 	permanentFileExtension: string = '';
 
+	get displayTime(): string {
+		return this.parseEdtfInterval('start');
+	}
+
+	get displayEndTime(): string {
+		return this.parseEdtfInterval('end');
+	}
+
+	private parseEdtfInterval(part: 'start' | 'end'): string {
+		const item = this.selectedItem;
+		if (!item) {
+			return '';
+		}
+
+		const displayTimeValue = item.displayTime;
+		if (!displayTimeValue) {
+			return part === 'start' ? item.displayDT || '' : item.displayEndDT || '';
+		}
+
+		if (displayTimeValue.includes('/')) {
+			const parts = displayTimeValue.split('/');
+			return part === 'start' ? parts[0] : parts[1] || '';
+		}
+
+		return part === 'start' ? displayTimeValue : '';
+	}
+
 	constructor(
 		private dataService: DataService,
 		private editService: EditService,
@@ -158,6 +185,29 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		}
 
 		this.currentTab = tab;
+	}
+
+	async onDateEditing(datePart: 'start' | 'end', value: string) {
+		const item = this.selectedItem;
+		if (!item) return;
+
+		const startDate =
+			datePart === 'start' ? value : this.parseEdtfInterval('start');
+		const endDate = datePart === 'end' ? value : this.parseEdtfInterval('end');
+		let displayTime: string;
+		if (!startDate) {
+			displayTime = null;
+		} else if (endDate) {
+			displayTime = `${startDate}/${endDate}`;
+		} else {
+			displayTime = startDate;
+		}
+		this.editService.saveItemVoProperty(
+			item,
+			'displayTime' as KeysOfType<ItemVO, string>,
+			displayTime,
+		);
+		this.cdr.detectChanges();
 	}
 
 	async onFinishEditing(property: KeysOfType<ItemVO, String>, value: string) {

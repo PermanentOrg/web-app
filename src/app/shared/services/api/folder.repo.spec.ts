@@ -15,6 +15,34 @@ const fakeFolderResponse = {
 		},
 	],
 };
+const mockStelaFolder = {
+	folderId: '123',
+	size: 1024,
+	location: { id: '1', name: 'Test Location' },
+	parentFolder: { id: '456' },
+	shares: [],
+	tags: [],
+	archive: { id: 'arch1', name: 'Test Archive' },
+	createdAt: '2024-01-01T00:00:00Z',
+	updatedAt: '2024-01-02T00:00:00Z',
+	description: 'Test folder',
+	displayName: 'Test Folder',
+	downloadName: 'test-folder',
+	imageRatio: 1.5,
+	paths: { names: ['path1', 'path2'] },
+	publicAt: null,
+	sort: 'name',
+	thumbnailUrls: {
+		'200': 'url200',
+		'256': 'url256',
+		'500': 'url500',
+		'1000': 'url1000',
+		'2000': 'url2000',
+	},
+	type: 'folder',
+	status: 'ok',
+	view: 'grid',
+};
 const fakeChildrenResponse = {
 	items: [
 		{
@@ -212,35 +240,6 @@ describe('Folder repo', () => {
 	});
 
 	describe('updateStelaFolder', () => {
-		const mockStelaFolder = {
-			folderId: '123',
-			size: 1024,
-			location: { id: '1', name: 'Test Location' },
-			parentFolder: { id: '456' },
-			shares: [],
-			tags: [],
-			archive: { id: 'arch1', name: 'Test Archive' },
-			createdAt: '2024-01-01T00:00:00Z',
-			updatedAt: '2024-01-02T00:00:00Z',
-			description: 'Test folder',
-			displayName: 'Test Folder',
-			downloadName: 'test-folder',
-			imageRatio: 1.5,
-			paths: { names: ['path1', 'path2'] },
-			publicAt: null,
-			sort: 'name',
-			thumbnailUrls: {
-				'200': 'url200',
-				'256': 'url256',
-				'500': 'url500',
-				'1000': 'url1000',
-				'2000': 'url2000',
-			},
-			type: 'folder',
-			status: 'ok',
-			view: 'grid',
-		};
-
 		it('should send PATCH request with displayTime as EDTF interval', async () => {
 			const folderVO = new FolderVO({
 				folderId: 123,
@@ -290,35 +289,6 @@ describe('Folder repo', () => {
 	});
 
 	describe('getStelaFolderVOs', () => {
-		const mockStelaFolder = {
-			folderId: '123',
-			size: 1024,
-			location: { id: '1', name: 'Test Location' },
-			parentFolder: { id: '456' },
-			shares: [],
-			tags: [],
-			archive: { id: 'arch1', name: 'Test Archive' },
-			createdAt: '2024-01-01T00:00:00Z',
-			updatedAt: '2024-01-02T00:00:00Z',
-			description: 'Test folder',
-			displayName: 'Test Folder',
-			downloadName: 'test-folder',
-			imageRatio: 1.5,
-			paths: { names: ['path1', 'path2'] },
-			publicAt: null,
-			sort: 'name',
-			thumbnailUrls: {
-				'200': 'url200',
-				'256': 'url256',
-				'500': 'url500',
-				'1000': 'url1000',
-				'2000': 'url2000',
-			},
-			type: 'folder',
-			status: 'ok',
-			view: 'grid',
-		};
-
 		it('should fetch single folder and return FolderResponse', async () => {
 			const folderVO = new FolderVO({ folderId: 123 });
 
