@@ -483,7 +483,7 @@ export class RecordRepo extends BaseRepo {
 		// update the whole record using this method.
 		const stelaRecord = await firstValueFrom(
 			this.httpV2.patch<StelaRecord>(`v2/records/${recordId}`, {
-				displayTime: recordVO.displayDT,
+				displayTime: recordVO.displayTime,
 			}),
 		);
 

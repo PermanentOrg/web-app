@@ -252,10 +252,10 @@ describe('RecordRepo', () => {
 			httpSendRequestPromiseSpy = spyOn(httpService, 'sendRequestPromise');
 		});
 
-		it('should send a PATCH request with displayTime derived from displayDT', async () => {
+		it('should send a PATCH request with displayTime', async () => {
 			const recordVO = new RecordVO({
 				recordId: 42,
-				displayDT: '1985-05-20T00:00:00.000Z',
+				displayTime: '1985-05-20T00:00:00.000Z',
 			});
 
 			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
@@ -272,7 +272,7 @@ describe('RecordRepo', () => {
 		it('should look up recordId by archiveNbr when recordId is not available', async () => {
 			const recordVO = new RecordVO({
 				archiveNbr: 'archive-100',
-				displayDT: '2000-03-01T00:00:00.000Z',
+				displayTime: '2000-03-01T00:00:00.000Z',
 			});
 
 			httpSendRequestPromiseSpy.and.resolveTo({
@@ -296,7 +296,7 @@ describe('RecordRepo', () => {
 		it('should return a RecordResponse with converted record data', async () => {
 			const recordVO = new RecordVO({
 				recordId: 42,
-				displayDT: '1985-05-01T00:00:00.000Z',
+				displayTime: '1985-05-01T00:00:00.000Z',
 			});
 
 			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));

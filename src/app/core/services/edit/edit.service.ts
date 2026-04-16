@@ -391,11 +391,7 @@ export class EditService {
 
 		const promises: Array<Promise<any>> = [];
 
-		if (folders.length) {
-			promises.push(this.api.folder.update(folders, whitelist));
-		} else {
-			promises.push(Promise.resolve());
-		}
+		promises.push(this.updateFolders(folders, whitelist));
 
 		promises.push(this.updateRecords(records, whitelist));
 
@@ -414,6 +410,18 @@ export class EditService {
 						newData.TimezoneVO = updatedItem.TimezoneVO;
 					}
 
+					if (updatedItem.displayTime) {
+						newData.displayTime = updatedItem.displayTime;
+					}
+
+					if (updatedItem.displayDT) {
+						newData.displayDT = updatedItem.displayDT;
+					}
+
+					if (updatedItem.displayEndDT) {
+						newData.displayEndDT = updatedItem.displayEndDT;
+					}
+
 					const folder =
 						(itemsByLinkId[updatedItem.folder_linkId] as FolderVO) ||
 						foldersByFolderId.get(updatedItem.folderId);
@@ -426,11 +434,18 @@ export class EditService {
 
 				const newData: RecordVOData = {
 					updatedDT: res.updatedDT,
-					displayTime: res.displayTime,
 				};
 
 				if (res.TimezoneVO) {
 					newData.TimezoneVO = res.TimezoneVO;
+				}
+
+				if (res.displayTime) {
+					newData.displayTime = res.displayTime;
+				}
+
+				if (res.displayDT) {
+					newData.displayDT = res.displayDT;
 				}
 
 				const record =
@@ -664,12 +679,12 @@ export class EditService {
 		recordKey?: (keyof ItemVO)[],
 	): Promise<RecordVO[] | void> {
 		if (!records.length) {
-			return await Promise.resolve();
+			return;
 		}
 
 		const promises: Array<Promise<unknown[] | RecordResponse[]>> = [];
 
-		if (recordKey?.[0] === 'displayDT') {
+		if (recordKey?.includes('displayTime')) {
 			promises.push(
 				Promise.all(
 					records.map(
@@ -680,9 +695,44 @@ export class EditService {
 		}
 
 		const archiveId = this.accountService.getArchive().archiveId;
-		promises.push(this.api.record.update(records, archiveId));
+		const legacyRecordKey = recordKey?.filter((k) => k !== 'displayTime');
+
+		if (!recordKey || legacyRecordKey?.length > 0) {
+			promises.push(this.api.record.update(records, archiveId));
+		}
 
 		await Promise.all(promises);
 		return (await this.api.record.get(records)).getRecordVOs();
+	}
+
+	private async updateFolders(
+		folders: FolderVO[],
+		folderKeys?: (keyof ItemVO)[],
+	): Promise<FolderResponse | void> {
+		if (!folders.length) {
+			return;
+		}
+
+		const promises: Array<Promise<FolderResponse | FolderResponse[]>> = [];
+
+		if (folderKeys?.includes('displayTime')) {
+			promises.push(
+				Promise.all(
+					folders.map(
+						async (folder) => await this.api.folder.updateStelaFolder(folder),
+					),
+				),
+			);
+		}
+
+		const legacyFolderKeys = folderKeys?.filter((k) => k !== 'displayTime');
+
+		if (!folderKeys || legacyFolderKeys?.length > 0) {
+			promises.push(this.api.folder.update(folders, legacyFolderKeys));
+		}
+
+		await Promise.all(promises);
+
+		return await this.api.folder.getStelaFolderVOs(folders);
 	}
 }
