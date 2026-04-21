@@ -8,7 +8,6 @@ import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
-import { FolderResponse } from '@shared/services/api/index.repo';
 import { PublicRoutePipe } from '@shared/pipes/public-route.pipe';
 import { Router } from '@angular/router';
 import { PublishIaData } from '@models/publish-ia-vo';
@@ -80,9 +79,9 @@ export class PublishComponent {
 				let tries = 0;
 				while (!this.publicItem && tries < 10) {
 					tries += 1;
-					const publicRootResponse = (await this.api.folder
-						.navigateLean(publicRoot)
-						.toPromise()) as FolderResponse;
+					const publicRootResponse = await this.api.folder.getWithChildren([
+						publicRoot,
+					]);
 					const publicRootFull = publicRootResponse.getFolderVO(true);
 					const publicFolders: FolderVO[] = publicRootFull.ChildItemVOs.filter(
 						(i) => i instanceof FolderVO,
