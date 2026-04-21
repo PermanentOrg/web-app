@@ -55,6 +55,10 @@ interface StelaFolder {
 		id: string;
 		name: string;
 	};
+	archiveNumber: string;
+	folderLinkId: number;
+	folderLinkType: string;
+	parentFolderLinkId: number;
 	createdAt: string;
 	updatedAt: string;
 	description: string;
@@ -102,6 +106,10 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		...stelaFolder,
 		folderId: stelaFolder.folderId,
 		archiveId: stelaFolder.archive?.id,
+		archiveNbr: stelaFolder.archiveNumber,
+		folder_linkId: stelaFolder.folderLinkId,
+		folder_linkType: stelaFolder.folderLinkType,
+		parentFolder_linkId: stelaFolder.parentFolderLinkId,
 		displayName: stelaFolder.displayName,
 		displayDT: stelaFolder.displayTimestamp,
 		displayEndDT: stelaFolder.displayEndTimestamp,
@@ -124,6 +132,8 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		thumbnail256: stelaFolder.thumbnailUrls?.['256'],
 		thumbnail256CloudPath: stelaFolder.thumbnailUrls?.['256'],
 		status: stelaFolder.status,
+		createdDT: stelaFolder.createdAt,
+		updatedDT: stelaFolder.updatedAt,
 		publicDT: stelaFolder.publicAt,
 		parentFolderId: stelaFolder.parentFolder?.id,
 		pathAsText: stelaFolder.paths?.names,
@@ -137,6 +147,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		),
 		ChildItemVOs: [...childRecordVOs, ...childFolderVOs],
 		ShareVOs: (stelaFolder.shares ?? []).map(convertStelaSharetoShareVO),
+		accessRole: 'access.role.owner', // TODO: Replace with BE value once Stela returns accessRole
 		isFolder: true,
 	});
 };
@@ -263,47 +274,72 @@ export class FolderRepo extends BaseRepo {
 		return response[0].items;
 	}
 
+	private async resolveFolderId(folderVO: FolderVO): Promise<FolderVO> {
+		if (folderVO.folderId) {
+			return folderVO;
+		}
+		const response = await this.get([folderVO]);
+		const resolvedFolder = response.getFolderVO();
+		return new FolderVO({ ...folderVO, folderId: resolvedFolder.folderId });
+	}
+
 	public async getWithChildren(
 		folderVOs: FolderVO[],
 		shareToken: string = null,
 	): Promise<FolderResponse> {
-		// Stela has two separate endpoints -- one for loading the folder, one for loading the children.
-		const requests = folderVOs.map(async (folderVO) => {
-			const stelaFolder = await this.getStelaFolder(folderVO, shareToken);
-			const stelaFolderChildren = await this.getStelaFolderChildren(
-				folderVO,
-				shareToken,
+		try {
+			// Stela has two separate endpoints -- one for loading the folder, one for loading the children.
+			const requests = folderVOs.map(async (folderVO) => {
+				const resolvedFolderVO = await this.resolveFolderId(folderVO);
+				const stelaFolder = await this.getStelaFolder(
+					resolvedFolderVO,
+					shareToken,
+				);
+				const stelaFolderChildren = await this.getStelaFolderChildren(
+					resolvedFolderVO,
+					shareToken,
+				);
+				return {
+					...stelaFolder,
+					children: stelaFolderChildren,
+				};
+			});
+
+			const stelaFolders = (await Promise.all(requests)).flat();
+
+			// We need the `Results` to look the way v1 results look, for now.
+			const simulatedV1FolderResponseResults = stelaFolders.map(
+				(stelaFolder) => ({
+					data: [
+						{
+							FolderVO: convertStelaFolderToFolderVO(stelaFolder),
+						},
+					],
+					message: ['Folder retrieved'],
+					status: true,
+					resultDT: new Date().toISOString(),
+					createdDT: null,
+					updatedDT: null,
+				}),
 			);
-			return {
-				...stelaFolder,
-				children: stelaFolderChildren,
-			};
-		});
 
-		const stelaFolders = (await Promise.all(requests)).flat();
-
-		// We need the `Results` to look the way v1 results look, for now.
-		const simulatedV1FolderResponseResults = stelaFolders.map(
-			(stelaFolder) => ({
-				data: [
-					{
-						FolderVO: convertStelaFolderToFolderVO(stelaFolder),
-					},
-				],
-				message: ['Folder retrieved'],
-				status: true,
-				resultDT: new Date().toISOString(),
-				createdDT: null,
-				updatedDT: null,
-			}),
-		);
-
-		const folderResponse = new FolderResponse({
-			isSuccessful: true,
-			isSystemUp: true,
-			Results: simulatedV1FolderResponseResults,
-		});
-		return folderResponse;
+			const folderResponse = new FolderResponse({
+				isSuccessful: true,
+				isSystemUp: true,
+				Results: simulatedV1FolderResponseResults,
+			});
+			return folderResponse;
+		} catch (err) {
+			// We need the error to look the way v1 errors look too,
+			// Changing all the error handlers would be errror prone
+			const errorFolderResponse = new FolderResponse();
+			errorFolderResponse.Results = [
+				{
+					message: [err?.error?.error],
+				},
+			];
+			return errorFolderResponse;
+		}
 	}
 
 	public navigate(folderVO: FolderVO): Observable<FolderResponse> {

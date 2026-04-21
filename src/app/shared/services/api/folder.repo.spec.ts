@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { FolderVO } from '@models/index';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { HttpService } from '../http/http.service';
-import { FolderRepo } from './folder.repo';
+import { FolderRepo, FolderResponse } from './folder.repo';
 
 const emptyResponse = { items: [] };
 const fakeFolderResponse = {
@@ -26,6 +26,40 @@ const fakeChildrenResponse = {
 		},
 	],
 };
+
+const buildStelaFolderResponse = (overrides: Record<string, unknown> = {}) => ({
+	items: [
+		{
+			folderId: '42',
+			archiveNumber: 'ARCH-001',
+			archive: { id: 'arch-id', name: 'Test Archive' },
+			folderLinkId: 100,
+			folderLinkType: 'type.folder.link.private',
+			parentFolderLinkId: 0,
+			createdAt: '2024-01-01T00:00:00Z',
+			updatedAt: '2024-06-01T00:00:00Z',
+			description: 'Test',
+			displayTimestamp: '2024-01-01T00:00:00Z',
+			displayEndTimestamp: null,
+			displayName: 'Test Folder',
+			downloadName: 'Test Folder',
+			imageRatio: 1,
+			paths: { names: ['Test Folder'] },
+			publicAt: null,
+			sort: null,
+			thumbnailUrls: null,
+			type: 'type.folder.generic',
+			status: 'status.generic.ok',
+			view: 'grid',
+			size: 0,
+			location: null,
+			parentFolder: { id: 'parent-id' },
+			shares: null,
+			tags: null,
+			...overrides,
+		},
+	],
+});
 
 describe('Folder repo', () => {
 	let folderRepo: FolderRepo;
@@ -154,6 +188,100 @@ describe('Folder repo', () => {
 		});
 
 		expect(result.Results[0].data[0].FolderVO).toBeDefined();
+	});
+
+	describe('getWithChildren error handling', () => {
+		it('should return a FolderResponse with isSuccessful falsy when the Stela API throws', async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+			const apiError = { error: { error: 'Internal server error' } };
+
+			httpV2Spy.get.and.returnValue(
+				new Observable((subscriber) => subscriber.error(apiError)),
+			);
+
+			const result = await folderRepo.getWithChildren([folderVO]);
+
+			expect(result.isSuccessful).toBeFalsy();
+		});
+
+		it('should surface the error message from err.error.error via getMessage()', async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+			const apiError = { error: { error: 'Folder not found' } };
+
+			httpV2Spy.get.and.returnValue(
+				new Observable((subscriber) => subscriber.error(apiError)),
+			);
+
+			const result = await folderRepo.getWithChildren([folderVO]);
+
+			expect(result.getMessage()).toBe('Folder not found');
+		});
+
+		it('should return an empty error message when err.error.error is absent', async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+
+			httpV2Spy.get.and.returnValue(
+				new Observable((subscriber) => subscriber.error({})),
+			);
+
+			const result = await folderRepo.getWithChildren([folderVO]);
+
+			expect(result.getMessage()).toBeUndefined();
+		});
+	});
+
+	describe('resolveFolderId', () => {
+		it('should not call the legacy /folder/get endpoint when folderId is already present', async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+
+			httpV2Spy.get.and.returnValues(
+				of([buildStelaFolderResponse()]),
+				of([{ items: [] }]),
+			);
+
+			await folderRepo.getWithChildren([folderVO]);
+
+			expect(httpSpy.sendRequestPromise).not.toHaveBeenCalled();
+		});
+
+		it('should call legacy /folder/get to resolve folderId when it is missing', async () => {
+			const folderVO = new FolderVO({
+				archiveNbr: '0001-0001',
+				folder_linkId: 123,
+			});
+
+			const resolvedFolderResponse = new FolderResponse({
+				isSuccessful: true,
+				Results: [
+					{
+						data: [{ FolderVO: { folderId: 99 } }],
+						status: true,
+						message: ['OK'],
+						resultDT: new Date().toISOString(),
+						createdDT: null,
+						updatedDT: null,
+					},
+				],
+			});
+
+			httpSpy.sendRequestPromise.and.resolveTo(resolvedFolderResponse);
+			httpV2Spy.get.and.returnValues(
+				of([buildStelaFolderResponse({ folderId: '99' })]),
+				of([{ items: [] }]),
+			);
+
+			await folderRepo.getWithChildren([folderVO]);
+
+			expect(httpSpy.sendRequestPromise).toHaveBeenCalledWith(
+				'/folder/get',
+				jasmine.any(Array),
+				jasmine.any(Object),
+			);
+
+			expect(httpV2Spy.get).toHaveBeenCalledWith('v2/folder', {
+				folderIds: [99],
+			});
+		});
 	});
 
 	describe('getFolderShareLink', () => {
