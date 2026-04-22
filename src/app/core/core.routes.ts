@@ -21,8 +21,6 @@ import { AllArchivesComponent } from './components/all-archives/all-archives.com
 import { MyfilesGuard } from './guards/myfiles.guard';
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 import { StorageDialogComponent } from './components/storage-dialog/storage-dialog.component';
-import { WelcomeInvitationDialogComponent } from './components/welcome-invitation-dialog/welcome-invitation-dialog.component';
-import { WelcomeDialogComponent } from './components/welcome-dialog/welcome-dialog.component';
 import { ArchiveSettingsDialogComponent } from './components/archive-settings-dialog/archive-settings-dialog.component';
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
 import { AccountSettingsDialogComponent } from './components/account-settings-dialog/account-settings-dialog.component';
@@ -257,34 +255,6 @@ export const routes: RoutesWithData = [
 			{
 				path: 'settings',
 				redirectTo: '/app/(private//dialog:settings)',
-			},
-			{
-				path: 'welcome',
-				component: RoutedDialogWrapperComponent,
-				outlet: 'dialog',
-				data: {
-					title: 'Welcome!',
-					component: WelcomeDialogComponent,
-					dialogOptions: { width: '600px' },
-				},
-			},
-			{
-				path: 'welcome',
-				redirectTo: '/app/(private//dialog:welcome)',
-			},
-			{
-				path: 'welcomeinvitation',
-				component: RoutedDialogWrapperComponent,
-				outlet: 'dialog',
-				data: {
-					title: 'Welcome!',
-					component: WelcomeInvitationDialogComponent,
-					dialogOptions: { width: '600px' },
-				},
-			},
-			{
-				path: 'welcome-invitation',
-				redirectTo: '/app/(private//dialog:welcomeinvitation)',
 			},
 			{
 				path: 'storage/:path',

@@ -6,8 +6,6 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { EventService } from '@shared/services/event/event.service';
-import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
-import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { OnboardingService } from '../../services/onboarding.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
@@ -45,7 +43,6 @@ const mockAccountService = {
 describe('CreateNewArchiveComponent #onboarding', () => {
 	let component: CreateNewArchiveComponent;
 	let fixture: ComponentFixture<CreateNewArchiveComponent>;
-	let feature: FeatureFlagService;
 	let onboardingService: OnboardingService;
 
 	afterEach(() => {
@@ -53,7 +50,6 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 	});
 
 	beforeEach(async () => {
-		feature = new FeatureFlagService(undefined, new SecretsService());
 		calledAccept = false;
 		acceptedArchive = null;
 		mockApiService.share.requestShareAccess.calls.reset();
@@ -65,7 +61,6 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 				{ provide: AccountService, useValue: mockAccountService },
 				EventService,
 				OnboardingService,
-				{ provide: FeatureFlagService, useValue: feature },
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
@@ -92,67 +87,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 		expect(testComponent.progressUpdated.emit).toHaveBeenCalledWith(0);
 	});
 
-	it('the next button should be disabled if no goals have been selected', () => {
-		component.screen = 'goals';
-		component.selectedGoals = [];
-
-		fixture.detectChanges();
-
-		const button = fixture.nativeElement.querySelector('.goals-next');
-
-		expect(button.disabled).toBe(true);
-	});
-
-	it('should show the reasons screen after selecting goals and then clicking next', () => {
-		component.screen = 'goals';
-		component.selectedGoals = ['goal 1', 'goal 2'];
-
-		fixture.detectChanges();
-
-		const goalsNextButton = fixture.nativeElement.querySelector('.goals-next');
-		goalsNextButton.click();
-
-		fixture.detectChanges();
-
-		expect(component.screen).toBe('reasons'); // Expecting the overlay to be present
-	});
-
-	it('the create archive button should not work without any reasons selected', () => {
-		component.screen = 'reasons';
-		component.selectedReasons = [];
-
-		fixture.detectChanges();
-
-		const button = fixture.nativeElement.querySelector('.create-archive');
-
-		expect(button.disabled).toBe(true);
-	});
-
-	it('should disable the Skip This Step and submit buttons when the archive has been submitted', () => {
-		component.screen = 'reasons';
-		component.isArchiveSubmitted = true;
-
-		fixture.detectChanges();
-		const submitButton = fixture.nativeElement.querySelector('.create-archive');
-
-		const skipStepButton = fixture.nativeElement.querySelector('.skip-step');
-
-		expect(submitButton.disabled).toBe(true);
-		expect(skipStepButton.disabled).toBe(true);
-	});
-
-	it('should accept pending archives in the old flow', async () => {
-		feature.set('glam-onboarding', false);
-		component.pendingArchive = new ArchiveVO({ archiveId: 1234 });
-		await component.onSubmit();
-
-		expect(calledAccept).toBeTrue();
-		expect(acceptedArchive.archiveId).toBe(1234);
-	});
-
-	it('should not accept pending archives in the glam flow (they are already accepted in an earlier step)', async () => {
-		// Feature flag is read in constructor, so we must set isGlam directly
-		component.isGlam = true;
+	it('should not accept pending archives (they are already accepted in an earlier step)', async () => {
 		component.pendingArchive = new ArchiveVO({ archiveId: 1234 });
 		await component.onSubmit();
 
