@@ -80,7 +80,7 @@
 
 	position: relative;
 	height: 100%;
-	background: url('../../../../assets/img/sign_in_byte4byte.jpg');
+	background: url('../../../../assets/img/sign_in_feature_unlisted_share.png');
 	background-size: cover;
 	background-position: center center;
 	flex-grow: 1;
@@ -106,56 +106,46 @@
 
 .testimony {
 	position: absolute;
-	background: rgba(255, 255, 255, 0.9);
-	padding: 2.5% 5%;
+	background: rgba($PR-blue, 0.92);
+	padding: 20px 24px;
 	left: 64px;
-	bottom: 64px;
+	bottom: 135px;
 	border-radius: 12px;
-	width: calc((100% - 128px) / 2);
+	width: 328px;
+	box-shadow: 0 4px 16px $shadow-color;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 
-	@media screen and (min-width: 1024px) and (max-width: 1279px) {
-		width: calc(100% - 64px);
-		left: 32px;
-		bottom: 32px;
+	& > .heading {
+		font-family: 'UsualRegular', sans-serif;
+		font-weight: 700;
+		line-height: 24px;
+		font-size: 18px;
+		color: $white;
+		margin: 0;
 	}
 
 	& > .text {
 		font-family: 'UsualRegular', sans-serif;
 		font-weight: 400;
 		line-height: 24px;
-		font-size: 0.8rem;
-		@media screen and (min-width: 1800px) {
-			font-size: 1rem;
-		}
-
-		@media screen and (max-width: 1099px) and (min-width: 901px) {
-			font-size: 0.7rem;
-		}
-
-		@media screen and (max-width: 1379px) and (min-width: 1100px) {
-			font-size: 1rem;
-		}
-
-		color: #131b4a;
+		font-size: 18px;
+		color: rgba($white, 0.85);
+		margin: 0;
 	}
 
 	& > .link {
 		font-family: 'UsualRegular', sans-serif;
-		font-weight: 300;
+		font-weight: 400;
 		line-height: 24px;
-		font-size: 0.8rem;
-		@media screen and (min-width: 1800px) {
-			font-size: 1.1rem;
-		}
-		color: #131b4a;
+		font-size: 18px;
+		color: #7ca9ff;
+		text-decoration: underline;
 	}
 
 	& > .archive-data {
 		font-size: 10px;
-	}
-
-	& > p {
-		margin: 0;
 	}
 }
 
