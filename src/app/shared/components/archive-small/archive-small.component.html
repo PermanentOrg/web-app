@@ -29,11 +29,19 @@
 				<br />Access: {{ accessRoleDisplay }}
 			</span>
 		}
-		@if (clickable && isCurrent) {
+		@if (accessRole && isCurrent && clickable) {
+			<span class="archive-subtitle">
+				<br />Access: {{ accessRoleDisplay }} &bull; Current archive
+			</span>
+		}
+		@if (!accessRole && clickable && isCurrent) {
 			<span class="archive-subtitle"> <br />Current Archive </span>
 		}
 	</div>
-	@if (showDefault && isDefaultArchive()) {
+	@if (clickable && !isCurrent) {
+		<i class="material-icons archive-chevron">chevron_right</i>
+	}
+	@if (showDefault && isDefaultArchive() && !clickable) {
 		<div
 			class="archive-default"
 			[ngbTooltip]="'This archive is the default archive for your account.'"

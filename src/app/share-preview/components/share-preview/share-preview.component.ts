@@ -21,7 +21,7 @@ import { APP_CONFIG } from '@root/app/app.config';
 import { trimWhitespace, copyFromInputElement } from '@shared/utilities/forms';
 import { AuthResponse } from '@shared/services/api/index.repo';
 import { DeviceService } from '@shared/services/device/device.service';
-import { Subscription, Subject } from 'rxjs';
+import { Subscription, Subject, firstValueFrom } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
@@ -462,22 +462,27 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	}
 
 	async onRequestAccessClick() {
-		let dialogRef;
 		try {
 			this.waiting = true;
 			if (!this.archiveConfirmed) {
-				dialogRef = await this.accountService.promptForArchiveChange(
+				const dialogRef = await this.accountService.promptForArchiveChange(
 					this.chooseArchiveText,
 				);
-				this.archiveConfirmed = true;
-			}
-			if (dialogRef) {
-				dialogRef.closed.subscribe(async () => {
+				if (dialogRef) {
+					const result = await firstValueFrom(dialogRef.closed);
+					if (result === 'cancel') {
+						this.showCover = false;
+						return;
+					}
+					this.archiveConfirmed = true;
 					await this.requestShareAccess();
-				});
-			} else {
-				await this.requestShareAccess();
+					if (result === 'switched') {
+						this.router.navigate(['/app', 'shares']);
+					}
+					return;
+				}
 			}
+			await this.requestShareAccess();
 		} catch (err) {
 			if (err instanceof ShareResponse) {
 				if (err.messageIncludesPhrase('share.already_exists')) {

@@ -5,8 +5,14 @@
 	align-items: center;
 
 	&:hover {
-		background-color: darken(white, 4%);
+		background-color: $gray-100;
 	}
+}
+
+.archive-chevron {
+	color: $gray-400;
+	flex: 0 0 auto;
+	margin-left: 4px;
 }
 
 .archive {
