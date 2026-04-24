@@ -254,7 +254,7 @@ describe('DataService', () => {
 			})
 			.catch(done.fail);
 
-		const req = httpMock.expectOne(`${environment.apiUrl}/folder/navigateMin`);
+		const req = httpMock.expectOne(`${environment.apiUrl}/folder/navigateLean`);
 		req.flush(navigateMinData);
 	});
 

@@ -94,7 +94,7 @@ export class AnalyticsService implements EventObserver {
 		data: Record<string, unknown>;
 	}) {
 		if (analytics.data.workspace) {
-			analytics.data.workspace = this.data.currentFolder.type.includes(
+			analytics.data.workspace = this.data.currentFolder?.type.includes(
 				'private',
 			)
 				? 'Private Files'

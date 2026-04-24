@@ -682,24 +682,23 @@ export class EditService {
 			return;
 		}
 
-		const promises: Array<Promise<unknown[] | RecordResponse[]>> = [];
-
-		if (recordKey?.includes('displayTime')) {
-			promises.push(
-				Promise.all(
-					records.map(
-						async (record) => await this.api.record.updateStelaRecord(record),
-					),
-				),
-			);
-		}
-
+		// the get archive method returns a cached version of the archive,
+		// so we do not need to worry about any extra call
 		const archiveId = this.accountService.getArchive().archiveId;
-		const legacyRecordKey = recordKey?.filter((k) => k !== 'displayTime');
 
-		if (!recordKey || legacyRecordKey?.length > 0) {
-			promises.push(this.api.record.update(records, archiveId));
-		}
+		const promises: Array<Promise<unknown[] | RecordResponse[]>> =
+			recordKey?.length
+				? recordKey.map(async (key) =>
+						key === 'displayTime'
+							? await Promise.all(
+									records.map(
+										async (record) =>
+											await this.api.record.updateStelaRecord(record),
+									),
+								)
+							: await this.api.record.update(records, archiveId),
+					)
+				: [this.api.record.update(records, archiveId)];
 
 		await Promise.all(promises);
 		return (await this.api.record.get(records)).getRecordVOs();
@@ -713,23 +712,19 @@ export class EditService {
 			return;
 		}
 
-		const promises: Array<Promise<FolderResponse | FolderResponse[]>> = [];
-
-		if (folderKeys?.includes('displayTime')) {
-			promises.push(
-				Promise.all(
-					folders.map(
-						async (folder) => await this.api.folder.updateStelaFolder(folder),
-					),
-				),
-			);
-		}
-
-		const legacyFolderKeys = folderKeys?.filter((k) => k !== 'displayTime');
-
-		if (!folderKeys || legacyFolderKeys?.length > 0) {
-			promises.push(this.api.folder.update(folders, legacyFolderKeys));
-		}
+		const promises: Array<Promise<FolderResponse | FolderResponse[]>> =
+			folderKeys?.length
+				? folderKeys.map(async (key) =>
+						key === 'displayTime'
+							? await Promise.all(
+									folders.map(
+										async (folder) =>
+											await this.api.folder.updateStelaFolder(folder),
+									),
+								)
+							: await this.api.folder.update(folders, [key]),
+					)
+				: [this.api.folder.update(folders)];
 
 		await Promise.all(promises);
 

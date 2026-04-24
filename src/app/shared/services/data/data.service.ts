@@ -377,7 +377,7 @@ export class DataService {
 		this.debug('refreshCurrentFolder (sortOnly = %o)', sortOnly);
 
 		return await this.api.folder
-			.navigate(this.currentFolder)
+			.navigateLean(this.currentFolder)
 			.pipe(
 				map((response: FolderResponse) => {
 					this.debug('refreshCurrentFolder data fetched', sortOnly);

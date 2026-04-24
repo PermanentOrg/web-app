@@ -243,10 +243,7 @@ describe('EditService', () => {
 
 		await service.updateItems(mockFolders);
 
-		expect(apiService.folder.update).toHaveBeenCalledWith(
-			mockFolders,
-			undefined,
-		);
+		expect(apiService.folder.update).toHaveBeenCalledWith(mockFolders);
 
 		expect(apiService.folder.getStelaFolderVOs).toHaveBeenCalledWith(
 			mockFolders,
