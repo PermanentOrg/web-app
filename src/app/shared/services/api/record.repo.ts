@@ -5,6 +5,7 @@ import {
 	FolderLinkType,
 	ShareVO,
 	LocnVOData,
+	LocationPrecision,
 } from '@root/app/models';
 import {
 	BaseResponse,
@@ -71,16 +72,16 @@ interface StelaFile {
 }
 export interface StelaLocation {
 	id: string;
-	streetNumber: string;
-	streetName: string;
-	locality: string;
-	county: string;
-	state: string;
-	latitude: number;
-	longitude: number;
-	country: string;
-	countryCode: string;
-	displayName: string | null;
+	name?: string | null;
+	sublocation?: string | null;
+	city?: string | null;
+	state?: string | null;
+	postalCode?: string | null;
+	country?: string | null;
+	latitude?: number | null;
+	longitude?: number | null;
+	altitudeMeters?: number | null;
+	precision?: LocationPrecision | null;
 }
 interface StelaArchive {
 	id: string;
@@ -157,14 +158,19 @@ export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 	});
 
 export const convertStelaLocationToLocnVOData = (
-	stelaLocation: StelaLocation,
-): LocnVOData =>
-	stelaLocation?.id
-		? {
-				...stelaLocation,
-				locnId: Number.parseInt(stelaLocation.id, 10),
-			}
-		: null;
+	stelaLocation: StelaLocation | null | undefined,
+): LocnVOData | null => {
+	if (!stelaLocation?.id) {
+		return null;
+	}
+	const { state, precision, ...rest } = stelaLocation;
+	return {
+		...rest,
+		locnId: Number.parseInt(stelaLocation.id, 10),
+		adminOneName: state ?? undefined,
+		locationPrecision: precision ?? undefined,
+	};
+};
 
 export const convertStelaRecordToRecordVO = (
 	stelaRecord: StelaRecord,
