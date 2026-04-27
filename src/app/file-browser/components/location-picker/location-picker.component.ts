@@ -188,7 +188,13 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 	}
 
 	async saveItem() {
-		this.item.update({ LocnVO: this.currentLocation });
+		// Persist the location directly (POST /locn stores exactly what the
+		// picker collected — no reverse geocoding), then reference the saved
+		// locn by id so the record update associates the existing location
+		// instead of re-deriving it. Mirrors saveProfileItem.
+		const response = await this.api.locn.create(this.currentLocation);
+		const locnVO = response.getLocnVO();
+		this.item.update({ LocnVO: locnVO, locnId: locnVO.locnId });
 		await this.editService.updateItems([this.item], ['LocnVO']);
 	}
 
@@ -229,32 +235,33 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 
 	createLocnFromPlace(place: google.maps.places.PlaceResult) {
 		const addr = place.address_components;
+		const streetNumber = getComponentName(addr, 'street_number');
+		const streetName = getComponentName(addr, 'route');
+		const sublocation =
+			[streetNumber, streetName].filter(Boolean).join(' ') || null;
 		const locn: LocnVOData = {
 			latitude: place.geometry.location.lat(),
 			longitude: place.geometry.location.lng(),
-			streetNumber: getComponentName(addr, 'street_number'),
-			streetName: getComponentName(addr, 'route'),
 			postalCode: getComponentName(addr, 'postal_code'),
-			locality: getComponentName(addr, 'locality'),
 			adminOneName: getComponentName(addr, 'administrative_area_level_1'),
-			adminOneCode: getComponentName(addr, 'administrative_area_level_1', true),
-			adminTwoName: getComponentName(addr, 'administrative_area_level_2'),
-			adminTwoCode: getComponentName(addr, 'administrative_area_level_2', true),
 			country: getComponentName(addr, 'country'),
-			countryCode: getComponentName(addr, 'country', true),
+			sublocation,
+			city: getComponentName(addr, 'locality'),
 		};
+
+		// Store the place name as-is, nulling it when absent so the backend
+		// clears any stale value (sublocation is nulled the same way). The pipe
+		// decides how to render it.
+		locn.name = place.name || null;
 
 		return locn;
 
 		function getComponentName(
 			addressComponents: google.maps.GeocoderAddressComponent[],
 			type,
-			getShortName = true,
 		) {
 			const component = find(addressComponents, (c) => c.types.includes(type));
-			return component
-				? component[getShortName ? 'short_name' : 'long_name']
-				: null;
+			return component ? component.long_name : null;
 		}
 	}
 }

@@ -153,8 +153,12 @@
 				(click)="onLocationClick()"
 				[class.can-edit]="canEdit"
 			>
-				@if (selectedItem.LocnVO) {
-					<span>{{ (selectedItem.LocnVO | prLocation)?.full }}</span>
+				@if (selectedItem.LocnVO | prLocation; as location) {
+					@if (location.name) {
+						<strong>{{ location.name }}</strong>
+						<br />
+					}
+					<span>{{ location.line1 }}, {{ location.line2 }}</span>
 				}
 				@if (!selectedItem.LocnVO && !canEdit) {
 					<span class="sidebar-item-content-empty"> No location </span>

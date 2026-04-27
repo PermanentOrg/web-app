@@ -15,6 +15,10 @@
 			@if (currentLocation) {
 				<div class="location-panel" @ngIfFadeInAnimation>
 					<div class="location-info">
+						@if (currentLocationDisplay.name) {
+							<span>{{ currentLocationDisplay.name }}</span>
+							<br />
+						}
 						<span>{{ currentLocationDisplay.line1 }}</span>
 						<br />
 						<span>{{ currentLocationDisplay.line2 }}</span>

@@ -192,8 +192,12 @@
 						@if (currentRecord.LocnVO) {
 							<pr-static-map [location]="currentRecord.LocnVO"></pr-static-map>
 						}
-						@if (currentRecord.LocnVO) {
-							<span>{{ (currentRecord.LocnVO | prLocation)?.full }}</span>
+						@if (currentRecord.LocnVO | prLocation; as location) {
+							@if (location.name) {
+								<strong>{{ location.name }}</strong>
+								<br />
+							}
+							<span>{{ location.line1 }}, {{ location.line2 }}</span>
 						}
 						@if (!currentRecord.LocnVO && canEdit) {
 							<span class="add-location"> Click to add location</span>

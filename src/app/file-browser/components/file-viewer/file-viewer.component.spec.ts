@@ -40,6 +40,13 @@ class MockPrConstantsPipe implements PipeTransform {
 	}
 }
 
+@Pipe({ name: 'prLocation', standalone: false })
+class MockPrLocationPipe implements PipeTransform {
+	transform(value: any): any {
+		return value ? { name: value.name, line1: '', line2: '' } : null;
+	}
+}
+
 const defaultTagList: TagVOData[] = [
 	{
 		tagId: 1,
@@ -147,6 +154,7 @@ describe('FileViewerComponent', () => {
 				MockFileSizePipe,
 				MockGetAltTextPipe,
 				MockPrConstantsPipe,
+				MockPrLocationPipe,
 				GetThumbnailPipe,
 			],
 			imports: [HttpClientTestingModule],
