@@ -1,5 +1,7 @@
 import { BaseVOData } from '@models/base-vo';
 
+export type LocationPrecision = 'approximate' | 'uncertain' | 'unknown';
+
 export interface LocnVOData extends BaseVOData {
 	locnId?: number;
 	timeZoneId?: number;
@@ -25,6 +27,11 @@ export interface LocnVOData extends BaseVOData {
 	geometryAsArray?: string;
 	geoCodeType?: string;
 	geoCodeResponseAsXml?: string;
+	name?: string;
+	sublocation?: string;
+	city?: string;
+	altitudeMeters?: number;
+	locationPrecision?: LocationPrecision;
 	status?: string;
 	type?: string;
 }

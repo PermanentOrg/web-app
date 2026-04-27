@@ -6,7 +6,12 @@ import {
 import { of } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
-import { RecordRepo, RecordResponse } from '@shared/services/api/record.repo';
+import {
+	RecordRepo,
+	RecordResponse,
+	StelaLocation,
+	convertStelaLocationToLocnVOData,
+} from '@shared/services/api/record.repo';
 import { RecordVO } from '@root/app/models';
 import {
 	provideHttpClient,
@@ -219,6 +224,59 @@ describe('RecordRepo', () => {
 			const result = await repo.getRecordShareLink(recordVO);
 
 			expect(result).toEqual([]);
+		});
+	});
+
+	describe('convertStelaLocationToLocnVOData', () => {
+		it('returns null when the stela location has no id', () => {
+			expect(convertStelaLocationToLocnVOData(null)).toBeNull();
+			expect(
+				convertStelaLocationToLocnVOData({ id: '' } as StelaLocation),
+			).toBeNull();
+		});
+
+		it('parses the id and remaps state/precision onto the LocnVO shape', () => {
+			const stelaLocation: StelaLocation = {
+				id: '42',
+				name: "Jean Valjean's House",
+				sublocation: '55 Rue Plumet',
+				city: 'Paris',
+				state: 'Ile-de-France',
+				postalCode: '75007',
+				country: 'France',
+				latitude: 48.83,
+				longitude: 2.3,
+				altitudeMeters: 35,
+				precision: 'approximate',
+			};
+
+			const result = convertStelaLocationToLocnVOData(stelaLocation);
+
+			expect(result.locnId).toBe(42);
+			expect(result.name).toBe("Jean Valjean's House");
+			expect(result.sublocation).toBe('55 Rue Plumet');
+			expect(result.city).toBe('Paris');
+			expect(result.adminOneName).toBe('Ile-de-France');
+			expect(result.postalCode).toBe('75007');
+			expect(result.country).toBe('France');
+			expect(result.altitudeMeters).toBe(35);
+			expect(result.locationPrecision).toBe('approximate');
+
+			expect((result as Record<string, unknown>).state).toBeUndefined();
+			expect((result as Record<string, unknown>).precision).toBeUndefined();
+		});
+
+		it('coerces null state/precision to undefined', () => {
+			const stelaLocation: StelaLocation = {
+				id: '7',
+				state: null,
+				precision: null,
+			};
+
+			const result = convertStelaLocationToLocnVOData(stelaLocation);
+
+			expect(result.adminOneName).toBeUndefined();
+			expect(result.locationPrecision).toBeUndefined();
 		});
 	});
 
