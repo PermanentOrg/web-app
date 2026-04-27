@@ -200,7 +200,7 @@ export class ConnectorComponent implements OnInit {
 			this.waiting = false;
 			this.connector.status = 'status.connector.disconnected';
 			this.setStatus();
-			this.message.showError(response.getMessage());
+			this.message.showError({ message: response.getMessage() });
 		}
 	}
 

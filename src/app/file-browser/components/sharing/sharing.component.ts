@@ -427,7 +427,7 @@ export class SharingComponent implements OnInit {
 					} catch (response) {
 						reject();
 						if (response.getMessage()) {
-							this.messageService.showError(response.getMessage());
+							this.messageService.showError({ message: response.getMessage() });
 						}
 					}
 				},
