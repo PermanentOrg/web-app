@@ -115,7 +115,16 @@ export class PublishComponent {
 			});
 		} catch (err) {
 			if (err.getMessage) {
-				this.messageService.showError(err.getMessage());
+				if (err.getMessage() == 'warning.record.copy_status') {
+					this.messageService.showError({
+						message:
+							'Sorry, this record cannot be copied or published until processing completes.',
+					});
+				} else {
+					this.messageService.showError({
+						message: err.getMessage(),
+					});
+				}
 			}
 		} finally {
 			this.waiting = false;
