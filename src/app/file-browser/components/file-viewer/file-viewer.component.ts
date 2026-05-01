@@ -30,7 +30,13 @@ import { GetAccessFile } from '@models/get-access-file';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import {
+	DateTimeModel,
+	EdtfService,
+} from '@shared/services/edtf-service/edtf.service';
+import { MessageService } from '@shared/services/message/message.service';
 import { TagsService } from '../../../core/services/tags/tags.service';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
 
 @Component({
 	selector: 'pr-file-viewer',
@@ -77,7 +83,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
 	// UI
 	public useMinimalView = false;
-	public editingDate: boolean = false;
 	private bodyScrollTop: number;
 	private itemTagsSubscription: Subscription;
 	private tagsSubscription: Subscription;
@@ -88,6 +93,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		private route: ActivatedRoute,
 		private element: ElementRef,
 		private dataService: DataService,
+		private message: MessageService,
 		@Inject(DOCUMENT) private document: any,
 		public sanitizer: DomSanitizer,
 		private accountService: AccountService,
@@ -97,6 +103,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		private shareLinksService: ShareLinksService,
 		private api: ApiService,
 		private feature: FeatureFlagService,
+		private edtfService: EdtfService,
+		private editDateTimeModalService: EditDateTimeModalService,
 	) {
 		// store current scroll position in file list
 		this.bodyScrollTop = window.scrollY;
@@ -432,6 +440,42 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	get displayTimeObject(): DateTimeModel | null {
+		try {
+			const timeSource =
+				this.currentRecord?.displayTime || this.currentRecord?.displayDT;
+			return timeSource ? this.edtfService.toDateTimeModel(timeSource) : null;
+		} catch (err) {
+			this.message.showError({ message: err?.message });
+		}
+	}
+
+	public async onDateSaved(result: DateTimeModel): Promise<void> {
+		try {
+			const newDisplayTime = this.edtfService.toEdtfDate(result);
+			this.onFinishEditing('displayTime', newDisplayTime);
+		} catch (err) {
+			this.message.showError({ message: err?.message });
+		}
+	}
+
+	public async onDateMoreOptions(modalData: DateTimeModel): Promise<void> {
+		const dialogRef = this.editDateTimeModalService.open(modalData);
+
+		dialogRef.closed.subscribe((result) => {
+			if (result) {
+				if (result) {
+					try {
+						const newDisplayTime = this.edtfService.toEdtfDate(result);
+						this.onFinishEditing('displayTime', newDisplayTime);
+					} catch (err) {
+						this.message.showError({ message: err?.message });
+					}
+				}
+			}
+		});
+	}
+
 	public async onFinishEditing(
 		property: KeysOfType<ItemVO, string>,
 		value: string,
@@ -453,10 +497,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		if (this.canEdit) {
 			this.editService.openTagsDialog(this.currentRecord as ItemVO, type);
 		}
-	}
-
-	public onDateToggle(active: boolean): void {
-		this.editingDate = active;
 	}
 
 	public onDownloadClick(): void {
