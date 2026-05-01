@@ -15,7 +15,9 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { MockComponent } from 'ng-mocks';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { MessageService } from '@shared/services/message/message.service';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
 import { FileViewerComponent } from './file-viewer.component';
 
 @Pipe({ name: 'dsFileSize', standalone: false })
@@ -227,6 +229,19 @@ describe('FileViewerComponent', () => {
 					provide: FeatureFlagService,
 					useValue: {
 						isEnabled: (flag: string) => featureFlagsEnabled.get(flag) ?? false,
+					},
+				},
+				{
+					provide: MessageService,
+					useValue: {
+						showError: () => {},
+						showMessage: () => {},
+					},
+				},
+				{
+					provide: EditDateTimeModalService,
+					useValue: {
+						open: () => ({ closed: { subscribe: () => {} } }),
 					},
 				},
 			],
