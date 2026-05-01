@@ -39,7 +39,7 @@ const mockApiService = {
 			updatedValues: { milestoneSortOrder?: string },
 		) => {
 			if (patchArchiveThrowError) {
-				throw { error: { message: 'Test Error' } };
+				throw { error: { error: { message: 'Test Error' } } };
 			}
 			patchArchiveCalled = true;
 			patchArchiveCalledWith = { archiveId, updatedValues };

@@ -972,7 +972,8 @@
 		"archive": {
 			"no_email_found": "No Permanent Archive with that email address was found",
 			"no_remove_access_active": "Can not remove there access of active Permanent Archive.",
-			"no_remove_access_owner": "The owner can not remove there access."
+			"no_remove_access_owner": "The owner can not remove their access.",
+			"not_found": "Sorry, this archive was not found or you do not have permission to update it."
 		},
 		"auth": {
 			"access_denied": "You do not have sufficient privileges to perform this action or access this item.",

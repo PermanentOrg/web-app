@@ -57,8 +57,6 @@ export class PublicSettingsComponent implements OnInit {
 	}
 
 	public async onMilestoneSortOrderChange() {
-		const previousOrder =
-			this.archive.milestoneSortOrder ?? 'reverse_chronological';
 		this.updating = true;
 		try {
 			await this.api.archive.patchArchive(this.archive.archiveId, {
@@ -66,8 +64,10 @@ export class PublicSettingsComponent implements OnInit {
 			});
 			this.archive.milestoneSortOrder = this.milestoneSortOrder;
 		} catch (err) {
-			this.milestoneSortOrder = previousOrder;
-			this.msg.showError({ message: err.error?.message, translate: true });
+			this.msg.showError({
+				message: err.error?.error?.message ?? 'error.generic.update_fail',
+				translate: true,
+			});
 		} finally {
 			this.updating = false;
 		}
