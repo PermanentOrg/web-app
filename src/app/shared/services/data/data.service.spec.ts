@@ -254,13 +254,16 @@ describe('DataService', () => {
 			})
 			.catch(done.fail);
 
-		const req = httpMock.expectOne(`${environment.apiUrl}/folder/navigateMin`);
+		const req = httpMock.expectOne(`${environment.apiUrl}/folder/navigateLean`);
 		req.flush(navigateMinData);
 	});
 
 	it('should add items to thumbRefreshQueue that meet the criteria', (done) => {
 		const service = TestBed.inject(DataService);
-		const httpMock = TestBed.inject(HttpTestingController);
+		const api = TestBed.inject(ApiService);
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve(new FolderResponse(getLeanItemsData)),
+		);
 		const navigateResponse = new FolderResponse(navigateMinData);
 		const currentFolder = navigateResponse.getFolderVO(true);
 		service.setCurrentFolder(currentFolder);
@@ -278,10 +281,5 @@ describe('DataService', () => {
 				done();
 			})
 			.catch(done.fail);
-
-		const req = httpMock.expectOne(
-			`${environment.apiUrl}/v2/folder?folderIds[]=149612`,
-		);
-		req.flush(getLeanItemsData);
 	});
 });

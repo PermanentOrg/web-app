@@ -109,6 +109,9 @@ const mockDataService = {
 
 const mockEditService = {
 	openLocationDialog: (_: any) => {},
+	saveItemVoProperty: jasmine
+		.createSpy('saveItemVoProperty')
+		.and.returnValue(Promise.resolve()),
 };
 
 class MockAccountService {
@@ -272,5 +275,132 @@ describe('SidebarComponent', () => {
 			fixture.nativeElement.querySelector('.unknown');
 
 		expect(unknownTypeContainer).toBeFalsy();
+	});
+
+	describe('displayTime getter', () => {
+		it('should return empty string when selectedItem is null', () => {
+			component.selectedItem = null;
+
+			expect(component.displayTime).toBe('');
+		});
+
+		it('should return displayDT when displayTime property does not exist', () => {
+			component.selectedItem = new RecordVO({
+				displayDT: '1985-05-20T00:00:00Z',
+			});
+
+			expect(component.displayTime).toBe('1985-05-20T00:00:00Z');
+		});
+
+		it('should parse start date from EDTF interval', () => {
+			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
+			component.selectedItem = item;
+
+			expect(component.displayTime).toBe('1985-05-20');
+		});
+
+		it('should return full displayTime when no interval separator', () => {
+			const item = new RecordVO({ displayTime: '1985-05-20' });
+			component.selectedItem = item;
+
+			expect(component.displayTime).toBe('1985-05-20');
+		});
+	});
+
+	describe('displayEndTime getter', () => {
+		it('should return displayEndDT when displayTime property does not exist', () => {
+			component.selectedItem = new RecordVO({
+				displayEndDT: '1990-06-15T00:00:00Z',
+			});
+
+			expect(component.displayEndTime).toBe('1990-06-15T00:00:00Z');
+		});
+
+		it('should parse end date from EDTF interval', () => {
+			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
+			component.selectedItem = item;
+
+			expect(component.displayEndTime).toBe('1990-06-15');
+		});
+
+		it('should return empty string when displayTime has no interval', () => {
+			const item = new RecordVO({ displayTime: '1985-05-20' });
+			component.selectedItem = item;
+
+			expect(component.displayEndTime).toBe('');
+		});
+
+		it('should return empty string when displayTime interval has no end date', () => {
+			const item = new RecordVO({ displayTime: '1985-05-20/' });
+			component.selectedItem = item;
+
+			expect(component.displayEndTime).toBe('');
+		});
+	});
+
+	describe('onDateEditing', () => {
+		beforeEach(() => {
+			mockEditService.saveItemVoProperty.calls.reset();
+		});
+
+		it('should build EDTF interval when setting start date and end date exists', async () => {
+			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
+			component.selectedItem = item;
+
+			await component.onDateEditing('start', '2000-01-01');
+
+			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
+				item,
+				'displayTime',
+				'2000-01-01/1990-06-15',
+			);
+		});
+
+		it('should build EDTF interval when setting end date and start date exists', async () => {
+			const item = new RecordVO({ displayTime: '1985-05-20' });
+			component.selectedItem = item;
+
+			await component.onDateEditing('end', '2025-12-31');
+
+			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
+				item,
+				'displayTime',
+				'1985-05-20/2025-12-31',
+			);
+		});
+
+		it('should set only start date when no end date is provided', async () => {
+			const item = new RecordVO({ displayTime: '1985-05-20' });
+			component.selectedItem = item;
+
+			await component.onDateEditing('start', '2000-01-01');
+
+			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
+				item,
+				'displayTime',
+				'2000-01-01',
+			);
+		});
+
+		it('should set displayTime to null when start date is cleared', async () => {
+			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
+			component.selectedItem = item;
+
+			await component.onDateEditing('start', '');
+
+			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
+				item,
+				'displayTime',
+				null,
+			);
+		});
+
+		it('should not call saveItemVoProperty when selectedItem is null', async () => {
+			component.selectedItem = null;
+
+			await component.onDateEditing('start', '2000-01-01');
+
+			expect(mockEditService.saveItemVoProperty).not.toHaveBeenCalled();
+		});
 	});
 });

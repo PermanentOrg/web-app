@@ -318,7 +318,9 @@ export class DataService {
 			);
 		} else {
 			promises.push(
-				folders.length ? this.api.folder.get(folders) : Promise.resolve(),
+				folders.length
+					? this.api.folder.getStelaFolderVOs(folders)
+					: Promise.resolve(),
 			);
 		}
 		return await Promise.all(promises)
@@ -375,7 +377,7 @@ export class DataService {
 		this.debug('refreshCurrentFolder (sortOnly = %o)', sortOnly);
 
 		return await this.api.folder
-			.navigate(this.currentFolder)
+			.navigateLean(this.currentFolder)
 			.pipe(
 				map((response: FolderResponse) => {
 					this.debug('refreshCurrentFolder data fetched', sortOnly);
