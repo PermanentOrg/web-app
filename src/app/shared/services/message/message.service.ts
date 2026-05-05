@@ -37,8 +37,8 @@ export class MessageService {
 
 		if (translate) {
 			this.component.display({
-				message: this.constants.translate(data.message),
 				...data,
+				message: this.constants.translate(data.message),
 			});
 		} else {
 			this.component.display(data);

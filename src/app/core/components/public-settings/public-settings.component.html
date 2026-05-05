@@ -66,4 +66,45 @@
 			<a href="{{ supportLink }}">contact support</a></small
 		>
 	}
+	<div class="settings-item">
+		<label>Milestone Sort Order</label>
+		<div class="form-check form-check-inline">
+			<input
+				class="form-check-input"
+				type="radio"
+				name="milestoneSortOrder"
+				id="milestoneSortOrderDesc"
+				value="reverse_chronological"
+				[disabled]="updating"
+				[(ngModel)]="milestoneSortOrder"
+				(ngModelChange)="onMilestoneSortOrderChange()"
+			/>
+			<label class="form-check-label" for="milestoneSortOrderDesc"
+				>Descending</label
+			>
+		</div>
+		<div class="form-check form-check-inline">
+			<input
+				class="form-check-input"
+				type="radio"
+				name="milestoneSortOrder"
+				id="milestoneSortOrderAsc"
+				value="chronological"
+				[disabled]="updating"
+				[(ngModel)]="milestoneSortOrder"
+				(ngModelChange)="onMilestoneSortOrderChange()"
+			/>
+			<label class="form-check-label" for="milestoneSortOrderAsc"
+				>Ascending</label
+			>
+		</div>
+	</div>
+	<small class="text-muted">
+		Select whether the most recent (descending) or most distant (ascending)
+		milestones appear at the top of the public profile.
+		<a
+			href="https://permanent.zohodesk.com/portal/en/kb/articles/public-profiles"
+			>Learn more</a
+		>.
+	</small>
 </div>
