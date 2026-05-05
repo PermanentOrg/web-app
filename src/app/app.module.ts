@@ -12,6 +12,7 @@ import {
 	NavigationEnd,
 	ActivatedRoute,
 	NavigationStart,
+	UrlSerializer,
 } from '@angular/router';
 import {
 	HttpErrorResponse,
@@ -50,6 +51,7 @@ import { EventService } from '@shared/services/event/event.service';
 import { DataService } from '@shared/services/data/data.service';
 import { OverlayContainer, OVERLAY_DEFAULT_CONFIG } from '@angular/cdk/overlay';
 import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
+import { DoubleSlashUrlSerializer } from './double-slash-url-serializer';
 import { RouteHistoryModule } from './route-history/route-history.module';
 import { CustomOverlayContainer } from './dialog-cdk/custom-overlay-container';
 import { FeatureFlagModule } from './feature-flag/feature-flag.module';
@@ -195,6 +197,10 @@ export class PermErrorHandler implements ErrorHandler {
 		{
 			provide: APP_BASE_HREF,
 			useValue: '/',
+		},
+		{
+			provide: UrlSerializer,
+			useClass: DoubleSlashUrlSerializer,
 		},
 		provideHttpClient(withInterceptorsFromDi(), withJsonpSupport()),
 	],
