@@ -14,7 +14,7 @@ import { MessageService } from '@shared/services/message/message.service';
 })
 export class DirectiveEditComponent implements OnInit {
 	@Output() public savedDirective = new EventEmitter<Directive>();
-	@Input() public directive: Directive;
+	@Input() public directive: Directive | null = null;
 	public email: string;
 	public note: string;
 	public waiting = false;
@@ -30,7 +30,7 @@ export class DirectiveEditComponent implements OnInit {
 
 	ngOnInit(): void {
 		if (this.directive) {
-			this.email = this.directive.steward.email;
+			this.email = this.directive.steward?.email;
 			this.note = this.directive.note;
 		}
 		this.archiveName = this.account.getArchive().fullName;

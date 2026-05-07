@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Directive } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
 	selector: 'pr-directive-display',
@@ -11,29 +12,46 @@ import { ApiService } from '@shared/services/api/api.service';
 })
 export class DirectiveDisplayComponent implements OnInit {
 	@Input() public checkLegacyContact: boolean = true;
-	@Input() public initialDirective: Directive;
-	@Output() public loadedDirective = new EventEmitter<Directive>();
-	@Output() public beginEdit = new EventEmitter<Directive>();
+	@Input() public initialDirectives: Directive[] = [];
+	@Output() public loadedDirectives = new EventEmitter<Directive[]>();
+	@Output() public beginEdit = new EventEmitter<Directive | null>();
 	public archiveName: string;
-	public directive: Directive;
+	public directives: Directive[] = [];
 	public error: boolean;
 	public noPlan: boolean;
 
 	constructor(
 		private account: AccountService,
 		private api: ApiService,
+		private message: MessageService,
 	) {
 		this.error = false;
 		this.noPlan = false;
 	}
 
 	async ngOnInit(): Promise<void> {
-		this.directive = this.initialDirective;
+		this.directives = this.initialDirectives ?? [];
 		this.archiveName = this.account.getArchive().fullName;
 		if (this.checkLegacyContact) {
 			await this.getLegacyContact();
 		}
-		await this.getDirective();
+		await this.getDirectives();
+	}
+
+	public get gateAddButton(): boolean {
+		return this.error || (this.noPlan && this.directives.length === 0);
+	}
+
+	public get showNoPlanWarning(): boolean {
+		return this.noPlan && this.directives.length === 0;
+	}
+
+	public onCardActivated(
+		event: KeyboardEvent | MouseEvent,
+		directive: Directive,
+	): void {
+		event.preventDefault();
+		this.beginEdit.emit(directive);
 	}
 
 	protected async getLegacyContact(): Promise<void> {
@@ -47,16 +65,25 @@ export class DirectiveDisplayComponent implements OnInit {
 		}
 	}
 
-	protected async getDirective(): Promise<void> {
+	protected async getDirectives(): Promise<void> {
 		try {
-			this.directive = await this.api.directive.get(this.account.getArchive());
+			const fetchedDirectives = await this.api.directive.get(
+				this.account.getArchive(),
+			);
+			this.directives = (fetchedDirectives ?? []).map((directive) => {
+				if (directive?.note) {
+					directive.note = directive.note.trim();
+				}
+				return directive;
+			});
 		} catch {
 			this.error = true;
+			this.message.showError({
+				message:
+					'There was an error loading the Archive Stewards. Please reload the page and try again.',
+			});
 			return;
 		}
-		if (this.directive?.note) {
-			this.directive.note = this.directive.note.trim();
-		}
-		this.loadedDirective.emit(this.directive);
+		this.loadedDirectives.emit(this.directives);
 	}
 }

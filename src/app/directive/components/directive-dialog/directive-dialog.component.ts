@@ -18,19 +18,32 @@ export class DirectiveDialogComponent {
 		});
 	}
 	public mode: DialogState = 'display';
-	public directive: Directive;
+	public directives: Directive[] = [];
+	public editing: Directive | null = null;
 
-	public setSavedDirective(directive: Directive): void {
-		this.directive = directive;
+	public setLoadedDirectives(directives: Directive[]): void {
+		this.directives = directives;
 	}
 
-	public switchToEdit(directive: Directive): void {
-		this.setSavedDirective(directive);
+	public switchToEdit(directive: Directive | null): void {
+		this.editing = directive;
 		this.mode = 'edit';
 	}
 
 	public saveEditedDirective(directive: Directive): void {
-		this.setSavedDirective(directive);
+		const matchingIndex = this.directives.findIndex(
+			(existing) => existing.directiveId === directive.directiveId,
+		);
+		if (matchingIndex >= 0) {
+			this.directives = [
+				...this.directives.slice(0, matchingIndex),
+				directive,
+				...this.directives.slice(matchingIndex + 1),
+			];
+		} else {
+			this.directives = [...this.directives, directive];
+		}
+		this.editing = null;
 		this.mode = 'display';
 	}
 }
