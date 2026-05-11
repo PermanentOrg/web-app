@@ -21,6 +21,7 @@ import { AccountVO, ArchiveVO, RecordVO } from '@root/app/models';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { Subject } from 'rxjs';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
@@ -70,8 +71,9 @@ mockAccountService.archiveChange = new Subject<ArchiveVO>();
 mockAccountService.accountChange = new Subject<AccountVO>();
 
 const mockShareLinksService = {
-	currentShareToken: null,
+	currentShareToken: null as string | null,
 	isUnlistedShare: () => true,
+	isUnlistedShareSync: () => true,
 };
 
 const mockFilesystemService = {
@@ -124,6 +126,11 @@ describe('SharePreviewComponent', () => {
 		});
 
 		config.providers.push({
+			provide: AccountService,
+			useValue: mockAccountService,
+		});
+
+		config.providers.push({
 			provide: ShareLinksService,
 			useValue: mockShareLinksService,
 		});
@@ -159,15 +166,17 @@ describe('SharePreviewComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should mark it as unlisted share if restrictions are none', fakeAsync(() => {
-		spyOn(mockShareLinksService, 'isUnlistedShare').and.returnValue(true);
-		component.ngOnInit();
-
-		expect(mockShareLinksService.isUnlistedShare).toHaveBeenCalled();
-		tick(1005);
-
+	it('should mark it as unlisted share synchronously when restrictions are none', () => {
 		expect(component.isUnlistedShare).toEqual(true);
-	}));
+	});
+
+	it('should clear the current share token on destroy', () => {
+		mockShareLinksService.currentShareToken = 'abc123';
+
+		component.ngOnDestroy();
+
+		expect(mockShareLinksService.currentShareToken).toBe('');
+	});
 
 	it('should open dialog shortly after loading if user is logged out and it is not an unlisted share', fakeAsync(() => {
 		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);

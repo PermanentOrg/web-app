@@ -13,6 +13,7 @@ import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve
 import { PreviewResolveService } from './resolves/preview-resolve.service';
 import { PreviewFolderResolveService } from './resolves/preview-folder-resolve.service';
 import { ShareUrlResolveService } from './resolves/share-url-resolve.service';
+import { ShareUrlEphemeralFolderResolveService } from './resolves/share-url-ephemeral-folder-resolve.service';
 import { ShareNotFoundComponent } from './components/share-not-found/share-not-found.component';
 import { CreateAccountDialogComponent } from './components/create-account-dialog/create-account-dialog.component';
 import { InviteShareResolveService } from './resolves/invite-share-resolve.service';
@@ -22,6 +23,7 @@ import { SharePreviewFooterComponent } from './components/share-preview-footer/s
 
 const previewResolve = {
 	currentFolder: PreviewResolveService,
+	ephemeralFolder: ShareUrlEphemeralFolderResolveService,
 };
 
 const shareResolve = {
@@ -113,6 +115,7 @@ export const routes: Routes = [
 		PreviewArchiveResolveService,
 		PreviewFolderResolveService,
 		ShareUrlResolveService,
+		ShareUrlEphemeralFolderResolveService,
 		InviteShareResolveService,
 		RelationshipShareResolveService,
 	],

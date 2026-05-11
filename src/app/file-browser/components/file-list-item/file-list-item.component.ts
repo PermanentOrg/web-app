@@ -259,11 +259,16 @@ export class FileListItemComponent
 	}
 
 	async ngOnInit() {
-		this.recordThumbnailUrl = GetThumbnail(this.item);
+		this.isUnlistedShare = this.shareLinksService.isUnlistedShareSync();
+		const isInSharePreview =
+			this.router.routerState.snapshot.url.includes('/share/');
+		if (isInSharePreview && !this.isUnlistedShare) {
+			this.recordThumbnailUrl = this.getRandomPreviewImage();
+		} else {
+			this.recordThumbnailUrl = GetThumbnail(this.item);
+		}
 		const date = new Date(this.item.displayDT);
 		this.date = getFormattedDate(date);
-
-		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 
 		this.dataService.registerItem(this.item);
 		if (this.item.type.includes('app')) {
@@ -275,10 +280,7 @@ export class FileListItemComponent
 			this.isPublicArchive = true;
 		}
 
-		if (this.router.routerState.snapshot.url.includes('/share/')) {
-			if (!this.isUnlistedShare) {
-				this.recordThumbnailUrl = this.getRandomPreviewImage();
-			}
+		if (isInSharePreview) {
 			this.allowActions = false;
 			this.isInSharePreview = true;
 		}
