@@ -121,6 +121,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		private dataService: DataService,
 	) {
 		this.shareToken = this.route.snapshot.params.shareToken;
+		this.isUnlistedShare = this.shareLinksService.isUnlistedShareSync();
+		this.ephemeralFolder = this.route.snapshot.data.ephemeralFolder ?? null;
 
 		this.signupForm = fb.group({
 			invitation: [this.isInvite ? this.sharePreviewVO.token : ''],
@@ -192,19 +194,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	}
 
 	async ngOnInit() {
-		this.shareLinksService.currentShareToken = this.shareToken;
-		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
-
-		if (this.isUnlistedShare) {
-			if (this.route.snapshot.data.sharePreviewVO?.FolderVO) {
-				this.ephemeralFolder = await this.filesystemService.getFolder(
-					this.route.snapshot.data.sharePreviewVO.FolderVO,
-				);
-			} else {
-				this.ephemeralFolder = this.route.snapshot.data.currentFolder;
-				this.ephemeralFolder.folderId =
-					this.route.snapshot.data.sharePreviewVO?.RecordVO?.parentFolderId;
-			}
+		if (this.ephemeralFolder) {
 			this.dataService.ephemeralFolder = this.ephemeralFolder;
 			this.dataService.pushBreadcrumbFolder(this.ephemeralFolder);
 		}
@@ -253,8 +243,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		this.shareLinksService.currentShareToken = undefined;
-
 		this.routerListener.unsubscribe();
 		this.accountListener.unsubscribe();
 		this.archiveListener.unsubscribe();
