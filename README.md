@@ -64,3 +64,6 @@ You can configure your local git to always ignore these commits by invoking:
 ```
 git config blame.ignoreRevsFile .git-blame-ignore-revs
 ```
+
+## Test
+Adding a test change for Atlassian-GitHub connection.
