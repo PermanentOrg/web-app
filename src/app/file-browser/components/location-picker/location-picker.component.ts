@@ -244,10 +244,6 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 			countryCode: getComponentName(addr, 'country', true),
 		};
 
-		if (!place.name.includes(locn.streetNumber)) {
-			locn.displayName = place.name;
-		}
-
 		return locn;
 
 		function getComponentName(
