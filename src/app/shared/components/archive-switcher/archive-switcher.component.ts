@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
 
-import { remove, orderBy } from 'lodash';
+import { orderBy } from 'lodash';
 import { gsap } from 'gsap';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -12,14 +12,12 @@ import {
 } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { ArchiveVO, FolderVO } from '@root/app/models';
+import { ArchiveVO } from '@root/app/models';
 import { BaseResponse } from '@shared/services/api/base';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { RELATIONSHIP_FIELD } from '@shared/components/prompt/prompt-fields';
-import { DataService } from '@shared/services/data/data.service';
-import { Router } from '@angular/router';
 import { DialogRef } from '@angular/cdk/dialog';
 
 @Component({
@@ -37,36 +35,30 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 		private accountService: AccountService,
 		private dialogRef: DialogRef,
 		private api: ApiService,
-		private data: DataService,
 		private prConstants: PrConstantsService,
 		private prompt: PromptService,
 		private message: MessageService,
-		private router: Router,
 	) {}
 
 	async ngOnInit() {
-		this.data.setCurrentFolder(
-			new FolderVO({
-				displayName: 'Archives',
-				pathAsText: ['Archives'],
-				type: 'page',
-			}),
-		);
 		this.currentArchive = this.accountService.getArchive();
 
 		const archivesData = await this.accountService.refreshArchives();
 		const archives = orderBy(
 			archivesData.map((archiveData) => new ArchiveVO(archiveData)),
 			'fullName',
+		) as ArchiveVO[];
+
+		const currentArchiveFetched = archives.find(
+			(a) => a.archiveId === this.currentArchive.archiveId,
 		);
-		const currentArchiveFetched = remove(archives, {
-			archiveId: this.currentArchive.archiveId,
-		})[0] as ArchiveVO;
 
-		this.currentArchive.update(currentArchiveFetched);
-		this.accountService.setArchive(this.currentArchive);
+		if (currentArchiveFetched) {
+			this.currentArchive.update(currentArchiveFetched);
+			this.accountService.setArchive(this.currentArchive);
+		}
 
-		this.archives = archives as ArchiveVO[];
+		this.archives = archives;
 		this.archivesLoading = false;
 	}
 
@@ -85,6 +77,11 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 	}
 
 	archiveClick(archive: ArchiveVO) {
+		if (archive.archiveId === this.currentArchive.archiveId) {
+			this.dialogRef.close();
+			return;
+		}
+
 		const { promise, resolve } = Promise.withResolvers();
 
 		const buttons: PromptButton[] = [
@@ -123,8 +120,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 					.then(async () => await this.accountService.changeArchive(archive))
 					.then(() => {
 						resolve(undefined);
-						this.dialogRef.close();
-						this.router.navigate(['/private']);
+						this.dialogRef.close('switched');
 					})
 					.catch((response: BaseResponse) => {
 						resolve(undefined);
@@ -207,7 +203,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 			});
 	}
 
-	backButtonClick() {
-		this.dialogRef.close();
+	cancelClick() {
+		this.dialogRef.close('cancel');
 	}
 }

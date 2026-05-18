@@ -1,13 +1,26 @@
 <div class="archive-list-wrapper">
 	<div class="archive-list">
-		<div class="archive-list-title">Select archive to request access:</div>
+		<div class="archive-list-title">
+			<span>Select archive to request access</span>
+			<button class="archive-list-close" (click)="cancelClick()">
+				<i class="material-icons archive-list-close-button">close</i>
+			</button>
+		</div>
 		@for (archive of archives; track archive) {
-			<pr-archive-small
-				[archive]="archive"
-				[accessRole]="archive.accessRole"
-				(click)="archiveClick(archive)"
+			<div
+				class="archive-list-row"
+				[class.archive-list-row--current]="
+					archive.archiveId === currentArchive?.archiveId
+				"
 			>
-			</pr-archive-small>
+				<pr-archive-small
+					[archive]="archive"
+					[accessRole]="archive.accessRole"
+					[clickable]="true"
+					(click)="archiveClick(archive)"
+				>
+				</pr-archive-small>
+			</div>
 		}
 		@if (!archivesLoading && !archives.length) {
 			<div class="archives-empty">You have no other archives</div>
@@ -20,8 +33,9 @@
 <div class="archive-list-button">
 	<button class="btn btn-primary" (click)="createArchiveClick()">
 		Create new archive
+		<i class="material-icons archive-list-button-approve-icon">inventory_2</i>
 	</button>
-	<button class="btn btn-primary" (click)="backButtonClick()">
-		Current Archive
+	<button class="btn btn-link cancel-button" (click)="cancelClick()">
+		Cancel
 	</button>
 </div>
