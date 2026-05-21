@@ -55,6 +55,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 			return timeSource ? this.edtfService.toDateTimeModel(timeSource) : null;
 		} catch (err) {
 			this.message.showError({ message: err?.message });
+			return null;
 		}
 	}
 
@@ -249,7 +250,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	async onDateSaved(result: DateTimeModel) {
 		try {
 			const newDisplayTime = this.edtfService.toEdtfDate(result);
-			this.onFinishEditing('displayTime', newDisplayTime);
+			await this.onFinishEditing('displayTime', newDisplayTime);
 		} catch (err) {
 			this.message.showError({ message: err?.message });
 		}
@@ -258,11 +259,11 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	async onDateMoreOptions(modalData: DateTimeModel): Promise<void> {
 		const dialogRef = this.editDateTimeModalService.open(modalData);
 
-		dialogRef.closed.subscribe((result) => {
+		dialogRef.closed.subscribe(async (result) => {
 			if (result) {
 				try {
 					const newDisplayTime = this.edtfService.toEdtfDate(result);
-					this.onFinishEditing('displayTime', newDisplayTime);
+					await this.onFinishEditing('displayTime', newDisplayTime);
 				} catch (err) {
 					this.message.showError({ message: err?.message });
 				}

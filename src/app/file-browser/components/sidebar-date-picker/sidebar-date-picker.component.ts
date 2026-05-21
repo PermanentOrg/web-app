@@ -13,6 +13,7 @@ import {
 	ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { format, setYear } from 'date-fns';
 import {
 	EdtfService,
 	Meridian,
@@ -59,8 +60,6 @@ const EMPTY_QUALIFIERS: DateQualifierFlags = {
 export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	@Input() displayTime: DateTimeModel | null;
 	@Input() disabled = false;
-
-	constructor(private edtfService: EdtfService) {}
 
 	@Output() saveClicked = new EventEmitter<DateTimeModel>();
 	@Output() moreOptionsClicked = new EventEmitter<DateTimeModel>();
@@ -305,28 +304,19 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 			const monthNum = hasMonth ? parseInt(date.month, 10) - 1 : 0;
 			const dayNum = hasDay ? parseInt(date.day, 10) : 1;
 
-			const formatOptions: Intl.DateTimeFormatOptions = {};
-			formatOptions.year = 'numeric';
-			if (hasMonth) formatOptions.month = 'long';
-			if (hasDay) formatOptions.day = 'numeric';
+			// setYear avoids the JS Date quirk where years 0-99 are interpreted as 1900-1999
+			const dateObj = setYear(new Date(2000, monthNum, dayNum), yearNum);
 
-			const dateObj = new Date(yearNum, monthNum, dayNum);
-			if (yearNum >= 0 && yearNum < 100) {
-				dateObj.setFullYear(yearNum);
-			}
-
-			return new Intl.DateTimeFormat('en-US', formatOptions).format(dateObj);
+			if (hasMonth && hasDay) return format(dateObj, 'MMMM d, yyyy');
+			if (hasMonth) return format(dateObj, 'MMMM yyyy');
+			return format(dateObj, 'yyyy');
 		}
 
 		const dateParts: string[] = [];
 		if (hasMonth) {
 			const monthIdx = parseInt(date.month, 10) - 1;
 			if (monthIdx >= 0 && monthIdx < 12) {
-				dateParts.push(
-					new Intl.DateTimeFormat('en-US', {
-						month: 'long',
-					}).format(new Date(2000, monthIdx)),
-				);
+				dateParts.push(format(new Date(2000, monthIdx), 'MMMM'));
 			}
 		}
 		if (hasDay) dateParts.push(date.day);
@@ -336,7 +326,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	private formatTime(time: TimeModel): string {
 		if (!time?.hours) return '';
 
-		const h = parseInt(time.hours, 10);
+		const h = time.hours.padStart(2, '0');
 		const m = (time.minutes || '00').padStart(2, '0');
 		const s = (time.seconds || '00').padStart(2, '0');
 		return `${h}:${m}:${s}`;

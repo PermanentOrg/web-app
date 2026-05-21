@@ -56,7 +56,7 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes.time) {
-			const model = this.edtfService.to24HourTime(this.time);
+			const model = this.edtfService.parseTimeAs24Hour(this.time);
 			const current = this.timepickerControl.value;
 			if (!this.ngbTimeEquals(model, current)) {
 				this.timepickerControl.setValue(model, { emitEvent: false });

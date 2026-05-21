@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import edtf, { Date, Interval } from 'edtf';
+import edtf, { Date as EdtfDate, Interval as EdtfInterval } from 'edtf';
+import { getHours, getMinutes, getSeconds, isValid, parse } from 'date-fns';
 
 export enum DateQualifier {
 	Approximate = 'approximate',
@@ -18,8 +19,6 @@ export enum EdtfPrecision {
 	Month = 2,
 	Day = 3,
 }
-
-export const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 export const UNKNOWN_VALUE = 'XXXX-XX-XX';
 
@@ -189,7 +188,7 @@ export class EdtfService {
 			const normalizedString = this.normalizeForParsing(edtfString);
 			const edtfObject = edtf(normalizedString);
 
-			if (!(edtfObject instanceof Date)) {
+			if (!(edtfObject instanceof EdtfDate)) {
 				return null;
 			}
 
@@ -217,7 +216,7 @@ export class EdtfService {
 		try {
 			const edtfObject = edtf(`${normalizedStart}/${normalizedEnd}`);
 
-			if (!(edtfObject instanceof Interval)) {
+			if (!(edtfObject instanceof EdtfInterval)) {
 				return null;
 			}
 
@@ -263,47 +262,6 @@ export class EdtfService {
 			return stringDate;
 		} catch (error) {
 			throw new Error(this.toHumanReadableError(error));
-		}
-	}
-
-	isValidTime(time: TimeModel): boolean {
-		if (!time?.hours) {
-			return true;
-		}
-
-		const hours = Number(time.hours);
-		if (isNaN(hours) || hours < 1 || hours > 12) {
-			return false;
-		}
-
-		const hasMinutes = !!time.minutes;
-		const hasSeconds = !!time.seconds;
-
-		// Seconds without minutes is not valid
-		if (hasSeconds && !hasMinutes) {
-			return false;
-		}
-
-		try {
-			const timeStr = this.buildTimeString(time);
-			edtf(`2000-01-01${timeStr}Z`);
-			return true;
-		} catch {
-			return false;
-		}
-	}
-
-	isValidDate(date: DateModel): boolean {
-		if (!date.year) {
-			return false;
-		}
-
-		try {
-			const dateStr = this.buildDateString(date);
-			edtf(dateStr);
-			return true;
-		} catch {
-			return false;
 		}
 	}
 
@@ -355,7 +313,7 @@ export class EdtfService {
 	}
 
 	private buildDateString(date: DateModel): string {
-		const year = date.year.padEnd(4, 'X');
+		const year = date.year.padStart(4, '0');
 
 		if (!date.month) {
 			return year;
@@ -372,20 +330,15 @@ export class EdtfService {
 	}
 
 	private buildTimeString(time: TimeModel): string {
-		if (!time?.hours) {
-			return '';
+		if (!time?.hours) return '';
+
+		const converted = this.parseTimeAs24Hour(time);
+		if (!converted) {
+			throw new Error('Invalid time');
 		}
 
-		let hours24 = Number(time.hours);
-		if (time.pm && hours24 !== 12) {
-			hours24 += 12;
-		} else if (time.am && hours24 === 12) {
-			hours24 = 0;
-		}
-
-		const minutes = time.minutes || '00';
-		const seconds = time.seconds || '00';
-		return `T${String(hours24).padStart(2, '0')}:${minutes}:${seconds}`;
+		const pad = (n: number): string => String(n).padStart(2, '0');
+		return `T${pad(converted.hour)}:${pad(converted.minute)}:${pad(converted.second)}`;
 	}
 
 	private extractTimezone(edtfString: string): {
@@ -411,7 +364,7 @@ export class EdtfService {
 	}
 
 	private extDateToDateTimeModel(
-		extDate: Date,
+		extDate: EdtfDate,
 		timezoneOffset: string,
 		timezoneName: string,
 	): DateTimeModel {
@@ -472,23 +425,12 @@ export class EdtfService {
 	}
 
 	private toHumanReadableError(error: unknown): string {
-		const message = error instanceof Error ? error.message : '';
+		const message = error instanceof Error ? error.message.toLowerCase() : '';
 
-		if (message.includes('%')) {
-			return 'The date is not valid as both approximate and uncertain. Please check the date values.';
-		}
-		if (message.includes('~')) {
-			return 'The date is not valid as approximate. Please check the date values.';
-		}
-		if (message.includes('?')) {
-			return 'The date is not valid as uncertain. Please check the date values.';
-		}
-
-		const lowerMessage = message.toLowerCase();
 		if (
-			lowerMessage.includes('invalid interval') ||
-			lowerMessage.includes('invalid lower bound') ||
-			lowerMessage.includes('invalid upper bound')
+			message.includes('invalid interval') ||
+			message.includes('invalid lower bound') ||
+			message.includes('invalid upper bound')
 		) {
 			return 'The date range is not valid. Please make sure the start date is before the end date.';
 		}
@@ -497,7 +439,7 @@ export class EdtfService {
 	}
 
 	private intervalToDateTimeModel(
-		interval: Interval,
+		interval: EdtfInterval,
 		startTz: { timezoneOffset: string; timezoneName: string },
 		endTz: { timezoneOffset: string; timezoneName: string },
 	): DateTimeModel {
@@ -531,128 +473,67 @@ export class EdtfService {
 		return model;
 	}
 
-	getMaxDaysInMonth(year: string, month: string): number {
-		const y = parseInt(year, 10);
-		const m = parseInt(month, 10);
-
-		if (!m || m < 1 || m > 12) return 31;
-
-		if (m === 2 && y) {
-			return this.isLeapYear(y) ? 29 : 28;
-		}
-
-		return DAYS_IN_MONTH[m - 1];
-	}
-
 	isNumeric(value: string): boolean {
 		return /^\d+$/.test(value);
 	}
 
-	isLeapYear(year: number): boolean {
-		return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-	}
-
-	isValidYear(date: DateModel): boolean {
-		const year = date.year;
-
-		// Empty is valid (optional field)
-		if (year === '') return true;
-
-		// Must be numeric
-		if (!this.isNumeric(year)) return false;
-
-		// Must be 4 digits and not start with 0
-		if (year.length !== 4 || year.startsWith('0')) return false;
-
-		return true;
-	}
-
-	isValidMonth(date: DateModel): boolean {
-		const month = date.month;
-
-		// Empty is valid (optional field)
-		if (!month || month === '') return true;
-
-		// Must be numeric
-		if (!this.isNumeric(month)) return false;
-
-		// Must be 1 or 2 digits
-		if (month.length > 2) return false;
-
-		// First digit must be 0 or 1
-		if (month.length === 1) {
-			const firstDigit = parseInt(month, 10);
-			if (firstDigit > 1) return false;
-		}
-
-		// If 2 digits, must be between 01 and 12
-		if (month.length === 2) {
-			const num = parseInt(month, 10);
-			if (num < 1 || num > 12) return false;
-		}
-
-		return true;
-	}
-
-	isValidDay(date: DateModel): boolean {
-		const day = date.day;
-
-		// Empty is valid (optional field)
-		if (!day || day === '') return true;
-
-		// Must be numeric
-		if (!this.isNumeric(day)) return false;
-
-		// Must be 1 or 2 digits
-		if (day.length > 2) return false;
-
-		// Validate first digit based on max days in month
-		const maxDay = this.getMaxDaysInMonth(date.year, date.month || '');
-		if (day.length === 1) {
-			const firstDigit = parseInt(day, 10);
-			if (firstDigit > Math.floor(maxDay / 10)) return false;
-		}
-
-		// If 2 digits, must be between 01 and maxDay
-		if (day.length === 2) {
-			const num = parseInt(day, 10);
-			if (num < 1 || num > maxDay) return false;
-		}
-
-		return true;
-	}
-
-	to24HourTime(
+	parseTimeAs24Hour(
 		time: TimeModel,
 	): { hour: number; minute: number; second: number } | null {
-		const hour12 = parseInt(time.hours || '0', 10);
-		const isPm = time.pm === true;
-		const hour = isPm
-			? hour12 === 12
-				? 12
-				: hour12 + 12
-			: hour12 === 12
-				? 0
-				: hour12;
-		const minute = parseInt(time.minutes || '0', 10);
-		const second = parseInt(time.seconds || '0', 10);
+		// '12' default lets empty hours collapse to midnight via the AM branch below
+		// (12-hour clock has no '0', so parse('0 AM') would be invalid)
+		const hoursInput = time.hours || '12';
+		const minutesInput = time.minutes || '0';
+		const secondsInput = time.seconds || '0';
+		const meridian = time.pm === true ? 'PM' : 'AM';
 
-		if (isNaN(hour) || isNaN(minute)) return null;
+		const parsed = parse(
+			`${hoursInput}:${minutesInput}:${secondsInput} ${meridian}`,
+			'h:m:s a',
+			new Date(),
+		);
 
-		return { hour, minute, second: isNaN(second) ? 0 : second };
+		if (!isValid(parsed)) return null;
+
+		return {
+			hour: getHours(parsed),
+			minute: getMinutes(parsed),
+			second: getSeconds(parsed),
+		};
 	}
 
 	isValidHour(value: string): boolean {
-		if (!this.isNumeric(value) || value.length > 2) return false;
-		const num = parseInt(value, 10);
-		if (value.length === 1) return num >= 0 && num <= 1;
-		return num >= 1 && num <= 12;
+		if (value.length === 1) return parseInt(value, 10) <= 1;
+		// 12-hour clock — defer to date-fns parse to verify the full value (01-12)
+		return isValid(parse(`${value}:00 AM`, 'hh:mm a', new Date()));
 	}
 
 	isValidMinutesSeconds(value: string): boolean {
-		if (!this.isNumeric(value) || value.length > 2) return false;
-		const num = parseInt(value, 10);
-		if (value.length === 1) return num >= 0 && num <= 5;
-		return num >= 0 && num <= 59;
+		if (value.length === 1) return parseInt(value, 10) <= 5;
+		// Defer to date-fns parse to verify the full value (00-59)
+		return isValid(parse(`12:${value}:00 AM`, 'hh:mm:ss a', new Date()));
+	}
+
+	isValidYear(value: string): boolean {
+		if (value === '') return true;
+		return /^\d{1,4}$/.test(value);
+	}
+
+	isValidMonth(value: string): boolean {
+		if (value === '') return true;
+		if (/^\d$/.test(value)) return parseInt(value, 10) <= 1;
+		return isValid(parse(value, 'MM', new Date()));
+	}
+
+	isValidDay(value: string, year: string, month: string): boolean {
+		if (value === '') return true;
+		// Defaults let day be typed before year/month are filled in.
+		// 2000 is a leap year (allows Feb 29); 01 has 31 days (most permissive).
+		const yearStr = year.length === 4 ? year : '2000';
+		const monthStr = month.length === 2 ? month : '01';
+		const dayStr = value.padStart(2, '0');
+		return isValid(
+			parse(`${yearStr}-${monthStr}-${dayStr}`, 'yyyy-MM-dd', new Date()),
+		);
 	}
 }

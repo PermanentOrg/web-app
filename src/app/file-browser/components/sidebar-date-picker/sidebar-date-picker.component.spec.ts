@@ -158,7 +158,7 @@ describe('SidebarDatePickerComponent', () => {
 			);
 
 			expect(value.textContent).toContain('May 20, 1985');
-			expect(value.textContent).toContain('2:30:00');
+			expect(value.textContent).toContain('02:30:00');
 			expect(value.textContent).toContain('PM');
 		});
 

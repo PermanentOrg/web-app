@@ -79,20 +79,12 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 		const input = event.target as HTMLInputElement;
 		const value = input.value;
 
-		if (
-			value !== '' &&
-			(!this.edtfService.isNumeric(value) || value.length > 4)
-		) {
+		if (!this.edtfService.isValidYear(value)) {
 			input.value = this.date.year;
 			return;
 		}
 
 		if (value.length === 4) {
-			const testDate = { ...this.date, year: value };
-			if (!this.edtfService.isValidYear(testDate)) {
-				input.value = this.date.year;
-				return;
-			}
 			this.dateChange.emit({ ...this.date, year: value });
 			this.monthInput.nativeElement.focus();
 		} else if (value.length === 0) {
@@ -104,8 +96,7 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 		const input = event.target as HTMLInputElement;
 		const value = input.value;
 
-		const testDate = { ...this.date, month: value };
-		if (!this.edtfService.isValidMonth(testDate)) {
+		if (!this.edtfService.isValidMonth(value)) {
 			input.value = this.date.month ?? '';
 			return;
 		}
@@ -120,8 +111,9 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 		const input = event.target as HTMLInputElement;
 		const value = input.value;
 
-		const testDate = { ...this.date, day: value };
-		if (!this.edtfService.isValidDay(testDate)) {
+		if (
+			!this.edtfService.isValidDay(value, this.date.year, this.date.month ?? '')
+		) {
 			input.value = this.date.day ?? '';
 			return;
 		}
