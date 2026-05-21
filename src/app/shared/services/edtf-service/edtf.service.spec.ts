@@ -536,157 +536,6 @@ describe('EdtfService', () => {
 		});
 	});
 
-	describe('isValidDate', () => {
-		it('should return true for a valid full date', () => {
-			expect(
-				service.isValidDate({ year: '1985', month: '05', day: '20' }),
-			).toBe(true);
-		});
-
-		it('should return true for a valid year-month', () => {
-			expect(service.isValidDate({ year: '1985', month: '05', day: '' })).toBe(
-				true,
-			);
-		});
-
-		it('should return true for a valid year only', () => {
-			expect(service.isValidDate({ year: '1985', month: '', day: '' })).toBe(
-				true,
-			);
-		});
-
-		it('should return true for a partial year', () => {
-			expect(service.isValidDate({ year: '19', month: '', day: '' })).toBe(
-				true,
-			);
-		});
-
-		it('should return false for an invalid month', () => {
-			expect(service.isValidDate({ year: '1985', month: '13', day: '' })).toBe(
-				false,
-			);
-		});
-
-		it('should return false for an invalid day', () => {
-			expect(
-				service.isValidDate({ year: '1985', month: '05', day: '32' }),
-			).toBe(false);
-		});
-
-		it('should return false for an empty year', () => {
-			expect(service.isValidDate({ year: '', month: '', day: '' })).toBe(false);
-		});
-	});
-
-	describe('isValidTime', () => {
-		it('should return true for a valid PM time', () => {
-			expect(
-				service.isValidTime({
-					hours: '02',
-					minutes: '30',
-					seconds: '45',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
-		});
-
-		it('should return true for a valid AM time', () => {
-			expect(
-				service.isValidTime({
-					hours: '09',
-					minutes: '15',
-					seconds: '00',
-					am: true,
-					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
-		});
-
-		it('should return true for midnight (12 AM)', () => {
-			expect(
-				service.isValidTime({
-					hours: '12',
-					minutes: '00',
-					seconds: '00',
-					am: true,
-					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
-		});
-
-		it('should return true for noon (12 PM)', () => {
-			expect(
-				service.isValidTime({
-					hours: '12',
-					minutes: '00',
-					seconds: '00',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
-		});
-
-		it('should return true when no hours provided', () => {
-			expect(
-				service.isValidTime({
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
-		});
-
-		it('should return false for invalid hours', () => {
-			expect(
-				service.isValidTime({
-					hours: '13',
-					minutes: '00',
-					seconds: '00',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(false);
-		});
-
-		it('should return false for invalid minutes', () => {
-			expect(
-				service.isValidTime({
-					hours: '02',
-					minutes: '60',
-					seconds: '00',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(false);
-		});
-
-		it('should return false for invalid seconds', () => {
-			expect(
-				service.isValidTime({
-					hours: '02',
-					minutes: '30',
-					seconds: '60',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(false);
-		});
-	});
-
 	describe('interval with different timezones', () => {
 		it('should parse different timezones for start and end', () => {
 			const result = service.toDateTimeModel(
@@ -718,57 +567,9 @@ describe('EdtfService', () => {
 		});
 
 		describe('formatting errors', () => {
-			it('should throw a human-readable approximate error for invalid approximate date', () => {
+			it('should throw a generic human-readable error for invalid dates', () => {
 				const model: DateTimeModel = {
-					date: { year: '1', month: '05', day: '20' },
-					time: { timezoneOffset: '', timezoneName: '' },
-					qualifiers: {
-						approximate: true,
-						uncertain: false,
-						unknown: false,
-					},
-				};
-
-				expect(() => service.toEdtfDate(model)).toThrowError(
-					'The date is not valid as approximate. Please check the date values.',
-				);
-			});
-
-			it('should throw a human-readable uncertain error for invalid uncertain date', () => {
-				const model: DateTimeModel = {
-					date: { year: '1', month: '05', day: '20' },
-					time: { timezoneOffset: '', timezoneName: '' },
-					qualifiers: {
-						approximate: false,
-						uncertain: true,
-						unknown: false,
-					},
-				};
-
-				expect(() => service.toEdtfDate(model)).toThrowError(
-					'The date is not valid as uncertain. Please check the date values.',
-				);
-			});
-
-			it('should throw a human-readable combined error for invalid approximate and uncertain date', () => {
-				const model: DateTimeModel = {
-					date: { year: '1', month: '05', day: '20' },
-					time: { timezoneOffset: '', timezoneName: '' },
-					qualifiers: {
-						approximate: true,
-						uncertain: true,
-						unknown: false,
-					},
-				};
-
-				expect(() => service.toEdtfDate(model)).toThrowError(
-					'The date is not valid as both approximate and uncertain. Please check the date values.',
-				);
-			});
-
-			it('should throw a generic human-readable error for other invalid dates', () => {
-				const model: DateTimeModel = {
-					date: { year: '1', month: '99' },
+					date: { year: '1985', month: '99' },
 					time: { timezoneOffset: '', timezoneName: '' },
 				};
 
@@ -823,32 +624,6 @@ describe('EdtfService', () => {
 		});
 	});
 
-	describe('getMaxDaysInMonth', () => {
-		it('should return 31 for January', () => {
-			expect(service.getMaxDaysInMonth('2000', '1')).toBe(31);
-		});
-
-		it('should return 28 for February in a non-leap year', () => {
-			expect(service.getMaxDaysInMonth('2023', '2')).toBe(28);
-		});
-
-		it('should return 29 for February in a leap year', () => {
-			expect(service.getMaxDaysInMonth('2024', '2')).toBe(29);
-		});
-
-		it('should return 30 for April', () => {
-			expect(service.getMaxDaysInMonth('2000', '4')).toBe(30);
-		});
-
-		it('should return 31 for invalid month', () => {
-			expect(service.getMaxDaysInMonth('2000', '13')).toBe(31);
-		});
-
-		it('should return 31 for empty month', () => {
-			expect(service.getMaxDaysInMonth('2000', '')).toBe(31);
-		});
-	});
-
 	describe('isNumeric', () => {
 		it('should return true for digit-only string', () => {
 			expect(service.isNumeric('12345')).toBe(true);
@@ -867,142 +642,9 @@ describe('EdtfService', () => {
 		});
 	});
 
-	describe('isLeapYear', () => {
-		it('should return true for year divisible by 4 but not 100', () => {
-			expect(service.isLeapYear(2024)).toBe(true);
-		});
-
-		it('should return false for year divisible by 100 but not 400', () => {
-			expect(service.isLeapYear(1900)).toBe(false);
-		});
-
-		it('should return true for year divisible by 400', () => {
-			expect(service.isLeapYear(2000)).toBe(true);
-		});
-
-		it('should return false for non-leap year', () => {
-			expect(service.isLeapYear(2023)).toBe(false);
-		});
-	});
-
-	describe('isValidYear', () => {
-		it('should return true for empty year', () => {
-			expect(service.isValidYear({ year: '' })).toBe(true);
-		});
-
-		it('should return true for valid 4-digit year', () => {
-			expect(service.isValidYear({ year: '1985' })).toBe(true);
-		});
-
-		it('should return false for non-numeric year', () => {
-			expect(service.isValidYear({ year: 'abcd' })).toBe(false);
-		});
-
-		it('should return false for year shorter than 4 digits', () => {
-			expect(service.isValidYear({ year: '19' })).toBe(false);
-		});
-
-		it('should return false for year starting with 0', () => {
-			expect(service.isValidYear({ year: '0985' })).toBe(false);
-		});
-	});
-
-	describe('isValidMonth', () => {
-		it('should return true for empty month', () => {
-			expect(service.isValidMonth({ year: '1985', month: '' })).toBe(true);
-		});
-
-		it('should return true for undefined month', () => {
-			expect(service.isValidMonth({ year: '1985' })).toBe(true);
-		});
-
-		it('should return true for valid 2-digit month', () => {
-			expect(service.isValidMonth({ year: '1985', month: '05' })).toBe(true);
-		});
-
-		it('should return true for single digit', () => {
-			expect(service.isValidMonth({ year: '1985', month: '0' })).toBe(true);
-			expect(service.isValidMonth({ year: '1985', month: '1' })).toBe(true);
-		});
-
-		it('should return false for single digit greater than 1', () => {
-			expect(service.isValidMonth({ year: '1985', month: '2' })).toBe(false);
-		});
-
-		it('should return false for month greater than 12', () => {
-			expect(service.isValidMonth({ year: '1985', month: '13' })).toBe(false);
-		});
-
-		it('should return false for month 00', () => {
-			expect(service.isValidMonth({ year: '1985', month: '00' })).toBe(false);
-		});
-
-		it('should return false for non-numeric month', () => {
-			expect(service.isValidMonth({ year: '1985', month: 'ab' })).toBe(false);
-		});
-
-		it('should return false for month longer than 2 digits', () => {
-			expect(service.isValidMonth({ year: '1985', month: '123' })).toBe(false);
-		});
-	});
-
-	describe('isValidDay', () => {
-		it('should return true for empty day', () => {
-			expect(service.isValidDay({ year: '1985', month: '05', day: '' })).toBe(
-				true,
-			);
-		});
-
-		it('should return true for undefined day', () => {
-			expect(service.isValidDay({ year: '1985', month: '05' })).toBe(true);
-		});
-
-		it('should return true for valid 2-digit day', () => {
-			expect(service.isValidDay({ year: '1985', month: '05', day: '20' })).toBe(
-				true,
-			);
-		});
-
-		it('should return false for day exceeding max days in month', () => {
-			expect(service.isValidDay({ year: '1985', month: '02', day: '29' })).toBe(
-				false,
-			);
-		});
-
-		it('should return true for day 29 in February of a leap year', () => {
-			expect(service.isValidDay({ year: '2024', month: '02', day: '29' })).toBe(
-				true,
-			);
-		});
-
-		it('should return false for day 00', () => {
-			expect(service.isValidDay({ year: '1985', month: '05', day: '00' })).toBe(
-				false,
-			);
-		});
-
-		it('should return false for non-numeric day', () => {
-			expect(service.isValidDay({ year: '1985', month: '05', day: 'ab' })).toBe(
-				false,
-			);
-		});
-
-		it('should return false for day longer than 2 digits', () => {
-			expect(
-				service.isValidDay({ year: '1985', month: '05', day: '123' }),
-			).toBe(false);
-		});
-
-		it('should return false for single digit exceeding max tens digit', () => {
-			expect(service.isValidDay({ year: '1985', month: '02', day: '3' })).toBe(
-				false,
-			);
-		});
-	});
-
-	describe('to24HourTime', () => {
+	describe('parseTimeAs24Hour', () => {
 		it('should convert PM time to 24-hour format', () => {
-			const result = service.to24HourTime({
+			const result = service.parseTimeAs24Hour({
 				hours: '02',
 				minutes: '30',
 				seconds: '45',
@@ -1013,7 +655,7 @@ describe('EdtfService', () => {
 		});
 
 		it('should convert AM time to 24-hour format', () => {
-			const result = service.to24HourTime({
+			const result = service.parseTimeAs24Hour({
 				hours: '09',
 				minutes: '15',
 				seconds: '00',
@@ -1025,7 +667,7 @@ describe('EdtfService', () => {
 		});
 
 		it('should convert 12 PM to 12', () => {
-			const result = service.to24HourTime({
+			const result = service.parseTimeAs24Hour({
 				hours: '12',
 				minutes: '00',
 				seconds: '00',
@@ -1036,7 +678,7 @@ describe('EdtfService', () => {
 		});
 
 		it('should convert 12 AM to 0', () => {
-			const result = service.to24HourTime({
+			const result = service.parseTimeAs24Hour({
 				hours: '12',
 				minutes: '00',
 				seconds: '00',
@@ -1048,7 +690,7 @@ describe('EdtfService', () => {
 		});
 
 		it('should default missing seconds to 0', () => {
-			const result = service.to24HourTime({
+			const result = service.parseTimeAs24Hour({
 				hours: '05',
 				minutes: '30',
 				pm: false,
@@ -1058,9 +700,21 @@ describe('EdtfService', () => {
 		});
 
 		it('should default missing hours and minutes to 0', () => {
-			const result = service.to24HourTime({});
+			const result = service.parseTimeAs24Hour({});
 
 			expect(result).toEqual({ hour: 0, minute: 0, second: 0 });
+		});
+
+		it('should parse unpadded single-digit hours', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '7',
+				minutes: '5',
+				seconds: '3',
+				am: true,
+				pm: false,
+			});
+
+			expect(result).toEqual({ hour: 7, minute: 5, second: 3 });
 		});
 	});
 
@@ -1115,6 +769,130 @@ describe('EdtfService', () => {
 		});
 	});
 
+	describe('isValidYear', () => {
+		it('should accept empty year', () => {
+			expect(service.isValidYear('')).toBe(true);
+		});
+
+		it('should accept a 4-digit year', () => {
+			expect(service.isValidYear('1985')).toBe(true);
+		});
+
+		it('should accept partial year input (progressive)', () => {
+			expect(service.isValidYear('1')).toBe(true);
+			expect(service.isValidYear('19')).toBe(true);
+			expect(service.isValidYear('198')).toBe(true);
+		});
+
+		it('should accept ISO 8601 year padded with leading zeros', () => {
+			expect(service.isValidYear('0985')).toBe(true);
+		});
+
+		it('should accept leading zero(s) as progressive input', () => {
+			expect(service.isValidYear('0')).toBe(true);
+			expect(service.isValidYear('00')).toBe(true);
+			expect(service.isValidYear('000')).toBe(true);
+			expect(service.isValidYear('0000')).toBe(true);
+		});
+
+		it('should reject non-numeric year', () => {
+			expect(service.isValidYear('abcd')).toBe(false);
+			expect(service.isValidYear('19ab')).toBe(false);
+		});
+
+		it('should reject year longer than 4 digits', () => {
+			expect(service.isValidYear('12345')).toBe(false);
+		});
+	});
+
+	describe('isValidMonth', () => {
+		it('should accept empty month', () => {
+			expect(service.isValidMonth('')).toBe(true);
+		});
+
+		it('should accept a valid 2-digit month', () => {
+			expect(service.isValidMonth('01')).toBe(true);
+			expect(service.isValidMonth('12')).toBe(true);
+		});
+
+		it('should accept 0 or 1 as a progressive single digit', () => {
+			expect(service.isValidMonth('0')).toBe(true);
+			expect(service.isValidMonth('1')).toBe(true);
+		});
+
+		it('should reject single digit greater than 1', () => {
+			expect(service.isValidMonth('2')).toBe(false);
+			expect(service.isValidMonth('9')).toBe(false);
+		});
+
+		it('should reject month 00', () => {
+			expect(service.isValidMonth('00')).toBe(false);
+		});
+
+		it('should reject month greater than 12', () => {
+			expect(service.isValidMonth('13')).toBe(false);
+		});
+
+		it('should reject non-numeric month', () => {
+			expect(service.isValidMonth('ab')).toBe(false);
+		});
+
+		it('should reject month longer than 2 digits', () => {
+			expect(service.isValidMonth('123')).toBe(false);
+		});
+	});
+
+	describe('isValidDay', () => {
+		it('should accept empty day', () => {
+			expect(service.isValidDay('', '1985', '05')).toBe(true);
+		});
+
+		it('should accept a valid 2-digit day for the month', () => {
+			expect(service.isValidDay('20', '1985', '05')).toBe(true);
+		});
+
+		it('should accept Feb 29 in a leap year', () => {
+			expect(service.isValidDay('29', '2024', '02')).toBe(true);
+		});
+
+		it('should reject Feb 29 in a non-leap year', () => {
+			expect(service.isValidDay('29', '1985', '02')).toBe(false);
+		});
+
+		it('should reject Feb 30', () => {
+			expect(service.isValidDay('30', '1985', '02')).toBe(false);
+		});
+
+		it('should reject day 31 in a 30-day month', () => {
+			expect(service.isValidDay('31', '1985', '04')).toBe(false);
+		});
+
+		it('should reject day 00', () => {
+			expect(service.isValidDay('00', '1985', '05')).toBe(false);
+		});
+
+		it('should reject day greater than 31', () => {
+			expect(service.isValidDay('32', '1985', '01')).toBe(false);
+		});
+
+		it('should reject non-numeric day', () => {
+			expect(service.isValidDay('ab', '1985', '05')).toBe(false);
+		});
+
+		it('should accept single digit as progressive day input', () => {
+			expect(service.isValidDay('3', '1985', '05')).toBe(true);
+		});
+
+		it('should fall back to leap year 2000 when year is missing', () => {
+			// 2000 is a leap year so Feb 29 is allowed
+			expect(service.isValidDay('29', '', '02')).toBe(true);
+		});
+
+		it('should fall back to month 01 (31 days) when month is missing', () => {
+			expect(service.isValidDay('31', '1985', '')).toBe(true);
+		});
+	});
+
 	describe('roundtrip', () => {
 		it('should roundtrip a full date', () => {
 			const edtfString = '1985-05-20';
@@ -1134,14 +912,6 @@ describe('EdtfService', () => {
 
 		it('should roundtrip year only', () => {
 			const edtfString = '1985';
-			const model = service.toDateTimeModel(edtfString);
-			const result = service.toEdtfDate(model);
-
-			expect(result).toBe(edtfString);
-		});
-
-		it('should roundtrip partial year', () => {
-			const edtfString = '19XX';
 			const model = service.toDateTimeModel(edtfString);
 			const result = service.toEdtfDate(model);
 

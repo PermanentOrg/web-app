@@ -64,10 +64,10 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate).toBeNull();
 	});
 
-	it('should reject year starting with 0', () => {
-		component.updateYear(mockEvent('0123'));
+	it('should accept year padded with leading zeros (ISO 8601)', () => {
+		component.updateYear(mockEvent('0985'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.year).toBe('0985');
 	});
 
 	it('should accept valid 2-digit month and emit', () => {
