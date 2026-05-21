@@ -1,5 +1,6 @@
 <div class="pr-date-input-group" [class.active]="showDatepicker()">
 	<input
+		#yearInput
 		type="text"
 		class="pr-date-segment year"
 		[value]="date.year"
@@ -16,6 +17,7 @@
 		[value]="date.month ?? ''"
 		[disabled]="disabled"
 		(input)="updateMonth($event)"
+		(keydown)="onMonthKeydown($event)"
 		placeholder="MM"
 		maxlength="2"
 	/>
@@ -27,6 +29,7 @@
 		[value]="date.day ?? ''"
 		[disabled]="disabled"
 		(input)="updateDay($event)"
+		(keydown)="onDayKeydown($event)"
 		placeholder="DD"
 		maxlength="2"
 	/>

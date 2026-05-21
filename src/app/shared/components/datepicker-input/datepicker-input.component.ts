@@ -31,6 +31,7 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 
 	@Output() dateChange = new EventEmitter<DateModel>();
 
+	@ViewChild('yearInput') yearInput!: ElementRef<HTMLInputElement>;
 	@ViewChild('monthInput') monthInput!: ElementRef<HTMLInputElement>;
 	@ViewChild('dayInput') dayInput!: ElementRef<HTMLInputElement>;
 
@@ -101,8 +102,8 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 			return;
 		}
 
-		if (value.length === 2 || value.length === 0) {
-			this.dateChange.emit({ ...this.date, month: value });
+		this.dateChange.emit({ ...this.date, month: value });
+		if (value.length === 2) {
 			this.dayInput.nativeElement.focus();
 		}
 	}
@@ -118,9 +119,27 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 			return;
 		}
 
-		if (value.length === 2 || value.length === 0) {
-			this.dateChange.emit({ ...this.date, day: value });
-		}
+		this.dateChange.emit({ ...this.date, day: value });
+	}
+
+	onMonthKeydown(event: KeyboardEvent): void {
+		if (event.key !== 'Backspace') return;
+		const target = event.target as HTMLInputElement;
+		if (target.value !== '') return;
+		event.preventDefault();
+		const newYear = (this.date.year ?? '').slice(0, -1);
+		this.dateChange.emit({ ...this.date, year: newYear });
+		this.yearInput.nativeElement.focus();
+	}
+
+	onDayKeydown(event: KeyboardEvent): void {
+		if (event.key !== 'Backspace') return;
+		const target = event.target as HTMLInputElement;
+		if (target.value !== '') return;
+		event.preventDefault();
+		const newMonth = (this.date.month ?? '').slice(0, -1);
+		this.dateChange.emit({ ...this.date, month: newMonth });
+		this.monthInput.nativeElement.focus();
 	}
 
 	onDateSelect(newDate: NgbDateStruct): void {

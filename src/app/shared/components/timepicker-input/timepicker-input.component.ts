@@ -36,6 +36,8 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 
 	@Output() timeChange = new EventEmitter<TimeModel>();
 
+	@ViewChild('hoursInput') hoursInput!: ElementRef<HTMLInputElement>;
+	@ViewChild('minutesInput') minutesInput!: ElementRef<HTMLInputElement>;
 	@ViewChild('secondsInput') secondsInput?: ElementRef<HTMLInputElement>;
 
 	showTimepicker = signal(false);
@@ -104,6 +106,26 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 			am: this.time.pm,
 			pm: this.time.am,
 		});
+	}
+
+	onMinutesKeydown(event: KeyboardEvent): void {
+		if (event.key !== 'Backspace') return;
+		const target = event.target as HTMLInputElement;
+		if (target.value !== '') return;
+		event.preventDefault();
+		const newHours = (this.time.hours ?? '').slice(0, -1);
+		this.timeChange.emit({ ...this.time, hours: newHours });
+		this.hoursInput.nativeElement.focus();
+	}
+
+	onSecondsKeydown(event: KeyboardEvent): void {
+		if (event.key !== 'Backspace') return;
+		const target = event.target as HTMLInputElement;
+		if (target.value !== '') return;
+		event.preventDefault();
+		const newMinutes = (this.time.minutes ?? '').slice(0, -1);
+		this.timeChange.emit({ ...this.time, minutes: newMinutes });
+		this.minutesInput.nativeElement.focus();
 	}
 
 	updateTime(
