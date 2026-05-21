@@ -76,10 +76,10 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate?.month).toBe('06');
 	});
 
-	it('should not emit for single digit month', () => {
-		component.updateMonth(mockEvent('6'));
+	it('should emit single digit month', () => {
+		component.updateMonth(mockEvent('1'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.month).toBe('1');
 	});
 
 	it('should not emit or auto-focus for invalid month', () => {
@@ -102,12 +102,12 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate?.day).toBe('31');
 	});
 
-	it('should not emit for single digit day', () => {
+	it('should emit single digit day', () => {
 		hostComponent.date = { year: '2026', month: '01', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('3'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.day).toBe('3');
 	});
 
 	it('should not emit day greater than max for month', () => {
