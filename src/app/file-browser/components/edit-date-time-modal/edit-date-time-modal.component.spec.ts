@@ -25,7 +25,7 @@ describe('EditDateTimeModalComponent', () => {
 			am: true,
 			pm: false,
 			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
+			timezoneName: 'Europe/Berlin',
 		},
 	};
 
@@ -64,9 +64,7 @@ describe('EditDateTimeModalComponent', () => {
 		expect(component.qualifiers().uncertain).toBeFalse();
 		expect(component.qualifiers().unknown).toBeFalse();
 		expect(component.time().timezoneOffset).toBe('GMT+01:00');
-		expect(component.time().timezoneName).toBe(
-			'Central European Standard Time',
-		);
+		expect(component.time().timezoneName).toBe('Europe/Berlin');
 
 		expect(component.useDateRange()).toBeFalse();
 	});
@@ -137,7 +135,7 @@ describe('EditDateTimeModalComponent', () => {
 			am: true,
 			pm: false,
 			timezoneOffset: 'GMT-05:00',
-			timezoneName: 'Eastern Standard Time',
+			timezoneName: 'America/New_York',
 		});
 		component.onTimeChange(
 			{ hours: '11', minutes: '30', seconds: '00', am: true, pm: false },
@@ -146,29 +144,39 @@ describe('EditDateTimeModalComponent', () => {
 
 		expect(component.time().hours).toBe('11');
 		expect(component.time().timezoneOffset).toBe('GMT-05:00');
-		expect(component.time().timezoneName).toBe('Eastern Standard Time');
+		expect(component.time().timezoneName).toBe('America/New_York');
 	});
 
 	// --- Timezone updates via onTimezoneChange ---
 
 	it('should update timezone on time signal via onTimezoneChange', () => {
 		component.onTimezoneChange(
-			{ offset: 'GMT-05:00', name: 'Eastern Standard Time' },
+			{
+				ianaZone: 'America/New_York',
+				offset: 'GMT-05:00',
+				label: 'America / New York',
+				abbreviation: 'EST',
+			},
 			component.time,
 		);
 
 		expect(component.time().timezoneOffset).toBe('GMT-05:00');
-		expect(component.time().timezoneName).toBe('Eastern Standard Time');
+		expect(component.time().timezoneName).toBe('America/New_York');
 	});
 
 	it('should update timezone on endTime signal via onTimezoneChange', () => {
 		component.onTimezoneChange(
-			{ offset: 'GMT+09:00', name: 'Japan Standard Time' },
+			{
+				ianaZone: 'Asia/Tokyo',
+				offset: 'GMT+09:00',
+				label: 'Asia / Tokyo',
+				abbreviation: 'JST',
+			},
 			component.endTime,
 		);
 
 		expect(component.endTime().timezoneOffset).toBe('GMT+09:00');
-		expect(component.endTime().timezoneName).toBe('Japan Standard Time');
+		expect(component.endTime().timezoneName).toBe('Asia/Tokyo');
 	});
 
 	// --- Date range toggle ---
@@ -383,7 +391,8 @@ describe('EditDateTimeModalComponent', () => {
 			am: true,
 			pm: false,
 			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
+			// Empty IANA zone keeps the stored offset untouched (no DST re-derivation).
+			timezoneName: '',
 		});
 		component.qualifiers.set({
 			approximate: false,
@@ -403,7 +412,7 @@ describe('EditDateTimeModalComponent', () => {
 			am: true,
 			pm: false,
 			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
+			timezoneName: '',
 		});
 		component.qualifiers.set({
 			approximate: false,

@@ -1,10 +1,15 @@
+import { TestBed } from '@angular/core/testing';
+import { TimezoneService } from '@shared/services/timezone-service/timezone.service';
 import { EdtfService, DateTimeModel } from './edtf.service';
 
 describe('EdtfService', () => {
 	let service: EdtfService;
+	let timezoneService: TimezoneService;
 
 	beforeEach(() => {
-		service = new EdtfService();
+		TestBed.configureTestingModule({});
+		service = TestBed.inject(EdtfService);
+		timezoneService = TestBed.inject(TimezoneService);
 	});
 
 	describe('toDateTimeModel', () => {
@@ -130,21 +135,47 @@ describe('EdtfService', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45Z');
 
 				expect(result.time.timezoneOffset).toBe('GMT+00:00');
-				expect(result.time.timezoneName).toBe('Greenwich Mean Time');
+				// timezoneName now holds the IANA zone matching the offset for the
+				// referenced date — any GMT+00:00 zone is acceptable.
+				const ianaZone = result.time.timezoneName as string;
+
+				expect(ianaZone).toBeTruthy();
+				expect(
+					timezoneService.computeOffsetForZone(
+						ianaZone,
+						new Date(Date.UTC(1985, 4, 20, 14, 30, 45)),
+					),
+				).toBe('GMT+00:00');
 			});
 
 			it('should extract positive timezone offset', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45+05:30');
 
 				expect(result.time.timezoneOffset).toBe('GMT+05:30');
-				expect(result.time.timezoneName).toBe('India Standard Time');
+				const ianaZone = result.time.timezoneName as string;
+
+				expect(ianaZone).toBeTruthy();
+				expect(
+					timezoneService.computeOffsetForZone(
+						ianaZone,
+						new Date(Date.UTC(1985, 4, 20, 14, 30, 45)),
+					),
+				).toBe('GMT+05:30');
 			});
 
 			it('should extract negative timezone offset', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45-04:00');
 
 				expect(result.time.timezoneOffset).toBe('GMT-04:00');
-				expect(result.time.timezoneName).toBe('Atlantic Standard Time');
+				const ianaZone = result.time.timezoneName as string;
+
+				expect(ianaZone).toBeTruthy();
+				expect(
+					timezoneService.computeOffsetForZone(
+						ianaZone,
+						new Date(Date.UTC(1985, 4, 20, 14, 30, 45)),
+					),
+				).toBe('GMT-04:00');
 			});
 
 			it('should have empty timezone when none present', () => {
@@ -348,7 +379,7 @@ describe('EdtfService', () => {
 						am: false,
 						pm: true,
 						timezoneOffset: 'GMT+05:30',
-						timezoneName: 'India Standard Time',
+						timezoneName: '',
 					},
 				};
 
@@ -367,13 +398,39 @@ describe('EdtfService', () => {
 						am: true,
 						pm: false,
 						timezoneOffset: 'GMT-04:00',
-						timezoneName: 'Atlantic Standard Time',
+						timezoneName: '',
 					},
 				};
 
 				const result = service.toEdtfDate(model);
 
 				expect(result).toContain('-04:00');
+			});
+
+			it('should derive a DST-correct offset from the IANA zone when provided', () => {
+				// 2025-07-15 in New York is EDT (-04:00).
+				const summerModel: DateTimeModel = {
+					date: { year: '2025', month: '07', day: '15' },
+					time: {
+						hours: '10',
+						minutes: '00',
+						seconds: '00',
+						am: true,
+						pm: false,
+						timezoneOffset: 'GMT-05:00',
+						timezoneName: 'America/New_York',
+					},
+				};
+
+				expect(service.toEdtfDate(summerModel)).toContain('-04:00');
+
+				// 2025-01-15 in New York is EST (-05:00).
+				const winterModel: DateTimeModel = {
+					...summerModel,
+					date: { year: '2025', month: '01', day: '15' },
+				};
+
+				expect(service.toEdtfDate(winterModel)).toContain('-05:00');
 			});
 
 			it('should not append timezone when empty', () => {
@@ -577,28 +634,6 @@ describe('EdtfService', () => {
 					/Please check the values/,
 				);
 			});
-		});
-	});
-
-	describe('offsetToAbbreviation', () => {
-		it('should return known abbreviation for mapped offset', () => {
-			expect(EdtfService.offsetToAbbreviation('GMT-05:00')).toBe('EST');
-		});
-
-		it('should return known abbreviation for positive offset', () => {
-			expect(EdtfService.offsetToAbbreviation('GMT+09:00')).toBe('JST');
-		});
-
-		it('should return UTC format for unmapped whole-hour offset', () => {
-			expect(EdtfService.offsetToAbbreviation('GMT-02:00')).toBe('UTC-2');
-		});
-
-		it('should return UTC format with minutes for unmapped offset with minutes', () => {
-			expect(EdtfService.offsetToAbbreviation('GMT+06:30')).toBe('UTC+6:30');
-		});
-
-		it('should return the input string for non-GMT format', () => {
-			expect(EdtfService.offsetToAbbreviation('invalid')).toBe('invalid');
 		});
 	});
 

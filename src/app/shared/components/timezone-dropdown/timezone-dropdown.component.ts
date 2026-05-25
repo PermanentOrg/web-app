@@ -8,12 +8,13 @@ import {
 	ElementRef,
 	ViewChild,
 	HostListener,
+	inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
 	TimezoneOption,
-	TIMEZONES,
-} from '@shared/services/edtf-service/edtf.service';
+	TimezoneService,
+} from '@shared/services/timezone-service/timezone.service';
 
 @Component({
 	selector: 'pr-timezone-dropdown',
@@ -23,9 +24,29 @@ import {
 	styleUrls: ['./timezone-dropdown.component.scss'],
 })
 export class TimezoneDropdownComponent {
-	@Input() selectedOffset = '';
-	@Input() selectedName = '';
+	private readonly timezoneService = inject(TimezoneService);
+
+	@Input() selectedOffsetFallback = '';
 	@Input() disabled = false;
+
+	get selectedZone(): string {
+		return this._selectedZone();
+	}
+
+	@Input()
+	set selectedZone(value: string | null | undefined) {
+		this._selectedZone.set(value ?? '');
+	}
+
+	get referenceDate(): Date {
+		return this._referenceDate();
+	}
+
+	@Input()
+	set referenceDate(value: Date | null | undefined) {
+		this._referenceDate.set(value ?? new Date());
+	}
+
 	@Output() timezoneChange = new EventEmitter<TimezoneOption>();
 
 	@ViewChild('dropdownContainer') dropdownContainer?: ElementRef<HTMLElement>;
@@ -33,15 +54,38 @@ export class TimezoneDropdownComponent {
 	isOpen = signal(false);
 	filter = signal('');
 
-	timezones = TIMEZONES;
+	private readonly _selectedZone = signal<string>('');
+	private readonly _referenceDate = signal<Date>(new Date());
+
+	zones = computed<TimezoneOption[]>(() =>
+		this.timezoneService.getZones(this._referenceDate()),
+	);
+
+	selectedOption = computed<TimezoneOption | null>(() => {
+		const zone = this._selectedZone();
+		if (!zone) return null;
+		const referenceDate = this._referenceDate();
+		return {
+			ianaZone: zone,
+			offset: this.timezoneService.computeOffsetForZone(zone, referenceDate),
+			label: this.timezoneService.formatZoneLabel(zone),
+			abbreviation: this.timezoneService.getAbbreviationForZone(
+				zone,
+				referenceDate,
+			),
+		};
+	});
 
 	filteredTimezones = computed(() => {
 		const term = this.filter().toLowerCase();
-		if (!term) return this.timezones;
-		return this.timezones.filter(
+		const allZones = this.zones();
+		if (!term) return allZones;
+		return allZones.filter(
 			(tz) =>
-				tz.name.toLowerCase().includes(term) ||
-				tz.offset.toLowerCase().includes(term),
+				tz.ianaZone.toLowerCase().includes(term) ||
+				tz.label.toLowerCase().includes(term) ||
+				tz.offset.toLowerCase().includes(term) ||
+				tz.abbreviation.toLowerCase().includes(term),
 		);
 	});
 
@@ -70,6 +114,16 @@ export class TimezoneDropdownComponent {
 
 	select(tz: TimezoneOption): void {
 		this.timezoneChange.emit(tz);
+		this.close();
+	}
+
+	clearSelection(): void {
+		this.timezoneChange.emit({
+			ianaZone: '',
+			offset: '',
+			label: '',
+			abbreviation: '',
+		});
 		this.close();
 	}
 }

@@ -434,7 +434,7 @@ describe('SidebarDatePickerComponent', () => {
 					am: true,
 					pm: false,
 					timezoneOffset: 'GMT+01:00',
-					timezoneName: 'CET',
+					timezoneName: 'Europe/Berlin',
 				},
 			};
 			fixture.detectChanges();
@@ -610,14 +610,52 @@ describe('SidebarDatePickerComponent', () => {
 
 		it('should update timezone on onTimezoneChange', () => {
 			component.onTimezoneChange({
+				ianaZone: 'Europe/Berlin',
 				offset: 'GMT+01:00',
-				name: 'Central European Standard Time',
+				label: 'Europe / Berlin',
+				abbreviation: 'CET',
 			});
 
 			expect(component._time().timezoneOffset).toBe('GMT+01:00');
-			expect(component._time().timezoneName).toBe(
-				'Central European Standard Time',
-			);
+			expect(component._time().timezoneName).toBe('Europe/Berlin');
+		});
+	});
+
+	describe('timezone abbreviation', () => {
+		it('should derive a DST-aware abbreviation from the IANA zone', () => {
+			host.displayTime = {
+				date: { year: '2025', month: '07', day: '15' },
+				time: {
+					hours: '10',
+					minutes: '00',
+					seconds: '00',
+					am: true,
+					pm: false,
+					timezoneOffset: 'GMT-04:00',
+					timezoneName: 'America/New_York',
+				},
+			};
+			fixture.detectChanges();
+
+			expect(component.startTimezone()).toBe('EDT');
+		});
+
+		it('should fall back to displaying the offset when no IANA zone is set', () => {
+			host.displayTime = {
+				date: { year: '2025', month: '07', day: '15' },
+				time: {
+					hours: '10',
+					minutes: '00',
+					seconds: '00',
+					am: true,
+					pm: false,
+					timezoneOffset: 'GMT+03:00',
+					timezoneName: '',
+				},
+			};
+			fixture.detectChanges();
+
+			expect(component.startTimezone()).toBe('GMT+03:00');
 		});
 	});
 });

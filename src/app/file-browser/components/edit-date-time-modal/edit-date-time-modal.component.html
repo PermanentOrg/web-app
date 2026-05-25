@@ -67,8 +67,9 @@
 
 		<!-- Timezone -->
 		<pr-timezone-dropdown
-			[selectedOffset]="time().timezoneOffset"
-			[selectedName]="time().timezoneName"
+			[selectedZone]="time().timezoneName"
+			[selectedOffsetFallback]="time().timezoneOffset"
+			[referenceDate]="startReferenceDate()"
 			[disabled]="fieldsDisabled()"
 			(timezoneChange)="onTimezoneChange($event, time)"
 		/>
@@ -91,8 +92,9 @@
 
 			<!-- End timezone -->
 			<pr-timezone-dropdown
-				[selectedOffset]="endTime().timezoneOffset"
-				[selectedName]="endTime().timezoneName"
+				[selectedZone]="endTime().timezoneName"
+				[selectedOffsetFallback]="endTime().timezoneOffset"
+				[referenceDate]="endReferenceDate()"
 				(timezoneChange)="onTimezoneChange($event, endTime)"
 			/>
 		}

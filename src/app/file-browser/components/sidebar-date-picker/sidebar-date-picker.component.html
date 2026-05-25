@@ -86,8 +86,9 @@
 				/>
 
 				<pr-timezone-dropdown
-					[selectedOffset]="_time().timezoneOffset"
-					[selectedName]="dropdownTimezoneLabel()"
+					[selectedZone]="_time().timezoneName"
+					[selectedOffsetFallback]="_time().timezoneOffset"
+					[referenceDate]="startReferenceDate()"
 					(timezoneChange)="onTimezoneChange($event)"
 				/>
 

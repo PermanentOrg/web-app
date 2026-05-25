@@ -21,8 +21,8 @@ import {
 	DateTimeModel,
 	DEFAULT_TIME,
 	UNKNOWN_VALUE,
-	TimezoneOption,
 } from '@shared/services/edtf-service/edtf.service';
+import { TimezoneOption } from '@shared/services/timezone-service/timezone.service';
 
 @Component({
 	selector: 'pr-edit-date-time-modal',
@@ -105,6 +105,13 @@ export class EditDateTimeModalComponent implements OnInit {
 	isEdtfValid = computed(() => this.edtfResult().valid);
 	edtfErrorMessage = computed(() => this.edtfResult().errorMessage);
 
+	startReferenceDate = computed(() =>
+		this.buildReferenceDate(this.date(), this.time()),
+	);
+	endReferenceDate = computed(() =>
+		this.buildReferenceDate(this.endDate(), this.endTime()),
+	);
+
 	constructor(
 		public dialogRef: DialogRef<DateTimeModel>,
 		@Inject(DIALOG_DATA) public data: DateTimeModel,
@@ -163,8 +170,28 @@ export class EditDateTimeModalComponent implements OnInit {
 		currentTime.update((t) => ({
 			...t,
 			timezoneOffset: timezoneOption.offset,
-			timezoneName: timezoneOption.name,
+			timezoneName: timezoneOption.ianaZone,
 		}));
+	}
+
+	private buildReferenceDate(date: DateModel, time: TimeModel): Date {
+		const year = parseInt(date?.year ?? '', 10);
+		if (Number.isNaN(year)) return new Date();
+		const month = date.month ? parseInt(date.month, 10) - 1 : 0;
+		const day = date.day ? parseInt(date.day, 10) : 1;
+		const time24 = time?.hours
+			? this.edtfService.parseTimeAs24Hour(time)
+			: null;
+		return new Date(
+			Date.UTC(
+				year,
+				month,
+				day,
+				time24?.hour ?? 0,
+				time24?.minute ?? 0,
+				time24?.second ?? 0,
+			),
+		);
 	}
 
 	onQualifierChange(newDateQualifier: DateQualifier): void {
