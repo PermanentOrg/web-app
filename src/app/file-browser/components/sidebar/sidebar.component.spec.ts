@@ -375,8 +375,6 @@ describe('SidebarComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 
@@ -399,8 +397,6 @@ describe('SidebarComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 
@@ -414,8 +410,6 @@ describe('SidebarComponent', () => {
 					seconds: '00',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			});
 
@@ -440,8 +434,6 @@ describe('SidebarComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 

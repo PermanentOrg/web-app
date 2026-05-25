@@ -80,8 +80,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -103,8 +101,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -125,8 +121,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -147,8 +141,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '00',
 					am: false,
 					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -172,8 +164,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -194,8 +184,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -216,8 +204,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 				endDate: { year: '1990', month: '06', day: '' },
 				endTime: {
@@ -226,8 +212,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -241,6 +225,38 @@ describe('SidebarDatePickerComponent', () => {
 
 			expect(toValue.textContent.trim()).toBe('June 1990');
 		});
+
+		it('should show a browser-default timezone label when time is entered', () => {
+			host.displayTime = {
+				date: { year: '1985', month: '05', day: '20' },
+				time: {
+					hours: '02',
+					minutes: '30',
+					seconds: '00',
+					am: false,
+					pm: true,
+				},
+			};
+			fixture.detectChanges();
+
+			expect(component.startTimezone()).not.toBe('');
+		});
+
+		it('should not show a timezone label when no time is entered', () => {
+			host.displayTime = {
+				date: { year: '1985', month: '05', day: '20' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					am: true,
+					pm: false,
+				},
+			};
+			fixture.detectChanges();
+
+			expect(component.startTimezone()).toBe('');
+		});
 	});
 
 	describe('qualifiers', () => {
@@ -253,8 +269,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -276,8 +290,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -300,8 +312,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -334,8 +344,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -354,8 +362,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -378,8 +384,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 				endDate: { year: '1990', month: '06', day: '' },
 				endTime: {
@@ -388,8 +392,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -410,8 +412,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -433,8 +433,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '00',
 					am: true,
 					pm: false,
-					timezoneOffset: 'GMT+01:00',
-					timezoneName: 'CET',
 				},
 			};
 			fixture.detectChanges();
@@ -459,8 +457,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '00',
 					am: false,
 					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -486,8 +482,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -517,8 +511,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -541,8 +533,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -565,8 +555,6 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					am: true,
 					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
 				},
 			};
 			fixture.detectChanges();
@@ -606,18 +594,6 @@ describe('SidebarDatePickerComponent', () => {
 			expect(component._time().hours).toBe('10');
 			expect(component._time().minutes).toBe('30');
 			expect(component._time().pm).toBe(true);
-		});
-
-		it('should update timezone on onTimezoneChange', () => {
-			component.onTimezoneChange({
-				offset: 'GMT+01:00',
-				name: 'Central European Standard Time',
-			});
-
-			expect(component._time().timezoneOffset).toBe('GMT+01:00');
-			expect(component._time().timezoneName).toBe(
-				'Central European Standard Time',
-			);
 		});
 	});
 });

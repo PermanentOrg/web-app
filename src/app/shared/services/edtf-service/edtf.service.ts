@@ -22,88 +22,13 @@ export enum EdtfPrecision {
 
 export const UNKNOWN_VALUE = 'XXXX-XX-XX';
 
-export const TIMEZONES: TimezoneOption[] = [
-	{ offset: 'GMT-12:00', name: 'International Date Line West' },
-	{ offset: 'GMT-11:00', name: 'Samoa Standard Time' },
-	{ offset: 'GMT-10:00', name: 'Hawaii-Aleutian Standard Time' },
-	{ offset: 'GMT-09:00', name: 'Alaska Standard Time' },
-	{ offset: 'GMT-08:00', name: 'Pacific Standard Time' },
-	{ offset: 'GMT-07:00', name: 'Mountain Standard Time' },
-	{ offset: 'GMT-06:00', name: 'Central Standard Time' },
-	{ offset: 'GMT-05:00', name: 'Eastern Standard Time' },
-	{ offset: 'GMT-04:00', name: 'Atlantic Standard Time' },
-	{ offset: 'GMT-03:30', name: 'Newfoundland Standard Time' },
-	{ offset: 'GMT-03:00', name: 'Argentina Standard Time' },
-	{ offset: 'GMT-02:00', name: 'Mid-Atlantic Standard Time' },
-	{ offset: 'GMT-01:00', name: 'Azores Standard Time' },
-	{ offset: 'GMT+00:00', name: 'Greenwich Mean Time' },
-	{ offset: 'GMT+01:00', name: 'Central European Standard Time' },
-	{ offset: 'GMT+02:00', name: 'Eastern European Standard Time' },
-	{ offset: 'GMT+03:00', name: 'Moscow Standard Time' },
-	{ offset: 'GMT+03:30', name: 'Iran Standard Time' },
-	{ offset: 'GMT+04:00', name: 'Gulf Standard Time' },
-	{ offset: 'GMT+04:30', name: 'Afghanistan Time' },
-	{ offset: 'GMT+05:00', name: 'Pakistan Standard Time' },
-	{ offset: 'GMT+05:30', name: 'India Standard Time' },
-	{ offset: 'GMT+05:45', name: 'Nepal Time' },
-	{ offset: 'GMT+06:00', name: 'Bangladesh Standard Time' },
-	{ offset: 'GMT+07:00', name: 'Indochina Time' },
-	{ offset: 'GMT+08:00', name: 'China Standard Time' },
-	{ offset: 'GMT+09:00', name: 'Japan Standard Time' },
-	{ offset: 'GMT+09:30', name: 'Australian Central Standard Time' },
-	{ offset: 'GMT+10:00', name: 'Australian Eastern Standard Time' },
-	{ offset: 'GMT+11:00', name: 'Solomon Islands Time' },
-	{ offset: 'GMT+12:00', name: 'New Zealand Standard Time' },
-	{ offset: 'GMT+13:00', name: 'Tonga Standard Time' },
-];
-
 export const DEFAULT_TIME: TimeModel = {
 	hours: '',
 	minutes: '',
 	seconds: '',
 	am: true,
 	pm: false,
-	timezoneOffset: '',
-	timezoneName: '',
 };
-
-export const OFFSET_ABBREVIATIONS: Record<string, string> = {
-	'GMT-12:00': 'IDLW',
-	'GMT-11:00': 'SST',
-	'GMT-10:00': 'HST',
-	'GMT-09:00': 'AKST',
-	'GMT-08:00': 'PST',
-	'GMT-07:00': 'MST',
-	'GMT-06:00': 'CST',
-	'GMT-05:00': 'EST',
-	'GMT-04:00': 'AST',
-	'GMT-03:30': 'NST',
-	'GMT-03:00': 'ART',
-	'GMT+00:00': 'GMT',
-	'GMT+01:00': 'CET',
-	'GMT+02:00': 'EET',
-	'GMT+03:00': 'MSK',
-	'GMT+03:30': 'IRST',
-	'GMT+04:00': 'GST',
-	'GMT+04:30': 'AFT',
-	'GMT+05:00': 'PKT',
-	'GMT+05:30': 'IST',
-	'GMT+05:45': 'NPT',
-	'GMT+06:00': 'BST',
-	'GMT+07:00': 'ICT',
-	'GMT+08:00': 'HKT',
-	'GMT+09:00': 'JST',
-	'GMT+09:30': 'ACST',
-	'GMT+10:00': 'AEST',
-	'GMT+11:00': 'SBT',
-	'GMT+12:00': 'NZST',
-	'GMT+13:00': 'TOT',
-};
-
-export interface TimezoneOption {
-	offset: string;
-	name: string;
-}
 
 export interface DateQualifierFlags {
 	approximate: boolean;
@@ -123,8 +48,6 @@ export interface TimeModel {
 	seconds?: string;
 	am?: boolean;
 	pm?: boolean;
-	timezoneOffset?: string;
-	timezoneName?: string;
 }
 
 export interface DateTimeModel {
@@ -139,33 +62,6 @@ export interface DateTimeModel {
 	providedIn: 'root',
 })
 export class EdtfService {
-	static offsetToAbbreviation(offset: string): string {
-		if (OFFSET_ABBREVIATIONS[offset]) {
-			return OFFSET_ABBREVIATIONS[offset];
-		}
-
-		const match = offset.match(/GMT([+-])(\d{2}):(\d{2})/);
-		if (!match) return offset;
-		const sign = match[1];
-		const hrs = parseInt(match[2], 10);
-		const mins = parseInt(match[3], 10);
-		return mins === 0
-			? `UTC${sign}${hrs}`
-			: `UTC${sign}${hrs}:${String(mins).padStart(2, '0')}`;
-	}
-
-	static buildTzSuffix(tzOffset: string): string {
-		if (!tzOffset) return '';
-		const match = tzOffset.match(/GMT([+-])(\d{2}):(\d{2})/);
-		if (!match) return '';
-		const sign = match[1];
-		const hrs = parseInt(match[2], 10);
-		const mins = parseInt(match[3], 10);
-		return mins === 0
-			? `${sign}${hrs}`
-			: `${sign}${hrs}:${String(mins).padStart(2, '0')}`;
-	}
-
 	toDateTimeModel(edtfString: string): DateTimeModel | null {
 		try {
 			if (!edtfString) {
@@ -184,7 +80,6 @@ export class EdtfService {
 				return this.parseInterval(edtfString);
 			}
 
-			const { timezoneOffset, timezoneName } = this.extractTimezone(edtfString);
 			const normalizedString = this.normalizeForParsing(edtfString);
 			const edtfObject = edtf(normalizedString);
 
@@ -192,11 +87,7 @@ export class EdtfService {
 				return null;
 			}
 
-			return this.extDateToDateTimeModel(
-				edtfObject,
-				timezoneOffset,
-				timezoneName,
-			);
+			return this.extDateToDateTimeModel(edtfObject);
 		} catch (error) {
 			throw new Error(this.toHumanReadableError(error));
 		}
@@ -204,9 +95,6 @@ export class EdtfService {
 
 	private parseInterval(edtfString: string): DateTimeModel | null {
 		const [startPart, endPart] = edtfString.split('/');
-
-		const startTz = this.extractTimezone(startPart);
-		const endTz = this.extractTimezone(endPart);
 
 		const normalizedStart =
 			startPart === '..' ? '..' : this.normalizeForParsing(startPart);
@@ -220,7 +108,7 @@ export class EdtfService {
 				return null;
 			}
 
-			return this.intervalToDateTimeModel(edtfObject, startTz, endTz);
+			return this.intervalToDateTimeModel(edtfObject);
 		} catch {
 			return null;
 		}
@@ -279,11 +167,10 @@ export class EdtfService {
 		const timeStr = hasCompleteDate ? this.buildTimeString(time) : '';
 
 		if (timeStr) {
-			const timezone = this.formatTimezoneForEdtf(time?.timezoneOffset || '');
-			result = `${result}${timeStr}${timezone}`;
+			result = `${result}${timeStr}`;
 		}
 
-		// Add qualifiers after the complete date-time string (including timezone)
+		// Add qualifiers after the complete date-time string
 		if (qualifiers?.approximate && qualifiers?.uncertain) {
 			result += '%';
 		} else if (qualifiers?.approximate) {
@@ -293,23 +180,6 @@ export class EdtfService {
 		}
 
 		return result;
-	}
-
-	private formatTimezoneForEdtf(timezoneOffset: string): string {
-		if (!timezoneOffset) return '';
-
-		// Convert GMT+hh:mm or GMT-hh:mm to +hh:mm or -hh:mm
-		const match = timezoneOffset.match(/GMT([+-]\d{2}:\d{2})/);
-		if (match) {
-			return match[1];
-		}
-
-		// If already in +hh:mm or -hh:mm format, return as is
-		if (/^[+-]\d{2}:\d{2}$/.test(timezoneOffset)) {
-			return timezoneOffset;
-		}
-
-		return '';
 	}
 
 	private buildDateString(date: DateModel): string {
@@ -341,33 +211,7 @@ export class EdtfService {
 		return `T${pad(converted.hour)}:${pad(converted.minute)}:${pad(converted.second)}`;
 	}
 
-	private extractTimezone(edtfString: string): {
-		timezoneOffset: string;
-		timezoneName: string;
-	} {
-		if (!edtfString) {
-			return { timezoneOffset: '', timezoneName: '' };
-		}
-
-		const timezoneMatch = edtfString.match(/T[\d:]+([+-]\d{2}:\d{2}|Z)$/);
-
-		if (!timezoneMatch) {
-			return { timezoneOffset: '', timezoneName: '' };
-		}
-
-		const offset = timezoneMatch[1];
-
-		// Normalise to GMT+hh:mm format so it matches the TIMEZONES list
-		const gmtOffset = offset === 'Z' ? 'GMT+00:00' : `GMT${offset}`;
-		const tz = TIMEZONES.find((t) => t.offset === gmtOffset);
-		return { timezoneOffset: gmtOffset, timezoneName: tz?.name || '' };
-	}
-
-	private extDateToDateTimeModel(
-		extDate: EdtfDate,
-		timezoneOffset: string,
-		timezoneName: string,
-	): DateTimeModel {
+	private extDateToDateTimeModel(extDate: EdtfDate): DateTimeModel {
 		const edtfStr = extDate.toEDTF();
 		const precision = extDate.precision;
 
@@ -414,8 +258,6 @@ export class EdtfService {
 				seconds: hasTime ? String(extDate.seconds).padStart(2, '0') : '',
 				am: hasTime ? !isPm : true,
 				pm: hasTime ? isPm : false,
-				timezoneOffset,
-				timezoneName,
 			},
 		};
 	}
@@ -438,11 +280,7 @@ export class EdtfService {
 		return 'The date entered is not valid. Please check the values and try again.';
 	}
 
-	private intervalToDateTimeModel(
-		interval: EdtfInterval,
-		startTz: { timezoneOffset: string; timezoneName: string },
-		endTz: { timezoneOffset: string; timezoneName: string },
-	): DateTimeModel {
+	private intervalToDateTimeModel(interval: EdtfInterval): DateTimeModel {
 		const lower = interval.lower;
 		const upper = interval.upper;
 
@@ -450,22 +288,14 @@ export class EdtfService {
 		const openEnd = typeof upper === 'number' || upper === null;
 
 		const model: DateTimeModel = openStart
-			? { date: { year: '' } as DateModel, time: { ...startTz } as TimeModel }
-			: this.extDateToDateTimeModel(
-					lower,
-					startTz.timezoneOffset,
-					startTz.timezoneName,
-				);
+			? { date: { year: '' } as DateModel, time: {} as TimeModel }
+			: this.extDateToDateTimeModel(lower);
 
 		if (openEnd) {
 			model.endDate = { year: '' } as DateModel;
-			model.endTime = { ...endTz } as TimeModel;
+			model.endTime = {} as TimeModel;
 		} else if (upper) {
-			const upperModel = this.extDateToDateTimeModel(
-				upper,
-				endTz.timezoneOffset,
-				endTz.timezoneName,
-			);
+			const upperModel = this.extDateToDateTimeModel(upper);
 			model.endDate = upperModel.date;
 			model.endTime = upperModel.time;
 		}
@@ -475,6 +305,35 @@ export class EdtfService {
 
 	isNumeric(value: string): boolean {
 		return /^\d+$/.test(value);
+	}
+
+	buildReferenceDate(date: DateModel, time: TimeModel): Date {
+		const year = parseInt(date?.year ?? '', 10);
+		if (Number.isNaN(year)) return new Date();
+		const month = date.month ? parseInt(date.month, 10) - 1 : 0;
+		const day = date.day ? parseInt(date.day, 10) : 1;
+		const time24 = time?.hours ? this.parseTimeAs24Hour(time) : null;
+		return new Date(
+			year,
+			month,
+			day,
+			time24?.hour ?? 0,
+			time24?.minute ?? 0,
+			time24?.second ?? 0,
+		);
+	}
+
+	browserTimezoneAbbreviation(date: DateModel, time: TimeModel): string {
+		if (!time?.hours) return '';
+		try {
+			const referenceDate = this.buildReferenceDate(date, time);
+			const parts = new Intl.DateTimeFormat('en-US', {
+				timeZoneName: 'short',
+			}).formatToParts(referenceDate);
+			return parts.find((part) => part.type === 'timeZoneName')?.value ?? '';
+		} catch {
+			return '';
+		}
 	}
 
 	parseTimeAs24Hour(

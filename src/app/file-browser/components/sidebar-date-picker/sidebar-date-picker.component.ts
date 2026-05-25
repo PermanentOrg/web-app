@@ -21,11 +21,9 @@ import {
 	DateModel,
 	TimeModel,
 	DateQualifierFlags,
-	TimezoneOption,
 } from '@shared/services/edtf-service/edtf.service';
 import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
 import { TimepickerInputComponent } from '@shared/components/timepicker-input/timepicker-input.component';
-import { TimezoneDropdownComponent } from '@shared/components/timezone-dropdown/timezone-dropdown.component';
 
 const EMPTY_DATE: DateModel = { year: '', month: '', day: '' };
 
@@ -35,8 +33,6 @@ const EMPTY_TIME: TimeModel = {
 	seconds: '',
 	am: true,
 	pm: false,
-	timezoneOffset: '',
-	timezoneName: '',
 };
 
 const EMPTY_QUALIFIERS: DateQualifierFlags = {
@@ -48,12 +44,7 @@ const EMPTY_QUALIFIERS: DateQualifierFlags = {
 @Component({
 	selector: 'pr-sidebar-date-picker',
 	standalone: true,
-	imports: [
-		CommonModule,
-		DatepickerInputComponent,
-		TimepickerInputComponent,
-		TimezoneDropdownComponent,
-	],
+	imports: [CommonModule, DatepickerInputComponent, TimepickerInputComponent],
 	templateUrl: './sidebar-date-picker.component.html',
 	styleUrls: ['./sidebar-date-picker.component.scss'],
 })
@@ -66,6 +57,8 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 	@ViewChild('sidebarDatePickerContainer')
 	container?: ElementRef<HTMLElement>;
+
+	constructor(private readonly edtfService: EdtfService) {}
 
 	isDropdownOpen = signal(false);
 
@@ -105,15 +98,9 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		this._time().hours ? (this._time().pm ? Meridian.PM : Meridian.AM) : '',
 	);
 
-	startTimezone = computed(() => {
-		const offset = this._time().timezoneOffset;
-		return offset ? EdtfService.offsetToAbbreviation(offset) : '';
-	});
-
-	dropdownTimezoneLabel = computed(() => {
-		const offset = this._time().timezoneOffset;
-		return offset ? EdtfService.offsetToAbbreviation(offset) : '';
-	});
+	startTimezone = computed(() =>
+		this.edtfService.browserTimezoneAbbreviation(this._date(), this._time()),
+	);
 
 	// End date/time computed properties
 	hasEndDate = computed(() => {
@@ -136,10 +123,12 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 			: '',
 	);
 
-	endTimezone = computed(() => {
-		const offset = this._endTime().timezoneOffset;
-		return offset ? EdtfService.offsetToAbbreviation(offset) : '';
-	});
+	endTimezone = computed(() =>
+		this.edtfService.browserTimezoneAbbreviation(
+			this._endDate(),
+			this._endTime(),
+		),
+	);
 
 	ngOnInit(): void {
 		this.updateFromDisplayTime();
@@ -192,14 +181,6 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		this._time.update((t) => ({
 			...t,
 			...newTime,
-		}));
-	}
-
-	onTimezoneChange(tz: TimezoneOption): void {
-		this._time.update((t) => ({
-			...t,
-			timezoneOffset: tz.offset,
-			timezoneName: tz.name,
 		}));
 	}
 

@@ -85,12 +85,6 @@
 					(timeChange)="onTimeChange($event)"
 				/>
 
-				<pr-timezone-dropdown
-					[selectedOffset]="_time().timezoneOffset"
-					[selectedName]="dropdownTimezoneLabel()"
-					(timezoneChange)="onTimezoneChange($event)"
-				/>
-
 				<button class="pr-clear-btn" (click)="clearAll()">
 					<i class="material-icons">delete_outline</i>
 					<span>Clear date and time</span>

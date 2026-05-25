@@ -65,14 +65,6 @@
 			/>
 		</div>
 
-		<!-- Timezone -->
-		<pr-timezone-dropdown
-			[selectedOffset]="time().timezoneOffset"
-			[selectedName]="time().timezoneName"
-			[disabled]="fieldsDisabled()"
-			(timezoneChange)="onTimezoneChange($event, time)"
-		/>
-
 		<!-- End date range (shown when useDateRange is on) -->
 		@if (useDateRange()) {
 			<div class="pr-range-label">TO</div>
@@ -88,13 +80,6 @@
 					(timeChange)="onTimeChange($event, endTime)"
 				/>
 			</div>
-
-			<!-- End timezone -->
-			<pr-timezone-dropdown
-				[selectedOffset]="endTime().timezoneOffset"
-				[selectedName]="endTime().timezoneName"
-				(timezoneChange)="onTimezoneChange($event, endTime)"
-			/>
 		}
 
 		<!-- Date range toggle + clear -->

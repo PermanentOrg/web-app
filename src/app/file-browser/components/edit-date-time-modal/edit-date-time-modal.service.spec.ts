@@ -21,8 +21,6 @@ describe('EditDateTimeModalService', () => {
 			seconds: '',
 			am: true,
 			pm: false,
-			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
 		},
 	};
 

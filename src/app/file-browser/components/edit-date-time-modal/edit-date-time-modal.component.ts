@@ -11,7 +11,6 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
 import { TimepickerInputComponent } from '@shared/components/timepicker-input/timepicker-input.component';
-import { TimezoneDropdownComponent } from '@shared/components/timezone-dropdown/timezone-dropdown.component';
 import {
 	EdtfService,
 	DateQualifier,
@@ -21,7 +20,6 @@ import {
 	DateTimeModel,
 	DEFAULT_TIME,
 	UNKNOWN_VALUE,
-	TimezoneOption,
 } from '@shared/services/edtf-service/edtf.service';
 
 @Component({
@@ -32,7 +30,6 @@ import {
 		NgbTooltipModule,
 		DatepickerInputComponent,
 		TimepickerInputComponent,
-		TimezoneDropdownComponent,
 	],
 	templateUrl: './edit-date-time-modal.component.html',
 	styleUrls: ['./edit-date-time-modal.component.scss'],
@@ -153,17 +150,6 @@ export class EditDateTimeModalComponent implements OnInit {
 			seconds: timeInputValue.seconds,
 			am: timeInputValue.am,
 			pm: timeInputValue.pm,
-		}));
-	}
-
-	onTimezoneChange(
-		timezoneOption: TimezoneOption,
-		currentTime: WritableSignal<TimeModel>,
-	): void {
-		currentTime.update((t) => ({
-			...t,
-			timezoneOffset: timezoneOption.offset,
-			timezoneName: timezoneOption.name,
 		}));
 	}
 

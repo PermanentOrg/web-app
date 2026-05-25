@@ -123,35 +123,14 @@ describe('EdtfService', () => {
 				expect(result.time.am).toBe(true);
 				expect(result.time.pm).toBe(false);
 			});
-		});
 
-		describe('timezone', () => {
-			it('should extract UTC timezone from Z suffix', () => {
-				const result = service.toDateTimeModel('1985-05-20T14:30:45Z');
-
-				expect(result.time.timezoneOffset).toBe('GMT+00:00');
-				expect(result.time.timezoneName).toBe('Greenwich Mean Time');
-			});
-
-			it('should extract positive timezone offset', () => {
+			it('should parse time with a timezone offset suffix (offset is discarded)', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45+05:30');
 
-				expect(result.time.timezoneOffset).toBe('GMT+05:30');
-				expect(result.time.timezoneName).toBe('India Standard Time');
-			});
-
-			it('should extract negative timezone offset', () => {
-				const result = service.toDateTimeModel('1985-05-20T14:30:45-04:00');
-
-				expect(result.time.timezoneOffset).toBe('GMT-04:00');
-				expect(result.time.timezoneName).toBe('Atlantic Standard Time');
-			});
-
-			it('should have empty timezone when none present', () => {
-				const result = service.toDateTimeModel('1985-05-20');
-
-				expect(result.time.timezoneOffset).toBe('');
-				expect(result.time.timezoneName).toBe('');
+				expect(result.time.hours).toBe('02');
+				expect(result.time.minutes).toBe('30');
+				expect(result.time.seconds).toBe('45');
+				expect(result.time.pm).toBe(true);
 			});
 		});
 
@@ -215,6 +194,15 @@ describe('EdtfService', () => {
 				expect(result.endDate.year).toBe('1990');
 				expect(result.endDate.month).toBe('');
 			});
+
+			it('should parse an interval with timezone suffixes (offsets are discarded)', () => {
+				const result = service.toDateTimeModel(
+					'1985-05-20T10:00:00+05:30/1990-06-15T12:00:00-04:00',
+				);
+
+				expect(result.date.year).toBe('1985');
+				expect(result.endDate.year).toBe('1990');
+			});
 		});
 	});
 
@@ -223,7 +211,7 @@ describe('EdtfService', () => {
 			it('should build year-only EDTF string', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985');
@@ -232,7 +220,7 @@ describe('EdtfService', () => {
 			it('should build year-month EDTF string', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05');
@@ -241,7 +229,7 @@ describe('EdtfService', () => {
 			it('should build full date EDTF string', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05-20');
@@ -258,8 +246,6 @@ describe('EdtfService', () => {
 						seconds: '45',
 						am: false,
 						pm: true,
-						timezoneOffset: '',
-						timezoneName: '',
 					},
 				};
 
@@ -277,8 +263,6 @@ describe('EdtfService', () => {
 						seconds: '00',
 						am: true,
 						pm: false,
-						timezoneOffset: '',
-						timezoneName: '',
 					},
 				};
 
@@ -296,8 +280,6 @@ describe('EdtfService', () => {
 						seconds: '00',
 						am: true,
 						pm: false,
-						timezoneOffset: '',
-						timezoneName: '',
 					},
 				};
 
@@ -315,8 +297,6 @@ describe('EdtfService', () => {
 						seconds: '00',
 						am: false,
 						pm: true,
-						timezoneOffset: '',
-						timezoneName: '',
 					},
 				};
 
@@ -328,17 +308,15 @@ describe('EdtfService', () => {
 			it('should omit time when hours not provided', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 				};
 
 				const result = service.toEdtfDate(model);
 
 				expect(result).not.toContain('T');
 			});
-		});
 
-		describe('timezone output', () => {
-			it('should append timezone offset from GMT format', () => {
+			it('should not append any timezone suffix to the serialized EDTF string', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
 					time: {
@@ -347,44 +325,12 @@ describe('EdtfService', () => {
 						seconds: '45',
 						am: false,
 						pm: true,
-						timezoneOffset: 'GMT+05:30',
-						timezoneName: 'India Standard Time',
 					},
 				};
 
 				const result = service.toEdtfDate(model);
 
-				expect(result).toContain('+05:30');
-			});
-
-			it('should append negative timezone offset from GMT format', () => {
-				const model: DateTimeModel = {
-					date: { year: '1985', month: '05', day: '20' },
-					time: {
-						hours: '09',
-						minutes: '00',
-						seconds: '00',
-						am: true,
-						pm: false,
-						timezoneOffset: 'GMT-04:00',
-						timezoneName: 'Atlantic Standard Time',
-					},
-				};
-
-				const result = service.toEdtfDate(model);
-
-				expect(result).toContain('-04:00');
-			});
-
-			it('should not append timezone when empty', () => {
-				const model: DateTimeModel = {
-					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
-				};
-
-				const result = service.toEdtfDate(model);
-
-				expect(result).toBe('1985-05');
+				expect(result).toBe('1985-05-20T14:30:45');
 			});
 		});
 
@@ -392,7 +338,7 @@ describe('EdtfService', () => {
 			it('should add approximate qualifier', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
@@ -402,7 +348,7 @@ describe('EdtfService', () => {
 			it('should add uncertain qualifier', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					qualifiers: { approximate: false, uncertain: true, unknown: false },
 				};
 
@@ -412,7 +358,7 @@ describe('EdtfService', () => {
 			it('should add combined qualifier', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					qualifiers: { approximate: true, uncertain: true, unknown: false },
 				};
 
@@ -422,7 +368,7 @@ describe('EdtfService', () => {
 			it('should not add qualifier when none set', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					qualifiers: { approximate: false, uncertain: false, unknown: false },
 				};
 
@@ -432,7 +378,7 @@ describe('EdtfService', () => {
 			it('should return XXXX-XX-XX when unknown qualifier is set', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					qualifiers: { approximate: false, uncertain: false, unknown: true },
 				};
 
@@ -444,9 +390,9 @@ describe('EdtfService', () => {
 			it('should build a date range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					endDate: { year: '1990', month: '06' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
+					endTime: {},
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05/1990-06');
@@ -455,9 +401,9 @@ describe('EdtfService', () => {
 			it('should build a full date range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					endDate: { year: '1990', month: '06', day: '15' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
+					endTime: {},
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05-20/1990-06-15');
@@ -466,9 +412,9 @@ describe('EdtfService', () => {
 			it('should build a year-only range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					endDate: { year: '1990' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
+					endTime: {},
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985/1990');
@@ -477,9 +423,9 @@ describe('EdtfService', () => {
 			it('should apply approximate qualifier to both dates in a range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					endDate: { year: '1990', month: '06' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
+					endTime: {},
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
@@ -489,9 +435,9 @@ describe('EdtfService', () => {
 			it('should apply uncertain qualifier to both dates in a range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					endDate: { year: '1990', month: '06' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
+					endTime: {},
 					qualifiers: { approximate: false, uncertain: true, unknown: false },
 				};
 
@@ -501,9 +447,9 @@ describe('EdtfService', () => {
 			it('should apply combined qualifier to both dates in a range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					endDate: { year: '1990', month: '06' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
+					endTime: {},
 					qualifiers: { approximate: true, uncertain: true, unknown: false },
 				};
 
@@ -513,9 +459,9 @@ describe('EdtfService', () => {
 			it('should apply qualifier only to the start when the end is open', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					endDate: { year: '', month: '', day: '' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
+					endTime: {},
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
@@ -525,25 +471,14 @@ describe('EdtfService', () => {
 			it('should apply qualifier to both dates with mixed precision', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 					endDate: { year: '1990', month: '06' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
+					endTime: {},
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985~/1990-06~');
 			});
-		});
-	});
-
-	describe('interval with different timezones', () => {
-		it('should parse different timezones for start and end', () => {
-			const result = service.toDateTimeModel(
-				'1985-05-20T10:00:00+05:30/1990-06-15T12:00:00-04:00',
-			);
-
-			expect(result.time.timezoneOffset).toBe('GMT+05:30');
-			expect(result.endTime.timezoneOffset).toBe('GMT-04:00');
 		});
 	});
 
@@ -570,57 +505,13 @@ describe('EdtfService', () => {
 			it('should throw a generic human-readable error for invalid dates', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '99' },
-					time: { timezoneOffset: '', timezoneName: '' },
+					time: {},
 				};
 
 				expect(() => service.toEdtfDate(model)).toThrowError(
 					/Please check the values/,
 				);
 			});
-		});
-	});
-
-	describe('offsetToAbbreviation', () => {
-		it('should return known abbreviation for mapped offset', () => {
-			expect(EdtfService.offsetToAbbreviation('GMT-05:00')).toBe('EST');
-		});
-
-		it('should return known abbreviation for positive offset', () => {
-			expect(EdtfService.offsetToAbbreviation('GMT+09:00')).toBe('JST');
-		});
-
-		it('should return UTC format for unmapped whole-hour offset', () => {
-			expect(EdtfService.offsetToAbbreviation('GMT-02:00')).toBe('UTC-2');
-		});
-
-		it('should return UTC format with minutes for unmapped offset with minutes', () => {
-			expect(EdtfService.offsetToAbbreviation('GMT+06:30')).toBe('UTC+6:30');
-		});
-
-		it('should return the input string for non-GMT format', () => {
-			expect(EdtfService.offsetToAbbreviation('invalid')).toBe('invalid');
-		});
-	});
-
-	describe('buildTzSuffix', () => {
-		it('should return empty string for empty input', () => {
-			expect(EdtfService.buildTzSuffix('')).toBe('');
-		});
-
-		it('should return suffix for whole-hour positive offset', () => {
-			expect(EdtfService.buildTzSuffix('GMT+05:00')).toBe('+5');
-		});
-
-		it('should return suffix for whole-hour negative offset', () => {
-			expect(EdtfService.buildTzSuffix('GMT-08:00')).toBe('-8');
-		});
-
-		it('should return suffix with minutes for non-whole-hour offset', () => {
-			expect(EdtfService.buildTzSuffix('GMT+05:30')).toBe('+5:30');
-		});
-
-		it('should return empty string for non-GMT format', () => {
-			expect(EdtfService.buildTzSuffix('invalid')).toBe('');
 		});
 	});
 

@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TIMEZONES } from '@shared/services/edtf-service/edtf.service';
-import { TimezoneDropdownComponent } from './timezone-dropdown.component';
+import {
+	TimezoneDropdownComponent,
+	TimezoneOption,
+} from './timezone-dropdown.component';
 
 describe('TimezoneDropdownComponent', () => {
 	let component: TimezoneDropdownComponent;
@@ -18,6 +20,13 @@ describe('TimezoneDropdownComponent', () => {
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
+	});
+
+	it('should source timezones from the IANA browser list', () => {
+		expect(component.timezones.length).toBeGreaterThan(0);
+		expect(
+			component.timezones.every((tz) => typeof tz.ianaZone === 'string'),
+		).toBeTrue();
 	});
 
 	// --- Toggle behaviour ---
@@ -64,25 +73,34 @@ describe('TimezoneDropdownComponent', () => {
 	it('should return all timezones when filter is empty', () => {
 		component.filter.set('');
 
-		expect(component.filteredTimezones().length).toBe(TIMEZONES.length);
+		expect(component.filteredTimezones().length).toBe(
+			component.timezones.length,
+		);
 	});
 
-	it('should filter timezones by name', () => {
+	it('should filter timezones by IANA name', () => {
 		component.filter.set('pacific');
 		const filtered = component.filteredTimezones();
 
 		expect(filtered.length).toBeGreaterThan(0);
 		expect(
-			filtered.every((tz) => tz.name.toLowerCase().includes('pacific')),
+			filtered.every(
+				(tz) =>
+					tz.ianaZone.toLowerCase().includes('pacific') ||
+					tz.label.toLowerCase().includes('pacific') ||
+					tz.abbreviation.toLowerCase().includes('pacific'),
+			),
 		).toBeTrue();
 	});
 
 	it('should filter timezones by offset', () => {
-		component.filter.set('GMT+09');
+		component.filter.set('gmt+09');
 		const filtered = component.filteredTimezones();
 
 		expect(filtered.length).toBeGreaterThan(0);
-		expect(filtered.every((tz) => tz.offset.includes('GMT+09'))).toBeTrue();
+		expect(
+			filtered.every((tz) => tz.offset.toLowerCase().includes('gmt+09')),
+		).toBeTrue();
 	});
 
 	// --- Selection ---
@@ -91,7 +109,7 @@ describe('TimezoneDropdownComponent', () => {
 		spyOn(component.timezoneChange, 'emit');
 		component.toggle();
 
-		const tz = { offset: 'GMT-05:00', name: 'Eastern Standard Time' };
+		const tz: TimezoneOption = component.timezones[0];
 		component.select(tz);
 
 		expect(component.timezoneChange.emit).toHaveBeenCalledWith(tz);
@@ -99,13 +117,10 @@ describe('TimezoneDropdownComponent', () => {
 		expect(component.filter()).toBe('');
 	});
 
-	it('should emit empty timezone for placeholder selection', () => {
+	it('should emit null for placeholder selection', () => {
 		spyOn(component.timezoneChange, 'emit');
-		component.select({ offset: '', name: '' });
+		component.select(null);
 
-		expect(component.timezoneChange.emit).toHaveBeenCalledWith({
-			offset: '',
-			name: '',
-		});
+		expect(component.timezoneChange.emit).toHaveBeenCalledWith(null);
 	});
 });

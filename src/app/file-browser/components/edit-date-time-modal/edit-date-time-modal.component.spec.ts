@@ -24,8 +24,6 @@ describe('EditDateTimeModalComponent', () => {
 			seconds: '',
 			am: true,
 			pm: false,
-			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
 		},
 	};
 
@@ -63,10 +61,6 @@ describe('EditDateTimeModalComponent', () => {
 		expect(component.qualifiers().approximate).toBeTrue();
 		expect(component.qualifiers().uncertain).toBeFalse();
 		expect(component.qualifiers().unknown).toBeFalse();
-		expect(component.time().timezoneOffset).toBe('GMT+01:00');
-		expect(component.time().timezoneName).toBe(
-			'Central European Standard Time',
-		);
 
 		expect(component.useDateRange()).toBeFalse();
 	});
@@ -92,8 +86,6 @@ describe('EditDateTimeModalComponent', () => {
 				seconds: '',
 				am: true,
 				pm: false,
-				timezoneOffset: '',
-				timezoneName: '',
 			},
 		};
 
@@ -127,48 +119,6 @@ describe('EditDateTimeModalComponent', () => {
 
 		expect(component.endTime().hours).toBe('06');
 		expect(component.endTime().minutes).toBe('45');
-	});
-
-	it('should preserve timezone when updating time via onTimeChange', () => {
-		component.time.set({
-			hours: '10',
-			minutes: '00',
-			seconds: '00',
-			am: true,
-			pm: false,
-			timezoneOffset: 'GMT-05:00',
-			timezoneName: 'Eastern Standard Time',
-		});
-		component.onTimeChange(
-			{ hours: '11', minutes: '30', seconds: '00', am: true, pm: false },
-			component.time,
-		);
-
-		expect(component.time().hours).toBe('11');
-		expect(component.time().timezoneOffset).toBe('GMT-05:00');
-		expect(component.time().timezoneName).toBe('Eastern Standard Time');
-	});
-
-	// --- Timezone updates via onTimezoneChange ---
-
-	it('should update timezone on time signal via onTimezoneChange', () => {
-		component.onTimezoneChange(
-			{ offset: 'GMT-05:00', name: 'Eastern Standard Time' },
-			component.time,
-		);
-
-		expect(component.time().timezoneOffset).toBe('GMT-05:00');
-		expect(component.time().timezoneName).toBe('Eastern Standard Time');
-	});
-
-	it('should update timezone on endTime signal via onTimezoneChange', () => {
-		component.onTimezoneChange(
-			{ offset: 'GMT+09:00', name: 'Japan Standard Time' },
-			component.endTime,
-		);
-
-		expect(component.endTime().timezoneOffset).toBe('GMT+09:00');
-		expect(component.endTime().timezoneName).toBe('Japan Standard Time');
 	});
 
 	// --- Date range toggle ---
@@ -290,8 +240,6 @@ describe('EditDateTimeModalComponent', () => {
 				seconds: '',
 				am: true,
 				pm: false,
-				timezoneOffset: '',
-				timezoneName: '',
 			},
 		};
 
@@ -374,7 +322,7 @@ describe('EditDateTimeModalComponent', () => {
 
 	// --- EDTF computed ---
 
-	it('should compute EDTF value from date and time', () => {
+	it('should compute EDTF value from date and time without timezone suffix', () => {
 		component.date.set({ year: '2026', month: '02', day: '18' });
 		component.time.set({
 			hours: '10',
@@ -382,8 +330,6 @@ describe('EditDateTimeModalComponent', () => {
 			seconds: '00',
 			am: true,
 			pm: false,
-			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
 		});
 		component.qualifiers.set({
 			approximate: false,
@@ -391,7 +337,7 @@ describe('EditDateTimeModalComponent', () => {
 			unknown: false,
 		});
 
-		expect(component.edtfValue()).toBe('2026-02-18T10:30:00+01:00');
+		expect(component.edtfValue()).toBe('2026-02-18T10:30:00');
 	});
 
 	it('should compute EDTF with date only', () => {
@@ -402,8 +348,6 @@ describe('EditDateTimeModalComponent', () => {
 			seconds: '',
 			am: true,
 			pm: false,
-			timezoneOffset: 'GMT+01:00',
-			timezoneName: 'Central European Standard Time',
 		});
 		component.qualifiers.set({
 			approximate: false,
@@ -422,8 +366,6 @@ describe('EditDateTimeModalComponent', () => {
 			seconds: '00',
 			am: false,
 			pm: true,
-			timezoneOffset: '',
-			timezoneName: '',
 		});
 		component.qualifiers.set({
 			approximate: false,
@@ -444,8 +386,6 @@ describe('EditDateTimeModalComponent', () => {
 			seconds: '',
 			am: true,
 			pm: false,
-			timezoneOffset: '',
-			timezoneName: '',
 		});
 		component.qualifiers.set({
 			approximate: false,
