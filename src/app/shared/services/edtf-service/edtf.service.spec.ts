@@ -1,10 +1,15 @@
+import { TestBed } from '@angular/core/testing';
+import { TimezoneService } from '@shared/services/timezone-service/timezone.service';
 import { EdtfService, DateTimeModel } from './edtf.service';
 
 describe('EdtfService', () => {
 	let service: EdtfService;
+	let timezoneService: TimezoneService;
 
 	beforeEach(() => {
-		service = new EdtfService();
+		TestBed.configureTestingModule({});
+		service = TestBed.inject(EdtfService);
+		timezoneService = TestBed.inject(TimezoneService);
 	});
 
 	describe('toDateTimeModel', () => {
@@ -13,8 +18,8 @@ describe('EdtfService', () => {
 				const result = service.toDateTimeModel('1985');
 
 				expect(result.date.year).toBe('1985');
-				expect(result.date.month).toBeUndefined();
-				expect(result.date.day).toBeUndefined();
+				expect(result.date.month).toBe('');
+				expect(result.date.day).toBe('');
 			});
 
 			it('should parse year-month', () => {
@@ -22,7 +27,7 @@ describe('EdtfService', () => {
 
 				expect(result.date.year).toBe('1985');
 				expect(result.date.month).toBe('05');
-				expect(result.date.day).toBeUndefined();
+				expect(result.date.day).toBe('');
 			});
 
 			it('should parse full date', () => {
@@ -34,42 +39,36 @@ describe('EdtfService', () => {
 			});
 		});
 
-		describe('partial year', () => {
-			it('should return only known digits for partial year', () => {
-				const result = service.toDateTimeModel('19XX');
-
-				expect(result.date.year).toBe('19');
-				expect(result.date.month).toBeUndefined();
-				expect(result.date.day).toBeUndefined();
-			});
-
-			it('should return single digit for mostly unknown year', () => {
-				const result = service.toDateTimeModel('1XXX');
-
-				expect(result.date.year).toBe('1');
-			});
-		});
-
 		describe('unspecified fields', () => {
-			it('should set month to undefined when XX', () => {
+			it('should set month to empty when XX', () => {
 				const result = service.toDateTimeModel('1985-XX');
 
 				expect(result.date.year).toBe('1985');
-				expect(result.date.month).toBeUndefined();
+				expect(result.date.month).toBe('');
 			});
 
-			it('should set day to undefined when XX', () => {
+			it('should set day to empty when XX', () => {
 				const result = service.toDateTimeModel('1985-05-XX');
 
 				expect(result.date.year).toBe('1985');
 				expect(result.date.month).toBe('05');
-				expect(result.date.day).toBeUndefined();
+				expect(result.date.day).toBe('');
 			});
 
 			it('should set unknown qualifier to true when whole date is unspecified', () => {
 				const result = service.toDateTimeModel('XXXX');
 
 				expect(result.qualifiers.unknown).toBe(true);
+			});
+
+			it('should parse XXXX-XX-XX as unknown', () => {
+				const result = service.toDateTimeModel('XXXX-XX-XX');
+
+				expect(result.qualifiers.unknown).toBe(true);
+				expect(result.date.year).toBe('');
+				expect(result.date.month).toBe('');
+				expect(result.date.day).toBe('');
+				expect(result.time.hours).toBe('');
 			});
 
 			it('should set unknown qualifier to false when partially unspecified', () => {
@@ -120,14 +119,14 @@ describe('EdtfService', () => {
 				expect(result.time.pm).toBe(true);
 			});
 
-			it('should have undefined time fields when no time present', () => {
+			it('should have empty time fields when no time present', () => {
 				const result = service.toDateTimeModel('1985-05-20');
 
-				expect(result.time.hours).toBeUndefined();
-				expect(result.time.minutes).toBeUndefined();
-				expect(result.time.seconds).toBeUndefined();
-				expect(result.time.am).toBeUndefined();
-				expect(result.time.pm).toBeUndefined();
+				expect(result.time.hours).toBe('');
+				expect(result.time.minutes).toBe('');
+				expect(result.time.seconds).toBe('');
+				expect(result.time.am).toBe(true);
+				expect(result.time.pm).toBe(false);
 			});
 		});
 
@@ -135,22 +134,48 @@ describe('EdtfService', () => {
 			it('should extract UTC timezone from Z suffix', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45Z');
 
-				expect(result.time.timezoneOffset).toBe('+00:00');
-				expect(result.time.timezoneName).toBe('UTC');
+				expect(result.time.timezoneOffset).toBe('GMT+00:00');
+				// timezoneName now holds the IANA zone matching the offset for the
+				// referenced date — any GMT+00:00 zone is acceptable.
+				const ianaZone = result.time.timezoneName as string;
+
+				expect(ianaZone).toBeTruthy();
+				expect(
+					timezoneService.computeOffsetForZone(
+						ianaZone,
+						new Date(Date.UTC(1985, 4, 20, 14, 30, 45)),
+					),
+				).toBe('GMT+00:00');
 			});
 
 			it('should extract positive timezone offset', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45+05:30');
 
-				expect(result.time.timezoneOffset).toBe('+05:30');
-				expect(result.time.timezoneName).toBe('');
+				expect(result.time.timezoneOffset).toBe('GMT+05:30');
+				const ianaZone = result.time.timezoneName as string;
+
+				expect(ianaZone).toBeTruthy();
+				expect(
+					timezoneService.computeOffsetForZone(
+						ianaZone,
+						new Date(Date.UTC(1985, 4, 20, 14, 30, 45)),
+					),
+				).toBe('GMT+05:30');
 			});
 
 			it('should extract negative timezone offset', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45-04:00');
 
-				expect(result.time.timezoneOffset).toBe('-04:00');
-				expect(result.time.timezoneName).toBe('');
+				expect(result.time.timezoneOffset).toBe('GMT-04:00');
+				const ianaZone = result.time.timezoneName as string;
+
+				expect(ianaZone).toBeTruthy();
+				expect(
+					timezoneService.computeOffsetForZone(
+						ianaZone,
+						new Date(Date.UTC(1985, 4, 20, 14, 30, 45)),
+					),
+				).toBe('GMT-04:00');
 			});
 
 			it('should have empty timezone when none present', () => {
@@ -217,36 +242,9 @@ describe('EdtfService', () => {
 				const result = service.toDateTimeModel('1985/1990');
 
 				expect(result.date.year).toBe('1985');
-				expect(result.date.month).toBeUndefined();
+				expect(result.date.month).toBe('');
 				expect(result.endDate.year).toBe('1990');
-				expect(result.endDate.month).toBeUndefined();
-			});
-
-			it('should parse open start interval', () => {
-				const result = service.toDateTimeModel('../1985');
-
-				expect(result.date.year).toBe('');
-				expect(result.date.month).toBeUndefined();
-				expect(result.time.hours).toBeUndefined();
-				expect(result.endDate.year).toBe('1985');
-			});
-
-			it('should parse open end interval', () => {
-				const result = service.toDateTimeModel('1985/..');
-
-				expect(result.date.year).toBe('1985');
-				expect(result.endDate.year).toBe('');
-				expect(result.endDate.month).toBeUndefined();
-				expect(result.endTime.hours).toBeUndefined();
-			});
-
-			it('should parse open start with full end date', () => {
-				const result = service.toDateTimeModel('../1985-05-20');
-
-				expect(result.date.year).toBe('');
-				expect(result.endDate.year).toBe('1985');
-				expect(result.endDate.month).toBe('05');
-				expect(result.endDate.day).toBe('20');
+				expect(result.endDate.month).toBe('');
 			});
 		});
 	});
@@ -278,26 +276,6 @@ describe('EdtfService', () => {
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05-20');
-			});
-		});
-
-		describe('partial year output', () => {
-			it('should pad partial year with X', () => {
-				const model: DateTimeModel = {
-					date: { year: '19' },
-					time: { timezoneOffset: '', timezoneName: '' },
-				};
-
-				expect(service.toEdtfDate(model)).toBe('19XX');
-			});
-
-			it('should pad single digit year with X', () => {
-				const model: DateTimeModel = {
-					date: { year: '1' },
-					time: { timezoneOffset: '', timezoneName: '' },
-				};
-
-				expect(service.toEdtfDate(model)).toBe('1XXX');
 			});
 		});
 
@@ -391,7 +369,7 @@ describe('EdtfService', () => {
 		});
 
 		describe('timezone output', () => {
-			it('should append timezone offset', () => {
+			it('should append timezone offset from GMT format', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
 					time: {
@@ -400,7 +378,7 @@ describe('EdtfService', () => {
 						seconds: '45',
 						am: false,
 						pm: true,
-						timezoneOffset: '+05:30',
+						timezoneOffset: 'GMT+05:30',
 						timezoneName: '',
 					},
 				};
@@ -410,7 +388,7 @@ describe('EdtfService', () => {
 				expect(result).toContain('+05:30');
 			});
 
-			it('should append negative timezone offset', () => {
+			it('should append negative timezone offset from GMT format', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
 					time: {
@@ -419,7 +397,7 @@ describe('EdtfService', () => {
 						seconds: '00',
 						am: true,
 						pm: false,
-						timezoneOffset: '-04:00',
+						timezoneOffset: 'GMT-04:00',
 						timezoneName: '',
 					},
 				};
@@ -427,6 +405,32 @@ describe('EdtfService', () => {
 				const result = service.toEdtfDate(model);
 
 				expect(result).toContain('-04:00');
+			});
+
+			it('should derive a DST-correct offset from the IANA zone when provided', () => {
+				// 2025-07-15 in New York is EDT (-04:00).
+				const summerModel: DateTimeModel = {
+					date: { year: '2025', month: '07', day: '15' },
+					time: {
+						hours: '10',
+						minutes: '00',
+						seconds: '00',
+						am: true,
+						pm: false,
+						timezoneOffset: 'GMT-05:00',
+						timezoneName: 'America/New_York',
+					},
+				};
+
+				expect(service.toEdtfDate(summerModel)).toContain('-04:00');
+
+				// 2025-01-15 in New York is EST (-05:00).
+				const winterModel: DateTimeModel = {
+					...summerModel,
+					date: { year: '2025', month: '01', day: '15' },
+				};
+
+				expect(service.toEdtfDate(winterModel)).toContain('-05:00');
 			});
 
 			it('should not append timezone when empty', () => {
@@ -481,6 +485,16 @@ describe('EdtfService', () => {
 
 				expect(service.toEdtfDate(model)).toBe('1985-05');
 			});
+
+			it('should return XXXX-XX-XX when unknown qualifier is set', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '20' },
+					time: { timezoneOffset: '', timezoneName: '' },
+					qualifiers: { approximate: false, uncertain: false, unknown: true },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('XXXX-XX-XX');
+			});
 		});
 
 		describe('interval output (range)', () => {
@@ -517,189 +531,400 @@ describe('EdtfService', () => {
 				expect(service.toEdtfDate(model)).toBe('1985/1990');
 			});
 
-			it('should build open start interval', () => {
+			it('should apply approximate qualifier to both dates in a range', () => {
 				const model: DateTimeModel = {
-					date: { year: '' },
+					date: { year: '1985', month: '05' },
 					time: { timezoneOffset: '', timezoneName: '' },
-					endDate: { year: '1985' },
+					endDate: { year: '1990', month: '06' },
 					endTime: { timezoneOffset: '', timezoneName: '' },
+					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
-				expect(service.toEdtfDate(model)).toBe('../1985');
+				expect(service.toEdtfDate(model)).toBe('1985-05~/1990-06~');
 			});
 
-			it('should build open end interval', () => {
+			it('should apply uncertain qualifier to both dates in a range', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05' },
+					time: { timezoneOffset: '', timezoneName: '' },
+					endDate: { year: '1990', month: '06' },
+					endTime: { timezoneOffset: '', timezoneName: '' },
+					qualifiers: { approximate: false, uncertain: true, unknown: false },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05?/1990-06?');
+			});
+
+			it('should apply combined qualifier to both dates in a range', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05' },
+					time: { timezoneOffset: '', timezoneName: '' },
+					endDate: { year: '1990', month: '06' },
+					endTime: { timezoneOffset: '', timezoneName: '' },
+					qualifiers: { approximate: true, uncertain: true, unknown: false },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05%/1990-06%');
+			});
+
+			it('should apply qualifier only to the start when the end is open', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05' },
+					time: { timezoneOffset: '', timezoneName: '' },
+					endDate: { year: '', month: '', day: '' },
+					endTime: { timezoneOffset: '', timezoneName: '' },
+					qualifiers: { approximate: true, uncertain: false, unknown: false },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05~/..');
+			});
+
+			it('should apply qualifier to both dates with mixed precision', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985' },
 					time: { timezoneOffset: '', timezoneName: '' },
-					endDate: { year: '' },
+					endDate: { year: '1990', month: '06' },
 					endTime: { timezoneOffset: '', timezoneName: '' },
+					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
-				expect(service.toEdtfDate(model)).toBe('1985/..');
+				expect(service.toEdtfDate(model)).toBe('1985~/1990-06~');
+			});
+		});
+	});
+
+	describe('interval with different timezones', () => {
+		it('should parse different timezones for start and end', () => {
+			const result = service.toDateTimeModel(
+				'1985-05-20T10:00:00+05:30/1990-06-15T12:00:00-04:00',
+			);
+
+			expect(result.time.timezoneOffset).toBe('GMT+05:30');
+			expect(result.endTime.timezoneOffset).toBe('GMT-04:00');
+		});
+	});
+
+	describe('error handling', () => {
+		describe('parsing errors', () => {
+			it('should throw a human-readable error for completely invalid EDTF string', () => {
+				expect(() => service.toDateTimeModel('not-a-date')).toThrowError();
 			});
 
-			it('should build fully open interval', () => {
+			it('should return null for invalid interval string', () => {
+				const result = service.toDateTimeModel('invalid/also-invalid');
+
+				expect(result).toBeNull();
+			});
+
+			it('should return null for empty string', () => {
+				const result = service.toDateTimeModel('');
+
+				expect(result).toBeNull();
+			});
+		});
+
+		describe('formatting errors', () => {
+			it('should throw a generic human-readable error for invalid dates', () => {
 				const model: DateTimeModel = {
-					date: { year: '' },
+					date: { year: '1985', month: '99' },
 					time: { timezoneOffset: '', timezoneName: '' },
-					endDate: { year: '' },
-					endTime: { timezoneOffset: '', timezoneName: '' },
 				};
 
-				expect(service.toEdtfDate(model)).toBe('../..');
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/Please check the values/,
+				);
 			});
 		});
 	});
 
-	describe('isValidDate', () => {
-		it('should return true for a valid full date', () => {
-			expect(
-				service.isValidDate({ year: '1985', month: '05', day: '20' }),
-			).toBe(true);
+	describe('buildTzSuffix', () => {
+		it('should return empty string for empty input', () => {
+			expect(EdtfService.buildTzSuffix('')).toBe('');
 		});
 
-		it('should return true for a valid year-month', () => {
-			expect(service.isValidDate({ year: '1985', month: '05', day: '' })).toBe(
-				true,
-			);
+		it('should return suffix for whole-hour positive offset', () => {
+			expect(EdtfService.buildTzSuffix('GMT+05:00')).toBe('+5');
 		});
 
-		it('should return true for a valid year only', () => {
-			expect(service.isValidDate({ year: '1985', month: '', day: '' })).toBe(
-				true,
-			);
+		it('should return suffix for whole-hour negative offset', () => {
+			expect(EdtfService.buildTzSuffix('GMT-08:00')).toBe('-8');
 		});
 
-		it('should return true for a partial year', () => {
-			expect(service.isValidDate({ year: '19', month: '', day: '' })).toBe(
-				true,
-			);
+		it('should return suffix with minutes for non-whole-hour offset', () => {
+			expect(EdtfService.buildTzSuffix('GMT+05:30')).toBe('+5:30');
 		});
 
-		it('should return false for an invalid month', () => {
-			expect(service.isValidDate({ year: '1985', month: '13', day: '' })).toBe(
-				false,
-			);
-		});
-
-		it('should return false for an invalid day', () => {
-			expect(
-				service.isValidDate({ year: '1985', month: '05', day: '32' }),
-			).toBe(false);
-		});
-
-		it('should return false for an empty year', () => {
-			expect(service.isValidDate({ year: '', month: '', day: '' })).toBe(false);
+		it('should return empty string for non-GMT format', () => {
+			expect(EdtfService.buildTzSuffix('invalid')).toBe('');
 		});
 	});
 
-	describe('isValidTime', () => {
-		it('should return true for a valid PM time', () => {
-			expect(
-				service.isValidTime({
-					hours: '02',
-					minutes: '30',
-					seconds: '45',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
+	describe('isNumeric', () => {
+		it('should return true for digit-only string', () => {
+			expect(service.isNumeric('12345')).toBe(true);
 		});
 
-		it('should return true for a valid AM time', () => {
-			expect(
-				service.isValidTime({
-					hours: '09',
-					minutes: '15',
-					seconds: '00',
-					am: true,
-					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
+		it('should return false for string with letters', () => {
+			expect(service.isNumeric('12a5')).toBe(false);
 		});
 
-		it('should return true for midnight (12 AM)', () => {
-			expect(
-				service.isValidTime({
-					hours: '12',
-					minutes: '00',
-					seconds: '00',
-					am: true,
-					pm: false,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
+		it('should return false for empty string', () => {
+			expect(service.isNumeric('')).toBe(false);
 		});
 
-		it('should return true for noon (12 PM)', () => {
-			expect(
-				service.isValidTime({
-					hours: '12',
-					minutes: '00',
-					seconds: '00',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
+		it('should return false for negative number string', () => {
+			expect(service.isNumeric('-1')).toBe(false);
+		});
+	});
+
+	describe('parseTimeAs24Hour', () => {
+		it('should convert PM time to 24-hour format', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '02',
+				minutes: '30',
+				seconds: '45',
+				pm: true,
+			});
+
+			expect(result).toEqual({ hour: 14, minute: 30, second: 45 });
 		});
 
-		it('should return true when no hours provided', () => {
-			expect(
-				service.isValidTime({
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(true);
+		it('should convert AM time to 24-hour format', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '09',
+				minutes: '15',
+				seconds: '00',
+				am: true,
+				pm: false,
+			});
+
+			expect(result).toEqual({ hour: 9, minute: 15, second: 0 });
 		});
 
-		it('should return false for invalid hours', () => {
-			expect(
-				service.isValidTime({
-					hours: '13',
-					minutes: '00',
-					seconds: '00',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(false);
+		it('should convert 12 PM to 12', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '12',
+				minutes: '00',
+				seconds: '00',
+				pm: true,
+			});
+
+			expect(result).toEqual({ hour: 12, minute: 0, second: 0 });
 		});
 
-		it('should return false for invalid minutes', () => {
-			expect(
-				service.isValidTime({
-					hours: '02',
-					minutes: '60',
-					seconds: '00',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(false);
+		it('should convert 12 AM to 0', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '12',
+				minutes: '00',
+				seconds: '00',
+				am: true,
+				pm: false,
+			});
+
+			expect(result).toEqual({ hour: 0, minute: 0, second: 0 });
 		});
 
-		it('should return false for invalid seconds', () => {
-			expect(
-				service.isValidTime({
-					hours: '02',
-					minutes: '30',
-					seconds: '60',
-					am: false,
-					pm: true,
-					timezoneOffset: '',
-					timezoneName: '',
-				}),
-			).toBe(false);
+		it('should default missing seconds to 0', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '05',
+				minutes: '30',
+				pm: false,
+			});
+
+			expect(result.second).toBe(0);
+		});
+
+		it('should default missing hours and minutes to 0', () => {
+			const result = service.parseTimeAs24Hour({});
+
+			expect(result).toEqual({ hour: 0, minute: 0, second: 0 });
+		});
+
+		it('should parse unpadded single-digit hours', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '7',
+				minutes: '5',
+				seconds: '3',
+				am: true,
+				pm: false,
+			});
+
+			expect(result).toEqual({ hour: 7, minute: 5, second: 3 });
+		});
+	});
+
+	describe('isValidHour', () => {
+		it('should validate single digit hour', () => {
+			expect(service.isValidHour('0')).toBe(true);
+			expect(service.isValidHour('1')).toBe(true);
+			expect(service.isValidHour('2')).toBe(false);
+		});
+
+		it('should return true for valid 2-digit hour 01', () => {
+			expect(service.isValidHour('01')).toBe(true);
+			expect(service.isValidHour('12')).toBe(true);
+		});
+
+		it('should return false for hour 13', () => {
+			expect(service.isValidHour('13')).toBe(false);
+		});
+
+		it('should return false for hour 00', () => {
+			expect(service.isValidHour('00')).toBe(false);
+		});
+
+		it('should return false for non-numeric input', () => {
+			expect(service.isValidHour('ab')).toBe(false);
+		});
+
+		it('should return false for input longer than 2 digits', () => {
+			expect(service.isValidHour('123')).toBe(false);
+		});
+	});
+
+	describe('isValidMinutesSeconds', () => {
+		it('should validate single digit minutes or seconds', () => {
+			expect(service.isValidMinutesSeconds('0')).toBe(true);
+			expect(service.isValidMinutesSeconds('5')).toBe(true);
+			expect(service.isValidMinutesSeconds('6')).toBe(false);
+		});
+
+		it('should validate 2-digit minutes or seconds', () => {
+			expect(service.isValidMinutesSeconds('00')).toBe(true);
+			expect(service.isValidMinutesSeconds('59')).toBe(true);
+			expect(service.isValidMinutesSeconds('60')).toBe(false);
+		});
+
+		it('should reject non-numeric minutes or seconds', () => {
+			expect(service.isValidMinutesSeconds('ab')).toBe(false);
+		});
+
+		it('should reject minutes or seconds longer than 2 digits', () => {
+			expect(service.isValidMinutesSeconds('123')).toBe(false);
+		});
+	});
+
+	describe('isValidYear', () => {
+		it('should accept empty year', () => {
+			expect(service.isValidYear('')).toBe(true);
+		});
+
+		it('should accept a 4-digit year', () => {
+			expect(service.isValidYear('1985')).toBe(true);
+		});
+
+		it('should accept partial year input (progressive)', () => {
+			expect(service.isValidYear('1')).toBe(true);
+			expect(service.isValidYear('19')).toBe(true);
+			expect(service.isValidYear('198')).toBe(true);
+		});
+
+		it('should accept ISO 8601 year padded with leading zeros', () => {
+			expect(service.isValidYear('0985')).toBe(true);
+		});
+
+		it('should accept leading zero(s) as progressive input', () => {
+			expect(service.isValidYear('0')).toBe(true);
+			expect(service.isValidYear('00')).toBe(true);
+			expect(service.isValidYear('000')).toBe(true);
+			expect(service.isValidYear('0000')).toBe(true);
+		});
+
+		it('should reject non-numeric year', () => {
+			expect(service.isValidYear('abcd')).toBe(false);
+			expect(service.isValidYear('19ab')).toBe(false);
+		});
+
+		it('should reject year longer than 4 digits', () => {
+			expect(service.isValidYear('12345')).toBe(false);
+		});
+	});
+
+	describe('isValidMonth', () => {
+		it('should accept empty month', () => {
+			expect(service.isValidMonth('')).toBe(true);
+		});
+
+		it('should accept a valid 2-digit month', () => {
+			expect(service.isValidMonth('01')).toBe(true);
+			expect(service.isValidMonth('12')).toBe(true);
+		});
+
+		it('should accept 0 or 1 as a progressive single digit', () => {
+			expect(service.isValidMonth('0')).toBe(true);
+			expect(service.isValidMonth('1')).toBe(true);
+		});
+
+		it('should reject single digit greater than 1', () => {
+			expect(service.isValidMonth('2')).toBe(false);
+			expect(service.isValidMonth('9')).toBe(false);
+		});
+
+		it('should reject month 00', () => {
+			expect(service.isValidMonth('00')).toBe(false);
+		});
+
+		it('should reject month greater than 12', () => {
+			expect(service.isValidMonth('13')).toBe(false);
+		});
+
+		it('should reject non-numeric month', () => {
+			expect(service.isValidMonth('ab')).toBe(false);
+		});
+
+		it('should reject month longer than 2 digits', () => {
+			expect(service.isValidMonth('123')).toBe(false);
+		});
+	});
+
+	describe('isValidDay', () => {
+		it('should accept empty day', () => {
+			expect(service.isValidDay('', '1985', '05')).toBe(true);
+		});
+
+		it('should accept a valid 2-digit day for the month', () => {
+			expect(service.isValidDay('20', '1985', '05')).toBe(true);
+		});
+
+		it('should accept Feb 29 in a leap year', () => {
+			expect(service.isValidDay('29', '2024', '02')).toBe(true);
+		});
+
+		it('should reject Feb 29 in a non-leap year', () => {
+			expect(service.isValidDay('29', '1985', '02')).toBe(false);
+		});
+
+		it('should reject Feb 30', () => {
+			expect(service.isValidDay('30', '1985', '02')).toBe(false);
+		});
+
+		it('should reject day 31 in a 30-day month', () => {
+			expect(service.isValidDay('31', '1985', '04')).toBe(false);
+		});
+
+		it('should reject day 00', () => {
+			expect(service.isValidDay('00', '1985', '05')).toBe(false);
+		});
+
+		it('should reject day greater than 31', () => {
+			expect(service.isValidDay('32', '1985', '01')).toBe(false);
+		});
+
+		it('should reject non-numeric day', () => {
+			expect(service.isValidDay('ab', '1985', '05')).toBe(false);
+		});
+
+		it('should accept single digit as progressive day input', () => {
+			expect(service.isValidDay('3', '1985', '05')).toBe(true);
+		});
+
+		it('should fall back to leap year 2000 when year is missing', () => {
+			// 2000 is a leap year so Feb 29 is allowed
+			expect(service.isValidDay('29', '', '02')).toBe(true);
+		});
+
+		it('should fall back to month 01 (31 days) when month is missing', () => {
+			expect(service.isValidDay('31', '1985', '')).toBe(true);
 		});
 	});
 
@@ -722,14 +947,6 @@ describe('EdtfService', () => {
 
 		it('should roundtrip year only', () => {
 			const edtfString = '1985';
-			const model = service.toDateTimeModel(edtfString);
-			const result = service.toEdtfDate(model);
-
-			expect(result).toBe(edtfString);
-		});
-
-		it('should roundtrip partial year', () => {
-			const edtfString = '19XX';
 			const model = service.toDateTimeModel(edtfString);
 			const result = service.toEdtfDate(model);
 

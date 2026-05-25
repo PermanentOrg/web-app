@@ -1,0 +1,55 @@
+<div #dropdownContainer class="pr-timezone-row">
+	<div
+		class="pr-timezone-select"
+		[class.disabled]="disabled"
+		(click)="toggle()"
+	>
+		@if (selectedOption(); as opt) {
+			<span class="pr-timezone-value">{{ opt.offset }}</span>
+			<span class="pr-timezone-label"
+				>{{ opt.label }} ({{ opt.abbreviation }})</span
+			>
+		} @else if (selectedOffsetFallback) {
+			<span class="pr-timezone-value">{{ selectedOffsetFallback }}</span>
+			<span class="pr-timezone-label">Select timezone</span>
+		} @else {
+			<span class="pr-timezone-value"></span>
+			<span class="pr-timezone-label">Select timezone</span>
+		}
+		<span class="pr-icon-button pr-chevron">
+			<i class="material-icons">unfold_more</i>
+		</span>
+	</div>
+	@if (isOpen()) {
+		<div class="pr-timezone-dropdown">
+			<input
+				type="text"
+				class="pr-timezone-search"
+				placeholder="Search timezone..."
+				[value]="filter()"
+				(input)="filter.set($any($event.target).value)"
+			/>
+			<div class="pr-timezone-options">
+				<div
+					class="pr-timezone-option"
+					[class.selected]="!selectedZone"
+					(click)="clearSelection()"
+				>
+					<span class="pr-tz-name">Select timezone</span>
+				</div>
+				@for (tz of filteredTimezones(); track tz.ianaZone) {
+					<div
+						class="pr-timezone-option"
+						[class.selected]="tz.ianaZone === selectedZone"
+						(click)="select(tz)"
+					>
+						<span class="pr-tz-offset">{{ tz.offset }}</span>
+						<span class="pr-tz-name"
+							>{{ tz.label }} ({{ tz.abbreviation }})</span
+						>
+					</div>
+				}
+			</div>
+		</div>
+	}
+</div>
