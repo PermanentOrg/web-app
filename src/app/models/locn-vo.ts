@@ -4,7 +4,6 @@ export interface LocnVOData extends BaseVOData {
 	locnId?: number;
 	timeZoneId?: number;
 
-	displayName?: string;
 	geoCodeLookup?: string;
 	streetNumber?: string;
 	streetName?: string;
