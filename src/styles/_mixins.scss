@@ -19,3 +19,89 @@
 	line-height: 22px;
 	color: white;
 }
+
+// Date/Time Picker Component Mixins
+@mixin usual-text {
+	font-family: 'Usual', sans-serif;
+	font-weight: 400;
+	font-style: normal;
+	font-size: 14px;
+	line-height: 24px;
+	letter-spacing: 0;
+}
+
+@mixin input-container {
+	display: flex;
+	align-items: center;
+	background: $white;
+	border: 1px solid $PR-blue-100;
+	border-radius: 8px;
+	height: 40px;
+	flex: 1;
+}
+
+@mixin input-focus-state {
+	box-shadow: 0px 0px 0px 4px #131b4a08;
+}
+
+@mixin icon-wrapper {
+	background: $PR-blue-25;
+	border-radius: 0 8px 8px 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	gap: 16px;
+	opacity: 1;
+}
+
+@mixin clear-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+
+	i {
+		color: $red;
+	}
+
+	span {
+		font-weight: 500;
+		color: $red;
+	}
+
+	&:hover {
+		opacity: 0.8;
+	}
+}
+
+@mixin panel-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-top: 1px solid $PR-blue-100;
+	background: $PR-blue-25;
+	border-radius: 0 0 12px 12px;
+}
+
+@mixin input-segment {
+	border: none;
+	background: transparent;
+	text-align: center;
+	@include usual-text;
+	color: $PR-blue;
+	outline: none;
+
+	&::placeholder {
+		color: $PR-blue-400;
+	}
+
+	&:disabled {
+		color: $PR-blue-400;
+		cursor: not-allowed;
+	}
+}
