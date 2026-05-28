@@ -47,7 +47,7 @@ interface Format {
 	extension: string;
 }
 
-type FileListColumn = 'name' | 'date' | 'type';
+type FileListColumn = 'name' | 'date';
 
 @Component({
 	selector: 'pr-file-list-controls',
@@ -241,8 +241,6 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 		const sort = this.data.currentFolder?.sort;
 		if (!sort || sort.includes('alpha')) {
 			this.currentSort = 'name';
-		} else if (sort.includes('type')) {
-			this.currentSort = 'type';
 		} else if (sort.includes('display_date')) {
 			this.currentSort = 'date';
 		} else {
@@ -263,9 +261,6 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 		switch (column) {
 			case 'name':
 				sortType = desc ? 'sort.alphabetical_desc' : 'sort.alphabetical_asc';
-				break;
-			case 'type':
-				sortType = desc ? 'sort.type_desc' : 'sort.type_asc';
 				break;
 			case 'date':
 				sortType = desc ? 'sort.display_date_desc' : 'sort.display_date_asc';

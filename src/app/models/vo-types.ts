@@ -6,9 +6,7 @@ export type SortType =
 	| 'sort.display_date_asc'
 	| 'sort.display_date_desc'
 	| 'sort.alphabetical_asc'
-	| 'sort.alphabetical_desc'
-	| 'sort.type_asc'
-	| 'sort.type_desc';
+	| 'sort.alphabetical_desc';
 
 export type FolderType =
 	| 'type.folder.root.app'
@@ -35,20 +33,17 @@ export type FolderLinkType =
 	| 'type.folder_link.share'
 	| 'type.folder_link.vault';
 
-export type RecordType =
-	| 'type.record.archive'
-	| 'type.record.audio'
-	| 'type.record.document'
-	| 'type.record.experience'
-	| 'type.record.folder'
-	| 'type.record.image'
-	| 'type.record.pdf'
-	| 'type.record.presentation'
-	| 'type.record.reference'
-	| 'type.record.spreadsheet'
-	| 'type.record.unknown'
-	| 'type.record.video'
-	| 'type.record.web_archive';
+export type RecordCategory =
+	| 'image'
+	| 'video'
+	| 'audio'
+	| 'pdf'
+	| 'document'
+	| 'spreadsheet'
+	| 'presentation'
+	| 'archive'
+	| 'web_archive'
+	| 'unknown';
 
 export type GenericStatus =
 	| 'status.generic.declined'

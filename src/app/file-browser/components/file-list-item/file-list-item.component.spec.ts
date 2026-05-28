@@ -321,7 +321,6 @@ describe('FileListItemComponent', () => {
 			Promise.resolve(false),
 		);
 		component.item.isRecord = true;
-		component.item.type = 'type.record.image';
 
 		await component.ngOnInit();
 
@@ -335,7 +334,6 @@ describe('FileListItemComponent', () => {
 
 	it('should always set real thumbnail URL on init', async () => {
 		component.item.isRecord = true;
-		component.item.type = 'type.record.image';
 		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
 
 		await component.ngOnInit();

@@ -103,11 +103,6 @@
 			}
 		</div>
 	</div>
-	@if (!showAccess && !inGridView) {
-		<div class="type">
-			{{ item.type | prConstants | titlecase }}
-		</div>
-	}
 	@if (!showAccess) {
 		<div class="date">
 			@if (item.dataStatus > 0) {

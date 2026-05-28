@@ -30,6 +30,7 @@ import {
 	RecordVOData,
 	ShareVO,
 	ItemVO,
+	RecordType,
 } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
@@ -257,7 +258,7 @@ export class FileListItemComponent
 		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
 
 		this.dataService.registerItem(this.item);
-		if (this.item.type.includes('app')) {
+		if (this.item instanceof FolderVO && this.item.type?.includes('app')) {
 			this.allowActions = false;
 		}
 
@@ -317,7 +318,9 @@ export class FileListItemComponent
 
 		this.inGridView = this.folderView === FolderView.Grid;
 
-		this.isZip = this.item.type === 'type.record.archive';
+		this.isZip =
+			this.item instanceof RecordVO &&
+			this.item.FileVOs?.some((f) => f.type?.includes('zip'));
 
 		if (this.drag) {
 			this.subscriptions.push(
@@ -1048,15 +1051,34 @@ export class FileListItemComponent
 			this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
 			return;
 		}
-		const sortPriorities = [
-			'type.record.image',
-			'type.record.video',
-			'type.record.presentation',
-			'type.record.pdf',
+		const sortPriorities: RecordType[] = [
+			'image',
+			'video',
+			'presentation',
+			'pdf',
 		];
 
+		const categoryOf = (item: ItemVO): RecordType => {
+			if (!(item instanceof RecordVO)) {
+				return 'unknown';
+			}
+			if (item.FileVOs?.some((f) => f.type?.includes('image'))) {
+				return 'image';
+			}
+			if (item.FileVOs?.some((f) => f.type?.includes('video'))) {
+				return 'video';
+			}
+			if (item.FileVOs?.some((f) => f.type?.includes('presentation'))) {
+				return 'presentation';
+			}
+			if (item.FileVOs?.some((f) => f.type?.includes('pdf'))) {
+				return 'pdf';
+			}
+			return 'unknown';
+		};
+
 		const calculateSortPriority = (item: ItemVO): number => {
-			const priority = sortPriorities.indexOf(item.type);
+			const priority = sortPriorities.indexOf(categoryOf(item));
 			if (priority < 0) {
 				return Infinity;
 			}
@@ -1076,15 +1098,15 @@ export class FileListItemComponent
 					if (resp.isSuccessful) {
 						const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
 						const allChildren = newFolderVO.ChildItemVOs;
-						const sortedItems = newFolderVO.ChildItemVOs.filter((item) =>
-							item.type.includes('type.record'),
+						const sortedItems = newFolderVO.ChildItemVOs.filter(
+							(item) => item.isRecord,
 						);
 						sortedItems.sort(
 							(a, b) => calculateSortPriority(a) - calculateSortPriority(b),
 						);
 						const thumbnailItem = sortedItems.shift();
 						if (thumbnailItem) {
-							if (sortPriorities.includes(thumbnailItem.type)) {
+							if (sortPriorities.includes(categoryOf(thumbnailItem))) {
 								if (GetThumbnail(thumbnailItem)) {
 									this.folderThumb = GetThumbnail(thumbnailItem);
 								} else {

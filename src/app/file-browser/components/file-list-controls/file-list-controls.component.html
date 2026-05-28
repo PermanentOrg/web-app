@@ -126,28 +126,6 @@
 			</div>
 			@if (!showAccess) {
 				<div
-					class="type"
-					[class.active-sort]="currentSort === 'type'"
-					[class.sort-desc]="sortDesc"
-				>
-					<span
-						class="col-title"
-						(click)="onSortClick('type')"
-						[ngbTooltip]="getTooltipConstantForSort('type') | prTooltip"
-						>Type</span
-					>
-					@if (canSaveSort) {
-						<span
-							class="save-sort"
-							(click)="saveSort()"
-							[ngbTooltip]="'fileList.sort.save' | prTooltip"
-							>Save</span
-						>
-					}
-				</div>
-			}
-			@if (!showAccess) {
-				<div
 					class="date"
 					[class.active-sort]="currentSort === 'date'"
 					[class.sort-desc]="sortDesc"
@@ -205,14 +183,6 @@
 							Sort by name
 							{{
 								!sortDesc && currentSort === 'name'
-									? '(descending)'
-									: '(ascending)'
-							}}
-						</div>
-						<div class="single-col-sort-option" (click)="onSortClick('type')">
-							Sort by type
-							{{
-								!sortDesc && currentSort === 'type'
 									? '(descending)'
 									: '(ascending)'
 							}}
