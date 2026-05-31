@@ -172,6 +172,56 @@ export const convertStelaLocationToLocnVOData = (
 	};
 };
 
+// The location shape accepted by the stela record/folder PATCH and POST
+// endpoints. The location is written as part of the record/folder rather than
+// as a standalone object, and is sent without an id (stela creates or updates
+// the underlying location row).
+export interface StelaLocationUpdateRequest {
+	name?: string;
+	sublocation?: string;
+	city?: string;
+	state?: string;
+	postalCode?: string;
+	country?: string;
+	latitude?: number;
+	longitude?: number;
+	altitudeMeters?: number;
+	precision?: LocationPrecision;
+}
+
+const toStelaCoordinate = (
+	value: string | number | null | undefined,
+): number | undefined =>
+	value === null || value === undefined || value === ''
+		? undefined
+		: Number(value);
+
+export const convertLocnVODataToStelaLocation = (
+	locn: LocnVOData,
+): StelaLocationUpdateRequest => {
+	const location: StelaLocationUpdateRequest = {
+		name: locn.name ?? undefined,
+		sublocation: locn.sublocation ?? undefined,
+		city: locn.city ?? undefined,
+		state: locn.adminOneName ?? undefined,
+		postalCode: locn.postalCode ?? undefined,
+		country: locn.country ?? undefined,
+		latitude: toStelaCoordinate(locn.latitude),
+		longitude: toStelaCoordinate(locn.longitude),
+		altitudeMeters: locn.altitudeMeters ?? undefined,
+		precision: locn.locationPrecision ?? undefined,
+	};
+	// Strip undefined fields so we send a clean, non-empty location object.
+	(Object.keys(location) as Array<keyof StelaLocationUpdateRequest>).forEach(
+		(key) => {
+			if (location[key] === undefined) {
+				delete location[key];
+			}
+		},
+	);
+	return location;
+};
+
 export const convertStelaRecordToRecordVO = (
 	stelaRecord: StelaRecord,
 ): RecordVO =>
@@ -480,17 +530,31 @@ export class RecordRepo extends BaseRepo {
 		);
 	}
 
-	public async updateStelaRecord(recordVO: RecordVO): Promise<RecordResponse> {
+	public async updateStelaRecord(
+		recordVO: RecordVO,
+		fields: Array<'displayTime' | 'location'> = ['displayTime'],
+	): Promise<RecordResponse> {
 		const recordId =
 			recordVO.recordId ??
 			(await this.getRecordIdByArchiveNbr(recordVO.archiveNbr));
 
-		// For now we only send displayTime. This will evolve until we can
-		// update the whole record using this method.
+		// We patch the record itself, sending only the fields being updated.
+		// Locations are written as part of the record rather than via standalone
+		// location objects. This will evolve until we can update the whole record
+		// using this method.
+		const payload: {
+			displayTime?: string;
+			location?: StelaLocationUpdateRequest;
+		} = {};
+		if (fields.includes('displayTime')) {
+			payload.displayTime = recordVO.displayTime;
+		}
+		if (fields.includes('location') && recordVO.LocnVO) {
+			payload.location = convertLocnVODataToStelaLocation(recordVO.LocnVO);
+		}
+
 		const stelaRecord = await firstValueFrom(
-			this.httpV2.patch<StelaRecord>(`v2/records/${recordId}`, {
-				displayTime: recordVO.displayTime,
-			}),
+			this.httpV2.patch<StelaRecord>(`v2/records/${recordId}`, payload),
 		);
 
 		const simulatedV1RecordResponseResults = stelaRecord.map((record) => ({

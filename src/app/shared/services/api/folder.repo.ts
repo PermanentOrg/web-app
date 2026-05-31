@@ -4,11 +4,13 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import {
+	convertLocnVODataToStelaLocation,
 	convertStelaLocationToLocnVOData,
 	convertStelaRecordToRecordVO,
 	convertStelaSharetoShareVO,
 	convertStelaTagToTagVO,
 	StelaLocation,
+	StelaLocationUpdateRequest,
 	StelaShare,
 	StelaTag,
 	type StelaRecord,
@@ -234,10 +236,23 @@ export class FolderRepo extends BaseRepo {
 		return folderResponse?.items || [];
 	}
 
-	public async updateStelaFolder(folderVO: FolderVO): Promise<FolderResponse> {
-		const payload = {
-			displayTime: folderVO.displayTime,
-		};
+	public async updateStelaFolder(
+		folderVO: FolderVO,
+		fields: Array<'displayTime' | 'location'> = ['displayTime'],
+	): Promise<FolderResponse> {
+		// We patch the folder itself, sending only the fields being updated.
+		// Locations are written as part of the folder rather than via standalone
+		// location objects.
+		const payload: {
+			displayTime?: string;
+			location?: StelaLocationUpdateRequest;
+		} = {};
+		if (fields.includes('displayTime')) {
+			payload.displayTime = folderVO.displayTime;
+		}
+		if (fields.includes('location') && folderVO.LocnVO) {
+			payload.location = convertLocnVODataToStelaLocation(folderVO.LocnVO);
+		}
 
 		const response = await firstValueFrom(
 			this.httpV2.patch<StelaFolder>(`v2/folder/${folderVO.folderId}`, payload),
