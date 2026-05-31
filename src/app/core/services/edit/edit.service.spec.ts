@@ -148,7 +148,10 @@ describe('EditService', () => {
 
 		await service.updateItems([record], ['displayTime']);
 
-		expect(apiService.record.updateStelaRecord).toHaveBeenCalledWith(record);
+		expect(apiService.record.updateStelaRecord).toHaveBeenCalledWith(record, [
+			'displayTime',
+		]);
+
 		expect(apiService.record.update).not.toHaveBeenCalled();
 		expect(apiService.record.get).toHaveBeenCalledWith([record]);
 	});
@@ -202,7 +205,10 @@ describe('EditService', () => {
 
 		await service.updateItems([record], ['displayTime', 'displayName']);
 
-		expect(apiService.record.updateStelaRecord).toHaveBeenCalledWith(record);
+		expect(apiService.record.updateStelaRecord).toHaveBeenCalledWith(record, [
+			'displayTime',
+		]);
+
 		expect(apiService.record.update).toHaveBeenCalled();
 		expect(apiService.record.get).toHaveBeenCalledWith([record]);
 	});
@@ -358,7 +364,10 @@ describe('EditService', () => {
 
 		await service.updateItems(mockFolders, ['displayTime']);
 
-		expect(apiService.folder.updateStelaFolder).toHaveBeenCalledWith(folder);
+		expect(apiService.folder.updateStelaFolder).toHaveBeenCalledWith(folder, [
+			'displayTime',
+		]);
+
 		expect(apiService.folder.update).not.toHaveBeenCalled();
 		expect(apiService.folder.getStelaFolderVOs).toHaveBeenCalledWith(
 			mockFolders,
@@ -425,7 +434,10 @@ describe('EditService', () => {
 
 		await service.updateItems(mockFolders, ['displayTime', 'displayName']);
 
-		expect(apiService.folder.updateStelaFolder).toHaveBeenCalledWith(folder);
+		expect(apiService.folder.updateStelaFolder).toHaveBeenCalledWith(folder, [
+			'displayTime',
+		]);
+
 		expect(apiService.folder.update).toHaveBeenCalledWith(mockFolders, [
 			'displayName',
 		]);

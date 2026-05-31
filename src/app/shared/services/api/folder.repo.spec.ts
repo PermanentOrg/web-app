@@ -286,6 +286,34 @@ describe('Folder repo', () => {
 			expect(result.Results[0][0].FolderVO.folderId).toBe('123');
 			expect(result.Results[0][0].FolderVO.displayName).toBe('Test Folder');
 		});
+
+		it('should send the location (and not displayTime) when updating location', async () => {
+			const folderVO = new FolderVO({
+				folderId: 123,
+				displayTime: '1985-05-20T00:00:00Z',
+				LocnVO: {
+					city: 'Paris',
+					adminOneName: 'Ile-de-France',
+					country: 'France',
+					latitude: 48.83,
+					longitude: 2.3,
+				},
+			});
+
+			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
+
+			await folderRepo.updateStelaFolder(folderVO, ['location']);
+
+			expect(httpV2Spy.patch).toHaveBeenCalledWith('v2/folder/123', {
+				location: {
+					city: 'Paris',
+					state: 'Ile-de-France',
+					country: 'France',
+					latitude: 48.83,
+					longitude: 2.3,
+				},
+			});
+		});
 	});
 
 	describe('getStelaFolderVOs', () => {
