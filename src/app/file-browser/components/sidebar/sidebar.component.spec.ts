@@ -7,6 +7,7 @@ import { ArchiveVO, RecordVO } from '@models/index';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { BehaviorSubject } from 'rxjs';
 import { MessageService } from '@shared/services/message/message.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -120,6 +121,10 @@ class MockAccountService {
 	}
 }
 
+const mockFeatureFlagService = {
+	isEnabled: (_flag: string) => false,
+};
+
 describe('SidebarComponent', () => {
 	let component: SidebarComponent;
 	let fixture: ComponentFixture<SidebarComponent>;
@@ -169,6 +174,10 @@ describe('SidebarComponent', () => {
 						showError: () => {},
 						showMessage: () => {},
 					},
+				},
+				{
+					provide: FeatureFlagService,
+					useValue: mockFeatureFlagService,
 				},
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -273,6 +282,23 @@ describe('SidebarComponent', () => {
 			component.selectedItem.displayTime || component.selectedItem.displayDT;
 
 		expect(displayValue).toBe('2024-01-01T00:00:00.000Z');
+	});
+
+	describe('edtf-date feature flag', () => {
+		it('should set showEdtfDatePicker to false when edtf-date flag is disabled', () => {
+			expect(component.showEdtfDatePicker).toBe(false);
+		});
+
+		it('should set showEdtfDatePicker to true when edtf-date flag is enabled', () => {
+			spyOn(mockFeatureFlagService, 'isEnabled').and.callFake(
+				(flag: string) => flag === 'edtf-date',
+			);
+
+			const enabledFixture = TestBed.createComponent(SidebarComponent);
+			enabledFixture.detectChanges();
+
+			expect(enabledFixture.componentInstance.showEdtfDatePicker).toBe(true);
+		});
 	});
 
 	it('should hide the original format for folders', () => {
