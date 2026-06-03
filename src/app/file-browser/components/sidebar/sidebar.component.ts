@@ -18,6 +18,7 @@ import {
 	EdtfService,
 } from '@shared/services/edtf-service/edtf.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 
 type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
 @Component({
@@ -45,6 +46,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	canUseViews: boolean;
 
 	originalFileExtension: string = '';
+
+	showEdtfDatePicker: boolean;
 
 	get displayTimeObject(): DateTimeModel | null {
 		try {
@@ -91,8 +94,10 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		private message: MessageService,
 		private accountService: AccountService,
 		private cdr: ChangeDetectorRef,
+		private feature: FeatureFlagService,
 	) {
 		this.currentArchive = this.accountService.getArchive();
+		this.showEdtfDatePicker = this.feature.isEnabled('edtf-date');
 
 		this.subscriptions.push(
 			this.dataService.selectedItems$().subscribe(async (selectedItems) => {
