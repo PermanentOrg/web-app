@@ -32,7 +32,6 @@ import {
 export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() time: TimeModel = DEFAULT_TIME;
 	@Input() disabled = false;
-	@Input() showSeconds = true;
 
 	@Output() timeChange = new EventEmitter<TimeModel>();
 
@@ -92,9 +91,7 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 		this.timeChange.emit({
 			hours: String(displayHour).padStart(2, '0'),
 			minutes: String(ngbTime.minute).padStart(2, '0'),
-			seconds: this.showSeconds
-				? String(ngbTime.second ?? 0).padStart(2, '0')
-				: this.time.seconds,
+			seconds: String(ngbTime.second ?? 0).padStart(2, '0'),
 			am: !isPm,
 			pm: isPm,
 		});
@@ -103,8 +100,8 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 	toggleAmPm(): void {
 		this.timeChange.emit({
 			...this.time,
-			am: this.time.pm,
-			pm: this.time.am,
+			am: !!this.time.pm,
+			pm: !!this.time.am,
 		});
 	}
 

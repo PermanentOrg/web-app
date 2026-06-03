@@ -7,7 +7,6 @@ import { TimepickerInputComponent } from './timepicker-input.component';
 	template: `<pr-timepicker-input
 		[time]="time"
 		[disabled]="disabled"
-		[showSeconds]="showSeconds"
 		(timeChange)="onTimeChange($event)"
 	/>`,
 	standalone: true,
@@ -22,7 +21,6 @@ class TestHostComponent {
 		pm: false,
 	};
 	disabled = false;
-	showSeconds = true;
 	lastEmittedTime: TimeModel | null = null;
 
 	onTimeChange(time: TimeModel): void {
@@ -60,14 +58,6 @@ describe('TimepickerInputComponent', () => {
 		const inputs = fixture.nativeElement.querySelectorAll('.pr-time-segment');
 
 		expect(inputs.length).toBe(3);
-	});
-
-	it('should hide seconds input when showSeconds is false', () => {
-		hostComponent.showSeconds = false;
-		fixture.detectChanges();
-		const inputs = fixture.nativeElement.querySelectorAll('.pr-time-segment');
-
-		expect(inputs.length).toBe(2);
 	});
 
 	// --- Disabled state ---
