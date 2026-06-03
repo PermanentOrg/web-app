@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables' as *;
 
 $sidebar-border: $file-list-border;
 $sidebar-thumb-height: 200px;
