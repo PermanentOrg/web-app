@@ -33,8 +33,8 @@
 		placeholder="ss"
 		maxlength="2"
 	/>
-	<button class="pr-am-pm-toggle" [disabled]="disabled" (click)="toggleAmPm()">
-		{{ time.pm ? 'PM' : 'AM' }}
+	<button class="pr-am-pm-toggle" [disabled]="disabled" (click)="cycleFormat()">
+		{{ formatLabel() }}
 	</button>
 	<div class="pr-time-icon-wrapper">
 		<span
@@ -51,7 +51,7 @@
 	<div class="pr-timepicker-dropdown">
 		<ngb-timepicker
 			[formControl]="timepickerControl"
-			[meridian]="true"
+			[meridian]="!is24Hour()"
 			[spinners]="true"
 		/>
 	</div>

@@ -22,8 +22,7 @@ describe('EditDateTimeModalComponent', () => {
 			hours: '11',
 			minutes: '',
 			seconds: '',
-			am: true,
-			pm: false,
+			format: 'am',
 		},
 	};
 
@@ -56,8 +55,7 @@ describe('EditDateTimeModalComponent', () => {
 	it('should initialize fields from dialog data', () => {
 		expect(component.date().year).toBe('1930');
 		expect(component.time().hours).toBe('11');
-		expect(component.time().am).toBe(true);
-		expect(component.time().pm).toBe(false);
+		expect(component.time().format).toBe('am');
 		expect(component.qualifiers().approximate).toBeTrue();
 		expect(component.qualifiers().uncertain).toBeFalse();
 		expect(component.qualifiers().unknown).toBeFalse();
@@ -84,8 +82,7 @@ describe('EditDateTimeModalComponent', () => {
 				hours: '',
 				minutes: '',
 				seconds: '',
-				am: true,
-				pm: false,
+				format: 'am',
 			},
 		};
 
@@ -101,19 +98,19 @@ describe('EditDateTimeModalComponent', () => {
 
 	it('should update time fields via onTimeChange', () => {
 		component.onTimeChange(
-			{ hours: '02', minutes: '30', seconds: '15', am: false, pm: true },
+			{ hours: '02', minutes: '30', seconds: '15', format: 'pm' },
 			component.time,
 		);
 
 		expect(component.time().hours).toBe('02');
 		expect(component.time().minutes).toBe('30');
 		expect(component.time().seconds).toBe('15');
-		expect(component.time().pm).toBe(true);
+		expect(component.time().format).toBe('pm');
 	});
 
 	it('should update end time fields via onTimeChange', () => {
 		component.onTimeChange(
-			{ hours: '06', minutes: '45', seconds: '00', am: true, pm: false },
+			{ hours: '06', minutes: '45', seconds: '00', format: 'am' },
 			component.endTime,
 		);
 
@@ -238,8 +235,7 @@ describe('EditDateTimeModalComponent', () => {
 				hours: '',
 				minutes: '',
 				seconds: '',
-				am: true,
-				pm: false,
+				format: 'am',
 			},
 		};
 
@@ -328,8 +324,7 @@ describe('EditDateTimeModalComponent', () => {
 			hours: '10',
 			minutes: '30',
 			seconds: '00',
-			am: true,
-			pm: false,
+			format: 'am',
 		});
 		component.qualifiers.set({
 			approximate: false,
@@ -346,8 +341,7 @@ describe('EditDateTimeModalComponent', () => {
 			hours: '',
 			minutes: '',
 			seconds: '',
-			am: true,
-			pm: false,
+			format: 'am',
 		});
 		component.qualifiers.set({
 			approximate: false,
@@ -364,8 +358,7 @@ describe('EditDateTimeModalComponent', () => {
 			hours: '13',
 			minutes: '30',
 			seconds: '00',
-			am: false,
-			pm: true,
+			format: 'pm',
 		});
 		component.qualifiers.set({
 			approximate: false,
@@ -384,8 +377,7 @@ describe('EditDateTimeModalComponent', () => {
 			hours: '',
 			minutes: '',
 			seconds: '',
-			am: true,
-			pm: false,
+			format: 'am',
 		});
 		component.qualifiers.set({
 			approximate: false,

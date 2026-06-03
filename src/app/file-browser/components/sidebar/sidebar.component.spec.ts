@@ -373,8 +373,7 @@ describe('SidebarComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 
@@ -395,8 +394,7 @@ describe('SidebarComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 
@@ -408,8 +406,7 @@ describe('SidebarComponent', () => {
 					hours: '10',
 					minutes: '30',
 					seconds: '00',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			});
 
@@ -432,8 +429,7 @@ describe('SidebarComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 

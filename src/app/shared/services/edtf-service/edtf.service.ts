@@ -8,10 +8,13 @@ export enum DateQualifier {
 	Unknown = 'unknown',
 }
 
-export enum Meridian {
-	AM = 'AM',
-	PM = 'PM',
-}
+export type TimeFormat = 'am' | 'pm' | 'h24';
+
+export const TIME_FORMAT_LABEL: Record<TimeFormat, string> = {
+	am: 'AM',
+	pm: 'PM',
+	h24: '24H',
+};
 
 export enum EdtfPrecision {
 	Time = 0,
@@ -26,8 +29,7 @@ export const DEFAULT_TIME: TimeModel = {
 	hours: '',
 	minutes: '',
 	seconds: '',
-	am: true,
-	pm: false,
+	format: 'am',
 };
 
 export interface DateQualifierFlags {
@@ -46,8 +48,7 @@ export interface TimeModel {
 	hours?: string;
 	minutes?: string;
 	seconds?: string;
-	am?: boolean;
-	pm?: boolean;
+	format: TimeFormat;
 }
 
 export interface DateTimeModel {
@@ -87,7 +88,7 @@ export class EdtfService {
 				return null;
 			}
 
-			return this.extDateToDateTimeModel(edtfObject);
+			return this.extDateToDateTimeModel(edtfObject, edtfString);
 		} catch (error) {
 			throw new Error(this.toHumanReadableError(error));
 		}
@@ -108,7 +109,7 @@ export class EdtfService {
 				return null;
 			}
 
-			return this.intervalToDateTimeModel(edtfObject);
+			return this.intervalToDateTimeModel(edtfObject, startPart, endPart);
 		} catch {
 			return null;
 		}
@@ -211,7 +212,10 @@ export class EdtfService {
 		return `T${pad(converted.hour)}:${pad(converted.minute)}:${pad(converted.second)}`;
 	}
 
-	private extDateToDateTimeModel(extDate: EdtfDate): DateTimeModel {
+	private extDateToDateTimeModel(
+		extDate: EdtfDate,
+		rawEdtfString: string,
+	): DateTimeModel {
 		const edtfStr = extDate.toEDTF();
 		const precision = extDate.precision;
 
@@ -237,7 +241,15 @@ export class EdtfService {
 		const day = dayPart === 'XX' ? '' : (dayPart ?? '');
 
 		const hasTime = precision === EdtfPrecision.Time || edtfStr.includes('T');
-		const hours24 = extDate.hours;
+		// Read the wall-clock time from the original input string instead of
+		// extDate.hours/minutes/seconds — the edtf library treats unmarked
+		// times as local and shifts them to UTC, which corrupts the value
+		// we want to display unchanged (see node_modules/edtf/src/util.js
+		// `datetime` postprocess).
+		const rawTime = hasTime ? this.extractRawTime(rawEdtfString) : null;
+		const hours24 = rawTime?.hours ?? 0;
+		const minutes = rawTime?.minutes ?? 0;
+		const seconds = rawTime?.seconds ?? 0;
 		const isPm = hours24 >= 12;
 		const hours12 = hours24 % 12 || 12;
 
@@ -254,11 +266,22 @@ export class EdtfService {
 			},
 			time: {
 				hours: hasTime ? String(hours12).padStart(2, '0') : '',
-				minutes: hasTime ? String(extDate.minutes).padStart(2, '0') : '',
-				seconds: hasTime ? String(extDate.seconds).padStart(2, '0') : '',
-				am: hasTime ? !isPm : true,
-				pm: hasTime ? isPm : false,
+				minutes: hasTime ? String(minutes).padStart(2, '0') : '',
+				seconds: hasTime ? String(seconds).padStart(2, '0') : '',
+				format: hasTime && isPm ? 'pm' : 'am',
 			},
+		};
+	}
+
+	private extractRawTime(
+		edtfString: string,
+	): { hours: number; minutes: number; seconds: number } | null {
+		const match = edtfString.match(/T(\d{2}):(\d{2})(?::(\d{2}))?/);
+		if (!match) return null;
+		return {
+			hours: parseInt(match[1], 10),
+			minutes: parseInt(match[2], 10),
+			seconds: match[3] ? parseInt(match[3], 10) : 0,
 		};
 	}
 
@@ -280,7 +303,11 @@ export class EdtfService {
 		return 'The date entered is not valid. Please check the values and try again.';
 	}
 
-	private intervalToDateTimeModel(interval: EdtfInterval): DateTimeModel {
+	private intervalToDateTimeModel(
+		interval: EdtfInterval,
+		startRaw: string,
+		endRaw: string,
+	): DateTimeModel {
 		const lower = interval.lower;
 		const upper = interval.upper;
 
@@ -288,14 +315,14 @@ export class EdtfService {
 		const openEnd = typeof upper === 'number' || upper === null;
 
 		const model: DateTimeModel = openStart
-			? { date: { year: '' } as DateModel, time: {} as TimeModel }
-			: this.extDateToDateTimeModel(lower);
+			? { date: { year: '' } as DateModel, time: { format: 'am' } }
+			: this.extDateToDateTimeModel(lower, startRaw);
 
 		if (openEnd) {
 			model.endDate = { year: '' } as DateModel;
-			model.endTime = {} as TimeModel;
+			model.endTime = { format: 'am' };
 		} else if (upper) {
-			const upperModel = this.extDateToDateTimeModel(upper);
+			const upperModel = this.extDateToDateTimeModel(upper, endRaw);
 			model.endDate = upperModel.date;
 			model.endTime = upperModel.time;
 		}
@@ -339,12 +366,27 @@ export class EdtfService {
 	parseTimeAs24Hour(
 		time: TimeModel,
 	): { hour: number; minute: number; second: number } | null {
+		const minutesInput = time.minutes || '0';
+		const secondsInput = time.seconds || '0';
+
+		if (time.format === 'h24') {
+			const parsed = parse(
+				`${time.hours || '0'}:${minutesInput}:${secondsInput}`,
+				'H:m:s',
+				new Date(),
+			);
+			if (!isValid(parsed)) return null;
+			return {
+				hour: getHours(parsed),
+				minute: getMinutes(parsed),
+				second: getSeconds(parsed),
+			};
+		}
+
 		// '12' default lets empty hours collapse to midnight via the AM branch below
 		// (12-hour clock has no '0', so parse('0 AM') would be invalid)
 		const hoursInput = time.hours || '12';
-		const minutesInput = time.minutes || '0';
-		const secondsInput = time.seconds || '0';
-		const meridian = time.pm === true ? 'PM' : 'AM';
+		const meridian = time.format === 'pm' ? 'PM' : 'AM';
 
 		const parsed = parse(
 			`${hoursInput}:${minutesInput}:${secondsInput} ${meridian}`,
@@ -361,7 +403,12 @@ export class EdtfService {
 		};
 	}
 
-	isValidHour(value: string): boolean {
+	isValidHour(value: string, is24Hour = false): boolean {
+		if (is24Hour) {
+			if (value.length === 1) return parseInt(value, 10) <= 2;
+			// 24-hour clock — defer to date-fns parse to verify the full value (00-23)
+			return isValid(parse(`${value}:00`, 'HH:mm', new Date()));
+		}
 		if (value.length === 1) return parseInt(value, 10) <= 1;
 		// 12-hour clock — defer to date-fns parse to verify the full value (01-12)
 		return isValid(parse(`${value}:00 AM`, 'hh:mm a', new Date()));

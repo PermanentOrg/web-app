@@ -19,8 +19,7 @@ describe('EditDateTimeModalService', () => {
 			hours: '10',
 			minutes: '30',
 			seconds: '',
-			am: true,
-			pm: false,
+			format: 'am',
 		},
 	};
 

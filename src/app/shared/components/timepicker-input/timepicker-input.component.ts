@@ -4,6 +4,7 @@ import {
 	Output,
 	EventEmitter,
 	signal,
+	computed,
 	HostListener,
 	OnInit,
 	OnChanges,
@@ -18,6 +19,8 @@ import { NgbTimepicker, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, takeUntil } from 'rxjs';
 import {
 	TimeModel,
+	TimeFormat,
+	TIME_FORMAT_LABEL,
 	DEFAULT_TIME,
 	EdtfService,
 } from '@shared/services/edtf-service/edtf.service';
@@ -42,6 +45,12 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 	showTimepicker = signal(false);
 	timepickerControl = new FormControl<NgbTimeStruct | null>(null);
 
+	private readonly timeSignal = signal<TimeModel>(DEFAULT_TIME);
+	private readonly FORMAT_CYCLE: TimeFormat[] = ['am', 'pm', 'h24'];
+
+	formatLabel = computed(() => TIME_FORMAT_LABEL[this.timeSignal().format]);
+	is24Hour = computed(() => this.timeSignal().format === 'h24');
+
 	private destroy$ = new Subject<void>();
 
 	constructor(
@@ -57,6 +66,7 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes.time) {
+			this.timeSignal.set(this.time);
 			const model = this.edtfService.parseTimeAs24Hour(this.time);
 			const current = this.timepickerControl.value;
 			if (!this.ngbTimeEquals(model, current)) {
@@ -85,24 +95,35 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 	onTimeSelect(ngbTime: NgbTimeStruct | null): void {
 		if (!ngbTime) return;
 
+		const minutes = String(ngbTime.minute).padStart(2, '0');
+		const seconds = String(ngbTime.second ?? 0).padStart(2, '0');
+
+		if (this.is24Hour()) {
+			this.timeChange.emit({
+				hours: String(ngbTime.hour).padStart(2, '0'),
+				minutes,
+				seconds,
+				format: 'h24',
+			});
+			return;
+		}
+
 		const isPm = ngbTime.hour >= 12;
 		const displayHour = ngbTime.hour % 12 || 12;
 
 		this.timeChange.emit({
 			hours: String(displayHour).padStart(2, '0'),
-			minutes: String(ngbTime.minute).padStart(2, '0'),
-			seconds: String(ngbTime.second ?? 0).padStart(2, '0'),
-			am: !isPm,
-			pm: isPm,
+			minutes,
+			seconds,
+			format: isPm ? 'pm' : 'am',
 		});
 	}
 
-	toggleAmPm(): void {
-		this.timeChange.emit({
-			...this.time,
-			am: !!this.time.pm,
-			pm: !!this.time.am,
-		});
+	cycleFormat(): void {
+		const currentIndex = this.FORMAT_CYCLE.indexOf(this.time.format);
+		const nextFormat =
+			this.FORMAT_CYCLE[(currentIndex + 1) % this.FORMAT_CYCLE.length];
+		this.timeChange.emit({ ...this.time, format: nextFormat });
 	}
 
 	onMinutesKeydown(event: KeyboardEvent): void {
@@ -136,7 +157,7 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 		if (value !== '') {
 			const isValid =
 				timePropKey === 'hours'
-					? this.edtfService.isValidHour(value)
+					? this.edtfService.isValidHour(value, this.is24Hour())
 					: this.edtfService.isValidMinutesSeconds(value);
 			if (!isValid) {
 				input.value = this.time[timePropKey] ?? '';
@@ -149,7 +170,7 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 		if (nextField && value.length === 2) {
 			const isComplete =
 				timePropKey === 'hours'
-					? this.edtfService.isValidHour(value)
+					? this.edtfService.isValidHour(value, this.is24Hour())
 					: this.edtfService.isValidMinutesSeconds(value);
 			if (isComplete) nextField.focus();
 		}

@@ -148,8 +148,7 @@ export class EditDateTimeModalComponent implements OnInit {
 			hours: timeInputValue.hours,
 			minutes: timeInputValue.minutes,
 			seconds: timeInputValue.seconds,
-			am: timeInputValue.am,
-			pm: timeInputValue.pm,
+			format: timeInputValue.format,
 		}));
 	}
 
