@@ -445,6 +445,77 @@ describe('EditService', () => {
 		expect(apiService.folder.getStelaFolderVOs).not.toHaveBeenCalled();
 	});
 
+	it('should revert property and show error when updateStelaRecord fails', async () => {
+		const messageService = TestBed.inject(MessageService);
+		spyOn(messageService, 'showError');
+
+		const record = new RecordVO({ recordId: 1, displayTime: 'original-value' });
+		const httpError = {
+			error: { message: 'Invalid date format' },
+			message: 'Http failure',
+		};
+
+		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+			Promise.reject(httpError),
+		);
+		(apiService.record.update as jasmine.Spy).and.returnValue(
+			Promise.resolve([]),
+		);
+
+		await service.saveItemVoProperty(record, 'displayTime', 'new-value');
+
+		expect(record.displayTime).toBe('original-value');
+		expect(messageService.showError).toHaveBeenCalledWith({
+			message: 'Invalid date format',
+		});
+	});
+
+	it('should show fallback error when updateStelaRecord fails without error body', async () => {
+		const messageService = TestBed.inject(MessageService);
+		spyOn(messageService, 'showError');
+
+		const record = new RecordVO({ recordId: 1, displayTime: 'original-value' });
+
+		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+			Promise.reject({}),
+		);
+		(apiService.record.update as jasmine.Spy).and.returnValue(
+			Promise.resolve([]),
+		);
+
+		await service.saveItemVoProperty(record, 'displayTime', 'new-value');
+
+		expect(record.displayTime).toBe('original-value');
+		expect(messageService.showError).toHaveBeenCalledWith({
+			message: 'Failed to save changes',
+		});
+	});
+
+	it('should revert property and show error when updateStelaFolder fails', async () => {
+		const messageService = TestBed.inject(MessageService);
+		spyOn(messageService, 'showError');
+
+		const folder = new FolderVO({ folderId: 1, displayTime: 'original-value' });
+		const httpError = { error: { error: 'Invalid EDTF string' } };
+
+		(apiService.folder.updateStelaFolder as jasmine.Spy).and.returnValue(
+			Promise.reject(httpError),
+		);
+		(apiService.folder.update as jasmine.Spy).and.returnValue(
+			Promise.resolve({}),
+		);
+		(apiService.folder.getStelaFolderVOs as jasmine.Spy).and.returnValue(
+			Promise.resolve({ getFolderVOs: () => [] }),
+		);
+
+		await service.saveItemVoProperty(folder, 'displayTime', 'new-value');
+
+		expect(folder.displayTime).toBe('original-value');
+		expect(messageService.showError).toHaveBeenCalledWith({
+			message: 'Invalid EDTF string',
+		});
+	});
+
 	describe('openShareDialog', () => {
 		const mockShareLink: ShareLink = {
 			id: 'link1',

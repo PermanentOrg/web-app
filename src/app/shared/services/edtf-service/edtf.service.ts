@@ -359,6 +359,39 @@ export class EdtfService {
 		return model;
 	}
 
+	isNumeric(value: string): boolean {
+		return /^\d+$/.test(value);
+	}
+
+	buildReferenceDate(date: DateModel, time: TimeModel): Date {
+		const year = parseInt(date?.year ?? '', 10);
+		if (Number.isNaN(year)) return new Date();
+		const month = date.month ? parseInt(date.month, 10) - 1 : 0;
+		const day = date.day ? parseInt(date.day, 10) : 1;
+		const time24 = time?.hours ? this.parseTimeAs24Hour(time) : null;
+		return new Date(
+			year,
+			month,
+			day,
+			time24?.hour ?? 0,
+			time24?.minute ?? 0,
+			time24?.second ?? 0,
+		);
+	}
+
+	browserTimezoneAbbreviation(date: DateModel, time: TimeModel): string {
+		if (!time?.hours) return '';
+		try {
+			const referenceDate = this.buildReferenceDate(date, time);
+			const parts = new Intl.DateTimeFormat('en-US', {
+				timeZoneName: 'short',
+			}).formatToParts(referenceDate);
+			return parts.find((part) => part.type === 'timeZoneName')?.value ?? '';
+		} catch {
+			return '';
+		}
+	}
+
 	parseTimeAs24Hour(
 		time: TimeModel,
 	): { hour: number; minute: number; second: number } | null {
