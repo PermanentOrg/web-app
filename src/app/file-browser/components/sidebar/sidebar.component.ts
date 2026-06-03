@@ -49,6 +49,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 
 	showEdtfDatePicker: boolean;
 
+	showEdtfDatePicker: boolean;
+
 	get displayTimeObject(): DateTimeModel | null {
 		try {
 			const timeSource =
