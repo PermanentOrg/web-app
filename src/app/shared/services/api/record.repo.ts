@@ -101,6 +101,7 @@ export type StelaRecord = Omit<RecordVO, 'files'> & {
 	tags: Array<StelaTag> | null;
 	archiveNumber: string;
 	displayDate: string;
+	displayTime?: string;
 	folderLinkId: string;
 	folderLinkType: FolderLinkType;
 	parentFolderLinkId: string;
@@ -180,6 +181,7 @@ export const convertStelaRecordToRecordVO = (
 		),
 		archiveNbr: stelaRecord.archiveNumber,
 		displayDT: stelaRecord.displayDate,
+		displayTime: stelaRecord.displayTime,
 		folder_linkId: Number.parseInt(stelaRecord.folderLinkId, 10),
 		folder_linkType: stelaRecord.folderLinkType,
 		LocnVO: convertStelaLocationToLocnVOData(stelaRecord.location),
