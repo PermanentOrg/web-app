@@ -86,32 +86,28 @@ describe('EdtfService', () => {
 				expect(result.time.hours).toBe('02');
 				expect(result.time.minutes).toBe('30');
 				expect(result.time.seconds).toBe('45');
-				expect(result.time.pm).toBe(true);
-				expect(result.time.am).toBe(false);
+				expect(result.time.format).toBe('pm');
 			});
 
 			it('should parse AM time', () => {
 				const result = service.toDateTimeModel('1985-05-20T09:15:00Z');
 
 				expect(result.time.hours).toBe('09');
-				expect(result.time.am).toBe(true);
-				expect(result.time.pm).toBe(false);
+				expect(result.time.format).toBe('am');
 			});
 
 			it('should parse midnight as 12 AM', () => {
 				const result = service.toDateTimeModel('1985-05-20T00:00:00Z');
 
 				expect(result.time.hours).toBe('12');
-				expect(result.time.am).toBe(true);
-				expect(result.time.pm).toBe(false);
+				expect(result.time.format).toBe('am');
 			});
 
 			it('should parse noon as 12 PM', () => {
 				const result = service.toDateTimeModel('1985-05-20T12:00:00Z');
 
 				expect(result.time.hours).toBe('12');
-				expect(result.time.am).toBe(false);
-				expect(result.time.pm).toBe(true);
+				expect(result.time.format).toBe('pm');
 			});
 
 			it('should have empty time fields when no time present', () => {
@@ -120,8 +116,7 @@ describe('EdtfService', () => {
 				expect(result.time.hours).toBe('');
 				expect(result.time.minutes).toBe('');
 				expect(result.time.seconds).toBe('');
-				expect(result.time.am).toBe(true);
-				expect(result.time.pm).toBe(false);
+				expect(result.time.format).toBe('am');
 			});
 
 			it('should parse time with a timezone offset suffix (offset is discarded)', () => {
@@ -130,7 +125,30 @@ describe('EdtfService', () => {
 				expect(result.time.hours).toBe('02');
 				expect(result.time.minutes).toBe('30');
 				expect(result.time.seconds).toBe('45');
-				expect(result.time.pm).toBe(true);
+				expect(result.time.format).toBe('pm');
+			});
+
+			it('should preserve wall-clock time when no timezone marker is present', () => {
+				// Regression: edtf treats unmarked datetimes as local time and
+				// shifts them to UTC, which mangles the displayed wall-clock
+				// value in any non-UTC timezone.
+				const result = service.toDateTimeModel('1985-05-20T23:23:23');
+
+				expect(result.time.hours).toBe('11');
+				expect(result.time.minutes).toBe('23');
+				expect(result.time.seconds).toBe('23');
+				expect(result.time.format).toBe('pm');
+			});
+
+			it('should preserve wall-clock time when input has milliseconds and Z', () => {
+				// The folder/record VO normalizer rewrites BE values like
+				// '1985-05-20T23:23:23' to '1985-05-20T23:23:23.000Z'.
+				const result = service.toDateTimeModel('1985-05-20T23:23:23.000Z');
+
+				expect(result.time.hours).toBe('11');
+				expect(result.time.minutes).toBe('23');
+				expect(result.time.seconds).toBe('23');
+				expect(result.time.format).toBe('pm');
 			});
 		});
 
@@ -211,7 +229,7 @@ describe('EdtfService', () => {
 			it('should build year-only EDTF string', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985' },
-					time: {},
+					time: { format: 'am' },
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985');
@@ -220,7 +238,7 @@ describe('EdtfService', () => {
 			it('should build year-month EDTF string', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05');
@@ -229,7 +247,7 @@ describe('EdtfService', () => {
 			it('should build full date EDTF string', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
-					time: {},
+					time: { format: 'am' },
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05-20');
@@ -244,8 +262,7 @@ describe('EdtfService', () => {
 						hours: '02',
 						minutes: '30',
 						seconds: '45',
-						am: false,
-						pm: true,
+						format: 'pm',
 					},
 				};
 
@@ -261,8 +278,7 @@ describe('EdtfService', () => {
 						hours: '09',
 						minutes: '15',
 						seconds: '00',
-						am: true,
-						pm: false,
+						format: 'am',
 					},
 				};
 
@@ -278,8 +294,7 @@ describe('EdtfService', () => {
 						hours: '12',
 						minutes: '00',
 						seconds: '00',
-						am: true,
-						pm: false,
+						format: 'am',
 					},
 				};
 
@@ -295,8 +310,7 @@ describe('EdtfService', () => {
 						hours: '12',
 						minutes: '00',
 						seconds: '00',
-						am: false,
-						pm: true,
+						format: 'pm',
 					},
 				};
 
@@ -305,10 +319,26 @@ describe('EdtfService', () => {
 				expect(result).toContain('T12:00:00');
 			});
 
+			it('should build a date with a raw 24-hour time', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '20' },
+					time: {
+						hours: '14',
+						minutes: '30',
+						seconds: '45',
+						format: 'h24',
+					},
+				};
+
+				const result = service.toEdtfDate(model);
+
+				expect(result).toContain('T14:30:45');
+			});
+
 			it('should omit time when hours not provided', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
-					time: {},
+					time: { format: 'am' },
 				};
 
 				const result = service.toEdtfDate(model);
@@ -323,8 +353,7 @@ describe('EdtfService', () => {
 						hours: '02',
 						minutes: '30',
 						seconds: '45',
-						am: false,
-						pm: true,
+						format: 'pm',
 					},
 				};
 
@@ -338,7 +367,7 @@ describe('EdtfService', () => {
 			it('should add approximate qualifier', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
@@ -348,7 +377,7 @@ describe('EdtfService', () => {
 			it('should add uncertain qualifier', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 					qualifiers: { approximate: false, uncertain: true, unknown: false },
 				};
 
@@ -358,7 +387,7 @@ describe('EdtfService', () => {
 			it('should add combined qualifier', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 					qualifiers: { approximate: true, uncertain: true, unknown: false },
 				};
 
@@ -368,7 +397,7 @@ describe('EdtfService', () => {
 			it('should not add qualifier when none set', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 					qualifiers: { approximate: false, uncertain: false, unknown: false },
 				};
 
@@ -378,7 +407,7 @@ describe('EdtfService', () => {
 			it('should return XXXX-XX-XX when unknown qualifier is set', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
-					time: {},
+					time: { format: 'am' },
 					qualifiers: { approximate: false, uncertain: false, unknown: true },
 				};
 
@@ -390,9 +419,9 @@ describe('EdtfService', () => {
 			it('should build a date range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 					endDate: { year: '1990', month: '06' },
-					endTime: {},
+					endTime: { format: 'am' },
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05/1990-06');
@@ -401,9 +430,9 @@ describe('EdtfService', () => {
 			it('should build a full date range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
-					time: {},
+					time: { format: 'am' },
 					endDate: { year: '1990', month: '06', day: '15' },
-					endTime: {},
+					endTime: { format: 'am' },
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05-20/1990-06-15');
@@ -412,9 +441,9 @@ describe('EdtfService', () => {
 			it('should build a year-only range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985' },
-					time: {},
+					time: { format: 'am' },
 					endDate: { year: '1990' },
-					endTime: {},
+					endTime: { format: 'am' },
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985/1990');
@@ -423,9 +452,9 @@ describe('EdtfService', () => {
 			it('should apply approximate qualifier to both dates in a range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 					endDate: { year: '1990', month: '06' },
-					endTime: {},
+					endTime: { format: 'am' },
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
@@ -435,9 +464,9 @@ describe('EdtfService', () => {
 			it('should apply uncertain qualifier to both dates in a range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 					endDate: { year: '1990', month: '06' },
-					endTime: {},
+					endTime: { format: 'am' },
 					qualifiers: { approximate: false, uncertain: true, unknown: false },
 				};
 
@@ -447,9 +476,9 @@ describe('EdtfService', () => {
 			it('should apply combined qualifier to both dates in a range', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 					endDate: { year: '1990', month: '06' },
-					endTime: {},
+					endTime: { format: 'am' },
 					qualifiers: { approximate: true, uncertain: true, unknown: false },
 				};
 
@@ -459,9 +488,9 @@ describe('EdtfService', () => {
 			it('should apply qualifier only to the start when the end is open', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
-					time: {},
+					time: { format: 'am' },
 					endDate: { year: '', month: '', day: '' },
-					endTime: {},
+					endTime: { format: 'am' },
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
@@ -471,9 +500,9 @@ describe('EdtfService', () => {
 			it('should apply qualifier to both dates with mixed precision', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985' },
-					time: {},
+					time: { format: 'am' },
 					endDate: { year: '1990', month: '06' },
-					endTime: {},
+					endTime: { format: 'am' },
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
@@ -505,7 +534,7 @@ describe('EdtfService', () => {
 			it('should throw a generic human-readable error for invalid dates', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '99' },
-					time: {},
+					time: { format: 'am' },
 				};
 
 				expect(() => service.toEdtfDate(model)).toThrowError(
@@ -521,7 +550,7 @@ describe('EdtfService', () => {
 				hours: '02',
 				minutes: '30',
 				seconds: '45',
-				pm: true,
+				format: 'pm',
 			});
 
 			expect(result).toEqual({ hour: 14, minute: 30, second: 45 });
@@ -532,8 +561,7 @@ describe('EdtfService', () => {
 				hours: '09',
 				minutes: '15',
 				seconds: '00',
-				am: true,
-				pm: false,
+				format: 'am',
 			});
 
 			expect(result).toEqual({ hour: 9, minute: 15, second: 0 });
@@ -544,7 +572,7 @@ describe('EdtfService', () => {
 				hours: '12',
 				minutes: '00',
 				seconds: '00',
-				pm: true,
+				format: 'pm',
 			});
 
 			expect(result).toEqual({ hour: 12, minute: 0, second: 0 });
@@ -555,8 +583,7 @@ describe('EdtfService', () => {
 				hours: '12',
 				minutes: '00',
 				seconds: '00',
-				am: true,
-				pm: false,
+				format: 'am',
 			});
 
 			expect(result).toEqual({ hour: 0, minute: 0, second: 0 });
@@ -566,14 +593,14 @@ describe('EdtfService', () => {
 			const result = service.parseTimeAs24Hour({
 				hours: '05',
 				minutes: '30',
-				pm: false,
+				format: 'am',
 			});
 
 			expect(result.second).toBe(0);
 		});
 
 		it('should default missing hours and minutes to 0', () => {
-			const result = service.parseTimeAs24Hour({});
+			const result = service.parseTimeAs24Hour({ format: 'am' });
 
 			expect(result).toEqual({ hour: 0, minute: 0, second: 0 });
 		});
@@ -583,11 +610,43 @@ describe('EdtfService', () => {
 				hours: '7',
 				minutes: '5',
 				seconds: '3',
-				am: true,
-				pm: false,
+				format: 'am',
 			});
 
 			expect(result).toEqual({ hour: 7, minute: 5, second: 3 });
+		});
+
+		it('should pass through 24h hours directly', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '14',
+				minutes: '30',
+				seconds: '45',
+				format: 'h24',
+			});
+
+			expect(result).toEqual({ hour: 14, minute: 30, second: 45 });
+		});
+
+		it('should handle 00 hours in h24 mode', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '00',
+				minutes: '00',
+				seconds: '00',
+				format: 'h24',
+			});
+
+			expect(result).toEqual({ hour: 0, minute: 0, second: 0 });
+		});
+
+		it('should handle 23 hours in h24 mode', () => {
+			const result = service.parseTimeAs24Hour({
+				hours: '23',
+				minutes: '59',
+				seconds: '59',
+				format: 'h24',
+			});
+
+			expect(result).toEqual({ hour: 23, minute: 59, second: 59 });
 		});
 	});
 
@@ -617,6 +676,35 @@ describe('EdtfService', () => {
 
 		it('should return false for input longer than 2 digits', () => {
 			expect(service.isValidHour('123')).toBe(false);
+		});
+
+		describe('h24 mode', () => {
+			it('should accept single digits 0-2', () => {
+				expect(service.isValidHour('0', true)).toBe(true);
+				expect(service.isValidHour('1', true)).toBe(true);
+				expect(service.isValidHour('2', true)).toBe(true);
+			});
+
+			it('should reject single digit greater than 2', () => {
+				expect(service.isValidHour('3', true)).toBe(false);
+				expect(service.isValidHour('9', true)).toBe(false);
+			});
+
+			it('should accept 2-digit hours 00-23', () => {
+				expect(service.isValidHour('00', true)).toBe(true);
+				expect(service.isValidHour('13', true)).toBe(true);
+				expect(service.isValidHour('23', true)).toBe(true);
+			});
+
+			it('should reject hours 24 and above', () => {
+				expect(service.isValidHour('24', true)).toBe(false);
+				expect(service.isValidHour('30', true)).toBe(false);
+				expect(service.isValidHour('99', true)).toBe(false);
+			});
+
+			it('should reject non-numeric input', () => {
+				expect(service.isValidHour('ab', true)).toBe(false);
+			});
 		});
 	});
 
@@ -817,6 +905,14 @@ describe('EdtfService', () => {
 
 		it('should roundtrip a date range', () => {
 			const edtfString = '1985-05/1990-06';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip a full date-time without timezone marker', () => {
+			const edtfString = '1985-05-20T23:23:23';
 			const model = service.toDateTimeModel(edtfString);
 			const result = service.toEdtfDate(model);
 
