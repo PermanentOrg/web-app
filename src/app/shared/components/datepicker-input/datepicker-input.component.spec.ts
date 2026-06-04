@@ -52,10 +52,10 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate?.year).toBe('2026');
 	});
 
-	it('should not emit for incomplete year', () => {
+	it('should emit incomplete year as raw digits (no X in input)', () => {
 		component.updateYear(mockEvent('202'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.year).toBe('202');
 	});
 
 	it('should reject non-numeric year', () => {
@@ -167,10 +167,10 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate.year).toBe('');
 	});
 
-	it('should allow typing intermediate digits without emitting', () => {
+	it('should emit intermediate digits as the user types the year', () => {
 		component.updateYear(mockEvent('19'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.year).toBe('19');
 	});
 
 	it('should toggle datepicker', () => {

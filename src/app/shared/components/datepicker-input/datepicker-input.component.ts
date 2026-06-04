@@ -85,11 +85,9 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 			return;
 		}
 
+		this.dateChange.emit({ ...this.date, year: value });
 		if (value.length === 4) {
-			this.dateChange.emit({ ...this.date, year: value });
 			this.monthInput.nativeElement.focus();
-		} else if (value.length === 0) {
-			this.dateChange.emit({ ...this.date, year: value });
 		}
 	}
 

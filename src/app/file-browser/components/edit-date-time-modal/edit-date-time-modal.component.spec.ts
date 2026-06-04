@@ -371,7 +371,7 @@ describe('EditDateTimeModalComponent', () => {
 		expect(component.edtfValue()).toBe('');
 	});
 
-	it('should not include day without month in EDTF', () => {
+	it('should X-pad missing month when day is provided', () => {
 		component.date.set({ year: '2026', month: '', day: '18' });
 		component.time.set({
 			hours: '',
@@ -385,6 +385,6 @@ describe('EditDateTimeModalComponent', () => {
 			unknown: false,
 		});
 
-		expect(component.edtfValue()).toBe('2026');
+		expect(component.edtfValue()).toBe('2026-XX-18');
 	});
 });

@@ -184,20 +184,29 @@ export class EdtfService {
 	}
 
 	private buildDateString(date: DateModel): string {
-		const year = date.year.padStart(4, '0');
+		const hasYear = !!date.year;
+		const hasMonth = !!date.month;
+		const hasDay = !!date.day;
 
-		if (!date.month) {
-			return year;
-		}
+		if (!hasYear && !hasMonth && !hasDay) return '';
 
-		const month = date.month.padStart(2, '0');
+		const year = this.padWithX(date.year, 4);
+		if (!hasMonth && !hasDay) return year;
 
-		if (!date.day) {
-			return `${year}-${month}`;
-		}
+		const month = hasMonth ? this.padWithX(date.month, 2) : 'XX';
+		if (!hasDay) return `${year}-${month}`;
 
-		const day = date.day.padStart(2, '0');
+		const day = this.padWithX(date.day, 2);
 		return `${year}-${month}-${day}`;
+	}
+
+	// isValidMonth / isValidDay already restrict input to digit prefixes
+	// that form a parseable EDTF mask once X-padded (single-digit month ≤ 1,
+	// single-digit day ≤ 3) — so we never produce shapes like "5X" or "9X"
+	// that the edtf grammar rejects.
+	private padWithX(value: string, width: number): string {
+		const v = value ?? '';
+		return v.length >= width ? v : v + 'X'.repeat(width - v.length);
 	}
 
 	private buildTimeString(time: TimeModel): string {
@@ -237,8 +246,8 @@ export class EdtfService {
 					.substring(0, 2)
 			: undefined;
 
-		const month = monthPart === 'XX' ? '' : (monthPart ?? '');
-		const day = dayPart === 'XX' ? '' : (dayPart ?? '');
+		const month = (monthPart ?? '').replace(/X+$/i, '');
+		const day = (dayPart ?? '').replace(/X+$/i, '');
 
 		const hasTime = precision === EdtfPrecision.Time || edtfStr.includes('T');
 		// Read the wall-clock time from the original input string instead of
