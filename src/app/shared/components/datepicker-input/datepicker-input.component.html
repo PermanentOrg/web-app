@@ -36,8 +36,12 @@
 	<div class="pr-calendar-icon-wrapper">
 		<span
 			class="pr-icon-button"
+			role="button"
+			tabindex="0"
 			[class.disabled]="disabled"
 			(click)="toggleDatepicker()"
+			(keydown.enter)="toggleDatepicker()"
+			(keydown.space)="toggleDatepicker()"
 		>
 			<i class="material-icons">calendar_today</i>
 		</span>
