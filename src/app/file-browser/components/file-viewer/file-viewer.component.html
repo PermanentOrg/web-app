@@ -2,7 +2,6 @@
 	class="file-viewer"
 	[ngClass]="{
 		minimal: useMinimalView,
-		'editing-date': editingDate,
 		'can-edit': canEdit
 	}"
 >
@@ -125,26 +124,15 @@
 					></pr-inline-value-edit>
 				}
 			</div>
+			<div class="file-viewer-date">
+				<pr-sidebar-date-picker
+					[displayTime]="displayTimeObject"
+					[disabled]="!canEdit"
+					(saveClicked)="onDateSaved($event)"
+					(moreOptionsClicked)="onDateMoreOptions($event)"
+				/>
+			</div>
 			<table class="metadata-table">
-				<tr>
-					<td>Date</td>
-					<td>
-						<pr-inline-value-edit
-							[displayValue]="
-								currentRecord.displayTime || currentRecord.displayDT
-							"
-							[canEdit]="canEdit"
-							[item]="currentRecord"
-							[itemId]="currentRecord.folder_linkId"
-							emptyMessage="Click to add date"
-							readOnlyEmptyMessage="No date"
-							(doneEditing)="onFinishEditing('displayTime', $event)"
-							(toggledDatePicker)="onDateToggle($event)"
-							type="date"
-							class="no-padding"
-						></pr-inline-value-edit>
-					</td>
-				</tr>
 				<tr>
 					<td>Uploaded</td>
 					<td>{{ currentRecord.createdDT | date }}</td>

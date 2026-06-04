@@ -1,0 +1,115 @@
+<div class="pr-sidebar-date-picker" #sidebarDatePickerContainer>
+	<div class="pr-sidebar-date-picker-header">
+		<span class="pr-sidebar-date-picker-label">Date</span>
+		@if (activeQualifiers().length) {
+			<i class="material-icons pr-header-dot">fiber_manual_record</i>
+			<span class="pr-sidebar-date-picker-qualifiers">
+				{{ activeQualifiers().join(', ') }}:
+			</span>
+		}
+	</div>
+
+	<div
+		class="pr-sidebar-date-picker-rows"
+		[class.can-edit]="!disabled"
+		(click)="toggle()"
+	>
+		<div class="pr-sidebar-date-picker-row">
+			@if (hasEndDate()) {
+				<span class="pr-sidebar-date-picker-row-label">From</span>
+			}
+			@if (hasStartDate()) {
+				<span class="pr-sidebar-date-picker-row-value">
+					<span class="pr-date-part"
+						>{{ formattedStartDate() }}
+						@if (formattedStartTime()) {
+							<i class="material-icons pr-dot">fiber_manual_record</i>
+						}
+					</span>
+					@if (formattedStartTime()) {
+						<span class="pr-time-group">
+							<span class="pr-time-part">{{ formattedStartTime() }}</span>
+							<span class="pr-muted">{{ startMeridian() }}</span>
+							@if (startTimezone()) {
+								<span class="pr-muted">{{ startTimezone() }}</span>
+							}
+						</span>
+					}
+				</span>
+			} @else {
+				<span class="pr-sidebar-date-picker-row-placeholder">
+					{{ disabled ? 'No date' : 'Click to add date' }}
+				</span>
+			}
+			@if (!disabled) {
+				<span class="pr-sidebar-date-picker-edit-icon">
+					<i class="material-icons">edit</i>
+				</span>
+			}
+		</div>
+
+		@if (hasEndDate()) {
+			<div class="pr-sidebar-date-picker-row pr-sidebar-date-picker-to-row">
+				<span class="pr-sidebar-date-picker-row-label">To</span>
+				<span class="pr-sidebar-date-picker-row-value">
+					<span class="pr-date-part"
+						>{{ formattedEndDate() }}
+						@if (formattedEndTime()) {
+							<i class="material-icons pr-dot">fiber_manual_record</i>
+						}
+					</span>
+					@if (formattedEndTime()) {
+						<span class="pr-time-group">
+							<span class="pr-time-part">{{ formattedEndTime() }}</span>
+							<span class="pr-muted">{{ endMeridian() }}</span>
+							@if (endTimezone()) {
+								<span class="pr-muted">{{ endTimezone() }}</span>
+							}
+						</span>
+					}
+				</span>
+			</div>
+		}
+	</div>
+
+	@if (isDropdownOpen()) {
+		<div class="pr-sidebar-date-picker-panel">
+			<div class="pr-sidebar-date-picker-fields">
+				<pr-datepicker-input
+					[date]="_date()"
+					(dateChange)="onDateChange($event)"
+				/>
+
+				<pr-timepicker-input
+					[time]="_time()"
+					(timeChange)="onTimeChange($event)"
+				/>
+
+				<pr-timezone-dropdown
+					[selectedOffset]="_time().timezoneOffset"
+					[selectedName]="dropdownTimezoneLabel()"
+					(timezoneChange)="onTimezoneChange($event)"
+				/>
+
+				<button class="pr-clear-btn" (click)="clearAll()">
+					<i class="material-icons">delete_outline</i>
+					<span>Clear date and time</span>
+				</button>
+			</div>
+
+			<div class="pr-sidebar-date-picker-footer">
+				<button class="pr-more-options-btn" (click)="onMoreOptions()">
+					<i class="material-icons">tune</i>
+					<span>More options</span>
+				</button>
+
+				<div class="pr-sidebar-date-picker-actions">
+					<button class="pr-btn-cancel" (click)="onCancel()">Cancel</button>
+					<button class="pr-btn-save" (click)="onSave()">
+						<i class="material-icons">keyboard_return</i>
+					</button>
+				</div>
+			</div>
+		</div>
+	}
+</div>
