@@ -7,7 +7,6 @@ import { TimepickerInputComponent } from './timepicker-input.component';
 	template: `<pr-timepicker-input
 		[time]="time"
 		[disabled]="disabled"
-		[showSeconds]="showSeconds"
 		(timeChange)="onTimeChange($event)"
 	/>`,
 	standalone: true,
@@ -18,11 +17,9 @@ class TestHostComponent {
 		hours: '',
 		minutes: '',
 		seconds: '',
-		am: true,
-		pm: false,
+		format: 'am',
 	};
 	disabled = false;
-	showSeconds = true;
 	lastEmittedTime: TimeModel | null = null;
 
 	onTimeChange(time: TimeModel): void {
@@ -62,14 +59,6 @@ describe('TimepickerInputComponent', () => {
 		expect(inputs.length).toBe(3);
 	});
 
-	it('should hide seconds input when showSeconds is false', () => {
-		hostComponent.showSeconds = false;
-		fixture.detectChanges();
-		const inputs = fixture.nativeElement.querySelectorAll('.pr-time-segment');
-
-		expect(inputs.length).toBe(2);
-	});
-
 	// --- Disabled state ---
 
 	it('should not toggle timepicker when disabled', () => {
@@ -91,7 +80,7 @@ describe('TimepickerInputComponent', () => {
 		expect(component.showTimepicker()).toBeFalse();
 	});
 
-	// --- Hour validation ---
+	// --- Hour validation (12-hour) ---
 
 	it('should accept valid hour', () => {
 		component.updateTime(mockEvent('10'), 'hours');
@@ -119,6 +108,77 @@ describe('TimepickerInputComponent', () => {
 
 	it('should reject single digit greater than 1 for hours', () => {
 		component.updateTime(mockEvent('2'), 'hours');
+
+		expect(hostComponent.lastEmittedTime).toBeNull();
+	});
+
+	// --- Hour validation (24-hour) ---
+
+	it('should accept hours 00-23 in h24 mode', () => {
+		hostComponent.time = {
+			hours: '',
+			minutes: '',
+			seconds: '',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+
+		component.updateTime(mockEvent('00'), 'hours');
+
+		expect(hostComponent.lastEmittedTime?.hours).toBe('00');
+
+		component.updateTime(mockEvent('13'), 'hours');
+
+		expect(hostComponent.lastEmittedTime?.hours).toBe('13');
+
+		component.updateTime(mockEvent('23'), 'hours');
+
+		expect(hostComponent.lastEmittedTime?.hours).toBe('23');
+	});
+
+	it('should reject hours 24 and above in h24 mode', () => {
+		hostComponent.time = {
+			hours: '12',
+			minutes: '',
+			seconds: '',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+		hostComponent.lastEmittedTime = null;
+
+		component.updateTime(mockEvent('24'), 'hours');
+
+		expect(hostComponent.lastEmittedTime).toBeNull();
+
+		component.updateTime(mockEvent('30'), 'hours');
+
+		expect(hostComponent.lastEmittedTime).toBeNull();
+	});
+
+	it('should accept single digit 0-2 for hours in h24 mode', () => {
+		hostComponent.time = {
+			hours: '',
+			minutes: '',
+			seconds: '',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+
+		component.updateTime(mockEvent('2'), 'hours');
+
+		expect(hostComponent.lastEmittedTime?.hours).toBe('2');
+	});
+
+	it('should reject single digit greater than 2 for hours in h24 mode', () => {
+		hostComponent.time = {
+			hours: '',
+			minutes: '',
+			seconds: '',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+
+		component.updateTime(mockEvent('3'), 'hours');
 
 		expect(hostComponent.lastEmittedTime).toBeNull();
 	});
@@ -170,8 +230,7 @@ describe('TimepickerInputComponent', () => {
 			hours: '10',
 			minutes: '30',
 			seconds: '00',
-			am: true,
-			pm: false,
+			format: 'am',
 		};
 		fixture.detectChanges();
 		component.updateTime(mockEvent(''), 'hours');
@@ -179,34 +238,102 @@ describe('TimepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedTime?.hours).toBe('');
 	});
 
-	// --- AM/PM toggle ---
+	// --- Format cycle ---
 
-	it('should toggle AM to PM', () => {
+	it('should cycle AM -> PM', () => {
 		hostComponent.time = {
 			hours: '10',
 			minutes: '30',
 			seconds: '',
-			am: true,
-			pm: false,
+			format: 'am',
 		};
 		fixture.detectChanges();
-		component.toggleAmPm();
+		component.cycleFormat();
 
-		expect(hostComponent.lastEmittedTime?.pm).toBeTrue();
+		expect(hostComponent.lastEmittedTime?.format).toBe('pm');
 	});
 
-	it('should toggle PM to AM', () => {
+	it('should cycle PM -> h24', () => {
 		hostComponent.time = {
 			hours: '10',
 			minutes: '30',
 			seconds: '',
-			am: false,
-			pm: true,
+			format: 'pm',
 		};
 		fixture.detectChanges();
-		component.toggleAmPm();
+		component.cycleFormat();
 
-		expect(hostComponent.lastEmittedTime?.am).toBeTrue();
+		expect(hostComponent.lastEmittedTime?.format).toBe('h24');
+	});
+
+	it('should cycle h24 -> AM', () => {
+		hostComponent.time = {
+			hours: '14',
+			minutes: '30',
+			seconds: '',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+		component.cycleFormat();
+
+		expect(hostComponent.lastEmittedTime?.format).toBe('am');
+	});
+
+	it('should preserve hours value across format cycle', () => {
+		hostComponent.time = {
+			hours: '10',
+			minutes: '30',
+			seconds: '',
+			format: 'pm',
+		};
+		fixture.detectChanges();
+		component.cycleFormat();
+
+		expect(hostComponent.lastEmittedTime?.hours).toBe('10');
+	});
+
+	// --- Format label ---
+
+	it('should expose the AM label by default', () => {
+		expect(component.formatLabel()).toBe('AM');
+		expect(component.is24Hour()).toBeFalse();
+	});
+
+	it('should expose the 24H label when format is h24', () => {
+		hostComponent.time = {
+			hours: '14',
+			minutes: '30',
+			seconds: '',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+
+		expect(component.formatLabel()).toBe('24H');
+		expect(component.is24Hour()).toBeTrue();
+	});
+
+	it('should render formatLabel and bind meridian=false when h24 is active', () => {
+		hostComponent.time = {
+			hours: '14',
+			minutes: '30',
+			seconds: '',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+
+		const toggleButton: HTMLButtonElement =
+			fixture.nativeElement.querySelector('.pr-am-pm-toggle');
+
+		expect(toggleButton.textContent?.trim()).toBe('24H');
+
+		component.toggleTimepicker();
+		fixture.detectChanges();
+
+		const ngbTimepicker = fixture.debugElement.query(
+			(node) => node.name === 'ngb-timepicker',
+		);
+
+		expect(ngbTimepicker.componentInstance.meridian).toBeFalse();
 	});
 
 	// --- Outside click ---
@@ -227,8 +354,7 @@ describe('TimepickerInputComponent', () => {
 			hours: '02',
 			minutes: '30',
 			seconds: '15',
-			am: false,
-			pm: true,
+			format: 'pm',
 		};
 		fixture.detectChanges();
 
@@ -244,8 +370,7 @@ describe('TimepickerInputComponent', () => {
 			hours: '12',
 			minutes: '00',
 			seconds: '00',
-			am: true,
-			pm: false,
+			format: 'am',
 		};
 		fixture.detectChanges();
 
@@ -261,8 +386,7 @@ describe('TimepickerInputComponent', () => {
 			hours: '12',
 			minutes: '00',
 			seconds: '00',
-			am: false,
-			pm: true,
+			format: 'pm',
 		};
 		fixture.detectChanges();
 
@@ -278,8 +402,7 @@ describe('TimepickerInputComponent', () => {
 			hours: '',
 			minutes: '',
 			seconds: '',
-			am: true,
-			pm: false,
+			format: 'am',
 		};
 		fixture.detectChanges();
 
@@ -287,6 +410,22 @@ describe('TimepickerInputComponent', () => {
 			hour: 0,
 			minute: 0,
 			second: 0,
+		});
+	});
+
+	it('should sync FormControl from input time (h24)', () => {
+		hostComponent.time = {
+			hours: '14',
+			minutes: '30',
+			seconds: '15',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+
+		expect(component.timepickerControl.value).toEqual({
+			hour: 14,
+			minute: 30,
+			second: 15,
 		});
 	});
 
@@ -299,8 +438,7 @@ describe('TimepickerInputComponent', () => {
 			hours: '09',
 			minutes: '15',
 			seconds: '30',
-			am: true,
-			pm: false,
+			format: 'am',
 		});
 	});
 
@@ -311,8 +449,7 @@ describe('TimepickerInputComponent', () => {
 			hours: '02',
 			minutes: '45',
 			seconds: '00',
-			am: false,
-			pm: true,
+			format: 'pm',
 		});
 	});
 
@@ -320,14 +457,32 @@ describe('TimepickerInputComponent', () => {
 		component.onTimeSelect({ hour: 12, minute: 0, second: 0 });
 
 		expect(hostComponent.lastEmittedTime?.hours).toBe('12');
-		expect(hostComponent.lastEmittedTime?.pm).toBeTrue();
+		expect(hostComponent.lastEmittedTime?.format).toBe('pm');
 	});
 
 	it('should emit 12 AM for hour 0', () => {
 		component.onTimeSelect({ hour: 0, minute: 0, second: 0 });
 
 		expect(hostComponent.lastEmittedTime?.hours).toBe('12');
-		expect(hostComponent.lastEmittedTime?.am).toBeTrue();
+		expect(hostComponent.lastEmittedTime?.format).toBe('am');
+	});
+
+	it('should emit raw 24h hour when h24 is active', () => {
+		hostComponent.time = {
+			hours: '14',
+			minutes: '00',
+			seconds: '00',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+		component.onTimeSelect({ hour: 14, minute: 30, second: 0 });
+
+		expect(hostComponent.lastEmittedTime).toEqual({
+			hours: '14',
+			minutes: '30',
+			seconds: '00',
+			format: 'h24',
+		});
 	});
 
 	it('should not emit on null ngb-timepicker value', () => {
