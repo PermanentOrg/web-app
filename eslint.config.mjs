@@ -222,6 +222,21 @@ export default typescriptEslint.config([
 			eqeqeq: 'off',
 			'no-await-in-loop': 'off',
 			'no-useless-assignment': 'off',
+			// Newly enabled by the eslint-config-love 134 -> 154 bump.
+			// Disabled for now; to be addressed in a later pass.
+			'@typescript-eslint/no-useless-default-assignment': 'off',
+			'@typescript-eslint/no-unused-private-class-members': 'off',
+			'@typescript-eslint/strict-void-return': 'off',
+			'@eslint-community/eslint-comments/require-description': 'off',
+			'require-unicode-regexp': 'off',
+			'prefer-template': 'off',
+			'require-atomic-updates': 'off',
+			'prefer-object-spread': 'off',
+			'prefer-named-capture-group': 'off',
+			'prefer-exponentiation-operator': 'off',
+			'operator-assignment': 'off',
+			'prefer-object-has-own': 'off',
+			'prefer-arrow-callback': 'off',
 		},
 	},
 	{
