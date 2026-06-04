@@ -249,6 +249,64 @@ describe('SidebarDatePickerComponent', () => {
 		});
 	});
 
+	describe('formattedStartDate with X-padding', () => {
+		const setDate = (year: string, month: string, day: string): void => {
+			host.displayTime = {
+				date: { year, month, day },
+				time: { hours: '', minutes: '', seconds: '', format: 'am' },
+			};
+			fixture.detectChanges();
+		};
+
+		it('should pad partial year with X (year only)', () => {
+			setDate('198', '', '');
+
+			expect(component.formattedStartDate()).toBe('198X');
+		});
+
+		it('should display "May XXXX" when only month is set', () => {
+			setDate('', '05', '');
+
+			expect(component.formattedStartDate()).toBe('May XXXX');
+		});
+
+		it('should display "May 20, 198X" with partial year and full month/day', () => {
+			setDate('198', '05', '20');
+
+			expect(component.formattedStartDate()).toBe('May 20, 198X');
+		});
+
+		it('should display "May 2X, 1985" with partial day', () => {
+			setDate('1985', '05', '2');
+
+			expect(component.formattedStartDate()).toBe('May 2X, 1985');
+		});
+
+		it('should fall back to ISO style "1985-XX-20" when month is missing', () => {
+			setDate('1985', '', '20');
+
+			expect(component.formattedStartDate()).toBe('1985-XX-20');
+		});
+
+		it('should fall back to ISO style "1985-1X-20" when month is partial', () => {
+			setDate('1985', '1', '20');
+
+			expect(component.formattedStartDate()).toBe('1985-1X-20');
+		});
+
+		it('should fall back to ISO style "XXXX-XX-20" when only day is set', () => {
+			setDate('', '', '20');
+
+			expect(component.formattedStartDate()).toBe('XXXX-XX-20');
+		});
+
+		it('should still display fully-specified date with month name (regression)', () => {
+			setDate('1985', '05', '20');
+
+			expect(component.formattedStartDate()).toBe('May 20, 1985');
+		});
+	});
+
 	describe('qualifiers', () => {
 		it('should not show qualifiers when none are active', () => {
 			host.displayTime = {

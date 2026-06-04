@@ -13,7 +13,7 @@ import {
 	ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { format, setYear } from 'date-fns';
+import { format } from 'date-fns';
 import {
 	EdtfService,
 	TIME_FORMAT_LABEL,
@@ -272,35 +272,38 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		);
 	}
 
+	private padDigitsWithX(value: string, width: number): string {
+		const v = value ?? '';
+		return v.length >= width ? v : v + 'X'.repeat(width - v.length);
+	}
+
 	private formatDate(date: DateModel): string {
-		const hasYear = !!date.year;
-		const hasMonth = !!date.month;
-		const hasDay = !!date.day && parseInt(date.day, 10) > 0;
+		const yearRaw = date.year ?? '';
+		const monthRaw = date.month ?? '';
+		const dayRaw = date.day ?? '';
+
+		const hasYear = !!yearRaw;
+		const hasMonth = !!monthRaw;
+		const hasDay = !!dayRaw && parseInt(dayRaw, 10) !== 0;
 
 		if (!hasYear && !hasMonth && !hasDay) return '';
 
-		if (hasYear) {
-			const yearNum = parseInt(date.year, 10);
-			const monthNum = hasMonth ? parseInt(date.month, 10) - 1 : 0;
-			const dayNum = hasDay ? parseInt(date.day, 10) : 1;
+		const yearDisplay = this.padDigitsWithX(yearRaw, 4);
+		const monthComplete = /^\d{2}$/.test(monthRaw);
+		const monthName = monthComplete
+			? format(new Date(2000, parseInt(monthRaw, 10) - 1), 'MMMM')
+			: null;
+		const dayDisplay = hasDay ? this.padDigitsWithX(dayRaw, 2) : '';
 
-			// setYear avoids the JS Date quirk where years 0-99 are interpreted as 1900-1999
-			const dateObj = setYear(new Date(2000, monthNum, dayNum), yearNum);
+		if (monthName && hasDay)
+			return `${monthName} ${dayDisplay}, ${yearDisplay}`;
+		if (monthName) return `${monthName} ${yearDisplay}`;
+		if (!hasMonth && !hasDay) return yearDisplay;
 
-			if (hasMonth && hasDay) return format(dateObj, 'MMMM d, yyyy');
-			if (hasMonth) return format(dateObj, 'MMMM yyyy');
-			return format(dateObj, 'yyyy');
-		}
-
-		const dateParts: string[] = [];
-		if (hasMonth) {
-			const monthIdx = parseInt(date.month, 10) - 1;
-			if (monthIdx >= 0 && monthIdx < 12) {
-				dateParts.push(format(new Date(2000, monthIdx), 'MMMM'));
-			}
-		}
-		if (hasDay) dateParts.push(date.day);
-		return dateParts.join(' ');
+		const monthDisplay = hasMonth ? this.padDigitsWithX(monthRaw, 2) : 'XX';
+		const parts: string[] = [yearDisplay, monthDisplay];
+		if (hasDay) parts.push(dayDisplay);
+		return parts.join('-');
 	}
 
 	private formatTime(time: TimeModel): string {
