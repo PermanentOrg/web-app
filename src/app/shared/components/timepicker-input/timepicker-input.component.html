@@ -39,8 +39,12 @@
 	<div class="pr-time-icon-wrapper">
 		<span
 			class="pr-icon-button"
+			role="button"
+			tabindex="0"
 			[class.disabled]="disabled"
 			(click)="toggleTimepicker()"
+			(keydown.enter)="toggleTimepicker()"
+			(keydown.space)="toggleTimepicker()"
 		>
 			<i class="material-icons">access_time</i>
 		</span>
