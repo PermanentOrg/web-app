@@ -77,6 +77,43 @@ describe('EdtfService', () => {
 
 				expect(result.qualifiers.unknown).toBe(false);
 			});
+
+			it('should strip trailing X from partial year', () => {
+				const result = service.toDateTimeModel('198X');
+
+				expect(result.date.year).toBe('198');
+				expect(result.date.month).toBe('');
+			});
+
+			it('should strip trailing X from partial month', () => {
+				const result = service.toDateTimeModel('1985-1X');
+
+				expect(result.date.year).toBe('1985');
+				expect(result.date.month).toBe('1');
+			});
+
+			it('should strip trailing X from partial day', () => {
+				const result = service.toDateTimeModel('1985-05-2X');
+
+				expect(result.date.year).toBe('1985');
+				expect(result.date.month).toBe('05');
+				expect(result.date.day).toBe('2');
+			});
+
+			it('should parse XXXX-05 as month-only', () => {
+				const result = service.toDateTimeModel('XXXX-05');
+
+				expect(result.date.year).toBe('');
+				expect(result.date.month).toBe('05');
+			});
+
+			it('should parse 198X-05-20 as partial year with full month and day', () => {
+				const result = service.toDateTimeModel('198X-05-20');
+
+				expect(result.date.year).toBe('198');
+				expect(result.date.month).toBe('05');
+				expect(result.date.day).toBe('20');
+			});
 		});
 
 		describe('time parsing', () => {
@@ -251,6 +288,80 @@ describe('EdtfService', () => {
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05-20');
+			});
+		});
+
+		describe('unspecified-digit (X-padding)', () => {
+			it('should pad 3-digit year with one X', () => {
+				const model: DateTimeModel = {
+					date: { year: '198' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('198X');
+			});
+
+			it('should pad 2-digit year with two Xs', () => {
+				const model: DateTimeModel = {
+					date: { year: '19' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('19XX');
+			});
+
+			it('should emit XXXX when only month has digits', () => {
+				const model: DateTimeModel = {
+					date: { year: '', month: '05' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('XXXX-05');
+			});
+
+			it('should emit XXXX-XX-20 when only day has digits', () => {
+				const model: DateTimeModel = {
+					date: { year: '', month: '', day: '20' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('XXXX-XX-20');
+			});
+
+			it('should emit 1985-XX-20 when month is missing but day is present', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '', day: '20' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-XX-20');
+			});
+
+			it('should pad single-digit day with one X', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '2' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05-2X');
+			});
+
+			it('should pad single-digit month with one X', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '1' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-1X');
+			});
+
+			it('should combine partial year, full month, and full day', () => {
+				const model: DateTimeModel = {
+					date: { year: '198', month: '05', day: '20' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('198X-05-20');
 			});
 		});
 
@@ -913,6 +1024,46 @@ describe('EdtfService', () => {
 
 		it('should roundtrip a full date-time without timezone marker', () => {
 			const edtfString = '1985-05-20T23:23:23';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip partial year (198X)', () => {
+			const edtfString = '198X';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip month-only with unknown year (XXXX-05)', () => {
+			const edtfString = 'XXXX-05';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip known year and day with unknown month (1985-XX-20)', () => {
+			const edtfString = '1985-XX-20';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip partial day (1985-05-2X)', () => {
+			const edtfString = '1985-05-2X';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip partial year with full month and day (198X-05-20)', () => {
+			const edtfString = '198X-05-20';
 			const model = service.toDateTimeModel(edtfString);
 			const result = service.toEdtfDate(model);
 
