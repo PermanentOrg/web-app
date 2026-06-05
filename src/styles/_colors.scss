@@ -1,25 +1,73 @@
-//BRAND COLORS
-$PR-blue: #131b4a;
+// PERMANENT COLORS
+$PR-white: #ffffff;
+$PR-black: #000000;
 $PR-purple: #800080;
 $PR-orange: #ff9933;
 
-// VARIATIONS
-$PR-blue-light: #5261b7;
-$PR-blue-lightest: #41496e;
+// PERMANENT BLUE
+$PR-blue-25: #f4f6fd;
+$PR-blue-50: #e7ebed;
+$PR-blue-100: #d0d1db;
+$PR-blue-200: #9b8bc9;
+$PR-blue-300: #a1a4b7;
+$PR-blue-400: #898da4;
+$PR-blue-500: #717692;
+$PR-blue-600: #5a5f80;
+$PR-blue-700: #42496e;
+$PR-blue-800: #2b325c;
+$PR-blue-900: #131b4a;
 
+// SUCCESS
+$success-25: #f6fef9;
+$success-50: #ecfdf3;
+$success-100: #d1fadf;
+$success-200: #a6f4c5;
+$success-300: #6ce9a6;
+$success-400: #32d583;
+$success-500: #12b76a;
+$success-600: #039855;
+$success-700: #027a48;
+$success-800: #05603a;
+$success-900: #054f31;
+
+// WARNING
+$warning-25: #fffcf5;
+$warning-50: #fffaeb;
+$warning-100: #fef0c7;
+$warning-200: #fedfb9;
+$warning-300: #fec84b;
+$warning-400: #fdb022;
+$warning-500: #f79009;
+$warning-600: #dc6803;
+$warning-700: #b54708;
+$warning-800: #93370d;
+$warning-900: #7a2e0e;
+
+// ERROR
+$error-25: #fffbfa;
+$error-50: #fef3f2;
+$error-100: #fee4e2;
+$error-200: #fecdca;
+$error-300: #fda29b;
+$error-400: #f97066;
+$error-500: #f04438;
+$error-600: #d92d20;
+$error-700: #b42318;
+$error-800: #912018;
+$error-900: #7a271a;
+
+// ALIASES (backward compatibility)
+$PR-blue: $PR-blue-900;
+$PR-blue-light: $PR-blue-600;
+$PR-blue-lightest: $PR-blue-700;
 $PR-orange-light: #ffc779;
 $PR-orange-lightest: #ffead5;
-
 $PR-purple-light: #e2c1ea;
 
 // UI COLORS
 $folder-icon: #f7c985;
-$gray-dark: #646464;
-$gray-light: #c8c8c8;
-$red: #a10000;
-
-//BOOTSTRAP COLORS
-$white: #fff !default;
+$white: $PR-white !default;
+$black: $PR-black !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
 $gray-300: #dee2e6 !default;
@@ -29,22 +77,24 @@ $gray-600: #6c757d !default;
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
-$black: #000 !default;
+$gray-dark: #646464;
+$gray-light: #c8c8c8;
+$red: #a10000;
 
 // THIRD PARTY COLORS
 $familysearch-brand: #87ba41;
 $facebook-brand: #1877f2;
 
-$toggle-checked: #12b76a;
+$toggle-checked: $success-500;
 $toggle: #e7e8ed;
 
 $theme-colors: (
 	'primary': $PR-blue,
 	'secondary': $gray-600,
-	'success': #198754,
+	'success': $success-600,
 	'info': #0dcaf0,
-	'warning': #ffc107,
-	'danger': $red,
+	'warning': $warning-500,
+	'danger': $error-600,
 	'light': $gray-100,
 	'dark': $gray-900,
 	'primary-light': $PR-blue-light,

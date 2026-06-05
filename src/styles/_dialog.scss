@@ -218,3 +218,9 @@ $header-height: 3 * $grid-unit;
 		}
 	}
 }
+
+// Shift the modal right by half the left-menu width so it centers over the
+// main content area rather than the full viewport.
+.cdk-overlay-pane.edit-date-time-modal-dialog-panel {
+	margin-left: calc(#{$left-menu-width} / 2);
+}

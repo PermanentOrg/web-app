@@ -4,8 +4,11 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
-import { of } from 'rxjs';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
+import { MessageService } from '@shared/services/message/message.service';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -92,15 +95,10 @@ class MockSelectedItemPipe implements PipeTransform {
 	}
 }
 
+let selectedItemsSubject: BehaviorSubject<Set<any>>;
+
 const mockDataService = {
-	selectedItems$: () =>
-		of(
-			new Set([
-				new RecordVO({
-					accessRole: 'access.role.owner',
-				}),
-			]),
-		),
+	selectedItems$: () => selectedItemsSubject.asObservable(),
 	fetchFullItems: (_: any) => {},
 	currentFolder: {
 		type: 'folder',
@@ -109,9 +107,15 @@ const mockDataService = {
 
 const mockEditService = {
 	openLocationDialog: (_: any) => {},
-	saveItemVoProperty: jasmine
-		.createSpy('saveItemVoProperty')
-		.and.returnValue(Promise.resolve()),
+	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
+};
+
+let closedSubject: Subject<DateTimeModel | undefined>;
+
+const mockModalService = {
+	open: (_data: DateTimeModel) => ({
+		closed: closedSubject.asObservable(),
+	}),
 };
 
 class MockAccountService {
@@ -131,6 +135,16 @@ describe('SidebarComponent', () => {
 	let fixture: ComponentFixture<SidebarComponent>;
 
 	beforeEach(async () => {
+		closedSubject = new Subject<DateTimeModel | undefined>();
+
+		selectedItemsSubject = new BehaviorSubject<Set<any>>(
+			new Set([
+				new RecordVO({
+					accessRole: 'access.role.owner',
+				}),
+			]),
+		);
+
 		await TestBed.configureTestingModule({
 			declarations: [
 				SidebarComponent,
@@ -160,6 +174,17 @@ describe('SidebarComponent', () => {
 				{
 					provide: AccountService,
 					useClass: MockAccountService,
+				},
+				{
+					provide: EditDateTimeModalService,
+					useValue: mockModalService,
+				},
+				{
+					provide: MessageService,
+					useValue: {
+						showError: () => {},
+						showMessage: () => {},
+					},
 				},
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -338,69 +363,80 @@ describe('SidebarComponent', () => {
 		});
 	});
 
-	describe('onDateEditing', () => {
-		beforeEach(() => {
-			mockEditService.saveItemVoProperty.calls.reset();
+	describe('onDateMoreOptions', () => {
+		it('should open the edit date time modal with provided data', () => {
+			const openSpy = spyOn(mockModalService, 'open').and.callThrough();
+
+			const modalData: DateTimeModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			};
+
+			component.onDateMoreOptions(modalData);
+
+			expect(openSpy).toHaveBeenCalledWith(modalData);
 		});
 
-		it('should build EDTF interval when setting start date and end date exists', async () => {
-			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
-			component.selectedItem = item;
+		it('should save displayTime when modal returns a result', () => {
+			const saveSpy = spyOn(
+				mockEditService,
+				'saveItemVoProperty',
+			).and.callThrough();
 
-			await component.onDateEditing('start', '2000-01-01');
+			const modalData: DateTimeModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			};
 
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
-				item,
+			component.onDateMoreOptions(modalData);
+
+			closedSubject.next({
+				date: { year: '2000', month: '03', day: '15' },
+				time: {
+					hours: '10',
+					minutes: '30',
+					seconds: '00',
+					format: 'am',
+				},
+			});
+
+			expect(saveSpy).toHaveBeenCalledWith(
+				component.selectedItem,
 				'displayTime',
-				'2000-01-01/1990-06-15',
+				jasmine.any(String),
 			);
 		});
 
-		it('should build EDTF interval when setting end date and start date exists', async () => {
-			const item = new RecordVO({ displayTime: '1985-05-20' });
-			component.selectedItem = item;
+		it('should not save when modal is dismissed', () => {
+			const saveSpy = spyOn(
+				mockEditService,
+				'saveItemVoProperty',
+			).and.callThrough();
 
-			await component.onDateEditing('end', '2025-12-31');
+			const modalData: DateTimeModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			};
 
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
-				item,
-				'displayTime',
-				'1985-05-20/2025-12-31',
-			);
-		});
+			component.onDateMoreOptions(modalData);
+			closedSubject.next(undefined);
 
-		it('should set only start date when no end date is provided', async () => {
-			const item = new RecordVO({ displayTime: '1985-05-20' });
-			component.selectedItem = item;
-
-			await component.onDateEditing('start', '2000-01-01');
-
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
-				item,
-				'displayTime',
-				'2000-01-01',
-			);
-		});
-
-		it('should set displayTime to null when start date is cleared', async () => {
-			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
-			component.selectedItem = item;
-
-			await component.onDateEditing('start', '');
-
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
-				item,
-				'displayTime',
-				null,
-			);
-		});
-
-		it('should not call saveItemVoProperty when selectedItem is null', async () => {
-			component.selectedItem = null;
-
-			await component.onDateEditing('start', '2000-01-01');
-
-			expect(mockEditService.saveItemVoProperty).not.toHaveBeenCalled();
+			expect(saveSpy).not.toHaveBeenCalled();
 		});
 	});
 });
