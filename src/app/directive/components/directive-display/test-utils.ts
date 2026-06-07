@@ -31,6 +31,7 @@ export class MockDirectiveRepo {
 	public static mockStewardId: number = null;
 	public static mockStewardEmail: string = null;
 	public static mockNote: string = null;
+	public static mockDirectives: DirectiveData[] | null = null;
 
 	public static reset(): void {
 		MockDirectiveRepo.failRequest = false;
@@ -40,37 +41,47 @@ export class MockDirectiveRepo {
 		MockDirectiveRepo.failLegacyRequest = false;
 		MockDirectiveRepo.legacyContactName = null;
 		MockDirectiveRepo.legacyContactEmail = null;
+		MockDirectiveRepo.mockDirectives = null;
 	}
 
-	public createDirective(): DirectiveData {
-		const testDirectiveId = '39b2a5fa-3508-4030-91b6-21dc6ec7a1ab';
+	public createDirective(
+		stewardEmail: string = MockDirectiveRepo.mockStewardEmail,
+		note: string = MockDirectiveRepo.mockNote,
+		directiveId: string = '39b2a5fa-3508-4030-91b6-21dc6ec7a1ab',
+	): DirectiveData {
 		return {
-			directiveId: testDirectiveId,
+			directiveId,
 			archiveId: 1,
 			type: 'admin',
 			createdDt: new Date(),
 			updatedDt: new Date(),
 			trigger: {
-				directiveTriggerId: testDirectiveId,
-				directiveId: testDirectiveId,
+				directiveTriggerId: directiveId,
+				directiveId,
 				type: 'admin',
 				createdDt: new Date(),
 				updatedDt: new Date(),
 			},
 			steward: {
-				email: MockDirectiveRepo.mockStewardEmail,
+				email: stewardEmail,
 				name: '',
 			},
-			note: MockDirectiveRepo.mockNote,
+			note,
 			executionDt: null,
 		};
 	}
 
-	public async get(): Promise<DirectiveData> {
+	public async get(): Promise<DirectiveData[]> {
 		if (MockDirectiveRepo.failRequest) {
 			throw new Error('Unit Testing: Forced Request Failure');
 		}
-		return this.createDirective();
+		if (MockDirectiveRepo.mockDirectives) {
+			return MockDirectiveRepo.mockDirectives;
+		}
+		if (!MockDirectiveRepo.mockStewardEmail && !MockDirectiveRepo.mockNote) {
+			return [];
+		}
+		return [this.createDirective()];
 	}
 
 	public async getLegacyContact(): Promise<LegacyContact> {

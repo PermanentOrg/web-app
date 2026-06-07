@@ -25,9 +25,9 @@
 		>
 	</p>
 	<div class="archive-steward-header">
-		Archive Steward: The {{ archiveName }} Archive
+		Archive Stewards: The {{ archiveName }} Archive
 	</div>
-	@if (noPlan) {
+	@if (showNoPlanWarning) {
 		<div class="no-plan-warning">
 			<div class="warning-icon">
 				<fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
@@ -47,47 +47,61 @@
 		</div>
 	}
 	<p class="archive-steward-description">
-		The Archive Steward for this archive will receive your note when your Legacy
-		Plan is activated.
+		Each Archive Steward for this archive will receive your note when your
+		Legacy Plan is activated.
 	</p>
 	@if (error) {
 		<div class="error">
-			An error occured while trying to find the Archive Steward for the current
+			An error occured while trying to find the Archive Stewards for the current
 			archive. Please reload the page and try again.
 		</div>
 	}
 	@if (!error) {
-		<div class="archive-steward-table">
-			<div class="row">
-				<div>Archive Steward email</div>
-				<div
-					[class]="{
-						'archive-steward-email': true,
-						'not-assigned': !directive?.steward?.email
-					}"
+		@for (directive of directives; track directive.directiveId) {
+			<div
+				class="archive-steward-card"
+				role="button"
+				tabindex="0"
+				(click)="onCardActivated($event, directive)"
+				(keydown.enter)="onCardActivated($event, directive)"
+				(keydown.space)="onCardActivated($event, directive)"
+			>
+				<i class="material-icons edit-icon" aria-label="Edit Archive Steward"
+					>edit</i
 				>
-					{{ directive?.steward?.email ?? 'not assigned' }}
+				<div class="archive-steward-table">
+					<div class="row">
+						<div>Archive Steward email</div>
+						<div
+							[class]="{
+								'archive-steward-email': true,
+								'not-assigned': !directive?.steward?.email
+							}"
+						>
+							{{ directive?.steward?.email ?? 'not assigned' }}
+						</div>
+					</div>
+					<div class="row">
+						<div>Note to Steward</div>
+						<div
+							[class]="{
+								'archive-steward-note': true,
+								'not-assigned': !directive?.note
+							}"
+						>
+							{{ directive?.note ?? 'none' }}
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div>Note to Steward</div>
-				<div
-					[class]="{
-						'archive-steward-note': true,
-						'not-assigned': !directive?.note
-					}"
-				>
-					{{ directive?.note ?? 'none' }}
-				</div>
-			</div>
-		</div>
+		}
 	}
 	<button
 		class="btn btn-primary"
-		[disabled]="error || noPlan"
-		(click)="beginEdit.emit(directive)"
+		[disabled]="gateAddButton"
+		(click)="beginEdit.emit(null)"
 	>
-		{{ directive?.steward?.email ? 'Edit' : 'Assign' }} Archive Steward
+		Add a new Archive Steward
 	</button>
 	<div>&nbsp;</div>
 </div>
