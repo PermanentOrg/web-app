@@ -40,7 +40,6 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	canUseViews: boolean;
 
 	originalFileExtension: string = '';
-	permanentFileExtension: string = '';
 
 	get displayTime(): string {
 		return this.parseEdtfInterval('start');
@@ -129,16 +128,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 					)
 						?.type.split('.')
 						.pop();
-
-					this.permanentFileExtension =
-						this.selectedItem.FileVOs.find(
-							(item) => item.format === 'file.format.converted',
-						)
-							?.type.split('.')
-							.pop() || this.originalFileExtension;
 				} else {
 					this.originalFileExtension = '';
-					this.permanentFileExtension = '';
 					this.isRecord = !this.selectedItem.isFolder;
 				}
 			}),
