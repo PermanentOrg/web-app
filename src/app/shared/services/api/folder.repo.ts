@@ -69,12 +69,12 @@ interface StelaFolder {
 	};
 	publicAt: string;
 	sort: string;
-	thumbnailUrls: {
-		'200': string;
-		'256': string;
-		'500': string;
-		'1000': string;
-		'2000': string;
+	thumbnailUrls?: {
+		'200'?: string;
+		'256'?: string;
+		'500'?: string;
+		'1000'?: string;
+		'2000'?: string;
 	};
 	type: string;
 	status: string;

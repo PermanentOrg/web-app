@@ -7,11 +7,11 @@ import { of } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import {
+	convertStelaLocationToLocnVOData,
 	convertStelaRecordToRecordVO,
 	RecordRepo,
 	RecordResponse,
 	StelaLocation,
-	convertStelaLocationToLocnVOData,
 } from '@shared/services/api/record.repo';
 import { RecordVO } from '@root/app/models';
 import {
@@ -446,6 +446,25 @@ describe('RecordRepo', () => {
 			} as any);
 
 			expect(record.displayTime).toBeUndefined();
+		});
+
+		it('maps thumbnailUrls to all thumb fields', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				thumbnailUrls: {
+					'200': 'https://example.com/200',
+					'256': 'https://example.com/256',
+					'500': 'https://example.com/500',
+					'1000': 'https://example.com/1000',
+					'2000': 'https://example.com/2000',
+				},
+			} as any);
+
+			expect(record.thumbURL200).toBe('https://example.com/200');
+			expect(record.thumbURL500).toBe('https://example.com/500');
+			expect(record.thumbURL1000).toBe('https://example.com/1000');
+			expect(record.thumbURL2000).toBe('https://example.com/2000');
+			expect(record.thumbnail256).toBe('https://example.com/256');
 		});
 	});
 });

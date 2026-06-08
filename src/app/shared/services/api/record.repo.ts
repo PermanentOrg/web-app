@@ -114,10 +114,13 @@ export type StelaRecord = Omit<RecordVO, 'files'> & {
 	folderLinkId: string;
 	folderLinkType: FolderLinkType;
 	parentFolderLinkId: string;
-	thumbUrl200: string;
-	thumbUrl500: string;
-	thumbUrl1000: string;
-	thumbUrl2000: string;
+	thumbnailUrls?: {
+		'200'?: string;
+		'256'?: string;
+		'500'?: string;
+		'1000'?: string;
+		'2000'?: string;
+	};
 	location: StelaLocation | null;
 	files: Array<StelaFile>;
 	createdAt: string;
@@ -199,10 +202,14 @@ export const convertStelaRecordToRecordVO = (
 ): RecordVO =>
 	new RecordVO({
 		...stelaRecord,
-		thumbURL200: stelaRecord.thumbUrl200,
-		thumbURL500: stelaRecord.thumbUrl500,
-		thumbURL1000: stelaRecord.thumbUrl1000,
-		thumbURL2000: stelaRecord.thumbUrl2000,
+		thumbURL200: stelaRecord.thumbnailUrls?.['200'] ?? stelaRecord.thumbURL200,
+		thumbURL500: stelaRecord.thumbnailUrls?.['500'] ?? stelaRecord.thumbURL500,
+		thumbURL1000:
+			stelaRecord.thumbnailUrls?.['1000'] ?? stelaRecord.thumbURL1000,
+		thumbURL2000:
+			stelaRecord.thumbnailUrls?.['2000'] ?? stelaRecord.thumbURL2000,
+		thumbnail256:
+			stelaRecord.thumbnailUrls?.['256'] ?? stelaRecord.thumbnail256,
 		TagVOs: (stelaRecord.tags ?? []).map((stelaTag) =>
 			convertStelaTagToTagVO(stelaTag, stelaRecord.archiveId),
 		),

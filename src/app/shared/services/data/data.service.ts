@@ -11,6 +11,7 @@ import {
 	RecordVOData,
 } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
+import { GetThumbnail } from '@models/get-thumbnail';
 import {
 	FolderResponse,
 	RecordResponse,
@@ -252,7 +253,7 @@ export class DataService {
 
 						if (
 							!item.isFolder &&
-							!item.thumbURL200 &&
+							!GetThumbnail(item) &&
 							item.parentFolderId === this.currentFolder.folderId
 						) {
 							this.debug('thumbRefreshQueue push %s', item.archiveNbr);
