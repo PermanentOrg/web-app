@@ -55,6 +55,7 @@ export interface DateTimeModel {
 	qualifiers?: DateQualifierFlags;
 	date: DateModel;
 	time: TimeModel;
+	endQualifiers?: DateQualifierFlags;
 	endDate?: DateModel;
 	endTime?: TimeModel;
 }
@@ -98,9 +99,13 @@ export class EdtfService {
 		const [startPart, endPart] = edtfString.split('/');
 
 		const normalizedStart =
-			startPart === '..' ? '..' : this.normalizeForParsing(startPart);
+			startPart === '..' || startPart === ''
+				? startPart
+				: this.normalizeForParsing(startPart);
 		const normalizedEnd =
-			endPart === '..' ? '..' : this.normalizeForParsing(endPart);
+			endPart === '..' || endPart === ''
+				? endPart
+				: this.normalizeForParsing(endPart);
 
 		try {
 			const edtfObject = edtf(`${normalizedStart}/${normalizedEnd}`);
@@ -123,30 +128,37 @@ export class EdtfService {
 
 	toEdtfDate(model: DateTimeModel): string {
 		try {
-			const { date, time, qualifiers, endDate, endTime } = model;
+			const { date, time, qualifiers, endQualifiers, endDate, endTime } = model;
+			const hasRange = !!endDate;
 
-			if (qualifiers?.unknown) {
+			if (!hasRange && qualifiers?.unknown) {
 				return UNKNOWN_VALUE;
 			}
 
 			const isStartEmpty = this.isEmptyDateTime(date, time);
-			const isOpenEnd = endDate && this.isEmptyDateTime(endDate, endTime);
-			const hasEndDate = endDate && !this.isEmptyDateTime(endDate, endTime);
+			const isEndEmpty = hasRange && this.isEmptyDateTime(endDate, endTime);
 
-			if (isStartEmpty && !hasEndDate) {
+			if (isStartEmpty && !hasRange) {
 				return '';
 			}
 
-			const startPart = isStartEmpty
-				? '..'
-				: this.normalizeEdtfString(date, time, qualifiers);
+			const startPart = qualifiers?.unknown
+				? ''
+				: isStartEmpty
+					? '..'
+					: this.normalizeEdtfString(date, time, qualifiers);
 
-			const endPart = isOpenEnd
-				? '..'
-				: hasEndDate
-					? this.normalizeEdtfString(endDate, endTime, qualifiers)
-					: null;
-			const stringDate = endPart ? `${startPart}/${endPart}` : startPart;
+			let endPart: string | null = null;
+			if (hasRange) {
+				endPart = endQualifiers?.unknown
+					? ''
+					: isEndEmpty
+						? '..'
+						: this.normalizeEdtfString(endDate, endTime, endQualifiers);
+			}
+
+			const stringDate =
+				endPart === null ? startPart : `${startPart}/${endPart}`;
 			edtf(stringDate);
 			return stringDate;
 		} catch (error) {
@@ -316,18 +328,42 @@ export class EdtfService {
 		const lower = interval.lower;
 		const upper = interval.upper;
 
-		const openStart = typeof lower === 'number' || lower === null;
-		const openEnd = typeof upper === 'number' || upper === null;
+		const isStartUnknownSlot = startRaw === '';
+		const isEndUnknownSlot = endRaw === '';
+		const isStartOpenBound = startRaw === '..';
+		const isEndOpenBound = endRaw === '..';
 
-		const model: DateTimeModel = openStart
-			? { date: { year: '' } as DateModel, time: { format: 'am' } }
-			: this.extDateToDateTimeModel(lower, startRaw);
+		let model: DateTimeModel;
+		if (isStartUnknownSlot) {
+			model = {
+				qualifiers: { approximate: false, uncertain: false, unknown: true },
+				date: { year: '', month: '', day: '' },
+				time: { ...DEFAULT_TIME },
+			};
+		} else if (
+			isStartOpenBound ||
+			lower === null ||
+			typeof lower === 'number'
+		) {
+			model = { date: { year: '' } as DateModel, time: { format: 'am' } };
+		} else {
+			model = this.extDateToDateTimeModel(lower, startRaw);
+		}
 
-		if (openEnd) {
+		if (isEndUnknownSlot) {
+			model.endQualifiers = {
+				approximate: false,
+				uncertain: false,
+				unknown: true,
+			};
+			model.endDate = { year: '', month: '', day: '' };
+			model.endTime = { ...DEFAULT_TIME };
+		} else if (isEndOpenBound || upper === null || typeof upper === 'number') {
 			model.endDate = { year: '' } as DateModel;
 			model.endTime = { format: 'am' };
 		} else if (upper) {
 			const upperModel = this.extDateToDateTimeModel(upper, endRaw);
+			model.endQualifiers = upperModel.qualifiers;
 			model.endDate = upperModel.date;
 			model.endTime = upperModel.time;
 		}

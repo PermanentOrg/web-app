@@ -258,6 +258,45 @@ describe('EdtfService', () => {
 				expect(result.date.year).toBe('1985');
 				expect(result.endDate.year).toBe('1990');
 			});
+
+			it('should parse per-side qualifiers in an interval', () => {
+				const result = service.toDateTimeModel('1985-05~/1990-06?');
+
+				expect(result.qualifiers.approximate).toBe(true);
+				expect(result.qualifiers.uncertain).toBe(false);
+				expect(result.endQualifiers.approximate).toBe(false);
+				expect(result.endQualifiers.uncertain).toBe(true);
+			});
+
+			it('should parse empty-slot end as endQualifiers.unknown', () => {
+				const result = service.toDateTimeModel('1985-04-12/');
+
+				expect(result.date.year).toBe('1985');
+				expect(result.endQualifiers.unknown).toBe(true);
+				expect(result.endDate.year).toBe('');
+				expect(result.endDate.month).toBe('');
+				expect(result.endDate.day).toBe('');
+			});
+
+			it('should parse empty-slot start as qualifiers.unknown', () => {
+				const result = service.toDateTimeModel('/1990-02-04');
+
+				expect(result.qualifiers.unknown).toBe(true);
+				expect(result.date.year).toBe('');
+				expect(result.date.month).toBe('');
+				expect(result.date.day).toBe('');
+				expect(result.endDate.year).toBe('1990');
+				expect(result.endDate.month).toBe('02');
+				expect(result.endDate.day).toBe('04');
+			});
+
+			it('should keep open-end (`..`) distinct from empty-slot end', () => {
+				const result = service.toDateTimeModel('1985/..');
+
+				expect(result.date.year).toBe('1985');
+				expect(result.endDate.year).toBe('');
+				expect(result.endQualifiers?.unknown ?? false).toBe(false);
+			});
 		});
 	});
 
@@ -560,7 +599,7 @@ describe('EdtfService', () => {
 				expect(service.toEdtfDate(model)).toBe('1985/1990');
 			});
 
-			it('should apply approximate qualifier to both dates in a range', () => {
+			it('should apply approximate qualifier only to the start when end has no qualifiers', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
 					time: { format: 'am' },
@@ -569,28 +608,51 @@ describe('EdtfService', () => {
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
-				expect(service.toEdtfDate(model)).toBe('1985-05~/1990-06~');
+				expect(service.toEdtfDate(model)).toBe('1985-05~/1990-06');
 			});
 
-			it('should apply uncertain qualifier to both dates in a range', () => {
+			it('should apply uncertain qualifier only to the end', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
 					time: { format: 'am' },
 					endDate: { year: '1990', month: '06' },
 					endTime: { format: 'am' },
-					qualifiers: { approximate: false, uncertain: true, unknown: false },
+					qualifiers: { approximate: false, uncertain: false, unknown: false },
+					endQualifiers: {
+						approximate: false,
+						uncertain: true,
+						unknown: false,
+					},
 				};
 
-				expect(service.toEdtfDate(model)).toBe('1985-05?/1990-06?');
+				expect(service.toEdtfDate(model)).toBe('1985-05/1990-06?');
 			});
 
-			it('should apply combined qualifier to both dates in a range', () => {
+			it('should apply different qualifiers to each side independently', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05' },
+					time: { format: 'am' },
+					endDate: { year: '1990', month: '06' },
+					endTime: { format: 'am' },
+					qualifiers: { approximate: true, uncertain: false, unknown: false },
+					endQualifiers: {
+						approximate: false,
+						uncertain: true,
+						unknown: false,
+					},
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05~/1990-06?');
+			});
+
+			it('should apply combined qualifier per side', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
 					time: { format: 'am' },
 					endDate: { year: '1990', month: '06' },
 					endTime: { format: 'am' },
 					qualifiers: { approximate: true, uncertain: true, unknown: false },
+					endQualifiers: { approximate: true, uncertain: true, unknown: false },
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05%/1990-06%');
@@ -608,16 +670,48 @@ describe('EdtfService', () => {
 				expect(service.toEdtfDate(model)).toBe('1985-05~/..');
 			});
 
-			it('should apply qualifier to both dates with mixed precision', () => {
+			it('should emit empty-slot form when end qualifier is unknown', () => {
 				const model: DateTimeModel = {
-					date: { year: '1985' },
+					date: { year: '1985', month: '04', day: '12' },
 					time: { format: 'am' },
-					endDate: { year: '1990', month: '06' },
+					endDate: { year: '', month: '', day: '' },
 					endTime: { format: 'am' },
-					qualifiers: { approximate: true, uncertain: false, unknown: false },
+					qualifiers: { approximate: false, uncertain: false, unknown: false },
+					endQualifiers: {
+						approximate: false,
+						uncertain: false,
+						unknown: true,
+					},
 				};
 
-				expect(service.toEdtfDate(model)).toBe('1985~/1990-06~');
+				expect(service.toEdtfDate(model)).toBe('1985-04-12/');
+			});
+
+			it('should emit empty-slot form when start qualifier is unknown', () => {
+				const model: DateTimeModel = {
+					date: { year: '', month: '', day: '' },
+					time: { format: 'am' },
+					endDate: { year: '1990', month: '02', day: '04' },
+					endTime: { format: 'am' },
+					qualifiers: { approximate: false, uncertain: false, unknown: true },
+					endQualifiers: {
+						approximate: false,
+						uncertain: false,
+						unknown: false,
+					},
+				};
+
+				expect(service.toEdtfDate(model)).toBe('/1990-02-04');
+			});
+
+			it('should still return XXXX-XX-XX for standalone unknown without a range', () => {
+				const model: DateTimeModel = {
+					date: { year: '', month: '', day: '' },
+					time: { format: 'am' },
+					qualifiers: { approximate: false, uncertain: false, unknown: true },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('XXXX-XX-XX');
 			});
 		});
 	});
@@ -1034,6 +1128,30 @@ describe('EdtfService', () => {
 
 		it('should roundtrip a date range', () => {
 			const edtfString = '1985-05/1990-06';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip a range with per-side qualifiers', () => {
+			const edtfString = '1985-05~/1990-06?';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip the empty-slot end form', () => {
+			const edtfString = '1985-04-12/';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip the empty-slot start form', () => {
+			const edtfString = '/1990-02-04';
 			const model = service.toDateTimeModel(edtfString);
 			const result = service.toEdtfDate(model);
 
