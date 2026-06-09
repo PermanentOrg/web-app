@@ -19,6 +19,7 @@ import {
 } from '@shared/services/edtf-service/edtf.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
 
 type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
 @Component({
@@ -46,8 +47,6 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	canUseViews: boolean;
 
 	originalFileExtension: string = '';
-
-	showEdtfDatePicker: boolean;
 
 	showEdtfDatePicker: boolean;
 
@@ -95,6 +94,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		private edtfService: EdtfService,
 		private message: MessageService,
 		private accountService: AccountService,
+		private editDateTimeModalService: EditDateTimeModalService,
 		private cdr: ChangeDetectorRef,
 		private feature: FeatureFlagService,
 	) {
@@ -252,8 +252,19 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		}
 	}
 
-	async onDateMoreOptions(): Promise<void> {
-		//TODO: add edit date time modal PER-10642
+	async onDateMoreOptions(modalData: DateTimeModel): Promise<void> {
+		const dialogRef = this.editDateTimeModalService.open(modalData);
+
+		dialogRef.closed.subscribe(async (result) => {
+			if (result) {
+				try {
+					const newDisplayTime = this.edtfService.toEdtfDate(result);
+					await this.onFinishEditing('displayTime', newDisplayTime);
+				} catch (err) {
+					this.message.showError({ message: err?.message });
+				}
+			}
+		});
 	}
 
 	onLocationClick() {

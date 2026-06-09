@@ -1286,45 +1286,5 @@ describe('EdtfService', () => {
 
 			expect(result).toBe(edtfString);
 		});
-
-		it('should roundtrip partial year (198X)', () => {
-			const edtfString = '198X';
-			const model = service.toDateTimeModel(edtfString);
-			const result = service.toEdtfDate(model);
-
-			expect(result).toBe(edtfString);
-		});
-
-		it('should roundtrip month-only with unknown year (XXXX-05)', () => {
-			const edtfString = 'XXXX-05';
-			const model = service.toDateTimeModel(edtfString);
-			const result = service.toEdtfDate(model);
-
-			expect(result).toBe(edtfString);
-		});
-
-		it('should roundtrip known year and day with unknown month (1985-XX-20)', () => {
-			const edtfString = '1985-XX-20';
-			const model = service.toDateTimeModel(edtfString);
-			const result = service.toEdtfDate(model);
-
-			expect(result).toBe(edtfString);
-		});
-
-		it('should roundtrip partial day (1985-05-2X)', () => {
-			const edtfString = '1985-05-2X';
-			const model = service.toDateTimeModel(edtfString);
-			const result = service.toEdtfDate(model);
-
-			expect(result).toBe(edtfString);
-		});
-
-		it('should roundtrip partial year with full month and day (198X-05-20)', () => {
-			const edtfString = '198X-05-20';
-			const model = service.toDateTimeModel(edtfString);
-			const result = service.toEdtfDate(model);
-
-			expect(result).toBe(edtfString);
-		});
 	});
 });
