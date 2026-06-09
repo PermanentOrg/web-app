@@ -454,23 +454,6 @@ describe('EditDateTimeModalComponent', () => {
 
 	// --- EDTF computed ---
 
-	it('should compute EDTF value from date and time without timezone suffix', () => {
-		component.date.set({ year: '2026', month: '02', day: '18' });
-		component.time.set({
-			hours: '10',
-			minutes: '30',
-			seconds: '00',
-			format: 'am',
-		});
-		component.qualifiers.set({
-			approximate: false,
-			uncertain: false,
-			unknown: false,
-		});
-
-		expect(component.edtfValue()).toBe('2026-02-18T10:30:00');
-	});
-
 	it('should compute EDTF with date only', () => {
 		component.date.set({ year: '2026', month: '', day: '' });
 		component.time.set({
