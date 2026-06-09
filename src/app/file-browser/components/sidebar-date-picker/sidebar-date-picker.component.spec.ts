@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
-import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
+import {
+	DateTimeModel,
+	EdtfService,
+} from '@shared/services/edtf-service/edtf.service';
 import { SidebarDatePickerComponent } from './sidebar-date-picker.component';
 
 @Component({
@@ -150,7 +153,7 @@ describe('SidebarDatePickerComponent', () => {
 			expect(value.textContent).toContain('PM');
 		});
 
-		it('should display "Unknown date and time" when unknown qualifier is set', () => {
+		it('should display "Unknown" when unknown qualifier is set', () => {
 			host.displayTime = {
 				qualifiers: { approximate: false, uncertain: false, unknown: true },
 				date: { year: '', month: '', day: '' },
@@ -167,7 +170,8 @@ describe('SidebarDatePickerComponent', () => {
 				'.pr-sidebar-date-picker-row-value',
 			);
 
-			expect(value.textContent).toContain('Unknown date and time');
+			expect(value.textContent.trim()).toBe('Unknown');
+			expect(component.activeQualifiers()).not.toContain('Unknown');
 		});
 
 		it('should not show To row when no end date', () => {
@@ -368,6 +372,54 @@ describe('SidebarDatePickerComponent', () => {
 			expect(qualifiers).toBeTruthy();
 			expect(qualifiers.textContent).toContain('Uncertain');
 		});
+
+		it('should union qualifiers across start and end sides', () => {
+			host.displayTime = {
+				qualifiers: { approximate: true, uncertain: false, unknown: false },
+				date: { year: '1985', month: '05', day: '' },
+				time: { hours: '', minutes: '', seconds: '', format: 'am' },
+				endQualifiers: { approximate: false, uncertain: true, unknown: false },
+				endDate: { year: '1990', month: '06', day: '' },
+				endTime: { hours: '', minutes: '', seconds: '', format: 'am' },
+			};
+			fixture.detectChanges();
+
+			const qualifiers = fixture.nativeElement.querySelector(
+				'.pr-sidebar-date-picker-qualifiers',
+			);
+
+			expect(qualifiers).toBeTruthy();
+			expect(qualifiers.textContent).toContain('Approximate');
+			expect(qualifiers.textContent).toContain('Uncertain');
+		});
+
+		it('should show "Unknown" for end side when endQualifiers.unknown is true', () => {
+			host.displayTime = {
+				date: { year: '1985', month: '04', day: '12' },
+				time: { hours: '', minutes: '', seconds: '', format: 'am' },
+				endQualifiers: { approximate: false, uncertain: false, unknown: true },
+				endDate: { year: '', month: '', day: '' },
+				endTime: { hours: '', minutes: '', seconds: '', format: 'am' },
+			};
+			fixture.detectChanges();
+
+			expect(component.formattedEndDate()).toBe('Unknown');
+			expect(component.activeQualifiers()).not.toContain('Unknown');
+		});
+
+		it('should still surface Approximate / Uncertain when set alongside Unknown', () => {
+			host.displayTime = {
+				qualifiers: { approximate: true, uncertain: false, unknown: false },
+				date: { year: '1985', month: '04', day: '12' },
+				time: { hours: '', minutes: '', seconds: '', format: 'am' },
+				endQualifiers: { approximate: false, uncertain: false, unknown: true },
+				endDate: { year: '', month: '', day: '' },
+				endTime: { hours: '', minutes: '', seconds: '', format: 'am' },
+			};
+			fixture.detectChanges();
+
+			expect(component.activeQualifiers()).toEqual(['Approximate']);
+		});
 	});
 
 	describe('toggle and dropdown', () => {
@@ -453,6 +505,22 @@ describe('SidebarDatePickerComponent', () => {
 					seconds: '',
 					format: 'am',
 				},
+			};
+			fixture.detectChanges();
+
+			component.toggle();
+
+			expect(component.isDropdownOpen()).toBeFalse();
+			expect(host.moreOptionsData).toBeTruthy();
+		});
+
+		it('should open modal when end qualifier is active', () => {
+			host.displayTime = {
+				date: { year: '1985', month: '05', day: '' },
+				time: { hours: '', minutes: '', seconds: '', format: 'am' },
+				endQualifiers: { approximate: false, uncertain: true, unknown: false },
+				endDate: { year: '1990', month: '06', day: '' },
+				endTime: { hours: '', minutes: '', seconds: '', format: 'am' },
 			};
 			fixture.detectChanges();
 
@@ -560,6 +628,25 @@ describe('SidebarDatePickerComponent', () => {
 			expect(host.moreOptionsData.date.month).toBe('05');
 		});
 
+		it('should include endQualifiers when an end side has qualifiers', () => {
+			host.displayTime = {
+				date: { year: '1985', month: '05', day: '' },
+				time: { hours: '', minutes: '', seconds: '', format: 'am' },
+				endQualifiers: { approximate: false, uncertain: true, unknown: false },
+				endDate: { year: '1990', month: '06', day: '' },
+				endTime: { hours: '', minutes: '', seconds: '', format: 'am' },
+			};
+			fixture.detectChanges();
+
+			component.onMoreOptions();
+
+			expect(host.moreOptionsData.endQualifiers).toEqual({
+				approximate: false,
+				uncertain: true,
+				unknown: false,
+			});
+		});
+
 		it('should close dropdown when emitting', () => {
 			host.displayTime = {
 				date: { year: '1985', month: '05', day: '' },
@@ -627,6 +714,78 @@ describe('SidebarDatePickerComponent', () => {
 			expect(component._time().hours).toBe('10');
 			expect(component._time().minutes).toBe('30');
 			expect(component._time().format).toBe('pm');
+		});
+	});
+
+	describe('interval display', () => {
+		let edtfService: EdtfService;
+
+		beforeEach(() => {
+			edtfService = TestBed.inject(EdtfService);
+		});
+
+		it('should show "Sometime before" and the end date for an open-start interval', () => {
+			host.displayTime = edtfService.toDateTimeModel('../1990');
+			fixture.detectChanges();
+
+			expect(component.intervalLabel()).toBe('Sometime before');
+			expect(component.intervalValueDate()).toBe('1990');
+
+			const rows = fixture.nativeElement.querySelectorAll(
+				'.pr-sidebar-date-picker-row',
+			);
+
+			expect(rows.length).toBe(2);
+			expect(rows[0].textContent).toContain('Sometime before');
+			expect(rows[1].textContent).toContain('1990');
+		});
+
+		it('should show "Sometime after" and the start date for an open-end interval', () => {
+			host.displayTime = edtfService.toDateTimeModel('1985/..');
+			fixture.detectChanges();
+
+			expect(component.intervalLabel()).toBe('Sometime after');
+			expect(component.intervalValueDate()).toBe('1985');
+
+			const rows = fixture.nativeElement.querySelectorAll(
+				'.pr-sidebar-date-picker-row',
+			);
+
+			expect(rows.length).toBe(2);
+			expect(rows[0].textContent).toContain('Sometime after');
+			expect(rows[1].textContent).toContain('1985');
+		});
+
+		it('should keep From/To layout with Unknown on the unknown start side', () => {
+			host.displayTime = edtfService.toDateTimeModel('/1990-02-04');
+			fixture.detectChanges();
+
+			expect(component.intervalLabel()).toBeNull();
+
+			const rows = fixture.nativeElement.querySelectorAll(
+				'.pr-sidebar-date-picker-row',
+			);
+
+			expect(rows[0].textContent).toContain('From');
+			expect(rows[0].textContent).toContain('Unknown');
+			expect(rows[1].textContent).toContain('To');
+			expect(rows[1].textContent).toContain('February 04, 1990');
+		});
+
+		it('should keep From/To layout with Unknown on the unknown end side', () => {
+			host.displayTime = edtfService.toDateTimeModel('1985-04-12/');
+			fixture.detectChanges();
+
+			expect(component.intervalLabel()).toBeNull();
+
+			const rows = fixture.nativeElement.querySelectorAll(
+				'.pr-sidebar-date-picker-row',
+			);
+
+			expect(rows[0].textContent).toContain('From');
+			expect(rows[0].textContent).toContain('April 12, 1985');
+			expect(rows[1].textContent).toContain('To');
+			expect(rows[1].textContent).toContain('Unknown');
 		});
 	});
 });
