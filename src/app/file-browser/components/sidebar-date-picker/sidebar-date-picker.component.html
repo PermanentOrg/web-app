@@ -14,60 +14,46 @@
 		[class.can-edit]="!disabled"
 		(click)="toggle()"
 	>
-		<div class="pr-sidebar-date-picker-row">
-			@if (hasEndDate()) {
-				<span class="pr-sidebar-date-picker-row-label">From</span>
-			}
-			@if (hasStartDate()) {
-				<span class="pr-sidebar-date-picker-row-value">
-					<span class="pr-date-part"
-						>{{ formattedStartDate() }}
-						@if (formattedStartTime()) {
-							<i class="material-icons pr-dot">fiber_manual_record</i>
-						}
+		@for (row of rows(); track $index) {
+			<div
+				class="pr-sidebar-date-picker-row"
+				[class.pr-sidebar-date-picker-to-row]="$index > 0"
+			>
+				@if (row.prefixLabel) {
+					<span class="pr-sidebar-date-picker-row-label">
+						{{ row.prefixLabel }}
 					</span>
-					@if (formattedStartTime()) {
-						<span class="pr-time-group">
-							<span class="pr-time-part">{{ formattedStartTime() }}</span>
-							<span class="pr-muted">{{ startMeridian() }}</span>
-							@if (startTimezone()) {
-								<span class="pr-muted">{{ startTimezone() }}</span>
+				}
+				@if (row.text) {
+					<span class="pr-sidebar-date-picker-row-value">{{ row.text }}</span>
+				} @else if (row.date) {
+					<span class="pr-sidebar-date-picker-row-value">
+						<span class="pr-date-part"
+							>{{ row.date }}
+							@if (row.time) {
+								<i class="material-icons pr-dot">fiber_manual_record</i>
 							}
 						</span>
-					}
-				</span>
-			} @else {
-				<span class="pr-sidebar-date-picker-row-placeholder">
-					{{ disabled ? 'No date' : 'Click to add date' }}
-				</span>
-			}
-			@if (!disabled) {
-				<span class="pr-sidebar-date-picker-edit-icon">
-					<i class="material-icons">edit</i>
-				</span>
-			}
-		</div>
-
-		@if (hasEndDate()) {
-			<div class="pr-sidebar-date-picker-row pr-sidebar-date-picker-to-row">
-				<span class="pr-sidebar-date-picker-row-label">To</span>
-				<span class="pr-sidebar-date-picker-row-value">
-					<span class="pr-date-part"
-						>{{ formattedEndDate() }}
-						@if (formattedEndTime()) {
-							<i class="material-icons pr-dot">fiber_manual_record</i>
+						@if (row.time) {
+							<span class="pr-time-group">
+								<span class="pr-time-part">{{ row.time }}</span>
+								<span class="pr-muted">{{ row.meridian }}</span>
+								@if (row.timezone) {
+									<span class="pr-muted">{{ row.timezone }}</span>
+								}
+							</span>
 						}
 					</span>
-					@if (formattedEndTime()) {
-						<span class="pr-time-group">
-							<span class="pr-time-part">{{ formattedEndTime() }}</span>
-							<span class="pr-muted">{{ endMeridian() }}</span>
-							@if (endTimezone()) {
-								<span class="pr-muted">{{ endTimezone() }}</span>
-							}
-						</span>
-					}
-				</span>
+				} @else if (row.isEmpty) {
+					<span class="pr-sidebar-date-picker-row-placeholder">
+						{{ disabled ? 'No date' : 'Click to add date' }}
+					</span>
+				}
+				@if ($index === 0 && !disabled) {
+					<span class="pr-sidebar-date-picker-edit-icon">
+						<i class="material-icons">edit</i>
+					</span>
+				}
 			</div>
 		}
 	</div>

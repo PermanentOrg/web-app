@@ -40,6 +40,16 @@ const EMPTY_QUALIFIERS: DateQualifierFlags = {
 	unknown: false,
 };
 
+interface SidebarDateRow {
+	prefixLabel?: string;
+	text?: string;
+	date?: string;
+	time?: string;
+	meridian?: string;
+	timezone?: string;
+	isEmpty?: boolean;
+}
+
 @Component({
 	selector: 'pr-sidebar-date-picker',
 	standalone: true,
@@ -66,15 +76,16 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	_endDate = signal<DateModel>({ ...EMPTY_DATE });
 	_endTime = signal<TimeModel>({ ...EMPTY_TIME });
 	_qualifiers = signal<DateQualifierFlags>({ ...EMPTY_QUALIFIERS });
+	_endQualifiers = signal<DateQualifierFlags>({ ...EMPTY_QUALIFIERS });
 	_isOpenStart = signal(false);
 	_isOpenEnd = signal(false);
 
 	activeQualifiers = computed(() => {
-		const q = this._qualifiers();
+		const start = this._qualifiers();
+		const end = this._endQualifiers();
 		const active: string[] = [];
-		if (q.approximate) active.push('Approximate');
-		if (q.uncertain) active.push('Uncertain');
-		if (q.unknown) active.push('Unknown');
+		if (start.approximate || end.approximate) active.push('Approximate');
+		if (start.uncertain || end.uncertain) active.push('Uncertain');
 		return active;
 	});
 
@@ -87,7 +98,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	});
 
 	formattedStartDate = computed(() => {
-		if (this._qualifiers().unknown) return 'Unknown date and time';
+		if (this._qualifiers().unknown) return 'Unknown';
 		if (this._isOpenStart()) return '..';
 		return this.formatDate(this._date());
 	});
@@ -105,12 +116,14 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 	// End date/time computed properties
 	hasEndDate = computed(() => {
+		if (this._endQualifiers().unknown) return true;
 		if (this._isOpenEnd()) return true;
 		const date = this._endDate();
 		return !!(date.year || date.month || date.day);
 	});
 
 	formattedEndDate = computed(() => {
+		if (this._endQualifiers().unknown) return 'Unknown';
 		if (this._isOpenEnd()) return '..';
 		return this.formatDate(this._endDate());
 	});
@@ -128,6 +141,66 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 			this._endTime(),
 		),
 	);
+
+	intervalLabel = computed(() => {
+		if (this._isOpenStart()) return 'Sometime before';
+		if (this._isOpenEnd()) return 'Sometime after';
+		return null;
+	});
+
+	intervalValueDate = computed(() =>
+		this._isOpenStart() ? this.formattedEndDate() : this.formattedStartDate(),
+	);
+	intervalValueTime = computed(() =>
+		this._isOpenStart() ? this.formattedEndTime() : this.formattedStartTime(),
+	);
+	intervalValueMeridian = computed(() =>
+		this._isOpenStart() ? this.endMeridian() : this.startMeridian(),
+	);
+	intervalValueTimezone = computed(() =>
+		this._isOpenStart() ? this.endTimezone() : this.startTimezone(),
+	);
+
+	rows = computed<SidebarDateRow[]>(() => {
+		const intervalLabel = this.intervalLabel();
+		if (intervalLabel) {
+			return [
+				{ text: intervalLabel },
+				{
+					date: this.intervalValueDate(),
+					time: this.intervalValueTime(),
+					meridian: this.intervalValueMeridian(),
+					timezone: this.intervalValueTimezone(),
+				},
+			];
+		}
+
+		const isInterval = this.hasEndDate();
+		const startRow: SidebarDateRow = {
+			prefixLabel: isInterval ? 'From' : undefined,
+		};
+		if (this.hasStartDate()) {
+			startRow.date = this.formattedStartDate();
+			startRow.time = this.formattedStartTime();
+			startRow.meridian = this.startMeridian();
+			startRow.timezone = this.startTimezone();
+		} else {
+			startRow.isEmpty = true;
+		}
+
+		if (!isInterval) return [startRow];
+
+		return [
+			startRow,
+			{
+				prefixLabel: 'To',
+				date: this.formattedEndDate(),
+				time: this.formattedEndTime(),
+				meridian: this.endMeridian(),
+				timezone: this.endTimezone(),
+			},
+		];
+	});
 
 	ngOnInit(): void {
 		this.updateFromDisplayTime();
@@ -154,8 +227,11 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 	toggle(): void {
 		if (this.disabled) return;
-		const q = this._qualifiers();
-		if (this.hasEndDate() || q.unknown || q.approximate || q.uncertain) {
+		if (
+			this.hasEndDate() ||
+			this.hasAnyQualifier(this._qualifiers()) ||
+			this.hasAnyQualifier(this._endQualifiers())
+		) {
 			this.onMoreOptions();
 			return;
 		}
@@ -189,6 +265,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		this._endDate.set({ ...EMPTY_DATE });
 		this._endTime.set({ ...EMPTY_TIME });
 		this._qualifiers.set({ ...EMPTY_QUALIFIERS });
+		this._endQualifiers.set({ ...EMPTY_QUALIFIERS });
 		this._isOpenStart.set(false);
 		this._isOpenEnd.set(false);
 	}
@@ -200,13 +277,8 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 			qualifiers: { ...this._qualifiers() },
 			date: { ...this._date() },
 			time: { ...this._time() },
+			...(this.buildEndSide() ?? {}),
 		};
-
-		const endDate = this._endDate();
-		if (endDate.year || endDate.month || endDate.day || this._isOpenEnd()) {
-			modalData.endDate = { ...endDate };
-			modalData.endTime = { ...this._endTime() };
-		}
 
 		this.moreOptionsClicked.emit(modalData);
 	}
@@ -221,16 +293,33 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 			qualifiers: { ...this._qualifiers() },
 			date: { ...this._date() },
 			time: { ...this._time() },
+			...(this.buildEndSide() ?? {}),
 		};
-
-		const endDate = this._endDate();
-		if (endDate.year || endDate.month || endDate.day || this._isOpenEnd()) {
-			dateTimeModel.endDate = { ...endDate };
-			dateTimeModel.endTime = { ...this._endTime() };
-		}
 
 		this.saveClicked.emit(dateTimeModel);
 		this.isDropdownOpen.set(false);
+	}
+
+	private hasAnyQualifier(flags: DateQualifierFlags): boolean {
+		return flags.approximate || flags.uncertain || flags.unknown;
+	}
+
+	private buildEndSide(): Pick<
+		DateTimeModel,
+		'endQualifiers' | 'endDate' | 'endTime'
+	> | null {
+		const endDate = this._endDate();
+		const endQualifiers = this._endQualifiers();
+		const hasEnd =
+			!!(endDate.year || endDate.month || endDate.day) ||
+			this._isOpenEnd() ||
+			this.hasAnyQualifier(endQualifiers);
+		if (!hasEnd) return null;
+		return {
+			endQualifiers: { ...endQualifiers },
+			endDate: { ...endDate },
+			endTime: { ...this._endTime() },
+		};
 	}
 
 	private updateFromDisplayTime(): void {
@@ -240,6 +329,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 			this._endDate.set({ ...EMPTY_DATE });
 			this._endTime.set({ ...EMPTY_TIME });
 			this._qualifiers.set({ ...EMPTY_QUALIFIERS });
+			this._endQualifiers.set({ ...EMPTY_QUALIFIERS });
 			this._isOpenStart.set(false);
 			this._isOpenEnd.set(false);
 			return;
@@ -247,23 +337,24 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 		const startDate = this.displayTime.date ?? { ...EMPTY_DATE };
 		const endDate = this.displayTime.endDate;
+		const startQualifiers = this.displayTime.qualifiers ?? EMPTY_QUALIFIERS;
+		const endQualifiers = this.displayTime.endQualifiers ?? EMPTY_QUALIFIERS;
 		const isInterval = !!endDate;
 		const isStartEmpty = !startDate.year && !startDate.month && !startDate.day;
 		const isEndEmpty =
 			isInterval && !endDate.year && !endDate.month && !endDate.day;
 
-		this._isOpenStart.set(isInterval && isStartEmpty);
-		this._isOpenEnd.set(isEndEmpty);
+		this._isOpenStart.set(
+			isInterval && isStartEmpty && !startQualifiers.unknown,
+		);
+		this._isOpenEnd.set(isEndEmpty && !endQualifiers.unknown);
 
 		this._date.set({ ...startDate });
 		this._time.set(
 			this.displayTime.time ? { ...this.displayTime.time } : { ...EMPTY_TIME },
 		);
-		this._qualifiers.set(
-			this.displayTime.qualifiers
-				? { ...this.displayTime.qualifiers }
-				: { ...EMPTY_QUALIFIERS },
-		);
+		this._qualifiers.set({ ...startQualifiers });
+		this._endQualifiers.set({ ...endQualifiers });
 		this._endDate.set(endDate ? { ...endDate } : { ...EMPTY_DATE });
 		this._endTime.set(
 			this.displayTime.endTime
