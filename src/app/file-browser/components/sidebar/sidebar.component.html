@@ -226,6 +226,14 @@
 						<div class="sidebar-detail-content">unknown</div>
 					</div>
 				}
+				@if (permanentFileExtension && permanentFileExtension !== 'null') {
+					<div class="sidebar-detail">
+						<label>Permanent Format</label>
+						<div class="sidebar-detail-content">
+							.{{ permanentFileExtension }}
+						</div>
+					</div>
+				}
 			</div>
 		</div>
 		<div class="sidebar-item">
