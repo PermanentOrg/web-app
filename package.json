@@ -111,7 +111,7 @@
 		"@types/node": "^24.1.0",
 		"@types/webpack-env": "^1.18.8",
 		"angular-eslint": "^21.4.0",
-		"dotenv": "^8.2.0",
+		"dotenv": "^17.4.2",
 		"eslint": "^9.39.4",
 		"eslint-config-love": "^154.0.0",
 		"eslint-config-prettier": "^10.1.8",
