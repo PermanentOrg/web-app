@@ -6,8 +6,14 @@ import {
 import { of } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
-import { RecordRepo, RecordResponse } from '@shared/services/api/record.repo';
-import { RecordVO } from '@root/app/models';
+import {
+	RecordRepo,
+	RecordResponse,
+	StelaLocation,
+	convertStelaLocationToLocnVOData,
+	convertLocnVODataToStelaLocation,
+} from '@shared/services/api/record.repo';
+import { LocnVOData, RecordVO } from '@root/app/models';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
@@ -222,6 +228,113 @@ describe('RecordRepo', () => {
 		});
 	});
 
+	describe('convertStelaLocationToLocnVOData', () => {
+		it('returns null when the stela location has no id', () => {
+			expect(convertStelaLocationToLocnVOData(null)).toBeNull();
+			expect(
+				convertStelaLocationToLocnVOData({ id: '' } as StelaLocation),
+			).toBeNull();
+		});
+
+		it('parses the id and remaps state/precision onto the LocnVO shape', () => {
+			const stelaLocation: StelaLocation = {
+				id: '42',
+				name: "Jean Valjean's House",
+				sublocation: '55 Rue Plumet',
+				city: 'Paris',
+				state: 'Ile-de-France',
+				postalCode: '75007',
+				country: 'France',
+				latitude: 48.83,
+				longitude: 2.3,
+				altitudeMeters: 35,
+				precision: 'approximate',
+			};
+
+			const result = convertStelaLocationToLocnVOData(stelaLocation);
+
+			expect(result.locnId).toBe(42);
+			expect(result.name).toBe("Jean Valjean's House");
+			expect(result.sublocation).toBe('55 Rue Plumet');
+			expect(result.city).toBe('Paris');
+			expect(result.adminOneName).toBe('Ile-de-France');
+			expect(result.postalCode).toBe('75007');
+			expect(result.country).toBe('France');
+			expect(result.altitudeMeters).toBe(35);
+			expect(result.locationPrecision).toBe('approximate');
+
+			expect((result as Record<string, unknown>).state).toBeUndefined();
+			expect((result as Record<string, unknown>).precision).toBeUndefined();
+		});
+
+		it('coerces null state/precision to undefined', () => {
+			const stelaLocation: StelaLocation = {
+				id: '7',
+				state: null,
+				precision: null,
+			};
+
+			const result = convertStelaLocationToLocnVOData(stelaLocation);
+
+			expect(result.adminOneName).toBeUndefined();
+			expect(result.locationPrecision).toBeUndefined();
+		});
+	});
+
+	describe('convertLocnVODataToStelaLocation', () => {
+		it('remaps the LocnVO shape onto the stela location request', () => {
+			const locn: LocnVOData = {
+				name: "Jean Valjean's House",
+				sublocation: '55 Rue Plumet',
+				city: 'Paris',
+				adminOneName: 'Ile-de-France',
+				postalCode: '75007',
+				country: 'France',
+				latitude: 48.83,
+				longitude: 2.3,
+				altitudeMeters: 35,
+				locationPrecision: 'approximate',
+			};
+
+			const result = convertLocnVODataToStelaLocation(locn);
+
+			expect(result).toEqual({
+				name: "Jean Valjean's House",
+				sublocation: '55 Rue Plumet',
+				city: 'Paris',
+				state: 'Ile-de-France',
+				postalCode: '75007',
+				country: 'France',
+				latitude: 48.83,
+				longitude: 2.3,
+				altitudeMeters: 35,
+				precision: 'approximate',
+			});
+		});
+
+		it('coerces string coordinates to numbers', () => {
+			const result = convertLocnVODataToStelaLocation({
+				latitude: '48.83',
+				longitude: '2.3',
+			});
+
+			expect(result.latitude).toBe(48.83);
+			expect(result.longitude).toBe(2.3);
+		});
+
+		it('omits undefined and empty fields so the location is clean', () => {
+			const result = convertLocnVODataToStelaLocation({
+				city: 'Paris',
+				latitude: '',
+				longitude: null,
+			});
+
+			expect(result).toEqual({ city: 'Paris' });
+			expect('latitude' in result).toBe(false);
+			expect('longitude' in result).toBe(false);
+		});
+	});
+
 	describe('updateStelaRecord', () => {
 		let httpV2PatchSpy: jasmine.Spy;
 		let httpSendRequestPromiseSpy: jasmine.Spy;
@@ -305,6 +418,34 @@ describe('RecordRepo', () => {
 			const resultRecord = result.getRecordVO();
 
 			expect(resultRecord).toBeInstanceOf(RecordVO);
+		});
+
+		it('should send the location (and not displayTime) when updating location', async () => {
+			const recordVO = new RecordVO({
+				recordId: 42,
+				displayTime: '1985-05-20T00:00:00.000Z',
+				LocnVO: {
+					city: 'Paris',
+					adminOneName: 'Ile-de-France',
+					country: 'France',
+					latitude: 48.83,
+					longitude: 2.3,
+				},
+			});
+
+			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+
+			await repo.updateStelaRecord(recordVO, ['location']);
+
+			expect(httpV2PatchSpy).toHaveBeenCalledWith('v2/records/42', {
+				location: {
+					city: 'Paris',
+					state: 'Ile-de-France',
+					country: 'France',
+					latitude: 48.83,
+					longitude: 2.3,
+				},
+			});
 		});
 	});
 });

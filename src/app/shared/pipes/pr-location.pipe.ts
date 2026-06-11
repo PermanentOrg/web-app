@@ -19,16 +19,19 @@ export class PrLocationPipe implements PipeTransform {
 
 		const output: LocnPipeOutput = {};
 
+		const hasCoordinates =
+			locnVO.latitude != null &&
+			locnVO.latitude !== '' &&
+			locnVO.longitude != null &&
+			locnVO.longitude !== '';
+
 		// order by priority/usefulness
 		const queue = [
-			locnVO.streetNumber
-				? locnVO.streetNumber + ' ' + locnVO.streetName
-				: locnVO.streetName,
-			locnVO.locality,
+			locnVO.sublocation,
+			locnVO.city,
 			locnVO.adminOneName,
-			locnVO.latitude + ', ' + locnVO.longitude,
+			hasCoordinates ? `${locnVO.latitude}, ${locnVO.longitude}` : null,
 			locnVO.country,
-			locnVO.countryCode,
 		];
 
 		const line2 = [];
