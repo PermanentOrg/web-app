@@ -25,6 +25,8 @@ export enum EdtfPrecision {
 
 export const UNKNOWN_VALUE = 'XXXX-XX-XX';
 
+const DIGITS_ONLY = /^\d*$/;
+
 export const DEFAULT_TIME: TimeModel = {
 	hours: '',
 	minutes: '',
@@ -171,13 +173,19 @@ export class EdtfService {
 		time: TimeModel,
 		qualifiers?: DateQualifierFlags,
 	): string {
+		const hasCompleteDate = !!(date.year && date.month && date.day);
+		const hasTime = !!time?.hours;
+
+		if (hasTime && !hasCompleteDate) {
+			throw new Error('A complete date is required when time is provided.');
+		}
+
 		const dateStr = this.buildDateString(date);
 		const edtfObject = edtf(dateStr);
 		// Strip any time/timezone the library may append (e.g. T00:00:00.000Z)
 		let result = edtfObject.toEDTF().replace(/T.*$/, '');
 
-		const hasCompleteDate = !!(date.year && date.month && date.day);
-		const timeStr = hasCompleteDate ? this.buildTimeString(time) : '';
+		const timeStr = hasTime ? this.buildTimeString(time) : '';
 
 		if (timeStr) {
 			result = `${result}${timeStr}`;
@@ -205,11 +213,18 @@ export class EdtfService {
 		const year = this.padWithX(date.year, 4);
 		if (!hasMonth && !hasDay) return year;
 
-		const month = hasMonth ? this.padWithX(date.month, 2) : 'XX';
+		const month = hasMonth ? this.padMonthOrDay(date.month) : 'XX';
 		if (!hasDay) return `${year}-${month}`;
 
-		const day = this.padWithX(date.day, 2);
+		const day = this.padMonthOrDay(date.day);
 		return `${year}-${month}-${day}`;
+	}
+
+	private padMonthOrDay(value: string): string {
+		// A single 1–9 digit is treated as a complete value (e.g. '5' → '05'),
+		// since the user can't be mid-typing a two-digit value starting with 2–9.
+		if (/^[1-9]$/.test(value)) return `0${value}`;
+		return this.padWithX(value, 2);
 	}
 
 	private padWithX(value: string, width: number): string {
@@ -315,6 +330,10 @@ export class EdtfService {
 			message.includes('invalid upper bound')
 		) {
 			return 'The date range is not valid. Please make sure the start date is before the end date.';
+		}
+
+		if (message.includes('complete date is required')) {
+			return 'A complete date is required when time is provided.';
 		}
 
 		return 'The date entered is not valid. Please check the values and try again.';
@@ -482,5 +501,22 @@ export class EdtfService {
 		return isValid(
 			parse(`${yearStr}-${monthStr}-${dayStr}`, 'yyyy-MM-dd', new Date()),
 		);
+	}
+
+	getSegmentError(
+		value: string,
+		options: {
+			invalidCharsMessage: string;
+			isWithinRange?: (completeValue: string) => boolean;
+			rangeMessage?: string;
+		},
+	): string | null {
+		if (value === '') return null;
+		if (!DIGITS_ONLY.test(value)) return options.invalidCharsMessage;
+		if (value.length < 2) return null;
+		if (options.isWithinRange && !options.isWithinRange(value)) {
+			return options.rangeMessage ?? null;
+		}
+		return null;
 	}
 }
