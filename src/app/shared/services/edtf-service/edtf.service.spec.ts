@@ -1,5 +1,16 @@
 import { EdtfService, DateTimeModel } from './edtf.service';
 
+// Mirrors the service's local-offset stamping so the expectations stay
+// green in any timezone the tests run in.
+const localTimezoneOffset = (): string => {
+	const offsetMinutes = -new Date().getTimezoneOffset();
+	const sign = offsetMinutes < 0 ? '-' : '+';
+	const absoluteMinutes = Math.abs(offsetMinutes);
+	const hours = String(Math.floor(absoluteMinutes / 60)).padStart(2, '0');
+	const minutes = String(absoluteMinutes % 60).padStart(2, '0');
+	return `${sign}${hours}:${minutes}`;
+};
+
 describe('EdtfService', () => {
 	let service: EdtfService;
 
@@ -156,13 +167,46 @@ describe('EdtfService', () => {
 				expect(result.time.format).toBe('am');
 			});
 
-			it('should parse time with a timezone offset suffix (offset is discarded)', () => {
+			it('should parse time with a timezone offset suffix as local wall-clock time', () => {
 				const result = service.toDateTimeModel('1985-05-20T14:30:45+05:30');
 
 				expect(result.time.hours).toBe('02');
 				expect(result.time.minutes).toBe('30');
 				expect(result.time.seconds).toBe('45');
 				expect(result.time.format).toBe('pm');
+			});
+
+			it('should preserve the timezone offset suffix in the model', () => {
+				const result = service.toDateTimeModel('1985-05-20T14:30:45+05:30');
+
+				expect(result.time.timezoneOffset).toBe('+05:30');
+			});
+
+			it('should not set a timezone offset for unmarked or Z-marked times', () => {
+				const unmarked = service.toDateTimeModel('1985-05-20T14:30:45');
+				const utcMarked = service.toDateTimeModel('1985-05-20T14:30:45Z');
+
+				expect(unmarked.time.timezoneOffset).toBeUndefined();
+				expect(utcMarked.time.timezoneOffset).toBeUndefined();
+			});
+
+			it('should preserve the date parts of an early-morning unmarked time', () => {
+				// Regression: without normalization the edtf library treats the
+				// value as browser-local and converts it to UTC, which can shift
+				// the date parts across midnight.
+				const result = service.toDateTimeModel('1985-05-20T01:00:00');
+
+				expect(result.date.year).toBe('1985');
+				expect(result.date.month).toBe('05');
+				expect(result.date.day).toBe('20');
+				expect(result.time.hours).toBe('01');
+			});
+
+			it('should preserve the date parts of an early-morning offset-marked time', () => {
+				const result = service.toDateTimeModel('1985-05-20T01:00:00+05:30');
+
+				expect(result.date.day).toBe('20');
+				expect(result.time.hours).toBe('01');
 			});
 
 			it('should preserve wall-clock time when no timezone marker is present', () => {
@@ -250,13 +294,15 @@ describe('EdtfService', () => {
 				expect(result.endDate.month).toBe('');
 			});
 
-			it('should parse an interval with timezone suffixes (offsets are discarded)', () => {
+			it('should parse an interval with timezone suffixes and preserve each offset', () => {
 				const result = service.toDateTimeModel(
 					'1985-05-20T10:00:00+05:30/1990-06-15T12:00:00-04:00',
 				);
 
 				expect(result.date.year).toBe('1985');
 				expect(result.endDate.year).toBe('1990');
+				expect(result.time.timezoneOffset).toBe('+05:30');
+				expect(result.endTime.timezoneOffset).toBe('-04:00');
 			});
 		});
 	});
@@ -457,7 +503,24 @@ describe('EdtfService', () => {
 				expect(result).not.toContain('T');
 			});
 
-			it('should not append any timezone suffix to the serialized EDTF string', () => {
+			it('should preserve the timezone offset stored in the model', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '20' },
+					time: {
+						hours: '02',
+						minutes: '30',
+						seconds: '45',
+						format: 'pm',
+						timezoneOffset: '+05:30',
+					},
+				};
+
+				const result = service.toEdtfDate(model);
+
+				expect(result).toBe('1985-05-20T14:30:45+05:30');
+			});
+
+			it('should stamp the local timezone offset when the model has none', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
 					time: {
@@ -470,7 +533,7 @@ describe('EdtfService', () => {
 
 				const result = service.toEdtfDate(model);
 
-				expect(result).toBe('1985-05-20T14:30:45');
+				expect(result).toBe(`1985-05-20T14:30:45${localTimezoneOffset()}`);
 			});
 		});
 
@@ -1022,12 +1085,28 @@ describe('EdtfService', () => {
 			expect(result).toBe(edtfString);
 		});
 
-		it('should roundtrip a full date-time without timezone marker', () => {
-			const edtfString = '1985-05-20T23:23:23';
+		it('should roundtrip a full date-time with a timezone offset unchanged', () => {
+			const edtfString = '1985-05-20T23:23:23+05:30';
 			const model = service.toDateTimeModel(edtfString);
 			const result = service.toEdtfDate(model);
 
 			expect(result).toBe(edtfString);
+		});
+
+		it('should stamp the local offset on a date-time without timezone marker', () => {
+			const model = service.toDateTimeModel('1985-05-20T23:23:23');
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(`1985-05-20T23:23:23${localTimezoneOffset()}`);
+		});
+
+		it('should replace a fabricated Z marker with the local offset', () => {
+			// The folder/record VO layer rewrites offset-less values to
+			// '….000Z', so Z is treated as "no offset" rather than real UTC.
+			const model = service.toDateTimeModel('1985-05-20T23:23:23.000Z');
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(`1985-05-20T23:23:23${localTimezoneOffset()}`);
 		});
 
 		it('should roundtrip partial year (198X)', () => {

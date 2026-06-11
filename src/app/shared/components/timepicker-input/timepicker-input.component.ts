@@ -100,6 +100,7 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 
 		if (this.is24Hour()) {
 			this.timeChange.emit({
+				...this.time,
 				hours: String(ngbTime.hour).padStart(2, '0'),
 				minutes,
 				seconds,
@@ -112,6 +113,7 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 		const displayHour = ngbTime.hour % 12 || 12;
 
 		this.timeChange.emit({
+			...this.time,
 			hours: String(displayHour).padStart(2, '0'),
 			minutes,
 			seconds,

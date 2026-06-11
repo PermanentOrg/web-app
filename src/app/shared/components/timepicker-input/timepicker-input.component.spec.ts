@@ -490,4 +490,18 @@ describe('TimepickerInputComponent', () => {
 
 		expect(hostComponent.lastEmittedTime).toBeNull();
 	});
+
+	it('should preserve the timezone offset on ngb-timepicker select', () => {
+		hostComponent.time = {
+			hours: '09',
+			minutes: '15',
+			seconds: '30',
+			format: 'am',
+			timezoneOffset: '+05:30',
+		};
+		fixture.detectChanges();
+		component.onTimeSelect({ hour: 14, minute: 45, second: 0 });
+
+		expect(hostComponent.lastEmittedTime?.timezoneOffset).toBe('+05:30');
+	});
 });

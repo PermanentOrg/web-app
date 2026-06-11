@@ -49,6 +49,7 @@ export interface TimeModel {
 	minutes?: string;
 	seconds?: string;
 	format: TimeFormat;
+	timezoneOffset?: string;
 }
 
 export interface DateTimeModel {
@@ -116,9 +117,15 @@ export class EdtfService {
 	}
 
 	private normalizeForParsing(edtfString: string): string {
-		// Replace +hh:mm / -hh:mm timezone offset with Z so the edtf library
-		// can parse it — the library requires a UTC designator and throws on offsets.
-		return edtfString.replace(/T([\d:]+)[+-]\d{2}:\d{2}/, 'T$1Z');
+		// Replace any timezone offset (or absent designator) with Z so the edtf
+		// library treats the wall-clock digits as UTC — otherwise it converts the
+		// value to UTC, which can shift the date parts we extract for display.
+		// The wall-clock time itself is read from the raw string (extractRawTime),
+		// and the original offset is preserved separately in the model.
+		return edtfString.replace(
+			/T(\d{2}:\d{2}(?::\d{2})?(?:\.\d+)?)(?:Z|[+-]\d{2}:\d{2})?$/,
+			'T$1Z',
+		);
 	}
 
 	toEdtfDate(model: DateTimeModel): string {
@@ -213,8 +220,18 @@ export class EdtfService {
 			throw new Error('Invalid time');
 		}
 
+		const timezoneOffset = time.timezoneOffset ?? this.localTimezoneOffset();
 		const pad = (n: number): string => String(n).padStart(2, '0');
-		return `T${pad(converted.hour)}:${pad(converted.minute)}:${pad(converted.second)}`;
+		return `T${pad(converted.hour)}:${pad(converted.minute)}:${pad(converted.second)}${timezoneOffset}`;
+	}
+
+	private localTimezoneOffset(): string {
+		const offsetMinutes = -new Date().getTimezoneOffset();
+		const sign = offsetMinutes < 0 ? '-' : '+';
+		const absoluteMinutes = Math.abs(offsetMinutes);
+		const hours = String(Math.floor(absoluteMinutes / 60)).padStart(2, '0');
+		const minutes = String(absoluteMinutes % 60).padStart(2, '0');
+		return `${sign}${hours}:${minutes}`;
 	}
 
 	private extDateToDateTimeModel(
@@ -274,19 +291,26 @@ export class EdtfService {
 				minutes: hasTime ? String(minutes).padStart(2, '0') : '',
 				seconds: hasTime ? String(seconds).padStart(2, '0') : '',
 				format: hasTime && isPm ? 'pm' : 'am',
+				timezoneOffset: rawTime?.timezoneOffset,
 			},
 		};
 	}
 
-	private extractRawTime(
-		edtfString: string,
-	): { hours: number; minutes: number; seconds: number } | null {
-		const match = edtfString.match(/T(\d{2}):(\d{2})(?::(\d{2}))?/);
+	private extractRawTime(edtfString: string): {
+		hours: number;
+		minutes: number;
+		seconds: number;
+		timezoneOffset?: string;
+	} | null {
+		const match = edtfString.match(
+			/T(\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?([+-]\d{2}:\d{2})?/,
+		);
 		if (!match) return null;
 		return {
 			hours: parseInt(match[1], 10),
 			minutes: parseInt(match[2], 10),
 			seconds: match[3] ? parseInt(match[3], 10) : 0,
+			timezoneOffset: match[4],
 		};
 	}
 
