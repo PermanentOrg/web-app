@@ -44,6 +44,17 @@
 	box-shadow: 0px 0px 0px 4px #131b4a08;
 }
 
+@mixin input-error-state {
+	border-color: $red;
+	background: rgba($red, 0.06);
+}
+
+@mixin input-error-message {
+	display: block;
+	font-size: 12px;
+	color: $red;
+}
+
 @mixin icon-wrapper {
 	background: $PR-blue-25;
 	border-radius: 0 8px 8px 0;
