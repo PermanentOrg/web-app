@@ -105,6 +105,7 @@ export const LeanWhitelist = [
 	'thumbURL500',
 	'thumbURL1000',
 	'thumbURL2000',
+	'thumbnail256',
 	'thumbDT',
 	'refArchiveNbr',
 	'folder_linkId',

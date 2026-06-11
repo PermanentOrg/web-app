@@ -253,6 +253,7 @@ export class DataService {
 						if (
 							!item.isFolder &&
 							!item.thumbURL200 &&
+							!item.thumbnail256 &&
 							item.parentFolderId === this.currentFolder.folderId
 						) {
 							this.debug('thumbRefreshQueue push %s', item.archiveNbr);

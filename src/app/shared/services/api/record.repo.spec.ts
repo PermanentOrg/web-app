@@ -6,7 +6,12 @@ import {
 import { of } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
-import { RecordRepo, RecordResponse } from '@shared/services/api/record.repo';
+import {
+	convertStelaRecordToRecordVO,
+	RecordRepo,
+	RecordResponse,
+	StelaRecord,
+} from '@shared/services/api/record.repo';
 import { RecordVO } from '@root/app/models';
 import {
 	provideHttpClient,
@@ -14,6 +19,44 @@ import {
 } from '@angular/common/http';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { HttpV2Service } from '../http-v2/http-v2.service';
+
+describe('convertStelaRecordToRecordVO', () => {
+	it('maps thumbnailUrls to all thumb fields', () => {
+		const stelaRecord = {
+			recordId: 1,
+			displayName: 'Test',
+			archiveNumber: 'arch-1',
+			displayDate: '2025-01-01',
+			folderLinkId: '1',
+			folderLinkType: 'type.folder_link.private',
+			parentFolderLinkId: '2',
+			thumbnailUrls: {
+				'200': 'https://example.com/200',
+				'256': 'https://example.com/256',
+				'500': 'https://example.com/500',
+				'1000': 'https://example.com/1000',
+				'2000': 'https://example.com/2000',
+			},
+			location: null,
+			files: [],
+			createdAt: '2025-01-01',
+			updatedAt: '2025-01-01',
+			archive: { id: '1', name: 'Archive', thumbURL200: '' },
+			shares: null,
+			tags: null,
+		};
+
+		const result = convertStelaRecordToRecordVO(
+			stelaRecord as unknown as StelaRecord,
+		);
+
+		expect(result.thumbURL200).toBe('https://example.com/200');
+		expect(result.thumbURL500).toBe('https://example.com/500');
+		expect(result.thumbURL1000).toBe('https://example.com/1000');
+		expect(result.thumbURL2000).toBe('https://example.com/2000');
+		expect(result.thumbnail256).toBe('https://example.com/256');
+	});
+});
 
 describe('RecordRepo', () => {
 	let repo: RecordRepo;
