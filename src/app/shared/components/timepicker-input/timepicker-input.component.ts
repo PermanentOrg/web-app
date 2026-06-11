@@ -12,6 +12,7 @@ import {
 	OnDestroy,
 	ViewChild,
 	ElementRef,
+	WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
@@ -24,6 +25,14 @@ import {
 	DEFAULT_TIME,
 	EdtfService,
 } from '@shared/services/edtf-service/edtf.service';
+
+export const INVALID_CHARS_ERROR = 'The time contains invalid characters.';
+export const HOUR_24_RANGE_ERROR = 'Hour must be between 0 and 23.';
+export const HOUR_12_RANGE_ERROR = 'Hour must be between 1 and 12.';
+export const MINUTES_RANGE_ERROR = 'Minutes must be between 0 and 59.';
+export const SECONDS_RANGE_ERROR = 'Seconds must be between 0 and 59.';
+
+type TimeFieldKey = keyof Pick<TimeModel, 'hours' | 'minutes' | 'seconds'>;
 
 @Component({
 	selector: 'pr-timepicker-input',
@@ -51,6 +60,18 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 	formatLabel = computed(() => TIME_FORMAT_LABEL[this.timeSignal().format]);
 	is24Hour = computed(() => this.timeSignal().format === 'h24');
 
+	readonly fieldErrors: Record<TimeFieldKey, WritableSignal<string | null>> = {
+		hours: signal<string | null>(null),
+		minutes: signal<string | null>(null),
+		seconds: signal<string | null>(null),
+	};
+	currentError = computed(
+		() =>
+			this.fieldErrors.hours() ??
+			this.fieldErrors.minutes() ??
+			this.fieldErrors.seconds(),
+	);
+
 	private destroy$ = new Subject<void>();
 
 	constructor(
@@ -62,6 +83,7 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 		this.timepickerControl.valueChanges
 			.pipe(takeUntil(this.destroy$))
 			.subscribe((ngbTime) => this.onTimeSelect(ngbTime));
+		this.refreshErrorsFromInput();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -72,12 +94,58 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 			if (!this.ngbTimeEquals(model, current)) {
 				this.timepickerControl.setValue(model, { emitEvent: false });
 			}
+			this.refreshErrorsFromInput();
 		}
 	}
 
 	ngOnDestroy(): void {
 		this.destroy$.next();
 		this.destroy$.complete();
+	}
+
+	private refreshErrorsFromInput(): void {
+		(Object.keys(this.fieldErrors) as TimeFieldKey[]).forEach((timePropKey) =>
+			this.fieldErrors[timePropKey].set(
+				this.getFieldError(timePropKey, this.time[timePropKey] ?? ''),
+			),
+		);
+	}
+
+	private getFieldError(
+		timePropKey: TimeFieldKey,
+		value: string,
+	): string | null {
+		if (timePropKey === 'hours') {
+			return this.getHoursError(value, this.is24Hour());
+		}
+		if (timePropKey === 'minutes') return this.getMinutesError(value);
+		return this.getSecondsError(value);
+	}
+
+	private getHoursError(value: string, is24Hour: boolean): string | null {
+		return this.edtfService.getSegmentError(value, {
+			invalidCharsMessage: INVALID_CHARS_ERROR,
+			isWithinRange: (hours) => this.edtfService.isValidHour(hours, is24Hour),
+			rangeMessage: is24Hour ? HOUR_24_RANGE_ERROR : HOUR_12_RANGE_ERROR,
+		});
+	}
+
+	private getMinutesError(value: string): string | null {
+		return this.edtfService.getSegmentError(value, {
+			invalidCharsMessage: INVALID_CHARS_ERROR,
+			isWithinRange: (minutes) =>
+				this.edtfService.isValidMinutesSeconds(minutes),
+			rangeMessage: MINUTES_RANGE_ERROR,
+		});
+	}
+
+	private getSecondsError(value: string): string | null {
+		return this.edtfService.getSegmentError(value, {
+			invalidCharsMessage: INVALID_CHARS_ERROR,
+			isWithinRange: (seconds) =>
+				this.edtfService.isValidMinutesSeconds(seconds),
+			rangeMessage: SECONDS_RANGE_ERROR,
+		});
 	}
 
 	@HostListener('document:click', ['$event'])
@@ -126,6 +194,10 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 		const nextFormat =
 			this.FORMAT_CYCLE[(currentIndex + 1) % this.FORMAT_CYCLE.length];
 		this.timeChange.emit({ ...this.time, format: nextFormat });
+		// Hour validity depends on the format — re-check against the new format.
+		this.fieldErrors.hours.set(
+			this.getHoursError(this.time.hours ?? '', nextFormat === 'h24'),
+		);
 	}
 
 	onMinutesKeydown(event: KeyboardEvent): void {
@@ -134,6 +206,7 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 		if (target.value !== '') return;
 		event.preventDefault();
 		const newHours = (this.time.hours ?? '').slice(0, -1);
+		this.fieldErrors.hours.set(this.getFieldError('hours', newHours));
 		this.timeChange.emit({ ...this.time, hours: newHours });
 		this.hoursInput.nativeElement.focus();
 	}
@@ -144,37 +217,24 @@ export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {
 		if (target.value !== '') return;
 		event.preventDefault();
 		const newMinutes = (this.time.minutes ?? '').slice(0, -1);
+		this.fieldErrors.minutes.set(this.getFieldError('minutes', newMinutes));
 		this.timeChange.emit({ ...this.time, minutes: newMinutes });
 		this.minutesInput.nativeElement.focus();
 	}
 
 	updateTime(
 		event: Event,
-		timePropKey: keyof Pick<TimeModel, 'hours' | 'minutes' | 'seconds'>,
+		timePropKey: TimeFieldKey,
 		nextField?: HTMLInputElement,
 	): void {
-		const input = event.target as HTMLInputElement;
-		const value = input.value;
-
-		if (value !== '') {
-			const isValid =
-				timePropKey === 'hours'
-					? this.edtfService.isValidHour(value, this.is24Hour())
-					: this.edtfService.isValidMinutesSeconds(value);
-			if (!isValid) {
-				input.value = this.time[timePropKey] ?? '';
-				return;
-			}
-		}
+		const value = (event.target as HTMLInputElement).value;
+		const error = this.getFieldError(timePropKey, value);
+		this.fieldErrors[timePropKey].set(error);
 
 		this.timeChange.emit({ ...this.time, [timePropKey]: value });
 
-		if (nextField && value.length === 2) {
-			const isComplete =
-				timePropKey === 'hours'
-					? this.edtfService.isValidHour(value, this.is24Hour())
-					: this.edtfService.isValidMinutesSeconds(value);
-			if (isComplete) nextField.focus();
+		if (!error && nextField && value.length === 2) {
+			nextField.focus();
 		}
 	}
 
