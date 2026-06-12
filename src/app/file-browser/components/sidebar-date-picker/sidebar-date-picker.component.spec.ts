@@ -78,8 +78,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -99,8 +98,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -119,8 +117,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -139,8 +136,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '02',
 					minutes: '30',
 					seconds: '00',
-					am: false,
-					pm: true,
+					format: 'pm',
 				},
 			};
 			fixture.detectChanges();
@@ -162,8 +158,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -182,8 +177,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -202,16 +196,14 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 				endDate: { year: '1990', month: '06', day: '' },
 				endTime: {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -233,8 +225,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '02',
 					minutes: '30',
 					seconds: '00',
-					am: false,
-					pm: true,
+					format: 'pm',
 				},
 			};
 			fixture.detectChanges();
@@ -249,8 +240,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -325,8 +315,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -346,8 +335,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -368,8 +356,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -400,8 +387,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -418,8 +404,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -440,16 +425,14 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 				endDate: { year: '1990', month: '06', day: '' },
 				endTime: {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -468,8 +451,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -489,8 +471,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '10',
 					minutes: '30',
 					seconds: '00',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -513,8 +494,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '02',
 					minutes: '30',
 					seconds: '00',
-					am: false,
-					pm: true,
+					format: 'pm',
 				},
 			};
 			fixture.detectChanges();
@@ -538,8 +518,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -567,8 +546,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -589,8 +567,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -611,8 +588,7 @@ describe('SidebarDatePickerComponent', () => {
 					hours: '',
 					minutes: '',
 					seconds: '',
-					am: true,
-					pm: false,
+					format: 'am',
 				},
 			};
 			fixture.detectChanges();
@@ -645,13 +621,12 @@ describe('SidebarDatePickerComponent', () => {
 				hours: '10',
 				minutes: '30',
 				seconds: '00',
-				am: false,
-				pm: true,
+				format: 'pm',
 			});
 
 			expect(component._time().hours).toBe('10');
 			expect(component._time().minutes).toBe('30');
-			expect(component._time().pm).toBe(true);
+			expect(component._time().format).toBe('pm');
 		});
 	});
 });
