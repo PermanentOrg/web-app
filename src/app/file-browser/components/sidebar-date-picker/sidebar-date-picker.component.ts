@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 import { format } from 'date-fns';
 import {
 	EdtfService,
-	Meridian,
+	TIME_FORMAT_LABEL,
 	DateTimeModel,
 	DateModel,
 	TimeModel,
@@ -31,8 +31,7 @@ const EMPTY_TIME: TimeModel = {
 	hours: '',
 	minutes: '',
 	seconds: '',
-	am: true,
-	pm: false,
+	format: 'am',
 };
 
 const EMPTY_QUALIFIERS: DateQualifierFlags = {
@@ -94,9 +93,11 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	});
 
 	formattedStartTime = computed(() => this.formatTime(this._time()));
-	startMeridian = computed(() =>
-		this._time().hours ? (this._time().pm ? Meridian.PM : Meridian.AM) : '',
-	);
+	startMeridian = computed(() => {
+		const time = this._time();
+		if (!time.hours || time.format === 'h24') return '';
+		return TIME_FORMAT_LABEL[time.format];
+	});
 
 	startTimezone = computed(() =>
 		this.edtfService.browserTimezoneAbbreviation(this._date(), this._time()),
@@ -115,13 +116,11 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	});
 
 	formattedEndTime = computed(() => this.formatTime(this._endTime()));
-	endMeridian = computed(() =>
-		this._endTime().hours
-			? this._endTime().pm
-				? Meridian.PM
-				: Meridian.AM
-			: '',
-	);
+	endMeridian = computed(() => {
+		const time = this._endTime();
+		if (!time.hours || time.format === 'h24') return '';
+		return TIME_FORMAT_LABEL[time.format];
+	});
 
 	endTimezone = computed(() =>
 		this.edtfService.browserTimezoneAbbreviation(
