@@ -623,7 +623,7 @@ describe('EdtfService', () => {
 				expect(service.toEdtfDate(model)).toBe('1985/1990');
 			});
 
-			it('should apply approximate qualifier to both dates in a range', () => {
+			it('should apply approximate qualifier only to the start when end has no qualifiers', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
 					time: { format: 'am' },
@@ -632,28 +632,51 @@ describe('EdtfService', () => {
 					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
-				expect(service.toEdtfDate(model)).toBe('1985-05~/1990-06~');
+				expect(service.toEdtfDate(model)).toBe('1985-05~/1990-06');
 			});
 
-			it('should apply uncertain qualifier to both dates in a range', () => {
+			it('should apply uncertain qualifier only to the end', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
 					time: { format: 'am' },
 					endDate: { year: '1990', month: '06' },
 					endTime: { format: 'am' },
-					qualifiers: { approximate: false, uncertain: true, unknown: false },
+					qualifiers: { approximate: false, uncertain: false, unknown: false },
+					endQualifiers: {
+						approximate: false,
+						uncertain: true,
+						unknown: false,
+					},
 				};
 
-				expect(service.toEdtfDate(model)).toBe('1985-05?/1990-06?');
+				expect(service.toEdtfDate(model)).toBe('1985-05/1990-06?');
 			});
 
-			it('should apply combined qualifier to both dates in a range', () => {
+			it('should apply different qualifiers to each side independently', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05' },
+					time: { format: 'am' },
+					endDate: { year: '1990', month: '06' },
+					endTime: { format: 'am' },
+					qualifiers: { approximate: true, uncertain: false, unknown: false },
+					endQualifiers: {
+						approximate: false,
+						uncertain: true,
+						unknown: false,
+					},
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05~/1990-06?');
+			});
+
+			it('should apply combined qualifier per side', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05' },
 					time: { format: 'am' },
 					endDate: { year: '1990', month: '06' },
 					endTime: { format: 'am' },
 					qualifiers: { approximate: true, uncertain: true, unknown: false },
+					endQualifiers: { approximate: true, uncertain: true, unknown: false },
 				};
 
 				expect(service.toEdtfDate(model)).toBe('1985-05%/1990-06%');
@@ -671,16 +694,48 @@ describe('EdtfService', () => {
 				expect(service.toEdtfDate(model)).toBe('1985-05~/..');
 			});
 
-			it('should apply qualifier to both dates with mixed precision', () => {
+			it('should emit empty-slot form when end qualifier is unknown', () => {
 				const model: DateTimeModel = {
-					date: { year: '1985' },
+					date: { year: '1985', month: '04', day: '12' },
 					time: { format: 'am' },
-					endDate: { year: '1990', month: '06' },
+					endDate: { year: '', month: '', day: '' },
 					endTime: { format: 'am' },
-					qualifiers: { approximate: true, uncertain: false, unknown: false },
+					qualifiers: { approximate: false, uncertain: false, unknown: false },
+					endQualifiers: {
+						approximate: false,
+						uncertain: false,
+						unknown: true,
+					},
 				};
 
-				expect(service.toEdtfDate(model)).toBe('1985~/1990-06~');
+				expect(service.toEdtfDate(model)).toBe('1985-04-12/');
+			});
+
+			it('should emit empty-slot form when start qualifier is unknown', () => {
+				const model: DateTimeModel = {
+					date: { year: '', month: '', day: '' },
+					time: { format: 'am' },
+					endDate: { year: '1990', month: '02', day: '04' },
+					endTime: { format: 'am' },
+					qualifiers: { approximate: false, uncertain: false, unknown: true },
+					endQualifiers: {
+						approximate: false,
+						uncertain: false,
+						unknown: false,
+					},
+				};
+
+				expect(service.toEdtfDate(model)).toBe('/1990-02-04');
+			});
+
+			it('should still return XXXX-XX-XX for standalone unknown without a range', () => {
+				const model: DateTimeModel = {
+					date: { year: '', month: '', day: '' },
+					time: { format: 'am' },
+					qualifiers: { approximate: false, uncertain: false, unknown: true },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('XXXX-XX-XX');
 			});
 		});
 	});
