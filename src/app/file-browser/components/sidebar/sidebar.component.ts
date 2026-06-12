@@ -13,6 +13,12 @@ import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
+import {
+	DateTimeModel,
+	EdtfService,
+} from '@shared/services/edtf-service/edtf.service';
+import { MessageService } from '@shared/services/message/message.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 
 type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
 @Component({
@@ -40,6 +46,19 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	canUseViews: boolean;
 
 	originalFileExtension: string = '';
+
+	showEdtfDatePicker: boolean;
+
+	get displayTimeObject(): DateTimeModel | null {
+		try {
+			const timeSource =
+				this.selectedItem?.displayTime || this.selectedItem?.displayDT;
+			return timeSource ? this.edtfService.toDateTimeModel(timeSource) : null;
+		} catch (err) {
+			this.message.showError({ message: err?.message });
+			return null;
+		}
+	}
 
 	get displayTime(): string {
 		return this.parseEdtfInterval('start');
@@ -71,10 +90,14 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	constructor(
 		private dataService: DataService,
 		private editService: EditService,
+		private edtfService: EdtfService,
+		private message: MessageService,
 		private accountService: AccountService,
 		private cdr: ChangeDetectorRef,
+		private feature: FeatureFlagService,
 	) {
 		this.currentArchive = this.accountService.getArchive();
+		this.showEdtfDatePicker = this.feature.isEnabled('edtf-date');
 
 		this.subscriptions.push(
 			this.dataService.selectedItems$().subscribe(async (selectedItems) => {
@@ -117,7 +140,13 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 						await this.dataService.fetchFullItems(items);
 						this.isLoading = false;
 					}
+				} else if (
+					this.selectedItem?.isFolder &&
+					!this.selectedItem?.displayTime
+				) {
+					await this.dataService.fetchFullItems([this.selectedItem]);
 				}
+
 				if (
 					this.selectedItem instanceof RecordVO &&
 					this.selectedItem.FileVOs &&
@@ -132,6 +161,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 					this.originalFileExtension = '';
 					this.isRecord = !this.selectedItem.isFolder;
 				}
+
+				this.cdr.markForCheck();
 			}),
 		);
 	}
@@ -202,8 +233,25 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	}
 
 	async onFinishEditing(property: KeysOfType<ItemVO, String>, value: string) {
-		this.editService.saveItemVoProperty(this.selectedItem, property, value);
-		this.cdr.detectChanges();
+		await this.editService.saveItemVoProperty(
+			this.selectedItem,
+			property,
+			value,
+		);
+		this.cdr.markForCheck();
+	}
+
+	async onDateSaved(result: DateTimeModel) {
+		try {
+			const newDisplayTime = this.edtfService.toEdtfDate(result);
+			await this.onFinishEditing('displayTime', newDisplayTime);
+		} catch (err) {
+			this.message.showError({ message: err?.message });
+		}
+	}
+
+	async onDateMoreOptions(): Promise<void> {
+		//TODO: add edit date time modal PER-10642
 	}
 
 	onLocationClick() {

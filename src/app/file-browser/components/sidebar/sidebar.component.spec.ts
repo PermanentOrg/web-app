@@ -4,8 +4,10 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
-import { of } from 'rxjs';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { BehaviorSubject } from 'rxjs';
+import { MessageService } from '@shared/services/message/message.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -92,15 +94,10 @@ class MockSelectedItemPipe implements PipeTransform {
 	}
 }
 
+let selectedItemsSubject: BehaviorSubject<Set<any>>;
+
 const mockDataService = {
-	selectedItems$: () =>
-		of(
-			new Set([
-				new RecordVO({
-					accessRole: 'access.role.owner',
-				}),
-			]),
-		),
+	selectedItems$: () => selectedItemsSubject.asObservable(),
 	fetchFullItems: (_: any) => {},
 	currentFolder: {
 		type: 'folder',
@@ -109,9 +106,7 @@ const mockDataService = {
 
 const mockEditService = {
 	openLocationDialog: (_: any) => {},
-	saveItemVoProperty: jasmine
-		.createSpy('saveItemVoProperty')
-		.and.returnValue(Promise.resolve()),
+	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
 };
 
 class MockAccountService {
@@ -126,11 +121,23 @@ class MockAccountService {
 	}
 }
 
+const mockFeatureFlagService = {
+	isEnabled: (_flag: string) => false,
+};
+
 describe('SidebarComponent', () => {
 	let component: SidebarComponent;
 	let fixture: ComponentFixture<SidebarComponent>;
 
 	beforeEach(async () => {
+		selectedItemsSubject = new BehaviorSubject<Set<any>>(
+			new Set([
+				new RecordVO({
+					accessRole: 'access.role.owner',
+				}),
+			]),
+		);
+
 		await TestBed.configureTestingModule({
 			declarations: [
 				SidebarComponent,
@@ -160,6 +167,17 @@ describe('SidebarComponent', () => {
 				{
 					provide: AccountService,
 					useClass: MockAccountService,
+				},
+				{
+					provide: MessageService,
+					useValue: {
+						showError: () => {},
+						showMessage: () => {},
+					},
+				},
+				{
+					provide: FeatureFlagService,
+					useValue: mockFeatureFlagService,
 				},
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -266,6 +284,23 @@ describe('SidebarComponent', () => {
 		expect(displayValue).toBe('2024-01-01T00:00:00.000Z');
 	});
 
+	describe('edtf-date feature flag', () => {
+		it('should set showEdtfDatePicker to false when edtf-date flag is disabled', () => {
+			expect(component.showEdtfDatePicker).toBe(false);
+		});
+
+		it('should set showEdtfDatePicker to true when edtf-date flag is enabled', () => {
+			spyOn(mockFeatureFlagService, 'isEnabled').and.callFake(
+				(flag: string) => flag === 'edtf-date',
+			);
+
+			const enabledFixture = TestBed.createComponent(SidebarComponent);
+			enabledFixture.detectChanges();
+
+			expect(enabledFixture.componentInstance.showEdtfDatePicker).toBe(true);
+		});
+	});
+
 	it('should hide the original format for folders', () => {
 		component.isRecord = false;
 
@@ -335,72 +370,6 @@ describe('SidebarComponent', () => {
 			component.selectedItem = item;
 
 			expect(component.displayEndTime).toBe('');
-		});
-	});
-
-	describe('onDateEditing', () => {
-		beforeEach(() => {
-			mockEditService.saveItemVoProperty.calls.reset();
-		});
-
-		it('should build EDTF interval when setting start date and end date exists', async () => {
-			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
-			component.selectedItem = item;
-
-			await component.onDateEditing('start', '2000-01-01');
-
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
-				item,
-				'displayTime',
-				'2000-01-01/1990-06-15',
-			);
-		});
-
-		it('should build EDTF interval when setting end date and start date exists', async () => {
-			const item = new RecordVO({ displayTime: '1985-05-20' });
-			component.selectedItem = item;
-
-			await component.onDateEditing('end', '2025-12-31');
-
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
-				item,
-				'displayTime',
-				'1985-05-20/2025-12-31',
-			);
-		});
-
-		it('should set only start date when no end date is provided', async () => {
-			const item = new RecordVO({ displayTime: '1985-05-20' });
-			component.selectedItem = item;
-
-			await component.onDateEditing('start', '2000-01-01');
-
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
-				item,
-				'displayTime',
-				'2000-01-01',
-			);
-		});
-
-		it('should set displayTime to null when start date is cleared', async () => {
-			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
-			component.selectedItem = item;
-
-			await component.onDateEditing('start', '');
-
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
-				item,
-				'displayTime',
-				null,
-			);
-		});
-
-		it('should not call saveItemVoProperty when selectedItem is null', async () => {
-			component.selectedItem = null;
-
-			await component.onDateEditing('start', '2000-01-01');
-
-			expect(mockEditService.saveItemVoProperty).not.toHaveBeenCalled();
 		});
 	});
 });

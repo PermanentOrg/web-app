@@ -718,6 +718,89 @@ describe('EdtfService', () => {
 		});
 	});
 
+	describe('isNumeric', () => {
+		it('should return true for digit-only string', () => {
+			expect(service.isNumeric('12345')).toBe(true);
+		});
+
+		it('should return false for string with letters', () => {
+			expect(service.isNumeric('12a5')).toBe(false);
+		});
+
+		it('should return false for empty string', () => {
+			expect(service.isNumeric('')).toBe(false);
+		});
+
+		it('should return false for negative number string', () => {
+			expect(service.isNumeric('-1')).toBe(false);
+		});
+	});
+
+	describe('browserTimezoneAbbreviation', () => {
+		const stubTimezoneName = (timezoneName: string): void => {
+			spyOn(Intl, 'DateTimeFormat').and.returnValue({
+				formatToParts: () => [{ type: 'timeZoneName', value: timezoneName }],
+			} as unknown as Intl.DateTimeFormat);
+		};
+
+		const sampleDate = { year: '1985', month: '05', day: '20' };
+		const sampleTime = {
+			hours: '02',
+			minutes: '30',
+			seconds: '00',
+			format: 'pm' as const,
+		};
+
+		it('should return empty string when time has no hours', () => {
+			const result = service.browserTimezoneAbbreviation(sampleDate, {
+				hours: '',
+				format: 'am',
+			});
+
+			expect(result).toBe('');
+		});
+
+		it('should keep named abbreviations unchanged', () => {
+			stubTimezoneName('EDT');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'EDT',
+			);
+		});
+
+		it('should pad a whole-hour offset to +/-HH:MM', () => {
+			stubTimezoneName('GMT+3');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'GMT+03:00',
+			);
+		});
+
+		it('should pad a half-hour positive offset to +/-HH:MM', () => {
+			stubTimezoneName('GMT+5:30');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'GMT+05:30',
+			);
+		});
+
+		it('should pad a negative offset to +/-HH:MM', () => {
+			stubTimezoneName('GMT-9:30');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'GMT-09:30',
+			);
+		});
+
+		it('should leave an already-normalized offset unchanged', () => {
+			stubTimezoneName('GMT+03:00');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'GMT+03:00',
+			);
+		});
+	});
+
 	describe('parseTimeAs24Hour', () => {
 		it('should convert PM time to 24-hour format', () => {
 			const result = service.parseTimeAs24Hour({

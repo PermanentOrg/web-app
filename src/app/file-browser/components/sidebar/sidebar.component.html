@@ -105,35 +105,46 @@
 				></pr-edit-tags>
 			</div>
 		</div>
-		<div class="sidebar-item">
-			<label>{{ selectedItem.isFolder ? 'Start date' : 'Date' }}</label>
-			<pr-inline-value-edit
-				[displayValue]="displayTime"
-				[canEdit]="canEdit"
-				[item]="selectedItem"
-				[itemId]="selectedItem.folder_linkId"
-				emptyMessage="Click to add date"
-				[readOnlyEmptyMessage]="
-					selectedItem.isFolder ? 'No start date' : 'No date'
-				"
-				(doneEditing)="onDateEditing('start', $event)"
-				type="date"
-			></pr-inline-value-edit>
-		</div>
-		@if (selectedItem.isFolder) {
+		@if (showEdtfDatePicker) {
 			<div class="sidebar-item">
-				<label>End date</label>
+				<pr-sidebar-date-picker
+					[displayTime]="displayTimeObject"
+					[disabled]="!canEdit"
+					(saveClicked)="onDateSaved($event)"
+					(moreOptionsClicked)="onDateMoreOptions($event)"
+				/>
+			</div>
+		} @else {
+			<div class="sidebar-item">
+				<label>{{ selectedItem.isFolder ? 'Start date' : 'Date' }}</label>
 				<pr-inline-value-edit
-					[displayValue]="displayEndTime"
+					[displayValue]="displayTime"
 					[canEdit]="canEdit"
 					[item]="selectedItem"
 					[itemId]="selectedItem.folder_linkId"
 					emptyMessage="Click to add date"
-					readOnlyEmptyMessage="No end date"
-					(doneEditing)="onDateEditing('end', $event)"
+					[readOnlyEmptyMessage]="
+						selectedItem.isFolder ? 'No start date' : 'No date'
+					"
+					(doneEditing)="onDateEditing('start', $event)"
 					type="date"
 				></pr-inline-value-edit>
 			</div>
+			@if (selectedItem.isFolder) {
+				<div class="sidebar-item">
+					<label>End date</label>
+					<pr-inline-value-edit
+						[displayValue]="displayEndTime"
+						[canEdit]="canEdit"
+						[item]="selectedItem"
+						[itemId]="selectedItem.folder_linkId"
+						emptyMessage="Click to add date"
+						readOnlyEmptyMessage="No end date"
+						(doneEditing)="onDateEditing('end', $event)"
+						type="date"
+					></pr-inline-value-edit>
+				</div>
+			}
 		}
 		<div class="sidebar-item">
 			<label>Location</label>
