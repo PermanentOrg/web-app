@@ -49,14 +49,18 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 
 	showEdtfDatePicker: boolean;
 
-	get displayTimeObject(): DateTimeModel | null {
+	displayTimeObject: DateTimeModel | null = null;
+
+	private updateDisplayTimeObject(): void {
+		const timeSource =
+			this.selectedItem?.displayTime || this.selectedItem?.displayDT;
 		try {
-			const timeSource =
-				this.selectedItem?.displayTime || this.selectedItem?.displayDT;
-			return timeSource ? this.edtfService.toDateTimeModel(timeSource) : null;
+			this.displayTimeObject = timeSource
+				? this.edtfService.toDateTimeModel(timeSource)
+				: null;
 		} catch (err) {
+			this.displayTimeObject = null;
 			this.message.showError({ message: err?.message });
-			return null;
 		}
 	}
 
@@ -162,6 +166,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 					this.isRecord = !this.selectedItem.isFolder;
 				}
 
+				this.updateDisplayTimeObject();
+
 				this.cdr.markForCheck();
 			}),
 		);
@@ -245,6 +251,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		try {
 			const newDisplayTime = this.edtfService.toEdtfDate(result);
 			await this.onFinishEditing('displayTime', newDisplayTime);
+			this.updateDisplayTimeObject();
 		} catch (err) {
 			this.message.showError({ message: err?.message });
 		}

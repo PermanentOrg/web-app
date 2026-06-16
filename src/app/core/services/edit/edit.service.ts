@@ -366,12 +366,10 @@ export class EditService {
 						translate: true,
 					});
 				} else {
+					console.error('Failed to save item property', err);
 					this.message.showError({
-						message:
-							err?.error?.message ||
-							err?.error?.error ||
-							err?.message ||
-							'Failed to save changes',
+						message: 'error.generic.update_fail',
+						translate: true,
 					});
 				}
 			}

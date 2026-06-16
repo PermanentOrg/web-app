@@ -445,9 +445,10 @@ describe('EditService', () => {
 		expect(apiService.folder.getStelaFolderVOs).not.toHaveBeenCalled();
 	});
 
-	it('should revert property and show error when updateStelaRecord fails', async () => {
+	it('should revert property and show a translatable generic error when updateStelaRecord fails', async () => {
 		const messageService = TestBed.inject(MessageService);
 		spyOn(messageService, 'showError');
+		const consoleErrorSpy = spyOn(console, 'error');
 
 		const record = new RecordVO({ recordId: 1, displayTime: 'original-value' });
 		const httpError = {
@@ -466,13 +467,20 @@ describe('EditService', () => {
 
 		expect(record.displayTime).toBe('original-value');
 		expect(messageService.showError).toHaveBeenCalledWith({
-			message: 'Invalid date format',
+			message: 'error.generic.update_fail',
+			translate: true,
 		});
+
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			'Failed to save item property',
+			httpError,
+		);
 	});
 
-	it('should show fallback error when updateStelaRecord fails without error body', async () => {
+	it('should show a translatable generic error when updateStelaRecord fails without error body', async () => {
 		const messageService = TestBed.inject(MessageService);
 		spyOn(messageService, 'showError');
+		spyOn(console, 'error');
 
 		const record = new RecordVO({ recordId: 1, displayTime: 'original-value' });
 
@@ -487,13 +495,15 @@ describe('EditService', () => {
 
 		expect(record.displayTime).toBe('original-value');
 		expect(messageService.showError).toHaveBeenCalledWith({
-			message: 'Failed to save changes',
+			message: 'error.generic.update_fail',
+			translate: true,
 		});
 	});
 
-	it('should revert property and show error when updateStelaFolder fails', async () => {
+	it('should revert property and show a translatable generic error when updateStelaFolder fails', async () => {
 		const messageService = TestBed.inject(MessageService);
 		spyOn(messageService, 'showError');
+		spyOn(console, 'error');
 
 		const folder = new FolderVO({ folderId: 1, displayTime: 'original-value' });
 		const httpError = { error: { error: 'Invalid EDTF string' } };
@@ -512,7 +522,8 @@ describe('EditService', () => {
 
 		expect(folder.displayTime).toBe('original-value');
 		expect(messageService.showError).toHaveBeenCalledWith({
-			message: 'Invalid EDTF string',
+			message: 'error.generic.update_fail',
+			translate: true,
 		});
 	});
 
