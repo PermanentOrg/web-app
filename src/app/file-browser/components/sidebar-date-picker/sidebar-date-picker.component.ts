@@ -21,6 +21,7 @@ import {
 	DateModel,
 	TimeModel,
 	DateQualifierFlags,
+	DEFAULT_DATE_QUALIFIERS,
 } from '@shared/services/edtf-service/edtf.service';
 import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
 import { TimepickerInputComponent } from '@shared/components/timepicker-input/timepicker-input.component';
@@ -32,12 +33,6 @@ const EMPTY_TIME: TimeModel = {
 	minutes: '',
 	seconds: '',
 	format: 'am',
-};
-
-const EMPTY_QUALIFIERS: DateQualifierFlags = {
-	approximate: false,
-	uncertain: false,
-	unknown: false,
 };
 
 interface SidebarDateRow {
@@ -75,8 +70,8 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	_time = signal<TimeModel>({ ...EMPTY_TIME });
 	_endDate = signal<DateModel>({ ...EMPTY_DATE });
 	_endTime = signal<TimeModel>({ ...EMPTY_TIME });
-	_qualifiers = signal<DateQualifierFlags>({ ...EMPTY_QUALIFIERS });
-	_endQualifiers = signal<DateQualifierFlags>({ ...EMPTY_QUALIFIERS });
+	_qualifiers = signal<DateQualifierFlags>({ ...DEFAULT_DATE_QUALIFIERS });
+	_endQualifiers = signal<DateQualifierFlags>({ ...DEFAULT_DATE_QUALIFIERS });
 	_isOpenStart = signal(false);
 	_isOpenEnd = signal(false);
 
@@ -264,8 +259,8 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		this._time.set({ ...EMPTY_TIME });
 		this._endDate.set({ ...EMPTY_DATE });
 		this._endTime.set({ ...EMPTY_TIME });
-		this._qualifiers.set({ ...EMPTY_QUALIFIERS });
-		this._endQualifiers.set({ ...EMPTY_QUALIFIERS });
+		this._qualifiers.set({ ...DEFAULT_DATE_QUALIFIERS });
+		this._endQualifiers.set({ ...DEFAULT_DATE_QUALIFIERS });
 		this._isOpenStart.set(false);
 		this._isOpenEnd.set(false);
 	}
@@ -328,8 +323,8 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 			this._time.set({ ...EMPTY_TIME });
 			this._endDate.set({ ...EMPTY_DATE });
 			this._endTime.set({ ...EMPTY_TIME });
-			this._qualifiers.set({ ...EMPTY_QUALIFIERS });
-			this._endQualifiers.set({ ...EMPTY_QUALIFIERS });
+			this._qualifiers.set({ ...DEFAULT_DATE_QUALIFIERS });
+			this._endQualifiers.set({ ...DEFAULT_DATE_QUALIFIERS });
 			this._isOpenStart.set(false);
 			this._isOpenEnd.set(false);
 			return;
@@ -337,8 +332,10 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 		const startDate = this.displayTime.date ?? { ...EMPTY_DATE };
 		const endDate = this.displayTime.endDate;
-		const startQualifiers = this.displayTime.qualifiers ?? EMPTY_QUALIFIERS;
-		const endQualifiers = this.displayTime.endQualifiers ?? EMPTY_QUALIFIERS;
+		const startQualifiers =
+			this.displayTime.qualifiers ?? DEFAULT_DATE_QUALIFIERS;
+		const endQualifiers =
+			this.displayTime.endQualifiers ?? DEFAULT_DATE_QUALIFIERS;
 		const isInterval = !!endDate;
 		const isStartEmpty = !startDate.year && !startDate.month && !startDate.day;
 		const isEndEmpty =

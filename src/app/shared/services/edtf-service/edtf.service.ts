@@ -38,6 +38,12 @@ export interface DateQualifierFlags {
 	unknown: boolean;
 }
 
+export const DEFAULT_DATE_QUALIFIERS: DateQualifierFlags = {
+	approximate: false,
+	uncertain: false,
+	unknown: false,
+};
+
 export interface DateModel {
 	year: string;
 	month?: string;
