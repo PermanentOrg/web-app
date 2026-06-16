@@ -383,13 +383,22 @@ describe('EdtfService', () => {
 				expect(service.toEdtfDate(model)).toBe('1985-XX-20');
 			});
 
-			it('should pad single-digit day with one X', () => {
+			it('should zero-pad a single-digit day on the left', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '2' },
 					time: { format: 'am' },
 				};
 
-				expect(service.toEdtfDate(model)).toBe('1985-05-2X');
+				expect(service.toEdtfDate(model)).toBe('1985-05-02');
+			});
+
+			it('should zero-pad a single-digit day that would be an invalid X-range', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '9' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05-09');
 			});
 
 			it('should pad single-digit month with one X', () => {
@@ -1083,6 +1092,10 @@ describe('EdtfService', () => {
 			expect(service.isValidDay('3', '1985', '05')).toBe(true);
 		});
 
+		it('should accept a single "0" as in-progress input so backspace works on a padded day', () => {
+			expect(service.isValidDay('0', '1985', '05')).toBe(true);
+		});
+
 		it('should fall back to leap year 2000 when year is missing', () => {
 			// 2000 is a leap year so Feb 29 is allowed
 			expect(service.isValidDay('29', '', '02')).toBe(true);
@@ -1198,12 +1211,13 @@ describe('EdtfService', () => {
 			expect(result).toBe(edtfString);
 		});
 
-		it('should roundtrip partial day (1985-05-2X)', () => {
-			const edtfString = '1985-05-2X';
-			const model = service.toDateTimeModel(edtfString);
+		it('should normalize a partial day (1985-05-2X) to a discrete zero-padded day', () => {
+			// A day is treated as a discrete value, not an unspecified-digit
+			// range, so 2X collapses to the 2nd rather than round-tripping.
+			const model = service.toDateTimeModel('1985-05-2X');
 			const result = service.toEdtfDate(model);
 
-			expect(result).toBe(edtfString);
+			expect(result).toBe('1985-05-02');
 		});
 
 		it('should roundtrip partial year with full month and day (198X-05-20)', () => {

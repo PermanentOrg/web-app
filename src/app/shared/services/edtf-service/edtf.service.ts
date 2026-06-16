@@ -203,7 +203,9 @@ export class EdtfService {
 		const month = hasMonth ? this.padWithX(date.month, 2) : 'XX';
 		if (!hasDay) return `${year}-${month}`;
 
-		const day = this.padWithX(date.day, 2);
+		// A day is a discrete value, so a single digit is zero-padded on the
+		// left ("9" -> "09"); X-padding would produce an invalid day (90-99).
+		const day = date.day.padStart(2, '0');
 		return `${year}-${month}-${day}`;
 	}
 
@@ -470,6 +472,9 @@ export class EdtfService {
 
 	isValidDay(value: string, year: string, month: string): boolean {
 		if (value === '') return true;
+		// A single digit is an in-progress value (e.g. "0" while deleting "05"),
+		// so accept it; full validation runs once two digits are entered.
+		if (/^\d$/.test(value)) return true;
 		// Defaults let day be typed before year/month are filled in.
 		// 2000 is a leap year (allows Feb 29); 01 has 31 days (most permissive).
 		const yearStr = year.length === 4 ? year : '2000';

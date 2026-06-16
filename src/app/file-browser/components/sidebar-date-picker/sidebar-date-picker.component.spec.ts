@@ -276,10 +276,10 @@ describe('SidebarDatePickerComponent', () => {
 			expect(component.formattedStartDate()).toBe('May 20, 198X');
 		});
 
-		it('should display "May 2X, 1985" with partial day', () => {
+		it('should zero-pad a single-digit day on the left ("May 02, 1985")', () => {
 			setDate('1985', '05', '2');
 
-			expect(component.formattedStartDate()).toBe('May 2X, 1985');
+			expect(component.formattedStartDate()).toBe('May 02, 1985');
 		});
 
 		it('should fall back to ISO style "1985-XX-20" when month is missing', () => {

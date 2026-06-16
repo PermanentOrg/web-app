@@ -492,5 +492,22 @@ describe('SidebarComponent', () => {
 			expect(component.displayTimeObject).toBeNull();
 			expect(showErrorSpy).toHaveBeenCalledTimes(1);
 		});
+
+		it('should recompute the display time object when saving an invalid date fails, so the picker re-syncs to the stored value', async () => {
+			const messageService = TestBed.inject(MessageService);
+			const showErrorSpy = spyOn(messageService, 'showError');
+			const edtfService = TestBed.inject(EdtfService);
+			spyOn(edtfService, 'toEdtfDate').and.throwError('invalid date');
+
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			await component.onDateSaved({
+				date: { year: 'not-a-year' } as never,
+				time: { format: 'am' },
+			});
+
+			expect(showErrorSpy).toHaveBeenCalledTimes(1);
+			expect(component.displayTimeObject?.date.year).toBe('1985');
+		});
 	});
 });
