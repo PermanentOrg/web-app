@@ -359,10 +359,6 @@ export class EdtfService {
 		return model;
 	}
 
-	isNumeric(value: string): boolean {
-		return /^\d+$/.test(value);
-	}
-
 	buildReferenceDate(date: DateModel, time: TimeModel): Date {
 		const year = parseInt(date?.year ?? '', 10);
 		if (Number.isNaN(year)) return new Date();

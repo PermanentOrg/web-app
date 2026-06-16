@@ -718,24 +718,6 @@ describe('EdtfService', () => {
 		});
 	});
 
-	describe('isNumeric', () => {
-		it('should return true for digit-only string', () => {
-			expect(service.isNumeric('12345')).toBe(true);
-		});
-
-		it('should return false for string with letters', () => {
-			expect(service.isNumeric('12a5')).toBe(false);
-		});
-
-		it('should return false for empty string', () => {
-			expect(service.isNumeric('')).toBe(false);
-		});
-
-		it('should return false for negative number string', () => {
-			expect(service.isNumeric('-1')).toBe(false);
-		});
-	});
-
 	describe('browserTimezoneAbbreviation', () => {
 		const stubTimezoneName = (timezoneName: string): void => {
 			spyOn(Intl, 'DateTimeFormat').and.returnValue({

@@ -8,6 +8,7 @@ import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { BehaviorSubject } from 'rxjs';
 import { MessageService } from '@shared/services/message/message.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { EdtfService } from '@shared/services/edtf-service/edtf.service';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -370,6 +371,126 @@ describe('SidebarComponent', () => {
 			component.selectedItem = item;
 
 			expect(component.displayEndTime).toBe('');
+		});
+	});
+
+	describe('onDateEditing', () => {
+		let saveItemVoPropertySpy: jasmine.Spy;
+
+		beforeEach(() => {
+			saveItemVoPropertySpy = spyOn(mockEditService, 'saveItemVoProperty');
+		});
+
+		it('should build EDTF interval when setting start date and end date exists', async () => {
+			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
+			component.selectedItem = item;
+
+			await component.onDateEditing('start', '2000-01-01');
+
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
+				item,
+				'displayTime',
+				'2000-01-01/1990-06-15',
+			);
+		});
+
+		it('should build EDTF interval when setting end date and start date exists', async () => {
+			const item = new RecordVO({ displayTime: '1985-05-20' });
+			component.selectedItem = item;
+
+			await component.onDateEditing('end', '2025-12-31');
+
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
+				item,
+				'displayTime',
+				'1985-05-20/2025-12-31',
+			);
+		});
+
+		it('should set only start date when no end date is provided', async () => {
+			const item = new RecordVO({ displayTime: '1985-05-20' });
+			component.selectedItem = item;
+
+			await component.onDateEditing('start', '2000-01-01');
+
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
+				item,
+				'displayTime',
+				'2000-01-01',
+			);
+		});
+
+		it('should set displayTime to null when start date is cleared', async () => {
+			const item = new RecordVO({ displayTime: '1985-05-20/1990-06-15' });
+			component.selectedItem = item;
+
+			await component.onDateEditing('start', '');
+
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
+				item,
+				'displayTime',
+				null,
+			);
+		});
+
+		it('should not call saveItemVoProperty when selectedItem is null', async () => {
+			component.selectedItem = null;
+
+			await component.onDateEditing('start', '2000-01-01');
+
+			expect(saveItemVoPropertySpy).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('displayTimeObject', () => {
+		it('should keep a stable reference across reads instead of creating a new object each time', async () => {
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			await component.onDateSaved({
+				date: { year: '1985', month: '05', day: '20' },
+				time: { format: 'am' },
+			});
+
+			const firstRead = component.displayTimeObject;
+			const secondRead = component.displayTimeObject;
+
+			expect(firstRead).not.toBeNull();
+			expect(secondRead).toBe(firstRead);
+		});
+
+		it('should recompute the display time object when a new date is saved', async () => {
+			const editService = TestBed.inject(EditService);
+			spyOn(editService, 'saveItemVoProperty').and.callFake(
+				async (item: any, prop: any, value: any) => {
+					item[prop] = value;
+				},
+			);
+
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			await component.onDateSaved({
+				date: { year: '1990', month: '06', day: '15' },
+				time: { format: 'am' },
+			});
+
+			expect(component.displayTimeObject?.date.year).toBe('1990');
+		});
+
+		it('should null the display time object and show one error when parsing fails', async () => {
+			const messageService = TestBed.inject(MessageService);
+			const showErrorSpy = spyOn(messageService, 'showError');
+			const edtfService = TestBed.inject(EdtfService);
+			spyOn(edtfService, 'toDateTimeModel').and.throwError('bad date');
+
+			component.selectedItem = new RecordVO({ displayTime: 'not-a-date' });
+
+			await component.onDateSaved({
+				date: { year: '1990', month: '06', day: '15' },
+				time: { format: 'am' },
+			});
+
+			expect(component.displayTimeObject).toBeNull();
+			expect(showErrorSpy).toHaveBeenCalledTimes(1);
 		});
 	});
 });
