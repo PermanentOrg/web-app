@@ -38,6 +38,12 @@ export interface DateQualifierFlags {
 	unknown: boolean;
 }
 
+export const DEFAULT_DATE_QUALIFIERS: DateQualifierFlags = {
+	approximate: false,
+	uncertain: false,
+	unknown: false,
+};
+
 export interface DateModel {
 	year: string;
 	month?: string;
@@ -73,7 +79,7 @@ export class EdtfService {
 
 			if (/^X{4}-X{2}-X{2}$/i.test(edtfString)) {
 				return {
-					qualifiers: { approximate: false, uncertain: false, unknown: true },
+					qualifiers: { ...DEFAULT_DATE_QUALIFIERS, unknown: true },
 					date: { year: '', month: '', day: '' },
 					time: { ...DEFAULT_TIME },
 				};
@@ -362,7 +368,7 @@ export class EdtfService {
 		let model: DateTimeModel;
 		if (isStartUnknownSlot) {
 			model = {
-				qualifiers: { approximate: false, uncertain: false, unknown: true },
+				qualifiers: { ...DEFAULT_DATE_QUALIFIERS, unknown: true },
 				date: { year: '', month: '', day: '' },
 				time: { ...DEFAULT_TIME },
 			};
@@ -377,11 +383,7 @@ export class EdtfService {
 		}
 
 		if (isEndUnknownSlot) {
-			model.endQualifiers = {
-				approximate: false,
-				uncertain: false,
-				unknown: true,
-			};
+			model.endQualifiers = { ...DEFAULT_DATE_QUALIFIERS, unknown: true };
 			model.endDate = { year: '', month: '', day: '' };
 			model.endTime = { ...DEFAULT_TIME };
 		} else if (isEndOpenBound || upper === null || typeof upper === 'number') {

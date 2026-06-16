@@ -250,29 +250,32 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	}
 
 	async onDateSaved(result: DateTimeModel) {
+		await this.saveDisplayTime(result);
+	}
+
+	async onDateMoreOptions(modalData: DateTimeModel): Promise<void> {
+		const dialogRef = this.editDateTimeModalService.open(modalData);
+
+		this.subscriptions.push(
+			dialogRef.closed.subscribe(async (result) => {
+				if (result) {
+					await this.saveDisplayTime(result);
+				}
+			}),
+		);
+	}
+
+	private async saveDisplayTime(result: DateTimeModel): Promise<void> {
 		try {
 			const newDisplayTime = this.edtfService.toEdtfDate(result);
 			await this.onFinishEditing('displayTime', newDisplayTime);
 		} catch (err) {
 			this.message.showError({ message: err?.message });
 		} finally {
+			// Recompute so the picker re-syncs to the stored value, whether the
+			// save came from the inline picker or the modal, and on failure too.
 			this.updateDisplayTimeObject();
 		}
-	}
-
-	async onDateMoreOptions(modalData: DateTimeModel): Promise<void> {
-		const dialogRef = this.editDateTimeModalService.open(modalData);
-
-		dialogRef.closed.subscribe(async (result) => {
-			if (result) {
-				try {
-					const newDisplayTime = this.edtfService.toEdtfDate(result);
-					await this.onFinishEditing('displayTime', newDisplayTime);
-				} catch (err) {
-					this.message.showError({ message: err?.message });
-				}
-			}
-		});
 	}
 
 	onLocationClick() {

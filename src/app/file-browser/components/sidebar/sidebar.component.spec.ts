@@ -581,6 +581,58 @@ describe('SidebarComponent', () => {
 			);
 		});
 
+		it('should refresh the cached display time after saving from the modal', async () => {
+			spyOn(mockEditService, 'saveItemVoProperty').and.callFake(
+				async (item: any, prop: any, value: any) => {
+					item[prop] = value;
+				},
+			);
+
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			component.onDateMoreOptions({
+				date: { year: '1985', month: '05', day: '20' },
+				time: { format: 'am' },
+			} as DateTimeModel);
+
+			closedSubject.next({
+				date: { year: '2000', month: '03', day: '15' },
+				time: { format: 'am' },
+			} as DateTimeModel);
+			await fixture.whenStable();
+
+			expect(component.displayTimeObject?.date.year).toBe('2000');
+		});
+
+		it('should not save when the modal closes after the sidebar is destroyed', () => {
+			const saveSpy = spyOn(mockEditService, 'saveItemVoProperty');
+
+			const modalData: DateTimeModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			};
+
+			component.onDateMoreOptions(modalData);
+			component.ngOnDestroy();
+
+			closedSubject.next({
+				date: { year: '2000', month: '03', day: '15' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			});
+
+			expect(saveSpy).not.toHaveBeenCalled();
+		});
+
 		it('should not save when modal is dismissed', () => {
 			const saveSpy = spyOn(
 				mockEditService,

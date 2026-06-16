@@ -19,6 +19,7 @@ import {
 	TimeModel,
 	DateTimeModel,
 	DEFAULT_TIME,
+	DEFAULT_DATE_QUALIFIERS,
 	UNKNOWN_VALUE,
 } from '@shared/services/edtf-service/edtf.service';
 
@@ -43,17 +44,9 @@ interface SavedSideState {
 export class EditDateTimeModalComponent implements OnInit {
 	readonly DateQualifier = DateQualifier;
 
-	qualifiers = signal<DateQualifierFlags>({
-		approximate: false,
-		uncertain: false,
-		unknown: false,
-	});
+	qualifiers = signal<DateQualifierFlags>({ ...DEFAULT_DATE_QUALIFIERS });
 
-	endQualifiers = signal<DateQualifierFlags>({
-		approximate: false,
-		uncertain: false,
-		unknown: false,
-	});
+	endQualifiers = signal<DateQualifierFlags>({ ...DEFAULT_DATE_QUALIFIERS });
 
 	savedStartState = signal<SavedSideState | null>(null);
 	savedEndState = signal<SavedSideState | null>(null);
@@ -116,11 +109,7 @@ export class EditDateTimeModalComponent implements OnInit {
 	ngOnInit(): void {
 		if (this.data) {
 			this.qualifiers.set(
-				this.data.qualifiers ?? {
-					approximate: false,
-					uncertain: false,
-					unknown: false,
-				},
+				this.data.qualifiers ?? { ...DEFAULT_DATE_QUALIFIERS },
 			);
 			this.date.set(this.data.date ?? { year: '', month: '', day: '' });
 			this.time.set(this.data.time ?? { ...DEFAULT_TIME });
@@ -130,17 +119,13 @@ export class EditDateTimeModalComponent implements OnInit {
 				this.endDate.set(this.data.endDate);
 				this.endTime.set(this.data.endTime ?? { ...DEFAULT_TIME });
 				this.endQualifiers.set(
-					this.data.endQualifiers ?? {
-						approximate: false,
-						uncertain: false,
-						unknown: false,
-					},
+					this.data.endQualifiers ?? { ...DEFAULT_DATE_QUALIFIERS },
 				);
 			}
 
 			if (this.data.qualifiers?.unknown) {
 				this.savedStartState.set({
-					qualifiers: { approximate: false, uncertain: false, unknown: false },
+					qualifiers: { ...DEFAULT_DATE_QUALIFIERS },
 					date: { ...this.date() },
 					time: { ...this.time() },
 				});
@@ -148,7 +133,7 @@ export class EditDateTimeModalComponent implements OnInit {
 
 			if (this.data.endQualifiers?.unknown) {
 				this.savedEndState.set({
-					qualifiers: { approximate: false, uncertain: false, unknown: false },
+					qualifiers: { ...DEFAULT_DATE_QUALIFIERS },
 					date: { ...this.endDate() },
 					time: { ...this.endTime() },
 				});
@@ -255,22 +240,14 @@ export class EditDateTimeModalComponent implements OnInit {
 	}
 
 	clearStart(): void {
-		this.qualifiers.set({
-			approximate: false,
-			uncertain: false,
-			unknown: false,
-		});
+		this.qualifiers.set({ ...DEFAULT_DATE_QUALIFIERS });
 		this.date.set({ year: '', month: '', day: '' });
 		this.time.set({ ...DEFAULT_TIME });
 		this.savedStartState.set(null);
 	}
 
 	clearEnd(): void {
-		this.endQualifiers.set({
-			approximate: false,
-			uncertain: false,
-			unknown: false,
-		});
+		this.endQualifiers.set({ ...DEFAULT_DATE_QUALIFIERS });
 		this.endDate.set({ year: '', month: '', day: '' });
 		this.endTime.set({ ...DEFAULT_TIME });
 		this.savedEndState.set(null);
