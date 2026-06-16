@@ -293,7 +293,9 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		const monthName = monthComplete
 			? format(new Date(2000, parseInt(monthRaw, 10) - 1), 'MMMM')
 			: null;
-		const dayDisplay = hasDay ? this.padDigitsWithX(dayRaw, 2) : '';
+		// A day is a discrete value, not a range, so a single digit is
+		// zero-padded on the left ("2" -> "02") rather than X-padded.
+		const dayDisplay = hasDay ? dayRaw.padStart(2, '0') : '';
 
 		if (monthName && hasDay)
 			return `${monthName} ${dayDisplay}, ${yearDisplay}`;

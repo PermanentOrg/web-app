@@ -251,9 +251,10 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		try {
 			const newDisplayTime = this.edtfService.toEdtfDate(result);
 			await this.onFinishEditing('displayTime', newDisplayTime);
-			this.updateDisplayTimeObject();
 		} catch (err) {
 			this.message.showError({ message: err?.message });
+		} finally {
+			this.updateDisplayTimeObject();
 		}
 	}
 
