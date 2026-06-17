@@ -6,7 +6,10 @@ $transition-length: 0.33s;
 	left: 0;
 	right: 0;
 	transform: translateY(-100%);
-	z-index: 6;
+	// Must sit above full-screen components (z-index 10, e.g. the file viewer)
+	// and the date/time picker dropdowns (z-index 20) that open within them,
+	// otherwise the error banner renders but is hidden behind the overlay.
+	z-index: 30;
 }
 
 .alert {
