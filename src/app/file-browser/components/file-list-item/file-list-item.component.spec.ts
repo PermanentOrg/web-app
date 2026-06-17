@@ -25,8 +25,8 @@ class MockItemTypeIconPipe implements PipeTransform {
 
 @Pipe({ name: 'prDate' })
 export class MockPrDatePipe implements PipeTransform {
-	transform(value: any, format?: string): string {
-		return `mocked-date${format ? `-${format}` : ''}`;
+	transform(value: any, ...args: any[]): string {
+		return String(value ?? '');
 	}
 }
 
@@ -341,5 +341,28 @@ describe('FileListItemComponent', () => {
 		await component.ngOnInit();
 
 		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
+	});
+
+	it('should display displayTime instead of displayDT when displayTime is set', () => {
+		component.item.displayTime = '2020-06-10';
+		component.item.displayDT = '2023-01-01T00:00:00.000Z';
+		fixture.detectChanges();
+
+		const secondRowDate =
+			fixture.nativeElement.querySelector('.second-row span')?.textContent;
+
+		expect(secondRowDate).toContain('2020-06-10');
+		expect(secondRowDate).not.toContain('2023-01-01');
+	});
+
+	it('should display displayDT when displayTime is not set', () => {
+		component.item.displayTime = undefined;
+		component.item.displayDT = '2023-01-01T00:00:00.000Z';
+		fixture.detectChanges();
+
+		const secondRowDate =
+			fixture.nativeElement.querySelector('.second-row span')?.textContent;
+
+		expect(secondRowDate).toContain('2023-01-01T00:00:00.000Z');
 	});
 });
