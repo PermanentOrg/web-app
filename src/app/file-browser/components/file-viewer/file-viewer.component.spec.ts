@@ -16,7 +16,13 @@ import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag
 import { MockComponent } from 'ng-mocks';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { environment } from '@root/environments/environment';
+import { MessageService } from '@shared/services/message/message.service';
+import {
+	DateTimeModel,
+	EdtfService,
+} from '@shared/services/edtf-service/edtf.service';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
 import { FileViewerComponent } from './file-viewer.component';
 
 @Pipe({ name: 'dsFileSize', standalone: false })
@@ -230,6 +236,19 @@ describe('FileViewerComponent', () => {
 						isEnabled: (flag: string) => featureFlagsEnabled.get(flag) ?? false,
 					},
 				},
+				{
+					provide: MessageService,
+					useValue: {
+						showError: () => {},
+						showMessage: () => {},
+					},
+				},
+				{
+					provide: EditDateTimeModalService,
+					useValue: {
+						open: () => ({ closed: { subscribe: () => {} } }),
+					},
+				},
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
@@ -243,6 +262,68 @@ describe('FileViewerComponent', () => {
 
 	it('should create', () => {
 		expect(component).not.toBeNull();
+	});
+
+	describe('edtf-date feature flag', () => {
+		it('should show the EDTF date picker when the edtf-date flag is enabled', async () => {
+			featureFlagsEnabled.set('edtf-date', true);
+			await recreateComponent();
+
+			expect(component.showEdtfDatePicker).toBe(true);
+			expect(
+				fixture.nativeElement.querySelector('pr-sidebar-date-picker'),
+			).toBeTruthy();
+		});
+
+		it('should show the legacy date field and hide the EDTF picker when the edtf-date flag is disabled', async () => {
+			featureFlagsEnabled.set('edtf-date', false);
+			await recreateComponent();
+
+			expect(component.showEdtfDatePicker).toBe(false);
+			expect(
+				fixture.nativeElement.querySelector('pr-sidebar-date-picker'),
+			).toBeNull();
+
+			const dateRowLabel = Array.from(
+				fixture.nativeElement.querySelectorAll('.metadata-table td'),
+			).find((td: HTMLElement) => td.textContent?.trim() === 'Date');
+
+			expect(dateRowLabel).toBeTruthy();
+		});
+	});
+
+	describe('EDTF date handling', () => {
+		const recordWithDate = () =>
+			new RecordVO({
+				type: 'document',
+				displayName: 'Dated Doc',
+				TagVOs: [],
+				displayTime: '1985-05-20',
+			});
+
+		it('should compute the cached display time from the record on init', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			expect(component.displayTimeObject?.date.year).toBe('1985');
+		});
+
+		it('should reset the cached display time and show one error when an invalid date is saved', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			const edtfService = TestBed.inject(EdtfService);
+			spyOn(edtfService, 'toEdtfDate').and.throwError('invalid date');
+			const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+
+			await component.onDateSaved({
+				date: { year: 'bad' } as never,
+				time: { format: 'am' },
+			} as DateTimeModel);
+
+			expect(showErrorSpy).toHaveBeenCalledTimes(1);
+			expect(component.displayTimeObject?.date.year).toBe('1985');
+		});
 	});
 
 	it('should have two tags components', () => {
