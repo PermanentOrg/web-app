@@ -265,6 +265,21 @@ describe('DatepickerInputComponent', () => {
 		expect(component.showDatepicker()).toBeFalse();
 	});
 
+	it('should toggle datepicker via keyboard (Enter and Space)', () => {
+		const iconButton: HTMLElement =
+			fixture.nativeElement.querySelector('.pr-icon-button');
+
+		iconButton.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+		fixture.detectChanges();
+
+		expect(component.showDatepicker()).toBeTrue();
+
+		iconButton.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+		fixture.detectChanges();
+
+		expect(component.showDatepicker()).toBeFalse();
+	});
+
 	it('should emit date and clear errors on date select', () => {
 		component.showDatepicker.set(true);
 		component.fieldErrors.month.set(MONTH_RANGE_ERROR);
