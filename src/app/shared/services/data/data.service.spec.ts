@@ -272,11 +272,6 @@ describe('DataService', () => {
 			service.registerItem(item);
 		});
 
-		const leanItemsResponse = new FolderResponse(getLeanItemsData);
-		spyOn(api.folder, 'getWithChildren').and.returnValue(
-			Promise.resolve(leanItemsResponse),
-		);
-
 		service
 			.fetchLeanItems(currentFolder.ChildItemVOs)
 			.then(() => {

@@ -68,6 +68,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
 	public canEdit: boolean;
 
+	public showEdtfDatePicker = false;
+
+	public editingDate: boolean = false;
+
+	public displayTimeObject: DateTimeModel | null = null;
+
 	// Swiping
 	private touchElement: HTMLElement;
 	private thumbElement: HTMLElement;
@@ -86,6 +92,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	private bodyScrollTop: number;
 	private itemTagsSubscription: Subscription;
 	private tagsSubscription: Subscription;
+	private dateModalSubscription?: Subscription;
 	private isUnlistedShare = true;
 
 	constructor(
@@ -108,6 +115,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	) {
 		// store current scroll position in file list
 		this.bodyScrollTop = window.scrollY;
+
+		this.showEdtfDatePicker = this.feature.isEnabled('edtf-date');
 
 		const resolvedRecord = route.snapshot.data.currentRecord;
 		this.allTags = tagsService.getTags();
@@ -194,6 +203,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		});
 		this.itemTagsSubscription.unsubscribe();
 		this.tagsSubscription.unsubscribe();
+		this.dateModalSubscription?.unsubscribe();
 	}
 
 	private setRecordsToPreview(resolvedRecord: RecordVO) {
@@ -252,6 +262,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			this.replayUrl = this.getReplayUrl();
 		}
 		this.setCurrentTags();
+		this.updateDisplayTimeObject();
 	}
 
 	toggleSwipe(value: boolean) {
@@ -440,40 +451,48 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	get displayTimeObject(): DateTimeModel | null {
+	private updateDisplayTimeObject(): void {
+		const timeSource =
+			this.currentRecord?.displayTime || this.currentRecord?.displayDT;
 		try {
-			const timeSource =
-				this.currentRecord?.displayTime || this.currentRecord?.displayDT;
-			return timeSource ? this.edtfService.toDateTimeModel(timeSource) : null;
+			this.displayTimeObject = timeSource
+				? this.edtfService.toDateTimeModel(timeSource)
+				: null;
 		} catch (err) {
+			this.displayTimeObject = null;
 			this.message.showError({ message: err?.message });
 		}
 	}
 
 	public async onDateSaved(result: DateTimeModel): Promise<void> {
-		try {
-			const newDisplayTime = this.edtfService.toEdtfDate(result);
-			this.onFinishEditing('displayTime', newDisplayTime);
-		} catch (err) {
-			this.message.showError({ message: err?.message });
-		}
+		await this.saveDisplayTime(result);
 	}
 
 	public async onDateMoreOptions(modalData: DateTimeModel): Promise<void> {
 		const dialogRef = this.editDateTimeModalService.open(modalData);
 
-		dialogRef.closed.subscribe((result) => {
+		this.dateModalSubscription = dialogRef.closed.subscribe(async (result) => {
 			if (result) {
-				if (result) {
-					try {
-						const newDisplayTime = this.edtfService.toEdtfDate(result);
-						this.onFinishEditing('displayTime', newDisplayTime);
-					} catch (err) {
-						this.message.showError({ message: err?.message });
-					}
-				}
+				await this.saveDisplayTime(result);
 			}
 		});
+	}
+
+	private async saveDisplayTime(result: DateTimeModel): Promise<void> {
+		try {
+			const newDisplayTime = this.edtfService.toEdtfDate(result);
+			await this.onFinishEditing('displayTime', newDisplayTime);
+		} catch (err) {
+			this.message.showError({ message: err?.message });
+		} finally {
+			// Recompute so the picker re-syncs to the stored value, whether the
+			// save came from the inline picker or the modal, and on failure too.
+			this.updateDisplayTimeObject();
+		}
+	}
+
+	public onDateToggle(active: boolean): void {
+		this.editingDate = active;
 	}
 
 	public async onFinishEditing(
