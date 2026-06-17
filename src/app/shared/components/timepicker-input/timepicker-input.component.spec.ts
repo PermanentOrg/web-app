@@ -97,6 +97,21 @@ describe('TimepickerInputComponent', () => {
 		expect(component.showTimepicker()).toBeFalse();
 	});
 
+	it('should toggle timepicker via keyboard (Enter and Space)', () => {
+		const iconButton: HTMLElement =
+			fixture.nativeElement.querySelector('.pr-icon-button');
+
+		iconButton.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+		fixture.detectChanges();
+
+		expect(component.showTimepicker()).toBeTrue();
+
+		iconButton.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+		fixture.detectChanges();
+
+		expect(component.showTimepicker()).toBeFalse();
+	});
+
 	// --- Hour validation (12-hour mode) ---
 
 	it('should accept valid hour and clear hours error', () => {
