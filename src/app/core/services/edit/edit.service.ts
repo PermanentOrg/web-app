@@ -688,16 +688,29 @@ export class EditService {
 
 		const promises: Array<Promise<unknown[] | RecordResponse[]>> =
 			recordKey?.length
-				? recordKey.map(async (key) =>
-						key === 'displayTime'
-							? await Promise.all(
-									records.map(
-										async (record) =>
-											await this.api.record.updateStelaRecord(record),
-									),
-								)
-							: await this.api.record.update(records, archiveId),
-					)
+				? recordKey.map(async (key) => {
+						if (key === 'displayTime') {
+							return await Promise.all(
+								records.map(
+									async (record) =>
+										await this.api.record.updateStelaRecord(record, [
+											'displayTime',
+										]),
+								),
+							);
+						}
+						if (key === 'LocnVO') {
+							return await Promise.all(
+								records.map(
+									async (record) =>
+										await this.api.record.updateStelaRecord(record, [
+											'location',
+										]),
+								),
+							);
+						}
+						return await this.api.record.update(records, archiveId);
+					})
 				: [this.api.record.update(records, archiveId)];
 
 		await Promise.all(promises);
@@ -714,16 +727,29 @@ export class EditService {
 
 		const promises: Array<Promise<FolderResponse | FolderResponse[]>> =
 			folderKeys?.length
-				? folderKeys.map(async (key) =>
-						key === 'displayTime'
-							? await Promise.all(
-									folders.map(
-										async (folder) =>
-											await this.api.folder.updateStelaFolder(folder),
-									),
-								)
-							: await this.api.folder.update(folders, [key]),
-					)
+				? folderKeys.map(async (key) => {
+						if (key === 'displayTime') {
+							return await Promise.all(
+								folders.map(
+									async (folder) =>
+										await this.api.folder.updateStelaFolder(folder, [
+											'displayTime',
+										]),
+								),
+							);
+						}
+						if (key === 'LocnVO') {
+							return await Promise.all(
+								folders.map(
+									async (folder) =>
+										await this.api.folder.updateStelaFolder(folder, [
+											'location',
+										]),
+								),
+							);
+						}
+						return await this.api.folder.update(folders, [key]);
+					})
 				: [this.api.folder.update(folders)];
 
 		await Promise.all(promises);

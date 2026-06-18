@@ -229,32 +229,32 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 
 	createLocnFromPlace(place: google.maps.places.PlaceResult) {
 		const addr = place.address_components;
+		const streetNumber = getComponentName(addr, 'street_number');
+		const streetName = getComponentName(addr, 'route');
+		const sublocation =
+			[streetNumber, streetName].filter(Boolean).join(' ') || null;
 		const locn: LocnVOData = {
 			latitude: place.geometry.location.lat(),
 			longitude: place.geometry.location.lng(),
-			streetNumber: getComponentName(addr, 'street_number'),
-			streetName: getComponentName(addr, 'route'),
 			postalCode: getComponentName(addr, 'postal_code'),
-			locality: getComponentName(addr, 'locality'),
 			adminOneName: getComponentName(addr, 'administrative_area_level_1'),
-			adminOneCode: getComponentName(addr, 'administrative_area_level_1', true),
-			adminTwoName: getComponentName(addr, 'administrative_area_level_2'),
-			adminTwoCode: getComponentName(addr, 'administrative_area_level_2', true),
 			country: getComponentName(addr, 'country'),
-			countryCode: getComponentName(addr, 'country', true),
+			sublocation,
+			city: getComponentName(addr, 'locality'),
 		};
+
+		if (place.name && (!sublocation || !place.name.includes(sublocation))) {
+			locn.name = place.name;
+		}
 
 		return locn;
 
 		function getComponentName(
 			addressComponents: google.maps.GeocoderAddressComponent[],
-			type,
-			getShortName = true,
+			type: string,
 		) {
 			const component = find(addressComponents, (c) => c.types.includes(type));
-			return component
-				? component[getShortName ? 'short_name' : 'long_name']
-				: null;
+			return component ? component.long_name : null;
 		}
 	}
 }
