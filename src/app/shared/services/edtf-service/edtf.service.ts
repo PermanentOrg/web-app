@@ -203,7 +203,9 @@ export class EdtfService {
 		const month = hasMonth ? this.padWithX(date.month, 2) : 'XX';
 		if (!hasDay) return `${year}-${month}`;
 
-		const day = this.padWithX(date.day, 2);
+		// A day is a discrete value, so a single digit is zero-padded on the
+		// left ("9" -> "09"); X-padding would produce an invalid day (90-99).
+		const day = date.day.padStart(2, '0');
 		return `${year}-${month}-${day}`;
 	}
 
@@ -359,6 +361,47 @@ export class EdtfService {
 		return model;
 	}
 
+	buildReferenceDate(date: DateModel, time: TimeModel): Date {
+		const year = parseInt(date?.year ?? '', 10);
+		if (Number.isNaN(year)) return new Date();
+		const month = date.month ? parseInt(date.month, 10) - 1 : 0;
+		const day = date.day ? parseInt(date.day, 10) : 1;
+		const time24 = time?.hours ? this.parseTimeAs24Hour(time) : null;
+		return new Date(
+			year,
+			month,
+			day,
+			time24?.hour ?? 0,
+			time24?.minute ?? 0,
+			time24?.second ?? 0,
+		);
+	}
+
+	browserTimezoneAbbreviation(date: DateModel, time: TimeModel): string {
+		if (!time?.hours) return '';
+		try {
+			const referenceDate = this.buildReferenceDate(date, time);
+			const parts = new Intl.DateTimeFormat('en-US', {
+				timeZoneName: 'short',
+			}).formatToParts(referenceDate);
+			const timezoneName =
+				parts.find((part) => part.type === 'timeZoneName')?.value ?? '';
+			return this.normalizeTimezoneOffsetDisplay(timezoneName);
+		} catch {
+			return '';
+		}
+	}
+
+	// Intl 'short' renders offset-only zones as e.g. GMT+3 or GMT+5:30;
+	// rewrite the offset part to the canonical +/-HH:MM form (GMT+03:00).
+	private normalizeTimezoneOffsetDisplay(timezoneName: string): string {
+		const offsetMatch = /([+-])(\d{1,2})(?::(\d{2}))?/.exec(timezoneName);
+		if (!offsetMatch) return timezoneName;
+		const [rawOffset, sign, offsetHours, offsetMinutes] = offsetMatch;
+		const normalizedOffset = `${sign}${offsetHours.padStart(2, '0')}:${offsetMinutes ?? '00'}`;
+		return timezoneName.replace(rawOffset, normalizedOffset);
+	}
+
 	parseTimeAs24Hour(
 		time: TimeModel,
 	): { hour: number; minute: number; second: number } | null {
@@ -429,6 +472,9 @@ export class EdtfService {
 
 	isValidDay(value: string, year: string, month: string): boolean {
 		if (value === '') return true;
+		// A single digit is an in-progress value (e.g. "0" while deleting "05"),
+		// so accept it; full validation runs once two digits are entered.
+		if (/^\d$/.test(value)) return true;
 		// Defaults let day be typed before year/month are filled in.
 		// 2000 is a leap year (allows Feb 29); 01 has 31 days (most permissive).
 		const yearStr = year.length === 4 ? year : '2000';

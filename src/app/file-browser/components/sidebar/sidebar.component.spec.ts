@@ -4,8 +4,11 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
-import { of } from 'rxjs';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { BehaviorSubject } from 'rxjs';
+import { MessageService } from '@shared/services/message/message.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { EdtfService } from '@shared/services/edtf-service/edtf.service';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -92,15 +95,10 @@ class MockSelectedItemPipe implements PipeTransform {
 	}
 }
 
+let selectedItemsSubject: BehaviorSubject<Set<any>>;
+
 const mockDataService = {
-	selectedItems$: () =>
-		of(
-			new Set([
-				new RecordVO({
-					accessRole: 'access.role.owner',
-				}),
-			]),
-		),
+	selectedItems$: () => selectedItemsSubject.asObservable(),
 	fetchFullItems: (_: any) => {},
 	currentFolder: {
 		type: 'folder',
@@ -109,9 +107,7 @@ const mockDataService = {
 
 const mockEditService = {
 	openLocationDialog: (_: any) => {},
-	saveItemVoProperty: jasmine
-		.createSpy('saveItemVoProperty')
-		.and.returnValue(Promise.resolve()),
+	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
 };
 
 class MockAccountService {
@@ -126,11 +122,23 @@ class MockAccountService {
 	}
 }
 
+const mockFeatureFlagService = {
+	isEnabled: (_flag: string) => false,
+};
+
 describe('SidebarComponent', () => {
 	let component: SidebarComponent;
 	let fixture: ComponentFixture<SidebarComponent>;
 
 	beforeEach(async () => {
+		selectedItemsSubject = new BehaviorSubject<Set<any>>(
+			new Set([
+				new RecordVO({
+					accessRole: 'access.role.owner',
+				}),
+			]),
+		);
+
 		await TestBed.configureTestingModule({
 			declarations: [
 				SidebarComponent,
@@ -160,6 +168,17 @@ describe('SidebarComponent', () => {
 				{
 					provide: AccountService,
 					useClass: MockAccountService,
+				},
+				{
+					provide: MessageService,
+					useValue: {
+						showError: () => {},
+						showMessage: () => {},
+					},
+				},
+				{
+					provide: FeatureFlagService,
+					useValue: mockFeatureFlagService,
 				},
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -266,6 +285,23 @@ describe('SidebarComponent', () => {
 		expect(displayValue).toBe('2024-01-01T00:00:00.000Z');
 	});
 
+	describe('edtf-date feature flag', () => {
+		it('should set showEdtfDatePicker to false when edtf-date flag is disabled', () => {
+			expect(component.showEdtfDatePicker).toBe(false);
+		});
+
+		it('should set showEdtfDatePicker to true when edtf-date flag is enabled', () => {
+			spyOn(mockFeatureFlagService, 'isEnabled').and.callFake(
+				(flag: string) => flag === 'edtf-date',
+			);
+
+			const enabledFixture = TestBed.createComponent(SidebarComponent);
+			enabledFixture.detectChanges();
+
+			expect(enabledFixture.componentInstance.showEdtfDatePicker).toBe(true);
+		});
+	});
+
 	it('should hide the original format for folders', () => {
 		component.isRecord = false;
 
@@ -339,8 +375,10 @@ describe('SidebarComponent', () => {
 	});
 
 	describe('onDateEditing', () => {
+		let saveItemVoPropertySpy: jasmine.Spy;
+
 		beforeEach(() => {
-			mockEditService.saveItemVoProperty.calls.reset();
+			saveItemVoPropertySpy = spyOn(mockEditService, 'saveItemVoProperty');
 		});
 
 		it('should build EDTF interval when setting start date and end date exists', async () => {
@@ -349,7 +387,7 @@ describe('SidebarComponent', () => {
 
 			await component.onDateEditing('start', '2000-01-01');
 
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
 				item,
 				'displayTime',
 				'2000-01-01/1990-06-15',
@@ -362,7 +400,7 @@ describe('SidebarComponent', () => {
 
 			await component.onDateEditing('end', '2025-12-31');
 
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
 				item,
 				'displayTime',
 				'1985-05-20/2025-12-31',
@@ -375,7 +413,7 @@ describe('SidebarComponent', () => {
 
 			await component.onDateEditing('start', '2000-01-01');
 
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
 				item,
 				'displayTime',
 				'2000-01-01',
@@ -388,7 +426,7 @@ describe('SidebarComponent', () => {
 
 			await component.onDateEditing('start', '');
 
-			expect(mockEditService.saveItemVoProperty).toHaveBeenCalledWith(
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
 				item,
 				'displayTime',
 				null,
@@ -400,7 +438,76 @@ describe('SidebarComponent', () => {
 
 			await component.onDateEditing('start', '2000-01-01');
 
-			expect(mockEditService.saveItemVoProperty).not.toHaveBeenCalled();
+			expect(saveItemVoPropertySpy).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('displayTimeObject', () => {
+		it('should keep a stable reference across reads instead of creating a new object each time', async () => {
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			await component.onDateSaved({
+				date: { year: '1985', month: '05', day: '20' },
+				time: { format: 'am' },
+			});
+
+			const firstRead = component.displayTimeObject;
+			const secondRead = component.displayTimeObject;
+
+			expect(firstRead).not.toBeNull();
+			expect(secondRead).toBe(firstRead);
+		});
+
+		it('should recompute the display time object when a new date is saved', async () => {
+			const editService = TestBed.inject(EditService);
+			spyOn(editService, 'saveItemVoProperty').and.callFake(
+				async (item: any, prop: any, value: any) => {
+					item[prop] = value;
+				},
+			);
+
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			await component.onDateSaved({
+				date: { year: '1990', month: '06', day: '15' },
+				time: { format: 'am' },
+			});
+
+			expect(component.displayTimeObject?.date.year).toBe('1990');
+		});
+
+		it('should null the display time object and show one error when parsing fails', async () => {
+			const messageService = TestBed.inject(MessageService);
+			const showErrorSpy = spyOn(messageService, 'showError');
+			const edtfService = TestBed.inject(EdtfService);
+			spyOn(edtfService, 'toDateTimeModel').and.throwError('bad date');
+
+			component.selectedItem = new RecordVO({ displayTime: 'not-a-date' });
+
+			await component.onDateSaved({
+				date: { year: '1990', month: '06', day: '15' },
+				time: { format: 'am' },
+			});
+
+			expect(component.displayTimeObject).toBeNull();
+			expect(showErrorSpy).toHaveBeenCalledTimes(1);
+		});
+
+		it('should recompute the display time object when saving an invalid date fails, so the picker re-syncs to the stored value', async () => {
+			const messageService = TestBed.inject(MessageService);
+			const showErrorSpy = spyOn(messageService, 'showError');
+			const edtfService = TestBed.inject(EdtfService);
+			spyOn(edtfService, 'toEdtfDate').and.throwError('invalid date');
+
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			await component.onDateSaved({
+				date: { year: 'not-a-year' } as never,
+				time: { format: 'am' },
+			});
+
+			expect(showErrorSpy).toHaveBeenCalledTimes(1);
+			expect(component.displayTimeObject?.date.year).toBe('1985');
 		});
 	});
 });

@@ -383,13 +383,22 @@ describe('EdtfService', () => {
 				expect(service.toEdtfDate(model)).toBe('1985-XX-20');
 			});
 
-			it('should pad single-digit day with one X', () => {
+			it('should zero-pad a single-digit day on the left', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '2' },
 					time: { format: 'am' },
 				};
 
-				expect(service.toEdtfDate(model)).toBe('1985-05-2X');
+				expect(service.toEdtfDate(model)).toBe('1985-05-02');
+			});
+
+			it('should zero-pad a single-digit day that would be an invalid X-range', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '9' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05-09');
 			});
 
 			it('should pad single-digit month with one X', () => {
@@ -718,6 +727,71 @@ describe('EdtfService', () => {
 		});
 	});
 
+	describe('browserTimezoneAbbreviation', () => {
+		const stubTimezoneName = (timezoneName: string): void => {
+			spyOn(Intl, 'DateTimeFormat').and.returnValue({
+				formatToParts: () => [{ type: 'timeZoneName', value: timezoneName }],
+			} as unknown as Intl.DateTimeFormat);
+		};
+
+		const sampleDate = { year: '1985', month: '05', day: '20' };
+		const sampleTime = {
+			hours: '02',
+			minutes: '30',
+			seconds: '00',
+			format: 'pm' as const,
+		};
+
+		it('should return empty string when time has no hours', () => {
+			const result = service.browserTimezoneAbbreviation(sampleDate, {
+				hours: '',
+				format: 'am',
+			});
+
+			expect(result).toBe('');
+		});
+
+		it('should keep named abbreviations unchanged', () => {
+			stubTimezoneName('EDT');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'EDT',
+			);
+		});
+
+		it('should pad a whole-hour offset to +/-HH:MM', () => {
+			stubTimezoneName('GMT+3');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'GMT+03:00',
+			);
+		});
+
+		it('should pad a half-hour positive offset to +/-HH:MM', () => {
+			stubTimezoneName('GMT+5:30');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'GMT+05:30',
+			);
+		});
+
+		it('should pad a negative offset to +/-HH:MM', () => {
+			stubTimezoneName('GMT-9:30');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'GMT-09:30',
+			);
+		});
+
+		it('should leave an already-normalized offset unchanged', () => {
+			stubTimezoneName('GMT+03:00');
+
+			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
+				'GMT+03:00',
+			);
+		});
+	});
+
 	describe('parseTimeAs24Hour', () => {
 		it('should convert PM time to 24-hour format', () => {
 			const result = service.parseTimeAs24Hour({
@@ -1018,6 +1092,10 @@ describe('EdtfService', () => {
 			expect(service.isValidDay('3', '1985', '05')).toBe(true);
 		});
 
+		it('should accept a single "0" as in-progress input so backspace works on a padded day', () => {
+			expect(service.isValidDay('0', '1985', '05')).toBe(true);
+		});
+
 		it('should fall back to leap year 2000 when year is missing', () => {
 			// 2000 is a leap year so Feb 29 is allowed
 			expect(service.isValidDay('29', '', '02')).toBe(true);
@@ -1133,12 +1211,13 @@ describe('EdtfService', () => {
 			expect(result).toBe(edtfString);
 		});
 
-		it('should roundtrip partial day (1985-05-2X)', () => {
-			const edtfString = '1985-05-2X';
-			const model = service.toDateTimeModel(edtfString);
+		it('should normalize a partial day (1985-05-2X) to a discrete zero-padded day', () => {
+			// A day is treated as a discrete value, not an unspecified-digit
+			// range, so 2X collapses to the 2nd rather than round-tripping.
+			const model = service.toDateTimeModel('1985-05-2X');
 			const result = service.toEdtfDate(model);
 
-			expect(result).toBe(edtfString);
+			expect(result).toBe('1985-05-02');
 		});
 
 		it('should roundtrip partial year with full month and day (198X-05-20)', () => {

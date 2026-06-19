@@ -110,6 +110,17 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate?.day).toBe('3');
 	});
 
+	it('should allow backspacing a left-padded day down to a single "0" without reverting', () => {
+		hostComponent.date = { year: '2026', month: '01', day: '05' };
+		fixture.detectChanges();
+		const input = { value: '0' } as HTMLInputElement;
+
+		component.updateDay({ target: input } as unknown as Event);
+
+		expect(input.value).toBe('0');
+		expect(hostComponent.lastEmittedDate?.day).toBe('0');
+	});
+
 	it('should not emit day greater than max for month', () => {
 		hostComponent.date = { year: '2026', month: '02', day: '' };
 		fixture.detectChanges();
