@@ -365,4 +365,28 @@ describe('FileListItemComponent', () => {
 
 		expect(secondRowDate).toContain('2023-01-01T00:00:00.000Z');
 	});
+
+	it('should display only the start date when displayTime is an EDTF interval', () => {
+		component.item.displayTime = '2020-06-10/2026-06-15';
+		component.item.displayDT = '2023-01-01T00:00:00.000Z';
+		fixture.detectChanges();
+
+		const secondRowDate =
+			fixture.nativeElement.querySelector('.second-row span')?.textContent;
+
+		expect(secondRowDate).toContain('2020-06-10');
+		expect(secondRowDate).not.toContain('2026-06-15');
+		expect(secondRowDate).not.toContain('2023-01-01');
+	});
+
+	it('should fall back to displayDT when the EDTF interval has an open start', () => {
+		component.item.displayTime = '../2026-06-15';
+		component.item.displayDT = '2023-01-01T00:00:00.000Z';
+		fixture.detectChanges();
+
+		const secondRowDate =
+			fixture.nativeElement.querySelector('.second-row span')?.textContent;
+
+		expect(secondRowDate).toContain('2023-01-01T00:00:00.000Z');
+	});
 });

@@ -33,6 +33,7 @@ import {
 } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
+import { EdtfService } from '@shared/services/edtf-service/edtf.service';
 import {
 	RecordResponse,
 	FolderResponse,
@@ -247,7 +248,15 @@ export class FileListItemComponent
 		private storage: StorageService,
 		@Inject(DOCUMENT) private document: Document,
 		private shareLinksService: ShareLinksService,
+		private edtfService: EdtfService,
 	) {}
+
+	get startDisplayTime(): string {
+		return (
+			this.edtfService.getEdtfIntervalStartDate(this.item.displayTime) ||
+			this.item.displayDT
+		);
+	}
 
 	async ngOnInit() {
 		this.recordThumbnailUrl = GetThumbnail(this.item);

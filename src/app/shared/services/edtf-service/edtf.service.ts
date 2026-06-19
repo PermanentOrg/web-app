@@ -102,6 +102,19 @@ export class EdtfService {
 		}
 	}
 
+	getEdtfIntervalStartDate(edtfString: string | undefined): string {
+		if (!edtfString) {
+			return '';
+		}
+
+		if (!edtfString.includes('/')) {
+			return edtfString;
+		}
+
+		const [startPart] = edtfString.split('/');
+		return startPart === '..' ? '' : (startPart ?? '');
+	}
+
 	private parseInterval(edtfString: string): DateTimeModel | null {
 		const [startPart, endPart] = edtfString.split('/');
 
