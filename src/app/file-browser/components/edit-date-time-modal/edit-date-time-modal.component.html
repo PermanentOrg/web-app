@@ -1,0 +1,179 @@
+<div class="pr-edit-date-time-dialog">
+	<div class="pr-dialog-header">
+		<h2>Edit date and time</h2>
+		<button class="pr-close-button" (click)="onCancel()">
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+
+	<div class="pr-dialog-content">
+		<div class="pr-date-card">
+			<div class="pr-card-header">
+				<span class="pr-card-label">Start date:</span>
+
+				<div class="pr-qualifiers-row">
+					<div class="pr-qualifier-option">
+						<span>Approximate</span>
+						<label class="pr-toggle">
+							<input
+								type="checkbox"
+								[checked]="qualifiers().approximate"
+								[disabled]="startFieldsDisabled()"
+								(change)="onQualifierChange(DateQualifier.Approximate, false)"
+							/>
+							<span class="pr-toggle-slider"></span>
+						</label>
+					</div>
+
+					<div class="pr-qualifier-option">
+						<span>Uncertain</span>
+						<label class="pr-toggle">
+							<input
+								type="checkbox"
+								[checked]="qualifiers().uncertain"
+								[disabled]="startFieldsDisabled()"
+								(change)="onQualifierChange(DateQualifier.Uncertain, false)"
+							/>
+							<span class="pr-toggle-slider"></span>
+						</label>
+					</div>
+
+					<div class="pr-qualifier-option">
+						<span>Unknown</span>
+						<label class="pr-toggle">
+							<input
+								type="checkbox"
+								[checked]="qualifiers().unknown"
+								(change)="onQualifierChange(DateQualifier.Unknown, false)"
+							/>
+							<span class="pr-toggle-slider"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="pr-datetime-row" [class.disabled]="startFieldsDisabled()">
+				<pr-datepicker-input
+					[date]="date()"
+					[disabled]="startFieldsDisabled()"
+					(dateChange)="date.set($event)"
+				/>
+
+				<pr-timepicker-input
+					[time]="time()"
+					[disabled]="startFieldsDisabled()"
+					(timeChange)="onTimeChange($event, time)"
+				/>
+			</div>
+
+			<button class="pr-clear-link" (click)="clearStart()">
+				<i class="material-icons">backspace</i>
+				<span>Clear start date and time</span>
+			</button>
+		</div>
+
+		@if (useDateRange()) {
+			<div class="pr-date-card">
+				<div class="pr-card-header">
+					<span class="pr-card-label">End date:</span>
+
+					<div class="pr-qualifiers-row">
+						<div class="pr-qualifier-option">
+							<span>Approximate</span>
+							<label class="pr-toggle">
+								<input
+									type="checkbox"
+									[checked]="endQualifiers().approximate"
+									[disabled]="endFieldsDisabled()"
+									(change)="onQualifierChange(DateQualifier.Approximate, true)"
+								/>
+								<span class="pr-toggle-slider"></span>
+							</label>
+						</div>
+
+						<div class="pr-qualifier-option">
+							<span>Uncertain</span>
+							<label class="pr-toggle">
+								<input
+									type="checkbox"
+									[checked]="endQualifiers().uncertain"
+									[disabled]="endFieldsDisabled()"
+									(change)="onQualifierChange(DateQualifier.Uncertain, true)"
+								/>
+								<span class="pr-toggle-slider"></span>
+							</label>
+						</div>
+
+						<div class="pr-qualifier-option">
+							<span>Unknown</span>
+							<label class="pr-toggle">
+								<input
+									type="checkbox"
+									[checked]="endQualifiers().unknown"
+									(change)="onQualifierChange(DateQualifier.Unknown, true)"
+								/>
+								<span class="pr-toggle-slider"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="pr-datetime-row" [class.disabled]="endFieldsDisabled()">
+					<pr-datepicker-input
+						[date]="endDate()"
+						[disabled]="endFieldsDisabled()"
+						(dateChange)="endDate.set($event)"
+					/>
+
+					<pr-timepicker-input
+						[time]="endTime()"
+						[disabled]="endFieldsDisabled()"
+						(timeChange)="onTimeChange($event, endTime)"
+					/>
+				</div>
+
+				<button class="pr-clear-link" (click)="clearEnd()">
+					<i class="material-icons">backspace</i>
+					<span>Clear end date and time</span>
+				</button>
+			</div>
+		}
+
+		<div class="pr-date-range-row">
+			<span>Use a date range</span>
+			<label class="pr-toggle">
+				<input
+					type="checkbox"
+					[checked]="useDateRange()"
+					(change)="toggleDateRange()"
+				/>
+				<span class="pr-toggle-slider"></span>
+			</label>
+		</div>
+	</div>
+
+	<div class="pr-dialog-footer">
+		<div class="pr-edtf-display">
+			@if (isEdtfValid()) {
+				<span
+					class="pr-edtf-value"
+					[ngbTooltip]="'Formatted EDTF date and time'"
+					placement="top"
+					>{{ edtfValue() }}</span
+				>
+			} @else {
+				<span class="pr-edtf-error">{{ edtfErrorMessage() }}</span>
+			}
+		</div>
+		<div class="pr-dialog-actions">
+			<button class="pr-btn-cancel" (click)="onCancel()">Cancel</button>
+			<button
+				class="pr-btn-save"
+				[disabled]="!isEdtfValid()"
+				(click)="onSave()"
+			>
+				Save
+			</button>
+		</div>
+	</div>
+</div>

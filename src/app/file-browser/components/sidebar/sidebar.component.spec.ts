@@ -5,10 +5,12 @@ import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { EdtfService } from '@shared/services/edtf-service/edtf.service';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -110,6 +112,14 @@ const mockEditService = {
 	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
 };
 
+let closedSubject: Subject<DateTimeModel | undefined>;
+
+const mockModalService = {
+	open: (_data: DateTimeModel) => ({
+		closed: closedSubject.asObservable(),
+	}),
+};
+
 class MockAccountService {
 	getArchive() {
 		return new ArchiveVO({});
@@ -131,6 +141,8 @@ describe('SidebarComponent', () => {
 	let fixture: ComponentFixture<SidebarComponent>;
 
 	beforeEach(async () => {
+		closedSubject = new Subject<DateTimeModel | undefined>();
+
 		selectedItemsSubject = new BehaviorSubject<Set<any>>(
 			new Set([
 				new RecordVO({
@@ -168,6 +180,10 @@ describe('SidebarComponent', () => {
 				{
 					provide: AccountService,
 					useClass: MockAccountService,
+				},
+				{
+					provide: EditDateTimeModalService,
+					useValue: mockModalService,
 				},
 				{
 					provide: MessageService,
@@ -508,6 +524,135 @@ describe('SidebarComponent', () => {
 
 			expect(showErrorSpy).toHaveBeenCalledTimes(1);
 			expect(component.displayTimeObject?.date.year).toBe('1985');
+		});
+	});
+
+	describe('onDateMoreOptions', () => {
+		it('should open the edit date time modal with provided data', () => {
+			const openSpy = spyOn(mockModalService, 'open').and.callThrough();
+
+			const modalData: DateTimeModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			};
+
+			component.onDateMoreOptions(modalData);
+
+			expect(openSpy).toHaveBeenCalledWith(modalData);
+		});
+
+		it('should save displayTime when modal returns a result', () => {
+			const saveSpy = spyOn(
+				mockEditService,
+				'saveItemVoProperty',
+			).and.callThrough();
+
+			const modalData: DateTimeModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			};
+
+			component.onDateMoreOptions(modalData);
+
+			closedSubject.next({
+				date: { year: '2000', month: '03', day: '15' },
+				time: {
+					hours: '10',
+					minutes: '30',
+					seconds: '00',
+					format: 'am',
+				},
+			});
+
+			expect(saveSpy).toHaveBeenCalledWith(
+				component.selectedItem,
+				'displayTime',
+				jasmine.any(String),
+			);
+		});
+
+		it('should refresh the cached display time after saving from the modal', async () => {
+			spyOn(mockEditService, 'saveItemVoProperty').and.callFake(
+				async (item: any, prop: any, value: any) => {
+					item[prop] = value;
+				},
+			);
+
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			component.onDateMoreOptions({
+				date: { year: '1985', month: '05', day: '20' },
+				time: { format: 'am' },
+			} as DateTimeModel);
+
+			closedSubject.next({
+				date: { year: '2000', month: '03', day: '15' },
+				time: { format: 'am' },
+			} as DateTimeModel);
+			await fixture.whenStable();
+
+			expect(component.displayTimeObject?.date.year).toBe('2000');
+		});
+
+		it('should not save when the modal closes after the sidebar is destroyed', () => {
+			const saveSpy = spyOn(mockEditService, 'saveItemVoProperty');
+
+			const modalData: DateTimeModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			};
+
+			component.onDateMoreOptions(modalData);
+			component.ngOnDestroy();
+
+			closedSubject.next({
+				date: { year: '2000', month: '03', day: '15' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			});
+
+			expect(saveSpy).not.toHaveBeenCalled();
+		});
+
+		it('should not save when modal is dismissed', () => {
+			const saveSpy = spyOn(
+				mockEditService,
+				'saveItemVoProperty',
+			).and.callThrough();
+
+			const modalData: DateTimeModel = {
+				date: { year: '1985', month: '05', day: '' },
+				time: {
+					hours: '',
+					minutes: '',
+					seconds: '',
+					format: 'am',
+				},
+			};
+
+			component.onDateMoreOptions(modalData);
+			closedSubject.next(undefined);
+
+			expect(saveSpy).not.toHaveBeenCalled();
 		});
 	});
 });
