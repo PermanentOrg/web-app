@@ -23,6 +23,7 @@ interface AnalyticsConfig {
 export interface Environment {
 	production: boolean;
 	apiUrl: string;
+	replayBaseUrl: string;
 	hmr: boolean;
 	firebase: FirebaseConfig;
 	debug: boolean;

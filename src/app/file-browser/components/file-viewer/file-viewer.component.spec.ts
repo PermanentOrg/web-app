@@ -15,6 +15,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { MockComponent } from 'ng-mocks';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { environment } from '@root/environments/environment';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
 import { FileViewerComponent } from './file-viewer.component';
 
@@ -579,6 +580,10 @@ describe('FileViewerComponent', () => {
 			await fixture.whenStable();
 
 			expect(component.replayUrl).toBeTruthy();
+			const internalUrl = (component.replayUrl as any)
+				.changingThisBreaksApplicationSecurity;
+
+			expect(internalUrl.startsWith(environment.replayBaseUrl)).toBe(true);
 		});
 
 		it('should not set replayUrl when replay-web feature flag is disabled', async () => {
