@@ -4,6 +4,7 @@ import { Environment } from './environment-interface';
 export const environment: Environment = {
 	production: true,
 	apiUrl: 'https://app.staging.permanent.org/api',
+	replayBaseUrl: 'https://replay.staging.permanent.org',
 	hmr: false,
 	firebase: {
 		authDomain: 'prpledgestaging.firebaseapp.com',
