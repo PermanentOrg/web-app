@@ -35,6 +35,11 @@ export class PrDatePipe implements PipeTransform {
 			return;
 		}
 
+		if (typeof dtString === 'string' && !dtString.includes('T')) {
+			if (part === 'time') return;
+			return moment.utc(dtString).format(MOMENT_DATE_FORMAT.date);
+		}
+
 		const dt = moment.utc(dtString);
 
 		let outputDt: moment.Moment;

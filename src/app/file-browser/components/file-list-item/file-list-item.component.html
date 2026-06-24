@@ -90,10 +90,10 @@
 		<div class="second-row">
 			@if (!showAccess || !item.ShareArchiveVO) {
 				<span>
-					{{ item.displayDT | prDate: item.TimezoneVO : 'date' }}
+					{{ startDisplayTime | prDate: item.TimezoneVO : 'date' }}
 					@if (item.dataStatus > 0) {
 						<span @ngIfFadeInAnimation>{{
-							item.displayDT | prDate: item.TimezoneVO : 'time'
+							startDisplayTime | prDate: item.TimezoneVO : 'time'
 						}}</span>
 					}
 				</span>
@@ -112,12 +112,12 @@
 		<div class="date">
 			@if (item.dataStatus > 0) {
 				<div class="date-top" @ngIfFadeInAnimation>
-					{{ item.displayDT | prDate: item.TimezoneVO : 'date' }}
+					{{ startDisplayTime | prDate: item.TimezoneVO : 'date' }}
 				</div>
 			}
 			@if (item.dataStatus > 0) {
 				<div class="date-bottom" @ngIfFadeInAnimation>
-					{{ item.displayDT | prDate: item.TimezoneVO : 'time' }}
+					{{ startDisplayTime | prDate: item.TimezoneVO : 'time' }}
 				</div>
 			}
 		</div>

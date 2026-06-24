@@ -1283,4 +1283,42 @@ describe('EdtfService', () => {
 			expect(result).toBe(edtfString);
 		});
 	});
+
+	describe('getEdtfIntervalStartDate', () => {
+		it('should return the start date of an interval', () => {
+			expect(service.getEdtfIntervalStartDate('1985-05-20/1990-06-15')).toBe(
+				'1985-05-20',
+			);
+		});
+
+		it('should preserve the wall-clock time and offset of the start', () => {
+			expect(
+				service.getEdtfIntervalStartDate(
+					'2020-06-10T06:58:00-05:00/2026-06-15T00:00:00Z',
+				),
+			).toBe('2020-06-10T06:58:00-05:00');
+		});
+
+		it('should return a non-interval value unchanged', () => {
+			expect(service.getEdtfIntervalStartDate('1985-05-20')).toBe('1985-05-20');
+		});
+
+		it('should return an empty string for an empty input', () => {
+			expect(service.getEdtfIntervalStartDate('')).toBe('');
+		});
+
+		it('should return an empty string for an undefined input', () => {
+			expect(service.getEdtfIntervalStartDate(undefined)).toBe('');
+		});
+
+		it('should return an empty string for an open-ended start', () => {
+			expect(service.getEdtfIntervalStartDate('../1990-06-15')).toBe('');
+		});
+
+		it('should return the start when the end is open-ended', () => {
+			expect(service.getEdtfIntervalStartDate('1985-05-20/..')).toBe(
+				'1985-05-20',
+			);
+		});
+	});
 });
