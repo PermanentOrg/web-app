@@ -4,6 +4,7 @@ import { Environment } from './environment-interface';
 export const environment: Environment = {
 	production: false,
 	apiUrl: 'https://ng.permanent.org:4200/api',
+	replayBaseUrl: 'https://replay.dev.permanent.org',
 	hmr: false,
 	firebase: {
 		authDomain: 'prpledgedev.firebaseapp.com',
