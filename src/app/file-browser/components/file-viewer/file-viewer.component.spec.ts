@@ -324,6 +324,58 @@ describe('FileViewerComponent', () => {
 			expect(showErrorSpy).toHaveBeenCalledTimes(1);
 			expect(component.displayTimeObject?.date.year).toBe('1985');
 		});
+
+		it('should save null when the date is cleared to empty', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			await component.onDateSaved({
+				date: { year: '', month: '', day: '' },
+				time: { format: 'am' },
+			});
+
+			expect(savedProperty).toEqual({ name: 'displayTime', value: null });
+		});
+
+		it('should save the EDTF string unchanged for a non-empty date', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			await component.onDateSaved({
+				date: { year: '1990', month: '06', day: '15' },
+				time: { format: 'am' },
+			});
+
+			expect(savedProperty).toEqual({
+				name: 'displayTime',
+				value: '1990-06-15',
+			});
+		});
+
+		it('should show an empty date when displayTime is explicitly null, ignoring displayDT', async () => {
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Cleared Doc',
+				TagVOs: [],
+				displayTime: null,
+				displayDT: '1985-05-20T00:00:00Z',
+			});
+			await recreateComponent();
+
+			expect(component.displayTimeObject).toBeNull();
+		});
+
+		it('should fall back to displayDT when displayTime is undefined', async () => {
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Legacy Doc',
+				TagVOs: [],
+				displayDT: '1985-05-20T00:00:00Z',
+			});
+			await recreateComponent();
+
+			expect(component.displayTimeObject?.date.year).toBe('1985');
+		});
 	});
 
 	it('should have two tags components', () => {
