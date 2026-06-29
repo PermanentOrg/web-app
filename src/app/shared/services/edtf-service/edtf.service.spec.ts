@@ -335,6 +335,51 @@ describe('EdtfService', () => {
 
 				expect(service.toEdtfDate(model)).toBe('1985-05-20');
 			});
+
+			it('should left-pad a single-digit month with zero', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '5' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05');
+			});
+
+			it('should left-pad a single-digit month with zero when a day is present', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '5', day: '20' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05-20');
+			});
+
+			it('should left-pad single-digit month 1 with zero (January)', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '1' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-01');
+			});
+
+			it('should left-pad a single-digit day with zero', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '2' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05-02');
+			});
+
+			it('should left-pad single-digit day 1 with zero', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '1' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05-01');
+			});
 		});
 
 		describe('unspecified-digit (X-padding)', () => {
@@ -383,33 +428,6 @@ describe('EdtfService', () => {
 				expect(service.toEdtfDate(model)).toBe('1985-XX-20');
 			});
 
-			it('should zero-pad a single-digit day on the left', () => {
-				const model: DateTimeModel = {
-					date: { year: '1985', month: '05', day: '2' },
-					time: { format: 'am' },
-				};
-
-				expect(service.toEdtfDate(model)).toBe('1985-05-02');
-			});
-
-			it('should zero-pad a single-digit day that would be an invalid X-range', () => {
-				const model: DateTimeModel = {
-					date: { year: '1985', month: '05', day: '9' },
-					time: { format: 'am' },
-				};
-
-				expect(service.toEdtfDate(model)).toBe('1985-05-09');
-			});
-
-			it('should pad single-digit month with one X', () => {
-				const model: DateTimeModel = {
-					date: { year: '1985', month: '1' },
-					time: { format: 'am' },
-				};
-
-				expect(service.toEdtfDate(model)).toBe('1985-1X');
-			});
-
 			it('should combine partial year, full month, and full day', () => {
 				const model: DateTimeModel = {
 					date: { year: '198', month: '05', day: '20' },
@@ -421,6 +439,34 @@ describe('EdtfService', () => {
 		});
 
 		describe('time building', () => {
+			it('should left-pad single-digit hour, minute and second with zero', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '20' },
+					time: {
+						hours: '5',
+						minutes: '7',
+						seconds: '9',
+						format: 'am',
+					},
+				};
+
+				expect(service.toEdtfDate(model)).toContain('T05:07:09');
+			});
+
+			it('should left-pad a single-digit hour in 24-hour mode', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '20' },
+					time: {
+						hours: '5',
+						minutes: '30',
+						seconds: '00',
+						format: 'h24',
+					},
+				};
+
+				expect(service.toEdtfDate(model)).toContain('T05:30:00');
+			});
+
 			it('should build date with PM time', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
@@ -778,6 +824,48 @@ describe('EdtfService', () => {
 				expect(() => service.toEdtfDate(model)).toThrowError(
 					/Please check the values/,
 				);
+			});
+
+			it('should throw when time is filled but the date is missing the day', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '' },
+					time: { hours: '10', minutes: '30', seconds: '00', format: 'am' },
+				};
+
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/complete date is required/i,
+				);
+			});
+
+			it('should throw when time is filled but the date is missing the month', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '', day: '20' },
+					time: { hours: '10', minutes: '30', seconds: '00', format: 'am' },
+				};
+
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/complete date is required/i,
+				);
+			});
+
+			it('should throw when time is filled but the date has only a year', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '', day: '' },
+					time: { hours: '10', minutes: '30', seconds: '00', format: 'am' },
+				};
+
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/complete date is required/i,
+				);
+			});
+
+			it('should still emit a partial date when no time is provided', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('1985-05');
 			});
 		});
 	});
@@ -1161,6 +1249,44 @@ describe('EdtfService', () => {
 		});
 	});
 
+	describe('getSegmentError', () => {
+		const INVALID_MESSAGE = 'invalid characters';
+		const RANGE_MESSAGE = 'out of range';
+		const rangeOptions = {
+			invalidCharsMessage: INVALID_MESSAGE,
+			isWithinRange: (value: string): boolean => parseInt(value, 10) <= 12,
+			rangeMessage: RANGE_MESSAGE,
+		};
+
+		it('should return null for an empty value', () => {
+			expect(service.getSegmentError('', rangeOptions)).toBeNull();
+		});
+
+		it('should flag non-numeric characters with the provided message', () => {
+			expect(service.getSegmentError('a5', rangeOptions)).toBe(INVALID_MESSAGE);
+		});
+
+		it('should NOT range-check a partially-typed single digit', () => {
+			expect(service.getSegmentError('9', rangeOptions)).toBeNull();
+		});
+
+		it('should flag a complete out-of-range value with the provided message', () => {
+			expect(service.getSegmentError('13', rangeOptions)).toBe(RANGE_MESSAGE);
+		});
+
+		it('should return null for a complete in-range value', () => {
+			expect(service.getSegmentError('12', rangeOptions)).toBeNull();
+		});
+
+		it('should skip the range check when no range options are provided', () => {
+			expect(
+				service.getSegmentError('9999', {
+					invalidCharsMessage: INVALID_MESSAGE,
+				}),
+			).toBeNull();
+		});
+	});
+
 	describe('roundtrip', () => {
 		it('should roundtrip a full date', () => {
 			const edtfString = '1985-05-20';
@@ -1266,21 +1392,21 @@ describe('EdtfService', () => {
 			expect(result).toBe(edtfString);
 		});
 
-		it('should normalize a partial day (1985-05-2X) to a discrete zero-padded day', () => {
-			// A day is treated as a discrete value, not an unspecified-digit
-			// range, so 2X collapses to the 2nd rather than round-tripping.
-			const model = service.toDateTimeModel('1985-05-2X');
-			const result = service.toEdtfDate(model);
-
-			expect(result).toBe('1985-05-02');
-		});
-
 		it('should roundtrip partial year with full month and day (198X-05-20)', () => {
 			const edtfString = '198X-05-20';
 			const model = service.toDateTimeModel(edtfString);
 			const result = service.toEdtfDate(model);
 
 			expect(result).toBe(edtfString);
+		});
+
+		it('should canonicalize a partial day from "1985-05-2X" to "1985-05-02"', () => {
+			// The parser strips the trailing X, leaving day "2"; the serializer now
+			// treats a single 1–9 digit as a complete day and left-pads with zero.
+			const model = service.toDateTimeModel('1985-05-2X');
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe('1985-05-02');
 		});
 	});
 

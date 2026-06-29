@@ -53,8 +53,11 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	displayTimeObject: DateTimeModel | null = null;
 
 	private updateDisplayTimeObject(): void {
-		const timeSource =
-			this.selectedItem?.displayTime || this.selectedItem?.displayDT;
+		const edtfDate = this.selectedItem;
+		const hasExplicitlyClearedDate = edtfDate?.displayTime === null;
+		const timeSource = hasExplicitlyClearedDate
+			? null
+			: edtfDate?.displayTime || edtfDate?.displayDT;
 		try {
 			this.displayTimeObject = timeSource
 				? this.edtfService.toDateTimeModel(timeSource)
@@ -267,7 +270,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 
 	private async saveDisplayTime(result: DateTimeModel): Promise<void> {
 		try {
-			const newDisplayTime = this.edtfService.toEdtfDate(result);
+			const edtfDate = this.edtfService.toEdtfDate(result);
+			const newDisplayTime = edtfDate === '' ? null : edtfDate;
 			await this.onFinishEditing('displayTime', newDisplayTime);
 		} catch (err) {
 			this.message.showError({ message: err?.message });
