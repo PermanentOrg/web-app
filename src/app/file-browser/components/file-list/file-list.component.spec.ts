@@ -168,6 +168,20 @@ describe('FileListComponent', () => {
 		});
 	}));
 
+	it('should reset scroll to top in ngAfterViewInit even without a sidebar', () => {
+		component = fixture.componentInstance;
+		component.showSidebar = false;
+		component.listItemsQuery = {
+			toArray: () => [],
+		} as any;
+		const scrollElement = { scrollTo: jasmine.createSpy() } as any;
+		spyOn(component, 'getScrollElement').and.returnValue(scrollElement);
+
+		component.ngAfterViewInit();
+
+		expect(scrollElement.scrollTo).toHaveBeenCalledWith(0, 0);
+	});
+
 	it('should clean up on ngOnDestroy', () => {
 		const sub = new Subscription();
 		spyOn(sub, 'unsubscribe');
