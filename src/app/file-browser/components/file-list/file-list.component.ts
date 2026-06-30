@@ -353,9 +353,7 @@ export class FileListComponent
 
 		this.loadVisibleItems(true);
 
-		if (this.showSidebar) {
-			this.getScrollElement().scrollTo(0, 0);
-		}
+		this.getScrollElement().scrollTo(0, 0);
 
 		const queryParams = this.route.snapshot.queryParamMap;
 		if (queryParams.has('showItem')) {
