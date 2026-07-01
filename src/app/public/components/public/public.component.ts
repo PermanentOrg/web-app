@@ -1,4 +1,10 @@
-import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	HostBinding,
+	OnDestroy,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import {
 	ActivatedRoute,
 	Router,
@@ -15,6 +21,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 	selector: 'pr-public',
 	templateUrl: './public.component.html',
 	styleUrls: ['./public.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PublicComponent implements OnInit, OnDestroy {

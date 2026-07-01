@@ -27,7 +27,8 @@
 			update your payment, you may leave this page.
 			<br /><br />
 			This card will be charged for
-			{{ userData?.phase1?.pledgeTotal | currency }} within 5-7 business days.
+			{{ $safeNavigationMigration(userData?.phase1?.pledgeTotal) | currency }}
+			within 5-7 business days.
 		</p>
 		<div class="input-group-vertical" [hidden]="cardSaved">
 			<pr-form-input

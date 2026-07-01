@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { HttpService } from '@shared/services/http/http.service';
 import { BaseRepo } from '@shared/services/api/base';
@@ -10,7 +11,10 @@ describe('BaseRepo', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			imports: [],
-			providers: [HttpService, provideHttpClient(withInterceptorsFromDi())],
+			providers: [
+				HttpService,
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
+			],
 		});
 	});
 

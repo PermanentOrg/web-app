@@ -7,6 +7,7 @@ import {
 	HostListener,
 	Optional,
 	DOCUMENT,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { Router, ActivatedRoute } from '@angular/router';
@@ -37,6 +38,7 @@ import { TagsService } from '../../../core/services/tags/tags.service';
 	templateUrl: './file-viewer.component.html',
 	styleUrls: ['./file-viewer.component.scss'],
 	providers: [SearchService],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FileViewerComponent implements OnInit, OnDestroy {

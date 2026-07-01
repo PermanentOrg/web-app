@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -10,6 +16,7 @@ import { Subject } from 'rxjs';
 	selector: 'pr-metadata-edit-value[tag]',
 	templateUrl: './value-edit.component.html',
 	styleUrls: ['./value-edit.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class EditValueComponent {

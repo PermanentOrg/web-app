@@ -1,4 +1,4 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
@@ -18,6 +18,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 	selector: 'pr-mfa',
 	templateUrl: './mfa.component.html',
 	styleUrls: ['./mfa.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class MfaComponent {

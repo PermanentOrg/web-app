@@ -1,4 +1,10 @@
-import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
+import {
+	Component,
+	Inject,
+	ViewChild,
+	ElementRef,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import {
@@ -52,6 +58,7 @@ export type ConnectionsTab = 'connections' | 'pending' | 'new';
 	templateUrl: './connections-dialog.component.html',
 	styleUrls: ['./connections-dialog.component.scss'],
 	providers: [DataService],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ConnectionsDialogComponent {

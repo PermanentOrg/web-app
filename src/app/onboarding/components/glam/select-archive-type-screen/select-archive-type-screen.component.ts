@@ -1,4 +1,11 @@
-import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
+import {
+	Component,
+	Output,
+	EventEmitter,
+	Input,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { generateElementText } from '../../../utils/utils';
 import {
 	archiveOptionsWithArticle,
@@ -11,6 +18,7 @@ import { OnboardingService } from '../../../services/onboarding.service';
 	selector: 'pr-select-archive-type-screen',
 	templateUrl: './select-archive-type-screen.component.html',
 	styleUrl: './select-archive-type-screen.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SelectArchiveTypeScreenComponent implements OnInit {

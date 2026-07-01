@@ -7,6 +7,7 @@ import { AccountVO } from '@models/account-vo';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { LegacyContactDialogComponent } from './legacy-contact-dialog.component';
 
@@ -26,7 +27,7 @@ describe('LegacyContactDialogComponent', () => {
 						getAccount: () => new AccountVO({ accountId: 1 }),
 					},
 				},
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

@@ -5,6 +5,7 @@ import {
 	ElementRef,
 	AfterViewInit,
 	HostBinding,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { getFormInputError } from '@shared/utilities/forms';
@@ -33,6 +34,7 @@ export interface FormInputConfig {
 	selector: 'pr-form-input',
 	templateUrl: './form-input.component.html',
 	styleUrls: ['./form-input.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FormInputComponent implements OnInit, AfterViewInit {

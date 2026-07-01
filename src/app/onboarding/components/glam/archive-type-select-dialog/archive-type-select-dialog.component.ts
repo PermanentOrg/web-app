@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { OnboardingTypes } from '@root/app/onboarding/shared/onboarding-screen';
@@ -10,6 +10,7 @@ import { ArchiveTypeIconComponent } from '../archive-type-icon/archive-type-icon
 	selector: 'pr-archive-type-select-dialog',
 	imports: [FontAwesomeModule, ArchiveTypeIconComponent],
 	templateUrl: './archive-type-select-dialog.component.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrl: './archive-type-select-dialog.component.scss',
 })
 export class ArchiveTypeSelectDialogComponent {

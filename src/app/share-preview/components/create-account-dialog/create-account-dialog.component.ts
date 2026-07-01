@@ -1,4 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+	Component,
+	Inject,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { DeviceService } from '@shared/services/device/device.service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 	selector: 'pr-create-account-dialog',
 	templateUrl: './create-account-dialog.component.html',
 	styleUrls: ['./create-account-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class CreateAccountDialogComponent implements OnInit {

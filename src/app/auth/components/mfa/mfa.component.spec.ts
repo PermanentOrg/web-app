@@ -10,6 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 
 describe('MfaComponent', () => {
@@ -23,7 +24,7 @@ describe('MfaComponent', () => {
 			providers: [
 				CookieService,
 				MessageService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

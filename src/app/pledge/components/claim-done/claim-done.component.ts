@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PledgeService } from '@pledge/services/pledge.service';
@@ -7,6 +7,7 @@ import { PledgeService } from '@pledge/services/pledge.service';
 	selector: 'pr-claim-done',
 	templateUrl: './claim-done.component.html',
 	styleUrls: ['./claim-done.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ClaimDoneComponent implements OnInit {

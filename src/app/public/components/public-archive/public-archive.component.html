@@ -57,14 +57,22 @@
 						@case ('type.archive.person') {
 							@if (hasSingleValueFor('birth_info', 'day1')) {
 								<span class="profile-data profile-data-date">
-									on {{ profileItems.birth_info[0]?.day1 | date }}
+									on
+									{{
+										$safeNavigationMigration(profileItems.birth_info[0]?.day1)
+											| date
+									}}
 								</span>
 							}
 						}
 						@default {
 							@if (hasSingleValueFor('established_info', 'day1')) {
 								<span class="profile-data profile-data-date">
-									{{ profileItems.established_info[0]?.day1 | date }}
+									{{
+										$safeNavigationMigration(
+											profileItems.established_info[0]?.day1
+										) | date
+									}}
 								</span>
 							}
 						}

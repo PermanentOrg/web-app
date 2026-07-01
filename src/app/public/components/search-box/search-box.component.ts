@@ -8,6 +8,7 @@ import {
 	AfterViewInit,
 	HostBinding,
 	Input,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ArchiveVO } from '@models';
@@ -25,6 +26,7 @@ import { of } from 'rxjs';
 	selector: 'pr-search-box',
 	templateUrl: './search-box.component.html',
 	styleUrls: ['./search-box.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SearchBoxComponent implements OnInit, AfterViewInit {

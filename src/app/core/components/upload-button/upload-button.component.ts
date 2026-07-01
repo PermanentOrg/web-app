@@ -5,6 +5,7 @@ import {
 	ElementRef,
 	Input,
 	HostBinding,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
@@ -25,6 +26,7 @@ import { EventService } from '@shared/services/event/event.service';
 	selector: 'pr-upload-button',
 	templateUrl: './upload-button.component.html',
 	styleUrls: ['./upload-button.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class UploadButtonComponent implements OnDestroy, HasSubscriptions {

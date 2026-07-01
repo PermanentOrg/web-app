@@ -1,10 +1,17 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import {
+	Component,
+	Output,
+	EventEmitter,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 
 @Component({
 	selector: 'pr-archive-creation-start-screen',
 	templateUrl: './archive-creation-start-screen.component.html',
 	styleUrl: './archive-creation-start-screen.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchiveCreationStartScreenComponent implements OnInit {

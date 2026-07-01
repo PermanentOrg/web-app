@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadItem } from '@core/services/upload/uploadItem';
 import {
@@ -10,6 +10,7 @@ import {
 	selector: 'pr-upload-progress',
 	templateUrl: './upload-progress.component.html',
 	styleUrls: ['./upload-progress.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class UploadProgressComponent {

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import {
 	PromptService,
 	PromptField,
@@ -34,6 +34,7 @@ export interface ArchivePickerComponentConfig {
 	selector: 'pr-archive-picker',
 	templateUrl: './archive-picker.component.html',
 	styleUrls: ['./archive-picker.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchivePickerComponent {

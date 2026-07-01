@@ -8,6 +8,7 @@ import { environment } from '@root/environments/environment';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { StorageService } from '../storage/storage.service';
 
@@ -22,7 +23,7 @@ describe('HttpService', () => {
 			providers: [
 				HttpService,
 				StorageService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

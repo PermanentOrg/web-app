@@ -8,6 +8,7 @@ import {
 	Optional,
 	Output,
 	ViewChild,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
@@ -22,6 +23,7 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
 	selector: 'pr-archive-search-box',
 	templateUrl: './archive-search-box.component.html',
 	styleUrls: ['./archive-search-box.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchiveSearchBoxComponent implements OnInit {

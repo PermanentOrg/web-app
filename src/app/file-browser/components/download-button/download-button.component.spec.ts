@@ -5,6 +5,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { DownloadButtonComponent } from './download-button.component';
 
@@ -19,7 +20,7 @@ describe('DownloadButtonComponent', () => {
 			providers: [
 				DataService,
 				MessageService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

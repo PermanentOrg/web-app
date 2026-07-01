@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { RouterModule, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -168,6 +169,6 @@ const routes: RoutesWithData = [
 		FormsModule,
 		ReactiveFormsModule,
 	],
-	providers: [provideHttpClient(withInterceptorsFromDi())],
+	providers: [provideHttpClient(withXhr(), withInterceptorsFromDi())],
 })
 export class AppRoutingModule {}

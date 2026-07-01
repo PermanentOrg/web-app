@@ -1,5 +1,10 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+	Component,
+	OnDestroy,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FolderVO, RecordVO, TagVO } from '@models/index';
 import { SearchService } from '../../../search/services/search.service';
@@ -8,6 +13,7 @@ import { SearchService } from '../../../search/services/search.service';
 	selector: 'pr-public-search-results',
 	templateUrl: './public-search-results.component.html',
 	styleUrls: ['./public-search-results.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PublicSearchResultsComponent implements OnInit, OnDestroy {

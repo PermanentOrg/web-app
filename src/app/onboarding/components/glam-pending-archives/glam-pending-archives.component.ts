@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -8,6 +14,7 @@ import { OnboardingService } from '../../services/onboarding.service';
 	selector: 'pr-glam-pending-archives',
 	templateUrl: './glam-pending-archives.component.html',
 	styleUrl: './glam-pending-archives.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GlamPendingArchivesComponent {

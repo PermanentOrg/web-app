@@ -20,11 +20,11 @@ import { EventService } from '@shared/services/event/event.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { FileListComponent } from './file-list.component';
 
-@Component({ template: '' })
+@Component({ changeDetection: ChangeDetectionStrategy.Eager, template: '' })
 class DummyComponent {}
 
 describe('FileListComponent', () => {

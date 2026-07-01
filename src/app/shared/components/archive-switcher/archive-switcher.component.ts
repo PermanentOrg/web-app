@@ -1,4 +1,9 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import {
+	Component,
+	AfterViewInit,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Validators } from '@angular/forms';
 
 import { orderBy } from 'lodash';
@@ -24,6 +29,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 	selector: 'pr-archive-switcher',
 	templateUrl: './archive-switcher.component.html',
 	styleUrls: ['./archive-switcher.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {

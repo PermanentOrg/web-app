@@ -8,6 +8,7 @@ import {
 	OnDestroy,
 	Output,
 	ViewChild,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { GetAccessFile } from '@models/get-access-file';
 import { RecordVO } from '@models/index';
@@ -18,6 +19,7 @@ import { ZoomEvent, FullScreenEvent } from 'openseadragon';
 	selector: 'pr-zooming-image-viewer',
 	templateUrl: './zooming-image-viewer.component.html',
 	styleUrl: './zooming-image-viewer.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ZoomingImageViewerComponent implements AfterViewInit, OnDestroy {

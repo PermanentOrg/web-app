@@ -11,6 +11,7 @@ import {
 	HostListener,
 	ViewChild,
 	ElementRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { format } from 'date-fns';
@@ -50,6 +51,7 @@ interface SidebarDateRow {
 	standalone: true,
 	imports: [CommonModule, DatepickerInputComponent, TimepickerInputComponent],
 	templateUrl: './sidebar-date-picker.component.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrls: ['./sidebar-date-picker.component.scss'],
 })
 export class SidebarDatePickerComponent implements OnInit, OnChanges {

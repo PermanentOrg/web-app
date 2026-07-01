@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import * as Repo from '@shared/services/api/index.repo';
 
@@ -11,7 +12,10 @@ describe('ApiService', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			imports: [],
-			providers: [ApiService, provideHttpClient(withInterceptorsFromDi())],
+			providers: [
+				ApiService,
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
+			],
 		});
 	});
 

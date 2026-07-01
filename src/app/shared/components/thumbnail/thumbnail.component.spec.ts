@@ -1,4 +1,8 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import {
 	ComponentFixture,
 	TestBed,
@@ -102,6 +106,7 @@ const fullItem2 = new RecordVO(
 	template: `<div [style.width]="width" [style.height]="height">
 		<pr-thumbnail [item]="item"></pr-thumbnail>
 	</div>`,
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 class ThumbnailTestHostComponent {

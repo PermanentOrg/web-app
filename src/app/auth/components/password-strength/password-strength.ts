@@ -1,4 +1,9 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import {
+	Component,
+	Input,
+	OnChanges,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { passwordStrength } from 'check-password-strength';
 
@@ -13,6 +18,7 @@ enum PasswordStrength {
 	selector: 'pr-password-strength',
 	templateUrl: './password-strength.html',
 	styleUrls: ['./password-strength.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PasswordStrengthComponent implements OnChanges {

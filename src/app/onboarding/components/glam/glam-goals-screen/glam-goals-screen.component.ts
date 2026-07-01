@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { goals } from '../../../shared/onboarding-screen';
 import { OnboardingService } from '../../../services/onboarding.service';
 
@@ -11,6 +18,7 @@ interface OutputModel {
 	selector: 'pr-glam-goals-screen',
 	templateUrl: './glam-goals-screen.component.html',
 	styleUrl: './glam-goals-screen.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GlamGoalsScreenComponent implements OnInit {

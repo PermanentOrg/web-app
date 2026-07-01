@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Directive } from '@models/directive';
 import { EventService } from '@shared/services/event/event.service';
 
@@ -8,6 +8,7 @@ export type DialogState = 'display' | 'edit';
 	selector: 'pr-directive-dialog',
 	templateUrl: './directive-dialog.component.html',
 	styleUrls: ['./directive-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class DirectiveDialogComponent {

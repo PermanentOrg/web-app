@@ -27,7 +27,9 @@
 				>group</i
 			>
 			<ng-template #sharesList>
-				<ng-container [ngPlural]="currentFolder?.ShareVOs?.length">
+				<ng-container
+					[ngPlural]="$safeNavigationMigration(currentFolder?.ShareVOs?.length)"
+				>
 					Shared with
 					<ng-template ngPluralCase="=0">no one</ng-template>
 					<ng-template ngPluralCase="=1"

@@ -1,4 +1,4 @@
-import { NgModule, ComponentFactoryResolver } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { GoogleMapsModule } from '@angular/google-maps';
@@ -69,10 +69,7 @@ import { SidebarDatePickerComponent } from './components/sidebar-date-picker/sid
 	],
 })
 export class FileBrowserComponentsModule {
-	constructor(
-		resolver: ComponentFactoryResolver,
-		private library: FaIconLibrary,
-	) {
+	constructor(private library: FaIconLibrary) {
 		library.addIcons(faFileArchive);
 	}
 }

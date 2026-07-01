@@ -11,6 +11,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -80,7 +81,7 @@ describe('NotificationService', () => {
 			providers: [
 				NotificationService,
 				MessageService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

@@ -21,7 +21,10 @@
 		[ngClass]="{ 'download-options-file-viewer': isFileView }"
 	>
 		@for (item of downloadOptions; track item; let i = $index) {
-			<div class="download-option" (click)="onFileTypeClick(item?.name)">
+			<div
+				class="download-option"
+				(click)="onFileTypeClick($safeNavigationMigration(item?.name))"
+			>
 				<span>{{ i === 0 ? 'Original Format:' : 'Permanent Format:' }}</span>
 				<span>{{
 					item?.extension && item?.extension !== 'null'

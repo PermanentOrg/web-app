@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import {
+	CUSTOM_ELEMENTS_SCHEMA,
+	Component,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import {
 	DateTimeModel,
 	EdtfService,
@@ -15,6 +19,7 @@ import { SidebarDatePickerComponent } from './sidebar-date-picker.component';
 			(moreOptionsClicked)="onMoreOptionsClicked($event)"
 		/>
 	`,
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 class TestHostComponent {

@@ -1,10 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	Input,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { FeaturedArchive } from '../../types/featured-archive';
 
 @Component({
 	selector: 'pr-featured-archive',
 	templateUrl: './featured-archive.component.html',
 	styleUrls: ['./featured-archive.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FeaturedArchiveComponent implements OnInit {

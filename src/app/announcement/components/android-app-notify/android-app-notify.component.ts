@@ -1,4 +1,9 @@
-import { Component, HostListener, ElementRef } from '@angular/core';
+import {
+	Component,
+	HostListener,
+	ElementRef,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import {
 	adjustLayoutForAnnouncement,
 	resetLayoutForAnnouncement,
@@ -13,6 +18,7 @@ export interface BeforeInstallPromptEvent extends Event {
 	selector: 'pr-android-app-notify',
 	templateUrl: './android-app-notify.component.html',
 	styleUrls: ['./android-app-notify.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class AndroidAppNotifyComponent {

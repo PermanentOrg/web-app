@@ -1,4 +1,10 @@
-import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
+import {
+	Component,
+	Inject,
+	ViewChild,
+	ElementRef,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { FolderVO } from '@models';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
@@ -10,6 +16,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 	selector: 'pr-timeline-complete-dialog',
 	templateUrl: './timeline-complete-dialog.component.html',
 	styleUrls: ['./timeline-complete-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class TimelineCompleteDialogComponent {

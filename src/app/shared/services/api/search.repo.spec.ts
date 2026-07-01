@@ -9,6 +9,7 @@ import { TagVO } from '@models/tag-vo';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { SearchRepo, SearchResponse } from './search.repo';
@@ -22,7 +23,7 @@ describe('SearchRepo', () => {
 			imports: [],
 			providers: [
 				HttpService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LedgerFinancialVOData } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -10,6 +10,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 	selector: 'pr-transaction-history',
 	templateUrl: './transaction-history.component.html',
 	styleUrls: ['./transaction-history.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class TransactionHistoryComponent implements OnInit {

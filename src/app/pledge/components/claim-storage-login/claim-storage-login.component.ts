@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
@@ -21,6 +21,7 @@ import { MessageService } from '@shared/services/message/message.service';
 	selector: 'pr-claim-storage-login',
 	templateUrl: './claim-storage-login.component.html',
 	styleUrls: ['./claim-storage-login.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ClaimStorageLoginComponent {

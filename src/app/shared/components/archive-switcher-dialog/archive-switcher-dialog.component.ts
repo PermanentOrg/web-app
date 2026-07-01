@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models';
 
@@ -9,6 +9,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 	selector: 'pr-archive-switcher-dialog',
 	templateUrl: './archive-switcher-dialog.component.html',
 	styleUrls: ['./archive-switcher-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchiveSwitcherDialogComponent {

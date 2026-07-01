@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 
@@ -19,6 +19,7 @@ interface FolderViewToggleOption {
 	selector: 'pr-folder-view-toggle',
 	templateUrl: './folder-view-toggle.component.html',
 	styleUrls: ['./folder-view-toggle.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FolderViewToggleComponent implements OnDestroy, HasSubscriptions {

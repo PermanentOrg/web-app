@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Directive } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -7,6 +14,7 @@ import { ApiService } from '@shared/services/api/api.service';
 	selector: 'pr-directive-display',
 	templateUrl: './directive-display.component.html',
 	styleUrls: ['./directive-display.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class DirectiveDisplayComponent implements OnInit {

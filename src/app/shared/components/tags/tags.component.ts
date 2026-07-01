@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, HostBinding } from '@angular/core';
+import {
+	Component,
+	Input,
+	OnChanges,
+	HostBinding,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { TagVOData } from '@models/tag-vo';
 import { orderBy } from 'lodash';
 import { ngIfScaleAnimationDynamic } from '@shared/animations';
@@ -8,6 +14,7 @@ import { ngIfScaleAnimationDynamic } from '@shared/animations';
 	templateUrl: './tags.component.html',
 	styleUrls: ['./tags.component.scss'],
 	animations: [ngIfScaleAnimationDynamic],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class TagsComponent implements OnChanges {

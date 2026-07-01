@@ -6,6 +6,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { DataService } from '../../../shared/services/data/data.service';
@@ -35,7 +36,7 @@ describe('PublicSearchResultsComponent', () => {
 				{ provide: ActivatedRoute, useValue: mockActivatedRoute },
 				Location,
 				DataService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

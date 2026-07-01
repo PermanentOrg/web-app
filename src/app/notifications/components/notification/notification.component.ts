@@ -4,6 +4,7 @@ import {
 	Input,
 	ElementRef,
 	HostBinding,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { NotificationVOData } from '@models/notification-vo';
 
@@ -11,6 +12,7 @@ import { NotificationVOData } from '@models/notification-vo';
 	selector: 'pr-notification',
 	templateUrl: './notification.component.html',
 	styleUrls: ['./notification.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class NotificationComponent implements OnInit {

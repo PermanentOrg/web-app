@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+	Component,
+	Input,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as _ from 'lodash';
@@ -30,6 +35,7 @@ export const FAMILYSEARCH_CONNECT_KEY = 'familysearchConnect';
 	selector: 'pr-connector',
 	templateUrl: './connector.component.html',
 	styleUrls: ['./connector.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ConnectorComponent implements OnInit {

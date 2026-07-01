@@ -1,5 +1,10 @@
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	OnDestroy,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { EventService } from '@shared/services/event/event.service';
@@ -12,6 +17,7 @@ type StorageDialogTab = (typeof dialogTabs)[number];
 	selector: 'pr-storage-dialog',
 	templateUrl: './storage-dialog.component.html',
 	styleUrls: ['./storage-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class StorageDialogComponent implements OnInit, OnDestroy {

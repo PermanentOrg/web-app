@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
@@ -12,6 +12,7 @@ import { savePropertyOnAccount } from '@shared/services/account/account.service.
 	selector: 'pr-billing-settings',
 	templateUrl: './billing-settings.component.html',
 	styleUrls: ['./billing-settings.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class BillingSettingsComponent implements OnInit {

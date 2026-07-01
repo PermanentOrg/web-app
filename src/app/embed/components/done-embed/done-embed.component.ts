@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -8,6 +8,7 @@ import { AccountVO } from '@root/app/models';
 	selector: 'pr-done-embed',
 	templateUrl: './done-embed.component.html',
 	styleUrls: ['./done-embed.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class DoneEmbedComponent implements OnInit {

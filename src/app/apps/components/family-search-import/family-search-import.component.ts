@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { filter } from 'lodash';
 import { ArchiveVO } from '@models';
@@ -25,6 +25,7 @@ interface FamilySearchPersonI {
 	selector: 'pr-family-search-import',
 	templateUrl: './family-search-import.component.html',
 	styleUrls: ['./family-search-import.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FamilySearchImportComponent {

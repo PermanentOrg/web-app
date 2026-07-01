@@ -9,6 +9,7 @@ import {
 	SimpleChanges,
 	OnChanges,
 	HostBinding,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ngIfScaleAnimation, collapseAnimation } from '@shared/animations';
 import {
@@ -44,6 +45,7 @@ type ValueType = string | number;
 	templateUrl: './inline-value-edit.component.html',
 	styleUrls: ['./inline-value-edit.component.scss'],
 	animations: [ngIfScaleAnimation, collapseAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class InlineValueEditComponent implements OnInit, OnChanges {

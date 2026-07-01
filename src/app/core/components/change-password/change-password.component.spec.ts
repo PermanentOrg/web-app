@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { MessageService } from '@shared/services/message/message.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -24,7 +25,7 @@ describe('ChangePasswordComponent', () => {
 					provide: MessageService,
 					useClass: MessageStub,
 				},
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

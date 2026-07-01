@@ -11,6 +11,7 @@ import { ArchiveVO } from '@models/index';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { ChecklistApiResponse } from '../types/checklist-item';
 import { UserChecklistService } from './user-checklist.service';
@@ -27,7 +28,7 @@ describe('UserChecklistService', () => {
 			providers: [
 				HttpV2Service,
 				AccountService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

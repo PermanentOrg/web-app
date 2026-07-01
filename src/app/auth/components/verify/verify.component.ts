@@ -1,4 +1,9 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import {
+	Component,
+	HostBinding,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -18,6 +23,7 @@ import { EventService } from '@shared/services/event/event.service';
 	selector: 'pr-verify',
 	templateUrl: './verify.component.html',
 	styleUrls: ['./verify.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class VerifyComponent implements OnInit {

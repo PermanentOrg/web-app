@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 
 @Component({
 	selector: 'pr-gallery-header',
 	templateUrl: './gallery-header.component.html',
 	styleUrls: ['./gallery-header.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GalleryHeaderComponent {

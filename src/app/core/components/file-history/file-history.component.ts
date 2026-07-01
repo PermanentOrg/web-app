@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LedgerNonfinancialVOData } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -10,6 +10,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 	selector: 'pr-file-history',
 	templateUrl: './file-history.component.html',
 	styleUrls: ['./file-history.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FileHistoryComponent implements OnInit {

@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
 	selector: 'pr-public-archive-web-links',
 	templateUrl: './public-archive-web-links.component.html',
 	styleUrls: ['./public-archive-web-links.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PublicArchiveWebLinksComponent {

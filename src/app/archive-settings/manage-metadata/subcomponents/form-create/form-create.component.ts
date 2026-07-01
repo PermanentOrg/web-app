@@ -1,10 +1,17 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+	Component,
+	Input,
+	OnDestroy,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
 @Component({
 	selector: 'pr-metadata-creation-form',
 	templateUrl: './form-create.component.html',
 	styleUrls: ['./form-create.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FormCreateComponent implements OnInit, OnDestroy {

@@ -7,6 +7,7 @@ import {
 	OnInit,
 	Renderer2,
 	ViewChild,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
@@ -32,6 +33,7 @@ import { Observable, Subscription } from 'rxjs';
 			]),
 		]),
 	],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SharePreviewFooterComponent implements OnInit, OnDestroy {

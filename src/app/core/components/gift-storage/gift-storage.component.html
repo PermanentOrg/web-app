@@ -66,7 +66,9 @@
 						formControlName="amount"
 						placeholder="0"
 						[ngClass]="{
-							'form-control-error': giftForm.get('amount').errors?.notInteger
+							'form-control-error': $safeNavigationMigration(
+								giftForm.get('amount').errors?.notInteger
+							)
 						}"
 					/>
 					<span class="gigabytes">gigabytes per recipient</span>

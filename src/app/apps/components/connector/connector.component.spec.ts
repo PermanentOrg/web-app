@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveVO, ConnectorOverviewVO, FolderVO } from '@root/app/models';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ConnectorComponent } from './connector.component';
 
@@ -16,6 +16,7 @@ import { ConnectorComponent } from './connector.component';
 			[appsFolder]="appsFolder"
 		></pr-connector>
 	}`,
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 class TestHostComponent {

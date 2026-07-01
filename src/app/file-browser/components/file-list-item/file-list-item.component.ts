@@ -13,6 +13,7 @@ import {
 	ViewChild,
 	AfterViewInit,
 	DOCUMENT,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { getFormattedDate } from '@shared/utilities/dateTime';
@@ -158,6 +159,7 @@ const DRAG_MIN_Y = 1;
 	templateUrl: './file-list-item.component.html',
 	styleUrls: ['./file-list-item.component.scss'],
 	animations: [ngIfFadeInAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FileListItemComponent

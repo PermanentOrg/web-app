@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { LegacyContact } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -7,6 +14,7 @@ import { ApiService } from '@shared/services/api/api.service';
 	selector: 'pr-legacy-contact-display',
 	templateUrl: './legacy-contact-display.component.html',
 	styleUrls: ['./legacy-contact-display.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class LegacyContactDisplayComponent implements OnInit {

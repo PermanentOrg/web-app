@@ -9,6 +9,7 @@ import {
 	ViewChild,
 	HostListener,
 	NgZone,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ItemVO, ArchiveVO, LocnVOData } from '@models';
 import { MapInfoWindow, GoogleMap } from '@angular/google-maps';
@@ -33,6 +34,7 @@ const DEFAULT_CENTER: google.maps.LatLngLiteral = {
 	templateUrl: './location-picker.component.html',
 	styleUrls: ['./location-picker.component.scss'],
 	animations: [ngIfFadeInAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class LocationPickerComponent implements OnInit, AfterViewInit {

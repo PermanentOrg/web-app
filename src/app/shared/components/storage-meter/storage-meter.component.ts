@@ -3,7 +3,13 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { Subscription } from 'rxjs';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	Input,
+	OnDestroy,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models';
 import { ApiService } from '../../services/api/api.service';
@@ -12,6 +18,7 @@ import { ApiService } from '../../services/api/api.service';
 	selector: 'pr-storage-meter',
 	templateUrl: './storage-meter.component.html',
 	styleUrls: ['./storage-meter.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class StorageMeterComponent implements OnInit, OnDestroy {

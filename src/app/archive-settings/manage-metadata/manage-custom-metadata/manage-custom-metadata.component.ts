@@ -5,6 +5,7 @@ import {
 	OnInit,
 	Renderer2,
 	ViewChild,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { TagsService } from '@core/services/tags/tags.service';
 import { TagVO } from '@models/tag-vo';
@@ -14,6 +15,7 @@ import { Subject } from 'rxjs';
 	selector: 'pr-manage-custom-metadata',
 	templateUrl: './manage-custom-metadata.component.html',
 	styleUrls: ['./manage-custom-metadata.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ManageCustomMetadataComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { DialogRef } from '@angular/cdk/dialog';
 
@@ -8,6 +8,7 @@ export const PROFILE_ONBOARDING_COOKIE = 'hasSeenProfileMessage';
 	selector: 'pr-profile-edit-first-time-dialog',
 	templateUrl: './profile-edit-first-time-dialog.component.html',
 	styleUrls: ['./profile-edit-first-time-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ProfileEditFirstTimeDialogComponent implements OnInit {

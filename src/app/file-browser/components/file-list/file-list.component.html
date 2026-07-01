@@ -8,7 +8,7 @@
 }
 <div
 	class="file-list-scroll"
-	[class.is-sorting]="controls?.isSorting$ | async"
+	[class.is-sorting]="$safeNavigationMigration(controls?.isSorting$) | async"
 	#scroll
 >
 	@if (!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length) {

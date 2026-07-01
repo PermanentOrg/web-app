@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { ApiService } from '@shared/services/api/api.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -25,7 +26,7 @@ describe('DirectiveDialogComponent', () => {
 						getAccount: () => new AccountVO({ accountId: 1 }),
 					},
 				},
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

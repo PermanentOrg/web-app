@@ -9,6 +9,7 @@ import {
 	ElementRef,
 	OnDestroy,
 	ViewChild,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { find } from 'lodash';
@@ -40,6 +41,7 @@ import { MembersDialogComponent } from '../members-dialog/members-dialog.compone
 	templateUrl: './left-menu.component.html',
 	styleUrls: ['./left-menu.component.scss'],
 	animations: [ngIfSlideInAnimation, ngIfScaleHeightAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {

@@ -1,5 +1,5 @@
 import { ArchiveVO, ArchiveType } from '@models/archive-vo';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
@@ -8,6 +8,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 	selector: 'pr-archive-type-change-dialog',
 	templateUrl: './archive-type-change-dialog.component.html',
 	styleUrls: ['./archive-type-change-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchiveTypeChangeDialogComponent {

@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FolderVO, RecordVO, TagVOData } from '@models/index';
 
@@ -6,6 +12,7 @@ import { FolderVO, RecordVO, TagVOData } from '@models/index';
 	selector: 'pr-public-search-bar-results',
 	templateUrl: './public-search-bar-results.component.html',
 	styleUrl: './public-search-bar-results.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PublicSearchBarResultsComponent {

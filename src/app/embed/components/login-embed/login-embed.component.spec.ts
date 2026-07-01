@@ -15,6 +15,7 @@ import { IFrameService } from '@shared/services/iframe/iframe.service';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 
 describe('LoginEmbedComponent', () => {
@@ -45,7 +46,7 @@ describe('LoginEmbedComponent', () => {
 						setParentUrl: function () {},
 					},
 				},
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

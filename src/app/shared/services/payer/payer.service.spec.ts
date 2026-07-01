@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { AccountService } from '../account/account.service';
 import { PayerService } from './payer.service';
@@ -15,7 +16,7 @@ describe('PayerService', () => {
 			imports: [],
 			providers: [
 				AccountService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

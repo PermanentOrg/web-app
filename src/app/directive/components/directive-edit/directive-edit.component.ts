@@ -1,5 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Directive, DirectiveUpdateRequest } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
 import { EventService } from '@shared/services/event/event.service';
@@ -10,6 +17,7 @@ import { MessageService } from '@shared/services/message/message.service';
 	selector: 'pr-directive-edit',
 	templateUrl: './directive-edit.component.html',
 	styleUrls: ['./directive-edit.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class DirectiveEditComponent implements OnInit {

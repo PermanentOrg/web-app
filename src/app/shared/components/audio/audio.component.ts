@@ -1,4 +1,9 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import {
+	Component,
+	Input,
+	OnChanges,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { RecordVO } from '@models';
 import { GetAccessFile } from '@models/get-access-file';
 
@@ -6,6 +11,7 @@ import { GetAccessFile } from '@models/get-access-file';
 	selector: 'pr-audio',
 	templateUrl: './audio.component.html',
 	styleUrls: ['./audio.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class AudioComponent implements OnChanges {

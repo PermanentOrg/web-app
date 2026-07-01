@@ -5,6 +5,7 @@ import {
 	HostBinding,
 	Inject,
 	DOCUMENT,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { SearchService } from '@search/services/search.service';
 import { ItemVO, RecordVO, TagVOData } from '@models';
@@ -29,6 +30,7 @@ type ResultsListType = 'local' | 'global' | 'tag';
 	templateUrl: './global-search-bar.component.html',
 	styleUrls: ['./global-search-bar.component.scss'],
 	animations: [ngIfScaleHeightEnterAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GlobalSearchBarComponent {

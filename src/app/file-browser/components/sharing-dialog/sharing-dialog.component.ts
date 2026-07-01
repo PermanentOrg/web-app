@@ -4,6 +4,7 @@ import {
 	Inject,
 	OnInit,
 	ViewChild,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import {
 	UntypedFormBuilder,
@@ -71,6 +72,7 @@ const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
 	templateUrl: './sharing-dialog.component.html',
 	styleUrls: ['./sharing-dialog.component.scss'],
 	animations: [ngIfScaleAnimation, ngIfScaleAnimationDynamic],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SharingDialogComponent implements OnInit {

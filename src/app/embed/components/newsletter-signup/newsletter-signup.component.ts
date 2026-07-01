@@ -1,4 +1,9 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	HostBinding,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
 	UntypedFormGroup,
@@ -17,6 +22,7 @@ import { AccountVO } from '@models';
 	selector: 'pr-newsletter-signup',
 	templateUrl: './newsletter-signup.component.html',
 	styleUrls: ['./newsletter-signup.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class NewsletterSignupComponent implements OnInit {

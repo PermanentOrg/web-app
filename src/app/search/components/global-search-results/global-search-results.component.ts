@@ -4,6 +4,7 @@ import {
 	ViewChild,
 	ElementRef,
 	OnDestroy,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, TagVOData, RecordVO, ItemVO } from '@models';
@@ -27,6 +28,7 @@ import {
 	templateUrl: './global-search-results.component.html',
 	styleUrls: ['./global-search-results.component.scss'],
 	animations: [ngIfFadeInAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GlobalSearchResultsComponent

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
@@ -18,6 +18,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 	selector: 'pr-claim-storage',
 	templateUrl: './claim-storage.component.html',
 	styleUrls: ['./claim-storage.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ClaimStorageComponent {

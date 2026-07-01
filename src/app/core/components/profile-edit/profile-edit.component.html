@@ -150,7 +150,11 @@
 								<div class="profile-field">
 									<pr-inline-value-edit
 										[alwaysShow]="true"
-										[displayValue]="this.profileItems.basic[0]?.string1"
+										[displayValue]="
+											$safeNavigationMigration(
+												this.profileItems.basic[0]?.string1
+											)
+										"
 										[maxLength]="60"
 										[required]="true"
 										(doneEditing)="
@@ -171,7 +175,11 @@
 							<div class="profile-field">
 								<pr-inline-value-edit
 									[alwaysShow]="true"
-									[displayValue]="this.profileItems.blurb[0]?.string1"
+									[displayValue]="
+										$safeNavigationMigration(
+											this.profileItems.blurb[0]?.string1
+										)
+									"
 									[maxLength]="280"
 									emptyMessage="Add a short description about the purpose of this Archive."
 									(doneEditing)="
@@ -193,7 +201,11 @@
 							<div class="profile-field">
 								<pr-inline-value-edit
 									[alwaysShow]="true"
-									[displayValue]="this.profileItems.description[0]?.textData1"
+									[displayValue]="
+										$safeNavigationMigration(
+											this.profileItems.description[0]?.textData1
+										)
+									"
 									type="textarea"
 									(doneEditing)="
 										onSaveProfileItem(
@@ -237,7 +249,9 @@
 										[alwaysShow]="true"
 										emptyMessage="Full name"
 										[maxLength]="120"
-										[displayValue]="profileItems.basic[0]?.string2"
+										[displayValue]="
+											$safeNavigationMigration(profileItems.basic[0]?.string2)
+										"
 										(doneEditing)="
 											onSaveProfileItem(
 												profileItems.basic[0],
@@ -269,7 +283,9 @@
 										[alwaysShow]="true"
 										emptyMessage="Aliases or nicknames"
 										[maxLength]="280"
-										[displayValue]="profileItems.basic[0]?.string3"
+										[displayValue]="
+											$safeNavigationMigration(profileItems.basic[0]?.string3)
+										"
 										(doneEditing)="
 											onSaveProfileItem(
 												profileItems.basic[0],
@@ -285,7 +301,11 @@
 										<pr-inline-value-edit
 											[alwaysShow]="true"
 											[maxLength]="120"
-											[displayValue]="profileItems.gender[0]?.string1"
+											[displayValue]="
+												$safeNavigationMigration(
+													profileItems.gender[0]?.string1
+												)
+											"
 											(doneEditing)="
 												onSaveProfileItem(
 													profileItems.gender[0],
@@ -304,7 +324,11 @@
 											<label>Date of Birth</label>
 											<pr-inline-value-edit
 												[alwaysShow]="true"
-												[displayValue]="profileItems.birth_info[0]?.day1"
+												[displayValue]="
+													$safeNavigationMigration(
+														profileItems.birth_info[0]?.day1
+													)
+												"
 												[dateOnly]="true"
 												emptyMessage="YYYY-MM-DD"
 												type="date"
@@ -345,7 +369,11 @@
 											<label>Date Established</label>
 											<pr-inline-value-edit
 												[alwaysShow]="true"
-												[displayValue]="profileItems.established_info[0]?.day1"
+												[displayValue]="
+													$safeNavigationMigration(
+														profileItems.established_info[0]?.day1
+													)
+												"
 												[dateOnly]="true"
 												emptyMessage="YYYY-MM-DD"
 												type="date"
@@ -403,7 +431,9 @@
 											[maxLength]="80"
 											[alwaysShow]="true"
 											emptyMessage="email@website.com"
-											[displayValue]="profileItem?.string1"
+											[displayValue]="
+												$safeNavigationMigration(profileItem?.string1)
+											"
 											(doneEditing)="
 												onSaveProfileItem(profileItem, 'string1', $event)
 											"
@@ -434,7 +464,9 @@
 											[maxLength]="120"
 											[alwaysShow]="true"
 											emptyMessage="www.website.com/user"
-											[displayValue]="profileItem?.string1"
+											[displayValue]="
+												$safeNavigationMigration(profileItem?.string1)
+											"
 											(doneEditing)="
 												onSaveProfileItem(profileItem, 'string1', $event)
 											"

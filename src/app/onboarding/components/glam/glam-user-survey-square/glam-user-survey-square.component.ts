@@ -1,9 +1,16 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
 	selector: 'pr-glam-user-survey-square',
 	templateUrl: './glam-user-survey-square.component.html',
 	styleUrl: './glam-user-survey-square.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GlamUserSurveySquareComponent {

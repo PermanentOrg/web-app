@@ -1,4 +1,4 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
@@ -11,6 +11,7 @@ import { ApiService } from '@shared/services/api/api.service';
 	selector: 'pr-login',
 	templateUrl: './forgot-password.component.html',
 	styleUrls: ['./forgot-password.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ForgotPasswordComponent {

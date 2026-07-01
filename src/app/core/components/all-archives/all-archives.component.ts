@@ -4,6 +4,7 @@ import {
 	Optional,
 	OnDestroy,
 	ViewChild,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators } from '@angular/forms';
@@ -32,6 +33,7 @@ import { CdkPortal } from '@angular/cdk/portal';
 	selector: 'pr-all-archives',
 	templateUrl: './all-archives.component.html',
 	styleUrls: ['./all-archives.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class AllArchivesComponent implements AfterViewInit, OnDestroy {

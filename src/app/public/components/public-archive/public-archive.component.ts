@@ -1,4 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	OnDestroy,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { ArchiveVO, FolderVO } from '@models';
 import { collapseAnimationCustom } from '@shared/animations';
@@ -18,6 +23,7 @@ import { GetBanner } from '@models/get-thumbnail';
 	templateUrl: './public-archive.component.html',
 	styleUrls: ['./public-archive.component.scss'],
 	animations: [collapseAnimationCustom(250)],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PublicArchiveComponent implements OnInit, OnDestroy {

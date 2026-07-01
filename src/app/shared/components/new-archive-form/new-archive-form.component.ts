@@ -5,6 +5,7 @@ import {
 	Input,
 	Output,
 	ViewChild,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ArchiveVO, ArchiveType } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
@@ -35,6 +36,7 @@ const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
 	selector: 'pr-new-archive-form',
 	templateUrl: './new-archive-form.component.html',
 	styleUrls: ['./new-archive-form.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class NewArchiveFormComponent {

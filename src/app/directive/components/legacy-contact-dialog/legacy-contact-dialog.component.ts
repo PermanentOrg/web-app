@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { LegacyContact } from '@models/directive';
 import { EventService } from '@shared/services/event/event.service';
 import { DialogState } from '../directive-dialog/directive-dialog.component';
@@ -7,6 +7,7 @@ import { DialogState } from '../directive-dialog/directive-dialog.component';
 	selector: 'pr-legacy-contact-dialog',
 	templateUrl: './legacy-contact-dialog.component.html',
 	styleUrls: ['./legacy-contact-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class LegacyContactDialogComponent {

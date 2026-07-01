@@ -1,4 +1,9 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import {
+	Component,
+	Output,
+	EventEmitter,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 import { ArchiveVO } from '@models/index';
@@ -8,6 +13,7 @@ import { ArchiveCreateEvent } from '../types/archive-types';
 	selector: 'pr-create-archive-for-me-screen',
 	templateUrl: './create-archive-for-me-screen.component.html',
 	styleUrl: './create-archive-for-me-screen.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class CreateArchiveForMeScreenComponent {

@@ -216,7 +216,8 @@
 						@if (!dateOnly) {
 							{{
 								displayValue
-									? (displayValue | prDate: item?.TimezoneVO)
+									? (displayValue
+										| prDate: $safeNavigationMigration(item?.TimezoneVO))
 									: (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'
 							}}
 						}

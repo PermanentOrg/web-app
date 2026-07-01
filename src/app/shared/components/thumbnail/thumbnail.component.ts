@@ -1,4 +1,11 @@
-import { Component, Input, DoCheck, Inject, OnInit } from '@angular/core';
+import {
+	Component,
+	Input,
+	DoCheck,
+	Inject,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
@@ -8,6 +15,7 @@ import { GetThumbnailInfo } from '@models/get-thumbnail';
 	selector: 'pr-thumbnail',
 	templateUrl: './thumbnail.component.html',
 	styleUrls: ['./thumbnail.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ThumbnailComponent implements OnInit, DoCheck {

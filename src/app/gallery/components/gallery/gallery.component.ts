@@ -1,4 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+	Component,
+	Inject,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { EventService } from '@shared/services/event/event.service';
 import { FeaturedArchive } from '../../types/featured-archive';
@@ -11,6 +16,7 @@ import {
 	selector: 'pr-gallery',
 	templateUrl: './gallery.component.html',
 	styleUrls: ['./gallery.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GalleryComponent implements OnInit {

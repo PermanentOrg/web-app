@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { remove } from 'lodash';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, ItemVO, RecordVO } from '@root/app/models/index';
@@ -18,6 +18,7 @@ export enum FolderPickerOperations {
 	selector: 'pr-folder-picker',
 	templateUrl: './folder-picker.component.html',
 	styleUrls: ['./folder-picker.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FolderPickerComponent implements OnDestroy {

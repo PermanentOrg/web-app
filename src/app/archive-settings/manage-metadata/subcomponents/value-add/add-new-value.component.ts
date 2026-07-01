@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { Subject } from 'rxjs';
@@ -7,6 +13,7 @@ import { Subject } from 'rxjs';
 	selector: 'pr-metadata-add-new-value',
 	templateUrl: './add-new-value.component.html',
 	styleUrls: ['./add-new-value.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class AddNewValueComponent {

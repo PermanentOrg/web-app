@@ -1,4 +1,11 @@
-import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
+import {
+	Component,
+	Output,
+	EventEmitter,
+	Input,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { reasons } from '../../../shared/onboarding-screen';
 import { OnboardingService } from '../../../services/onboarding.service';
 
@@ -11,6 +18,7 @@ interface ReasonsEmit {
 	selector: 'pr-glam-reasons-screen',
 	templateUrl: './glam-reasons-screen.component.html',
 	styleUrl: './glam-reasons-screen.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GlamReasonsScreenComponent implements OnInit {

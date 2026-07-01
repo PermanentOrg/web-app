@@ -6,6 +6,7 @@ import {
 	ViewChildren,
 	QueryList,
 	Inject,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ArchiveVO, AccountVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
@@ -52,6 +53,7 @@ const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
 	selector: 'pr-my-archives-dialog',
 	templateUrl: './my-archives-dialog.component.html',
 	styleUrls: ['./my-archives-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class MyArchivesDialogComponent implements OnInit {

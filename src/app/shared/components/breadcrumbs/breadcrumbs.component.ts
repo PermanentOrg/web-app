@@ -8,6 +8,7 @@ import {
 	Optional,
 	Output,
 	EventEmitter,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -65,6 +66,7 @@ export class Breadcrumb {
 	templateUrl: './breadcrumbs.component.html',
 	styleUrls: ['./breadcrumbs.component.scss'],
 	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {

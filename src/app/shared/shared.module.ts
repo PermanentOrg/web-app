@@ -1,4 +1,4 @@
-import { NgModule, ComponentFactoryResolver } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
@@ -209,7 +209,6 @@ import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-
 })
 export class SharedModule {
 	constructor(
-		private resolver: ComponentFactoryResolver,
 		private datePickerConfig: NgbDatepickerConfig,
 		private timePickerConfig: NgbTimepickerConfig,
 		private tooltipConfig: NgbTooltipConfig,

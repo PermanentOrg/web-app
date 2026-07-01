@@ -5,6 +5,7 @@ import {
 	signal,
 	computed,
 	WritableSignal,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -39,6 +40,7 @@ interface SavedSideState {
 		TimepickerInputComponent,
 	],
 	templateUrl: './edit-date-time-modal.component.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrls: ['./edit-date-time-modal.component.scss'],
 })
 export class EditDateTimeModalComponent implements OnInit {

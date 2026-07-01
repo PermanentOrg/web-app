@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TimeModel } from '@shared/services/edtf-service/edtf.service';
 import { TimepickerInputComponent } from './timepicker-input.component';
 
@@ -10,6 +10,7 @@ import { TimepickerInputComponent } from './timepicker-input.component';
 		(timeChange)="onTimeChange($event)"
 	/>`,
 	standalone: true,
+	changeDetection: ChangeDetectionStrategy.Eager,
 	imports: [TimepickerInputComponent],
 })
 class TestHostComponent {

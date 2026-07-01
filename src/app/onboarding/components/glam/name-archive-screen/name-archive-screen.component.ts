@@ -5,6 +5,7 @@ import {
 	OnDestroy,
 	OnInit,
 	Output,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import {
 	UntypedFormBuilder,
@@ -19,6 +20,7 @@ import { Subscription } from 'rxjs';
 	selector: 'pr-name-archive-screen',
 	templateUrl: './name-archive-screen.component.html',
 	styleUrl: './name-archive-screen.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class NameArchiveScreenComponent implements OnInit, OnDestroy {

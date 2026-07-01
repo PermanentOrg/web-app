@@ -15,6 +15,7 @@ import {
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { DirectiveRepo } from './directive.repo';
@@ -31,7 +32,7 @@ describe('DirectiveRepo', () => {
 			imports: [],
 			providers: [
 				HttpService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
@@ -22,6 +22,7 @@ export type SettingsTab = (typeof settingsTabs)[number];
 	selector: 'pr-account-settings-dialog',
 	templateUrl: './account-settings-dialog.component.html',
 	styleUrls: ['./account-settings-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class AccountSettingsDialogComponent {

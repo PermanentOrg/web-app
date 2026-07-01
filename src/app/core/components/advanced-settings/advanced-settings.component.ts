@@ -1,6 +1,6 @@
 import { AccountVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { MessageService } from '../../../shared/services/message/message.service';
 
@@ -8,6 +8,7 @@ import { MessageService } from '../../../shared/services/message/message.service
 	selector: 'pr-advanced-settings',
 	templateUrl: './advanced-settings.component.html',
 	styleUrls: ['./advanced-settings.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class AdvancedSettingsComponent implements OnInit {

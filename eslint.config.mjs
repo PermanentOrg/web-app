@@ -140,6 +140,12 @@ export default typescriptEslint.config([
 	{
 		rules: {
 			// More rules to disable for now
+			// Angular 22 makes OnPush the default change-detection strategy. The v22
+			// `ng update` migration added `ChangeDetectionStrategy.Eager` to every
+			// existing component to preserve pre-v22 (CheckAlways) behavior, which this
+			// newly-recommended rule flags. Keep it off until components are migrated to
+			// OnPush deliberately (per-component, with testing).
+			'@angular-eslint/prefer-on-push-component-change-detection': 'off',
 			'@typescript-eslint/no-unsafe-assignment': 'off',
 			'@typescript-eslint/no-explicit-any': 'off',
 			'@typescript-eslint/no-unsafe-argument': 'off',

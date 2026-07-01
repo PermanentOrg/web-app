@@ -18,6 +18,7 @@ import {
 	Renderer2,
 	DOCUMENT,
 	OnChanges,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -78,6 +79,7 @@ const DRAG_SCROLL_STEP = 20;
 	templateUrl: './file-list.component.html',
 	styleUrls: ['./file-list.component.scss'],
 	animations: [slideUpAnimation, ngIfScaleAnimationDynamic],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FileListComponent

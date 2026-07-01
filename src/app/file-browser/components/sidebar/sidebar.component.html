@@ -208,8 +208,9 @@
 						<label>Size</label>
 						<div class="sidebar-detail-content">
 							{{
-								(selectedItem | asFolder).FolderSizeVO?.allFileSizeDeep
-									| dsFileSize
+								$safeNavigationMigration(
+									(selectedItem | asFolder).FolderSizeVO?.allFileSizeDeep
+								) | dsFileSize
 							}}
 						</div>
 					</div>

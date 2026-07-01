@@ -9,6 +9,7 @@ import { StelaItems } from '@root/utils/stela-items';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { ShareLink } from '../models/share-link';
 import { ShareLinksApiService } from './share-links-api.service';
@@ -36,7 +37,7 @@ describe('ShareLinksApiService', () => {
 		TestBed.configureTestingModule({
 			providers: [
 				HttpV2Service,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

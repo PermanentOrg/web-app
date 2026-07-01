@@ -5,6 +5,7 @@ import {
 	Inject,
 	HostBinding,
 	DOCUMENT,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { find, remove } from 'lodash';
@@ -41,6 +42,7 @@ import { EventService } from '@shared/services/event/event.service';
 	templateUrl: './shares.component.html',
 	styleUrls: ['./shares.component.scss'],
 	animations: [slideUpAnimation, fadeAnimation, ngIfScaleAnimationDynamic],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SharesComponent

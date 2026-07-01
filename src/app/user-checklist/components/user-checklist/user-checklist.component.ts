@@ -1,4 +1,10 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+	Component,
+	Inject,
+	OnDestroy,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CHECKLIST_API, ChecklistApi } from '../../types/checklist-api';
 import { ChecklistItem } from '../../types/checklist-item';
@@ -7,6 +13,7 @@ import { ChecklistItem } from '../../types/checklist-item';
 	selector: 'pr-user-checklist',
 	templateUrl: './user-checklist.component.html',
 	styleUrl: './user-checklist.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class UserChecklistComponent implements OnInit, OnDestroy {

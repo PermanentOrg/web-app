@@ -4,6 +4,7 @@ import {
 	Inject,
 	ViewChild,
 	ElementRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { remove, find, partition } from 'lodash';
@@ -68,6 +69,7 @@ const ShareActions: { [key: string]: PromptButton } = {
 	selector: 'pr-sharing',
 	templateUrl: './sharing.component.html',
 	styleUrls: ['./sharing.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SharingComponent implements OnInit {

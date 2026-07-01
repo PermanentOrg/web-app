@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
 	UntypedFormBuilder,
 	UntypedFormControl,
@@ -17,6 +17,7 @@ interface Method {
 	selector: 'pr-two-factor-auth',
 	templateUrl: './two-factor-auth.component.html',
 	styleUrl: './two-factor-auth.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class TwoFactorAuthComponent implements OnInit {

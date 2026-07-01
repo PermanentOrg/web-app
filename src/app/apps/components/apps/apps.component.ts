@@ -4,6 +4,7 @@ import {
 	ViewChildren,
 	QueryList,
 	AfterViewInit,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { DataService } from '@shared/services/data/data.service';
@@ -24,6 +25,7 @@ import {
 	selector: 'pr-apps',
 	templateUrl: './apps.component.html',
 	styleUrls: ['./apps.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class AppsComponent

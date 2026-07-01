@@ -1,4 +1,10 @@
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	Inject,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { FolderVO, ArchiveVO } from '@models';
 import {
 	ProfileItemVOData,
@@ -45,6 +51,7 @@ import {
 	templateUrl: './profile-edit.component.html',
 	styleUrls: ['./profile-edit.component.scss'],
 	animations: [collapseAnimation, ngIfScaleAnimationDynamic],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ProfileEditComponent implements OnInit, AfterViewInit {

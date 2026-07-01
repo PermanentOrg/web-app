@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { Subscription } from 'rxjs';
@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 	selector: 'pr-folder-view',
 	templateUrl: './folder-view.component.html',
 	styleUrls: ['./folder-view.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FolderViewComponent implements OnDestroy {

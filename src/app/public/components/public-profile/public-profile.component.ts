@@ -1,4 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	OnDestroy,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ArchiveVO } from '@models';
 import {
 	ProfileItemVODictionary,
@@ -17,6 +22,7 @@ import { concat, orderBy } from 'lodash';
 	selector: 'pr-public-profile',
 	templateUrl: './public-profile.component.html',
 	styleUrls: ['./public-profile.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PublicProfileComponent

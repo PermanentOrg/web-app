@@ -4,6 +4,7 @@ import {
 	OnDestroy,
 	HostListener,
 	ElementRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO, ArchiveVO } from '@models';
@@ -54,6 +55,7 @@ const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
 	templateUrl: './account-dropdown.component.html',
 	styleUrls: ['./account-dropdown.component.scss'],
 	animations: [dropdownMenuAnimation, ngIfFadeInAnimationSlow],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class AccountDropdownComponent

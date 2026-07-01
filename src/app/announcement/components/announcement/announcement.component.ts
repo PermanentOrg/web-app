@@ -4,6 +4,7 @@ import {
 	ElementRef,
 	Input,
 	OnInit,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { AnnouncementEvent } from '@announcement/models/announcement-event';
@@ -39,6 +40,7 @@ export const resetLayoutForAnnouncement = () => {
 	selector: 'pr-announcement',
 	templateUrl: './announcement.component.html',
 	styleUrls: ['./announcement.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class AnnouncementComponent implements OnInit, AfterViewInit {

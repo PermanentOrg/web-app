@@ -4,6 +4,7 @@ import {
 	AfterViewInit,
 	ViewChild,
 	TemplateRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogRef } from '@angular/cdk/dialog';
@@ -28,6 +29,7 @@ import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 		</ng-template>
 	`,
 	animations: [slideUpAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class RoutedDialogWrapperComponent

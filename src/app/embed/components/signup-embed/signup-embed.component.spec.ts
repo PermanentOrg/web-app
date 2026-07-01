@@ -14,6 +14,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 
 describe('SignupEmbedComponent', () => {
@@ -38,7 +39,7 @@ describe('SignupEmbedComponent', () => {
 						},
 					},
 				},
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

@@ -1,4 +1,9 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	HostBinding,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 
@@ -6,6 +11,7 @@ import { IFrameService } from '@shared/services/iframe/iframe.service';
 	selector: 'pr-pledge',
 	templateUrl: './pledge.component.html',
 	styleUrls: ['./pledge.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PledgeComponent implements OnInit {

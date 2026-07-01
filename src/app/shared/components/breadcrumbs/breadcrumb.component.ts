@@ -8,6 +8,7 @@ import {
 	Optional,
 	Output,
 	EventEmitter,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import {
 	DragTargetDroppableComponent,
@@ -22,6 +23,7 @@ import { Breadcrumb } from './breadcrumbs.component';
 @Component({
 	selector: 'pr-breadcrumb',
 	templateUrl: './breadcrumb.component.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class BreadcrumbComponent

@@ -4,6 +4,7 @@ import {
 	Inject,
 	ViewChild,
 	ElementRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 
 import {
@@ -25,6 +26,7 @@ type InvitationsTab = 'new' | 'pending' | 'accepted';
 	selector: 'pr-invitations-dialog',
 	templateUrl: './invitations-dialog.component.html',
 	styleUrls: ['./invitations-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class InvitationsDialogComponent implements OnInit {

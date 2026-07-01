@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+	ChangeDetectorRef,
+	Component,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
@@ -12,6 +17,7 @@ import { EventService } from '@shared/services/event/event.service';
 	selector: 'pr-onboarding',
 	templateUrl: './onboarding.component.html',
 	styleUrls: ['./onboarding.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class OnboardingComponent implements OnInit {

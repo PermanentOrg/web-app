@@ -1,5 +1,11 @@
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+	Component,
+	Input,
+	OnInit,
+	ViewChild,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { PayerService } from '@shared/services/payer/payer.service';
@@ -13,6 +19,7 @@ import { ConfirmPayerDialogComponent } from '../confirm-payer-dialog/confirm-pay
 	selector: 'pr-archive-payer',
 	templateUrl: './archive-payer.component.html',
 	styleUrls: ['./archive-payer.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchivePayerComponent implements OnInit {

@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { TagVO } from '@models/tag-vo';
@@ -10,6 +16,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 	selector: 'pr-metadata-category-edit',
 	templateUrl: './category-edit.component.html',
 	styleUrls: ['./category-edit.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class CategoryEditComponent {

@@ -9,6 +9,7 @@ import {
 	Output,
 	EventEmitter,
 	SimpleChanges,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { UntypedFormControl, Validators, FormControl } from '@angular/forms';
 import { getFormInputError } from '@shared/utilities/forms';
@@ -35,6 +36,7 @@ export interface FormInputConfig {
 	selector: 'pr-form-input-glam',
 	templateUrl: './form-input.component.html',
 	styleUrls: ['./form-input.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FormInputComponent implements OnInit, OnChanges, AfterViewInit {

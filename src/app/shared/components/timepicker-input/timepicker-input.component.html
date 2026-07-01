@@ -16,7 +16,13 @@
 		class="pr-time-segment"
 		[value]="time.minutes ?? ''"
 		[disabled]="disabled"
-		(input)="updateTime($event, 'minutes', secondsInput?.nativeElement)"
+		(input)="
+			updateTime(
+				$event,
+				'minutes',
+				$safeNavigationMigration(secondsInput?.nativeElement)
+			)
+		"
 		(keydown)="onMinutesKeydown($event)"
 		placeholder="mm"
 		maxlength="2"

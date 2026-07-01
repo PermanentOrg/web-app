@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
 import { AccountVO, NotificationPreferencesI } from '@models';
@@ -10,6 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 	selector: 'pr-notification-preferences',
 	templateUrl: './notification-preferences.component.html',
 	styleUrls: ['./notification-preferences.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class NotificationPreferencesComponent {

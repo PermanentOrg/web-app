@@ -4,6 +4,7 @@ import {
 	Input,
 	SimpleChanges,
 	OnChanges,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { LocnVOData, ItemVO } from '@models';
 import { compact } from 'lodash';
@@ -13,6 +14,7 @@ import { SecretsService } from '../../services/secrets/secrets.service';
 	selector: 'pr-static-map',
 	templateUrl: './static-map.component.html',
 	styleUrls: ['./static-map.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class StaticMapComponent implements OnChanges {

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import {
 	PromptButton,
 	PromptField,
@@ -38,6 +38,7 @@ type MembersTab = 'members' | 'pending' | 'add';
 	selector: 'pr-members-dialog',
 	templateUrl: './members-dialog.component.html',
 	styleUrls: ['./members-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class MembersDialogComponent {

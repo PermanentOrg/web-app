@@ -4,7 +4,9 @@
 </div>
 <div class="preferences">
 	@for (
-		feature of account?.notificationPreferences?.emailPreference | keyvalue;
+		feature of $safeNavigationMigration(
+			account?.notificationPreferences?.emailPreference
+		) | keyvalue;
 		track feature
 	) {
 		<div class="preference-group">

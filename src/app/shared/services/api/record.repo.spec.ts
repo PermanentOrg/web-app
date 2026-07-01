@@ -15,6 +15,7 @@ import { RecordVO } from '@root/app/models';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { HttpV2Service } from '../http-v2/http-v2.service';
@@ -31,7 +32,7 @@ describe('RecordRepo', () => {
 			providers: [
 				HttpService,
 				HttpV2Service,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

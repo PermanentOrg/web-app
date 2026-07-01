@@ -1,9 +1,17 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
 	selector: 'pr-toggle',
 	templateUrl: './toggle.component.html',
 	styleUrls: ['./toggle.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ToggleComponent implements OnInit {

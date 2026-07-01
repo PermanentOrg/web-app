@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { TagVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
@@ -7,6 +13,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 	selector: 'pr-manage-tags',
 	templateUrl: './manage-tags.component.html',
 	styleUrls: ['./manage-tags.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ManageTagsComponent {

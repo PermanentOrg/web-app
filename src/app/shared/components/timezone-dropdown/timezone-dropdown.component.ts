@@ -8,6 +8,7 @@ import {
 	ElementRef,
 	ViewChild,
 	HostListener,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -62,6 +63,7 @@ const TIMEZONE_OPTIONS: TimezoneOption[] = buildTimezoneOptions();
 	standalone: true,
 	imports: [CommonModule],
 	templateUrl: './timezone-dropdown.component.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrls: ['./timezone-dropdown.component.scss'],
 })
 export class TimezoneDropdownComponent {

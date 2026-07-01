@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
 	selector: 'pr-archive-creation-with-share',
 	templateUrl: './archive-creation-with-share.component.html',
 	styleUrl: './archive-creation-with-share.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchiveCreationWithShareComponent implements OnInit {

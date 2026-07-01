@@ -10,6 +10,7 @@ import {
 	OnChanges,
 	SimpleChanges,
 	OnInit,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -23,6 +24,7 @@ import {
 	standalone: true,
 	imports: [CommonModule, NgbDatepicker],
 	templateUrl: './datepicker-input.component.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrls: ['./datepicker-input.component.scss'],
 })
 export class DatepickerInputComponent implements OnInit, OnChanges {

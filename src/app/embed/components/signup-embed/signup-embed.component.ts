@@ -1,4 +1,4 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
@@ -18,6 +18,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 	selector: 'pr-signup',
 	templateUrl: './signup-embed.component.html',
 	styleUrls: ['./signup-embed.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SignupEmbedComponent {

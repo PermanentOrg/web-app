@@ -1,10 +1,11 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
 	selector: 'pr-confirm-gift-dialog',
 	templateUrl: './confirm-gift-dialog.component.html',
 	styleUrls: ['./confirm-gift-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ConfirmGiftDialogComponent {

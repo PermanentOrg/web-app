@@ -1,4 +1,10 @@
-import { Component, ViewChild, ElementRef, Inject } from '@angular/core';
+import {
+	Component,
+	ViewChild,
+	ElementRef,
+	Inject,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { RecordVO, FolderVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -20,6 +26,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 	templateUrl: './publish.component.html',
 	styleUrls: ['./publish.component.scss'],
 	providers: [PublicLinkPipe, PublicRoutePipe],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PublishComponent {

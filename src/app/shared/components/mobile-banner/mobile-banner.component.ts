@@ -1,6 +1,6 @@
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ngIfSlideUpAnimation } from '@shared/animations';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MobileBannerService } from '@shared/services/mobile-banner/mobile-banner.service';
 
 @Component({
@@ -8,6 +8,7 @@ import { MobileBannerService } from '@shared/services/mobile-banner/mobile-banne
 	templateUrl: './mobile-banner.component.html',
 	styleUrls: ['./mobile-banner.component.scss'],
 	animations: [ngIfSlideUpAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class MobileBannerComponent {

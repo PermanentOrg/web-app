@@ -1,4 +1,10 @@
-import { Component, OnInit, ElementRef, HostBinding } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	ElementRef,
+	HostBinding,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import ProgressBar from 'progressbar.js';
 
 import { APP_CONFIG } from '@root/app/app.config';
@@ -18,6 +24,7 @@ export interface ProgressData {
 	selector: 'pr-phase-progress',
 	templateUrl: './phase-progress.component.html',
 	styleUrls: ['./phase-progress.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PhaseProgressComponent implements OnInit {

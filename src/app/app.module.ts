@@ -19,6 +19,7 @@ import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 	withJsonpSupport,
+	withXhr,
 } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -202,7 +203,7 @@ export class PermErrorHandler implements ErrorHandler {
 			provide: UrlSerializer,
 			useClass: DoubleSlashUrlSerializer,
 		},
-		provideHttpClient(withInterceptorsFromDi(), withJsonpSupport()),
+		provideHttpClient(withXhr(), withInterceptorsFromDi(), withJsonpSupport()),
 	],
 })
 export class AppModule {

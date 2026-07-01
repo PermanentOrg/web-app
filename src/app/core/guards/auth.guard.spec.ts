@@ -7,6 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 
 describe('AuthGuard', () => {
@@ -16,7 +17,7 @@ describe('AuthGuard', () => {
 			providers: [
 				AuthGuard,
 				CookieService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

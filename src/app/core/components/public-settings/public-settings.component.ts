@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+	Component,
+	Input,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveType, MilestoneSortOrder } from '@models/archive-vo';
@@ -11,6 +16,7 @@ import { ArchiveTypeChangeDialogComponent } from '../archive-type-change-dialog/
 	selector: 'pr-public-settings',
 	templateUrl: './public-settings.component.html',
 	styleUrls: ['./public-settings.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PublicSettingsComponent implements OnInit {

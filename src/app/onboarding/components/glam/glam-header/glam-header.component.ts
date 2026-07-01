@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 	selector: 'pr-onboarding-glam-header',
 	templateUrl: './glam-header.component.html',
 	styleUrl: './glam-header.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GlamOnboardingHeaderComponent {

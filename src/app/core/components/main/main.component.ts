@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	HostListener,
 	Optional,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import {
 	Router,
@@ -48,6 +49,7 @@ import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 	selector: 'pr-main',
 	templateUrl: './main.component.html',
 	styleUrls: ['./main.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class MainComponent

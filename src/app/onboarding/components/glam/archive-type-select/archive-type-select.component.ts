@@ -1,4 +1,11 @@
-import { Component, Output, Input, EventEmitter, OnInit } from '@angular/core';
+import {
+	Component,
+	Output,
+	Input,
+	EventEmitter,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
@@ -11,6 +18,7 @@ import { ArchiveTypeIconComponent } from '../archive-type-icon/archive-type-icon
 	selector: 'pr-glam-archive-type-select',
 	imports: [FontAwesomeModule, ArchiveTypeIconComponent],
 	templateUrl: './archive-type-select.component.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrl: './archive-type-select.component.scss',
 })
 export class GlamArchiveTypeSelectComponent implements OnInit {

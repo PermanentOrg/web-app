@@ -1,4 +1,9 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import {
+	Component,
+	Output,
+	EventEmitter,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 
@@ -6,6 +11,7 @@ import { OnboardingService } from '@root/app/onboarding/services/onboarding.serv
 	selector: 'pr-finalize-archive-creation-screen',
 	templateUrl: './finalize-archive-creation-screen.component.html',
 	styleUrl: './finalize-archive-creation-screen.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FinalizeArchiveCreationScreenComponent {

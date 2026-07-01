@@ -9,6 +9,7 @@ import { Directive, FolderType, FolderVO, RecordVO } from '@models/index';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { StorageService } from '../storage/storage.service';
@@ -115,7 +116,7 @@ describe('AnalyticsService Integration Tests', () => {
 					provide: AccountService,
 					useClass: MockAccountId,
 				},
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

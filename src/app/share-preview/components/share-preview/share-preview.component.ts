@@ -1,4 +1,10 @@
-import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	HostListener,
+	OnDestroy,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import {
 	Router,
 	ActivatedRoute,
@@ -46,6 +52,7 @@ enum FormType {
 	selector: 'pr-share-preview',
 	templateUrl: './share-preview.component.html',
 	styleUrls: ['./share-preview.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SharePreviewComponent implements OnInit, OnDestroy {

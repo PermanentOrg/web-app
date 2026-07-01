@@ -5,6 +5,7 @@ import {
 	OnDestroy,
 	ViewChildren,
 	QueryList,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import {
@@ -22,6 +23,7 @@ const DEFAULT_CANCEL_TEXT = 'Cancel';
 	selector: 'pr-prompt',
 	templateUrl: './prompt.component.html',
 	styleUrls: ['./prompt.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PromptComponent implements OnDestroy {

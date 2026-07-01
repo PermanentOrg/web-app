@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+	Component,
+	Input,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
@@ -24,6 +29,7 @@ interface StorageRedemptionMessage {
 	selector: 'pr-redeem-gift',
 	templateUrl: './redeem-gift.component.html',
 	styleUrl: './redeem-gift.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class RedeemGiftComponent implements OnInit {

@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	Input,
+	Output,
+	EventEmitter,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { DataService } from '@shared/services/data/data.service';
 import {
@@ -21,6 +28,7 @@ import { BaseResponse } from '@shared/services/api/base';
 	selector: 'pr-right-menu',
 	templateUrl: './right-menu.component.html',
 	styleUrls: ['./right-menu.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class RightMenuComponent implements OnInit {

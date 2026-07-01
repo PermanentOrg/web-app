@@ -7,6 +7,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { ArchivePickerComponent } from './archive-picker.component';
 
@@ -28,7 +29,7 @@ describe('ArchivePickerComponent', () => {
 				{ provide: ApiService, useValue: {} },
 				{ provide: AccountService, useValue: {} },
 				MessageService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

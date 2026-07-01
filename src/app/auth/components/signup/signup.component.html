@@ -69,7 +69,9 @@
 		></pr-form-input-glam>
 		@if (signupForm.controls['password']?.value) {
 			<pr-password-strength
-				[password]="signupForm.controls['password']?.value"
+				[password]="
+					$safeNavigationMigration(signupForm.controls['password']?.value)
+				"
 			></pr-password-strength>
 		}
 	</div>

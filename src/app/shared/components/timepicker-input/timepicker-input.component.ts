@@ -12,6 +12,7 @@ import {
 	OnDestroy,
 	ViewChild,
 	ElementRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
@@ -30,6 +31,7 @@ import {
 	standalone: true,
 	imports: [CommonModule, ReactiveFormsModule, NgbTimepicker],
 	templateUrl: './timepicker-input.component.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrls: ['./timepicker-input.component.scss'],
 })
 export class TimepickerInputComponent implements OnInit, OnChanges, OnDestroy {

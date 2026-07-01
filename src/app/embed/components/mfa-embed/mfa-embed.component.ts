@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
@@ -17,6 +17,7 @@ import { IFrameService } from '@shared/services/iframe/iframe.service';
 	selector: 'pr-mfa',
 	templateUrl: './mfa-embed.component.html',
 	styleUrls: ['./mfa-embed.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class MfaEmbedComponent {

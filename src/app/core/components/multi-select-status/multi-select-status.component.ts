@@ -1,4 +1,9 @@
-import { Component, HostBinding, OnDestroy } from '@angular/core';
+import {
+	Component,
+	HostBinding,
+	OnDestroy,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { Subscription } from 'rxjs';
 import { ItemVO } from '@models';
@@ -9,6 +14,7 @@ import { PromptButton } from '@shared/services/prompt/prompt.service';
 	selector: 'pr-multi-select-status',
 	templateUrl: './multi-select-status.component.html',
 	styleUrls: ['./multi-select-status.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class MultiSelectStatusComponent implements OnDestroy {

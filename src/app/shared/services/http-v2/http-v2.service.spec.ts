@@ -1,6 +1,7 @@
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import {
 	HttpTestingController,
@@ -53,7 +54,7 @@ describe('HttpV2Service', () => {
 					provide: SecretsService,
 					useClass: MockSecretService,
 				},
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

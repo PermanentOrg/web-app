@@ -8,6 +8,7 @@ import { environment } from '@root/environments/environment';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { FeaturedArchive } from '../types/featured-archive';
 import { FeaturedArchiveService } from './featured-archive.service';
@@ -21,7 +22,7 @@ describe('FeaturedArchiveService', () => {
 			imports: [],
 			providers: [
 				HttpV2Service,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

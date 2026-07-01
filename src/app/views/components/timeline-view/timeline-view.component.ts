@@ -8,6 +8,7 @@ import {
 	HostListener,
 	Inject,
 	Optional,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 
 import {
@@ -64,6 +65,7 @@ const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
 	templateUrl: './timeline-view.component.html',
 	styleUrls: ['./timeline-view.component.scss'],
 	animations: [slideUpAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {

@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+	Component,
+	Input,
+	Output,
+	EventEmitter,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { FolderViewType, FolderVO } from '@models';
 
 type FolderViewImages = {
@@ -9,6 +15,7 @@ type FolderViewImages = {
 	selector: 'pr-sidebar-view-option',
 	templateUrl: './sidebar-view-option.component.html',
 	styleUrls: ['./sidebar-view-option.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SidebarViewOptionComponent {

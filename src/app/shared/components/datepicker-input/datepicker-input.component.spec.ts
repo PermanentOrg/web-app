@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DateModel } from '@shared/services/edtf-service/edtf.service';
 import { DatepickerInputComponent } from './datepicker-input.component';
 
 @Component({
 	standalone: true,
 	imports: [DatepickerInputComponent],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `<pr-datepicker-input
 		[date]="date"
 		[disabled]="disabled"

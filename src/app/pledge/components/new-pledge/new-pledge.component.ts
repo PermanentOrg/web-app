@@ -5,6 +5,7 @@ import {
 	ViewChild,
 	AfterViewInit,
 	Input,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import {
 	UntypedFormGroup,
@@ -29,6 +30,7 @@ const elements = stripe.elements();
 	selector: 'pr-new-pledge',
 	templateUrl: './new-pledge.component.html',
 	styleUrls: ['./new-pledge.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class NewPledgeComponent implements OnInit, AfterViewInit {

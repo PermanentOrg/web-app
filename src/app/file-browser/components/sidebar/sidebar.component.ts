@@ -1,5 +1,10 @@
 import { RecordVO } from '@root/app/models';
-import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+	Component,
+	OnDestroy,
+	ChangeDetectorRef,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import {
 	HasSubscriptions,
@@ -26,6 +31,7 @@ type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
 	selector: 'pr-sidebar',
 	templateUrl: './sidebar.component.html',
 	styleUrls: ['./sidebar.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SidebarComponent implements OnDestroy, HasSubscriptions {

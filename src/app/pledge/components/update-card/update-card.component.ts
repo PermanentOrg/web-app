@@ -4,6 +4,7 @@ import {
 	ViewChild,
 	ElementRef,
 	AfterViewInit,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { UserData } from '@pledge/models/user-data';
 import firebase from 'firebase/compat/app';
@@ -20,6 +21,7 @@ const elements = stripe.elements();
 	selector: 'pr-update-card',
 	templateUrl: './update-card.component.html',
 	styleUrls: ['./update-card.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class UpdateCardComponent implements OnInit, AfterViewInit {

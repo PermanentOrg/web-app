@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	OnDestroy,
+	NgZone,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 
 import { orderBy } from 'lodash';
@@ -21,6 +27,7 @@ interface KeyedPledges {
 	selector: 'pr-pledge-list',
 	templateUrl: './pledge-list.component.html',
 	styleUrls: ['./pledge-list.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PledgeListComponent implements OnInit, OnDestroy {

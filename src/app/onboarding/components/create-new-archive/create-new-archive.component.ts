@@ -1,6 +1,13 @@
 import { Subscription } from 'rxjs';
 import { AccountService } from '@shared/services/account/account.service';
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	OnInit,
+	Output,
+	Input,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { ArchiveType, ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
@@ -22,6 +29,7 @@ import { OnboardingService } from '../../services/onboarding.service';
 	selector: 'pr-create-new-archive',
 	templateUrl: './create-new-archive.component.html',
 	styleUrls: ['./create-new-archive.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class CreateNewArchiveComponent implements OnInit {

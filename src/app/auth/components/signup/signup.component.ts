@@ -1,4 +1,4 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
@@ -30,6 +30,7 @@ const NEW_ONBOARDING_CHANCE = 1;
 	selector: 'pr-signup',
 	templateUrl: './signup.component.html',
 	styleUrls: ['./signup.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class SignupComponent {

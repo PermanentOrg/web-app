@@ -4,6 +4,7 @@ import {
 	ViewChild,
 	Optional,
 	OnDestroy,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
 import { CdkPortalOutlet } from '@angular/cdk/portal';
@@ -17,6 +18,7 @@ import { Overlay } from '@angular/cdk/overlay';
 	selector: 'pr-nav',
 	templateUrl: './nav.component.html',
 	styleUrls: ['./nav.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class NavComponent implements AfterViewInit, OnDestroy {

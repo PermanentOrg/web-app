@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { Dialog } from '@angular/cdk/dialog';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DialogCdkService } from './dialog-cdk.service';
 
 @Component({
 	selector: 'pr-dummy',
 	imports: [],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: 'Hello world',
 })
 class DummyComponent {}

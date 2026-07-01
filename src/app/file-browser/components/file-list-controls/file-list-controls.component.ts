@@ -8,6 +8,7 @@ import {
 	HostListener,
 	ViewChild,
 	ElementRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import {
@@ -54,6 +55,7 @@ type FileListColumn = 'name' | 'date' | 'type';
 	templateUrl: './file-list-controls.component.html',
 	styleUrls: ['./file-list-controls.component.scss'],
 	animations: [ngIfFadeInAnimation],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class FileListControlsComponent implements OnDestroy, HasSubscriptions {

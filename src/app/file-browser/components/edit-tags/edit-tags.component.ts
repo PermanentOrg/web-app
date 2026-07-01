@@ -8,6 +8,7 @@ import {
 	ElementRef,
 	Optional,
 	Inject,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { TagsService } from '@core/services/tags/tags.service';
 import { ItemVO, TagVOData, TagLinkVOData, FolderVO } from '@models';
@@ -35,6 +36,7 @@ export type TagType = 'keyword' | 'customMetadata';
 	styleUrls: ['./edit-tags.component.scss'],
 	animations: [ngIfScaleAnimation],
 	providers: [SearchService],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class EditTagsComponent

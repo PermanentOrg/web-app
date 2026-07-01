@@ -10,13 +10,14 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ArchiveVO } from '@root/app/models';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { ArchiveSwitcherComponent } from './archive-switcher.component';
 
 @Component({
 	selector: 'pr-archive-small',
 	template: '',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: true,
 })
 class MockArchiveSmallComponent {}
@@ -24,6 +25,7 @@ class MockArchiveSmallComponent {}
 @Component({
 	selector: 'pr-basic-loading-spinner',
 	template: '',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: true,
 })
 class MockLoadingSpinnerComponent {}

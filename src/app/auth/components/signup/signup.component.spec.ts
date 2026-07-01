@@ -17,6 +17,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 
@@ -48,7 +49,7 @@ describe('SignupComponent', () => {
 						},
 					},
 				},
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		}).compileComponents();

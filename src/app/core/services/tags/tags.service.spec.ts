@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO, TagVO } from '@models';
@@ -56,7 +57,7 @@ describe('TagsService', () => {
 					provide: AccountService,
 					useValue: account,
 				},
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

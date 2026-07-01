@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
@@ -31,6 +31,7 @@ import { ConfirmGiftDialogComponent } from '../confirm-gift-dialog/confirm-gift-
 	selector: 'pr-gift-storage',
 	templateUrl: './gift-storage.component.html',
 	styleUrls: ['./gift-storage.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class GiftStorageComponent implements OnDestroy {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
 	UntypedFormGroup,
 	UntypedFormBuilder,
@@ -21,6 +21,7 @@ import { matchControlValidator } from '@shared/utilities/forms';
 	selector: 'pr-change-password',
 	templateUrl: './change-password.component.html',
 	styleUrl: './change-password.component.scss',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ChangePasswordComponent {

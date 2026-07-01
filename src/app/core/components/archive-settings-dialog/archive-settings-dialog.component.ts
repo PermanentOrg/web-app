@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { TagsService } from '@core/services/tags/tags.service';
@@ -21,6 +21,7 @@ type ArchiveSettingsDialogTab = (typeof archiveSettingsTabs)[number];
 	selector: 'pr-archive-settings-dialog',
 	templateUrl: './archive-settings-dialog.component.html',
 	styleUrls: ['./archive-settings-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchiveSettingsDialogComponent implements OnInit {

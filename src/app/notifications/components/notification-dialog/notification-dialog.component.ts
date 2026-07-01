@@ -5,6 +5,7 @@ import {
 	AfterViewInit,
 	OnDestroy,
 	QueryList,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import {
 	HasSubscriptions,
@@ -20,6 +21,7 @@ import { NotificationService } from '../../services/notification.service';
 	selector: 'pr-notification-dialog',
 	templateUrl: './notification-dialog.component.html',
 	styleUrls: ['./notification-dialog.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class NotificationDialogComponent

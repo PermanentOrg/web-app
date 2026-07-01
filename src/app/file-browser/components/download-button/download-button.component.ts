@@ -4,6 +4,7 @@ import {
 	ElementRef,
 	ViewChild,
 	HostListener,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { RecordVO } from '@models/index';
 import { DataService } from '@shared/services/data/data.service';
@@ -18,6 +19,7 @@ interface Format {
 	selector: 'pr-download-button',
 	templateUrl: './download-button.component.html',
 	styleUrls: ['./download-button.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class DownloadButtonComponent {

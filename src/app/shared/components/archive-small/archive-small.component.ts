@@ -8,6 +8,7 @@ import {
 	Output,
 	EventEmitter,
 	ElementRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
@@ -19,6 +20,7 @@ import { GetThumbnail } from '@models/get-thumbnail';
 	selector: 'pr-archive-small',
 	templateUrl: './archive-small.component.html',
 	styleUrls: ['./archive-small.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchiveSmallComponent implements OnInit, OnChanges {

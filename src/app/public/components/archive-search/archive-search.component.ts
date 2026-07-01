@@ -1,4 +1,10 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import {
+	Component,
+	Output,
+	EventEmitter,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ArchiveVO, TagVO, TagVOData } from '@models/index';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
@@ -17,6 +23,7 @@ import {
 	selector: 'pr-archive-search',
 	templateUrl: './archive-search.component.html',
 	styleUrls: ['./archive-search.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class ArchiveSearchComponent implements OnInit {

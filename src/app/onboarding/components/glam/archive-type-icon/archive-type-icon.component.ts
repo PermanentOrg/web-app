@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
 	faBuildingColumns,
@@ -15,6 +15,7 @@ import { OnboardingTypes } from '@root/app/onboarding/shared/onboarding-screen';
 @Component({
 	selector: 'pr-archive-type-icon',
 	imports: [FontAwesomeModule],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	templateUrl: './archive-type-icon.component.html',
 })
 export class ArchiveTypeIconComponent {

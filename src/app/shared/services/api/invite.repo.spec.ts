@@ -19,6 +19,7 @@ import { AccessRoleType } from '@models/access-role';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 
@@ -31,7 +32,7 @@ describe('InviteRepo', () => {
 			imports: [],
 			providers: [
 				HttpService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

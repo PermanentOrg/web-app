@@ -9,6 +9,7 @@ import { HttpService } from '@shared/services/http/http.service';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { IdPuser } from './idpuser.repo';
@@ -22,7 +23,7 @@ describe('IdpUser', () => {
 			imports: [],
 			providers: [
 				HttpService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

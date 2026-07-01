@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
+	withXhr,
 } from '@angular/common/http';
 import { AccountService } from '@shared/services/account/account.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -19,7 +20,7 @@ describe('RelationshipService', () => {
 				AccountService,
 				StorageService,
 				RelationshipService,
-				provideHttpClient(withInterceptorsFromDi()),
+				provideHttpClient(withXhr(), withInterceptorsFromDi()),
 				provideHttpClientTesting(),
 			],
 		});

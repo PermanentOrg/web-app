@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { MessageService } from '../../../shared/services/message/message.service
 	selector: 'pr-public-archives-list',
 	templateUrl: './public-archives-list.component.html',
 	styleUrls: ['./public-archives-list.component.scss'],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	standalone: false,
 })
 export class PublicArchivesListComponent implements OnInit {
