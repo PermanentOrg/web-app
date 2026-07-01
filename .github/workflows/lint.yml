@@ -18,7 +18,7 @@ jobs:
         with:
           node-version-file: .node-version
       - name: Lint GitHub Action workflows
-        uses: raven-actions/actionlint@v2
+        uses: raven-actions/actionlint@v2.1.2
   eslint:
     runs-on: ubuntu-latest
     steps:
