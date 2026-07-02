@@ -127,6 +127,7 @@ describe('FileListItemComponent', () => {
 					provide: ShareLinksService,
 					useValue: {
 						isUnlistedShare: async () => await Promise.resolve(false),
+						isUnlistedShareSync: () => false,
 					},
 				},
 				{ provide: EditService, useValue: mockEditService },
@@ -317,9 +318,7 @@ describe('FileListItemComponent', () => {
 		(router.routerState.snapshot as any).url = '/share/test';
 
 		const shareLinksService = TestBed.inject(ShareLinksService);
-		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
-			Promise.resolve(false),
-		);
+		spyOn(shareLinksService, 'isUnlistedShareSync').and.returnValue(false);
 		component.item.isRecord = true;
 		component.item.type = 'type.record.image';
 
@@ -333,7 +332,7 @@ describe('FileListItemComponent', () => {
 		(router.routerState.snapshot as any).url = '/';
 	});
 
-	it('should always set real thumbnail URL on init', async () => {
+	it('should set real thumbnail URL on init outside share preview', async () => {
 		component.item.isRecord = true;
 		component.item.type = 'type.record.image';
 		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
@@ -388,5 +387,22 @@ describe('FileListItemComponent', () => {
 			fixture.nativeElement.querySelector('.second-row span')?.textContent;
 
 		expect(secondRowDate).toContain('2023-01-01T00:00:00.000Z');
+	});
+
+	it('should set real thumbnail URL on init for unlisted share records', async () => {
+		const router = TestBed.inject(Router);
+		(router.routerState.snapshot as any).url = '/share/test';
+
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		spyOn(shareLinksService, 'isUnlistedShareSync').and.returnValue(true);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+
+		await component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
+
+		(router.routerState.snapshot as any).url = '/';
 	});
 });
