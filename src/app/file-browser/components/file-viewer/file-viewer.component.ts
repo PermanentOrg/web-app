@@ -30,6 +30,7 @@ import { GetAccessFile } from '@models/get-access-file';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { environment } from '@root/environments/environment';
 import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
@@ -291,7 +292,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			return null;
 		}
 
-		const url = `https://replay.dev.permanent.org/?source=${encodeURIComponent(originalFileUrl)}&embed=replay-with-info`;
+		const url = `${environment.replayBaseUrl}/?source=${encodeURIComponent(originalFileUrl)}&embed=replay-with-info`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 
