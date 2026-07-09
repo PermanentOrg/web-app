@@ -2,8 +2,8 @@
 	@default {
 		<pr-directive-display
 			[checkLegacyContact]="true"
-			[initialDirective]="directive"
-			(loadedDirective)="setSavedDirective($event)"
+			[initialDirectives]="directives"
+			(loadedDirectives)="setLoadedDirectives($event)"
 			(beginEdit)="switchToEdit($event)"
 		></pr-directive-display>
 	}
@@ -12,7 +12,7 @@
 			<fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>
 		</a>
 		<pr-directive-edit
-			[directive]="directive"
+			[directive]="editing"
 			(savedDirective)="saveEditedDirective($event)"
 		></pr-directive-edit>
 	}

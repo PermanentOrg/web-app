@@ -18,6 +18,27 @@
 	display: block;
 }
 
+.archive-steward-card {
+	position: relative;
+	border: 1px solid $PR-blue-100;
+	border-radius: 0.25rem;
+	padding: 1em 2.5em 1em 1em;
+	margin-bottom: 0.75em;
+	cursor: pointer;
+
+	&:hover,
+	&:focus-visible {
+		background: $PR-blue-25;
+	}
+
+	.edit-icon {
+		position: absolute;
+		top: 0.75em;
+		right: 0.75em;
+		color: $gray-dark;
+	}
+}
+
 .archive-steward-table {
 	display: table;
 

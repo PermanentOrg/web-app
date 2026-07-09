@@ -9,14 +9,10 @@ import { getFirst } from '../http-v2/http-v2.service';
 import { BaseRepo } from './base';
 
 export class DirectiveRepo extends BaseRepo {
-	public async get(archive: ArchiveVO): Promise<Directive> {
-		return await getFirst(
-			this.httpV2.get(
-				`/v2/directive/archive/${archive.archiveId}`,
-				{},
-				Directive,
-			),
-		).toPromise();
+	public async get(archive: ArchiveVO): Promise<Directive[]> {
+		return await this.httpV2
+			.get(`/v2/directive/archive/${archive.archiveId}`, {}, Directive)
+			.toPromise();
 	}
 
 	public async create(directive: DirectiveCreateRequest): Promise<Directive> {

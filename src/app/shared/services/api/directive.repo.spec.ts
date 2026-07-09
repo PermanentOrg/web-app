@@ -49,13 +49,14 @@ describe('DirectiveRepo', () => {
 		expect(repo).not.toBeNull();
 	});
 
-	it('can get a Directive from an Archive', (done) => {
+	it('can get a list of Directives for an Archive', (done) => {
 		repo.httpV2.setAuthToken('test_token');
 		repo
 			.get(testArchive)
-			.then((directive) => {
-				expect(directive).not.toBeNull();
-				expect(directive.note).toBe('Test Note');
+			.then((directives) => {
+				expect(directives).not.toBeNull();
+				expect(directives.length).toBe(1);
+				expect(directives[0].note).toBe('Test Note');
 				done();
 			})
 			.catch(done.fail);
