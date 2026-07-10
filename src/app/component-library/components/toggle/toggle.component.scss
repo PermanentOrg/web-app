@@ -21,13 +21,13 @@
 		height: 20px;
 		border-radius: 25px;
 		position: relative;
-		background-color: rgba(255, 255, 255, 0.32);
+		background-color: rgba($PR-brand-white, 0.32);
 		transition: background-color 0.2s;
 
 		& > .toggle-knob {
 			width: 15px;
 			height: 15px;
-			background-color: $white;
+			background-color: $PR-brand-white;
 			border-radius: 50%;
 			position: absolute;
 			top: 2.5px;

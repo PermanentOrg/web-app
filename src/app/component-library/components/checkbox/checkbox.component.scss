@@ -49,7 +49,7 @@
 
 .checkbox-container-enabled.checkbox-container-primary {
 	& > .checkbox {
-		border: 2.5px solid rgba(19, 27, 74, 1);
+		border: 2.5px solid rgba($PR-blue-900, 1);
 		transition: background-color 0.2s;
 		border-radius: 4px;
 	}
@@ -57,7 +57,7 @@
 	& > .checkbox::after {
 		content: '';
 		position: absolute;
-		background-color: rgba(19, 27, 74, 1);
+		background-color: rgba($PR-blue-900, 1);
 		transition: opacity 0.2s;
 		opacity: 0;
 		border-radius: 2px;
@@ -71,13 +71,13 @@
 	}
 
 	& > label {
-		color: rgba(19, 27, 74, 1);
+		color: rgba($PR-blue-900, 1);
 	}
 }
 
 .checkbox-container-enabled.checkbox-container-secondary {
 	& > .checkbox {
-		border: 2.5px solid white;
+		border: 2.5px solid $PR-brand-white;
 		transition: background-color 0.2s;
 		border-radius: 4px;
 	}
@@ -85,7 +85,7 @@
 	& > .checkbox::after {
 		content: '';
 		position: absolute;
-		background-color: white;
+		background-color: $PR-brand-white;
 		transition: opacity 0.2s;
 		opacity: 0;
 		border-radius: 2px;
@@ -99,14 +99,14 @@
 	}
 
 	& > label {
-		color: white;
+		color: $PR-brand-white;
 	}
 }
 
 .checkbox-container-disabled.checkbox-container-primary {
 	cursor: not-allowed;
 	& > .checkbox {
-		border: 1px solid #646464;
+		border: 1px solid $gray-dark;
 		transition: background-color 0.2s;
 	}
 
@@ -114,7 +114,7 @@
 	& > .checkbox::after {
 		content: '';
 		position: absolute;
-		background-color: white;
+		background-color: $PR-brand-white;
 		transition: opacity 0.2s;
 		opacity: 0;
 		border-radius: 2px;
@@ -124,7 +124,7 @@
 
 	& > .checkbox {
 		background-color: $gray-light;
-		border: 1px solid #646464;
+		border: 1px solid $gray-dark;
 	}
 
 	& > .checkbox::before,
@@ -140,7 +140,7 @@
 .checkbox-container-disabled.checkbox-container-secondary {
 	cursor: not-allowed;
 	& > .checkbox {
-		border: 1px solid #646464;
+		border: 1px solid $gray-dark;
 		transition: background-color 0.2s;
 	}
 
@@ -148,7 +148,7 @@
 	& > .checkbox::after {
 		content: '';
 		position: absolute;
-		background-color: white;
+		background-color: $PR-brand-white;
 		transition: opacity 0.2s;
 		opacity: 0;
 		border-radius: 2px;
@@ -158,7 +158,7 @@
 
 	& > .checkbox {
 		background-color: $gray-light;
-		border: 1px solid #646464;
+		border: 1px solid $gray-dark;
 	}
 
 	& > .checkbox::before,
@@ -178,23 +178,23 @@ label {
 
 .checkbox-container-enabled.checkbox-container-secondary.checkbox-container-secondary-onboarding {
 	& > .checkbox.checked {
-		border: 2.5px solid white;
+		border: 2.5px solid $PR-brand-white;
 		transition: background-color 0.2s;
 		border-radius: 4px;
-		background-color: white;
+		background-color: $PR-brand-white;
 	}
 	& > .checkbox.checked::before,
 	& > .checkbox.checked::after {
 		content: '';
 		position: absolute;
-		background-color: white;
+		background-color: $PR-brand-white;
 		transition: opacity 0.2s;
 		opacity: 0;
 		border-radius: 2px;
 		background: linear-gradient(
 			to right,
 			rgba(184, 67, 166, 1),
-			rgba(128, 0, 128, 1)
+			rgba($PR-brand-purple, 1)
 		);
 	}
 
@@ -206,6 +206,6 @@ label {
 	}
 
 	& > label {
-		color: white;
+		color: $PR-brand-white;
 	}
 }

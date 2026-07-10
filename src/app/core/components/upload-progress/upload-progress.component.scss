@@ -73,7 +73,7 @@ $easing: $tweaked-ease;
 	display: block;
 	margin: 0 auto;
 	visibility: hidden;
-	background: white;
+	background: $PR-brand-white;
 	position: relative;
 
 	&.visible {
