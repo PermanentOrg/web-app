@@ -582,14 +582,14 @@ describe('SidebarComponent', () => {
 			expect(component.displayTimeObject).toBeNull();
 		});
 
-		it('should fall back to displayDT when displayTime is undefined', () => {
+		it('should not fall back to displayDT when displayTime is undefined', () => {
 			component.selectedItem = new RecordVO({
 				displayDT: '1985-05-20T00:00:00Z',
 			});
 
 			(component as any).updateDisplayTimeObject();
 
-			expect(component.displayTimeObject?.date.year).toBe('1985');
+			expect(component.displayTimeObject).toBeNull();
 		});
 	});
 
