@@ -2,7 +2,7 @@
 @import 'fonts';
 
 p {
-	color: white;
+	color: $PR-brand-white;
 	font-family: 'UsualRegular', sans-serif;
 	font-size: 16px;
 }
@@ -27,11 +27,11 @@ p {
 
 .square {
 	border-radius: 6px;
-	background: rgba(255, 255, 255, 0.08);
+	background: rgba($PR-brand-white, 0.08);
 	padding: 6px;
 
 	& > span {
-		color: white;
+		color: $PR-brand-white;
 		text-transform: uppercase;
 	}
 }
@@ -61,7 +61,7 @@ p {
 
 hr {
 	margin: 32px 0px;
-	border-top: 1px solid rgba(255, 255, 255, 0.3);
+	border-top: 1px solid rgba($PR-brand-white, 0.3);
 }
 
 .content-container {
@@ -97,7 +97,7 @@ hr {
 
 .get-started-text {
 	& > a {
-		color: white;
+		color: $PR-brand-white;
 	}
 	margin-bottom: 2rem;
 }

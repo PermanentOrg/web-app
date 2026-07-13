@@ -32,9 +32,9 @@
 	}
 
 	& > .btn-disabled {
-		background-color: #c8c8c8;
-		color: #646464;
-		border-color: #c8c8c8;
+		background-color: $gray-light;
+		color: $gray-dark;
+		border-color: $gray-light;
 	}
 }
 
@@ -46,7 +46,7 @@
 	position: relative;
 	& > p {
 		position: absolute;
-		color: #898da4;
+		color: $PR-blue-400;
 		z-index: 1000;
 		font-size: 24px;
 		font-family: 'UsualRegular', sans-serif;
@@ -80,7 +80,7 @@
 	}
 
 	& > div > p {
-		color: white;
+		color: $PR-brand-white;
 	}
 }
 

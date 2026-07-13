@@ -1,4 +1,5 @@
 @import 'fonts';
+@import 'colors';
 
 .archive-type-select {
 	cursor: pointer;
@@ -15,7 +16,7 @@
 
 	font-family: 'UsualRegular', sans-serif;
 	font-style: normal;
-	color: #fff;
+	color: $PR-brand-white;
 }
 
 .archive-type {
@@ -34,7 +35,7 @@
 	}
 
 	.type-description {
-		color: rgba(255, 255, 255, 0.75);
+		color: rgba($PR-brand-white, 0.75);
 		font-size: 18px;
 		font-style: normal;
 		font-weight: 400;

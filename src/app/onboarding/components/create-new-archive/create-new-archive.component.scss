@@ -33,13 +33,13 @@ h3 {
 .heading-container {
 	width: 50%;
 	& > .heading {
-		color: white;
+		color: $PR-brand-white;
 		font-family: 'UsualLight', sans-serif;
 	}
 
 	& > .heading-new-archive {
 		width: 60%;
-		color: white;
+		color: $PR-brand-white;
 		font-family: 'UsualLight', sans-serif;
 	}
 }
