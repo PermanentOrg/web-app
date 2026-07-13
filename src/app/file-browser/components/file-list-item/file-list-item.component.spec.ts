@@ -10,6 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { DragService } from '@shared/services/drag/drag.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
@@ -66,7 +67,13 @@ describe('FileListItemComponent', () => {
 		isMobileWidth: jasmine.createSpy().and.returnValue(false),
 	};
 
+	const mockFeatureFlagService = {
+		isEnabled: jasmine.createSpy().and.returnValue(false),
+	};
+
 	beforeEach(async () => {
+		mockFeatureFlagService.isEnabled.and.returnValue(false);
+
 		await TestBed.configureTestingModule({
 			imports: [MockItemTypeIconPipe, MockPrDatePipe, MockPrConstantsPipe],
 			declarations: [FileListItemComponent, GetThumbnailPipe],
@@ -131,6 +138,7 @@ describe('FileListItemComponent', () => {
 				},
 				{ provide: EditService, useValue: mockEditService },
 				{ provide: DeviceService, useValue: mockDeviceService },
+				{ provide: FeatureFlagService, useValue: mockFeatureFlagService },
 			],
 		}).compileComponents();
 
@@ -388,5 +396,37 @@ describe('FileListItemComponent', () => {
 			fixture.nativeElement.querySelector('.second-row span')?.textContent;
 
 		expect(secondRowDate).toContain('2023-01-01T00:00:00.000Z');
+	});
+
+	describe('with the edtf-date feature flag enabled', () => {
+		beforeEach(() => {
+			mockFeatureFlagService.isEnabled.and.callFake(
+				(flag: string) => flag === 'edtf-date',
+			);
+		});
+
+		it('should not fall back to displayDT when displayTime is missing', () => {
+			component.item.displayTime = undefined;
+			component.item.displayDT = '2023-01-01T00:00:00.000Z';
+			fixture.detectChanges();
+
+			expect(component.startDisplayTime).toBe('');
+		});
+
+		it('should show nothing when displayTime was explicitly cleared', () => {
+			component.item.displayTime = null;
+			component.item.displayDT = '2023-01-01T00:00:00.000Z';
+			fixture.detectChanges();
+
+			expect(component.startDisplayTime).toBe('');
+		});
+
+		it('should still show the displayTime start date', () => {
+			component.item.displayTime = '2020-06-10/2026-06-15';
+			component.item.displayDT = '2023-01-01T00:00:00.000Z';
+			fixture.detectChanges();
+
+			expect(component.startDisplayTime).toBe('2020-06-10');
+		});
 	});
 });
