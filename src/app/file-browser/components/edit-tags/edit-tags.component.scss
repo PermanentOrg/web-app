@@ -6,7 +6,7 @@
 	display: block;
 	flex: 1;
 	max-width: 100%;
-	background-color: white;
+	background-color: $PR-brand-white;
 
 	&.is-waiting {
 		opacity: 0.5;
@@ -88,7 +88,7 @@
 		height: $multi-select-radius * math.div(2, 3);
 		width: $multi-select-radius * math.div(2, 3);
 		border-radius: 50%;
-		background: $PR-blue;
+		background: $PR-blue-900;
 		opacity: 0;
 	}
 
@@ -122,7 +122,7 @@
 
 	.manage-tags-link {
 		font-weight: 600;
-		color: black;
+		color: $PR-brand-black;
 		text-decoration: underline;
 		cursor: pointer;
 	}

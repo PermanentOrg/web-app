@@ -65,13 +65,13 @@ $bg-transition-length: 0.075s;
 	cursor: pointer;
 	user-select: none;
 	transition: background-color $bg-transition-length $tweaked-ease;
-	background-color: rgba(white, 0);
+	background-color: rgba($PR-brand-white, 0);
 	overflow-y: hidden;
 	min-height: $row-height;
 
 	&.grid-view {
 		border-bottom: none;
-		background-color: white;
+		background-color: $PR-brand-white;
 		flex-wrap: wrap;
 		padding-bottom: $grid-info-section-height;
 		position: relative;
@@ -177,7 +177,7 @@ $bg-transition-length: 0.075s;
 		height: $grid-info-section-height;
 		position: absolute;
 		bottom: 0px;
-		background: white;
+		background: $PR-brand-white;
 		left: 0;
 		right: 0;
 		min-width: 0;
@@ -314,7 +314,7 @@ $bg-transition-length: 0.075s;
 	}
 
 	& fa-icon {
-		color: #000;
+		color: $PR-brand-black;
 		font-size: 2em;
 	}
 }
@@ -329,7 +329,7 @@ $bg-transition-length: 0.075s;
 	position: absolute;
 	bottom: $grid-info-section-height + $margin;
 	right: $margin;
-	background: white;
+	background: $PR-brand-white;
 	height: $diameter;
 	width: $diameter;
 	border-radius: 50%;
@@ -340,7 +340,7 @@ $bg-transition-length: 0.075s;
 	box-shadow: $box-shadow-sm;
 
 	.material-icons {
-		color: $PR-blue;
+		color: $PR-blue-900;
 		font-size: $mat-icon-sm;
 		transition: color $bg-transition-length $tweaked-ease;
 	}
@@ -401,7 +401,7 @@ $multi-select-radius: 30px;
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		background: $PR-blue;
+		background: $PR-blue-900;
 		transform: translate(-50%, -50%);
 	}
 }

@@ -6,7 +6,7 @@
 	left: 0;
 	right: 0;
 	z-index: $z-index-nav;
-	background-color: $white;
+	background-color: $PR-brand-white;
 	box-shadow: $box-shadow-sm;
 
 	@include after($tablet-horizontal) {
@@ -22,10 +22,10 @@
 
 nav.navbar {
 	padding: 0 0.5rem;
-	color: white;
+	color: $PR-brand-white;
 	height: $navbar-height;
 	align-items: center;
-	background-color: $PR-blue;
+	background-color: $PR-blue-900;
 
 	&.nav-desktop {
 		display: none;
@@ -116,7 +116,7 @@ nav.nav-desktop {
 
 .nav-buttons {
 	margin-left: $grid-unit;
-	color: white;
+	color: $PR-brand-white;
 	display: flex;
 	align-items: center;
 
@@ -127,8 +127,8 @@ nav.nav-desktop {
 		border-radius: 50%;
 		width: $button-size;
 		height: $button-size;
-		background-color: white;
-		color: $PR-blue;
+		background-color: $PR-brand-white;
+		color: $PR-blue-900;
 		text-align: center;
 		line-height: $button-size;
 		font-weight: bold;
