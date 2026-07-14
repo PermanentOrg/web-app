@@ -1,11 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { DateModel } from '@shared/services/edtf-service/edtf.service';
+import {
+	DateModel,
+	DAY_RANGE_ERROR,
+	MONTH_RANGE_ERROR,
+} from '@shared/services/edtf-service/edtf.service';
 import {
 	DatepickerInputComponent,
-	DAY_RANGE_ERROR,
 	INVALID_CHARS_ERROR,
-	MONTH_RANGE_ERROR,
 } from './datepicker-input.component';
 
 @Component({

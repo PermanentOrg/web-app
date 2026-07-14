@@ -13,7 +13,6 @@ import {
 	ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { format } from 'date-fns';
 import {
 	EdtfService,
 	TIME_FORMAT_LABEL,
@@ -360,40 +359,8 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		);
 	}
 
-	private padDigitsWithX(value: string, width: number): string {
-		const v = value ?? '';
-		return v.length >= width ? v : v + 'X'.repeat(width - v.length);
-	}
-
 	private formatDate(date: DateModel): string {
-		const yearRaw = date.year ?? '';
-		const monthRaw = date.month ?? '';
-		const dayRaw = date.day ?? '';
-
-		const hasYear = !!yearRaw;
-		const hasMonth = !!monthRaw;
-		const hasDay = !!dayRaw && parseInt(dayRaw, 10) !== 0;
-
-		if (!hasYear && !hasMonth && !hasDay) return '';
-
-		const yearDisplay = this.padDigitsWithX(yearRaw, 4);
-		const monthComplete = /^\d{2}$/.test(monthRaw);
-		const monthName = monthComplete
-			? format(new Date(2000, parseInt(monthRaw, 10) - 1), 'MMMM')
-			: null;
-		// A day is a discrete value, not a range, so a single digit is
-		// zero-padded on the left ("2" -> "02") rather than X-padded.
-		const dayDisplay = hasDay ? dayRaw.padStart(2, '0') : '';
-
-		if (monthName && hasDay)
-			return `${monthName} ${dayDisplay}, ${yearDisplay}`;
-		if (monthName) return `${monthName} ${yearDisplay}`;
-		if (!hasMonth && !hasDay) return yearDisplay;
-
-		const monthDisplay = hasMonth ? this.padDigitsWithX(monthRaw, 2) : 'XX';
-		const parts: string[] = [yearDisplay, monthDisplay];
-		if (hasDay) parts.push(dayDisplay);
-		return parts.join('-');
+		return this.edtfService.formatDateForDisplay(date);
 	}
 
 	private formatTime(time: TimeModel): string {
