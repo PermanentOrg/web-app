@@ -17,12 +17,12 @@ import { CommonModule } from '@angular/common';
 import { NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import {
 	DateModel,
+	DAY_RANGE_ERROR,
 	EdtfService,
+	MONTH_RANGE_ERROR,
 } from '@shared/services/edtf-service/edtf.service';
 
 export const INVALID_CHARS_ERROR = 'The date contains invalid characters.';
-export const MONTH_RANGE_ERROR = 'Month must be between 1 and 12.';
-export const DAY_RANGE_ERROR = 'Day must be between 1 and 31.';
 
 type DateFieldKey = keyof DateModel;
 

@@ -1,4 +1,9 @@
-import { EdtfService, DateTimeModel } from './edtf.service';
+import {
+	EdtfService,
+	DateTimeModel,
+	MONTH_RANGE_ERROR,
+	DAY_RANGE_ERROR,
+} from './edtf.service';
 
 // Mirrors the service's local-offset stamping so the expectations stay
 // green in any timezone the tests run in.
@@ -435,6 +440,26 @@ describe('EdtfService', () => {
 				};
 
 				expect(service.toEdtfDate(model)).toBe('198X-05-20');
+			});
+		});
+
+		describe('rejecting a lone zero', () => {
+			it('should reject a month of "0" instead of serializing it to "0X"', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '0', day: '20' },
+					time: { format: 'am' },
+				};
+
+				expect(() => service.toEdtfDate(model)).toThrowError(MONTH_RANGE_ERROR);
+			});
+
+			it('should reject a day of "0" instead of serializing it to "0X"', () => {
+				const model: DateTimeModel = {
+					date: { year: '1985', month: '05', day: '0' },
+					time: { format: 'am' },
+				};
+
+				expect(() => service.toEdtfDate(model)).toThrowError(DAY_RANGE_ERROR);
 			});
 		});
 
@@ -1445,6 +1470,61 @@ describe('EdtfService', () => {
 			expect(service.getEdtfIntervalStartDate('1985-05-20/..')).toBe(
 				'1985-05-20',
 			);
+		});
+
+		it('should return an empty string for a null input', () => {
+			expect(service.getEdtfIntervalStartDate(null)).toBe('');
+		});
+	});
+
+	describe('formatDateForDisplay', () => {
+		it('should return an empty string when no field has a value', () => {
+			expect(
+				service.formatDateForDisplay({ year: '', month: '', day: '' }),
+			).toBe('');
+		});
+
+		it('should render a complete date with the month name', () => {
+			expect(
+				service.formatDateForDisplay({ year: '1985', month: '05', day: '20' }),
+			).toBe('May 20, 1985');
+		});
+
+		it('should X-pad a partial year like serialization does', () => {
+			expect(
+				service.formatDateForDisplay({ year: '198', month: '', day: '' }),
+			).toBe('198X');
+		});
+
+		it('should interpret a single-digit month the same way serialization does ("1" -> January)', () => {
+			expect(
+				service.formatDateForDisplay({ year: '1985', month: '1', day: '20' }),
+			).toBe('January 20, 1985');
+
+			expect(
+				service.toEdtfDate({
+					date: { year: '1985', month: '1', day: '20' },
+					time: { format: 'am' },
+				}),
+			).toBe('1985-01-20');
+		});
+
+		it('should zero-pad a single-digit day like serialization does', () => {
+			expect(
+				service.formatDateForDisplay({ year: '1985', month: '05', day: '2' }),
+			).toBe('May 02, 1985');
+		});
+
+		it('should show XX for a missing month when a day is present', () => {
+			expect(
+				service.formatDateForDisplay({ year: '1985', month: '', day: '20' }),
+			).toBe('1985-XX-20');
+		});
+
+		it('should treat an in-progress "0" day as absent instead of guessing', () => {
+			expect(
+				service.formatDateForDisplay({ year: '1985', month: '05', day: '0' }),
+			).toBe('May 1985');
 		});
 	});
 });
