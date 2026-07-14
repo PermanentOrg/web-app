@@ -5,6 +5,7 @@ export interface LocnPipeOutput {
 	line1?: string;
 	line2?: string;
 	full?: string;
+	name?: string;
 }
 
 @Pipe({
@@ -19,16 +20,19 @@ export class PrLocationPipe implements PipeTransform {
 
 		const output: LocnPipeOutput = {};
 
+		const hasCoordinates =
+			locnVO.latitude != null &&
+			locnVO.latitude !== '' &&
+			locnVO.longitude != null &&
+			locnVO.longitude !== '';
+
 		// order by priority/usefulness
 		const queue = [
-			locnVO.streetNumber
-				? locnVO.streetNumber + ' ' + locnVO.streetName
-				: locnVO.streetName,
-			locnVO.locality,
+			locnVO.sublocation,
+			locnVO.city,
 			locnVO.adminOneName,
-			locnVO.latitude + ', ' + locnVO.longitude,
+			hasCoordinates ? `${locnVO.latitude}, ${locnVO.longitude}` : null,
 			locnVO.country,
-			locnVO.countryCode,
 		];
 
 		const line2 = [];
@@ -52,6 +56,12 @@ export class PrLocationPipe implements PipeTransform {
 
 		output.line2 = line2.length ? line2.join(', ') : 'Unknown Location';
 		output.full = output.line1 + ', ' + output.line2;
+		// Surface the name whenever it exists; it is rendered distinctly (bold,
+		// on its own line), so it does not need deduping against the sublocation.
+		if (locnVO.name) {
+			output.name = locnVO.name;
+			output.full = locnVO.name + ', ' + output.full;
+		}
 		return output;
 	}
 }

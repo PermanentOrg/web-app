@@ -10,6 +10,8 @@ import {
 	convertStelaRecordToRecordVO,
 	RecordRepo,
 	RecordResponse,
+	StelaLocation,
+	convertStelaLocationToLocnVOData,
 } from '@shared/services/api/record.repo';
 import { RecordVO } from '@root/app/models';
 import {
@@ -223,6 +225,100 @@ describe('RecordRepo', () => {
 			const result = await repo.getRecordShareLink(recordVO);
 
 			expect(result).toEqual([]);
+		});
+	});
+
+	describe('convertStelaLocationToLocnVOData', () => {
+		it('returns null when the stela location has no id', () => {
+			expect(convertStelaLocationToLocnVOData(null)).toBeNull();
+			expect(
+				convertStelaLocationToLocnVOData({ id: '' } as StelaLocation),
+			).toBeNull();
+		});
+
+		it('parses the id and remaps state/precision onto the LocnVO shape', () => {
+			const stelaLocation: StelaLocation = {
+				id: '42',
+				name: "Jean Valjean's House",
+				sublocation: '55 Rue Plumet',
+				city: 'Paris',
+				state: 'Ile-de-France',
+				postalCode: '75007',
+				country: 'France',
+				latitude: 48.83,
+				longitude: 2.3,
+				altitudeMeters: 35,
+				precision: 'approximate',
+			};
+
+			const result = convertStelaLocationToLocnVOData(stelaLocation);
+
+			expect(result.locnId).toBe(42);
+			expect(result.name).toBe("Jean Valjean's House");
+			expect(result.sublocation).toBe('55 Rue Plumet');
+			expect(result.city).toBe('Paris');
+			expect(result.adminOneName).toBe('Ile-de-France');
+			expect(result.postalCode).toBe('75007');
+			expect(result.country).toBe('France');
+			expect(result.altitudeMeters).toBe(35);
+			expect(result.locationPrecision).toBe('approximate');
+
+			expect((result as Record<string, unknown>).state).toBeUndefined();
+			expect((result as Record<string, unknown>).precision).toBeUndefined();
+		});
+
+		it('coerces null state/precision to undefined', () => {
+			const stelaLocation: StelaLocation = {
+				id: '7',
+				state: null,
+				precision: null,
+			};
+
+			const result = convertStelaLocationToLocnVOData(stelaLocation);
+
+			expect(result.adminOneName).toBeUndefined();
+			expect(result.locationPrecision).toBeUndefined();
+		});
+
+		it('shims legacy fields when the modern location fields are absent', () => {
+			const stelaLocation: StelaLocation = {
+				id: '7',
+				name: null,
+				sublocation: null,
+				city: null,
+				country: null,
+				streetNumber: '239',
+				streetName: 'Glenwood Road',
+				locality: 'Melrose Park',
+				countryCode: 'US',
+				displayName: 'Home',
+			};
+
+			const result = convertStelaLocationToLocnVOData(stelaLocation);
+
+			expect(result.sublocation).toBe('239 Glenwood Road');
+			expect(result.city).toBe('Melrose Park');
+			expect(result.name).toBe('Home');
+			expect(result.country).toBe('US');
+		});
+
+		it('prefers the modern fields over legacy when both are present', () => {
+			const stelaLocation: StelaLocation = {
+				id: '7',
+				name: 'Modern Name',
+				sublocation: 'Modern Sublocation',
+				city: 'Modern City',
+				streetNumber: '239',
+				streetName: 'Glenwood Road',
+				locality: 'Melrose Park',
+				displayName: 'Legacy Name',
+			};
+
+			const result = convertStelaLocationToLocnVOData(stelaLocation);
+
+			expect(result.sublocation).toBe('Modern Sublocation');
+			expect(result.city).toBe('Modern City');
+			expect(result.name).toBe('Modern Name');
 		});
 	});
 

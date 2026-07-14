@@ -5,6 +5,7 @@ import {
 	FolderLinkType,
 	ShareVO,
 	LocnVOData,
+	LocationPrecision,
 } from '@root/app/models';
 import {
 	BaseResponse,
@@ -71,16 +72,24 @@ interface StelaFile {
 }
 export interface StelaLocation {
 	id: string;
-	streetNumber: string;
-	streetName: string;
-	locality: string;
-	county: string;
-	state: string;
-	latitude: number;
-	longitude: number;
-	country: string;
-	countryCode: string;
-	displayName: string | null;
+	name?: string | null;
+	sublocation?: string | null;
+	city?: string | null;
+	state?: string | null;
+	postalCode?: string | null;
+	country?: string | null;
+	latitude?: number | null;
+	longitude?: number | null;
+	altitudeMeters?: number | null;
+	precision?: LocationPrecision | null;
+	// Legacy columns still returned by stela for backwards compatibility. Used
+	// to shim locations that predate (or were geocoded without) the new fields.
+	streetNumber?: string | null;
+	streetName?: string | null;
+	locality?: string | null;
+	county?: string | null;
+	countryCode?: string | null;
+	displayName?: string | null;
 }
 interface StelaArchive {
 	id: string;
@@ -158,14 +167,32 @@ export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 	});
 
 export const convertStelaLocationToLocnVOData = (
-	stelaLocation: StelaLocation,
-): LocnVOData =>
-	stelaLocation?.id
-		? {
-				...stelaLocation,
-				locnId: Number.parseInt(stelaLocation.id, 10),
-			}
-		: null;
+	stelaLocation: StelaLocation | null | undefined,
+): LocnVOData | null => {
+	if (!stelaLocation?.id) {
+		return null;
+	}
+	const { state, precision, ...rest } = stelaLocation;
+	// Legacy shim: locations geocoded before the IPTC fields existed — or by
+	// backend paths (e.g. EXIF geocoding on upload) that still only write the
+	// legacy columns — arrive without name/sublocation/city. Fall back to the
+	// legacy fields so the rest of the app can rely on the new shape. Mirrors the
+	// backfill in migration 20260427120000_add_iptc_fields_to_locn.
+	const legacySublocation =
+		[stelaLocation.streetNumber, stelaLocation.streetName]
+			.filter(Boolean)
+			.join(' ') || undefined;
+	return {
+		...rest,
+		locnId: Number.parseInt(stelaLocation.id, 10),
+		adminOneName: state ?? undefined,
+		locationPrecision: precision ?? undefined,
+		name: stelaLocation.name ?? stelaLocation.displayName ?? undefined,
+		sublocation: stelaLocation.sublocation ?? legacySublocation,
+		city: stelaLocation.city ?? stelaLocation.locality ?? undefined,
+		country: stelaLocation.country ?? stelaLocation.countryCode ?? undefined,
+	};
+};
 
 export const convertStelaRecordToRecordVO = (
 	stelaRecord: StelaRecord,
