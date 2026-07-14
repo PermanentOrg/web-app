@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import edtf, { Date as EdtfDate, Interval as EdtfInterval } from 'edtf';
-import { getHours, getMinutes, getSeconds, isValid, parse } from 'date-fns';
+import {
+	format,
+	getHours,
+	getMinutes,
+	getSeconds,
+	isValid,
+	parse,
+} from 'date-fns';
 
 export enum DateQualifier {
 	Approximate = 'approximate',
@@ -24,6 +31,9 @@ export enum EdtfPrecision {
 }
 
 export const UNKNOWN_VALUE = 'XXXX-XX-XX';
+
+export const MONTH_RANGE_ERROR = 'Month must be between 1 and 12.';
+export const DAY_RANGE_ERROR = 'Day must be between 1 and 31.';
 
 const DIGITS_ONLY = /^\d*$/;
 
@@ -104,7 +114,7 @@ export class EdtfService {
 		}
 	}
 
-	getEdtfIntervalStartDate(edtfString: string | undefined): string {
+	getEdtfIntervalStartDate(edtfString: string | null | undefined): string {
 		if (!edtfString) {
 			return '';
 		}
@@ -236,6 +246,11 @@ export class EdtfService {
 
 		if (!hasYear && !hasMonth && !hasDay) return '';
 
+		// A lone '0' is an unfinished value ('05' minus a keystroke), never a
+		// month or day on its own — reject it instead of guessing ('0X').
+		if (date.month === '0') throw new Error(MONTH_RANGE_ERROR);
+		if (date.day === '0') throw new Error(DAY_RANGE_ERROR);
+
 		const year = this.padWithX(date.year, 4);
 		if (!hasMonth && !hasDay) return year;
 
@@ -246,9 +261,13 @@ export class EdtfService {
 		return `${year}-${month}-${day}`;
 	}
 
+	// Shared by serialization (toEdtfDate) and display (formatDateForDisplay)
+	// so a saved value always reads back the way the preview rendered it.
 	private padMonthOrDay(value: string): string {
-		// A single 1–9 digit is treated as a complete value (e.g. '5' → '05'),
-		// since the user can't be mid-typing a two-digit value starting with 2–9.
+		// A single digit is zero-padded ('1' → '01', i.e. January / the 1st).
+		// '1' could in principle be the start of '10'–'12', but this runs on a
+		// finished value, not mid-keystroke, and the digits-only inputs give no
+		// way to type an unspecified digit — so '1X' is not expressible intent.
 		if (/^[1-9]$/.test(value)) return `0${value}`;
 		return this.padWithX(value, 2);
 	}
@@ -256,6 +275,40 @@ export class EdtfService {
 	private padWithX(value: string, width: number): string {
 		const v = value ?? '';
 		return v.length >= width ? v : v + 'X'.repeat(width - v.length);
+	}
+
+	// Human-readable counterpart of buildDateString: both share padWithX and
+	// padMonthOrDay, so the preview always shows what serialization will write.
+	// Unlike serialization it must tolerate in-progress values (it renders
+	// live while the user types), so it never throws.
+	formatDateForDisplay(date: DateModel): string {
+		const yearRaw = date.year ?? '';
+		const monthRaw = date.month ?? '';
+		const dayRaw = date.day ?? '';
+
+		const hasYear = !!yearRaw;
+		const hasMonth = !!monthRaw;
+		// A lone '0' day is an unfinished value ('05' minus a keystroke), so
+		// the preview treats it as absent rather than guessing.
+		const hasDay = !!dayRaw && parseInt(dayRaw, 10) !== 0;
+
+		if (!hasYear && !hasMonth && !hasDay) return '';
+
+		const yearDisplay = this.padWithX(yearRaw, 4);
+		const monthPadded = hasMonth ? this.padMonthOrDay(monthRaw) : 'XX';
+		const monthName = /^\d{2}$/.test(monthPadded)
+			? format(new Date(2000, parseInt(monthPadded, 10) - 1), 'MMMM')
+			: null;
+		const dayDisplay = hasDay ? this.padMonthOrDay(dayRaw) : '';
+
+		if (monthName && hasDay)
+			return `${monthName} ${dayDisplay}, ${yearDisplay}`;
+		if (monthName) return `${monthName} ${yearDisplay}`;
+		if (!hasMonth && !hasDay) return yearDisplay;
+
+		const parts: string[] = [yearDisplay, monthPadded];
+		if (hasDay) parts.push(dayDisplay);
+		return parts.join('-');
 	}
 
 	private buildTimeString(time: TimeModel): string {
@@ -377,6 +430,11 @@ export class EdtfService {
 
 		if (message.includes('complete date is required')) {
 			return 'A complete date is required when time is provided.';
+		}
+
+		if (message.includes('must be between')) {
+			// Already a human-readable segment range message (month/day).
+			return (error as Error).message;
 		}
 
 		return 'The date entered is not valid. Please check the values and try again.';

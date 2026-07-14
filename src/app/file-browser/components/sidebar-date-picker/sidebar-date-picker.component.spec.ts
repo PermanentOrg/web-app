@@ -292,10 +292,10 @@ describe('SidebarDatePickerComponent', () => {
 			expect(component.formattedStartDate()).toBe('1985-XX-20');
 		});
 
-		it('should fall back to ISO style "1985-1X-20" when month is partial', () => {
+		it('should render a single-digit month as the complete month, matching serialization ("1" -> January)', () => {
 			setDate('1985', '1', '20');
 
-			expect(component.formattedStartDate()).toBe('1985-1X-20');
+			expect(component.formattedStartDate()).toBe('January 20, 1985');
 		});
 
 		it('should fall back to ISO style "XXXX-XX-20" when only day is set', () => {
