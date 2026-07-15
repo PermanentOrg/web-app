@@ -147,8 +147,11 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 						this.isLoading = false;
 					}
 				} else if (
+					// Synthetic root folders (e.g. the Shares workspace) have no
+					// folderId, so there is nothing to fetch for them.
 					this.selectedItem?.isFolder &&
-					!this.selectedItem?.displayTime
+					this.selectedItem.folderId &&
+					!this.selectedItem.displayTime
 				) {
 					await this.dataService.fetchFullItems([this.selectedItem]);
 				}

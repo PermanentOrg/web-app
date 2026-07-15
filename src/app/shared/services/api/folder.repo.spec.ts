@@ -372,5 +372,27 @@ describe('Folder repo', () => {
 
 			expect(folders[0]).toBeDefined();
 		});
+
+		it('should not issue a request when no folder has a folderId', async () => {
+			const syntheticFolder = new FolderVO({ type: 'type.folder.root.share' });
+
+			const result = await folderRepo.getStelaFolderVOs([syntheticFolder]);
+
+			expect(httpV2Spy.get).not.toHaveBeenCalled();
+			expect(result.getFolderVOs().length).toBe(0);
+		});
+
+		it('should query only the folders that have a folderId', async () => {
+			const folderWithId = new FolderVO({ folderId: 123 });
+			const folderWithoutId = new FolderVO({ type: 'type.folder.root.share' });
+
+			httpV2Spy.get.and.returnValue(of([{ items: [mockStelaFolder] }]));
+
+			await folderRepo.getStelaFolderVOs([folderWithId, folderWithoutId]);
+
+			expect(httpV2Spy.get).toHaveBeenCalledWith('v2/folder', {
+				folderIds: [123],
+			});
+		});
 	});
 });
