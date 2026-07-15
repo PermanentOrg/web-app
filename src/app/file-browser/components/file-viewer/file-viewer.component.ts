@@ -453,6 +453,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	private updateDisplayTimeObject(): void {
+		if (!this.showEdtfDatePicker) {
+			return;
+		}
 		const edtfDate = this.currentRecord;
 		const hasExplicitlyClearedDate = edtfDate?.displayTime === null;
 		const timeSource = hasExplicitlyClearedDate
@@ -504,7 +507,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		property: KeysOfType<ItemVO, string>,
 		value: string,
 	): Promise<void> {
-		this.editService.saveItemVoProperty(
+		await this.editService.saveItemVoProperty(
 			this.currentRecord as ItemVO,
 			property,
 			value,

@@ -301,6 +301,25 @@ describe('FileViewerComponent', () => {
 				displayTime: '1985-05-20',
 			});
 
+		beforeEach(() => {
+			featureFlagsEnabled.set('edtf-date', true);
+		});
+
+		it('should not parse the date or show an error when the edtf-date flag is disabled', async () => {
+			featureFlagsEnabled.set('edtf-date', false);
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Invalid Date Doc',
+				TagVOs: [],
+				displayTime: 'not-a-valid-edtf-date',
+			});
+			const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+			await recreateComponent();
+
+			expect(component.displayTimeObject).toBeNull();
+			expect(showErrorSpy).not.toHaveBeenCalled();
+		});
+
 		it('should compute the cached display time from the record on init', async () => {
 			activatedRouteData.currentRecord = recordWithDate();
 			await recreateComponent();
@@ -350,6 +369,30 @@ describe('FileViewerComponent', () => {
 				name: 'displayTime',
 				value: '1990-06-15',
 			});
+		});
+
+		it('should re-sync the picker to the reverted value after a failed backend save', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			// Mimic EditService on a server failure: optimistic update now,
+			// revert on a later macrotask. The re-sync must wait for this.
+			spyOn(TestBed.inject(EditService), 'saveItemVoProperty').and.callFake(
+				async (item, _property, value) => {
+					item.displayTime = value;
+					await new Promise((resolve) => {
+						setTimeout(resolve);
+					});
+					item.displayTime = '1985-05-20';
+				},
+			);
+
+			await component.onDateSaved({
+				date: { year: '1990', month: '06', day: '15' },
+				time: { format: 'am' },
+			});
+
+			expect(component.displayTimeObject?.date.year).toBe('1985');
 		});
 
 		it('should show an empty date when displayTime is explicitly null, ignoring displayDT', async () => {
