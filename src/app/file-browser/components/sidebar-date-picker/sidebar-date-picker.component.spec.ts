@@ -578,6 +578,62 @@ describe('SidebarDatePickerComponent', () => {
 		});
 	});
 
+	describe('validation', () => {
+		const invalidTimeOnlyInput = {
+			hours: '02',
+			minutes: '30',
+			seconds: '00',
+			format: 'pm',
+		} as const;
+
+		it('should disable save and show an error when a time is entered without a complete date', () => {
+			component.open();
+			component.onTimeChange({ ...invalidTimeOnlyInput });
+			fixture.detectChanges();
+
+			expect(component.isEdtfValid()).toBeFalse();
+
+			const errorMessage =
+				fixture.nativeElement.querySelector('.pr-edtf-error');
+
+			expect(errorMessage).toBeTruthy();
+			expect(errorMessage.textContent.trim()).not.toBe('');
+
+			const saveButton = fixture.nativeElement.querySelector('.pr-btn-save');
+
+			expect(saveButton.disabled).toBeTrue();
+		});
+
+		it('should not emit saveClicked and should keep the dropdown open when the input is invalid', () => {
+			component.open();
+			component.onTimeChange({ ...invalidTimeOnlyInput });
+			fixture.detectChanges();
+
+			component.onSave();
+
+			expect(host.savedValue).toBeNull();
+			expect(component.isDropdownOpen()).toBeTrue();
+		});
+
+		it('should keep save enabled and show no error for a valid date', () => {
+			host.displayTime = {
+				date: { year: '1985', month: '05', day: '20' },
+				time: { hours: '', minutes: '', seconds: '', format: 'am' },
+			};
+			fixture.detectChanges();
+
+			component.open();
+			fixture.detectChanges();
+
+			expect(component.isEdtfValid()).toBeTrue();
+			expect(fixture.nativeElement.querySelector('.pr-edtf-error')).toBeNull();
+
+			const saveButton = fixture.nativeElement.querySelector('.pr-btn-save');
+
+			expect(saveButton.disabled).toBeFalse();
+		});
+	});
+
 	describe('onCancel', () => {
 		it('should close dropdown and reset to input values', () => {
 			host.displayTime = {

@@ -55,6 +55,16 @@
 	color: $red;
 }
 
+@mixin edtf-error-message {
+	font-size: 12px;
+	line-height: 16px;
+	color: $red;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	white-space: normal;
+	min-width: 0;
+}
+
 @mixin icon-wrapper {
 	background: $PR-blue-25;
 	border-radius: 0 8px 8px 0;

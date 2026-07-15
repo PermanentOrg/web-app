@@ -453,11 +453,14 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	private updateDisplayTimeObject(): void {
-		const edtfDate = this.currentRecord;
-		const hasExplicitlyClearedDate = edtfDate?.displayTime === null;
+		if (!this.showEdtfDatePicker) {
+			return;
+		}
+		const record = this.currentRecord;
+		const hasExplicitlyClearedDate = record?.displayTime === null;
 		const timeSource = hasExplicitlyClearedDate
 			? null
-			: edtfDate?.displayTime || edtfDate?.displayDT;
+			: record?.displayTime || record?.displayDT;
 		try {
 			this.displayTimeObject = timeSource
 				? this.edtfService.toDateTimeModel(timeSource)
@@ -504,7 +507,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		property: KeysOfType<ItemVO, string>,
 		value: string,
 	): Promise<void> {
-		this.editService.saveItemVoProperty(
+		await this.editService.saveItemVoProperty(
 			this.currentRecord as ItemVO,
 			property,
 			value,
