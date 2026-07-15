@@ -16,7 +16,13 @@ import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag
 import { MockComponent } from 'ng-mocks';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { environment } from '@root/environments/environment';
+import { MessageService } from '@shared/services/message/message.service';
+import {
+	DateTimeModel,
+	EdtfService,
+} from '@shared/services/edtf-service/edtf.service';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
+import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
 import { FileViewerComponent } from './file-viewer.component';
 
 @Pipe({ name: 'dsFileSize', standalone: false })
@@ -230,6 +236,19 @@ describe('FileViewerComponent', () => {
 						isEnabled: (flag: string) => featureFlagsEnabled.get(flag) ?? false,
 					},
 				},
+				{
+					provide: MessageService,
+					useValue: {
+						showError: () => {},
+						showMessage: () => {},
+					},
+				},
+				{
+					provide: EditDateTimeModalService,
+					useValue: {
+						open: () => ({ closed: { subscribe: () => {} } }),
+					},
+				},
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
@@ -243,6 +262,163 @@ describe('FileViewerComponent', () => {
 
 	it('should create', () => {
 		expect(component).not.toBeNull();
+	});
+
+	describe('edtf-date feature flag', () => {
+		it('should show the EDTF date picker when the edtf-date flag is enabled', async () => {
+			featureFlagsEnabled.set('edtf-date', true);
+			await recreateComponent();
+
+			expect(component.showEdtfDatePicker).toBe(true);
+			expect(
+				fixture.nativeElement.querySelector('pr-sidebar-date-picker'),
+			).toBeTruthy();
+		});
+
+		it('should show the legacy date field and hide the EDTF picker when the edtf-date flag is disabled', async () => {
+			featureFlagsEnabled.set('edtf-date', false);
+			await recreateComponent();
+
+			expect(component.showEdtfDatePicker).toBe(false);
+			expect(
+				fixture.nativeElement.querySelector('pr-sidebar-date-picker'),
+			).toBeNull();
+
+			const dateRowLabel = Array.from(
+				fixture.nativeElement.querySelectorAll('.metadata-table td'),
+			).find((td: HTMLElement) => td.textContent?.trim() === 'Date');
+
+			expect(dateRowLabel).toBeTruthy();
+		});
+	});
+
+	describe('EDTF date handling', () => {
+		const recordWithDate = () =>
+			new RecordVO({
+				type: 'document',
+				displayName: 'Dated Doc',
+				TagVOs: [],
+				displayTime: '1985-05-20',
+			});
+
+		beforeEach(() => {
+			featureFlagsEnabled.set('edtf-date', true);
+		});
+
+		it('should not parse the date or show an error when the edtf-date flag is disabled', async () => {
+			featureFlagsEnabled.set('edtf-date', false);
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Invalid Date Doc',
+				TagVOs: [],
+				displayTime: 'not-a-valid-edtf-date',
+			});
+			const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+			await recreateComponent();
+
+			expect(component.displayTimeObject).toBeNull();
+			expect(showErrorSpy).not.toHaveBeenCalled();
+		});
+
+		it('should compute the cached display time from the record on init', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			expect(component.displayTimeObject?.date.year).toBe('1985');
+		});
+
+		it('should reset the cached display time and show one error when an invalid date is saved', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			const edtfService = TestBed.inject(EdtfService);
+			spyOn(edtfService, 'toEdtfDate').and.throwError('invalid date');
+			const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+
+			await component.onDateSaved({
+				date: { year: 'bad' } as never,
+				time: { format: 'am' },
+			} as DateTimeModel);
+
+			expect(showErrorSpy).toHaveBeenCalledTimes(1);
+			expect(component.displayTimeObject?.date.year).toBe('1985');
+		});
+
+		it('should save null when the date is cleared to empty', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			await component.onDateSaved({
+				date: { year: '', month: '', day: '' },
+				time: { format: 'am' },
+			});
+
+			expect(savedProperty).toEqual({ name: 'displayTime', value: null });
+		});
+
+		it('should save the EDTF string unchanged for a non-empty date', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			await component.onDateSaved({
+				date: { year: '1990', month: '06', day: '15' },
+				time: { format: 'am' },
+			});
+
+			expect(savedProperty).toEqual({
+				name: 'displayTime',
+				value: '1990-06-15',
+			});
+		});
+
+		it('should re-sync the picker to the reverted value after a failed backend save', async () => {
+			activatedRouteData.currentRecord = recordWithDate();
+			await recreateComponent();
+
+			// Mimic EditService on a server failure: optimistic update now,
+			// revert on a later macrotask. The re-sync must wait for this.
+			spyOn(TestBed.inject(EditService), 'saveItemVoProperty').and.callFake(
+				async (item, _property, value) => {
+					item.displayTime = value;
+					await new Promise((resolve) => {
+						setTimeout(resolve);
+					});
+					item.displayTime = '1985-05-20';
+				},
+			);
+
+			await component.onDateSaved({
+				date: { year: '1990', month: '06', day: '15' },
+				time: { format: 'am' },
+			});
+
+			expect(component.displayTimeObject?.date.year).toBe('1985');
+		});
+
+		it('should show an empty date when displayTime is explicitly null, ignoring displayDT', async () => {
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Cleared Doc',
+				TagVOs: [],
+				displayTime: null,
+				displayDT: '1985-05-20T00:00:00Z',
+			});
+			await recreateComponent();
+
+			expect(component.displayTimeObject).toBeNull();
+		});
+
+		it('should fall back to displayDT when displayTime is undefined', async () => {
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Legacy Doc',
+				TagVOs: [],
+				displayDT: '1985-05-20T00:00:00Z',
+			});
+			await recreateComponent();
+
+			expect(component.displayTimeObject?.date.year).toBe('1985');
+		});
 	});
 
 	it('should have two tags components', () => {

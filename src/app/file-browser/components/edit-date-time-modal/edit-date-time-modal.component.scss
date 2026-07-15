@@ -251,13 +251,7 @@
 			}
 
 			.pr-edtf-error {
-				font-size: 12px;
-				line-height: 16px;
-				color: $red;
-				word-wrap: break-word;
-				overflow-wrap: break-word;
-				white-space: normal;
-				min-width: 0;
+				@include edtf-error-message;
 			}
 		}
 

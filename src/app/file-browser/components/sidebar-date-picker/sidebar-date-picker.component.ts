@@ -155,6 +155,23 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		this._isOpenStart() ? this.endTimezone() : this.startTimezone(),
 	);
 
+	private edtfResult = computed<{ valid: boolean; errorMessage: string }>(
+		() => {
+			try {
+				this.edtfService.toEdtfDate(this.buildDateTimeModel());
+				return { valid: true, errorMessage: '' };
+			} catch (error) {
+				return {
+					valid: false,
+					errorMessage: error instanceof Error ? error.message : 'Invalid date',
+				};
+			}
+		},
+	);
+
+	isEdtfValid = computed(() => this.edtfResult().valid);
+	edtfErrorMessage = computed(() => this.edtfResult().errorMessage);
+
 	rows = computed<SidebarDateRow[]>(() => {
 		const intervalLabel = this.intervalLabel();
 		if (intervalLabel) {
@@ -266,15 +283,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 	onMoreOptions(): void {
 		this.isDropdownOpen.set(false);
-
-		const modalData: DateTimeModel = {
-			qualifiers: { ...this._qualifiers() },
-			date: { ...this._date() },
-			time: { ...this._time() },
-			...(this.buildEndSide() ?? {}),
-		};
-
-		this.moreOptionsClicked.emit(modalData);
+		this.moreOptionsClicked.emit(this.buildDateTimeModel());
 	}
 
 	onCancel(): void {
@@ -283,15 +292,21 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	}
 
 	onSave(): void {
-		const dateTimeModel: DateTimeModel = {
+		if (!this.isEdtfValid()) {
+			return;
+		}
+
+		this.saveClicked.emit(this.buildDateTimeModel());
+		this.isDropdownOpen.set(false);
+	}
+
+	private buildDateTimeModel(): DateTimeModel {
+		return {
 			qualifiers: { ...this._qualifiers() },
 			date: { ...this._date() },
 			time: { ...this._time() },
 			...(this.buildEndSide() ?? {}),
 		};
-
-		this.saveClicked.emit(dateTimeModel);
-		this.isDropdownOpen.set(false);
 	}
 
 	private hasAnyQualifier(flags: DateQualifierFlags): boolean {
