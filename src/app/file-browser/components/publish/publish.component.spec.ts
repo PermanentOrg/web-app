@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderVO, RecordVO } from '@models/index';
 import { FolderResponse } from '@shared/services/api/folder.repo';
-import { Observable } from 'rxjs';
 import { MessageService } from '@shared/services/message/message.service';
 import { EventService } from '@shared/services/event/event.service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
@@ -33,8 +32,6 @@ const mockApiService = {
 			folderVOs: FolderVO[],
 			destination: FolderVO,
 		): Promise<FolderResponse> => await Promise.resolve(new FolderResponse({})),
-		navigateLean: (folder: FolderVO): Observable<FolderResponse> =>
-			new Observable<FolderResponse>(),
 	},
 	publish: {
 		getInternetArchiveLink: async () => ({
@@ -64,7 +61,9 @@ describe('PublishComponent', () => {
 				{
 					provide: DIALOG_DATA,
 					useValue: {
-						item: { folder_linkType: 'linkType' },
+						// No folder_linkType, like items loaded through the Stela
+						// API, which omits it.
+						item: { type: 'type.folder.generic', displayName: 'Test Item' },
 					},
 				},
 				{ provide: DialogRef, useClass: MockDialogRef },
@@ -92,6 +91,14 @@ describe('PublishComponent', () => {
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
+	});
+
+	it('should show the publish title when the item has no folder_linkType', () => {
+		const title = fixture.nativeElement.querySelector('.page-title');
+
+		expect(component.isPublicSourceItem).toBeFalse();
+		expect(title.textContent).toContain('Publish');
+		expect(title.textContent).toContain('Test Item');
 	});
 
 	it('should disaple the public to internet archive button if the user does not have the correct access role', () => {
