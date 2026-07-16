@@ -4,8 +4,6 @@ import {
 	RouterStateSnapshot,
 	Router,
 } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { find, cloneDeep } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -24,10 +22,10 @@ export class LeanFolderResolveService {
 		private router: Router,
 	) {}
 
-	resolve(
+	async resolve(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
-	): Observable<any> | Promise<any> {
+	): Promise<any> {
 		let targetFolder;
 
 		if (route.params.archiveNbr && route.params.folderLinkId) {
@@ -51,7 +49,7 @@ export class LeanFolderResolveService {
 				folder.pathAsText.unshift('Shares', 'Record');
 				folder.pathAsFolder_linkId.unshift(0, 0);
 				folder.ChildItemVOs = [sharedRecord];
-				return Promise.resolve(folder);
+				return folder;
 			}
 		} else {
 			const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {
@@ -60,38 +58,39 @@ export class LeanFolderResolveService {
 			targetFolder = new FolderVO(myFiles);
 		}
 
-		return this.api.folder
-			.navigateLean(targetFolder)
-			.pipe(
-				map((response: FolderResponse) => {
-					if (!response.isSuccessful) {
-						throw response;
-					}
+		try {
+			const response: FolderResponse = await this.api.folder.getWithChildren([
+				targetFolder,
+			]);
 
-					return response.getFolderVO(true);
-				}),
-			)
-			.toPromise()
-			.catch(async (response: FolderResponse) => {
-				this.message.showError({
-					message: response.getMessage(),
-					translate: true,
-				});
-				if (targetFolder.type.includes('root')) {
-					this.accountService
-						.logOut()
-						.then(() => {
-							this.router.navigate(['/login']);
-						})
-						.catch(() => {
-							this.router.navigate(['/login']);
-						});
-				} else if (state.url.includes('apps')) {
-					this.router.navigate(['/apps']);
-				} else {
-					this.router.navigate(['/private']);
-				}
-				return await Promise.reject(false);
+			// getWithChildren resolves with an error-shaped FolderResponse instead
+			// of rejecting, so failures must be detected here and thrown to reach
+			// the catch block below.
+			if (!response.isSuccessful) {
+				throw response;
+			}
+
+			return response.getFolderVO(true);
+		} catch (response) {
+			this.message.showError({
+				message: response.getMessage(),
+				translate: true,
 			});
+			if (targetFolder.type.includes('root')) {
+				this.accountService
+					.logOut()
+					.then(() => {
+						this.router.navigate(['/login']);
+					})
+					.catch(() => {
+						this.router.navigate(['/login']);
+					});
+			} else if (state.url.includes('apps')) {
+				this.router.navigate(['/apps']);
+			} else {
+				this.router.navigate(['/private']);
+			}
+			return await Promise.reject(false);
+		}
 	}
 }
