@@ -222,6 +222,10 @@ export const convertStelaRecordToRecordVO = (
 		timeZoneId: CENTRAL_TIMEZONE_VO.timeZoneId,
 		TimezoneVO: CENTRAL_TIMEZONE_VO,
 		ShareVOs: (stelaRecord.shares ?? []).map(convertStelaSharetoShareVO),
+		// accessRole is intentionally always owner, matching the folder
+		// conversion: the backend removed item-level accessRole because all
+		// non-owner values were deprecated in 2020. Real access is on ShareVOs.
+		accessRole: 'access.role.owner',
 	});
 
 export class RecordRepo extends BaseRepo {
