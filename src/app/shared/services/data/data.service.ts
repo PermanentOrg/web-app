@@ -1,5 +1,4 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { remove, find, findIndex } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -376,27 +375,22 @@ export class DataService {
 	public async refreshCurrentFolder(sortOnly = false) {
 		this.debug('refreshCurrentFolder (sortOnly = %o)', sortOnly);
 
-		return await this.api.folder
-			.navigateLean(this.currentFolder)
-			.pipe(
-				map((response: FolderResponse) => {
-					this.debug('refreshCurrentFolder data fetched', sortOnly);
+		const response: FolderResponse = await this.api.folder.getWithChildren([
+			this.currentFolder,
+		]);
 
-					if (!response.isSuccessful) {
-						throw response;
-					}
+		this.debug('refreshCurrentFolder data fetched', sortOnly);
 
-					return response.getFolderVO(true);
-				}),
-			)
-			.toPromise()
-			.then((updatedFolder: FolderVO) => {
-				this.updateChildItems(this.currentFolder, updatedFolder, sortOnly);
-				this.hideItemsInCurrentFolder();
-				this.debug('refreshCurrentFolder done', sortOnly);
-				this.folderUpdate.emit(this.currentFolder);
-				this.currentHiddenItems = [];
-			});
+		if (!response.isSuccessful) {
+			throw response;
+		}
+
+		const updatedFolder = response.getFolderVO(true);
+		this.updateChildItems(this.currentFolder, updatedFolder, sortOnly);
+		this.hideItemsInCurrentFolder();
+		this.debug('refreshCurrentFolder done', sortOnly);
+		this.folderUpdate.emit(this.currentFolder);
+		this.currentHiddenItems = [];
 	}
 
 	public updateChildItems(
