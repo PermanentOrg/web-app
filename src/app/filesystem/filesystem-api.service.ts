@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
 
 import { FolderVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
@@ -24,17 +23,13 @@ export class FilesystemApiService implements FilesystemApi {
 
 	public async navigate(folder: FolderIdentifier): Promise<FolderVO> {
 		const isUnlistedShare = await this.shareLinksService.isUnlistedShare();
-		let response: FolderResponse = null;
-		if (isUnlistedShare) {
-			response = await this.api.folder.getWithChildren(
-				[new FolderVO(folder)],
-				this.shareLinksService.currentShareToken,
-			);
-		} else {
-			response = await firstValueFrom(
-				this.api.folder.navigateLean(new FolderVO(folder)),
-			);
-		}
+		const shareToken = isUnlistedShare
+			? this.shareLinksService.currentShareToken
+			: null;
+		const response: FolderResponse = await this.api.folder.getWithChildren(
+			[new FolderVO(folder)],
+			shareToken,
+		);
 		if (!response.isSuccessful) {
 			throw response;
 		}
