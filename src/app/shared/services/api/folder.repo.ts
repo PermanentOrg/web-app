@@ -407,18 +407,6 @@ export class FolderRepo extends BaseRepo {
 		});
 	}
 
-	public navigateLean(folderVO: FolderVO): Observable<FolderResponse> {
-		const data = [
-			{
-				FolderVO: new FolderVO(folderVO),
-			},
-		];
-
-		return this.http.sendRequest<FolderResponse>('/folder/navigateLean', data, {
-			ResponseClass: FolderResponse,
-		});
-	}
-
 	public async post(folderVOs: FolderVO[]): Promise<FolderResponse> {
 		const data = folderVOs.map((folderVO) => ({
 			FolderVO: new FolderVO(folderVO),

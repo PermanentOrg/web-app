@@ -7,8 +7,6 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, RecordVO } from '@root/app/models';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { of } from 'rxjs';
-import { HttpTestingController } from '@angular/common/http/testing';
-import { environment } from '@root/environments/environment';
 import { DataStatus } from '@models/data-status.enum';
 
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -236,9 +234,12 @@ describe('DataService', () => {
 		await service.fetchFullItems([]);
 	});
 
-	it('should refresh the current folder with latest data', (done) => {
+	it('should refresh the current folder with latest data', async () => {
 		const service = TestBed.inject(DataService);
-		const httpMock = TestBed.inject(HttpTestingController);
+		const api = TestBed.inject(ApiService);
+		spyOn(api.folder, 'getWithChildren').and.resolveTo(
+			new FolderResponse(navigateMinData),
+		);
 		const navigateResponse = new FolderResponse(navigateMinData);
 		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
 		const childItemCount = currentFolder.ChildItemVOs.length;
@@ -246,16 +247,9 @@ describe('DataService', () => {
 		currentFolder.ChildItemVOs = [];
 		service.setCurrentFolder(currentFolder);
 
-		service
-			.refreshCurrentFolder()
-			.then(() => {
-				expect(currentFolder.ChildItemVOs.length).toBe(childItemCount);
-				done();
-			})
-			.catch(done.fail);
+		await service.refreshCurrentFolder();
 
-		const req = httpMock.expectOne(`${environment.apiUrl}/folder/navigateLean`);
-		req.flush(navigateMinData);
+		expect(currentFolder.ChildItemVOs.length).toBe(childItemCount);
 	});
 
 	it('should add items to thumbRefreshQueue that meet the criteria', (done) => {
