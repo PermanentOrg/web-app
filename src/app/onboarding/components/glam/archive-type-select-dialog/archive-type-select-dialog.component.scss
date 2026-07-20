@@ -3,7 +3,7 @@
 
 .archive-type-select-dialog {
 	font-family: 'UsualRegular', sans-serif;
-	background: #fff;
+	background: $PR-brand-white;
 	border-radius: 12px;
 	display: flex;
 	width: auto;
@@ -33,7 +33,7 @@
 	align-items: center;
 	flex-shrink: 0;
 	align-self: stretch;
-	border-bottom: 1px solid #e7e8ed;
+	border-bottom: 1px solid $PR-blue-50;
 
 	.dialog-label {
 		color: $darkBlue;
@@ -81,7 +81,7 @@
 		}
 
 		.type-description {
-			color: #646464;
+			color: $gray-dark;
 			font-weight: 400;
 			line-height: 32px;
 		}

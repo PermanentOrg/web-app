@@ -1,12 +1,13 @@
 @import 'fonts';
+@import 'colors';
 
 .square {
 	width: 280px;
 	height: 130px;
 	padding: 24px;
-	background-color: rgba(19, 27, 74, 1);
+	background-color: rgba($PR-blue-900, 1);
 	border-radius: 12px;
-	border: 1px solid rgba(255, 255, 255, 0.16);
+	border: 1px solid rgba($PR-brand-white, 0.16);
 	cursor: pointer;
 	display: flex;
 
@@ -19,7 +20,7 @@
 	font-family: 'UsualRegular', sans-serif;
 	font-size: 18px;
 	font-weight: 400;
-	color: white;
+	color: $PR-brand-white;
 	margin-left: 24px;
 	margin-left: 10px;
 	display: flex;
@@ -31,7 +32,7 @@
 	background: linear-gradient(
 		to right,
 		rgba(184, 67, 166, 1),
-		rgba(128, 0, 128, 1)
+		rgba($PR-brand-purple, 1)
 	);
 }
 

@@ -29,7 +29,7 @@
 		display: flex;
 		> label,
 		label > a {
-			color: white;
+			color: $PR-brand-white;
 			font-family: 'UsualRegular', sans-serif;
 			font-size: 14px;
 		}
@@ -51,7 +51,7 @@ form {
 .terms-title {
 	margin-bottom: 18px;
 	font-family: 'UsualBold', sans-serif;
-	color: white;
+	color: $PR-brand-white;
 	font-size: 16px;
 	line-height: 24px;
 	letter-spacing: -0.16px;
@@ -61,7 +61,7 @@ form {
 	font-family: 'UsualRegular', sans-serif;
 	font-size: 14px;
 	line-height: 22px;
-	color: white;
+	color: $PR-brand-white;
 	margin-bottom: 36px;
 	width: 334px;
 }
@@ -90,7 +90,7 @@ form {
 .terms-title {
 	margin-bottom: 18px;
 	font-family: 'UsualBold', sans-serif;
-	color: white;
+	color: $PR-brand-white;
 	font-size: 16px;
 	line-height: 24px;
 	letter-spacing: -0.16px;
@@ -100,7 +100,7 @@ form {
 	font-family: 'UsualRegular', sans-serif;
 	font-size: 14px;
 	line-height: 22px;
-	color: white;
+	color: $PR-brand-white;
 	margin-bottom: 36px;
 	width: 334px;
 }

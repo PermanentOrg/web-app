@@ -2,7 +2,7 @@
 @import 'fonts';
 
 p {
-	color: white;
+	color: $PR-brand-white;
 }
 
 .create-archive-for-me {
@@ -29,7 +29,7 @@ p {
 		font-family: 'UsualRegular', sans-serif;
 	}
 	& .archive-type {
-		color: rgba(255, 255, 255, 0.64);
+		color: rgba($PR-brand-white, 0.64);
 		font-family: 'UsualRegular', sans-serif;
 		font-size: 10px;
 	}
