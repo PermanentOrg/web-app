@@ -1,6 +1,6 @@
 import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import {
@@ -386,25 +386,6 @@ export class FolderRepo extends BaseRepo {
 			];
 			return errorFolderResponse;
 		}
-	}
-
-	public navigate(folderVO: FolderVO): Observable<FolderResponse> {
-		const response = {
-			...folderVO,
-		};
-		if (folderVO.type === 'type.folder.root.private') {
-			response.displayName = 'Private';
-		}
-
-		const data = [
-			{
-				FolderVO: new FolderVO(response),
-			},
-		];
-
-		return this.http.sendRequest<FolderResponse>('/folder/navigateMin', data, {
-			ResponseClass: FolderResponse,
-		});
 	}
 
 	public async post(folderVOs: FolderVO[]): Promise<FolderResponse> {

@@ -7,6 +7,7 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
+import { AccountService } from '@shared/services/account/account.service';
 
 export enum FolderPickerOperations {
 	Move = 1,
@@ -46,6 +47,7 @@ export class FolderPickerComponent implements OnDestroy {
 		private message: MessageService,
 		private folderPickerService: FolderPickerService,
 		private prompt: PromptService,
+		private accountService: AccountService,
 	) {
 		this.folderPickerService.registerComponent(this);
 	}
@@ -116,15 +118,33 @@ export class FolderPickerComponent implements OnDestroy {
 	async setFolder(folder: FolderVO) {
 		this.waiting = true;
 		try {
-			const folderResponse = await this.api.folder
-				.navigate(
-					new FolderVO({
-						folder_linkId: folder.folder_linkId,
-						folderId: folder.folderId,
-						archiveNbr: folder.archiveNbr,
-					}),
-				)
-				.toPromise();
+			const rootFolder = this.accountService.getRootFolder();
+			// goToParentFolder reconstructs the root folder with only its ids
+			// (no type), so detect root by type or by identity against the cache.
+			const isRoot =
+				folder.type?.includes('type.folder.root.root') ||
+				(rootFolder &&
+					(folder.folderId === rootFolder.folderId ||
+						folder.folder_linkId === rootFolder.folder_linkId));
+
+			// The root.root folder is a virtual folder that Stela's
+			// getWithChildren does not serve, so keep loading it through getRoot.
+			const folderResponse: FolderResponse = isRoot
+				? await this.api.folder.getRoot()
+				: await this.api.folder.getWithChildren([
+						new FolderVO({
+							folder_linkId: folder.folder_linkId,
+							folderId: folder.folderId,
+							archiveNbr: folder.archiveNbr,
+						}),
+					]);
+
+			// getWithChildren resolves an error-shaped response instead of
+			// rejecting, so surface failures explicitly for the catch below.
+			if (!folderResponse.isSuccessful) {
+				throw folderResponse;
+			}
+
 			this.currentFolder = folderResponse.getFolderVO(true);
 			this.isRootFolder = this.currentFolder.type.includes(
 				'type.folder.root.root',
