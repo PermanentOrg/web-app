@@ -16,8 +16,8 @@ $dual-ring-size: 95px;
 	height: $dual-ring-size;
 	margin: 1px;
 	border-radius: 50%;
-	border: 6px solid $PR-blue;
-	border-color: $PR-blue transparent $PR-blue transparent;
+	border: 6px solid $PR-blue-900;
+	border-color: $PR-blue-900 transparent $PR-blue-900 transparent;
 	animation: lds-dual-ring 1.5s linear infinite;
 }
 
@@ -103,7 +103,7 @@ $fade-ring-opacity: 0.6;
 	content: '';
 }
 .fade-ring-loader:after {
-	background: $PR-blue;
+	background: $PR-blue-900;
 	width: 75%;
 	height: 75%;
 	border-radius: 50%;

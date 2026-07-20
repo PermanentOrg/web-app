@@ -1,11 +1,11 @@
 @import 'variables';
 
 @mixin darkButton($isLink: false) {
-	background-color: rgba(255, 255, 255, 0);
-	border: 1px solid rgba(255, 255, 255, 0.32);
+	background-color: rgba($PR-brand-white, 0);
+	border: 1px solid rgba($PR-brand-white, 0.32);
 
 	& > .button-text {
-		color: white;
+		color: $PR-brand-white;
 		margin: 0;
 		@include bodyMedium;
 
@@ -16,10 +16,10 @@
 }
 
 @mixin lightButton($isLink: false) {
-	background-color: $white;
-	border: 1px solid rgba(184, 187, 201, 1);
+	background-color: $PR-brand-white;
+	border: 1px solid rgba($PR-blue-200, 1);
 	& > .button-text {
-		color: rgba(19, 27, 74, 1);
+		color: rgba($PR-blue-900, 1);
 		margin: 0;
 		@include bodyMedium;
 
@@ -29,7 +29,7 @@
 	}
 
 	& > .icon {
-		color: rgba(19, 27, 74, 1);
+		color: rgba($PR-blue-900, 1);
 	}
 }
 
@@ -60,14 +60,14 @@
 	}
 
 	& > .icon {
-		color: white;
+		color: $PR-brand-white;
 	}
 
 	&-primary {
 		&.button-light {
 			@include darkButton();
 			&:focus {
-				border: 2px solid white;
+				border: 2px solid $PR-brand-white;
 			}
 		}
 		&.button-dark {
@@ -79,12 +79,12 @@
 		&.button-light {
 			@include lightButton();
 			&:focus {
-				border: 2px solid black;
+				border: 2px solid $PR-brand-black;
 			}
 		}
 		&.button-dark {
 			@include darkButton();
-			border: 1px solid rgba(255, 255, 255, 0.32);
+			border: 1px solid rgba($PR-brand-white, 0.32);
 		}
 	}
 
@@ -118,7 +118,7 @@
 	}
 
 	&-text {
-		color: white;
+		color: $PR-brand-white;
 		margin: 0;
 		@include bodyMedium;
 	}

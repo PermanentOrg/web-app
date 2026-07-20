@@ -44,17 +44,17 @@
 	}
 
 	&-dark {
-		background: rgba(255, 255, 255, 0.08);
+		background: rgba($PR-brand-white, 0.08);
 		opacity: 0.8;
-		color: white;
-		border: 1px solid rgba(255, 255, 255, 0.16);
+		color: $PR-brand-white;
+		border: 1px solid rgba($PR-brand-white, 0.16);
 		&:focus {
 			background-color: $form-background-dark !important;
 			opacity: 1;
 			border: 1px solid $form-border;
 		}
 		&::placeholder {
-			color: white;
+			color: $PR-brand-white;
 		}
 	}
 }

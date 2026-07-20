@@ -1,3 +1,5 @@
+@import 'colors';
+
 :host {
 	position: absolute;
 	top: 0;
@@ -7,5 +9,5 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: white;
+	background: $PR-brand-white;
 }

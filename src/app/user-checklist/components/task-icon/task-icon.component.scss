@@ -1,5 +1,7 @@
+@import 'colors';
+
 div:not(.completed) svg path {
-	fill: #131b4a;
+	fill: $PR-blue-900;
 }
 
 div.completed svg path {
