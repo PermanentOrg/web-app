@@ -48,6 +48,7 @@ interface StelaFolder {
 	location: StelaLocation;
 	parentFolder: {
 		id: string;
+		parentFolderLinkId: number;
 	};
 	shares: Array<StelaShare>;
 	tags: Array<StelaTag>;
@@ -55,6 +56,8 @@ interface StelaFolder {
 		id: string;
 		name: string;
 	};
+	archiveNumber: string;
+	folderLinkId: number;
 	createdAt: string;
 	updatedAt: string;
 	description: string;
@@ -66,6 +69,8 @@ interface StelaFolder {
 	imageRatio: number;
 	paths: {
 		names: string[];
+		folderLinkIds: string[];
+		archiveNumbers: string[];
 	};
 	publicAt: string;
 	sort: string;
@@ -103,6 +108,9 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		...stelaFolder,
 		folderId: stelaFolder.folderId,
 		archiveId: stelaFolder.archive?.id,
+		archiveNbr: stelaFolder.archiveNumber,
+		folder_linkId: stelaFolder.folderLinkId,
+		parentFolder_linkId: stelaFolder.parentFolder?.parentFolderLinkId,
 		displayName: stelaFolder.displayName,
 		displayDT: stelaFolder.displayTimestamp,
 		displayEndDT: stelaFolder.displayEndTimestamp,
@@ -126,9 +134,13 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		thumbnail256: stelaFolder.thumbnailUrls?.['256'],
 		thumbnail256CloudPath: stelaFolder.thumbnailUrls?.['256'],
 		status: stelaFolder.status,
+		createdDT: stelaFolder.createdAt,
+		updatedDT: stelaFolder.updatedAt,
 		publicDT: stelaFolder.publicAt,
 		parentFolderId: stelaFolder.parentFolder?.id,
 		pathAsText: stelaFolder.paths?.names,
+		pathAsFolder_linkId: stelaFolder.paths?.folderLinkIds?.map(Number),
+		pathAsArchiveNbr: stelaFolder.paths?.archiveNumbers,
 		ParentFolderVOs: [new FolderVO({ folderId: stelaFolder.parentFolder?.id })],
 		ChildFolderVOs: childFolderVOs,
 		RecordVOs: childRecordVOs,
@@ -139,6 +151,9 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		),
 		ChildItemVOs: [...childRecordVOs, ...childFolderVOs],
 		ShareVOs: (stelaFolder.shares ?? []).map(convertStelaSharetoShareVO),
+		// accessRole is intentionally always owner: the backend removed item-level accessRole
+		// because all non-owner values were deprecated in 2020. Real access is on ShareVOs.
+		accessRole: 'access.role.owner',
 		isFolder: true,
 	});
 };
@@ -303,51 +318,74 @@ export class FolderRepo extends BaseRepo {
 		return response[0].items;
 	}
 
+	private async resolveFolderId(folderVO: FolderVO): Promise<FolderVO> {
+		if (folderVO.folderId) {
+			return folderVO;
+		}
+		const response = await this.get([folderVO]);
+		const resolvedFolder = response.getFolderVO();
+		return new FolderVO({ ...folderVO, folderId: resolvedFolder.folderId });
+	}
+
 	public async getWithChildren(
 		folderVOs: FolderVO[],
 		shareToken: string = null,
 	): Promise<FolderResponse> {
-		// Stela has two separate endpoints -- one for loading the folder, one for loading the children.
-		const requests = folderVOs.map(async (folderVO) => {
-			const stelaFolders = await this.getStelaFolders([folderVO], shareToken);
-			const stelaFolderChildren = await this.getStelaFolderChildren(
-				folderVO,
-				shareToken,
+		try {
+			// Stela has two separate endpoints -- one for loading the folder, one for loading the children.
+			const requests = folderVOs.map(async (folderVO) => {
+				const resolvedFolderVO = await this.resolveFolderId(folderVO);
+				const [stelaFolders, stelaFolderChildren] = await Promise.all([
+					this.getStelaFolders([resolvedFolderVO], shareToken),
+					this.getStelaFolderChildren(resolvedFolderVO, shareToken),
+				]);
+				const stelaFolder = stelaFolders[0];
+				if (!stelaFolder) {
+					throw new Error('No folder returned from getStelaFolders');
+				}
+				return {
+					...stelaFolder,
+					children: stelaFolderChildren,
+				};
+			});
+
+			const stelaFolders = (await Promise.all(requests)).flat();
+
+			// We need the `Results` to look the way v1 results look, for now.
+			const simulatedV1FolderResponseResults = stelaFolders.map(
+				(stelaFolder) => ({
+					data: [
+						{
+							FolderVO: convertStelaFolderToFolderVO(stelaFolder),
+						},
+					],
+					message: ['Folder retrieved'],
+					status: true,
+					resultDT: new Date().toISOString(),
+					createdDT: null,
+					updatedDT: null,
+				}),
 			);
-			const stelaFolder = stelaFolders[0];
-			if (!stelaFolder) {
-				throw new Error('No folder returned from getStelaFolders');
-			}
-			return {
-				...stelaFolder,
-				children: stelaFolderChildren,
-			};
-		});
 
-		const stelaFolders = (await Promise.all(requests)).flat();
-
-		// We need the `Results` to look the way v1 results look, for now.
-		const simulatedV1FolderResponseResults = stelaFolders.map(
-			(stelaFolder) => ({
-				data: [
-					{
-						FolderVO: convertStelaFolderToFolderVO(stelaFolder),
-					},
-				],
-				message: ['Folder retrieved'],
-				status: true,
-				resultDT: new Date().toISOString(),
-				createdDT: null,
-				updatedDT: null,
-			}),
-		);
-
-		const folderResponse = new FolderResponse({
-			isSuccessful: true,
-			isSystemUp: true,
-			Results: simulatedV1FolderResponseResults,
-		});
-		return folderResponse;
+			const folderResponse = new FolderResponse({
+				isSuccessful: true,
+				isSystemUp: true,
+				Results: simulatedV1FolderResponseResults,
+			});
+			return folderResponse;
+		} catch (err) {
+			// We need the error to look the way v1 errors look too,
+			// Changing all the error handlers would be errror prone
+			const errorFolderResponse = new FolderResponse();
+			errorFolderResponse.Results = [
+				{
+					// Stela API errors carry the message in err.error.error;
+					// internally thrown Errors carry it in err.message.
+					message: [err?.error?.error ?? err?.message],
+				},
+			];
+			return errorFolderResponse;
+		}
 	}
 
 	public navigate(folderVO: FolderVO): Observable<FolderResponse> {

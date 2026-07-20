@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { FolderVO } from '@models/index';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { HttpService } from '../http/http.service';
-import { FolderRepo } from './folder.repo';
+import { FolderRepo, FolderResponse } from './folder.repo';
 
 const emptyResponse = { items: [] };
 const fakeFolderResponse = {
@@ -54,6 +54,42 @@ const fakeChildrenResponse = {
 		},
 	],
 };
+
+const buildStelaFolderResponse = (overrides: Record<string, unknown> = {}) => ({
+	items: [
+		{
+			folderId: '42',
+			archiveNumber: 'ARCH-001',
+			archive: { id: 'arch-id', name: 'Test Archive' },
+			folderLinkId: 100,
+			createdAt: '2024-01-01T00:00:00Z',
+			updatedAt: '2024-06-01T00:00:00Z',
+			description: 'Test',
+			displayTimestamp: '2024-01-01T00:00:00Z',
+			displayEndTimestamp: null,
+			displayName: 'Test Folder',
+			downloadName: 'Test Folder',
+			imageRatio: 1,
+			paths: {
+				names: ['My Files', 'Test Folder'],
+				folderLinkIds: ['55', '100'],
+				archiveNumbers: ['ARCH-000', 'ARCH-001'],
+			},
+			publicAt: null,
+			sort: null,
+			thumbnailUrls: null,
+			type: 'type.folder.generic',
+			status: 'status.generic.ok',
+			view: 'grid',
+			size: 0,
+			location: null,
+			parentFolder: { id: 'parent-id', parentFolderLinkId: 55 },
+			shares: null,
+			tags: null,
+			...overrides,
+		},
+	],
+});
 
 describe('Folder repo', () => {
 	let folderRepo: FolderRepo;
@@ -158,10 +194,13 @@ describe('Folder repo', () => {
 	it('should get folder with children using fallback to auth token', async () => {
 		const mockFolderVO = { folderId: 42 } as FolderVO;
 
+		// The folder and children requests run in parallel, so the call order
+		// is: folder (share token), children (share token), then the
+		// auth-token fallbacks in the same order.
 		httpV2Spy.get.and.returnValues(
 			of([emptyResponse]),
+			of([{}]),
 			of([fakeFolderResponse]),
-			of([emptyResponse]),
 			of([fakeChildrenResponse]),
 		);
 
@@ -182,6 +221,152 @@ describe('Folder repo', () => {
 		});
 
 		expect(result.Results[0].data[0].FolderVO).toBeDefined();
+	});
+
+	describe('getWithChildren error handling', () => {
+		it('should return a FolderResponse with isSuccessful falsy when the Stela API throws', async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+			const apiError = { error: { error: 'Internal server error' } };
+
+			httpV2Spy.get.and.returnValue(
+				new Observable((subscriber) => subscriber.error(apiError)),
+			);
+
+			const result = await folderRepo.getWithChildren([folderVO]);
+
+			expect(result.isSuccessful).toBeFalsy();
+		});
+
+		it('should surface the error message from err.error.error via getMessage()', async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+			const apiError = { error: { error: 'Folder not found' } };
+
+			httpV2Spy.get.and.returnValue(
+				new Observable((subscriber) => subscriber.error(apiError)),
+			);
+
+			const result = await folderRepo.getWithChildren([folderVO]);
+
+			expect(result.getMessage()).toBe('Folder not found');
+		});
+
+		it('should return an empty error message when err.error.error is absent', async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+
+			httpV2Spy.get.and.returnValue(
+				new Observable((subscriber) => subscriber.error({})),
+			);
+
+			const result = await folderRepo.getWithChildren([folderVO]);
+
+			expect(result.getMessage()).toBeUndefined();
+		});
+
+		it('should surface the message of internally thrown errors via getMessage()', async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+
+			// Both the folder and children endpoints return empty results,
+			// so getWithChildren throws its internal "no folder" Error.
+			httpV2Spy.get.and.returnValue(of([{ items: [] }]));
+
+			const result = await folderRepo.getWithChildren([folderVO]);
+
+			expect(result.getMessage()).toBe(
+				'No folder returned from getStelaFolders',
+			);
+		});
+	});
+
+	describe('resolveFolderId', () => {
+		it('should not call the legacy /folder/get endpoint when folderId is already present', async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+
+			httpV2Spy.get.and.returnValues(
+				of([buildStelaFolderResponse()]),
+				of([{ items: [] }]),
+			);
+
+			await folderRepo.getWithChildren([folderVO]);
+
+			expect(httpSpy.sendRequestPromise).not.toHaveBeenCalled();
+		});
+
+		it('should call legacy /folder/get to resolve folderId when it is missing', async () => {
+			const folderVO = new FolderVO({
+				archiveNbr: '0001-0001',
+				folder_linkId: 123,
+			});
+
+			const resolvedFolderResponse = new FolderResponse({
+				isSuccessful: true,
+				Results: [
+					{
+						data: [{ FolderVO: { folderId: 99 } }],
+						status: true,
+						message: ['OK'],
+						resultDT: new Date().toISOString(),
+						createdDT: null,
+						updatedDT: null,
+					},
+				],
+			});
+
+			httpSpy.sendRequestPromise.and.resolveTo(resolvedFolderResponse);
+			httpV2Spy.get.and.returnValues(
+				of([buildStelaFolderResponse({ folderId: '99' })]),
+				of([{ items: [] }]),
+			);
+
+			await folderRepo.getWithChildren([folderVO]);
+
+			expect(httpSpy.sendRequestPromise).toHaveBeenCalledWith(
+				'/folder/get',
+				jasmine.any(Array),
+				jasmine.any(Object),
+			);
+
+			expect(httpV2Spy.get).toHaveBeenCalledWith('v2/folder', {
+				folderIds: [99],
+			});
+		});
+	});
+
+	describe('convertStelaFolderToFolderVO mapping', () => {
+		const getConvertedFolder = async () => {
+			const folderVO = new FolderVO({ folderId: 42 });
+			httpV2Spy.get.and.returnValues(
+				of([buildStelaFolderResponse()]),
+				of([{ items: [] }]),
+			);
+			const result = await folderRepo.getWithChildren([folderVO]);
+			return result.getFolderVO(true);
+		};
+
+		it('should map parentFolder_linkId from the parentFolder object', async () => {
+			const folder = await getConvertedFolder();
+
+			expect(folder.parentFolder_linkId).toBe(55);
+		});
+
+		it('should map the folder path arrays for breadcrumbs', async () => {
+			const folder = await getConvertedFolder();
+
+			expect(folder.pathAsText).toEqual(['My Files', 'Test Folder']);
+			expect(folder.pathAsFolder_linkId).toEqual([55, 100]);
+			expect(folder.pathAsArchiveNbr).toEqual(['ARCH-000', 'ARCH-001']);
+		});
+
+		it('should leave folder_linkType undefined since the backend omits it', async () => {
+			const folder = await getConvertedFolder();
+
+			expect(folder.folder_linkType).toBeUndefined();
+		});
+
+		it('should hardcode accessRole to owner', async () => {
+			const folder = await getConvertedFolder();
+
+			expect(folder.accessRole).toBe('access.role.owner');
+		});
 	});
 
 	describe('getFolderShareLink', () => {

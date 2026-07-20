@@ -447,5 +447,16 @@ describe('RecordRepo', () => {
 
 			expect(record.displayTime).toBeUndefined();
 		});
+
+		it('should hardcode accessRole to owner, matching the folder conversion', () => {
+			// The backend omits item-level accessRole; UI permission gates
+			// (e.g. the sidebar share button) read it and treat a missing
+			// value as no access.
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+			} as any);
+
+			expect(record.accessRole).toBe('access.role.owner');
+		});
 	});
 });
