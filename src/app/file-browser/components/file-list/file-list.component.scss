@@ -50,6 +50,6 @@
 		z-index: 10;
 		opacity: 1;
 		transition: opacity 0.25s $tweaked-ease;
-		background: rgba(white, 0.7);
+		background: rgba($PR-brand-white, 0.7);
 	}
 }

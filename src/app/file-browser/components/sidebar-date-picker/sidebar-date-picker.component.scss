@@ -42,7 +42,7 @@
 				background-color: $PR-blue-25;
 
 				.pr-sidebar-date-picker-edit-icon {
-					color: $PR-blue;
+					color: $PR-blue-900;
 				}
 			}
 		}
@@ -67,7 +67,7 @@
 		align-items: center;
 		gap: 4px;
 		font-size: 14px;
-		color: $PR-blue;
+		color: $PR-blue-900;
 		font-weight: 500;
 
 		.pr-time-group {
@@ -79,7 +79,7 @@
 
 		.pr-dot {
 			font-size: 6px;
-			color: $PR-blue;
+			color: $PR-blue-900;
 			vertical-align: middle;
 			margin-left: 2px;
 		}
@@ -117,10 +117,10 @@
 		left: -16px;
 		right: -16px;
 		z-index: 20;
-		background: $white;
+		background: $PR-brand-white;
 		border: 1px solid $PR-blue-100;
 		border-radius: 12px;
-		box-shadow: 0 8px 24px rgba($black, 0.12);
+		box-shadow: 0 8px 24px rgba($PR-brand-black, 0.12);
 		overflow: visible;
 	}
 
@@ -137,12 +137,12 @@
 		width: 151px;
 
 		i {
-			color: $PR-blue;
+			color: $PR-blue-900;
 			font-size: 16px;
 		}
 
 		span {
-			color: $PR-blue;
+			color: $PR-blue-900;
 			font-size: 14px;
 		}
 	}
@@ -161,7 +161,7 @@
 		cursor: pointer;
 		font-size: 14px;
 		font-weight: 500;
-		color: $PR-blue;
+		color: $PR-blue-900;
 		padding: 0;
 
 		&:hover {
@@ -185,7 +185,7 @@
 		cursor: pointer;
 		font-size: 14px;
 		font-weight: 500;
-		color: $PR-blue;
+		color: $PR-blue-900;
 		padding: 6px 12px;
 
 		&:hover {
@@ -197,11 +197,11 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: $PR-blue;
+		background: $PR-blue-900;
 		border: none;
 		border-radius: 6px;
 		cursor: pointer;
-		color: $white;
+		color: $PR-brand-white;
 		width: 36px;
 		height: 36px;
 		padding: 0;

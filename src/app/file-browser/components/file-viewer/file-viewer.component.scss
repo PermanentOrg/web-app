@@ -13,7 +13,7 @@ $button-size: 2rem;
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background-color: white;
+	background-color: $PR-brand-white;
 
 	-webkit-transform: translate3d(0, 0, 0);
 	-moz-transform: translate3d(0, 0, 0);
@@ -21,7 +21,7 @@ $button-size: 2rem;
 	transform: translate3d(0, 0, 0);
 
 	&.minimal {
-		background-color: black;
+		background-color: $PR-brand-black;
 		.file-viewer-close {
 			transform: translateY(-100%);
 		}
@@ -132,7 +132,7 @@ iframe {
 	font-size: 24px;
 	font-weight: bold;
 	z-index: 2;
-	color: white;
+	color: $PR-brand-white;
 	cursor: pointer;
 	display: flex;
 

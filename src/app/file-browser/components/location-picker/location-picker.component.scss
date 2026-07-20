@@ -4,7 +4,7 @@
 	display: block;
 	flex: 1;
 	max-width: 100%;
-	background-color: white;
+	background-color: $PR-brand-white;
 }
 
 .map-wrapper {
@@ -19,7 +19,7 @@
 	left: 5px;
 	padding: 0.5rem;
 	max-width: 15rem;
-	background: white;
+	background: $PR-brand-white;
 	font-size: $font-size-sm;
 	box-shadow: $box-shadow-sm;
 }
@@ -52,5 +52,5 @@
 //   }
 // }
 .dialog-content {
-	background-color: white;
+	background-color: $PR-brand-white;
 }
