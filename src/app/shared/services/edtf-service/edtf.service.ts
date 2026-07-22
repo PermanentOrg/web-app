@@ -89,7 +89,19 @@ export class EdtfService {
 				return null;
 			}
 
-			if (/^X{4}-X{2}-X{2}$/i.test(edtfString)) {
+			if (edtfString.includes('/')) {
+				return this.parseInterval(edtfString);
+			}
+
+			// The library can't parse a qualifier alongside unspecified (X) digits,
+			// so for those strings we strip the trailing qualifier, parse the base,
+			// and reattach the flags below.
+			const hasUnspecified = this.hasUnspecifiedDigits(edtfString);
+			const { base, approximate, uncertain } = hasUnspecified
+				? this.parseTrailingQualifier(edtfString)
+				: { base: edtfString, approximate: false, uncertain: false };
+
+			if (/^X{4}-X{2}-X{2}$/i.test(base)) {
 				return {
 					qualifiers: { ...DEFAULT_DATE_QUALIFIERS, unknown: true },
 					date: { year: '', month: '', day: '' },
@@ -97,18 +109,19 @@ export class EdtfService {
 				};
 			}
 
-			if (edtfString.includes('/')) {
-				return this.parseInterval(edtfString);
-			}
-
-			const normalizedString = this.normalizeForParsing(edtfString);
+			const normalizedString = this.normalizeForParsing(base);
 			const edtfObject = edtf(normalizedString);
 
 			if (!(edtfObject instanceof EdtfDate)) {
 				return null;
 			}
 
-			return this.extDateToDateTimeModel(edtfObject, edtfString);
+			const model = this.extDateToDateTimeModel(edtfObject, base);
+			if (hasUnspecified && model.qualifiers && !model.qualifiers.unknown) {
+				model.qualifiers.approximate = approximate;
+				model.qualifiers.uncertain = uncertain;
+			}
+			return model;
 		} catch (error) {
 			throw new Error(this.toHumanReadableError(error));
 		}
@@ -128,16 +141,27 @@ export class EdtfService {
 	}
 
 	private parseInterval(edtfString: string): DateTimeModel | null {
-		const [startPart, endPart] = edtfString.split('/');
+		const [rawStart, rawEnd] = edtfString.split('/');
+
+		// Only the unspecified-digit (X) case needs the strip-and-reattach
+		// workaround; without X the library parses per-side qualifiers natively
+		// (and rejects a qualifier combined with a time, which we keep blocking).
+		const hasUnspecified = this.hasUnspecifiedDigits(edtfString);
+		const start = hasUnspecified
+			? this.parseTrailingQualifier(rawStart ?? '')
+			: { base: rawStart ?? '', approximate: false, uncertain: false };
+		const end = hasUnspecified
+			? this.parseTrailingQualifier(rawEnd ?? '')
+			: { base: rawEnd ?? '', approximate: false, uncertain: false };
 
 		const normalizedStart =
-			startPart === '..' || startPart === ''
-				? startPart
-				: this.normalizeForParsing(startPart);
+			start.base === '..' || start.base === ''
+				? start.base
+				: this.normalizeForParsing(start.base);
 		const normalizedEnd =
-			endPart === '..' || endPart === ''
-				? endPart
-				: this.normalizeForParsing(endPart);
+			end.base === '..' || end.base === ''
+				? end.base
+				: this.normalizeForParsing(end.base);
 
 		try {
 			const edtfObject = edtf(`${normalizedStart}/${normalizedEnd}`);
@@ -146,7 +170,24 @@ export class EdtfService {
 				return null;
 			}
 
-			return this.intervalToDateTimeModel(edtfObject, startPart, endPart);
+			const model = this.intervalToDateTimeModel(
+				edtfObject,
+				start.base,
+				end.base,
+			);
+
+			if (hasUnspecified) {
+				if (model.qualifiers && !model.qualifiers.unknown) {
+					model.qualifiers.approximate = start.approximate;
+					model.qualifiers.uncertain = start.uncertain;
+				}
+				if (model.endQualifiers && !model.endQualifiers.unknown) {
+					model.endQualifiers.approximate = end.approximate;
+					model.endQualifiers.uncertain = end.uncertain;
+				}
+			}
+
+			return model;
 		} catch {
 			return null;
 		}
@@ -197,7 +238,14 @@ export class EdtfService {
 
 			const stringDate =
 				endPart === null ? startPart : `${startPart}/${endPart}`;
-			edtf(stringDate);
+			// The edtf library's grammar rejects a qualifier (~/?/%) combined with
+			// unspecified (X) digits, but that combination is valid EDTF the backend
+			// accepts, so for those we validate the qualifier-stripped base instead.
+			edtf(
+				this.hasUnspecifiedDigits(stringDate)
+					? this.stripGroupQualifiers(stringDate)
+					: stringDate,
+			);
 			return stringDate;
 		} catch (error) {
 			throw new Error(this.toHumanReadableError(error));
@@ -228,15 +276,45 @@ export class EdtfService {
 		}
 
 		// Add qualifiers after the complete date-time string
-		if (qualifiers?.approximate && qualifiers?.uncertain) {
-			result += '%';
-		} else if (qualifiers?.approximate) {
-			result += '~';
-		} else if (qualifiers?.uncertain) {
-			result += '?';
-		}
+		result += this.buildQualifierSuffix(qualifiers);
 
 		return result;
+	}
+
+	private hasUnspecifiedDigits(edtfString: string): boolean {
+		return /X/i.test(edtfString);
+	}
+
+	private buildQualifierSuffix(qualifiers?: DateQualifierFlags): string {
+		if (qualifiers?.approximate && qualifiers?.uncertain) return '%';
+		if (qualifiers?.approximate) return '~';
+		if (qualifiers?.uncertain) return '?';
+		return '';
+	}
+
+	// Inverse of buildQualifierSuffix: split a trailing group qualifier off a
+	// single date
+	private parseTrailingQualifier(part: string): {
+		base: string;
+		approximate: boolean;
+		uncertain: boolean;
+	} {
+		const suffix = part.slice(-1);
+		if (suffix === '%')
+			return { base: part.slice(0, -1), approximate: true, uncertain: true };
+		if (suffix === '~')
+			return { base: part.slice(0, -1), approximate: true, uncertain: false };
+		if (suffix === '?')
+			return { base: part.slice(0, -1), approximate: false, uncertain: true };
+		return { base: part, approximate: false, uncertain: false };
+	}
+
+	// Remove group qualifiers (~/?/%) that sit at the end of the whole string or
+	// at an interval boundary, leaving a base string the edtf library can parse
+	// even when it contains unspecified (X) digits. Used for serialize-time
+	// validation only.
+	private stripGroupQualifiers(edtfString: string): string {
+		return edtfString.replace(/[%~?](?=\/|$)/g, '');
 	}
 
 	private buildDateString(date: DateModel): string {
