@@ -267,6 +267,26 @@ describe('EdtfService', () => {
 				expect(result.qualifiers.uncertain).toBe(false);
 				expect(result.qualifiers.unknown).toBe(false);
 			});
+
+			it('should detect approximate qualifier combined with an unspecified month', () => {
+				const result = service.toDateTimeModel('2026-XX-11~');
+
+				expect(result.qualifiers.approximate).toBe(true);
+				expect(result.qualifiers.uncertain).toBe(false);
+				expect(result.date.year).toBe('2026');
+				expect(result.date.month).toBe('');
+				expect(result.date.day).toBe('11');
+			});
+
+			it('should detect combined qualifier alongside an unspecified year digit', () => {
+				const result = service.toDateTimeModel('198X-05-20%');
+
+				expect(result.qualifiers.approximate).toBe(true);
+				expect(result.qualifiers.uncertain).toBe(true);
+				expect(result.date.year).toBe('198');
+				expect(result.date.month).toBe('05');
+				expect(result.date.day).toBe('20');
+			});
 		});
 
 		describe('interval (range)', () => {
@@ -667,6 +687,36 @@ describe('EdtfService', () => {
 
 				expect(service.toEdtfDate(model)).toBe('XXXX-XX-XX');
 			});
+
+			it('should add approximate qualifier with an unspecified month', () => {
+				const model: DateTimeModel = {
+					date: { year: '2026', month: '', day: '11' },
+					time: { format: 'am' },
+					qualifiers: { approximate: true, uncertain: false, unknown: false },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('2026-XX-11~');
+			});
+
+			it('should add uncertain qualifier on a month with an unspecified year', () => {
+				const model: DateTimeModel = {
+					date: { year: '', month: '05', day: '' },
+					time: { format: 'am' },
+					qualifiers: { approximate: false, uncertain: true, unknown: false },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('XXXX-05?');
+			});
+
+			it('should add combined qualifier alongside an unspecified year digit', () => {
+				const model: DateTimeModel = {
+					date: { year: '198', month: '05', day: '20' },
+					time: { format: 'am' },
+					qualifiers: { approximate: true, uncertain: true, unknown: false },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('198X-05-20%');
+			});
 		});
 
 		describe('interval output (range)', () => {
@@ -837,6 +887,12 @@ describe('EdtfService', () => {
 
 				expect(result).toBeNull();
 			});
+
+			it('should throw for a qualifier combined with a time (unsupported combination)', () => {
+				expect(() =>
+					service.toDateTimeModel('2026-01-01T10:00:00~'),
+				).toThrowError();
+			});
 		});
 
 		describe('formatting errors', () => {
@@ -844,6 +900,18 @@ describe('EdtfService', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '99' },
 					time: { format: 'am' },
+				};
+
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/Please check the values/,
+				);
+			});
+
+			it('should throw for a complete date with a time and a qualifier (unsupported combination)', () => {
+				const model: DateTimeModel = {
+					date: { year: '2026', month: '01', day: '01' },
+					time: { hours: '10', minutes: '30', seconds: '00', format: 'am' },
+					qualifiers: { approximate: true, uncertain: false, unknown: false },
 				};
 
 				expect(() => service.toEdtfDate(model)).toThrowError(
@@ -1432,6 +1500,38 @@ describe('EdtfService', () => {
 			const result = service.toEdtfDate(model);
 
 			expect(result).toBe('1985-05-02');
+		});
+
+		it('should roundtrip approximate qualifier with an unspecified month (2026-XX-11~)', () => {
+			const edtfString = '2026-XX-11~';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip approximate qualifier with unknown year and month (XXXX-XX-20~)', () => {
+			const edtfString = 'XXXX-XX-20~';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip combined qualifier with a partial year (198X-05-20%)', () => {
+			const edtfString = '198X-05-20%';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
+		});
+
+		it('should roundtrip an interval with per-side qualifiers and an unspecified month', () => {
+			const edtfString = '2026-XX-11~/2027-01?';
+			const model = service.toDateTimeModel(edtfString);
+			const result = service.toEdtfDate(model);
+
+			expect(result).toBe(edtfString);
 		});
 	});
 
