@@ -389,4 +389,34 @@ describe('FileListItemComponent', () => {
 
 		expect(secondRowDate).toContain('2023-01-01T00:00:00.000Z');
 	});
+
+	it('should base the public-archive date on displayTime when it is set', async () => {
+		component.item.displayTime = '2020-06-10';
+		component.item.displayDT = '2023-01-01T00:00:00.000Z';
+
+		await component.ngOnInit();
+
+		expect(component.date).toContain('2020');
+		expect(component.date).not.toContain('2023');
+	});
+
+	it('should fall back to displayDT for the public-archive date when displayTime is not set', async () => {
+		component.item.displayTime = undefined;
+		component.item.displayDT = '2023-03-15T12:00:00.000Z';
+
+		await component.ngOnInit();
+
+		expect(component.date).toContain('2023');
+	});
+
+	it('should use the interval start for the public-archive date when displayTime is an EDTF interval', async () => {
+		component.item.displayTime = '2020-06-10/2026-06-15';
+		component.item.displayDT = '2023-01-01T00:00:00.000Z';
+
+		await component.ngOnInit();
+
+		expect(component.date).toContain('2020');
+		expect(component.date).not.toContain('2023');
+		expect(component.date).not.toContain('2026');
+	});
 });
