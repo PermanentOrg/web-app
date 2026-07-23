@@ -260,7 +260,7 @@ export class FileListItemComponent
 
 	async ngOnInit() {
 		this.recordThumbnailUrl = GetThumbnail(this.item);
-		const date = new Date(this.item.displayDT);
+		const date = new Date(this.startDisplayTime);
 		this.date = getFormattedDate(date);
 
 		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
