@@ -34,6 +34,7 @@ import {
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { EdtfService } from '@shared/services/edtf-service/edtf.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import {
 	RecordResponse,
 	FolderResponse,
@@ -249,13 +250,22 @@ export class FileListItemComponent
 		@Inject(DOCUMENT) private document: Document,
 		private shareLinksService: ShareLinksService,
 		private edtfService: EdtfService,
+		private featureFlagService: FeatureFlagService,
 	) {}
 
 	get startDisplayTime(): string {
-		return (
-			this.edtfService.getEdtfIntervalStartDate(this.item.displayTime) ||
-			this.item.displayDT
+		const edtfStartDate = this.edtfService.getEdtfIntervalStartDate(
+			this.item.displayTime,
 		);
+
+		// Once the edtf-date UI ships, displayTime is authoritative (a null
+		// value means the user cleared the date, so nothing is shown). Until
+		// then, items may only have displayDT populated, so keep the fallback.
+		if (this.featureFlagService.isEnabled('edtf-date')) {
+			return edtfStartDate;
+		}
+
+		return edtfStartDate || this.item.displayDT;
 	}
 
 	async ngOnInit() {

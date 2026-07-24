@@ -527,6 +527,72 @@ describe('SidebarComponent', () => {
 		});
 	});
 
+	describe('saveDisplayTime null handling', () => {
+		let saveItemVoPropertySpy: jasmine.Spy;
+
+		beforeEach(() => {
+			saveItemVoPropertySpy = spyOn(
+				mockEditService,
+				'saveItemVoProperty',
+			).and.callFake(async (item: any, prop: any, value: any) => {
+				item[prop] = value;
+			});
+		});
+
+		it('should save null when the date is cleared to empty', async () => {
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			await component.onDateSaved({
+				date: { year: '', month: '', day: '' },
+				time: { format: 'am' },
+			});
+
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
+				component.selectedItem,
+				'displayTime',
+				null,
+			);
+		});
+
+		it('should save the EDTF string unchanged for a non-empty date', async () => {
+			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
+
+			await component.onDateSaved({
+				date: { year: '1990', month: '06', day: '15' },
+				time: { format: 'am' },
+			});
+
+			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
+				component.selectedItem,
+				'displayTime',
+				'1990-06-15',
+			);
+		});
+	});
+
+	describe('updateDisplayTimeObject', () => {
+		it('should show an empty date when displayTime is explicitly null, ignoring displayDT', () => {
+			component.selectedItem = new RecordVO({
+				displayTime: null,
+				displayDT: '1985-05-20T00:00:00Z',
+			});
+
+			(component as any).updateDisplayTimeObject();
+
+			expect(component.displayTimeObject).toBeNull();
+		});
+
+		it('should not fall back to displayDT when displayTime is undefined', () => {
+			component.selectedItem = new RecordVO({
+				displayDT: '1985-05-20T00:00:00Z',
+			});
+
+			(component as any).updateDisplayTimeObject();
+
+			expect(component.displayTimeObject).toBeNull();
+		});
+	});
+
 	describe('onDateMoreOptions', () => {
 		it('should open the edit date time modal with provided data', () => {
 			const openSpy = spyOn(mockModalService, 'open').and.callThrough();
