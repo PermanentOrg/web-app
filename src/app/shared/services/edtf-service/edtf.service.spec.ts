@@ -3,6 +3,7 @@ import {
 	DateTimeModel,
 	MONTH_RANGE_ERROR,
 	DAY_RANGE_ERROR,
+	INVALID_DAY_FOR_MONTH_ERROR,
 } from './edtf.service';
 
 // Mirrors the service's local-offset stamping so the expectations stay
@@ -464,13 +465,17 @@ describe('EdtfService', () => {
 		});
 
 		describe('rejecting a lone zero', () => {
+			// The specific message is surfaced inline by getMonthError/getDayError;
+			// serialization only needs to reject with the generic footer message.
 			it('should reject a month of "0" instead of serializing it to "0X"', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '0', day: '20' },
 					time: { format: 'am' },
 				};
 
-				expect(() => service.toEdtfDate(model)).toThrowError(MONTH_RANGE_ERROR);
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/Please check the values/,
+				);
 			});
 
 			it('should reject a day of "0" instead of serializing it to "0X"', () => {
@@ -479,7 +484,55 @@ describe('EdtfService', () => {
 					time: { format: 'am' },
 				};
 
-				expect(() => service.toEdtfDate(model)).toThrowError(DAY_RANGE_ERROR);
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/Please check the values/,
+				);
+			});
+		});
+
+		describe('rejecting an impossible calendar day', () => {
+			// Serialization rejects with the generic footer message; the specific
+			// day-for-month message is surfaced inline by getDayError.
+			it('should reject serializing Feb 29 in a non-leap year instead of rolling it forward', () => {
+				const model: DateTimeModel = {
+					date: { year: '2021', month: '02', day: '29' },
+					time: { format: 'am' },
+				};
+
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/Please check the values/,
+				);
+			});
+
+			it('should reject serializing Feb 29 in a non-leap year given a single-digit month', () => {
+				const model: DateTimeModel = {
+					date: { year: '2021', month: '2', day: '29' },
+					time: { format: 'am' },
+				};
+
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/Please check the values/,
+				);
+			});
+
+			it('should reject serializing day 31 in a 30-day month', () => {
+				const model: DateTimeModel = {
+					date: { year: '2021', month: '04', day: '31' },
+					time: { format: 'am' },
+				};
+
+				expect(() => service.toEdtfDate(model)).toThrowError(
+					/Please check the values/,
+				);
+			});
+
+			it('should accept serializing Feb 29 in a leap year', () => {
+				const model: DateTimeModel = {
+					date: { year: '2024', month: '02', day: '29' },
+					time: { format: 'am' },
+				};
+
+				expect(service.toEdtfDate(model)).toBe('2024-02-29');
 			});
 		});
 
@@ -1340,6 +1393,14 @@ describe('EdtfService', () => {
 		it('should fall back to month 01 (31 days) when month is missing', () => {
 			expect(service.isValidDay('31', '1985', '')).toBe(true);
 		});
+
+		it('should reject Feb 29 in a non-leap year given a single-digit month', () => {
+			expect(service.isValidDay('29', '2021', '2')).toBe(false);
+		});
+
+		it('should accept Feb 29 in a leap year given a single-digit month', () => {
+			expect(service.isValidDay('29', '2024', '2')).toBe(true);
+		});
 	});
 
 	describe('getSegmentError', () => {
@@ -1377,6 +1438,92 @@ describe('EdtfService', () => {
 					invalidCharsMessage: INVALID_MESSAGE,
 				}),
 			).toBeNull();
+		});
+	});
+
+	describe('getDayError', () => {
+		const options = { invalidCharsMessage: 'invalid characters' };
+
+		it('should return null for a valid day in the month', () => {
+			expect(service.getDayError('20', '1985', '05', options)).toBeNull();
+		});
+
+		it('should return null while only a single digit has been typed', () => {
+			expect(service.getDayError('9', '2021', '02', options)).toBeNull();
+		});
+
+		it('should flag non-numeric day characters with the provided message', () => {
+			expect(service.getDayError('a5', '1985', '05', options)).toBe(
+				options.invalidCharsMessage,
+			);
+		});
+
+		it('should return the range error for a day greater than 31', () => {
+			expect(service.getDayError('32', '1985', '01', options)).toBe(
+				DAY_RANGE_ERROR,
+			);
+		});
+
+		it('should return the range error for day 00', () => {
+			expect(service.getDayError('00', '1985', '05', options)).toBe(
+				DAY_RANGE_ERROR,
+			);
+		});
+
+		it('should return the day-for-month error for Feb 29 in a non-leap year', () => {
+			expect(service.getDayError('29', '2021', '02', options)).toBe(
+				INVALID_DAY_FOR_MONTH_ERROR,
+			);
+		});
+
+		it('should return the day-for-month error given a single-digit month', () => {
+			expect(service.getDayError('29', '2021', '2', options)).toBe(
+				INVALID_DAY_FOR_MONTH_ERROR,
+			);
+		});
+
+		it('should return null for Feb 29 in a leap year', () => {
+			expect(service.getDayError('29', '2024', '02', options)).toBeNull();
+		});
+
+		it('should return the range error for a lone "0" day', () => {
+			expect(service.getDayError('0', '2024', '01', options)).toBe(
+				DAY_RANGE_ERROR,
+			);
+		});
+
+		it('should not report a day-for-month error when the month is a lone "0"', () => {
+			expect(service.getDayError('31', '2024', '0', options)).toBeNull();
+		});
+
+		it('should not report a day-for-month error when the month is out of range', () => {
+			expect(service.getDayError('31', '2024', '13', options)).toBeNull();
+		});
+	});
+
+	describe('getMonthError', () => {
+		const options = { invalidCharsMessage: 'invalid characters' };
+
+		it('should return null for a valid two-digit month', () => {
+			expect(service.getMonthError('12', options)).toBeNull();
+		});
+
+		it('should return null while only a valid single digit has been typed', () => {
+			expect(service.getMonthError('1', options)).toBeNull();
+		});
+
+		it('should flag non-numeric month characters with the provided message', () => {
+			expect(service.getMonthError('a5', options)).toBe(
+				options.invalidCharsMessage,
+			);
+		});
+
+		it('should return the range error for a month greater than 12', () => {
+			expect(service.getMonthError('13', options)).toBe(MONTH_RANGE_ERROR);
+		});
+
+		it('should return the range error for a lone "0" month', () => {
+			expect(service.getMonthError('0', options)).toBe(MONTH_RANGE_ERROR);
 		});
 	});
 
