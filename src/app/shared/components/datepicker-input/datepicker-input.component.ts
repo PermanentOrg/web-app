@@ -17,9 +17,7 @@ import { CommonModule } from '@angular/common';
 import { NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import {
 	DateModel,
-	DAY_RANGE_ERROR,
 	EdtfService,
-	MONTH_RANGE_ERROR,
 } from '@shared/services/edtf-service/edtf.service';
 
 export const INVALID_CHARS_ERROR = 'The date contains invalid characters.';
@@ -110,19 +108,14 @@ export class DatepickerInputComponent implements OnInit, OnChanges {
 	}
 
 	private getMonthError(value: string): string | null {
-		return this.edtfService.getSegmentError(value, {
+		return this.edtfService.getMonthError(value, {
 			invalidCharsMessage: INVALID_CHARS_ERROR,
-			isWithinRange: (month) => this.edtfService.isValidMonth(month),
-			rangeMessage: MONTH_RANGE_ERROR,
 		});
 	}
 
 	private getDayError(value: string, month: string): string | null {
-		return this.edtfService.getSegmentError(value, {
+		return this.edtfService.getDayError(value, this.date.year, month, {
 			invalidCharsMessage: INVALID_CHARS_ERROR,
-			isWithinRange: (day) =>
-				this.edtfService.isValidDay(day, this.date.year, month),
-			rangeMessage: DAY_RANGE_ERROR,
 		});
 	}
 
