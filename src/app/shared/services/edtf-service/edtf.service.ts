@@ -34,6 +34,8 @@ export const UNKNOWN_VALUE = 'XXXX-XX-XX';
 
 export const MONTH_RANGE_ERROR = 'Month must be between 1 and 12.';
 export const DAY_RANGE_ERROR = 'Day must be between 1 and 31.';
+export const INVALID_DAY_FOR_MONTH_ERROR =
+	'That day does not exist in the selected month and year.';
 
 const DIGITS_ONLY = /^\d*$/;
 
@@ -336,7 +338,26 @@ export class EdtfService {
 		if (!hasDay) return `${year}-${month}`;
 
 		const day = this.padMonthOrDay(date.day);
-		return `${year}-${month}-${day}`;
+		const dateStr = `${year}-${month}-${day}`;
+
+		// A fully-numeric date with an in-range month and day can still be an
+		// impossible calendar day (e.g. Feb 29 in a non-leap year, or Apr 31). The
+		// edtf library silently rolls those forward (2021-02-29 becomes 2021-03-01),
+		// so reject them here instead of storing the shift
+		const monthNumber = parseInt(month, 10);
+		const dayNumber = parseInt(day, 10);
+		if (
+			/^\d{4}-\d{2}-\d{2}$/.test(dateStr) &&
+			monthNumber >= 1 &&
+			monthNumber <= 12 &&
+			dayNumber >= 1 &&
+			dayNumber <= 31 &&
+			!isValid(parse(dateStr, 'yyyy-MM-dd', new Date()))
+		) {
+			throw new Error(INVALID_DAY_FOR_MONTH_ERROR);
+		}
+
+		return dateStr;
 	}
 
 	// Shared by serialization (toEdtfDate) and display (formatDateForDisplay)
@@ -510,11 +531,10 @@ export class EdtfService {
 			return 'A complete date is required when time is provided.';
 		}
 
-		if (message.includes('must be between')) {
-			// Already a human-readable segment range message (month/day).
-			return (error as Error).message;
-		}
-
+		// Segment errors (month/day range, day-for-month) are shown inline under
+		// the offending field, so the footer/toast only needs the generic message —
+		// no need to duplicate the specific one here. Errors without an inline
+		// counterpart (the date-range and complete-date cases above) keep theirs.
 		return 'The date entered is not valid. Please check the values and try again.';
 	}
 
@@ -681,8 +701,11 @@ export class EdtfService {
 		if (/^\d$/.test(value)) return true;
 		// Defaults let day be typed before year/month are filled in.
 		// 2000 is a leap year (allows Feb 29); 01 has 31 days (most permissive).
+		// A single-digit month is a complete value (e.g. '2' is February), so pad
+		// it rather than discarding it — otherwise a bad day like Feb 29 would be
+		// validated against January and wrongly pass.
 		const yearStr = year.length === 4 ? year : '2000';
-		const monthStr = month.length === 2 ? month : '01';
+		const monthStr = month ? month.padStart(2, '0') : '01';
 		const dayStr = value.padStart(2, '0');
 		return isValid(
 			parse(`${yearStr}-${monthStr}-${dayStr}`, 'yyyy-MM-dd', new Date()),
@@ -704,5 +727,71 @@ export class EdtfService {
 			return options.rangeMessage ?? null;
 		}
 		return null;
+	}
+
+	getMonthError(
+		value: string,
+		options: { invalidCharsMessage: string },
+	): string | null {
+		// A lone "0" is an unfinished value ("05" minus a keystroke), not a valid
+		// month — flag it inline instead of leaving it to serialization.
+		if (value === '0') return MONTH_RANGE_ERROR;
+
+		return this.getSegmentError(value, {
+			invalidCharsMessage: options.invalidCharsMessage,
+			isWithinRange: (month) => this.isValidMonth(month),
+			rangeMessage: MONTH_RANGE_ERROR,
+		});
+	}
+
+	// Validates a day segment in tiers so each failure gets a specific message:
+	// a lone "0", then the plain 1–31 range, then whether that day actually
+	// exists in the selected month/year (e.g. Feb 29 in a non-leap year).
+	getDayError(
+		value: string,
+		year: string,
+		month: string,
+		options: { invalidCharsMessage: string },
+	): string | null {
+		// A lone "0" is an unfinished value ("05" minus a keystroke), not a valid
+		// day — flag it inline instead of leaving it to serialization.
+		if (value === '0') return DAY_RANGE_ERROR;
+
+		const rangeError = this.getSegmentError(value, {
+			invalidCharsMessage: options.invalidCharsMessage,
+			isWithinRange: (day) => this.isDayInRange(day),
+			rangeMessage: DAY_RANGE_ERROR,
+		});
+		if (rangeError) return rangeError;
+
+		// Only cross-check the day against the month when the month is itself a
+		// valid month; when it is not (e.g. "0" or "13"), the error belongs to the
+		// month field, so we must not mislabel it as a day-for-month problem.
+		if (
+			value.length === 2 &&
+			this.isResolvableMonth(month) &&
+			!this.isValidDay(value, year, month)
+		) {
+			return INVALID_DAY_FOR_MONTH_ERROR;
+		}
+
+		return null;
+	}
+
+	// The plain 1–31 numeric range, independent of month/year — the first tier of
+	// getDayError, kept separate from the calendar check so an out-of-range day
+	// and a day that does not exist in the month get different messages.
+	private isDayInRange(value: string): boolean {
+		const dayNumber = parseInt(value, 10);
+		return dayNumber >= 1 && dayNumber <= 31;
+	}
+
+	// A month that resolves to a real 1–12 value (single digit or two digits).
+	// Used to gate the day-for-month check so an invalid month does not surface
+	// as a day error.
+	private isResolvableMonth(month: string): boolean {
+		if (!/^\d{1,2}$/.test(month)) return false;
+		const monthNumber = parseInt(month, 10);
+		return monthNumber >= 1 && monthNumber <= 12;
 	}
 }

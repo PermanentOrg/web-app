@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import {
 	DateModel,
 	DAY_RANGE_ERROR,
+	INVALID_DAY_FOR_MONTH_ERROR,
 	MONTH_RANGE_ERROR,
 } from '@shared/services/edtf-service/edtf.service';
 import {
@@ -138,12 +139,21 @@ describe('DatepickerInputComponent', () => {
 		expect(component.fieldErrors.month()).toBe(INVALID_CHARS_ERROR);
 	});
 
-	it('should emit day 31 in April and surface the day error', () => {
+	it('should emit day 31 in April and surface the day-for-month error', () => {
 		hostComponent.date = { year: '2026', month: '04', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('31'));
 
 		expect(hostComponent.lastEmittedDate?.day).toBe('31');
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
+	});
+
+	it('should surface the range error for a day greater than 31', () => {
+		hostComponent.date = { year: '2026', month: '01', day: '' };
+		fixture.detectChanges();
+		component.updateDay(mockEvent('32'));
+
+		expect(hostComponent.lastEmittedDate?.day).toBe('32');
 		expect(component.fieldErrors.day()).toBe(DAY_RANGE_ERROR);
 	});
 
@@ -158,22 +168,31 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate?.day).toBe('0');
 	});
 
-	it('should emit day 30 in February and surface the day error', () => {
+	it('should emit day 30 in February and surface the day-for-month error', () => {
 		hostComponent.date = { year: '2026', month: '02', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('30'));
 
 		expect(hostComponent.lastEmittedDate?.day).toBe('30');
-		expect(component.fieldErrors.day()).toBe(DAY_RANGE_ERROR);
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
 	});
 
-	it('should emit day 29 in February of a non-leap year and surface the day error', () => {
+	it('should emit day 29 in February of a non-leap year and surface the day-for-month error', () => {
 		hostComponent.date = { year: '2025', month: '02', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('29'));
 
 		expect(hostComponent.lastEmittedDate?.day).toBe('29');
-		expect(component.fieldErrors.day()).toBe(DAY_RANGE_ERROR);
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
+	});
+
+	it('should surface the day-for-month error for Feb 29 given a single-digit month', () => {
+		hostComponent.date = { year: '2021', month: '2', day: '' };
+		fixture.detectChanges();
+		component.updateDay(mockEvent('29'));
+
+		expect(hostComponent.lastEmittedDate?.day).toBe('29');
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
 	});
 
 	it('should re-validate the day when the month changes', () => {
@@ -184,7 +203,32 @@ describe('DatepickerInputComponent', () => {
 
 		component.updateMonth(mockEvent('04'));
 
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
+	});
+
+	it('should surface the range error inline for a lone "0" month', () => {
+		component.updateMonth(mockEvent('0'));
+
+		expect(hostComponent.lastEmittedDate?.month).toBe('0');
+		expect(component.fieldErrors.month()).toBe(MONTH_RANGE_ERROR);
+	});
+
+	it('should surface the range error inline for a lone "0" day', () => {
+		hostComponent.date = { year: '2026', month: '01', day: '' };
+		fixture.detectChanges();
+		component.updateDay(mockEvent('0'));
+
+		expect(hostComponent.lastEmittedDate?.day).toBe('0');
 		expect(component.fieldErrors.day()).toBe(DAY_RANGE_ERROR);
+	});
+
+	it('should attribute a lone "0" month to the month field, not the day', () => {
+		hostComponent.date = { year: '2024', month: '', day: '31' };
+		fixture.detectChanges();
+		component.updateMonth(mockEvent('0'));
+
+		expect(component.fieldErrors.month()).toBe(MONTH_RANGE_ERROR);
+		expect(component.fieldErrors.day()).toBeNull();
 	});
 
 	it('should clear the year error when the field is cleared', () => {
