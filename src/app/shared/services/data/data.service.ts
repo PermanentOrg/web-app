@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { remove, find, findIndex } from 'lodash';
+import { remove, find, findIndex, noop } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 import {
@@ -22,6 +22,21 @@ import { debugSubscribable } from '@shared/utilities/debug';
 import { TagsService } from '@core/services/tags/tags.service';
 
 const THUMBNAIL_REFRESH_INTERVAL = 3000;
+
+// Identifiers reach us as numbers from the PHP API and as strings from stela, and
+// a single item can carry both over its lifetime: a record loaded via navigateLean
+// has a numeric parentFolderId until update() overwrites it with stela's string.
+// Compare them as strings so the source of the id does not change the answer.
+// Null and undefined never match, including each other.
+type ItemId = string | number | null | undefined;
+
+const isSameId = (a: ItemId, b: ItemId): boolean => {
+	if (a === null || a === undefined || b === null || b === undefined) {
+		return false;
+	}
+
+	return String(a) === String(b);
+};
 
 export type SelectedItemsSet = Set<ItemVO>;
 
@@ -190,8 +205,22 @@ export class DataService {
 	): Promise<number> {
 		this.debug('fetchLeanItems %d items requested', items.length);
 
-		const itemResolves = [];
-		const itemRejects = [];
+		// Keyed by folder_linkId rather than by position: getWithChildren returns
+		// every child of the folder, not just the ones we asked about, so the
+		// response order tells us nothing about which resolver belongs to which
+		// item. Keys are stringified because folder_linkId reaches us as a number
+		// from stela and as a string from some PHP responses. The item reference is
+		// held here rather than looked up in byFolderLinkId on settle, so that an
+		// item whose row was destroyed (and therefore unregistered) mid-request
+		// still gets its isFetching flag cleared.
+		const itemResolvers = new Map<
+			string,
+			{
+				item: ItemVO;
+				resolve: (value: boolean) => void;
+				reject: () => void;
+			}
+		>();
 		let handleItemRegistration = false;
 
 		if (currentFolder) {
@@ -213,10 +242,18 @@ export class DataService {
 					}
 
 					item.isFetching = true;
-					item.fetched = new Promise((resolve, reject) => {
-						itemResolves.push(resolve);
-						itemRejects.push(reject);
+					item.fetched = new Promise<boolean>((resolve, reject) => {
+						itemResolvers.set(String(item.folder_linkId), {
+							item,
+							resolve,
+							reject,
+						});
 					});
+					// Not every caller awaits `fetched`, and the thumbnail refresh poll
+					// never does. Swallow the unawaited case so settling a missing item
+					// does not surface as an unhandled promise rejection. Callers that
+					// do chain onto `fetched` still see the rejection.
+					item.fetched.catch(noop);
 					return true;
 				})
 				.map((item) => ({
@@ -240,7 +277,7 @@ export class DataService {
 				return fetchedFolder.ChildItemVOs;
 			})
 			.then(async (leanItems) => {
-				leanItems.forEach((leanItem, index) => {
+				leanItems.forEach((leanItem) => {
 					const item = this.byFolderLinkId[leanItem.folder_linkId];
 					if (item) {
 						this.byArchiveNbr[leanItem.archiveNbr] = item;
@@ -248,19 +285,29 @@ export class DataService {
 
 						item.dataStatus = DataStatus.Lean;
 						item.isFetching = false;
-						itemResolves[index]();
+
+						const resolver = itemResolvers.get(String(leanItem.folder_linkId));
+						if (resolver) {
+							itemResolvers.delete(String(leanItem.folder_linkId));
+							resolver.resolve(true);
+						}
 						item.fetched = null;
 
 						if (
 							!item.isFolder &&
 							!GetThumbnail(item) &&
-							item.parentFolderId === this.currentFolder.folderId
+							isSameId(item.parentFolderId, this.currentFolder.folderId)
 						) {
 							this.debug('thumbRefreshQueue push %s', item.archiveNbr);
 							this.thumbRefreshQueue.push(item);
 						}
 					}
 				});
+
+				// Anything we asked for but did not get back still has to be settled.
+				// A stuck isFetching flag excludes an item from every future
+				// fetchLeanItems call, so it would never refresh again.
+				this.settleUnresolvedItems(itemResolvers);
 
 				if (handleItemRegistration) {
 					items.forEach((item) => {
@@ -272,14 +319,29 @@ export class DataService {
 
 				return await Promise.resolve(leanItems.length);
 			})
-			.catch((response) => {
-				itemRejects.forEach((reject, index) => {
-					items[index].isFetching = false;
-					items[index].fetched = null;
-					reject();
-				});
+			.catch(() => {
+				this.settleUnresolvedItems(itemResolvers);
 				return 0;
 			});
+	}
+
+	private settleUnresolvedItems(
+		itemResolvers: Map<
+			string,
+			{
+				item: ItemVO;
+				resolve: (value: boolean) => void;
+				reject: () => void;
+			}
+		>,
+	) {
+		for (const { item, reject } of itemResolvers.values()) {
+			item.isFetching = false;
+			item.fetched = null;
+			reject();
+		}
+
+		itemResolvers.clear();
 	}
 
 	public async fetchFullItems(items: Array<ItemVO>, withChildren?: boolean) {

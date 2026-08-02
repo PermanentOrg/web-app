@@ -321,6 +321,166 @@ describe('DataService', () => {
 			.catch(done.fail);
 	});
 
+	it('should update every child when the response is larger than the request', async () => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
+		service.setCurrentFolder(currentFolder);
+
+		const allChildren = currentFolder.ChildItemVOs as (RecordVO | FolderVO)[];
+		allChildren.forEach((item) => {
+			service.registerItem(item);
+		});
+
+		// Ask about two items but answer with every child of the folder. This is
+		// what stela's children endpoint does regardless of what was requested, so
+		// the response cannot be matched to the request by position.
+		const requested = allChildren.slice(0, 2);
+
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({
+					ChildItemVOs: allChildren.map((item) => ({
+						folder_linkId: item.folder_linkId,
+						archiveNbr: item.archiveNbr,
+						parentFolderId: currentFolder.folderId,
+						thumbURL500: `https://example.com/${item.folder_linkId}`,
+					})),
+				}),
+			} as unknown as FolderResponse),
+		);
+
+		const count = await service.fetchLeanItems(requested);
+
+		expect(count).toBe(allChildren.length);
+		allChildren.forEach((item) => {
+			expect(item.dataStatus).toEqual(DataStatus.Lean);
+			expect(item.isFetching).toBeFalse();
+			expect(item.thumbURL500).toBe(
+				`https://example.com/${item.folder_linkId}`,
+			);
+		});
+	});
+
+	it('should settle a requested item that is absent from the response', async () => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
+		service.setCurrentFolder(currentFolder);
+
+		const record = currentFolder.ChildItemVOs.find(
+			(item) => item.isRecord,
+		) as RecordVO;
+		service.registerItem(record);
+
+		// The record is no longer a child of the folder: it was moved or deleted
+		// between the fetch being issued and the response arriving.
+		const getWithChildren = spyOn(
+			api.folder,
+			'getWithChildren',
+		).and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({ ChildItemVOs: [] }),
+			} as unknown as FolderResponse),
+		);
+
+		const inFlight = service.fetchLeanItems([record]);
+		const fetched = record.fetched;
+		await inFlight;
+
+		await expectAsync(fetched).toBeRejected();
+
+		expect(record.isFetching).toBeFalse();
+		expect(record.fetched).toBeNull();
+
+		// A stuck isFetching flag would filter the record out of every later
+		// fetch, leaving it permanently stale.
+		getWithChildren.calls.reset();
+		await service.fetchLeanItems([record]);
+
+		expect(getWithChildren).toHaveBeenCalled();
+	});
+
+	it('should add a lean item to thumbRefreshQueue when the ids differ in type', (done) => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
+		service.setCurrentFolder(currentFolder);
+
+		const record = currentFolder.ChildItemVOs.find(
+			(item) => item.isRecord,
+		) as RecordVO;
+		service.registerItem(record);
+
+		// The folder came from the PHP API, so its folderId is a number, while
+		// stela reports the record's parentFolderId as a string.
+		expect(typeof currentFolder.folderId).toBe('number');
+
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({
+					ChildItemVOs: [
+						{
+							folder_linkId: record.folder_linkId,
+							archiveNbr: record.archiveNbr,
+							parentFolderId: String(currentFolder.folderId),
+						},
+					],
+				}),
+			} as unknown as FolderResponse),
+		);
+
+		service
+			.fetchLeanItems([record])
+			.then(() => {
+				expect(service.getThumbRefreshQueue()).toContain(record);
+				done();
+			})
+			.catch(done.fail);
+	});
+
+	it('should not add a lean item to thumbRefreshQueue when it belongs to another folder', (done) => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
+		service.setCurrentFolder(currentFolder);
+
+		const record = currentFolder.ChildItemVOs.find(
+			(item) => item.isRecord,
+		) as RecordVO;
+		service.registerItem(record);
+
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({
+					ChildItemVOs: [
+						{
+							folder_linkId: record.folder_linkId,
+							archiveNbr: record.archiveNbr,
+							parentFolderId: `${currentFolder.folderId}0`,
+						},
+					],
+				}),
+			} as unknown as FolderResponse),
+		);
+
+		service
+			.fetchLeanItems([record])
+			.then(() => {
+				expect(service.getThumbRefreshQueue()).not.toContain(record);
+				done();
+			})
+			.catch(done.fail);
+	});
+
 	it('should add a lean item to thumbRefreshQueue when no thumbnail size is present', (done) => {
 		const service = TestBed.inject(DataService);
 		const api = TestBed.inject(ApiService);

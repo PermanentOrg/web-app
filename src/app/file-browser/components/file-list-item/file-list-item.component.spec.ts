@@ -348,8 +348,71 @@ describe('FileListItemComponent', () => {
 
 		const firstRead = component.recordThumbnailUrl;
 
+		expect(firstRead).toMatch(/^assets\/img\/preview\/preview-\d+\.jpg$/);
 		expect(component.recordThumbnailUrl).toBe(firstRead);
 		expect(component.recordThumbnailUrl).toBe(firstRead);
+
+		(router.routerState.snapshot as any).url = '/';
+	});
+
+	it('should not expose the real thumbnail until the share type is known', async () => {
+		// detectChanges() in beforeEach left an ngOnInit awaiting isUnlistedShare().
+		// Drain it before changing the route, or its tail resumes against the route
+		// this test sets and overwrites the preview state with its own stale answer.
+		await new Promise((resolve) => {
+			setTimeout(resolve);
+		});
+
+		const router = TestBed.inject(Router);
+		(router.routerState.snapshot as any).url = '/share/test';
+
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		let resolveIsUnlistedShare: (isUnlisted: boolean) => void = () => {};
+		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+			new Promise<boolean>((resolve) => {
+				resolveIsUnlistedShare = resolve;
+			}),
+		);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+
+		// Deliberately not awaited: a listed share must not show the real
+		// thumbnail in the window before isUnlistedShare() settles.
+		const init = component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBeUndefined();
+
+		resolveIsUnlistedShare(false);
+		await init;
+
+		expect(component.recordThumbnailUrl).toMatch(
+			/^assets\/img\/preview\/preview-\d+\.jpg$/,
+		);
+
+		(router.routerState.snapshot as any).url = '/';
+	});
+
+	it('should show the real thumbnail on an unlisted share', async () => {
+		// See above: let the ngOnInit started by beforeEach settle first.
+		await new Promise((resolve) => {
+			setTimeout(resolve);
+		});
+
+		const router = TestBed.inject(Router);
+		(router.routerState.snapshot as any).url = '/share/test';
+
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+			Promise.resolve(true),
+		);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+
+		await component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
 
 		(router.routerState.snapshot as any).url = '/';
 	});
