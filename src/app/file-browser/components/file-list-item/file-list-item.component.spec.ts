@@ -333,6 +333,27 @@ describe('FileListItemComponent', () => {
 		(router.routerState.snapshot as any).url = '/';
 	});
 
+	it('should keep the same random preview thumbnail across reads', async () => {
+		const router = TestBed.inject(Router);
+		(router.routerState.snapshot as any).url = '/share/test';
+
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+			Promise.resolve(false),
+		);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+
+		const firstRead = component.recordThumbnailUrl;
+
+		expect(component.recordThumbnailUrl).toBe(firstRead);
+		expect(component.recordThumbnailUrl).toBe(firstRead);
+
+		(router.routerState.snapshot as any).url = '/';
+	});
+
 	it('should always set real thumbnail URL on init', async () => {
 		component.item.isRecord = true;
 		component.item.type = 'type.record.image';
@@ -341,6 +362,21 @@ describe('FileListItemComponent', () => {
 		await component.ngOnInit();
 
 		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
+	});
+
+	it('should pick up a thumbnail added to the item after init', async () => {
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBeUndefined();
+
+		// The thumbnail refresh poll in DataService mutates the existing item
+		// rather than replacing it.
+		component.item.thumbnail256 = 'https://example.com/256';
+
+		expect(component.recordThumbnailUrl).toBe('https://example.com/256');
 	});
 
 	it('should display displayTime instead of displayDT when displayTime is set', () => {
