@@ -59,7 +59,11 @@
 							>Click here to learn more about our endowment model.</a
 						>
 					</p>
-					<pr-new-pledge [inlineFlow]="true"></pr-new-pledge>
+					@if (showPaymentIntentFlow) {
+						<pr-payment-intent-form></pr-payment-intent-form>
+					} @else {
+						<pr-new-pledge [inlineFlow]="true"></pr-new-pledge>
+					}
 					<p class="nav-to-redeem">
 						<a href="#" (click)="setTab('promo'); $event.preventDefault()">
 							Have a code to redeem for free storage? Click here to redeem it.

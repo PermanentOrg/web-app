@@ -25,6 +25,7 @@ import { ArchiveSettingsDialogComponent } from './components/archive-settings-di
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
 import { AccountSettingsDialogComponent } from './components/account-settings-dialog/account-settings-dialog.component';
 import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
+import { PaymentIntentConfirmComponent } from './components/payment-intent-confirm/payment-intent-confirm.component';
 
 const rootFolderResolve = {
 	rootFolder: RootFolderResolveService,
@@ -273,6 +274,20 @@ export const routes: RoutesWithData = [
 			{
 				path: 'storage',
 				redirectTo: '/app/(private//dialog:storage/)',
+			},
+			{
+				path: 'storage-purchase-confirm',
+				component: RoutedDialogWrapperComponent,
+				outlet: 'dialog',
+				data: {
+					title: 'Storage Purchase',
+					component: PaymentIntentConfirmComponent,
+					dialogOptions: { width: '1000px' },
+				},
+			},
+			{
+				path: 'storage-purchase-confirm',
+				redirectTo: '/app/(private//dialog:storage-purchase-confirm)',
 			},
 			{
 				path: 'search',
