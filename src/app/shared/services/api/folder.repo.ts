@@ -198,8 +198,14 @@ export class FolderRepo extends BaseRepo {
 		folderVOs: FolderVO[],
 		shareToken: string = null,
 	): Promise<StelaFolder[]> {
+		const validFolderIds = folderVOs
+			.map((currentFolder) => currentFolder.folderId)
+			.filter((folderId) => folderId != null);
+		if (!validFolderIds.length) {
+			return [];
+		}
 		const queryData = {
-			folderIds: folderVOs.map((currentFolder) => currentFolder.folderId),
+			folderIds: validFolderIds,
 		};
 		let folderResponse: PagedStelaResponse<StelaFolder>;
 		if (shareToken) {

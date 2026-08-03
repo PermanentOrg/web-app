@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { ArchiveVO, RecordVO } from '@models/index';
+import { ArchiveVO, FolderVO, RecordVO } from '@models/index';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
@@ -653,6 +653,47 @@ describe('SidebarComponent', () => {
 			closedSubject.next(undefined);
 
 			expect(saveSpy).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('current folder full-data fetch', () => {
+		const originalCurrentFolder = mockDataService.currentFolder;
+		let fetchFullItemsSpy: jasmine.Spy;
+
+		beforeEach(() => {
+			fetchFullItemsSpy = spyOn(mockDataService, 'fetchFullItems');
+		});
+
+		afterEach(() => {
+			mockDataService.currentFolder = originalCurrentFolder;
+		});
+
+		it('should not fetch a synthetic root folder that has no folderId', async () => {
+			mockDataService.currentFolder = new FolderVO({
+				displayName: 'Shares',
+				pathAsText: ['Shares'],
+				type: 'type.folder.root.share',
+				ChildItemVOs: [],
+			});
+
+			selectedItemsSubject.next(new Set());
+			await fixture.whenStable();
+
+			expect(fetchFullItemsSpy).not.toHaveBeenCalled();
+		});
+
+		it('should fetch the current folder when it has a folderId and no displayTime', async () => {
+			mockDataService.currentFolder = new FolderVO({
+				folderId: 42,
+				type: 'type.folder.private',
+			});
+
+			selectedItemsSubject.next(new Set());
+			await fixture.whenStable();
+
+			expect(fetchFullItemsSpy).toHaveBeenCalledWith([
+				mockDataService.currentFolder,
+			]);
 		});
 	});
 });
