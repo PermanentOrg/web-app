@@ -166,6 +166,150 @@ export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 		},
 	});
 
+// AccountService caches the current archive under this key (see
+// AccountService.setArchive). The repos cannot inject AccountService to read
+// it directly: that would create a circular dependency through ApiService.
+const CURRENT_ARCHIVE_STORAGE_KEY = 'archive';
+
+export const getCachedCurrentArchiveId = ():
+	| string
+	| number
+	| null
+	| undefined => {
+	const storage = new StorageService();
+	const cachedCurrentArchive =
+		storage.local.get<{ archiveId?: string | number }>(
+			CURRENT_ARCHIVE_STORAGE_KEY,
+		) ||
+		storage.session.get<{ archiveId?: string | number }>(
+			CURRENT_ARCHIVE_STORAGE_KEY,
+		);
+	return cachedCurrentArchive?.archiveId;
+};
+
+// Stela ids arrive as strings while the cached archive id is a number.
+const normalizeArchiveId = (
+	archiveId: string | number | null | undefined,
+): string | null =>
+	archiveId === null || archiveId === undefined ? null : String(archiveId);
+
+// Each navigation request loads a single folder level, and Stela only returns
+// a share on the item that was shared directly — so when navigating deeper
+// into a shared folder tree, the role learned at a higher level must be
+// carried across requests. Derived roles are remembered per (archive, item)
+// as the client-side equivalent of v1 materializing a share's role down the
+// whole subtree. Entries are only ever re-derived from stronger evidence
+// (a direct share match or an inherited parent role win before the recall
+// fallback), so a remembered role is never downgraded by a bare fallback.
+// In-memory only: a page reload or a new tab loses it, and deep links into a
+// shared subtree fall back to owner until the backend exposes the caller's
+// effective role.
+const derivedStelaAccessRoleCache = new Map<string, AccessRoleType>();
+
+type StelaItemType = 'folder' | 'record';
+
+const buildDerivedAccessRoleCacheKey = (
+	itemType: StelaItemType,
+	itemId: string | number,
+	currentArchiveId: string | number,
+): string => `${String(currentArchiveId)}:${itemType}:${String(itemId)}`;
+
+export const rememberDerivedStelaAccessRole = (
+	itemType: StelaItemType,
+	itemId: string | number | null | undefined,
+	currentArchiveId: string | number | null | undefined,
+	accessRole: AccessRoleType,
+): void => {
+	if (
+		itemId === null ||
+		itemId === undefined ||
+		currentArchiveId === null ||
+		currentArchiveId === undefined
+	) {
+		return;
+	}
+	derivedStelaAccessRoleCache.set(
+		buildDerivedAccessRoleCacheKey(itemType, itemId, currentArchiveId),
+		accessRole,
+	);
+};
+
+export const recallDerivedStelaAccessRole = (
+	itemType: StelaItemType,
+	itemId: string | number | null | undefined,
+	currentArchiveId: string | number | null | undefined,
+): AccessRoleType | undefined => {
+	if (
+		itemId === null ||
+		itemId === undefined ||
+		currentArchiveId === null ||
+		currentArchiveId === undefined
+	) {
+		return undefined;
+	}
+	return derivedStelaAccessRoleCache.get(
+		buildDerivedAccessRoleCacheKey(itemType, itemId, currentArchiveId),
+	);
+};
+
+export const clearDerivedStelaAccessRoleCache = (): void => {
+	derivedStelaAccessRoleCache.clear();
+};
+
+// Stela responses carry no field for the caller's own access role on an item,
+// so derive it to match what the legacy v1 API returned (its rule was
+// COALESCE(access.accessRole, folder_link.accessRole)):
+// 1. a status-ok share granting the current archive access to the item wins;
+// 2. items belonging to the current archive report owner — the caller's
+//    archive-level membership role is applied separately by
+//    AccountService.checkMinimumAccess, never baked into the item;
+// 3. items inside a shared folder inherit the parent's derived role, since v1
+//    materialized a share's role down the whole subtree — within one response
+//    via the parentFolderAccessRole argument, and across navigation requests
+//    via the derived-role cache the converters consult before falling back;
+// 4. otherwise fall back to owner, matching v1's fallback for public and
+//    share-token browsing, where visibility is gated elsewhere. This branch is
+//    also hit when deep-linking into an unshared descendant of a shared folder
+//    that was never navigated in this session (no parent context to inherit);
+//    fixing that requires Stela to expose the caller's effective role.
+export const findStelaShareWithCurrentArchive = (
+	stelaShares: StelaShare[] | null | undefined,
+	currentArchiveId: string | number | null | undefined,
+): StelaShare | undefined => {
+	const normalizedCurrentArchiveId = normalizeArchiveId(currentArchiveId);
+	if (normalizedCurrentArchiveId === null) {
+		return undefined;
+	}
+	return (stelaShares ?? []).find(
+		(stelaShare) =>
+			stelaShare.status === 'status.generic.ok' &&
+			normalizeArchiveId(stelaShare.archive?.id) === normalizedCurrentArchiveId,
+	);
+};
+
+export const deriveStelaAccessRole = (
+	stelaShares: StelaShare[] | null | undefined,
+	itemArchiveId: string | number | null | undefined,
+	currentArchiveId: string | number | null | undefined,
+	parentFolderAccessRole?: AccessRoleType,
+): AccessRoleType => {
+	const shareWithCurrentArchive = findStelaShareWithCurrentArchive(
+		stelaShares,
+		currentArchiveId,
+	);
+	if (shareWithCurrentArchive) {
+		return shareWithCurrentArchive.accessRole;
+	}
+	const normalizedCurrentArchiveId = normalizeArchiveId(currentArchiveId);
+	if (
+		normalizedCurrentArchiveId !== null &&
+		normalizeArchiveId(itemArchiveId) === normalizedCurrentArchiveId
+	) {
+		return 'access.role.owner';
+	}
+	return parentFolderAccessRole ?? 'access.role.owner';
+};
+
 export const convertStelaLocationToLocnVOData = (
 	stelaLocation: StelaLocation | null | undefined,
 ): LocnVOData | null => {
@@ -196,8 +340,27 @@ export const convertStelaLocationToLocnVOData = (
 
 export const convertStelaRecordToRecordVO = (
 	stelaRecord: StelaRecord,
-): RecordVO =>
-	new RecordVO({
+	currentArchiveId: string | number | null = getCachedCurrentArchiveId(),
+	parentFolderAccessRole?: AccessRoleType,
+): RecordVO => {
+	const accessRole = deriveStelaAccessRole(
+		stelaRecord.shares,
+		stelaRecord.archive?.id ?? stelaRecord.archiveId,
+		currentArchiveId,
+		parentFolderAccessRole ??
+			recallDerivedStelaAccessRole(
+				'record',
+				stelaRecord.recordId,
+				currentArchiveId,
+			),
+	);
+	rememberDerivedStelaAccessRole(
+		'record',
+		stelaRecord.recordId,
+		currentArchiveId,
+		accessRole,
+	);
+	return new RecordVO({
 		...stelaRecord,
 		thumbURL200: stelaRecord.thumbUrl200,
 		thumbURL500: stelaRecord.thumbUrl500,
@@ -222,11 +385,9 @@ export const convertStelaRecordToRecordVO = (
 		timeZoneId: CENTRAL_TIMEZONE_VO.timeZoneId,
 		TimezoneVO: CENTRAL_TIMEZONE_VO,
 		ShareVOs: (stelaRecord.shares ?? []).map(convertStelaSharetoShareVO),
-		// accessRole is intentionally always owner, matching the folder
-		// conversion: the backend removed item-level accessRole because all
-		// non-owner values were deprecated in 2020. Real access is on ShareVOs.
-		accessRole: 'access.role.owner',
+		accessRole,
 	});
+};
 
 export class RecordRepo extends BaseRepo {
 	private async getRecordIdByArchiveNbr(archiveNbr: string): Promise<number> {

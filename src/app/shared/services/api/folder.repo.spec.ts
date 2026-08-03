@@ -2,9 +2,15 @@ import { TestBed } from '@angular/core/testing';
 import { FolderVO } from '@models/index';
 import { Observable, of } from 'rxjs';
 import { ShareLink } from '@root/app/share-links/models/share-link';
+import { StorageService } from '@shared/services/storage/storage.service';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { HttpService } from '../http/http.service';
-import { FolderRepo, FolderResponse } from './folder.repo';
+import { clearDerivedStelaAccessRoleCache } from './record.repo';
+import {
+	clearSharesBreadcrumbPathCache,
+	FolderRepo,
+	FolderResponse,
+} from './folder.repo';
 
 const emptyResponse = { items: [] };
 const fakeFolderResponse = {
@@ -250,7 +256,9 @@ describe('Folder repo', () => {
 			expect(result.getMessage()).toBe('Folder not found');
 		});
 
-		it('should return an empty error message when err.error.error is absent', async () => {
+		it('should return an empty string message when err.error.error is absent', async () => {
+			// Must be a string, not undefined: error handlers pass the message
+			// through PrConstantsService.translate, which crashes on undefined.
 			const folderVO = new FolderVO({ folderId: 42 });
 
 			httpV2Spy.get.and.returnValue(
@@ -259,7 +267,7 @@ describe('Folder repo', () => {
 
 			const result = await folderRepo.getWithChildren([folderVO]);
 
-			expect(result.getMessage()).toBeUndefined();
+			expect(result.getMessage()).toBe('');
 		});
 
 		it('should surface the message of internally thrown errors via getMessage()', async () => {
@@ -361,11 +369,256 @@ describe('Folder repo', () => {
 
 			expect(folder.folder_linkType).toBeUndefined();
 		});
+	});
 
-		it('should hardcode accessRole to owner', async () => {
-			const folder = await getConvertedFolder();
+	describe('accessRole derivation', () => {
+		const CURRENT_ARCHIVE_ID = 77;
+		const storage = new StorageService();
+
+		const okShareWithCurrentArchive = (accessRole: string) => ({
+			id: 'share-1',
+			status: 'status.generic.ok',
+			accessRole,
+			archive: {
+				id: String(CURRENT_ARCHIVE_ID),
+				name: 'My Archive',
+				thumbURL200: '',
+			},
+		});
+
+		const getConvertedFolder = async (
+			folderOverrides: Record<string, unknown>,
+			children: unknown[] = [],
+		) => {
+			httpV2Spy.get.and.returnValues(
+				of([buildStelaFolderResponse(folderOverrides)]),
+				of([{ items: children }]),
+			);
+			const result = await folderRepo.getWithChildren([
+				new FolderVO({ folderId: 42 }),
+			]);
+			return result.getFolderVO(true);
+		};
+
+		beforeEach(() => {
+			clearDerivedStelaAccessRoleCache();
+			clearSharesBreadcrumbPathCache();
+			storage.local.set('archive', { archiveId: CURRENT_ARCHIVE_ID });
+		});
+
+		afterEach(() => {
+			clearDerivedStelaAccessRoleCache();
+			clearSharesBreadcrumbPathCache();
+			storage.local.delete('archive');
+			storage.session.delete('archive');
+		});
+
+		it('derives owner for folders belonging to the current archive', async () => {
+			const folder = await getConvertedFolder({
+				archive: { id: String(CURRENT_ARCHIVE_ID), name: 'My Archive' },
+			});
 
 			expect(folder.accessRole).toBe('access.role.owner');
+		});
+
+		it('derives the share role for folders shared with the current archive', async () => {
+			const folder = await getConvertedFolder({
+				archive: { id: 'other-archive', name: 'Other Archive' },
+				shares: [okShareWithCurrentArchive('access.role.viewer')],
+			});
+
+			expect(folder.accessRole).toBe('access.role.viewer');
+		});
+
+		it('ignores shares with the current archive that are not status-ok', async () => {
+			const folder = await getConvertedFolder({
+				archive: { id: 'other-archive', name: 'Other Archive' },
+				shares: [
+					{
+						...okShareWithCurrentArchive('access.role.viewer'),
+						status: 'status.generic.pending',
+					},
+				],
+			});
+
+			expect(folder.accessRole).toBe('access.role.owner');
+		});
+
+		it('passes a shared folder role down to children without their own shares', async () => {
+			const childStelaFolder = {
+				folderId: 'child-folder-1',
+				archive: { id: 'other-archive', name: 'Other Archive' },
+				shares: null,
+			};
+			const childStelaRecord = {
+				recordId: 'child-record-1',
+				archive: { id: 'other-archive', name: 'Other Archive' },
+				shares: null,
+				files: [],
+				tags: null,
+				location: null,
+			};
+
+			const folder = await getConvertedFolder(
+				{
+					archive: { id: 'other-archive', name: 'Other Archive' },
+					shares: [okShareWithCurrentArchive('access.role.viewer')],
+				},
+				[childStelaFolder, childStelaRecord],
+			);
+
+			expect(folder.ChildItemVOs.length).toBe(2);
+			folder.ChildItemVOs.forEach((childItem) => {
+				expect(childItem.accessRole).toBe('access.role.viewer');
+			});
+		});
+
+		it('prefers a child item direct share over the inherited parent role', async () => {
+			const childStelaRecord = {
+				recordId: 'child-record-1',
+				archive: { id: 'other-archive', name: 'Other Archive' },
+				shares: [okShareWithCurrentArchive('access.role.editor')],
+				files: [],
+				tags: null,
+				location: null,
+			};
+
+			const folder = await getConvertedFolder(
+				{
+					archive: { id: 'other-archive', name: 'Other Archive' },
+					shares: [okShareWithCurrentArchive('access.role.viewer')],
+				},
+				[childStelaRecord],
+			);
+
+			expect(folder.ChildItemVOs[0].accessRole).toBe('access.role.editor');
+		});
+
+		it('keeps the shared role when navigating deeper into a shared subfolder tree', async () => {
+			const subfolderStelaFolder = {
+				folderId: 'subfolder-1',
+				archive: { id: 'other-archive', name: 'Other Archive' },
+				shares: null,
+			};
+
+			// First navigation: the directly-shared folder, whose children
+			// include the subfolder. Stela puts the share only on the folder
+			// that was shared, so the subfolder itself carries no share.
+			await getConvertedFolder(
+				{
+					archive: { id: 'other-archive', name: 'Other Archive' },
+					shares: [okShareWithCurrentArchive('access.role.viewer')],
+				},
+				[subfolderStelaFolder],
+			);
+
+			// Second navigation: into the subfolder, a separate request with
+			// no share data and no parent context of its own.
+			httpV2Spy.get.and.returnValues(
+				of([
+					buildStelaFolderResponse({
+						folderId: 'subfolder-1',
+						archive: { id: 'other-archive', name: 'Other Archive' },
+						shares: null,
+					}),
+				]),
+				of([
+					{
+						items: [
+							{
+								recordId: 'nested-record-1',
+								files: [],
+								tags: null,
+								location: null,
+								archive: { id: 'other-archive', name: 'Other Archive' },
+								shares: null,
+							},
+						],
+					},
+				]),
+			);
+			const result = await folderRepo.getWithChildren([
+				new FolderVO({ folderId: 'subfolder-1' }),
+			]);
+			const subfolder = result.getFolderVO(true);
+
+			expect(subfolder.accessRole).toBe('access.role.viewer');
+			expect(subfolder.ChildItemVOs[0].accessRole).toBe('access.role.viewer');
+		});
+
+		it('falls back to owner when no current archive is cached', async () => {
+			storage.local.delete('archive');
+
+			const folder = await getConvertedFolder({
+				archive: { id: 'other-archive', name: 'Other Archive' },
+				shares: [okShareWithCurrentArchive('access.role.viewer')],
+			});
+
+			expect(folder.accessRole).toBe('access.role.owner');
+		});
+
+		it('rebuilds the breadcrumb path for folders shared with the current archive', async () => {
+			const folder = await getConvertedFolder({
+				archive: { id: 'other-archive', name: 'Other Archive' },
+				shares: [okShareWithCurrentArchive('access.role.viewer')],
+			});
+
+			expect(folder.pathAsText).toEqual(['Shares', 'Test Folder']);
+			expect(folder.pathAsFolder_linkId).toEqual([0, 100]);
+			expect(folder.pathAsArchiveNbr).toEqual(['0000-0000', 'ARCH-001']);
+		});
+
+		it('keeps the owner path for folders in the current archive', async () => {
+			const folder = await getConvertedFolder({
+				archive: { id: String(CURRENT_ARCHIVE_ID), name: 'My Archive' },
+			});
+
+			expect(folder.pathAsText).toEqual(['My Files', 'Test Folder']);
+		});
+
+		it('extends the shares breadcrumb path when navigating into a subfolder', async () => {
+			const subfolderStelaFolder = {
+				folderId: 'subfolder-1',
+				displayName: 'Subfolder',
+				archiveNumber: 'ARCH-002',
+				folderLinkId: 200,
+				archive: { id: 'other-archive', name: 'Other Archive' },
+				shares: null,
+			};
+
+			await getConvertedFolder(
+				{
+					archive: { id: 'other-archive', name: 'Other Archive' },
+					shares: [okShareWithCurrentArchive('access.role.viewer')],
+				},
+				[subfolderStelaFolder],
+			);
+
+			httpV2Spy.get.and.returnValues(
+				of([
+					buildStelaFolderResponse({
+						folderId: 'subfolder-1',
+						displayName: 'Subfolder',
+						archiveNumber: 'ARCH-002',
+						folderLinkId: 200,
+						archive: { id: 'other-archive', name: 'Other Archive' },
+						shares: null,
+					}),
+				]),
+				of([{ items: [] }]),
+			);
+			const result = await folderRepo.getWithChildren([
+				new FolderVO({ folderId: 'subfolder-1' }),
+			]);
+			const subfolder = result.getFolderVO(true);
+
+			expect(subfolder.pathAsText).toEqual([
+				'Shares',
+				'Test Folder',
+				'Subfolder',
+			]);
+
+			expect(subfolder.pathAsFolder_linkId).toEqual([0, 100, 200]);
 		});
 	});
 

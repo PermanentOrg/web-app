@@ -97,7 +97,10 @@ export class FolderResolveService {
 					message: response.getMessage(),
 					translate: true,
 				});
-				if (targetFolder.type.includes('root')) {
+				// targetFolder built from route params has no type; without the
+				// optional chain a failed navigation crashes here instead of
+				// redirecting, leaving the app stuck on the old route.
+				if (targetFolder.type?.includes('root')) {
 					this.accountService
 						.logOut()
 						.then(() => {

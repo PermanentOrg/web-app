@@ -3,11 +3,17 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareLink } from '@root/app/share-links/models/share-link';
+import { AccessRoleType } from '@models/access-role';
 import {
 	convertStelaLocationToLocnVOData,
 	convertStelaRecordToRecordVO,
 	convertStelaSharetoShareVO,
 	convertStelaTagToTagVO,
+	deriveStelaAccessRole,
+	findStelaShareWithCurrentArchive,
+	getCachedCurrentArchiveId,
+	recallDerivedStelaAccessRole,
+	rememberDerivedStelaAccessRole,
 	StelaLocation,
 	StelaShare,
 	StelaTag,
@@ -96,14 +102,173 @@ type StelaFolderChild = StelaFolder | StelaRecord;
 const isStelaRecord = (child: StelaFolderChild): child is StelaRecord =>
 	child && 'recordId' in child;
 
-const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
+interface SharesBreadcrumbPath {
+	pathAsText: string[];
+	pathAsArchiveNbr: string[];
+	pathAsFolder_linkId: number[];
+}
+
+// For folders reached through a share, v1 never returned the owning archive's
+// real ancestry: it synthesized breadcrumbs in the PHP session
+// (SessionBO::HandlePath) as a fake 'Shares' root, the owning archive's name,
+// then only the folders the caller navigated through inside the share. Stela's
+// paths field is instead the owning archive's full private ancestry, which the
+// caller can neither see nor navigate — using it flips the breadcrumb root to
+// Private. Rebuild the v1 shape client-side, and carry it across navigation
+// requests the same way derived access roles are carried, since each request
+// loads a single folder level. In-memory only: a page reload or a new tab
+// loses it, and deep links into a shared subtree fall back to the owner path
+// until the backend exposes share-aware paths.
+const sharesBreadcrumbPathCache = new Map<string, SharesBreadcrumbPath>();
+
+const buildSharesBreadcrumbPathCacheKey = (
+	folderId: string | number,
+	currentArchiveId: string | number,
+): string => `${String(currentArchiveId)}:${String(folderId)}`;
+
+const rememberSharesBreadcrumbPath = (
+	folderId: string | number | null | undefined,
+	currentArchiveId: string | number | null | undefined,
+	sharesBreadcrumbPath: SharesBreadcrumbPath,
+): void => {
+	if (
+		folderId === null ||
+		folderId === undefined ||
+		currentArchiveId === null ||
+		currentArchiveId === undefined
+	) {
+		return;
+	}
+	sharesBreadcrumbPathCache.set(
+		buildSharesBreadcrumbPathCacheKey(folderId, currentArchiveId),
+		sharesBreadcrumbPath,
+	);
+};
+
+const recallSharesBreadcrumbPath = (
+	folderId: string | number | null | undefined,
+	currentArchiveId: string | number | null | undefined,
+): SharesBreadcrumbPath | undefined => {
+	if (
+		folderId === null ||
+		folderId === undefined ||
+		currentArchiveId === null ||
+		currentArchiveId === undefined
+	) {
+		return undefined;
+	}
+	return sharesBreadcrumbPathCache.get(
+		buildSharesBreadcrumbPathCacheKey(folderId, currentArchiveId),
+	);
+};
+
+export const clearSharesBreadcrumbPathCache = (): void => {
+	sharesBreadcrumbPathCache.clear();
+};
+
+const appendFolderToSharesBreadcrumbPath = (
+	sharesBreadcrumbPath: SharesBreadcrumbPath,
+	stelaFolder: StelaFolder,
+): SharesBreadcrumbPath => ({
+	pathAsText: [...sharesBreadcrumbPath.pathAsText, stelaFolder.displayName],
+	pathAsArchiveNbr: [
+		...sharesBreadcrumbPath.pathAsArchiveNbr,
+		stelaFolder.archiveNumber,
+	],
+	pathAsFolder_linkId: [
+		...sharesBreadcrumbPath.pathAsFolder_linkId,
+		stelaFolder.folderLinkId,
+	],
+});
+
+const deriveSharesBreadcrumbPath = (
+	stelaFolder: StelaFolder,
+	currentArchiveId: string | number | null | undefined,
+	parentSharesBreadcrumbPath?: SharesBreadcrumbPath,
+): SharesBreadcrumbPath | undefined => {
+	let sharesBreadcrumbPath: SharesBreadcrumbPath | undefined;
+	if (parentSharesBreadcrumbPath) {
+		sharesBreadcrumbPath = appendFolderToSharesBreadcrumbPath(
+			parentSharesBreadcrumbPath,
+			stelaFolder,
+		);
+	} else if (
+		findStelaShareWithCurrentArchive(stelaFolder.shares, currentArchiveId)
+	) {
+		// The share entry point anchors the path. The 'Shares' entry is
+		// synthetic (no real folder_link, so it must never render as a
+		// navigable folder crumb), like what FolderResolveService fabricates
+		// for shared records. Unlike v1, no archive-name element is inserted:
+		// it had no navigable target and clicking it broke navigation.
+		sharesBreadcrumbPath = {
+			pathAsText: ['Shares', stelaFolder.displayName],
+			pathAsArchiveNbr: ['0000-0000', stelaFolder.archiveNumber],
+			pathAsFolder_linkId: [0, stelaFolder.folderLinkId],
+		};
+	} else {
+		sharesBreadcrumbPath = recallSharesBreadcrumbPath(
+			stelaFolder.folderId,
+			currentArchiveId,
+		);
+	}
+	if (sharesBreadcrumbPath) {
+		rememberSharesBreadcrumbPath(
+			stelaFolder.folderId,
+			currentArchiveId,
+			sharesBreadcrumbPath,
+		);
+	}
+	return sharesBreadcrumbPath;
+};
+
+const convertStelaFolderToFolderVO = (
+	stelaFolder: StelaFolder,
+	currentArchiveId: string | number | null = getCachedCurrentArchiveId(),
+	parentFolderAccessRole?: AccessRoleType,
+	parentSharesBreadcrumbPath?: SharesBreadcrumbPath,
+): FolderVO => {
 	stelaFolder.children ??= [];
+	const accessRole = deriveStelaAccessRole(
+		stelaFolder.shares,
+		stelaFolder.archive?.id,
+		currentArchiveId,
+		parentFolderAccessRole ??
+			recallDerivedStelaAccessRole(
+				'folder',
+				stelaFolder.folderId,
+				currentArchiveId,
+			),
+	);
+	rememberDerivedStelaAccessRole(
+		'folder',
+		stelaFolder.folderId,
+		currentArchiveId,
+		accessRole,
+	);
+	const sharesBreadcrumbPath = deriveSharesBreadcrumbPath(
+		stelaFolder,
+		currentArchiveId,
+		parentSharesBreadcrumbPath,
+	);
 	const childFolderVOs = stelaFolder.children
 		.filter((child): child is StelaFolder => !isStelaRecord(child))
-		.map(convertStelaFolderToFolderVO);
+		.map((childStelaFolder) =>
+			convertStelaFolderToFolderVO(
+				childStelaFolder,
+				currentArchiveId,
+				accessRole,
+				sharesBreadcrumbPath,
+			),
+		);
 	const childRecordVOs = stelaFolder.children
 		.filter(isStelaRecord)
-		.map(convertStelaRecordToRecordVO);
+		.map((childStelaRecord) =>
+			convertStelaRecordToRecordVO(
+				childStelaRecord,
+				currentArchiveId,
+				accessRole,
+			),
+		);
 	return new FolderVO({
 		...stelaFolder,
 		folderId: stelaFolder.folderId,
@@ -138,9 +303,13 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		updatedDT: stelaFolder.updatedAt,
 		publicDT: stelaFolder.publicAt,
 		parentFolderId: stelaFolder.parentFolder?.id,
-		pathAsText: stelaFolder.paths?.names,
-		pathAsFolder_linkId: stelaFolder.paths?.folderLinkIds?.map(Number),
-		pathAsArchiveNbr: stelaFolder.paths?.archiveNumbers,
+		pathAsText: sharesBreadcrumbPath?.pathAsText ?? stelaFolder.paths?.names,
+		pathAsFolder_linkId:
+			sharesBreadcrumbPath?.pathAsFolder_linkId ??
+			stelaFolder.paths?.folderLinkIds?.map(Number),
+		pathAsArchiveNbr:
+			sharesBreadcrumbPath?.pathAsArchiveNbr ??
+			stelaFolder.paths?.archiveNumbers,
 		ParentFolderVOs: [new FolderVO({ folderId: stelaFolder.parentFolder?.id })],
 		ChildFolderVOs: childFolderVOs,
 		RecordVOs: childRecordVOs,
@@ -151,9 +320,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		),
 		ChildItemVOs: [...childRecordVOs, ...childFolderVOs],
 		ShareVOs: (stelaFolder.shares ?? []).map(convertStelaSharetoShareVO),
-		// accessRole is intentionally always owner: the backend removed item-level accessRole
-		// because all non-owner values were deprecated in 2020. Real access is on ShareVOs.
-		accessRole: 'access.role.owner',
+		accessRole,
 		isFolder: true,
 	});
 };
@@ -380,8 +547,10 @@ export class FolderRepo extends BaseRepo {
 			errorFolderResponse.Results = [
 				{
 					// Stela API errors carry the message in err.error.error;
-					// internally thrown Errors carry it in err.message.
-					message: [err?.error?.error ?? err?.message],
+					// internally thrown Errors carry it in err.message. The final
+					// fallback must be a string: error handlers pass this through
+					// PrConstantsService.translate, which crashes on undefined.
+					message: [err?.error?.error ?? err?.message ?? ''],
 				},
 			];
 			return errorFolderResponse;

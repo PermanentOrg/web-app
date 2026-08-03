@@ -205,6 +205,25 @@ describe('LeanFolderResolveService', () => {
 			return errorResponse;
 		};
 
+		it('should navigate to /private when a folder built from URL params fails', async () => {
+			// A targetFolder built from route params has no type; the error
+			// handler must not crash on the root-type check and must still
+			// redirect instead of leaving navigation stuck.
+			getWithChildrenSpy.and.resolveTo(
+				buildErrorFolderResponse('Folder not found'),
+			);
+
+			const route = buildRoute({
+				archiveNbr: '0001-0001',
+				folderLinkId: '123',
+			});
+			const state = buildState('/shares/0001-0001/123');
+
+			await service.resolve(route, state).catch(() => {});
+
+			expect(router.navigate).toHaveBeenCalledWith(['/private']);
+		});
+
 		it('should show an error message when getWithChildren returns an unsuccessful response', async () => {
 			getWithChildrenSpy.and.resolveTo(
 				buildErrorFolderResponse('Folder not found'),

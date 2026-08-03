@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import {
+	clearDerivedStelaAccessRoleCache,
 	convertStelaRecordToRecordVO,
 	RecordRepo,
 	RecordResponse,
@@ -410,6 +411,14 @@ describe('RecordRepo', () => {
 	});
 
 	describe('convertStelaRecordToRecordVO', () => {
+		beforeEach(() => {
+			clearDerivedStelaAccessRoleCache();
+		});
+
+		afterEach(() => {
+			clearDerivedStelaAccessRoleCache();
+		});
+
 		const baseStelaRecord = {
 			recordId: 42,
 			displayName: 'Test Record',
@@ -448,13 +457,49 @@ describe('RecordRepo', () => {
 			expect(record.displayTime).toBeUndefined();
 		});
 
-		it('should hardcode accessRole to owner, matching the folder conversion', () => {
-			// The backend omits item-level accessRole; UI permission gates
-			// (e.g. the sidebar share button) read it and treat a missing
-			// value as no access.
-			const record = convertStelaRecordToRecordVO({
-				...baseStelaRecord,
-			} as any);
+		it('derives owner accessRole for records belonging to the current archive', () => {
+			const record = convertStelaRecordToRecordVO(
+				{ ...baseStelaRecord } as any,
+				'1',
+			);
+
+			expect(record.accessRole).toBe('access.role.owner');
+		});
+
+		it('derives the share accessRole for records shared with the current archive', () => {
+			const record = convertStelaRecordToRecordVO(
+				{
+					...baseStelaRecord,
+					shares: [
+						{
+							id: 'share-1',
+							status: 'status.generic.ok',
+							accessRole: 'access.role.editor',
+							archive: { id: '9', name: 'Recipient Archive', thumbURL200: '' },
+						},
+					],
+				} as any,
+				9,
+			);
+
+			expect(record.accessRole).toBe('access.role.editor');
+		});
+
+		it('inherits the parent folder accessRole for foreign records without their own share', () => {
+			const record = convertStelaRecordToRecordVO(
+				{ ...baseStelaRecord } as any,
+				'9',
+				'access.role.viewer',
+			);
+
+			expect(record.accessRole).toBe('access.role.viewer');
+		});
+
+		it('falls back to owner accessRole without a current archive context', () => {
+			const record = convertStelaRecordToRecordVO(
+				{ ...baseStelaRecord } as any,
+				null,
+			);
 
 			expect(record.accessRole).toBe('access.role.owner');
 		});
