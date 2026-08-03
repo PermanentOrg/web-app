@@ -1,0 +1,672 @@
+diff --git a/src/app/file-browser/components/edit-date-time-modal/edit-date-time-modal.component.scss b/src/app/file-browser/components/edit-date-time-modal/edit-date-time-modal.component.scss
+index 628a98be..78fc1427 100644
+--- a/src/app/file-browser/components/edit-date-time-modal/edit-date-time-modal.component.scss
++++ b/src/app/file-browser/components/edit-date-time-modal/edit-date-time-modal.component.scss
+@@ -251,13 +251,7 @@
+ 			}
+ 
+ 			.pr-edtf-error {
+-				font-size: 12px;
+-				line-height: 16px;
+-				color: $red;
+-				word-wrap: break-word;
+-				overflow-wrap: break-word;
+-				white-space: normal;
+-				min-width: 0;
++				@include edtf-error-message;
+ 			}
+ 		}
+ 
+diff --git a/src/app/file-browser/components/file-viewer/file-viewer.component.html b/src/app/file-browser/components/file-viewer/file-viewer.component.html
+index c441a243..ba24ee97 100644
+--- a/src/app/file-browser/components/file-viewer/file-viewer.component.html
++++ b/src/app/file-browser/components/file-viewer/file-viewer.component.html
+@@ -125,26 +125,38 @@
+ 					></pr-inline-value-edit>
+ 				}
+ 			</div>
++			@if (showEdtfDatePicker) {
++				<div class="file-viewer-date">
++					<pr-sidebar-date-picker
++						[displayTime]="displayTimeObject"
++						[disabled]="!canEdit"
++						(saveClicked)="onDateSaved($event)"
++						(moreOptionsClicked)="onDateMoreOptions($event)"
++					/>
++				</div>
++			}
+ 			<table class="metadata-table">
+-				<tr>
+-					<td>Date</td>
+-					<td>
+-						<pr-inline-value-edit
+-							[displayValue]="
+-								currentRecord.displayTime || currentRecord.displayDT
+-							"
+-							[canEdit]="canEdit"
+-							[item]="currentRecord"
+-							[itemId]="currentRecord.folder_linkId"
+-							emptyMessage="Click to add date"
+-							readOnlyEmptyMessage="No date"
+-							(doneEditing)="onFinishEditing('displayTime', $event)"
+-							(toggledDatePicker)="onDateToggle($event)"
+-							type="date"
+-							class="no-padding"
+-						></pr-inline-value-edit>
+-					</td>
+-				</tr>
++				@if (!showEdtfDatePicker) {
++					<tr>
++						<td>Date</td>
++						<td>
++							<pr-inline-value-edit
++								[displayValue]="
++									currentRecord.displayTime || currentRecord.displayDT
++								"
++								[canEdit]="canEdit"
++								[item]="currentRecord"
++								[itemId]="currentRecord.folder_linkId"
++								emptyMessage="Click to add date"
++								readOnlyEmptyMessage="No date"
++								(doneEditing)="onFinishEditing('displayTime', $event)"
++								(toggledDatePicker)="onDateToggle($event)"
++								type="date"
++								class="no-padding"
++							></pr-inline-value-edit>
++						</td>
++					</tr>
++				}
+ 				<tr>
+ 					<td>Uploaded</td>
+ 					<td>{{ currentRecord.createdDT | date }}</td>
+diff --git a/src/app/file-browser/components/file-viewer/file-viewer.component.spec.ts b/src/app/file-browser/components/file-viewer/file-viewer.component.spec.ts
+index d06c6281..f8e3f8db 100644
+--- a/src/app/file-browser/components/file-viewer/file-viewer.component.spec.ts
++++ b/src/app/file-browser/components/file-viewer/file-viewer.component.spec.ts
+@@ -16,7 +16,13 @@ import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag
+ import { MockComponent } from 'ng-mocks';
+ import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+ import { environment } from '@root/environments/environment';
++import { MessageService } from '@shared/services/message/message.service';
++import {
++	DateTimeModel,
++	EdtfService,
++} from '@shared/services/edtf-service/edtf.service';
+ import { TagsComponent } from '../../../shared/components/tags/tags.component';
++import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
+ import { FileViewerComponent } from './file-viewer.component';
+ 
+ @Pipe({ name: 'dsFileSize', standalone: false })
+@@ -238,6 +244,19 @@ describe('FileViewerComponent', () => {
+ 						isEnabled: (flag: string) => featureFlagsEnabled.get(flag) ?? false,
+ 					},
+ 				},
++				{
++					provide: MessageService,
++					useValue: {
++						showError: () => {},
++						showMessage: () => {},
++					},
++				},
++				{
++					provide: EditDateTimeModalService,
++					useValue: {
++						open: () => ({ closed: { subscribe: () => {} } }),
++					},
++				},
+ 			],
+ 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+ 		}).compileComponents();
+@@ -253,6 +272,163 @@ describe('FileViewerComponent', () => {
+ 		expect(component).not.toBeNull();
+ 	});
+ 
++	describe('edtf-date feature flag', () => {
++		it('should show the EDTF date picker when the edtf-date flag is enabled', async () => {
++			featureFlagsEnabled.set('edtf-date', true);
++			await recreateComponent();
++
++			expect(component.showEdtfDatePicker).toBe(true);
++			expect(
++				fixture.nativeElement.querySelector('pr-sidebar-date-picker'),
++			).toBeTruthy();
++		});
++
++		it('should show the legacy date field and hide the EDTF picker when the edtf-date flag is disabled', async () => {
++			featureFlagsEnabled.set('edtf-date', false);
++			await recreateComponent();
++
++			expect(component.showEdtfDatePicker).toBe(false);
++			expect(
++				fixture.nativeElement.querySelector('pr-sidebar-date-picker'),
++			).toBeNull();
++
++			const dateRowLabel = Array.from(
++				fixture.nativeElement.querySelectorAll('.metadata-table td'),
++			).find((td: HTMLElement) => td.textContent?.trim() === 'Date');
++
++			expect(dateRowLabel).toBeTruthy();
++		});
++	});
++
++	describe('EDTF date handling', () => {
++		const recordWithDate = () =>
++			new RecordVO({
++				type: 'document',
++				displayName: 'Dated Doc',
++				TagVOs: [],
++				displayTime: '1985-05-20',
++			});
++
++		beforeEach(() => {
++			featureFlagsEnabled.set('edtf-date', true);
++		});
++
++		it('should not parse the date or show an error when the edtf-date flag is disabled', async () => {
++			featureFlagsEnabled.set('edtf-date', false);
++			activatedRouteData.currentRecord = new RecordVO({
++				type: 'document',
++				displayName: 'Invalid Date Doc',
++				TagVOs: [],
++				displayTime: 'not-a-valid-edtf-date',
++			});
++			const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
++			await recreateComponent();
++
++			expect(component.displayTimeObject).toBeNull();
++			expect(showErrorSpy).not.toHaveBeenCalled();
++		});
++
++		it('should compute the cached display time from the record on init', async () => {
++			activatedRouteData.currentRecord = recordWithDate();
++			await recreateComponent();
++
++			expect(component.displayTimeObject?.date.year).toBe('1985');
++		});
++
++		it('should reset the cached display time and show one error when an invalid date is saved', async () => {
++			activatedRouteData.currentRecord = recordWithDate();
++			await recreateComponent();
++
++			const edtfService = TestBed.inject(EdtfService);
++			spyOn(edtfService, 'toEdtfDate').and.throwError('invalid date');
++			const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
++
++			await component.onDateSaved({
++				date: { year: 'bad' } as never,
++				time: { format: 'am' },
++			} as DateTimeModel);
++
++			expect(showErrorSpy).toHaveBeenCalledTimes(1);
++			expect(component.displayTimeObject?.date.year).toBe('1985');
++		});
++
++		it('should save null when the date is cleared to empty', async () => {
++			activatedRouteData.currentRecord = recordWithDate();
++			await recreateComponent();
++
++			await component.onDateSaved({
++				date: { year: '', month: '', day: '' },
++				time: { format: 'am' },
++			});
++
++			expect(savedProperty).toEqual({ name: 'displayTime', value: null });
++		});
++
++		it('should save the EDTF string unchanged for a non-empty date', async () => {
++			activatedRouteData.currentRecord = recordWithDate();
++			await recreateComponent();
++
++			await component.onDateSaved({
++				date: { year: '1990', month: '06', day: '15' },
++				time: { format: 'am' },
++			});
++
++			expect(savedProperty).toEqual({
++				name: 'displayTime',
++				value: '1990-06-15',
++			});
++		});
++
++		it('should re-sync the picker to the reverted value after a failed backend save', async () => {
++			activatedRouteData.currentRecord = recordWithDate();
++			await recreateComponent();
++
++			// Mimic EditService on a server failure: optimistic update now,
++			// revert on a later macrotask. The re-sync must wait for this.
++			spyOn(TestBed.inject(EditService), 'saveItemVoProperty').and.callFake(
++				async (item, _property, value) => {
++					item.displayTime = value;
++					await new Promise((resolve) => {
++						setTimeout(resolve);
++					});
++					item.displayTime = '1985-05-20';
++				},
++			);
++
++			await component.onDateSaved({
++				date: { year: '1990', month: '06', day: '15' },
++				time: { format: 'am' },
++			});
++
++			expect(component.displayTimeObject?.date.year).toBe('1985');
++		});
++
++		it('should show an empty date when displayTime is explicitly null, ignoring displayDT', async () => {
++			activatedRouteData.currentRecord = new RecordVO({
++				type: 'document',
++				displayName: 'Cleared Doc',
++				TagVOs: [],
++				displayTime: null,
++				displayDT: '1985-05-20T00:00:00Z',
++			});
++			await recreateComponent();
++
++			expect(component.displayTimeObject).toBeNull();
++		});
++
++		it('should fall back to displayDT when displayTime is undefined', async () => {
++			activatedRouteData.currentRecord = new RecordVO({
++				type: 'document',
++				displayName: 'Legacy Doc',
++				TagVOs: [],
++				displayDT: '1985-05-20T00:00:00Z',
++			});
++			await recreateComponent();
++
++			expect(component.displayTimeObject?.date.year).toBe('1985');
++		});
++	});
++
+ 	it('should have two tags components', () => {
+ 		const tagsComponents = fixture.nativeElement.querySelectorAll('pr-tags');
+ 
+diff --git a/src/app/file-browser/components/file-viewer/file-viewer.component.ts b/src/app/file-browser/components/file-viewer/file-viewer.component.ts
+index f3a9e136..ea5a2a0a 100644
+--- a/src/app/file-browser/components/file-viewer/file-viewer.component.ts
++++ b/src/app/file-browser/components/file-viewer/file-viewer.component.ts
+@@ -31,7 +31,13 @@ import { ShareLinksService } from '@root/app/share-links/services/share-links.se
+ import { ApiService } from '@shared/services/api/api.service';
+ import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+ import { environment } from '@root/environments/environment';
++import {
++	DateTimeModel,
++	EdtfService,
++} from '@shared/services/edtf-service/edtf.service';
++import { MessageService } from '@shared/services/message/message.service';
+ import { TagsService } from '../../../core/services/tags/tags.service';
++import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
+ 
+ @Component({
+ 	selector: 'pr-file-viewer',
+@@ -63,6 +69,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
+ 
+ 	public canEdit: boolean;
+ 
++	public showEdtfDatePicker = false;
++
++	public editingDate: boolean = false;
++
++	public displayTimeObject: DateTimeModel | null = null;
++
+ 	// Swiping
+ 	private touchElement: HTMLElement;
+ 	private thumbElement: HTMLElement;
+@@ -78,10 +90,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
+ 
+ 	// UI
+ 	public useMinimalView = false;
+-	public editingDate: boolean = false;
+ 	private bodyScrollTop: number;
+ 	private itemTagsSubscription: Subscription;
+ 	private tagsSubscription: Subscription;
++	private dateModalSubscription?: Subscription;
+ 	private isUnlistedShare = true;
+ 
+ 	constructor(
+@@ -89,6 +101,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
+ 		private route: ActivatedRoute,
+ 		private element: ElementRef,
+ 		private dataService: DataService,
++		private message: MessageService,
+ 		@Inject(DOCUMENT) private document: any,
+ 		public sanitizer: DomSanitizer,
+ 		private accountService: AccountService,
+@@ -98,10 +111,14 @@ export class FileViewerComponent implements OnInit, OnDestroy {
+ 		private shareLinksService: ShareLinksService,
+ 		private api: ApiService,
+ 		private feature: FeatureFlagService,
++		private edtfService: EdtfService,
++		private editDateTimeModalService: EditDateTimeModalService,
+ 	) {
+ 		// store current scroll position in file list
+ 		this.bodyScrollTop = window.scrollY;
+ 
++		this.showEdtfDatePicker = this.feature.isEnabled('edtf-date');
++
+ 		const resolvedRecord = route.snapshot.data.currentRecord;
+ 		this.allTags = tagsService.getTags();
+ 
+@@ -187,6 +204,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
+ 		});
+ 		this.itemTagsSubscription.unsubscribe();
+ 		this.tagsSubscription.unsubscribe();
++		this.dateModalSubscription?.unsubscribe();
+ 	}
+ 
+ 	private setRecordsToPreview(resolvedRecord: RecordVO) {
+@@ -245,6 +263,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
+ 			this.replayUrl = this.getReplayUrl();
+ 		}
+ 		this.setCurrentTags();
++		this.updateDisplayTimeObject();
+ 	}
+ 
+ 	toggleSwipe(value: boolean) {
+@@ -433,11 +452,62 @@ export class FileViewerComponent implements OnInit, OnDestroy {
+ 		}
+ 	}
+ 
++	private updateDisplayTimeObject(): void {
++		if (!this.showEdtfDatePicker) {
++			return;
++		}
++		const record = this.currentRecord;
++		const hasExplicitlyClearedDate = record?.displayTime === null;
++		const timeSource = hasExplicitlyClearedDate
++			? null
++			: record?.displayTime || record?.displayDT;
++		try {
++			this.displayTimeObject = timeSource
++				? this.edtfService.toDateTimeModel(timeSource)
++				: null;
++		} catch (err) {
++			this.displayTimeObject = null;
++			this.message.showError({ message: err?.message });
++		}
++	}
++
++	public async onDateSaved(result: DateTimeModel): Promise<void> {
++		await this.saveDisplayTime(result);
++	}
++
++	public async onDateMoreOptions(modalData: DateTimeModel): Promise<void> {
++		const dialogRef = this.editDateTimeModalService.open(modalData);
++
++		this.dateModalSubscription = dialogRef.closed.subscribe(async (result) => {
++			if (result) {
++				await this.saveDisplayTime(result);
++			}
++		});
++	}
++
++	private async saveDisplayTime(result: DateTimeModel): Promise<void> {
++		try {
++			const edtfDate = this.edtfService.toEdtfDate(result);
++			const newDisplayTime = edtfDate === '' ? null : edtfDate;
++			await this.onFinishEditing('displayTime', newDisplayTime);
++		} catch (err) {
++			this.message.showError({ message: err?.message });
++		} finally {
++			// Recompute so the picker re-syncs to the stored value, whether the
++			// save came from the inline picker or the modal, and on failure too.
++			this.updateDisplayTimeObject();
++		}
++	}
++
++	public onDateToggle(active: boolean): void {
++		this.editingDate = active;
++	}
++
+ 	public async onFinishEditing(
+ 		property: KeysOfType<ItemVO, string>,
+ 		value: string,
+ 	): Promise<void> {
+-		this.editService.saveItemVoProperty(
++		await this.editService.saveItemVoProperty(
+ 			this.currentRecord as ItemVO,
+ 			property,
+ 			value,
+@@ -456,10 +526,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
+ 		}
+ 	}
+ 
+-	public onDateToggle(active: boolean): void {
+-		this.editingDate = active;
+-	}
+-
+ 	public onDownloadClick(): void {
+ 		this.dataService.downloadFile(this.currentRecord);
+ 	}
+diff --git a/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.html b/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.html
+index 9587f223..8243aa30 100644
+--- a/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.html
++++ b/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.html
+@@ -77,6 +77,10 @@
+ 				</button>
+ 			</div>
+ 
++			@if (!isEdtfValid()) {
++				<span class="pr-edtf-error">{{ edtfErrorMessage() }}</span>
++			}
++
+ 			<div class="pr-sidebar-date-picker-footer">
+ 				<button class="pr-more-options-btn" (click)="onMoreOptions()">
+ 					<i class="material-icons">tune</i>
+@@ -85,7 +89,11 @@
+ 
+ 				<div class="pr-sidebar-date-picker-actions">
+ 					<button class="pr-btn-cancel" (click)="onCancel()">Cancel</button>
+-					<button class="pr-btn-save" (click)="onSave()">
++					<button
++						class="pr-btn-save"
++						[disabled]="!isEdtfValid()"
++						(click)="onSave()"
++					>
+ 						<i class="material-icons">keyboard_return</i>
+ 					</button>
+ 				</div>
+diff --git a/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.scss b/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.scss
+index 5eae2c1b..bbba49a0 100644
+--- a/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.scss
++++ b/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.scss
+@@ -147,6 +147,12 @@
+ 		}
+ 	}
+ 
++	.pr-edtf-error {
++		@include edtf-error-message;
++		display: block;
++		padding: 4px 16px;
++	}
++
+ 	.pr-sidebar-date-picker-footer {
+ 		@include panel-footer;
+ 		padding: 12px 16px;
+@@ -210,6 +216,11 @@
+ 			background: $PR-blue-800;
+ 		}
+ 
++		&:disabled {
++			opacity: 0.5;
++			cursor: not-allowed;
++		}
++
+ 		.material-icons {
+ 			font-size: 18px;
+ 		}
+diff --git a/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.spec.ts b/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.spec.ts
+index 2f3176f6..9c94eac0 100644
+--- a/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.spec.ts
++++ b/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.spec.ts
+@@ -578,6 +578,62 @@ describe('SidebarDatePickerComponent', () => {
+ 		});
+ 	});
+ 
++	describe('validation', () => {
++		const invalidTimeOnlyInput = {
++			hours: '02',
++			minutes: '30',
++			seconds: '00',
++			format: 'pm',
++		} as const;
++
++		it('should disable save and show an error when a time is entered without a complete date', () => {
++			component.open();
++			component.onTimeChange({ ...invalidTimeOnlyInput });
++			fixture.detectChanges();
++
++			expect(component.isEdtfValid()).toBeFalse();
++
++			const errorMessage =
++				fixture.nativeElement.querySelector('.pr-edtf-error');
++
++			expect(errorMessage).toBeTruthy();
++			expect(errorMessage.textContent.trim()).not.toBe('');
++
++			const saveButton = fixture.nativeElement.querySelector('.pr-btn-save');
++
++			expect(saveButton.disabled).toBeTrue();
++		});
++
++		it('should not emit saveClicked and should keep the dropdown open when the input is invalid', () => {
++			component.open();
++			component.onTimeChange({ ...invalidTimeOnlyInput });
++			fixture.detectChanges();
++
++			component.onSave();
++
++			expect(host.savedValue).toBeNull();
++			expect(component.isDropdownOpen()).toBeTrue();
++		});
++
++		it('should keep save enabled and show no error for a valid date', () => {
++			host.displayTime = {
++				date: { year: '1985', month: '05', day: '20' },
++				time: { hours: '', minutes: '', seconds: '', format: 'am' },
++			};
++			fixture.detectChanges();
++
++			component.open();
++			fixture.detectChanges();
++
++			expect(component.isEdtfValid()).toBeTrue();
++			expect(fixture.nativeElement.querySelector('.pr-edtf-error')).toBeNull();
++
++			const saveButton = fixture.nativeElement.querySelector('.pr-btn-save');
++
++			expect(saveButton.disabled).toBeFalse();
++		});
++	});
++
+ 	describe('onCancel', () => {
+ 		it('should close dropdown and reset to input values', () => {
+ 			host.displayTime = {
+diff --git a/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.ts b/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.ts
+index 193b0c91..64c1666b 100644
+--- a/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.ts
++++ b/src/app/file-browser/components/sidebar-date-picker/sidebar-date-picker.component.ts
+@@ -155,6 +155,23 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
+ 		this._isOpenStart() ? this.endTimezone() : this.startTimezone(),
+ 	);
+ 
++	private edtfResult = computed<{ valid: boolean; errorMessage: string }>(
++		() => {
++			try {
++				this.edtfService.toEdtfDate(this.buildDateTimeModel());
++				return { valid: true, errorMessage: '' };
++			} catch (error) {
++				return {
++					valid: false,
++					errorMessage: error instanceof Error ? error.message : 'Invalid date',
++				};
++			}
++		},
++	);
++
++	isEdtfValid = computed(() => this.edtfResult().valid);
++	edtfErrorMessage = computed(() => this.edtfResult().errorMessage);
++
+ 	rows = computed<SidebarDateRow[]>(() => {
+ 		const intervalLabel = this.intervalLabel();
+ 		if (intervalLabel) {
+@@ -266,15 +283,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
+ 
+ 	onMoreOptions(): void {
+ 		this.isDropdownOpen.set(false);
+-
+-		const modalData: DateTimeModel = {
+-			qualifiers: { ...this._qualifiers() },
+-			date: { ...this._date() },
+-			time: { ...this._time() },
+-			...(this.buildEndSide() ?? {}),
+-		};
+-
+-		this.moreOptionsClicked.emit(modalData);
++		this.moreOptionsClicked.emit(this.buildDateTimeModel());
+ 	}
+ 
+ 	onCancel(): void {
+@@ -283,15 +292,21 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
+ 	}
+ 
+ 	onSave(): void {
+-		const dateTimeModel: DateTimeModel = {
++		if (!this.isEdtfValid()) {
++			return;
++		}
++
++		this.saveClicked.emit(this.buildDateTimeModel());
++		this.isDropdownOpen.set(false);
++	}
++
++	private buildDateTimeModel(): DateTimeModel {
++		return {
+ 			qualifiers: { ...this._qualifiers() },
+ 			date: { ...this._date() },
+ 			time: { ...this._time() },
+ 			...(this.buildEndSide() ?? {}),
+ 		};
+-
+-		this.saveClicked.emit(dateTimeModel);
+-		this.isDropdownOpen.set(false);
+ 	}
+ 
+ 	private hasAnyQualifier(flags: DateQualifierFlags): boolean {
+diff --git a/src/app/shared/components/message/message.component.scss b/src/app/shared/components/message/message.component.scss
+index b2f047b2..4e75c8de 100644
+--- a/src/app/shared/components/message/message.component.scss
++++ b/src/app/shared/components/message/message.component.scss
+@@ -8,7 +8,10 @@ $transition-length: 0.33s;
+ 	left: 0;
+ 	right: 0;
+ 	transform: translateY(-100%);
+-	z-index: 6;
++	// Must sit above full-screen components (z-index 10, e.g. the file viewer)
++	// and the date/time picker dropdowns (z-index 20) that open within them,
++	// otherwise the error banner renders but is hidden behind the overlay.
++	z-index: 30;
+ }
+ 
+ .alert {
+diff --git a/src/styles/_mixins.scss b/src/styles/_mixins.scss
+index 564686cf..93660b32 100644
+--- a/src/styles/_mixins.scss
++++ b/src/styles/_mixins.scss
+@@ -55,6 +55,16 @@
+ 	color: $red;
+ }
+ 
++@mixin edtf-error-message {
++	font-size: 12px;
++	line-height: 16px;
++	color: $red;
++	word-wrap: break-word;
++	overflow-wrap: break-word;
++	white-space: normal;
++	min-width: 0;
++}
++
+ @mixin icon-wrapper {
+ 	background: $PR-blue-25;
+ 	border-radius: 0 8px 8px 0;
