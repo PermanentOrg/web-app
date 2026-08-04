@@ -12,7 +12,6 @@ import { TagsService } from '@core/services/tags/tags.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { MockComponent } from 'ng-mocks';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { environment } from '@root/environments/environment';
@@ -117,7 +116,6 @@ describe('FileViewerComponent', () => {
 	let openedDialogs: string[];
 	let downloaded: boolean;
 	let publicProfileService: PublicProfileService;
-	let featureFlagsEnabled: Map<string, boolean>;
 
 	function setUpMultipleRecords(...items: ItemVO[]) {
 		folderChildren.push(...items);
@@ -145,7 +143,6 @@ describe('FileViewerComponent', () => {
 		openedDialogs = [];
 		downloaded = false;
 		publicProfileService = new PublicProfileService();
-		featureFlagsEnabled = new Map<string, boolean>();
 
 		await TestBed.configureTestingModule({
 			declarations: [
@@ -230,12 +227,6 @@ describe('FileViewerComponent', () => {
 						record: {
 							get: async () => ({ getRecordVO: () => defaultItem }),
 						},
-					},
-				},
-				{
-					provide: FeatureFlagService,
-					useValue: {
-						isEnabled: (flag: string) => featureFlagsEnabled.get(flag) ?? false,
 					},
 				},
 			],
@@ -581,8 +572,7 @@ describe('FileViewerComponent', () => {
 			});
 		}
 
-		it('should set replayUrl when replay-web feature flag is enabled', async () => {
-			featureFlagsEnabled.set('replay-web', true);
+		it('should set replayUrl for web archive records', async () => {
 			setUpWebArchiveRecord();
 			recreateComponent();
 			await fixture.whenStable();
@@ -594,17 +584,7 @@ describe('FileViewerComponent', () => {
 			expect(internalUrl.startsWith(environment.replayBaseUrl)).toBe(true);
 		});
 
-		it('should not set replayUrl when replay-web feature flag is disabled', async () => {
-			featureFlagsEnabled.set('replay-web', false);
-			setUpWebArchiveRecord();
-			recreateComponent();
-			await fixture.whenStable();
-
-			expect(component.replayUrl).toBeNull();
-		});
-
-		it('should have null replayUrl for non-web-archive records even when flag is enabled', async () => {
-			featureFlagsEnabled.set('replay-web', true);
+		it('should have null replayUrl for non-web-archive records', async () => {
 			activatedRouteData.currentRecord = new RecordVO({
 				type: 'document',
 				displayName: 'Test Document',
