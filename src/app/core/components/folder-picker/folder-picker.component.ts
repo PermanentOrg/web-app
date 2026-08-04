@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { remove } from 'lodash';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, ItemVO, RecordVO } from '@root/app/models/index';
+import { GetThumbnail } from '@models/get-thumbnail';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
@@ -111,6 +112,15 @@ export class FolderPickerComponent implements OnDestroy {
 
 	showRecord(record: RecordVO) {
 		this.selectedRecord = record;
+	}
+
+	// Read from the item on every check rather than through the getThumbnail pipe.
+	// The lean fetch that follows setFolder() writes thumbnail URLs onto these same
+	// item instances, and a pure pipe never re-runs for a mutation that leaves the
+	// reference unchanged, so the picker showed no thumbnails until its rows were
+	// rebuilt by navigating away and back.
+	getThumbnailUrl(item: ItemVO): string | undefined {
+		return GetThumbnail(item);
 	}
 
 	async setFolder(folder: FolderVO) {
