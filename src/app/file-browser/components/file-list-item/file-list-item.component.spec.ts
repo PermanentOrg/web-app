@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ElementRef, Pipe, PipeTransform } from '@angular/core';
-import { of } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
@@ -41,6 +41,7 @@ describe('FileListItemComponent', () => {
 	let component: FileListItemComponent;
 	let fixture: ComponentFixture<FileListItemComponent>;
 	let editService: EditService;
+	let thumbnailUpdatedSubject: Subject<any>;
 
 	const activatedRouteMock = {
 		snapshot: {
@@ -67,6 +68,8 @@ describe('FileListItemComponent', () => {
 	};
 
 	beforeEach(async () => {
+		thumbnailUpdatedSubject = new Subject<any>();
+
 		await TestBed.configureTestingModule({
 			imports: [MockItemTypeIconPipe, MockPrDatePipe, MockPrConstantsPipe],
 			declarations: [FileListItemComponent, GetThumbnailPipe],
@@ -84,6 +87,7 @@ describe('FileListItemComponent', () => {
 						beginPreparingForNavigate: jasmine.createSpy(),
 						fetchLeanItems: jasmine.createSpy(),
 						setItemMultiSelectStatus: jasmine.createSpy(),
+						thumbnailUpdated$: () => thumbnailUpdatedSubject.asObservable(),
 						currentFolder: { type: '' },
 					},
 				},
@@ -333,7 +337,15 @@ describe('FileListItemComponent', () => {
 		(router.routerState.snapshot as any).url = '/';
 	});
 
-	it('should keep the same random preview thumbnail across reads', async () => {
+	it('should not replace the stock preview when a thumbnail arrives later', async () => {
+		// detectChanges() in beforeEach left an ngOnInit awaiting isUnlistedShare().
+		// Drain it and tear the component down so this test starts from a single
+		// subscription, the way a real component instance does.
+		await new Promise((resolve) => {
+			setTimeout(resolve);
+		});
+		component.ngOnDestroy();
+
 		const router = TestBed.inject(Router);
 		(router.routerState.snapshot as any).url = '/share/test';
 
@@ -346,11 +358,14 @@ describe('FileListItemComponent', () => {
 
 		await component.ngOnInit();
 
-		const firstRead = component.recordThumbnailUrl;
+		const stockPreview = component.recordThumbnailUrl;
 
-		expect(firstRead).toMatch(/^assets\/img\/preview\/preview-\d+\.jpg$/);
-		expect(component.recordThumbnailUrl).toBe(firstRead);
-		expect(component.recordThumbnailUrl).toBe(firstRead);
+		expect(stockPreview).toMatch(/^assets\/img\/preview\/preview-\d+\.jpg$/);
+
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+		thumbnailUpdatedSubject.next(component.item);
+
+		expect(component.recordThumbnailUrl).toBe(stockPreview);
 
 		(router.routerState.snapshot as any).url = '/';
 	});
@@ -428,6 +443,7 @@ describe('FileListItemComponent', () => {
 	});
 
 	it('should pick up a thumbnail added to the item after init', async () => {
+		component.ngOnDestroy();
 		component.item.isRecord = true;
 		component.item.type = 'type.record.image';
 
@@ -436,10 +452,43 @@ describe('FileListItemComponent', () => {
 		expect(component.recordThumbnailUrl).toBeUndefined();
 
 		// The thumbnail refresh poll in DataService mutates the existing item
-		// rather than replacing it.
+		// rather than replacing it, then announces the item it wrote to.
 		component.item.thumbnail256 = 'https://example.com/256';
+		thumbnailUpdatedSubject.next(component.item);
 
 		expect(component.recordThumbnailUrl).toBe('https://example.com/256');
+	});
+
+	it('should ignore a thumbnail update for a different item', async () => {
+		component.ngOnDestroy();
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+
+		component.item.thumbnail256 = 'https://example.com/256';
+		// Same folder_linkId, different instance: only the item this row renders
+		// counts, so the update belongs to some other row.
+		thumbnailUpdatedSubject.next({
+			folder_linkId: component.item.folder_linkId,
+			thumbnail256: 'https://example.com/other',
+		});
+
+		expect(component.recordThumbnailUrl).toBeUndefined();
+	});
+
+	it('should stop applying thumbnail updates once destroyed', async () => {
+		component.ngOnDestroy();
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+		component.ngOnDestroy();
+
+		component.item.thumbnail256 = 'https://example.com/256';
+		thumbnailUpdatedSubject.next(component.item);
+
+		expect(component.recordThumbnailUrl).toBeUndefined();
 	});
 
 	it('should display displayTime instead of displayDT when displayTime is set', () => {
