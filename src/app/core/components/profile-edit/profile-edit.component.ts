@@ -23,7 +23,7 @@ import {
 	collapseAnimation,
 	ngIfScaleAnimationDynamic,
 } from '@shared/animations';
-import { GetBanner } from '@models/get-thumbnail';
+import { GetBanner, GetThumbnail } from '@models/get-thumbnail';
 import debug from 'debug';
 import {
 	PromptService,
@@ -75,6 +75,18 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
 	get bannerThumbnail(): string | null {
 		return this.publicRoot?.thumbArchiveNbr ? GetBanner(this.publicRoot) : null;
+	}
+
+	// Read through to the archive rather than piping it, the way bannerThumbnail
+	// reads through to publicRoot. Choosing a photo writes the new URLs onto this
+	// same ArchiveVO instance, and a pure pipe never re-runs for a mutation that
+	// leaves the reference unchanged.
+	get profileThumbnail(): string | null {
+		if (!this.archive) {
+			return null;
+		}
+
+		return GetThumbnail(this.archive) ?? null;
 	}
 
 	private debug = debug('component:profileEdit');
