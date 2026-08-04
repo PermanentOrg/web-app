@@ -93,6 +93,14 @@ export class DataService {
 
 	private unsharedItemSubject = new Subject<ItemVO>();
 
+	// Emits the item whose thumbnail URLs were just written by a lean fetch.
+	// Subscribers match on object identity: this service mutates the very same
+	// ItemVO instances its consumers render, so the emitted reference is the only
+	// unambiguous way to tell which consumer the update belongs to. Matching on
+	// folder_linkId would not be, since that id arrives as a number from stela
+	// and as a string from some PHP responses.
+	private thumbnailUpdatedSubject = new Subject<ItemVO>();
+
 	private eventSubject: Subject<boolean> = new Subject<boolean>();
 	public events: Observable<boolean> = this.eventSubject.asObservable();
 
@@ -293,9 +301,15 @@ export class DataService {
 						}
 						item.fetched = null;
 
+						const thumbnailUrl = GetThumbnail(item);
+
+						if (thumbnailUrl) {
+							this.thumbnailUpdatedSubject.next(item);
+						}
+
 						if (
 							!item.isFolder &&
-							!GetThumbnail(item) &&
+							!thumbnailUrl &&
 							isSameId(item.parentFolderId, this.currentFolder.folderId)
 						) {
 							this.debug('thumbRefreshQueue push %s', item.archiveNbr);
@@ -755,6 +769,10 @@ export class DataService {
 
 	public unsharedItem$() {
 		return this.unsharedItemSubject.asObservable();
+	}
+
+	public thumbnailUpdated$(): Observable<ItemVO> {
+		return this.thumbnailUpdatedSubject.asObservable();
 	}
 
 	public itemUnshared(item: ItemVO) {

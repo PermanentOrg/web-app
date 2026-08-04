@@ -62,6 +62,7 @@ import {
 	unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { RouteData } from '@root/app/app.routes';
@@ -205,25 +206,10 @@ export class FileListItemComponent
 	public isZip = false;
 	public date: string = '';
 	public isUnlistedShare = false;
+	public recordThumbnailUrl: string | undefined;
 
 	private folderThumb: string;
 	private folderContentsType: FolderContentsType = FolderContentsType.NORMAL;
-
-	private isSharePreviewRoute = false;
-	private previewImageOverride: string | undefined;
-	private previewImageResolved = false;
-
-	// Read live rather than snapshotted in ngOnInit: the thumbnail refresh poll in
-	// DataService writes new thumbnail URLs onto the existing item, so a snapshot
-	// would leave newly uploaded files without a thumbnail until a manual refresh.
-	public get recordThumbnailUrl(): string | undefined {
-		// Don't leak a real thumbnail before we know whether this share is unlisted.
-		if (this.isSharePreviewRoute && !this.previewImageResolved) {
-			return undefined;
-		}
-
-		return this.previewImageOverride ?? GetThumbnail(this.item);
-	}
 
 	private getRandomPreviewImage(): string {
 		const previewCount = 10;
@@ -274,12 +260,15 @@ export class FileListItemComponent
 	}
 
 	async ngOnInit() {
-		this.isSharePreviewRoute =
+		this.isInSharePreview =
 			this.router.routerState.snapshot.url.includes('/share/');
 		const date = new Date(this.startDisplayTime);
 		this.date = getFormattedDate(date);
 
-		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+		const isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+		this.isUnlistedShare = isUnlistedShare;
+
+		this.initializeThumbnail(isUnlistedShare);
 
 		this.dataService.registerItem(this.item);
 		if (this.item.type.includes('app')) {
@@ -291,13 +280,8 @@ export class FileListItemComponent
 			this.isPublicArchive = true;
 		}
 
-		if (this.isSharePreviewRoute) {
-			if (!this.isUnlistedShare) {
-				this.previewImageOverride = this.getRandomPreviewImage();
-			}
-			this.previewImageResolved = true;
+		if (this.isInSharePreview) {
 			this.allowActions = false;
-			this.isInSharePreview = true;
 		}
 
 		if (this.router.routerState.snapshot.url.includes('/apps')) {
@@ -1067,6 +1051,29 @@ export class FileListItemComponent
 			component: this,
 			element: this.element.nativeElement as HTMLElement,
 		});
+	}
+
+	// A listed share preview must never show the real content, only a stock image.
+	// The answer arrives asynchronously, so it is taken as an argument: the
+	// thumbnail cannot be resolved before the share type is known.
+	private initializeThumbnail(isUnlistedShare: boolean): void {
+		if (this.isInSharePreview && !isUnlistedShare) {
+			this.recordThumbnailUrl = this.getRandomPreviewImage();
+			return;
+		}
+
+		this.recordThumbnailUrl = GetThumbnail(this.item);
+
+		// The thumbnail refresh poll in DataService writes new URLs onto this same
+		// item instance, which no binding can observe on its own.
+		this.subscriptions.push(
+			this.dataService
+				.thumbnailUpdated$()
+				.pipe(filter((updatedItem) => updatedItem === this.item))
+				.subscribe(() => {
+					this.recordThumbnailUrl = GetThumbnail(this.item);
+				}),
+		);
 	}
 
 	private getFolderThumbnail(): void {

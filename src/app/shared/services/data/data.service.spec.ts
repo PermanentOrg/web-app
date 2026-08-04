@@ -321,6 +321,87 @@ describe('DataService', () => {
 			.catch(done.fail);
 	});
 
+	it('should announce the refreshed item when a thumbnail arrives', (done) => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
+		service.setCurrentFolder(currentFolder);
+
+		const record = currentFolder.ChildItemVOs.find(
+			(item) => item.isRecord,
+		) as RecordVO;
+		service.registerItem(record);
+
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({
+					ChildItemVOs: [
+						{
+							folder_linkId: record.folder_linkId,
+							archiveNbr: record.archiveNbr,
+							parentFolderId: currentFolder.folderId,
+							thumbURL500: 'https://example.com/500',
+						},
+					],
+				}),
+			} as unknown as FolderResponse),
+		);
+
+		// The emitted reference is what lets a consumer tell its own item apart
+		// from every other row's.
+		service.thumbnailUpdated$().subscribe((updatedItem) => {
+			expect(updatedItem).toBe(record);
+			expect((updatedItem as RecordVO).thumbURL500).toBe(
+				'https://example.com/500',
+			);
+			done();
+		});
+
+		service.fetchLeanItems([record]).catch(done.fail);
+	});
+
+	it('should not announce a refreshed item that still has no thumbnail', (done) => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
+		service.setCurrentFolder(currentFolder);
+
+		const record = currentFolder.ChildItemVOs.find(
+			(item) => item.isRecord,
+		) as RecordVO;
+		service.registerItem(record);
+
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({
+					ChildItemVOs: [
+						{
+							folder_linkId: record.folder_linkId,
+							archiveNbr: record.archiveNbr,
+							parentFolderId: currentFolder.folderId,
+						},
+					],
+				}),
+			} as unknown as FolderResponse),
+		);
+
+		const thumbnailUpdated = jasmine.createSpy();
+		service.thumbnailUpdated$().subscribe(thumbnailUpdated);
+
+		service
+			.fetchLeanItems([record])
+			.then(() => {
+				expect(thumbnailUpdated).not.toHaveBeenCalled();
+				expect(service.getThumbRefreshQueue()).toContain(record);
+				done();
+			})
+			.catch(done.fail);
+	});
+
 	it('should update every child when the response is larger than the request', async () => {
 		const service = TestBed.inject(DataService);
 		const api = TestBed.inject(ApiService);
