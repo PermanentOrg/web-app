@@ -72,6 +72,100 @@ describe('UserChecklistService', () => {
 		req.flush(expected);
 	});
 
+	describe('"Create your first archive" completion', () => {
+		function flushChecklistResponse(response: ChecklistApiResponse): void {
+			const req = http.expectOne(`${environment.apiUrl}/v2/event/checklist`);
+			req.flush(response);
+		}
+
+		it('marks the archiveCreated item as completed when the API reports it as incomplete', (done) => {
+			service
+				.getChecklistItems()
+				.then((items) => {
+					expect(items[0].completed).toBeTrue();
+					done();
+				})
+				.catch(() => {
+					done.fail();
+				});
+
+			flushChecklistResponse({
+				checklistItems: [
+					{
+						id: 'archiveCreated',
+						title: 'Create your first archive',
+						completed: false,
+					},
+				],
+			});
+		});
+
+		it('leaves the archiveCreated item completed when the API already reports it as complete', (done) => {
+			service
+				.getChecklistItems()
+				.then((items) => {
+					expect(items[0].completed).toBeTrue();
+					done();
+				})
+				.catch(() => {
+					done.fail();
+				});
+
+			flushChecklistResponse({
+				checklistItems: [
+					{
+						id: 'archiveCreated',
+						title: 'Create your first archive',
+						completed: true,
+					},
+				],
+			});
+		});
+
+		it('passes every other checklist item through untouched', (done) => {
+			service
+				.getChecklistItems()
+				.then((items) => {
+					expect(items.length).toBe(3);
+					expect(items[1]).toEqual({
+						id: 'firstUpload',
+						title: 'Upload first file',
+						completed: false,
+					});
+
+					expect(items[2]).toEqual({
+						id: 'publishContent',
+						title: 'Publish your archive',
+						completed: true,
+					});
+					done();
+				})
+				.catch(() => {
+					done.fail();
+				});
+
+			flushChecklistResponse({
+				checklistItems: [
+					{
+						id: 'archiveCreated',
+						title: 'Create your first archive',
+						completed: false,
+					},
+					{
+						id: 'firstUpload',
+						title: 'Upload first file',
+						completed: false,
+					},
+					{
+						id: 'publishContent',
+						title: 'Publish your archive',
+						completed: true,
+					},
+				],
+			});
+		});
+	});
+
 	it('can check if the user is hiding the checklist', () => {
 		account.setAccount(new AccountVO({ hideChecklist: false }));
 

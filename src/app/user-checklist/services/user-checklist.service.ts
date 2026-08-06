@@ -7,6 +7,11 @@ import { ChecklistApi } from '../types/checklist-api';
 import { ChecklistApiResponse, ChecklistItem } from '../types/checklist-item';
 import { ChecklistEventObserverService } from './checklist-event-observer.service';
 
+// The checklist is only shown to members viewing their own default archive, so
+// the "Create your first archive" step is always complete for anyone who can
+// see it. Mark it as complete regardless of what the API reports.
+const ALWAYS_COMPLETED_CHECKLIST_ITEM_ID = 'archiveCreated';
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -29,11 +34,21 @@ export class UserChecklistService implements ChecklistApi, OnDestroy {
 	}
 
 	public async getChecklistItems(): Promise<ChecklistItem[]> {
-		return (
+		const checklistItems = (
 			await firstValueFrom(
 				this.httpv2.get<ChecklistApiResponse>('/v2/event/checklist'),
 			)
 		)[0].checklistItems;
+
+		const archiveCreatedItem = checklistItems.find(
+			(checklistItem) =>
+				checklistItem.id === ALWAYS_COMPLETED_CHECKLIST_ITEM_ID,
+		);
+		if (archiveCreatedItem) {
+			archiveCreatedItem.completed = true;
+		}
+
+		return checklistItems;
 	}
 
 	public isAccountHidingChecklist(): boolean {
