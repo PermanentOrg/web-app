@@ -386,7 +386,10 @@ export class EditService {
 		const itemsByLinkId: { [key: number]: ItemVO } = {};
 
 		const recordsByRecordId: Map<number, RecordVO> = new Map();
-		const foldersByFolderId: Map<number, FolderVO> = new Map();
+		// Keyed by a stringified folderId: the Stela update response returns
+		// folderId as a string while the in-memory folder holds a number, so we
+		// normalize both sides to match them reliably.
+		const foldersByFolderId: Map<string, FolderVO> = new Map();
 
 		items.forEach((item) => {
 			item.isFolder ? folders.push(item) : records.push(item);
@@ -396,7 +399,7 @@ export class EditService {
 					recordsByRecordId.set(item.recordId, item);
 				}
 			} else if (item.folderId) {
-				foldersByFolderId.set(item.folderId, item);
+				foldersByFolderId.set(String(item.folderId), item);
 			}
 		});
 
@@ -435,8 +438,10 @@ export class EditService {
 
 					const folder =
 						(itemsByLinkId[updatedItem.folder_linkId] as FolderVO) ||
-						foldersByFolderId.get(updatedItem.folderId);
-					folder.update(newData);
+						foldersByFolderId.get(String(updatedItem.folderId));
+					// Guard against a response VO that maps to no in-memory folder so a
+					// lookup miss can never crash an otherwise-successful save.
+					folder?.update(newData);
 				});
 			}
 

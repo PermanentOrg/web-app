@@ -1,7 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { TimeModel } from '@shared/services/edtf-service/edtf.service';
-import { TimepickerInputComponent } from './timepicker-input.component';
+import {
+	HOUR_12_RANGE_ERROR,
+	HOUR_24_RANGE_ERROR,
+	INVALID_CHARS_ERROR,
+	MINUTES_RANGE_ERROR,
+	SECONDS_RANGE_ERROR,
+	TimepickerInputComponent,
+} from './timepicker-input.component';
 
 @Component({
 	template: `<pr-timepicker-input
@@ -47,6 +54,16 @@ describe('TimepickerInputComponent', () => {
 	const mockEvent = (value: string): Event =>
 		({ target: { value } }) as unknown as Event;
 
+	const switchToH24 = (): void => {
+		hostComponent.time = {
+			hours: '',
+			minutes: '',
+			seconds: '',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+	};
+
 	// --- Basic rendering ---
 
 	it('should create', () => {
@@ -80,107 +97,135 @@ describe('TimepickerInputComponent', () => {
 		expect(component.showTimepicker()).toBeFalse();
 	});
 
-	// --- Hour validation (12-hour) ---
+	it('should toggle timepicker via keyboard (Enter and Space)', () => {
+		const iconButton: HTMLElement =
+			fixture.nativeElement.querySelector('.pr-icon-button');
 
-	it('should accept valid hour', () => {
+		iconButton.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+		fixture.detectChanges();
+
+		expect(component.showTimepicker()).toBeTrue();
+
+		iconButton.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+		fixture.detectChanges();
+
+		expect(component.showTimepicker()).toBeFalse();
+	});
+
+	// --- Hour validation (12-hour mode) ---
+
+	it('should accept valid hour and clear hours error', () => {
 		component.updateTime(mockEvent('10'), 'hours');
 
 		expect(hostComponent.lastEmittedTime?.hours).toBe('10');
+		expect(component.fieldErrors.hours()).toBeNull();
 	});
 
-	it('should reject hour greater than 12', () => {
+	it('should emit hour > 12 in 12-hour mode AND surface 1-12 error', () => {
 		component.updateTime(mockEvent('13'), 'hours');
 
-		expect(hostComponent.lastEmittedTime).toBeNull();
+		expect(hostComponent.lastEmittedTime?.hours).toBe('13');
+		expect(component.fieldErrors.hours()).toBe(HOUR_12_RANGE_ERROR);
 	});
 
-	it('should reject non-numeric hour', () => {
+	it('should emit non-numeric hour AND surface the invalid-characters error', () => {
 		component.updateTime(mockEvent('ab'), 'hours');
 
-		expect(hostComponent.lastEmittedTime).toBeNull();
+		expect(hostComponent.lastEmittedTime?.hours).toBe('ab');
+		expect(component.fieldErrors.hours()).toBe(INVALID_CHARS_ERROR);
 	});
 
-	it('should accept single digit 0 or 1 for hours', () => {
+	it('should accept single digit 0 or 1 for hours in 12-hour mode', () => {
 		component.updateTime(mockEvent('1'), 'hours');
 
 		expect(hostComponent.lastEmittedTime?.hours).toBe('1');
+		expect(component.fieldErrors.hours()).toBeNull();
 	});
 
-	it('should reject single digit greater than 1 for hours', () => {
+	it('should NOT surface the hours range error while only one digit has been typed', () => {
 		component.updateTime(mockEvent('2'), 'hours');
 
-		expect(hostComponent.lastEmittedTime).toBeNull();
+		expect(hostComponent.lastEmittedTime?.hours).toBe('2');
+		expect(component.fieldErrors.hours()).toBeNull();
 	});
 
-	// --- Hour validation (24-hour) ---
+	it('should NOT surface the minutes range error while only one digit has been typed', () => {
+		component.updateTime(mockEvent('9'), 'minutes');
+
+		expect(hostComponent.lastEmittedTime?.minutes).toBe('9');
+		expect(component.fieldErrors.minutes()).toBeNull();
+	});
+
+	it('should NOT surface the seconds range error while only one digit has been typed', () => {
+		component.updateTime(mockEvent('9'), 'seconds');
+
+		expect(hostComponent.lastEmittedTime?.seconds).toBe('9');
+		expect(component.fieldErrors.seconds()).toBeNull();
+	});
+
+	// --- Hour validation (24-hour mode) ---
 
 	it('should accept hours 00-23 in h24 mode', () => {
-		hostComponent.time = {
-			hours: '',
-			minutes: '',
-			seconds: '',
-			format: 'h24',
-		};
-		fixture.detectChanges();
+		switchToH24();
 
 		component.updateTime(mockEvent('00'), 'hours');
 
 		expect(hostComponent.lastEmittedTime?.hours).toBe('00');
-
-		component.updateTime(mockEvent('13'), 'hours');
-
-		expect(hostComponent.lastEmittedTime?.hours).toBe('13');
+		expect(component.fieldErrors.hours()).toBeNull();
 
 		component.updateTime(mockEvent('23'), 'hours');
 
 		expect(hostComponent.lastEmittedTime?.hours).toBe('23');
+		expect(component.fieldErrors.hours()).toBeNull();
 	});
 
-	it('should reject hours 24 and above in h24 mode', () => {
-		hostComponent.time = {
-			hours: '12',
-			minutes: '',
-			seconds: '',
-			format: 'h24',
-		};
-		fixture.detectChanges();
-		hostComponent.lastEmittedTime = null;
+	it('should emit hour 24 in h24 mode AND surface 0-23 error', () => {
+		switchToH24();
 
 		component.updateTime(mockEvent('24'), 'hours');
 
-		expect(hostComponent.lastEmittedTime).toBeNull();
-
-		component.updateTime(mockEvent('30'), 'hours');
-
-		expect(hostComponent.lastEmittedTime).toBeNull();
+		expect(hostComponent.lastEmittedTime?.hours).toBe('24');
+		expect(component.fieldErrors.hours()).toBe(HOUR_24_RANGE_ERROR);
 	});
 
-	it('should accept single digit 0-2 for hours in h24 mode', () => {
+	it('should re-validate the hour when the format toggles (15 valid in h24, invalid in 12-hour)', () => {
 		hostComponent.time = {
-			hours: '',
+			hours: '15',
 			minutes: '',
 			seconds: '',
 			format: 'h24',
 		};
 		fixture.detectChanges();
 
-		component.updateTime(mockEvent('2'), 'hours');
+		expect(component.fieldErrors.hours()).toBeNull();
 
-		expect(hostComponent.lastEmittedTime?.hours).toBe('2');
+		component.cycleFormat();
+
+		expect(component.fieldErrors.hours()).toBe(HOUR_12_RANGE_ERROR);
 	});
 
-	it('should reject single digit greater than 2 for hours in h24 mode', () => {
+	it('should clear the hour error when the format toggles to one where the value is valid', () => {
 		hostComponent.time = {
-			hours: '',
+			hours: '15',
 			minutes: '',
 			seconds: '',
-			format: 'h24',
+			format: 'am',
 		};
 		fixture.detectChanges();
 
-		component.updateTime(mockEvent('3'), 'hours');
+		expect(component.fieldErrors.hours()).toBe(HOUR_12_RANGE_ERROR);
 
-		expect(hostComponent.lastEmittedTime).toBeNull();
+		// am -> pm: still 12-hour, still invalid
+		component.cycleFormat();
+		fixture.detectChanges();
+
+		expect(component.fieldErrors.hours()).toBe(HOUR_12_RANGE_ERROR);
+
+		// pm -> h24: now valid
+		component.cycleFormat();
+		fixture.detectChanges();
+
+		expect(component.fieldErrors.hours()).toBeNull();
 	});
 
 	// --- Minute validation ---
@@ -189,24 +234,21 @@ describe('TimepickerInputComponent', () => {
 		component.updateTime(mockEvent('30'), 'minutes');
 
 		expect(hostComponent.lastEmittedTime?.minutes).toBe('30');
+		expect(component.fieldErrors.minutes()).toBeNull();
 	});
 
-	it('should reject minutes greater than 59', () => {
+	it('should emit minutes 60 AND surface the minutes error', () => {
 		component.updateTime(mockEvent('60'), 'minutes');
 
-		expect(hostComponent.lastEmittedTime).toBeNull();
+		expect(hostComponent.lastEmittedTime?.minutes).toBe('60');
+		expect(component.fieldErrors.minutes()).toBe(MINUTES_RANGE_ERROR);
 	});
 
-	it('should accept single digit 0-5 for minutes', () => {
-		component.updateTime(mockEvent('5'), 'minutes');
+	it('should emit non-numeric minutes AND surface the invalid-characters error', () => {
+		component.updateTime(mockEvent('a5'), 'minutes');
 
-		expect(hostComponent.lastEmittedTime?.minutes).toBe('5');
-	});
-
-	it('should reject single digit greater than 5 for minutes', () => {
-		component.updateTime(mockEvent('6'), 'minutes');
-
-		expect(hostComponent.lastEmittedTime).toBeNull();
+		expect(hostComponent.lastEmittedTime?.minutes).toBe('a5');
+		expect(component.fieldErrors.minutes()).toBe(INVALID_CHARS_ERROR);
 	});
 
 	// --- Second validation ---
@@ -215,17 +257,19 @@ describe('TimepickerInputComponent', () => {
 		component.updateTime(mockEvent('45'), 'seconds');
 
 		expect(hostComponent.lastEmittedTime?.seconds).toBe('45');
+		expect(component.fieldErrors.seconds()).toBeNull();
 	});
 
-	it('should reject seconds greater than 59', () => {
+	it('should emit seconds 60 AND surface the seconds error', () => {
 		component.updateTime(mockEvent('60'), 'seconds');
 
-		expect(hostComponent.lastEmittedTime).toBeNull();
+		expect(hostComponent.lastEmittedTime?.seconds).toBe('60');
+		expect(component.fieldErrors.seconds()).toBe(SECONDS_RANGE_ERROR);
 	});
 
-	// --- Empty values ---
+	// --- Empty values clear errors ---
 
-	it('should allow clearing fields', () => {
+	it('should allow clearing fields and clear errors', () => {
 		hostComponent.time = {
 			hours: '10',
 			minutes: '30',
@@ -236,6 +280,69 @@ describe('TimepickerInputComponent', () => {
 		component.updateTime(mockEvent(''), 'hours');
 
 		expect(hostComponent.lastEmittedTime?.hours).toBe('');
+		expect(component.fieldErrors.hours()).toBeNull();
+	});
+
+	// --- currentError priority ---
+
+	it('should surface hours error first when both hours and minutes are invalid', () => {
+		component.updateTime(mockEvent('13'), 'hours');
+		component.updateTime(mockEvent('60'), 'minutes');
+
+		expect(component.currentError()).toBe(HOUR_12_RANGE_ERROR);
+	});
+
+	// --- Auto-focus ---
+
+	it('should auto-focus the next field after a valid 2-digit hour', () => {
+		const focusSpy = spyOn(
+			component.minutesInput.nativeElement,
+			'focus',
+		).and.callThrough();
+		component.updateTime(
+			mockEvent('10'),
+			'hours',
+			component.minutesInput.nativeElement,
+		);
+
+		expect(focusSpy).toHaveBeenCalled();
+	});
+
+	it('should NOT auto-focus the next field when the value is out of range', () => {
+		const focusSpy = spyOn(component.minutesInput.nativeElement, 'focus');
+		component.updateTime(
+			mockEvent('13'),
+			'hours',
+			component.minutesInput.nativeElement,
+		);
+
+		expect(focusSpy).not.toHaveBeenCalled();
+	});
+
+	// Dispatches real DOM input events so the template bindings themselves are
+	// exercised — a regression test for the minutes -> seconds focus jump.
+	it('should auto-focus the seconds input after a valid 2-digit minutes value via the template', () => {
+		const [, minutesElement, secondsElement] = Array.from<HTMLInputElement>(
+			fixture.nativeElement.querySelectorAll('.pr-time-segment'),
+		);
+		const focusSpy = spyOn(secondsElement, 'focus');
+
+		minutesElement.value = '30';
+		minutesElement.dispatchEvent(new Event('input'));
+
+		expect(focusSpy).toHaveBeenCalled();
+	});
+
+	it('should auto-focus the minutes input after a valid 2-digit hour via the template', () => {
+		const [hoursElement, minutesElement] = Array.from<HTMLInputElement>(
+			fixture.nativeElement.querySelectorAll('.pr-time-segment'),
+		);
+		const focusSpy = spyOn(minutesElement, 'focus');
+
+		hoursElement.value = '10';
+		hoursElement.dispatchEvent(new Event('input'));
+
+		expect(focusSpy).toHaveBeenCalled();
 	});
 
 	// --- Format cycle ---
@@ -503,5 +610,18 @@ describe('TimepickerInputComponent', () => {
 		component.onTimeSelect({ hour: 14, minute: 45, second: 0 });
 
 		expect(hostComponent.lastEmittedTime?.timezoneOffset).toBe('+05:30');
+	});
+	// --- Initial / @Input-driven error sync ---
+
+	it('should surface errors derived from incoming @Input time', () => {
+		hostComponent.time = {
+			hours: '25',
+			minutes: '',
+			seconds: '',
+			format: 'h24',
+		};
+		fixture.detectChanges();
+
+		expect(component.fieldErrors.hours()).toBe(HOUR_24_RANGE_ERROR);
 	});
 });
