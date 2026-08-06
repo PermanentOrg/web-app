@@ -9,7 +9,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 import { EventService } from '@shared/services/event/event.service';
 import { CookieService } from 'ngx-cookie-service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { FolderVO } from '@models/index';
+import { ArchiveVO, FolderVO } from '@models/index';
 import { RecordVO } from '@models/record-vo';
 import { FolderResponse } from '@shared/services/api/folder.repo';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
@@ -141,6 +141,18 @@ describe('ProfileEditComponent', () => {
 		expect(component.publicRoot.thumbURL500).toBe('new500');
 		expect(component.publicRoot.thumbURL1000).toBe('new1000');
 		expect(component.publicRoot.thumbURL2000).toBe('new2000');
+	});
+
+	it('should show a profile photo written onto the archive after the picker closes', () => {
+		component.archive = new ArchiveVO({ archiveNbr: 'a-1' });
+
+		expect(component.profileThumbnail).toBeNull();
+
+		// promptForProfilePicture() updates this same instance rather than
+		// replacing it, so the binding has to re-read an unchanged reference.
+		component.archive.thumbURL200 = 'new200';
+
+		expect(component.profileThumbnail).toBe('new200');
 	});
 
 	it('should restore original thumbArchiveNbr when chooseBannerPicture throws FolderResponse', async () => {

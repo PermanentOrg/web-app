@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ElementRef, Pipe, PipeTransform } from '@angular/core';
-import { of } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
@@ -41,6 +41,7 @@ describe('FileListItemComponent', () => {
 	let component: FileListItemComponent;
 	let fixture: ComponentFixture<FileListItemComponent>;
 	let editService: EditService;
+	let thumbnailUpdatedSubject: Subject<any>;
 
 	const activatedRouteMock = {
 		snapshot: {
@@ -67,6 +68,8 @@ describe('FileListItemComponent', () => {
 	};
 
 	beforeEach(async () => {
+		thumbnailUpdatedSubject = new Subject<any>();
+
 		await TestBed.configureTestingModule({
 			imports: [MockItemTypeIconPipe, MockPrDatePipe, MockPrConstantsPipe],
 			declarations: [FileListItemComponent, GetThumbnailPipe],
@@ -84,6 +87,7 @@ describe('FileListItemComponent', () => {
 						beginPreparingForNavigate: jasmine.createSpy(),
 						fetchLeanItems: jasmine.createSpy(),
 						setItemMultiSelectStatus: jasmine.createSpy(),
+						thumbnailUpdated$: () => thumbnailUpdatedSubject.asObservable(),
 						currentFolder: { type: '' },
 					},
 				},
@@ -333,6 +337,101 @@ describe('FileListItemComponent', () => {
 		(router.routerState.snapshot as any).url = '/';
 	});
 
+	it('should not replace the stock preview when a thumbnail arrives later', async () => {
+		// detectChanges() in beforeEach left an ngOnInit awaiting isUnlistedShare().
+		// Drain it and tear the component down so this test starts from a single
+		// subscription, the way a real component instance does.
+		await new Promise((resolve) => {
+			setTimeout(resolve);
+		});
+		component.ngOnDestroy();
+
+		const router = TestBed.inject(Router);
+		(router.routerState.snapshot as any).url = '/share/test';
+
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+			Promise.resolve(false),
+		);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+
+		const stockPreview = component.recordThumbnailUrl;
+
+		expect(stockPreview).toMatch(/^assets\/img\/preview\/preview-\d+\.jpg$/);
+
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+		thumbnailUpdatedSubject.next(component.item);
+
+		expect(component.recordThumbnailUrl).toBe(stockPreview);
+
+		(router.routerState.snapshot as any).url = '/';
+	});
+
+	it('should not expose the real thumbnail until the share type is known', async () => {
+		// detectChanges() in beforeEach left an ngOnInit awaiting isUnlistedShare().
+		// Drain it before changing the route, or its tail resumes against the route
+		// this test sets and overwrites the preview state with its own stale answer.
+		await new Promise((resolve) => {
+			setTimeout(resolve);
+		});
+
+		const router = TestBed.inject(Router);
+		(router.routerState.snapshot as any).url = '/share/test';
+
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		let resolveIsUnlistedShare: (isUnlisted: boolean) => void = () => {};
+		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+			new Promise<boolean>((resolve) => {
+				resolveIsUnlistedShare = resolve;
+			}),
+		);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+
+		// Deliberately not awaited: a listed share must not show the real
+		// thumbnail in the window before isUnlistedShare() settles.
+		const init = component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBeUndefined();
+
+		resolveIsUnlistedShare(false);
+		await init;
+
+		expect(component.recordThumbnailUrl).toMatch(
+			/^assets\/img\/preview\/preview-\d+\.jpg$/,
+		);
+
+		(router.routerState.snapshot as any).url = '/';
+	});
+
+	it('should show the real thumbnail on an unlisted share', async () => {
+		// See above: let the ngOnInit started by beforeEach settle first.
+		await new Promise((resolve) => {
+			setTimeout(resolve);
+		});
+
+		const router = TestBed.inject(Router);
+		(router.routerState.snapshot as any).url = '/share/test';
+
+		const shareLinksService = TestBed.inject(ShareLinksService);
+		spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+			Promise.resolve(true),
+		);
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+
+		await component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
+
+		(router.routerState.snapshot as any).url = '/';
+	});
+
 	it('should always set real thumbnail URL on init', async () => {
 		component.item.isRecord = true;
 		component.item.type = 'type.record.image';
@@ -341,6 +440,55 @@ describe('FileListItemComponent', () => {
 		await component.ngOnInit();
 
 		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
+	});
+
+	it('should pick up a thumbnail added to the item after init', async () => {
+		component.ngOnDestroy();
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBeUndefined();
+
+		// The thumbnail refresh poll in DataService mutates the existing item
+		// rather than replacing it, then announces the item it wrote to.
+		component.item.thumbnail256 = 'https://example.com/256';
+		thumbnailUpdatedSubject.next(component.item);
+
+		expect(component.recordThumbnailUrl).toBe('https://example.com/256');
+	});
+
+	it('should ignore a thumbnail update for a different item', async () => {
+		component.ngOnDestroy();
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+
+		component.item.thumbnail256 = 'https://example.com/256';
+		// Same folder_linkId, different instance: only the item this row renders
+		// counts, so the update belongs to some other row.
+		thumbnailUpdatedSubject.next({
+			folder_linkId: component.item.folder_linkId,
+			thumbnail256: 'https://example.com/other',
+		});
+
+		expect(component.recordThumbnailUrl).toBeUndefined();
+	});
+
+	it('should stop applying thumbnail updates once destroyed', async () => {
+		component.ngOnDestroy();
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+		component.ngOnDestroy();
+
+		component.item.thumbnail256 = 'https://example.com/256';
+		thumbnailUpdatedSubject.next(component.item);
+
+		expect(component.recordThumbnailUrl).toBeUndefined();
 	});
 
 	it('should display displayTime instead of displayDT when displayTime is set', () => {

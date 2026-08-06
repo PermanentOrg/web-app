@@ -62,6 +62,7 @@ import {
 	unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { RouteData } from '@root/app/app.routes';
@@ -259,11 +260,15 @@ export class FileListItemComponent
 	}
 
 	async ngOnInit() {
-		this.recordThumbnailUrl = GetThumbnail(this.item);
+		this.isInSharePreview =
+			this.router.routerState.snapshot.url.includes('/share/');
 		const date = new Date(this.startDisplayTime);
 		this.date = getFormattedDate(date);
 
-		this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+		const isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+		this.isUnlistedShare = isUnlistedShare;
+
+		this.initializeThumbnail(isUnlistedShare);
 
 		this.dataService.registerItem(this.item);
 		if (this.item.type.includes('app')) {
@@ -275,12 +280,8 @@ export class FileListItemComponent
 			this.isPublicArchive = true;
 		}
 
-		if (this.router.routerState.snapshot.url.includes('/share/')) {
-			if (!this.isUnlistedShare) {
-				this.recordThumbnailUrl = this.getRandomPreviewImage();
-			}
+		if (this.isInSharePreview) {
 			this.allowActions = false;
-			this.isInSharePreview = true;
 		}
 
 		if (this.router.routerState.snapshot.url.includes('/apps')) {
@@ -1050,6 +1051,29 @@ export class FileListItemComponent
 			component: this,
 			element: this.element.nativeElement as HTMLElement,
 		});
+	}
+
+	// A listed share preview must never show the real content, only a stock image.
+	// The answer arrives asynchronously, so it is taken as an argument: the
+	// thumbnail cannot be resolved before the share type is known.
+	private initializeThumbnail(isUnlistedShare: boolean): void {
+		if (this.isInSharePreview && !isUnlistedShare) {
+			this.recordThumbnailUrl = this.getRandomPreviewImage();
+			return;
+		}
+
+		this.recordThumbnailUrl = GetThumbnail(this.item);
+
+		// The thumbnail refresh poll in DataService writes new URLs onto this same
+		// item instance, which no binding can observe on its own.
+		this.subscriptions.push(
+			this.dataService
+				.thumbnailUpdated$()
+				.pipe(filter((updatedItem) => updatedItem === this.item))
+				.subscribe(() => {
+					this.recordThumbnailUrl = GetThumbnail(this.item);
+				}),
+		);
 	}
 
 	private getFolderThumbnail(): void {
