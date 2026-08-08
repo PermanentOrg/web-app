@@ -29,7 +29,6 @@ import { FileFormat } from '@models/file-vo';
 import { GetAccessFile } from '@models/get-access-file';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { environment } from '@root/environments/environment';
 import { TagsService } from '../../../core/services/tags/tags.service';
 
@@ -97,7 +96,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		@Optional() publicProfile: PublicProfileService,
 		private shareLinksService: ShareLinksService,
 		private api: ApiService,
-		private feature: FeatureFlagService,
 	) {
 		// store current scroll position in file list
 		this.bodyScrollTop = window.scrollY;
@@ -241,9 +239,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		);
 		this.isWebArchive = this.currentRecord.type.includes('web_archive');
 		this.documentUrl = this.getDocumentUrl();
-		if (this.feature.isEnabled('replay-web')) {
-			this.replayUrl = this.getReplayUrl();
-		}
+		this.replayUrl = this.getReplayUrl();
 		this.setCurrentTags();
 	}
 
