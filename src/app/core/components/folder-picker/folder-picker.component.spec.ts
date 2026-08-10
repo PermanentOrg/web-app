@@ -12,8 +12,11 @@ import { FolderVO, RecordVO } from '@root/app/models';
 import { HttpTestingController } from '@angular/common/http/testing';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { DataStatus } from '@models/data-status.enum';
-import { of } from 'rxjs';
-import { FolderPickerComponent } from './folder-picker.component';
+import { MessageService } from '@shared/services/message/message.service';
+import {
+	FolderPickerComponent,
+	FolderPickerOperations,
+} from './folder-picker.component';
 
 describe('FolderPickerComponent', () => {
 	let component: FolderPickerComponent;
@@ -48,16 +51,17 @@ describe('FolderPickerComponent', () => {
 
 	it('should initialize a folder, strip out records, and load lean child folders', async () => {
 		const api = TestBed.inject(ApiService) as ApiService;
-		const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
-		const myFiles = new FolderResponse(navigateMinExpected).getFolderVO();
+		const folderExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
+		const myFiles = new FolderResponse(folderExpected).getFolderVO();
 
-		spyOn(api.folder, 'navigate').and.returnValue(
-			of(new FolderResponse(navigateMinExpected)),
-		);
+		const getWithChildrenSpy = spyOn(
+			api.folder,
+			'getWithChildren',
+		).and.resolveTo(new FolderResponse(folderExpected));
 
 		await component.setFolder(myFiles);
 
-		expect(api.folder.navigate).toHaveBeenCalledTimes(1);
+		expect(getWithChildrenSpy).toHaveBeenCalledTimes(1);
 		expect(component.currentFolder).toBeTruthy();
 		expect(component.currentFolder.folder_linkId).toEqual(
 			myFiles.folder_linkId,
@@ -66,9 +70,7 @@ describe('FolderPickerComponent', () => {
 		expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
 
 		const getLeanItemsExpected = require('@root/test/responses/folder.getLeanItems.folderPicker.myFiles.success.json');
-		spyOn(api.folder, 'getWithChildren').and.returnValue(
-			Promise.resolve(new FolderResponse(getLeanItemsExpected)),
-		);
+		getWithChildrenSpy.and.resolveTo(new FolderResponse(getLeanItemsExpected));
 
 		await component.loadCurrentFolderChildData();
 
@@ -127,5 +129,282 @@ describe('FolderPickerComponent', () => {
 		fixture.detectChanges();
 
 		expect(background.bgSrc).toBe('https://example.com/thumb.jpg');
+	});
+
+	it('should load the virtual root folder through getRoot, not getWithChildren', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+		const rootExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
+
+		const getRootSpy = spyOn(api.folder, 'getRoot').and.resolveTo(
+			new FolderResponse(rootExpected),
+		);
+		const getWithChildrenSpy = spyOn(api.folder, 'getWithChildren');
+
+		await component.setFolder(
+			new FolderVO({ type: 'type.folder.root.root', folderId: 1 }),
+		);
+
+		expect(getRootSpy).toHaveBeenCalledTimes(1);
+		expect(getWithChildrenSpy).not.toHaveBeenCalled();
+	});
+
+	it('should strip app and vault folders out of the root listing', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+
+		spyOn(api.folder, 'getRoot').and.resolveTo(
+			new FolderResponse({
+				isSuccessful: true,
+				Results: [
+					{
+						data: [
+							{
+								FolderVO: {
+									type: 'type.folder.root.root',
+									folderId: 1,
+									ChildItemVOs: [
+										{ folderId: 2, type: 'type.folder.root.private' },
+										{ folderId: 3, type: 'type.folder.root.app' },
+										{ folderId: 4, type: 'type.folder.root.vault' },
+									],
+								},
+							},
+						],
+					},
+				],
+			}),
+		);
+
+		await component.setFolder(
+			new FolderVO({ type: 'type.folder.root.root', folderId: 1 }),
+		);
+
+		expect(component.currentFolder.ChildItemVOs.length).toBe(1);
+		expect(component.isRootFolder).toBeTrue();
+	});
+
+	it('should keep the requested folder_linkId when the response omits it', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+
+		// A Stela-shaped response with no folder_linkId or archiveNbr, which is
+		// what Copy and Move need for the destination.
+		spyOn(api.folder, 'getWithChildren').and.resolveTo(
+			new FolderResponse({
+				isSuccessful: true,
+				Results: [
+					{
+						data: [
+							{
+								FolderVO: {
+									type: 'type.folder.private',
+									folderId: '200',
+									ChildItemVOs: [],
+								},
+							},
+						],
+					},
+				],
+			}),
+		);
+
+		await component.setFolder(
+			new FolderVO({
+				type: 'type.folder.private',
+				folderId: '200',
+				folder_linkId: 158329,
+				archiveNbr: '0001-0002',
+			}),
+		);
+
+		expect(component.currentFolder.folder_linkId).toBe(158329);
+		expect(component.currentFolder.archiveNbr).toBe('0001-0002');
+	});
+
+	it('should not override a folder_linkId the response does provide', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+
+		spyOn(api.folder, 'getWithChildren').and.resolveTo(
+			new FolderResponse({
+				isSuccessful: true,
+				Results: [
+					{
+						data: [
+							{
+								FolderVO: {
+									type: 'type.folder.private',
+									folderId: '200',
+									folder_linkId: 999,
+									ChildItemVOs: [],
+								},
+							},
+						],
+					},
+				],
+			}),
+		);
+
+		await component.setFolder(
+			new FolderVO({
+				type: 'type.folder.private',
+				folderId: '200',
+				folder_linkId: 158329,
+			}),
+		);
+
+		expect(component.currentFolder.folder_linkId).toBe(999);
+	});
+
+	it('should replay the folder it came from when going back', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+		const rootExpected = require('@root/test/responses/folder.getRoot.success.json');
+		const folderExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
+
+		const getRootSpy = spyOn(api.folder, 'getRoot').and.resolveTo(
+			new FolderResponse(rootExpected),
+		);
+		spyOn(api.folder, 'getWithChildren').and.resolveTo(
+			new FolderResponse(folderExpected),
+		);
+
+		// Start at the root, then navigate into My Files.
+		await component.setFolder(
+			new FolderVO({ type: 'type.folder.root.root', folderId: 140682 }),
+		);
+		await component.navigate(
+			new FolderVO({ type: 'type.folder.root.private', folderId: '140683' }),
+		);
+		getRootSpy.calls.reset();
+
+		await component.goToParentFolder();
+
+		// One Back returns to the root, without the intermediate "Archive Root"
+		// folder that Stela would have served from the parent ids.
+		expect(getRootSpy).toHaveBeenCalledTimes(1);
+		expect(component.isRootFolder).toBeTrue();
+	});
+
+	it('should load child data when going back, so thumbnails come back too', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+		const dataService = TestBed.inject(DataService) as DataService;
+		const folderExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
+
+		spyOn(api.folder, 'getWithChildren').and.resolveTo(
+			new FolderResponse(folderExpected),
+		);
+		const fetchLeanItems = spyOn(dataService, 'fetchLeanItems').and.resolveTo(
+			0,
+		);
+
+		component.allowRecords = true;
+		await component.setFolder(
+			new FolderVO({ type: 'type.folder.private', folderId: '100' }),
+		);
+		await component.navigate(
+			new FolderVO({ type: 'type.folder.private', folderId: '200' }),
+		);
+		fetchLeanItems.calls.reset();
+
+		await component.goToParentFolder();
+
+		expect(fetchLeanItems).toHaveBeenCalledTimes(1);
+	});
+
+	it('should go to the root when there is nothing left to go back to', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+		const rootExpected = require('@root/test/responses/folder.getRoot.success.json');
+		const folderExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
+
+		const getRootSpy = spyOn(api.folder, 'getRoot').and.resolveTo(
+			new FolderResponse(rootExpected),
+		);
+		spyOn(api.folder, 'getWithChildren').and.resolveTo(
+			new FolderResponse(folderExpected),
+		);
+
+		// The record choosers open directly on My Files, so Back is available
+		// with no visited folder to return to.
+		await component.setFolder(
+			new FolderVO({ type: 'type.folder.root.private', folderId: '140683' }),
+		);
+
+		await component.goToParentFolder();
+
+		expect(getRootSpy).toHaveBeenCalledTimes(1);
+	});
+
+	it('should forget its history when reopened', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+		const rootExpected = require('@root/test/responses/folder.getRoot.success.json');
+		const folderExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
+
+		const getRootSpy = spyOn(api.folder, 'getRoot').and.resolveTo(
+			new FolderResponse(rootExpected),
+		);
+		spyOn(api.folder, 'getWithChildren').and.resolveTo(
+			new FolderResponse(folderExpected),
+		);
+
+		await component.setFolder(
+			new FolderVO({ type: 'type.folder.private', folderId: '100' }),
+		);
+		await component.navigate(
+			new FolderVO({ type: 'type.folder.private', folderId: '200' }),
+		);
+
+		// Reopening must not inherit the previous session's trail.
+		void component.show(
+			new FolderVO({ type: 'type.folder.root.private', folderId: '140683' }),
+			FolderPickerOperations.ChooseRecord,
+		);
+		await component.goToParentFolder();
+
+		expect(getRootSpy).toHaveBeenCalled();
+	});
+
+	it('should filter out folders listed in filterFolderLinkIds', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+		const folderExpected = cloneDeep(
+			require('@root/test/responses/folder.navigateMin.myFiles.success.json'),
+		);
+		const myFiles = new FolderResponse(folderExpected).getFolderVO(true);
+		const excludedFolder = (myFiles.ChildItemVOs as FolderVO[]).find(
+			(item) => item.isFolder,
+		);
+
+		spyOn(api.folder, 'getWithChildren').and.resolveTo(
+			new FolderResponse(folderExpected),
+		);
+
+		component.filterFolderLinkIds = [excludedFolder.folder_linkId];
+		await component.setFolder(myFiles);
+
+		expect(
+			some(
+				component.currentFolder.ChildItemVOs,
+				(item) => item.folder_linkId === excludedFolder.folder_linkId,
+			),
+		).toBeFalse();
+	});
+
+	it('should show an error and stop waiting when the folder fails to load', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+		const message = TestBed.inject(MessageService) as MessageService;
+		const showError = spyOn(message, 'showError');
+
+		spyOn(api.folder, 'getWithChildren').and.rejectWith(
+			new Error('network down'),
+		);
+
+		await expectAsync(
+			component.setFolder(
+				new FolderVO({ type: 'type.folder.private', folderId: 1 }),
+			),
+		).toBeResolved();
+
+		expect(showError).toHaveBeenCalledOnceWith({
+			message: 'error.generic.internal',
+			translate: true,
+		});
+
+		expect(component.waiting).toBeFalse();
 	});
 });
