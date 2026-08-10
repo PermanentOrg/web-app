@@ -39,6 +39,11 @@ export class FolderPickerComponent implements OnDestroy {
 
 	public filterFolderLinkIds: number[];
 
+	// The folders navigated through to reach the current one, most recent last.
+	// Back replays these rather than rebuilding a parent from ids, so setFolder
+	// always receives a complete FolderVO.
+	private visitedFolders: FolderVO[] = [];
+
 	private cancelResetTimeout: ReturnType<typeof setTimeout>;
 
 	constructor(
@@ -82,9 +87,8 @@ export class FolderPickerComponent implements OnDestroy {
 				break;
 		}
 
-		this.setFolder(startingFolder).then(() => {
-			this.loadCurrentFolderChildData();
-		});
+		this.visitedFolders = [];
+		void this.setFolderAndLoadChildData(startingFolder);
 
 		const { promise, resolve } = Promise.withResolvers<FolderVO | RecordVO>();
 		this.chooseFolderPromise = promise;
@@ -106,8 +110,10 @@ export class FolderPickerComponent implements OnDestroy {
 	}
 
 	async navigate(folder: FolderVO) {
-		await this.setFolder(folder);
-		this.loadCurrentFolderChildData();
+		if (this.currentFolder) {
+			this.visitedFolders.push(this.currentFolder);
+		}
+		await this.setFolderAndLoadChildData(folder);
 	}
 
 	showRecord(record: RecordVO) {
@@ -121,16 +127,25 @@ export class FolderPickerComponent implements OnDestroy {
 	async setFolder(folder: FolderVO) {
 		this.waiting = true;
 		try {
-			const folderResponse = await this.api.folder
-				.navigate(
-					new FolderVO({
-						folder_linkId: folder.folder_linkId,
-						folderId: folder.folderId,
-						archiveNbr: folder.archiveNbr,
-					}),
-				)
-				.toPromise();
+			// The root keeps loading through getRoot -- see isRootRootFolder.
+			const folderResponse = this.isRootRootFolder(folder)
+				? await this.api.folder.getRoot()
+				: await this.api.folder.getWithChildren([
+						new FolderVO({
+							folder_linkId: folder.folder_linkId,
+							folderId: folder.folderId,
+							archiveNbr: folder.archiveNbr,
+						}),
+					]);
 			this.currentFolder = folderResponse.getFolderVO(true);
+
+			// Copy and Move send only the destination's folder_linkId to the
+			// legacy endpoints, and Stela's folder response does not reliably
+			// carry it. We asked for this folder by id, so keep the ids we had
+			// rather than trusting the response to echo them back.
+			this.currentFolder.folder_linkId ??= folder.folder_linkId;
+			this.currentFolder.archiveNbr ??= folder.archiveNbr;
+
 			this.isRootFolder = this.currentFolder.type.includes(
 				'type.folder.root.root',
 			);
@@ -152,7 +167,14 @@ export class FolderPickerComponent implements OnDestroy {
 			if (err instanceof FolderResponse) {
 				this.message.showError({ message: err.getMessage(), translate: true });
 			} else {
-				throw err;
+				// getWithChildren rejects with the raw HTTP error rather than a
+				// FolderResponse, so there is no server message to surface. Fall
+				// back to the generic one instead of rethrowing into an unhandled
+				// rejection.
+				this.message.showError({
+					message: 'error.generic.internal',
+					translate: true,
+				});
 			}
 		} finally {
 			this.waiting = false;
@@ -168,11 +190,17 @@ export class FolderPickerComponent implements OnDestroy {
 	}
 
 	async goToParentFolder() {
-		const parentFolder = new FolderVO({
-			folder_linkId: this.currentFolder.parentFolder_linkId,
-			folderId: this.currentFolder.parentFolderId,
-		});
-		return await this.setFolder(parentFolder);
+		// Replay the folder we came from, so this behaves exactly like navigating
+		// forward: a complete FolderVO goes to setFolder, and the child data is
+		// loaded afterwards so thumbnails come back too.
+		const previousFolder = this.visitedFolders.pop();
+
+		// Nothing to pop when the picker was opened directly on a workspace
+		// folder, as the record choosers do with My Files. Going up from there
+		// means the archive root.
+		return await this.setFolderAndLoadChildData(
+			previousFolder ?? new FolderVO({ type: 'type.folder.root.root' }),
+		);
 	}
 
 	async loadCurrentFolderChildData() {
@@ -180,6 +208,11 @@ export class FolderPickerComponent implements OnDestroy {
 			this.currentFolder.ChildItemVOs,
 			this.currentFolder,
 		);
+	}
+
+	private async setFolderAndLoadChildData(folder: FolderVO) {
+		await this.setFolder(folder);
+		this.loadCurrentFolderChildData();
 	}
 
 	chooseFolder() {
@@ -209,6 +242,7 @@ export class FolderPickerComponent implements OnDestroy {
 			this.chooseFolderPromise = null;
 			this.chooseFolderResolve = null;
 			this.isRootFolder = true;
+			this.visitedFolders = [];
 			this.cancelResetTimeout = null;
 		}, 500);
 	}
@@ -245,5 +279,12 @@ export class FolderPickerComponent implements OnDestroy {
 
 	protected shouldConfirmFolderSelection(): boolean {
 		return this.currentFolder.type.endsWith('public');
+	}
+
+	// Stela serves the archive root as an ordinary folder -- it lists Apps and
+	// reports a type that does not read as root -- so the root keeps loading
+	// through the legacy getRoot endpoint.
+	private isRootRootFolder(folder: FolderVO): boolean {
+		return !!folder.type?.includes('type.folder.root.root');
 	}
 }

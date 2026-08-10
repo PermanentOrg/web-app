@@ -55,6 +55,8 @@ interface StelaFolder {
 		id: string;
 		name: string;
 	};
+	archiveNumber: string;
+	folderLinkId: string;
 	createdAt: string;
 	updatedAt: string;
 	description: string;
@@ -91,6 +93,16 @@ type StelaFolderChild = StelaFolder | StelaRecord;
 const isStelaRecord = (child: StelaFolderChild): child is StelaRecord =>
 	child && 'recordId' in child;
 
+// Returns undefined rather than NaN for a missing id, so callers can tell
+// "not provided" apart from a real link id.
+const toFolderLinkId = (folderLinkId: string): number | undefined => {
+	if (folderLinkId === null || folderLinkId === undefined) {
+		return undefined;
+	}
+	const parsed = Number(folderLinkId);
+	return Number.isNaN(parsed) ? undefined : parsed;
+};
+
 const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 	stelaFolder.children ??= [];
 	const childFolderVOs = stelaFolder.children
@@ -103,6 +115,11 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		...stelaFolder,
 		folderId: stelaFolder.folderId,
 		archiveId: stelaFolder.archive?.id,
+		archiveNbr: stelaFolder.archiveNumber,
+		// Stela returns link ids as strings, the same way it does for records.
+		// The FolderVO field is a number and is compared with strict equality
+		// (e.g. the folder picker's filterFolderLinkIds), so coerce it here.
+		folder_linkId: toFolderLinkId(stelaFolder.folderLinkId),
 		displayName: stelaFolder.displayName,
 		displayDT: stelaFolder.displayTimestamp,
 		displayEndDT: stelaFolder.displayEndTimestamp,
@@ -354,25 +371,6 @@ export class FolderRepo extends BaseRepo {
 			Results: simulatedV1FolderResponseResults,
 		});
 		return folderResponse;
-	}
-
-	public navigate(folderVO: FolderVO): Observable<FolderResponse> {
-		const response = {
-			...folderVO,
-		};
-		if (folderVO.type === 'type.folder.root.private') {
-			response.displayName = 'Private';
-		}
-
-		const data = [
-			{
-				FolderVO: new FolderVO(response),
-			},
-		];
-
-		return this.http.sendRequest<FolderResponse>('/folder/navigateMin', data, {
-			ResponseClass: FolderResponse,
-		});
 	}
 
 	public navigateLean(folderVO: FolderVO): Observable<FolderResponse> {

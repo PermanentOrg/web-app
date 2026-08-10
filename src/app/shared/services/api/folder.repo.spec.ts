@@ -395,4 +395,70 @@ describe('Folder repo', () => {
 			});
 		});
 	});
+
+	describe('Stela folder conversion', () => {
+		const convertFolder = async (overrides: Record<string, unknown>) => {
+			httpV2Spy.get.and.returnValue(
+				of([{ items: [{ ...mockStelaFolder, ...overrides }] }]),
+			);
+			const result = await folderRepo.getStelaFolderVOs([
+				new FolderVO({ folderId: 123 }),
+			]);
+			return result.getFolderVOs()[0];
+		};
+
+		it('should map archiveNumber to archiveNbr', async () => {
+			const folder = await convertFolder({ archiveNumber: '0001-0002' });
+
+			expect(folder.archiveNbr).toBe('0001-0002');
+		});
+
+		it('should map folderLinkId to a numeric folder_linkId', async () => {
+			const folder = await convertFolder({ folderLinkId: '158329' });
+
+			expect(folder.folder_linkId).toBe(158329);
+		});
+
+		it('should accept link ids that already arrive as numbers', async () => {
+			const folder = await convertFolder({ folderLinkId: 158329 });
+
+			expect(folder.folder_linkId).toBe(158329);
+		});
+
+		// The folder picker renders child thumbnails straight from this response,
+		// with no follow-up lean fetch, so the mapping has to survive the
+		// folder -> children conversion.
+		it('should carry child record thumbnails through getWithChildren', async () => {
+			httpV2Spy.get.and.returnValues(
+				of([{ items: [mockStelaFolder] }]),
+				of([
+					{
+						items: [
+							{
+								recordId: '77',
+								displayName: 'A photo',
+								folderLinkId: '900',
+								archiveNumber: '0001-0003',
+								thumbnailUrls: { '200': 'thumb200', '256': 'thumb256' },
+							},
+						],
+					},
+				]),
+			);
+
+			const result = await folderRepo.getWithChildren([
+				new FolderVO({ folderId: 123 }),
+			]);
+			const child = result.getFolderVO(true).ChildItemVOs[0];
+
+			expect(child.thumbURL200).toBe('thumb200');
+			expect(child.thumbnail256).toBe('thumb256');
+		});
+
+		it('should leave link ids undefined rather than NaN when absent', async () => {
+			const folder = await convertFolder({ folderLinkId: undefined });
+
+			expect(folder.folder_linkId).toBeUndefined();
+		});
+	});
 });
