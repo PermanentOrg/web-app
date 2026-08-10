@@ -59,10 +59,8 @@ interface StelaFolder {
 		id: string;
 		name: string;
 	};
-	archiveNumber?: string;
-	// Stela sends link ids as strings, but not every folder payload carries one,
-	// and some endpoints already send them as numbers.
-	folderLinkId?: string | number;
+	archiveNumber: string;
+	folderLinkId: string;
 	createdAt: string;
 	updatedAt: string;
 	description: string;
@@ -103,23 +101,13 @@ const isStelaRecord = (child: StelaFolderChild): child is StelaRecord =>
 	child && 'recordId' in child;
 
 // Returns undefined rather than NaN for a missing id, so callers can tell
-// "not provided" apart from a real link id. Accepts numbers as well as strings
-// because different Stela endpoints disagree on which one they send.
-const toFolderLinkId = (
-	folderLinkId: string | number | null | undefined,
-): number | undefined => {
-	if (typeof folderLinkId === 'number') {
-		return Number.isFinite(folderLinkId) ? folderLinkId : undefined;
-	}
-	if (
-		folderLinkId === null ||
-		folderLinkId === undefined ||
-		folderLinkId.trim() === ''
-	) {
+// "not provided" apart from a real link id.
+const toFolderLinkId = (folderLinkId: string): number | undefined => {
+	if (folderLinkId === null || folderLinkId === undefined) {
 		return undefined;
 	}
-	const parsedFolderLinkId = Number(folderLinkId);
-	return Number.isFinite(parsedFolderLinkId) ? parsedFolderLinkId : undefined;
+	const parsed = Number(folderLinkId);
+	return Number.isNaN(parsed) ? undefined : parsed;
 };
 
 const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
