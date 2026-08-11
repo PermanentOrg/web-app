@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ComponentType } from '@angular/cdk/portal';
 import { partition } from 'lodash';
 import { Subject } from 'rxjs';
 import debug from 'debug';
@@ -40,6 +41,8 @@ import { SharingComponent } from '@fileBrowser/components/sharing/sharing.compon
 import { PublishComponent } from '@fileBrowser/components/publish/publish.component';
 import { EditTagsComponent } from '@fileBrowser/components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
+import { UncertainLocationPickerComponent } from '@fileBrowser/components/uncertain-location-picker/uncertain-location-picker.component';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
@@ -137,6 +140,7 @@ export class EditService {
 		private device: DeviceService,
 		private secrets: SecretsService,
 		private event: EventService,
+		private feature: FeatureFlagService,
 	) {
 		this.loadGoogleMapsApi();
 	}
@@ -627,7 +631,12 @@ export class EditService {
 	}
 
 	async openLocationDialog(item: ItemVO) {
-		this.dialog.open(LocationPickerComponent, {
+		const picker: ComponentType<
+			LocationPickerComponent | UncertainLocationPickerComponent
+		> = this.feature.isEnabled('uncertain-locations')
+			? UncertainLocationPickerComponent
+			: LocationPickerComponent;
+		this.dialog.open(picker, {
 			data: { item },
 			panelClass: 'dialog',
 			height: 'auto',

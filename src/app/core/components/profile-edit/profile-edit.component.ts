@@ -33,6 +33,9 @@ import { CookieService } from 'ngx-cookie-service';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { EventService } from '@shared/services/event/event.service';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
+import { UncertainLocationPickerComponent } from '@fileBrowser/components/uncertain-location-picker/uncertain-location-picker.component';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { ComponentType } from '@angular/cdk/portal';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ArchiveSettingsDialogComponent } from '@core/components/archive-settings-dialog/archive-settings-dialog.component';
 import {
@@ -91,6 +94,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 		private message: MessageService,
 		private cookies: CookieService,
 		private event: EventService,
+		private feature: FeatureFlagService,
 	) {}
 
 	async ngOnInit(): Promise<void> {
@@ -251,7 +255,12 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
 	async chooseLocationForItem(item: ProfileItemVOData) {
 		try {
-			this.dialog.open(LocationPickerComponent, {
+			const picker: ComponentType<
+				LocationPickerComponent | UncertainLocationPickerComponent
+			> = this.feature.isEnabled('uncertain-locations')
+				? UncertainLocationPickerComponent
+				: LocationPickerComponent;
+			this.dialog.open(picker, {
 				data: { profileItem: item },
 				height: 'auto',
 				width: '600px',

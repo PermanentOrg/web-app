@@ -16,6 +16,9 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
+import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
+import { UncertainLocationPickerComponent } from '@fileBrowser/components/uncertain-location-picker/uncertain-location-picker.component';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 const mockDataService = {
@@ -32,6 +35,7 @@ describe('EditService', () => {
 	let shareLinksApiService: jasmine.SpyObj<ShareLinksApiService>;
 	let deviceService: jasmine.SpyObj<DeviceService>;
 	let dialogService: jasmine.SpyObj<DialogCdkService>;
+	let featureFlagService: jasmine.SpyObj<FeatureFlagService>;
 
 	beforeEach(() => {
 		apiService = jasmine.createSpyObj('ApiService', [
@@ -69,6 +73,10 @@ describe('EditService', () => {
 
 		deviceService = jasmine.createSpyObj('DeviceService', ['isMobile']);
 		dialogService = jasmine.createSpyObj('DialogCdkService', ['open']);
+		featureFlagService = jasmine.createSpyObj('FeatureFlagService', [
+			'isEnabled',
+		]);
+		featureFlagService.isEnabled.and.returnValue(false);
 
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 		config.imports.push(NgbTooltipModule);
@@ -83,6 +91,7 @@ describe('EditService', () => {
 				{ provide: ShareLinksApiService, useValue: shareLinksApiService },
 				{ provide: DeviceService, useValue: deviceService },
 				{ provide: DialogCdkService, useValue: dialogService },
+				{ provide: FeatureFlagService, useValue: featureFlagService },
 			],
 		});
 
@@ -524,6 +533,48 @@ describe('EditService', () => {
 		expect(messageService.showError).toHaveBeenCalledWith({
 			message: 'error.generic.update_fail',
 			translate: true,
+		});
+	});
+
+	describe('openLocationDialog', () => {
+		it('should open LocationPickerComponent when the flag is disabled', async () => {
+			const record = new RecordVO({ recordId: 123 });
+			featureFlagService.isEnabled.and.returnValue(false);
+
+			await service.openLocationDialog(record);
+
+			expect(featureFlagService.isEnabled).toHaveBeenCalledWith(
+				'uncertain-locations',
+			);
+
+			expect(dialogService.open).toHaveBeenCalledOnceWith(
+				LocationPickerComponent,
+				{
+					data: { item: record },
+					panelClass: 'dialog',
+					height: 'auto',
+					width: '600px',
+				},
+			);
+		});
+
+		it('should open UncertainLocationPickerComponent when the flag is enabled', async () => {
+			const record = new RecordVO({ recordId: 123 });
+			featureFlagService.isEnabled.and.callFake(
+				(flag: string) => flag === 'uncertain-locations',
+			);
+
+			await service.openLocationDialog(record);
+
+			expect(dialogService.open).toHaveBeenCalledOnceWith(
+				UncertainLocationPickerComponent,
+				{
+					data: { item: record },
+					panelClass: 'dialog',
+					height: 'auto',
+					width: '600px',
+				},
+			);
 		});
 	});
 
