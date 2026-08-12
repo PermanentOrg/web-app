@@ -288,6 +288,50 @@ describe('Folder repo', () => {
 		});
 	});
 
+	describe('folder timestamps', () => {
+		it('should map createdAt and updatedAt onto the FolderVO', async () => {
+			const folderVO = new FolderVO({ folderId: 123 });
+
+			httpV2Spy.get.and.returnValue(of([{ items: [mockStelaFolder] }]));
+
+			const result = await folderRepo.getStelaFolderVOs([folderVO]);
+			const folder = result.getFolderVOs()[0];
+
+			expect(folder.createdDT).toBe('2024-01-01T00:00:00Z');
+			expect(folder.updatedDT).toBe('2024-01-02T00:00:00Z');
+		});
+
+		it('should map timestamps onto child folders too, so callers can pick the most recent one', async () => {
+			const olderChild = {
+				...mockStelaFolder,
+				folderId: '900',
+				displayName: 'Older',
+				updatedAt: '2024-03-01T00:00:00Z',
+			};
+			const newerChild = {
+				...mockStelaFolder,
+				folderId: '901',
+				displayName: 'Newer',
+				updatedAt: '2024-05-01T00:00:00Z',
+			};
+
+			httpV2Spy.get.and.returnValues(
+				of([{ items: [mockStelaFolder] }]),
+				of([{ items: [olderChild, newerChild] }]),
+			);
+
+			const result = await folderRepo.getWithChildren([
+				new FolderVO({ folderId: 123 }),
+			]);
+			const children = result.getFolderVO(true).ChildItemVOs;
+
+			expect(children.map((child) => child.updatedDT)).toEqual([
+				'2024-03-01T00:00:00Z',
+				'2024-05-01T00:00:00Z',
+			]);
+		});
+	});
+
 	describe('getStelaFolderVOs', () => {
 		it('should fetch single folder and return FolderResponse', async () => {
 			const folderVO = new FolderVO({ folderId: 123 });
