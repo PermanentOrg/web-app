@@ -460,5 +460,17 @@ describe('Folder repo', () => {
 
 			expect(folder.folder_linkId).toBeUndefined();
 		});
+
+		it('should leave link ids undefined rather than 0 when blank', async () => {
+			const folder = await convertFolder({ folderLinkId: '  ' });
+
+			expect(folder.folder_linkId).toBeUndefined();
+		});
+
+		it('should leave link ids undefined when they are not numeric', async () => {
+			const folder = await convertFolder({ folderLinkId: 'not-a-number' });
+
+			expect(folder.folder_linkId).toBeUndefined();
+		});
 	});
 });

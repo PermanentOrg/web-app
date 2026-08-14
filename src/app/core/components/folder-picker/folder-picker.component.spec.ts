@@ -385,6 +385,124 @@ describe('FolderPickerComponent', () => {
 		).toBeFalse();
 	});
 
+	// The trail is built from loaded folders, so the tests below need each
+	// response to echo back the folder that was asked for.
+	const folderResponseFor = (folderId: string) =>
+		new FolderResponse({
+			isSuccessful: true,
+			Results: [
+				{
+					data: [
+						{
+							FolderVO: {
+								type: 'type.folder.private',
+								folderId,
+								ChildItemVOs: [],
+							},
+						},
+					],
+				},
+			],
+		});
+
+	it('should not record history for a navigation that failed', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+		const rootExpected = require('@root/test/responses/folder.getRoot.success.json');
+
+		const getRootSpy = spyOn(api.folder, 'getRoot').and.resolveTo(
+			new FolderResponse(rootExpected),
+		);
+		const getWithChildrenSpy = spyOn(
+			api.folder,
+			'getWithChildren',
+		).and.callFake(async (folderVOs: FolderVO[]) =>
+			folderResponseFor(String(folderVOs[0].folderId)),
+		);
+		spyOn(TestBed.inject(MessageService), 'showError');
+		spyOn(TestBed.inject(DataService), 'fetchLeanItems').and.resolveTo(0);
+
+		await component.setFolder(
+			new FolderVO({ type: 'type.folder.private', folderId: '100' }),
+		);
+
+		getWithChildrenSpy.and.rejectWith(new Error('network down'));
+		await component.navigate(
+			new FolderVO({ type: 'type.folder.private', folderId: '200' }),
+		);
+
+		getWithChildrenSpy.calls.reset();
+
+		await component.goToParentFolder();
+
+		// Back goes up from where we still are rather than replaying the folder
+		// we never left.
+		expect(getWithChildrenSpy).not.toHaveBeenCalled();
+		expect(getRootSpy).toHaveBeenCalledTimes(1);
+	});
+
+	it('should keep its history when going back fails', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+
+		const getWithChildrenSpy = spyOn(
+			api.folder,
+			'getWithChildren',
+		).and.callFake(async (folderVOs: FolderVO[]) =>
+			folderResponseFor(String(folderVOs[0].folderId)),
+		);
+		spyOn(TestBed.inject(MessageService), 'showError');
+		spyOn(TestBed.inject(DataService), 'fetchLeanItems').and.resolveTo(0);
+
+		await component.setFolder(
+			new FolderVO({ type: 'type.folder.private', folderId: '100' }),
+		);
+		await component.navigate(
+			new FolderVO({ type: 'type.folder.private', folderId: '200' }),
+		);
+		await component.navigate(
+			new FolderVO({ type: 'type.folder.private', folderId: '300' }),
+		);
+
+		getWithChildrenSpy.and.rejectWith(new Error('network down'));
+		await component.goToParentFolder();
+
+		getWithChildrenSpy.and.callFake(async (folderVOs: FolderVO[]) =>
+			folderResponseFor(String(folderVOs[0].folderId)),
+		);
+		getWithChildrenSpy.calls.reset();
+
+		// A retry still has the same folder to go back to, and the one below it
+		// is still there after that.
+		await component.goToParentFolder();
+
+		expect(component.currentFolder.folderId).toBe('200');
+
+		await component.goToParentFolder();
+
+		expect(component.currentFolder.folderId).toBe('100');
+	});
+
+	it('should not load child data when the folder fails to load', async () => {
+		const api = TestBed.inject(ApiService) as ApiService;
+		const dataService = TestBed.inject(DataService) as DataService;
+
+		spyOn(api.folder, 'getWithChildren').and.rejectWith(
+			new Error('network down'),
+		);
+		const fetchLeanItems = spyOn(dataService, 'fetchLeanItems').and.resolveTo(
+			0,
+		);
+		spyOn(TestBed.inject(MessageService), 'showError');
+
+		await expectAsync(
+			component.navigate(
+				new FolderVO({ type: 'type.folder.private', folderId: '200' }),
+			),
+		).toBeResolved();
+
+		expect(fetchLeanItems).not.toHaveBeenCalled();
+		expect(component.currentFolder).toBeFalsy();
+	});
+
 	it('should show an error and stop waiting when the folder fails to load', async () => {
 		const api = TestBed.inject(ApiService) as ApiService;
 		const message = TestBed.inject(MessageService) as MessageService;
