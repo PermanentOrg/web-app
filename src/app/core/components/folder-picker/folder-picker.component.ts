@@ -110,10 +110,14 @@ export class FolderPickerComponent implements OnDestroy {
 	}
 
 	async navigate(folder: FolderVO) {
-		if (this.currentFolder) {
-			this.visitedFolders.push(this.currentFolder);
+		const folderNavigatedFrom = this.currentFolder;
+		const didLoadFolder = await this.setFolderAndLoadChildData(folder);
+
+		// Only record where we came from once the new folder actually loaded,
+		// otherwise a failed navigation costs an extra Back press to undo.
+		if (didLoadFolder && folderNavigatedFrom) {
+			this.visitedFolders.push(folderNavigatedFrom);
 		}
-		await this.setFolderAndLoadChildData(folder);
 	}
 
 	showRecord(record: RecordVO) {
@@ -124,7 +128,9 @@ export class FolderPickerComponent implements OnDestroy {
 		return GetThumbnail(item);
 	}
 
-	async setFolder(folder: FolderVO) {
+	// Resolves to whether the folder loaded, so callers can leave the navigation
+	// history alone when it did not.
+	async setFolder(folder: FolderVO): Promise<boolean> {
 		this.waiting = true;
 		try {
 			// The root keeps loading through getRoot -- see isRootRootFolder.
@@ -163,6 +169,7 @@ export class FolderPickerComponent implements OnDestroy {
 			remove(this.currentFolder.ChildItemVOs, (item) =>
 				item.type.includes('type.folder.root.vault'),
 			);
+			return true;
 		} catch (err) {
 			if (err instanceof FolderResponse) {
 				this.message.showError({ message: err.getMessage(), translate: true });
@@ -176,6 +183,7 @@ export class FolderPickerComponent implements OnDestroy {
 					translate: true,
 				});
 			}
+			return false;
 		} finally {
 			this.waiting = false;
 		}
@@ -192,15 +200,20 @@ export class FolderPickerComponent implements OnDestroy {
 	async goToParentFolder() {
 		// Replay the folder we came from, so this behaves exactly like navigating
 		// forward: a complete FolderVO goes to setFolder, and the child data is
-		// loaded afterwards so thumbnails come back too.
-		const previousFolder = this.visitedFolders.pop();
+		// loaded afterwards so thumbnails come back too. Peek rather than pop, so
+		// a failed load leaves the history where it was and Back still works.
+		const previousFolder = this.visitedFolders[this.visitedFolders.length - 1];
 
-		// Nothing to pop when the picker was opened directly on a workspace
+		// Nothing to go back to when the picker was opened directly on a workspace
 		// folder, as the record choosers do with My Files. Going up from there
 		// means the archive root.
-		return await this.setFolderAndLoadChildData(
+		const didLoadFolder = await this.setFolderAndLoadChildData(
 			previousFolder ?? new FolderVO({ type: 'type.folder.root.root' }),
 		);
+
+		if (didLoadFolder && previousFolder) {
+			this.visitedFolders.pop();
+		}
 	}
 
 	async loadCurrentFolderChildData() {
@@ -210,9 +223,17 @@ export class FolderPickerComponent implements OnDestroy {
 		);
 	}
 
-	private async setFolderAndLoadChildData(folder: FolderVO) {
-		await this.setFolder(folder);
-		this.loadCurrentFolderChildData();
+	private async setFolderAndLoadChildData(folder: FolderVO): Promise<boolean> {
+		const didLoadFolder = await this.setFolder(folder);
+
+		// setFolder no longer rethrows, so without this guard a failed load would
+		// read child items off a currentFolder that is still unset (or, worse,
+		// still the folder we were leaving).
+		if (didLoadFolder) {
+			void this.loadCurrentFolderChildData();
+		}
+
+		return didLoadFolder;
 	}
 
 	chooseFolder() {
