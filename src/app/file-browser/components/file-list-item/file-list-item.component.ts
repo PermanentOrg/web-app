@@ -265,10 +265,16 @@ export class FileListItemComponent
 		const date = new Date(this.startDisplayTime);
 		this.date = getFormattedDate(date);
 
-		const isUnlistedShare = await this.shareLinksService.isUnlistedShare();
-		this.isUnlistedShare = isUnlistedShare;
+		// Only a share preview can be an unlisted share: the token that decides it
+		// is set by SharePreviewComponent and cleared when it is destroyed, so
+		// isUnlistedShare() answers false for every other route. Skipping the await
+		// there keeps the rest of init synchronous and lets the thumbnail be part of
+		// the first render instead of arriving a microtask later.
+		if (this.isInSharePreview) {
+			this.isUnlistedShare = await this.shareLinksService.isUnlistedShare();
+		}
 
-		this.initializeThumbnail(isUnlistedShare);
+		this.initializeThumbnail();
 
 		this.dataService.registerItem(this.item);
 		if (this.item.type.includes('app')) {
@@ -1054,10 +1060,10 @@ export class FileListItemComponent
 	}
 
 	// A listed share preview must never show the real content, only a stock image.
-	// The answer arrives asynchronously, so it is taken as an argument: the
-	// thumbnail cannot be resolved before the share type is known.
-	private initializeThumbnail(isUnlistedShare: boolean): void {
-		if (this.isInSharePreview && !isUnlistedShare) {
+	// Called once the share type is known, since the thumbnail cannot be resolved
+	// before then.
+	private initializeThumbnail(): void {
+		if (this.isInSharePreview && !this.isUnlistedShare) {
 			this.recordThumbnailUrl = this.getRandomPreviewImage();
 			return;
 		}

@@ -338,12 +338,9 @@ describe('FileListItemComponent', () => {
 	});
 
 	it('should not replace the stock preview when a thumbnail arrives later', async () => {
-		// detectChanges() in beforeEach left an ngOnInit awaiting isUnlistedShare().
-		// Drain it and tear the component down so this test starts from a single
-		// subscription, the way a real component instance does.
-		await new Promise((resolve) => {
-			setTimeout(resolve);
-		});
+		// ngOnInit runs again below, so tear down the subscription the init in
+		// beforeEach left behind and start from a single one, the way a real
+		// component instance does.
 		component.ngOnDestroy();
 
 		const router = TestBed.inject(Router);
@@ -371,13 +368,6 @@ describe('FileListItemComponent', () => {
 	});
 
 	it('should not expose the real thumbnail until the share type is known', async () => {
-		// detectChanges() in beforeEach left an ngOnInit awaiting isUnlistedShare().
-		// Drain it before changing the route, or its tail resumes against the route
-		// this test sets and overwrites the preview state with its own stale answer.
-		await new Promise((resolve) => {
-			setTimeout(resolve);
-		});
-
 		const router = TestBed.inject(Router);
 		(router.routerState.snapshot as any).url = '/share/test';
 
@@ -409,11 +399,6 @@ describe('FileListItemComponent', () => {
 	});
 
 	it('should show the real thumbnail on an unlisted share', async () => {
-		// See above: let the ngOnInit started by beforeEach settle first.
-		await new Promise((resolve) => {
-			setTimeout(resolve);
-		});
-
 		const router = TestBed.inject(Router);
 		(router.routerState.snapshot as any).url = '/share/test';
 
@@ -440,6 +425,21 @@ describe('FileListItemComponent', () => {
 		await component.ngOnInit();
 
 		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
+	});
+
+	it('should set the real thumbnail without waiting outside a share preview', async () => {
+		component.ngOnDestroy();
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+		component.item.thumbURL200 = 'https://example.com/thumb.jpg';
+
+		// Deliberately not awaited: outside a share preview there is no share type
+		// to wait for, so the thumbnail belongs to the first render.
+		const init = component.ngOnInit();
+
+		expect(component.recordThumbnailUrl).toBe('https://example.com/thumb.jpg');
+
+		await init;
 	});
 
 	it('should pick up a thumbnail added to the item after init', async () => {
