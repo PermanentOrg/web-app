@@ -23,6 +23,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FileListControlsComponent } from './components/file-list-controls/file-list-controls.component';
 import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from './components/location-picker/location-picker.component';
+import { UncertainLocationPickerComponent } from './components/uncertain-location-picker/uncertain-location-picker.component';
 import { SidebarViewOptionComponent } from './components/sidebar-view-option/sidebar-view-option.component';
 import { SharingDialogComponent } from './components/sharing-dialog/sharing-dialog.component';
 
@@ -48,6 +49,7 @@ import { SidebarDatePickerComponent } from './components/sidebar-date-picker/sid
 		FileListControlsComponent,
 		EditTagsComponent,
 		LocationPickerComponent,
+		UncertainLocationPickerComponent,
 		SharingDialogComponent,
 	],
 	declarations: [
@@ -63,6 +65,7 @@ import { SidebarDatePickerComponent } from './components/sidebar-date-picker/sid
 		SidebarComponent,
 		EditTagsComponent,
 		LocationPickerComponent,
+		UncertainLocationPickerComponent,
 		SidebarViewOptionComponent,
 		SharingDialogComponent,
 		DownloadButtonComponent,

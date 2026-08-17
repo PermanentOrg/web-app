@@ -13,6 +13,9 @@ import { FolderVO } from '@models/index';
 import { RecordVO } from '@models/record-vo';
 import { FolderResponse } from '@shared/services/api/folder.repo';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
+import { UncertainLocationPickerComponent } from '@fileBrowser/components/uncertain-location-picker/uncertain-location-picker.component';
 import { ProfileEditComponent } from './profile-edit.component';
 
 describe('ProfileEditComponent', () => {
@@ -24,6 +27,9 @@ describe('ProfileEditComponent', () => {
 	mockDialogService.open.and.returnValue(mockDialogRef);
 
 	const mockCookieService = jasmine.createSpyObj('CookieService', ['check']);
+	const mockFeatureFlagService = jasmine.createSpyObj('FeatureFlagService', [
+		'isEnabled',
+	]);
 	mockCookieService.check.and.returnValue(false);
 
 	const mockProfileService = jasmine.createSpyObj('ProfileService', [
@@ -55,6 +61,9 @@ describe('ProfileEditComponent', () => {
 	};
 
 	beforeEach(async () => {
+		mockDialogService.open.calls.reset();
+		mockFeatureFlagService.isEnabled.and.returnValue(false);
+
 		TestBed.configureTestingModule({
 			declarations: [ProfileEditComponent, GetThumbnailPipe],
 			providers: [
@@ -74,6 +83,7 @@ describe('ProfileEditComponent', () => {
 				{ provide: CookieService, useValue: mockCookieService },
 				{ provide: DIALOG_DATA, useValue: {} },
 				{ provide: DialogRef, useValue: mockDialogRef },
+				{ provide: FeatureFlagService, useValue: mockFeatureFlagService },
 			],
 		}).compileComponents();
 
@@ -100,21 +110,45 @@ describe('ProfileEditComponent', () => {
 
 		component.showFirstTimeDialog();
 
-		expect(mockDialogService.open).toHaveBeenCalledWith(jasmine.any(Function), {
-			width: '760px',
-			height: 'auto',
-		});
+		expect(mockDialogService.open).toHaveBeenCalledOnceWith(
+			jasmine.any(Function),
+			{
+				width: '760px',
+				height: 'auto',
+			},
+		);
 	});
 
 	it('should open LocationPickerComponent when chooseLocationForItem is called', async () => {
 		const item = {} as any;
 		await component.chooseLocationForItem(item);
 
-		expect(mockDialogService.open).toHaveBeenCalledWith(jasmine.any(Function), {
-			data: { profileItem: item },
-			height: 'auto',
-			width: '600px',
-		});
+		expect(mockDialogService.open).toHaveBeenCalledOnceWith(
+			LocationPickerComponent,
+			{
+				data: { profileItem: item },
+				height: 'auto',
+				width: '600px',
+			},
+		);
+	});
+
+	it('should open UncertainLocationPickerComponent when the uncertain-locations flag is enabled', async () => {
+		const item = {} as any;
+		mockFeatureFlagService.isEnabled.and.callFake(
+			(flag: string) => flag === 'uncertain-locations',
+		);
+
+		await component.chooseLocationForItem(item);
+
+		expect(mockDialogService.open).toHaveBeenCalledOnceWith(
+			UncertainLocationPickerComponent,
+			{
+				data: { profileItem: item },
+				height: 'auto',
+				width: '600px',
+			},
+		);
 	});
 
 	it('should update banner picture when chooseBannerPicture succeeds', async () => {

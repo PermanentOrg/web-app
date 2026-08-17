@@ -1,0 +1,46 @@
+@import 'variables';
+
+:host {
+	display: block;
+	flex: 1;
+	max-width: 100%;
+	background-color: $PR-brand-white;
+}
+
+// The global `pr-dialog .dialog-content` rules do not apply to CDK-opened
+// dialogs, so the flex structure is declared here alongside the background.
+.dialog-content {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background-color: $PR-brand-white;
+}
+
+.header {
+	@include tabbedDialogHeader(none, $body-color);
+	font-weight: $font-weight-bold;
+}
+
+.dialog-body {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	padding: 0 $grid-unit;
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.dialog-footer {
+	flex: 0 0 auto;
+	display: flex;
+	justify-content: flex-end;
+	padding: $grid-unit;
+
+	// `button.btn` is globally `display: block; margin: 10px auto; width: 100%`,
+	// and those auto margins would win over `justify-content` above.
+	button {
+		margin: 0;
+		width: auto;
+	}
+}
