@@ -2,6 +2,10 @@ import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
+import {
+	getAccessRoleFromArchiveMembershipRole,
+	type ArchiveMembershipRoleType,
+} from '@models/access-role';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import {
 	convertStelaLocationToLocnVOData,
@@ -67,6 +71,7 @@ interface StelaFolder {
 	paths: {
 		names: string[];
 	};
+	accessRole: ArchiveMembershipRoleType;
 	publicAt: string;
 	sort: string;
 	thumbnailUrls?: {
@@ -117,6 +122,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		view: stelaFolder.view,
 		imageRatio: stelaFolder.imageRatio,
 		type: stelaFolder.type,
+		accessRole: getAccessRoleFromArchiveMembershipRole(stelaFolder.accessRole),
 		thumbStatus: stelaFolder.status,
 		thumbURL200: stelaFolder.thumbnailUrls?.['200'],
 		thumbURL500: stelaFolder.thumbnailUrls?.['500'],
