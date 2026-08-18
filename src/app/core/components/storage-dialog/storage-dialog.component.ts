@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { EventService } from '@shared/services/event/event.service';
 import { DialogRef } from '@angular/cdk/dialog';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 
 const dialogTabs = ['add', 'file', 'transaction', 'promo', 'gift'] as const;
 
@@ -19,18 +20,23 @@ export class StorageDialogComponent implements OnInit, OnDestroy {
 	public tabs = ['add', 'gift', 'promo', 'transaction', 'file'];
 	public subscriptions: Subscription[] = [];
 	public promoCode: string | undefined;
+	public showPaymentIntentFlow: boolean;
 
 	constructor(
 		private dialogRef: DialogRef,
 		private route: ActivatedRoute,
 		private event: EventService,
+		private feature: FeatureFlagService,
 	) {
 		if (([...dialogTabs] as string[]).includes(route.snapshot.fragment)) {
 			this.activeTab = route.snapshot.fragment as StorageDialogTab;
 		}
+		this.showPaymentIntentFlow = this.feature.isEnabled(
+			'storage-purchase-payment-intent',
+		);
 	}
 
-	public ngOnInit(): void {
+	public async ngOnInit(): Promise<void> {
 		this.subscriptions.push(
 			this.route.queryParamMap.subscribe((params) => {
 				const param = params.get('promoCode');
@@ -38,6 +44,16 @@ export class StorageDialogComponent implements OnInit, OnDestroy {
 					this.promoCode = param;
 				}
 			}),
+		);
+
+		// The constructor's isEnabled() check above is a best-effort guess —
+		// FeatureFlagService's initial fetch is fire-and-forget at app bootstrap
+		// and may not have resolved yet if this dialog opens shortly after page
+		// load. Awaiting a fresh fetch here guarantees showPaymentIntentFlow
+		// reflects the real flag state once the dialog has actually rendered.
+		await this.feature.fetchFromApi();
+		this.showPaymentIntentFlow = this.feature.isEnabled(
+			'storage-purchase-payment-intent',
 		);
 	}
 

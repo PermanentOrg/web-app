@@ -1,0 +1,71 @@
+<div class="payment-intent-form">
+	@if (waiting) {
+		<pr-loading-spinner [isFullScreen]="true"></pr-loading-spinner>
+	}
+
+	@if (stage === 'amount') {
+		<div class="input-group-vertical">
+			<div class="input-vertical pledge-buttons">
+				@for (level of amountLevels; track level) {
+					<div
+						class="pledge-button"
+						[ngClass]="{ active: amountSelection === level }"
+						(click)="chooseAmount(level)"
+					>
+						${{ level }} <br /><span>{{ level / 10 }} GB</span>
+					</div>
+				}
+				<div
+					class="pledge-button"
+					[ngClass]="{ active: amountSelection === 'custom' }"
+					(click)="chooseAmount('custom')"
+				>
+					$<input
+						#customAmountInput
+						type="number"
+						class="form-control"
+						[(ngModel)]="customAmount"
+						min="1"
+					/>
+				</div>
+			</div>
+		</div>
+		<button
+			class="btn btn-primary"
+			[disabled]="!getSelectedAmount() || waiting"
+			(click)="continueToPayment()"
+		>
+			Continue to Payment ({{ getStorageAmount(getSelectedAmount()) }} GB)
+		</button>
+	}
+
+	@if (stage === 'payment') {
+		<div class="input-group-vertical">
+			<div class="input-vertical" #paymentElementContainer></div>
+			<div class="input-vertical checkbox">
+				<div class="form-check">
+					<a href="https://stripe.com" target="_blank">
+						<img src="assets/img/powered_by_stripe@2x.png" alt="" />
+					</a>
+				</div>
+			</div>
+		</div>
+		@if (errorMessage) {
+			<p class="input-vertical-error">{{ errorMessage }}</p>
+		}
+		<button
+			class="btn btn-primary"
+			[disabled]="waiting"
+			(click)="submitPayment()"
+		>
+			Purchase {{ getStorageAmount(getSelectedAmount()) }} GB
+		</button>
+	}
+
+	@if (stage === 'success') {
+		<p class="success-message">
+			Success! {{ amountInGb }} GB of Permanent storage has been added to your
+			account.
+		</p>
+	}
+</div>

@@ -90,6 +90,21 @@ export class BillingRepo extends BaseRepo {
 			this.httpV2.post('v2/billing/gift', data, GiftingResponse),
 		).toPromise();
 	}
+
+	public async createStoragePurchaseIntent(
+		amountInUSD: number,
+	): Promise<StoragePurchaseIntentResponse> {
+		const data = { amountInUSD };
+
+		const response = await getFirst(
+			this.httpV2.post<{ data: { clientSecret: string } }>(
+				'v2/storage-purchases',
+				data,
+			),
+		).toPromise();
+
+		return new StoragePurchaseIntentResponse(response.data);
+	}
 }
 
 export class BillingResponse extends BaseResponse {
@@ -126,6 +141,18 @@ export class GiftingResponse {
 	giftDelivered: string[];
 	invitationSent: string[];
 	alreadyInvited: string[];
+
+	constructor(props: Object) {
+		for (const prop in props) {
+			if (Object.hasOwn(props, prop)) {
+				this[prop] = props[prop];
+			}
+		}
+	}
+}
+
+export class StoragePurchaseIntentResponse {
+	clientSecret: string;
 
 	constructor(props: Object) {
 		for (const prop in props) {
