@@ -114,11 +114,6 @@ export class FolderPickerComponent implements OnDestroy {
 		this.selectedRecord = record;
 	}
 
-	// Read from the item on every check rather than through the getThumbnail pipe.
-	// The lean fetch that follows setFolder() writes thumbnail URLs onto these same
-	// item instances, and a pure pipe never re-runs for a mutation that leaves the
-	// reference unchanged, so the picker showed no thumbnails until its rows were
-	// rebuilt by navigating away and back.
 	getThumbnailUrl(item: ItemVO): string | undefined {
 		return GetThumbnail(item);
 	}
