@@ -12,7 +12,7 @@ import {
 	provideHttpClient,
 	withInterceptorsFromDi,
 } from '@angular/common/http';
-import { ChecklistApiResponse } from '../types/checklist-item';
+import { ChecklistApiResponse, ChecklistItem } from '../types/checklist-item';
 import { UserChecklistService } from './user-checklist.service';
 import { ChecklistEventObserverService } from './checklist-event-observer.service';
 
@@ -70,6 +70,113 @@ describe('UserChecklistService', () => {
 		expect(req.request.headers.get('Request-Version')).toBe('2');
 		expect(req.request.headers.get('Authorization')).not.toBeNull();
 		req.flush(expected);
+	});
+
+	describe('"Create your first archive" completion', () => {
+		function flushChecklistResponse(response: ChecklistApiResponse): void {
+			const req = http.expectOne(`${environment.apiUrl}/v2/event/checklist`);
+			req.flush(response);
+		}
+
+		function findArchiveCreatedItem(
+			checklistItems: ChecklistItem[],
+		): ChecklistItem | undefined {
+			return checklistItems.find(
+				(checklistItem) => checklistItem.id === 'archiveCreated',
+			);
+		}
+
+		it('marks the archiveCreated item as completed when the API reports it as incomplete', (done) => {
+			service
+				.getChecklistItems()
+				.then((items) => {
+					expect(findArchiveCreatedItem(items)?.completed).toBeTrue();
+					done();
+				})
+				.catch(() => {
+					done.fail();
+				});
+
+			flushChecklistResponse({
+				checklistItems: [
+					{
+						id: 'archiveCreated',
+						title: 'Create your first archive',
+						completed: false,
+					},
+				],
+			});
+		});
+
+		it('leaves the archiveCreated item completed when the API already reports it as complete', (done) => {
+			service
+				.getChecklistItems()
+				.then((items) => {
+					expect(findArchiveCreatedItem(items)?.completed).toBeTrue();
+					done();
+				})
+				.catch(() => {
+					done.fail();
+				});
+
+			flushChecklistResponse({
+				checklistItems: [
+					{
+						id: 'archiveCreated',
+						title: 'Create your first archive',
+						completed: true,
+					},
+				],
+			});
+		});
+
+		it('passes every other checklist item through untouched and in order', (done) => {
+			service
+				.getChecklistItems()
+				.then((items) => {
+					expect(items).toEqual([
+						{
+							id: 'archiveCreated',
+							title: 'Create your first archive',
+							completed: true,
+						},
+						{
+							id: 'firstUpload',
+							title: 'Upload first file',
+							completed: false,
+						},
+						{
+							id: 'publishContent',
+							title: 'Publish your archive',
+							completed: true,
+						},
+					]);
+					done();
+				})
+				.catch(() => {
+					done.fail();
+				});
+
+			flushChecklistResponse({
+				checklistItems: [
+					{
+						id: 'archiveCreated',
+						title: 'Create your first archive',
+						completed: false,
+					},
+					{
+						id: 'firstUpload',
+						title: 'Upload first file',
+						completed: false,
+					},
+					{
+						id: 'publishContent',
+						title: 'Publish your archive',
+						completed: true,
+					},
+				],
+			});
+		});
 	});
 
 	it('can check if the user is hiding the checklist', () => {
