@@ -14,7 +14,6 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { By } from '@angular/platform-browser';
 import { ArchiveStoragePayerComponent } from '@core/components/archive-storage-payer/archive-storage-payer.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 
 describe('LeftMenuComponent', () => {
 	let component: LeftMenuComponent;
@@ -28,7 +27,6 @@ describe('LeftMenuComponent', () => {
 		config.declarations.push(BgImageSrcDirective);
 		config.declarations.push(PrConstantsPipe);
 		config.declarations.push(ArchiveStoragePayerComponent);
-		config.declarations.push(GetThumbnailPipe);
 		config.imports.push(NgbTooltipModule);
 		config.imports.push(NoopAnimationsModule);
 
@@ -84,5 +82,36 @@ describe('LeftMenuComponent', () => {
 		);
 
 		expect(prArchiveStoragePayerDebugElement).toBeFalsy();
+	});
+
+	it('should read the thumbnail currently on the archive', () => {
+		expect(component.archiveThumbnail).toBeUndefined();
+
+		component.archive.thumbURL200 = 'https://example.com/200';
+
+		expect(component.archiveThumbnail).toBe('https://example.com/200');
+	});
+
+	it('should not read a thumbnail before an archive is set', () => {
+		// ngOnInit runs checkArchiveThumbnail() before assigning this.archive, so
+		// the getter has to tolerate rendering with no archive at all.
+		component.archive = undefined;
+
+		expect(component.archiveThumbnail).toBeUndefined();
+	});
+
+	it('should show a profile photo written onto the archive after the menu is rendered', () => {
+		const background = fixture.debugElement
+			.query(By.css('.menu-header-desktop .archive-thumb'))
+			.injector.get(BgImageSrcDirective);
+
+		expect(background.bgSrc).toBeFalsy();
+
+		// promptForProfilePicture() writes the new URLs onto this same instance, so
+		// the avatar has to notice a mutation that leaves the reference unchanged.
+		component.archive.thumbURL200 = 'https://example.com/thumb.jpg';
+		fixture.detectChanges();
+
+		expect(background.bgSrc).toBe('https://example.com/thumb.jpg');
 	});
 });

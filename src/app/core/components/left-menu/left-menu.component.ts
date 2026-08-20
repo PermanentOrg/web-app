@@ -60,6 +60,14 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
 	public hoverOverArchiveName: boolean = false;
 
+	// Read through to the archive rather than piping it. Choosing a profile photo
+	// writes the new URLs onto this same ArchiveVO instance, and a pure pipe never
+	// re-runs for a mutation that leaves the reference unchanged, so the avatar
+	// kept showing the old image until the menu was rebuilt.
+	public get archiveThumbnail(): string | undefined {
+		return this.archive ? GetThumbnail(this.archive) : undefined;
+	}
+
 	private subscriptions: Subscription[] = [];
 	private currentUrl: string;
 	private urlMatches: Map<string, boolean> = new Map();

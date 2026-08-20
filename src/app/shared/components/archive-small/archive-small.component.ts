@@ -53,6 +53,14 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 	public relationDisplay: string;
 	public accessRoleDisplay: string;
 
+	// Read through to the archive rather than piping it. Both the profile picture
+	// picker and checkArchiveThumbnail() below write the new URLs onto this same
+	// ArchiveVO instance, and a pure pipe never re-runs for a mutation that leaves
+	// the reference unchanged.
+	public get archiveThumbnail(): string | undefined {
+		return this.archive ? GetThumbnail(this.archive) : undefined;
+	}
+
 	constructor(
 		private account: AccountService,
 		private api: ApiService,
