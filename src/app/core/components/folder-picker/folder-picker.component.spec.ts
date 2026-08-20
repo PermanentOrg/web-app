@@ -6,7 +6,9 @@ import { DataService } from '@shared/services/data/data.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { SharedModule } from '@shared/shared.module';
-import { FolderVO } from '@root/app/models';
+import { By } from '@angular/platform-browser';
+import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
+import { FolderVO, RecordVO } from '@root/app/models';
 import { HttpTestingController } from '@angular/common/http/testing';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { DataStatus } from '@models/data-status.enum';
@@ -79,5 +81,51 @@ describe('FolderPickerComponent', () => {
 					childFolder.dataStatus === DataStatus.Placeholder,
 			),
 		).toBeFalsy();
+	});
+
+	it('should read the thumbnail currently on the item', () => {
+		const record = new RecordVO({ folder_linkId: 2, archiveNbr: 'a-2' });
+
+		expect(component.getThumbnailUrl(record)).toBeUndefined();
+
+		record.thumbnail256 = 'https://example.com/256';
+
+		expect(component.getThumbnailUrl(record)).toBe('https://example.com/256');
+	});
+
+	it('should show a thumbnail that arrives after the row is rendered', () => {
+		const record = new RecordVO({
+			folder_linkId: 1,
+			archiveNbr: 'a-1',
+			displayName: 'photo.jpg',
+		});
+		const folder = new FolderVO({
+			folder_linkId: 9,
+			folderId: 9,
+			displayName: 'Photos',
+			type: 'type.folder.private.folder',
+		});
+		folder.ChildItemVOs = [record];
+
+		component.allowRecords = true;
+		component.currentFolder = folder;
+		fixture.detectChanges();
+
+		const backgrounds = fixture.debugElement.queryAll(
+			By.directive(BgImageSrcDirective),
+		);
+
+		expect(backgrounds.length).toBe(1);
+
+		const background = backgrounds[0].injector.get(BgImageSrcDirective);
+
+		expect(background.bgSrc).toBeFalsy();
+
+		// loadCurrentFolderChildData() writes the URL onto this same instance, so
+		// the row has to notice a mutation that leaves the reference unchanged.
+		record.thumbURL200 = 'https://example.com/thumb.jpg';
+		fixture.detectChanges();
+
+		expect(background.bgSrc).toBe('https://example.com/thumb.jpg');
 	});
 });
