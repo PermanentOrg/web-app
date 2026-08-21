@@ -72,6 +72,97 @@
 	padding: 32px;
 }
 
+.pr-qualifiers-row {
+	display: flex;
+	align-items: center;
+
+	.pr-qualifiers-label {
+		@include usual-text;
+		font-family: 'UsualRegular', sans-serif;
+		color: $PR-blue-900;
+		white-space: nowrap;
+		margin-right: auto;
+	}
+
+	.pr-qualifier-option {
+		display: flex;
+		align-items: center;
+		height: 24px;
+		gap: 18px;
+		padding: 0 24px;
+		border-right: 1px solid $PR-blue-50;
+
+		&:last-child {
+			border-right: none;
+			padding-right: 0;
+		}
+
+		.pr-qualifier-option-label {
+			@include usual-text;
+			font-family: 'UsualRegular', sans-serif;
+			color: $PR-blue-900;
+			white-space: nowrap;
+		}
+	}
+}
+
+.pr-toggle {
+	position: relative;
+	display: inline-block;
+	width: 36px;
+	height: 20px;
+	flex-shrink: 0;
+	margin: 0;
+
+	input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.pr-toggle-slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: $PR-blue-50;
+		border-radius: 20px;
+		transition: 0.2s;
+
+		&::before {
+			content: '';
+			position: absolute;
+			height: 16px;
+			width: 16px;
+			left: 2px;
+			bottom: 2px;
+			background-color: $PR-brand-white;
+			border-radius: 50%;
+			transition: 0.2s;
+		}
+	}
+
+	input:focus-visible + .pr-toggle-slider {
+		outline: 2px solid $PR-blue-900;
+		outline-offset: 2px;
+	}
+
+	input:checked + .pr-toggle-slider {
+		background-color: $toggle-checked;
+	}
+
+	input:checked + .pr-toggle-slider::before {
+		transform: translateX(16px);
+	}
+
+	input:disabled + .pr-toggle-slider {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
 .pr-address-fields {
 	display: flex;
 	flex-direction: column;
@@ -81,9 +172,29 @@
 .pr-dialog-footer {
 	@include panel-footer;
 	border-top: none;
-	justify-content: flex-end;
 	gap: 24px;
 	padding: 32px;
+}
+
+.pr-dialog-actions {
+	display: flex;
+	gap: 24px;
+}
+
+.pr-clear-link {
+	@include clear-btn;
+	@include usual-text;
+	font-family: 'UsualRegular', sans-serif;
+
+	// `clear-btn` colours these red; this action is not destructive.
+	i,
+	span {
+		color: $PR-blue-900;
+	}
+
+	i {
+		font-size: 20px;
+	}
 }
 
 .pr-btn-cancel,
