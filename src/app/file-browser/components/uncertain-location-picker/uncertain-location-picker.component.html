@@ -25,9 +25,34 @@
 	</div>
 
 	<div class="pr-dialog-content">
+		<div class="pr-qualifiers-row">
+			<span class="pr-qualifiers-label">This place is:</span>
+			@for (option of qualifierOptions; track option.key) {
+				<!--
+					One label around the whole option, so its name comes from the
+					text beside it and the text is part of the hit area.
+				-->
+				<label class="pr-qualifier-option">
+					<span class="pr-qualifier-option-label">{{ option.label }}</span>
+					<span class="pr-toggle">
+						<input
+							type="checkbox"
+							[checked]="qualifiers()[option.key]"
+							[disabled]="
+								option.key !== LocationQualifier.Unknown && fieldsDisabled()
+							"
+							(change)="onQualifierChange(option.key)"
+						/>
+						<span class="pr-toggle-slider"></span>
+					</span>
+				</label>
+			}
+		</div>
+
 		<pr-icon-text-input
 			[icon]="nameIcon"
 			label="Name this place"
+			[disabled]="fieldsDisabled()"
 			[value]="location().name ?? ''"
 			(valueChange)="setField('name', $event)"
 		/>
@@ -37,6 +62,7 @@
 				<pr-icon-text-input
 					[icon]="field.icon"
 					[label]="field.label"
+					[disabled]="fieldsDisabled()"
 					[value]="location()[field.key] ?? ''"
 					(valueChange)="setField(field.key, $event)"
 				/>
@@ -45,9 +71,15 @@
 	</div>
 
 	<div class="pr-dialog-footer">
-		<button type="button" class="pr-btn-cancel" (click)="cancel()">
-			Cancel
+		<button type="button" class="pr-clear-link" (click)="clearAll()">
+			<i class="material-icons">backspace</i>
+			<span>Clear place and address</span>
 		</button>
-		<button type="button" class="pr-btn-save" (click)="save()">Save</button>
+		<div class="pr-dialog-actions">
+			<button type="button" class="pr-btn-cancel" (click)="cancel()">
+				Cancel
+			</button>
+			<button type="button" class="pr-btn-save" (click)="save()">Save</button>
+		</div>
 	</div>
 </div>
