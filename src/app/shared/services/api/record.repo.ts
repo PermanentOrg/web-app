@@ -18,7 +18,11 @@ import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cach
 import { firstValueFrom } from 'rxjs';
 import { FileFormat, PermanentFile } from '@models/file-vo';
 import { ShareStatus } from '@models/share-vo';
-import { AccessRoleType } from '@models/access-role';
+import {
+	AccessRoleType,
+	getAccessRoleFromArchiveMembershipRole,
+	type ArchiveMembershipRoleType,
+} from '@models/access-role';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { getFirst } from '../http-v2/http-v2.service';
 import { CENTRAL_TIMEZONE_VO } from './folder.repo';
@@ -106,8 +110,9 @@ export interface StelaShare {
 		thumbURL200: string;
 	};
 }
-export type StelaRecord = Omit<RecordVO, 'files'> & {
+export type StelaRecord = Omit<RecordVO, 'files' | 'accessRole'> & {
 	tags: Array<StelaTag> | null;
+	accessRole: ArchiveMembershipRoleType;
 	archiveNumber: string;
 	displayDate: string;
 	displayTime?: string;
@@ -214,6 +219,7 @@ export const convertStelaRecordToRecordVO = (
 			convertStelaTagToTagVO(stelaTag, stelaRecord.archiveId),
 		),
 		archiveNbr: stelaRecord.archiveNumber,
+		accessRole: getAccessRoleFromArchiveMembershipRole(stelaRecord.accessRole),
 		displayDT: stelaRecord.displayDate,
 		displayTime: stelaRecord.displayTime,
 		folder_linkId: Number.parseInt(stelaRecord.folderLinkId, 10),

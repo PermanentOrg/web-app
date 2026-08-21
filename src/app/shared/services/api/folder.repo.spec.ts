@@ -30,6 +30,7 @@ const mockStelaFolder = {
 	downloadName: 'test-folder',
 	imageRatio: 1.5,
 	paths: { names: ['path1', 'path2'] },
+	accessRole: 'owner',
 	publicAt: null,
 	sort: 'name',
 	thumbnailUrls: {
@@ -393,6 +394,67 @@ describe('Folder repo', () => {
 			expect(httpV2Spy.get).toHaveBeenCalledWith('v2/folder', {
 				folderIds: [123],
 			});
+		});
+	});
+
+	describe('access role translation', () => {
+		const convertFolder = async (overrides: Record<string, unknown>) => {
+			httpV2Spy.get.and.returnValue(
+				of([{ items: [{ ...mockStelaFolder, ...overrides }] }]),
+			);
+			const result = await folderRepo.getStelaFolderVOs([
+				new FolderVO({ folderId: 123 }),
+			]);
+			return result.getFolderVOs()[0];
+		};
+
+		it("should translate Stela's role into ours", async () => {
+			const folder = await convertFolder({ accessRole: 'owner' });
+
+			expect(folder.accessRole).toBe('access.role.owner');
+		});
+
+		it('should translate manager to manager, not curator', async () => {
+			const folder = await convertFolder({ accessRole: 'manager' });
+
+			expect(folder.accessRole).toBe('access.role.manager');
+		});
+
+		it('should leave the role undefined when Stela sends nothing', async () => {
+			const folder = await convertFolder({ accessRole: undefined });
+
+			expect(folder.accessRole).toBeUndefined();
+		});
+
+		it('should merge onto an existing folder without breaking its role', async () => {
+			const existingFolder = new FolderVO({
+				folderId: '123',
+				accessRole: 'access.role.owner',
+			});
+
+			existingFolder.update(await convertFolder({ accessRole: 'owner' }));
+
+			expect(existingFolder.accessRole).toBe('access.role.owner');
+		});
+
+		it('should translate the role on child folders too', async () => {
+			httpV2Spy.get.and.returnValues(
+				of([{ items: [mockStelaFolder] }]),
+				of([
+					{
+						items: [
+							{ ...mockStelaFolder, folderId: '999', accessRole: 'viewer' },
+						],
+					},
+				]),
+			);
+
+			const result = await folderRepo.getWithChildren([
+				new FolderVO({ folderId: 123 }),
+			]);
+			const child = result.getFolderVO(true).ChildItemVOs[0];
+
+			expect(child.accessRole).toBe('access.role.viewer');
 		});
 	});
 });
