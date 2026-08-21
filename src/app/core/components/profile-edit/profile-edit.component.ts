@@ -263,15 +263,16 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
 	async chooseLocationForItem(item: ProfileItemVOData) {
 		try {
+			const uncertain = this.feature.isEnabled('uncertain-locations');
 			const picker: ComponentType<
 				LocationPickerComponent | UncertainLocationPickerComponent
-			> = this.feature.isEnabled('uncertain-locations')
+			> = uncertain
 				? UncertainLocationPickerComponent
 				: LocationPickerComponent;
 			this.dialog.open(picker, {
 				data: { profileItem: item },
 				height: 'auto',
-				width: '600px',
+				width: uncertain ? '640px' : '600px',
 			});
 		} finally {
 			this.updateProgress();
