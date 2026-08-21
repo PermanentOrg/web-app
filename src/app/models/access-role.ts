@@ -62,6 +62,21 @@ export function getAccessRoleFromArchiveMembershipRole(
 	return ARCHIVE_MEMBERSHIP_ROLE_TO_ACCESS_ROLE[archiveMembershipRole];
 }
 
+/**
+ * Spread into VO data so that a role Stela did not send -- or one we cannot
+ * translate -- leaves no accessRole field behind at all, letting permission
+ * checks keep using the role the v1 endpoints supplied.
+ */
+export function getOptionalAccessRoleField(
+	archiveMembershipRole: ArchiveMembershipRoleType | undefined,
+): { accessRole?: AccessRoleType } {
+	const accessRole = getAccessRoleFromArchiveMembershipRole(
+		archiveMembershipRole,
+	);
+
+	return accessRole ? { accessRole } : {};
+}
+
 // Mapping for share link permissions. Note the stela share link API
 // mistakenly returns "manager" where it should use "curator" -- see
 // https://github.com/PermanentOrg/stela/issues/540
