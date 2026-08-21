@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
-import { LeanFolderResolveService } from '@core/resolves/lean-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
 import { fileListChildRoutes } from '@fileBrowser/file-browser.routes';
@@ -14,10 +13,6 @@ import { TimelineViewComponent } from './components/timeline-view/timeline-view.
 
 const folderResolve = {
 	currentFolder: FolderResolveService,
-};
-
-const leanFolderResolve = {
-	currentFolder: LeanFolderResolveService,
 };
 
 const recordResolve = {
@@ -34,13 +29,13 @@ export const routes: RoutesWithData = [
 			{
 				path: '',
 				component: TimelineViewComponent,
-				resolve: leanFolderResolve,
+				resolve: folderResolve,
 				children: fileListChildRoutes,
 			},
 			{
 				path: ':archiveNbr/:folderLinkId',
 				component: TimelineViewComponent,
-				resolve: leanFolderResolve,
+				resolve: folderResolve,
 				children: [
 					{
 						path: 'record/:recArchiveNbr',
@@ -79,11 +74,7 @@ export const routes: RoutesWithData = [
 		FileBrowserComponentsModule,
 	],
 	exports: [],
-	providers: [
-		LeanFolderResolveService,
-		RecordResolveService,
-		FolderResolveService,
-	],
+	providers: [RecordResolveService, FolderResolveService],
 	declarations: [],
 })
 export class ViewsRoutingModule {}

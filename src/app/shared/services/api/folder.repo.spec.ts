@@ -504,6 +504,63 @@ describe('Folder repo', () => {
 			expect(child.thumbnail256).toBe('thumb256');
 		});
 
+		// Stela's children endpoint ranks folders and records together by the
+		// parent folder's sort setting, so the response order is the render order.
+		it('should keep children in the order the response sent them', async () => {
+			httpV2Spy.get.and.returnValues(
+				of([{ items: [mockStelaFolder] }]),
+				of([
+					{
+						items: [
+							{ recordId: '77', displayName: 'Apple', folderLinkId: '900' },
+							{ folderId: '78', displayName: 'Banana', folderLinkId: '901' },
+							{ recordId: '79', displayName: 'Cherry', folderLinkId: '902' },
+							{ folderId: '80', displayName: 'Date', folderLinkId: '903' },
+						],
+					},
+				]),
+			);
+
+			const result = await folderRepo.getWithChildren([
+				new FolderVO({ folderId: 123 }),
+			]);
+			const childNames = result
+				.getFolderVO(true)
+				.ChildItemVOs.map((child) => child.displayName);
+
+			expect(childNames).toEqual(['Apple', 'Banana', 'Cherry', 'Date']);
+		});
+
+		it('should still expose children split by kind, each in response order', async () => {
+			httpV2Spy.get.and.returnValues(
+				of([{ items: [mockStelaFolder] }]),
+				of([
+					{
+						items: [
+							{ recordId: '77', displayName: 'Apple', folderLinkId: '900' },
+							{ folderId: '78', displayName: 'Banana', folderLinkId: '901' },
+							{ recordId: '79', displayName: 'Cherry', folderLinkId: '902' },
+							{ folderId: '80', displayName: 'Date', folderLinkId: '903' },
+						],
+					},
+				]),
+			);
+
+			const folder = (
+				await folderRepo.getWithChildren([new FolderVO({ folderId: 123 })])
+			).getFolderVO();
+
+			expect(folder.ChildFolderVOs.map((child) => child.displayName)).toEqual([
+				'Banana',
+				'Date',
+			]);
+
+			expect(folder.RecordVOs.map((child) => child.displayName)).toEqual([
+				'Apple',
+				'Cherry',
+			]);
+		});
+
 		it('should leave link ids undefined rather than NaN when absent', async () => {
 			const folder = await convertFolder({ folderLinkId: undefined });
 
