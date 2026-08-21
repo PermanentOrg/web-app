@@ -138,6 +138,11 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		displayTime: stelaFolder.displayTime,
 		derivedDT: stelaFolder.displayTimestamp,
 		derivedEndDT: stelaFolder.displayEndTimestamp,
+		// Stela names these createdAt / updatedAt. Records already map them; folders
+		// did not, so anything picking the most recently updated folder was comparing
+		// undefined values.
+		createdDT: stelaFolder.createdAt,
+		updatedDT: stelaFolder.updatedAt,
 		note: '',
 		description: stelaFolder.description,
 		sort: stelaFolder.sort,
