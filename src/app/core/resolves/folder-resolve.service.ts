@@ -9,11 +9,10 @@ import { find, cloneDeep } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { FolderResponse } from '@shared/services/api/index.repo';
-
 import { FolderVO } from '@root/app/models';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { findRouteData } from '@shared/utilities/router';
+import { getFolderErrorMessage } from '@shared/utilities/folder-error-message';
 import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 
 @Injectable()
@@ -92,12 +91,12 @@ export class FolderResolveService {
 				}
 				return folder;
 			})
-			.catch(async (response: FolderResponse) => {
+			.catch(async (error: unknown) => {
 				this.message.showError({
-					message: response.getMessage(),
+					message: getFolderErrorMessage(error),
 					translate: true,
 				});
-				if (targetFolder.type.includes('root')) {
+				if (targetFolder.type?.includes('root')) {
 					this.accountService
 						.logOut()
 						.then(() => {
