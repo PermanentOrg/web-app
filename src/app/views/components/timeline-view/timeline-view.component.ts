@@ -27,6 +27,8 @@ import { find, throttle, maxBy, debounce, countBy } from 'lodash';
 import { Subscription } from 'rxjs';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { DeviceService } from '@shared/services/device/device.service';
+import { MessageService } from '@shared/services/message/message.service';
+import { getFolderErrorMessage } from '@shared/utilities/folder-error-message';
 import { slideUpAnimation } from '@shared/animations';
 import {
 	TimelineBreadcrumbsComponent,
@@ -148,6 +150,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		private elementRef: ElementRef,
 		private fvService: FolderViewService,
 		private device: DeviceService,
+		private message: MessageService,
 	) {
 		this.currentTimespan = TimelineGroupTimespan.Year;
 		this.dataService.showBreadcrumbs = false;
@@ -485,11 +488,23 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (folder.isFetching) {
 			await folder.fetched;
 		}
-		const folderResponse = await this.api.folder
-			.navigateLean(folder)
-			.toPromise();
-		this.dataService.setCurrentFolder(folderResponse.getFolderVO(true));
-		this.isNavigating = false;
+		try {
+			const folderResponse =
+				await this.api.folder.getWithChildrenByIdentifier(folder);
+
+			if (!folderResponse.isSuccessful) {
+				throw folderResponse;
+			}
+
+			this.dataService.setCurrentFolder(folderResponse.getFolderVO(true));
+		} catch (error) {
+			this.message.showError({
+				message: getFolderErrorMessage(error),
+				translate: true,
+			});
+		} finally {
+			this.isNavigating = false;
+		}
 	}
 
 	async onRecordClick(record: RecordVO) {
