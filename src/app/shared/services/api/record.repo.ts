@@ -18,7 +18,11 @@ import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cach
 import { firstValueFrom } from 'rxjs';
 import { FileFormat, PermanentFile } from '@models/file-vo';
 import { ShareStatus } from '@models/share-vo';
-import { AccessRoleType } from '@models/access-role';
+import {
+	AccessRoleType,
+	getOptionalAccessRoleField,
+	type ArchiveMembershipRoleType,
+} from '@models/access-role';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { getFirst } from '../http-v2/http-v2.service';
 import { CENTRAL_TIMEZONE_VO } from './folder.repo';
@@ -106,8 +110,9 @@ export interface StelaShare {
 		thumbURL200: string;
 	};
 }
-export type StelaRecord = Omit<RecordVO, 'files'> & {
+export type StelaRecord = Omit<RecordVO, 'files' | 'accessRole'> & {
 	tags: Array<StelaTag> | null;
+	accessRole?: ArchiveMembershipRoleType;
 	archiveNumber: string;
 	displayDate: string;
 	displayTime?: string;
@@ -199,9 +204,12 @@ export const convertStelaLocationToLocnVOData = (
 
 export const convertStelaRecordToRecordVO = (
 	stelaRecord: StelaRecord,
-): RecordVO =>
-	new RecordVO({
-		...stelaRecord,
+): RecordVO => {
+	const { accessRole: stelaAccessRole, ...stelaRecordWithoutAccessRole } =
+		stelaRecord;
+
+	return new RecordVO({
+		...stelaRecordWithoutAccessRole,
 		thumbURL200: stelaRecord.thumbnailUrls?.['200'] ?? stelaRecord.thumbURL200,
 		thumbURL500: stelaRecord.thumbnailUrls?.['500'] ?? stelaRecord.thumbURL500,
 		thumbURL1000:
@@ -214,6 +222,7 @@ export const convertStelaRecordToRecordVO = (
 			convertStelaTagToTagVO(stelaTag, stelaRecord.archiveId),
 		),
 		archiveNbr: stelaRecord.archiveNumber,
+		...getOptionalAccessRoleField(stelaAccessRole),
 		displayDT: stelaRecord.displayDate,
 		displayTime: stelaRecord.displayTime,
 		folder_linkId: Number.parseInt(stelaRecord.folderLinkId, 10),
@@ -230,6 +239,7 @@ export const convertStelaRecordToRecordVO = (
 		TimezoneVO: CENTRAL_TIMEZONE_VO,
 		ShareVOs: (stelaRecord.shares ?? []).map(convertStelaSharetoShareVO),
 	});
+};
 
 export class RecordRepo extends BaseRepo {
 	private async getRecordIdByArchiveNbr(archiveNbr: string): Promise<number> {
