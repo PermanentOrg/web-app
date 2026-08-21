@@ -2,6 +2,10 @@ import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
+import {
+	getOptionalAccessRoleField,
+	type ArchiveMembershipRoleType,
+} from '@models/access-role';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import {
 	convertStelaLocationToLocnVOData,
@@ -70,7 +74,10 @@ interface StelaFolder {
 	imageRatio: number;
 	paths: {
 		names: string[];
+		folderLinkIds: string[];
+		archiveNumbers: Array<string | null>;
 	};
+	accessRole?: ArchiveMembershipRoleType;
 	publicAt: string;
 	sort: string;
 	thumbnailUrls?: {
@@ -123,8 +130,10 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 	const childRecordVOs = stelaFolder.children
 		.filter(isStelaRecord)
 		.map(convertStelaRecordToRecordVO);
+	const { accessRole: stelaAccessRole, ...stelaFolderWithoutAccessRole } =
+		stelaFolder;
 	return new FolderVO({
-		...stelaFolder,
+		...stelaFolderWithoutAccessRole,
 		folderId: stelaFolder.folderId,
 		archiveId: stelaFolder.archive?.id,
 		archiveNbr: stelaFolder.archiveNumber,
@@ -151,6 +160,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		view: stelaFolder.view,
 		imageRatio: stelaFolder.imageRatio,
 		type: stelaFolder.type,
+		...getOptionalAccessRoleField(stelaAccessRole),
 		thumbStatus: stelaFolder.status,
 		thumbURL200: stelaFolder.thumbnailUrls?.['200'],
 		thumbURL500: stelaFolder.thumbnailUrls?.['500'],
@@ -163,6 +173,10 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		publicDT: stelaFolder.publicAt,
 		parentFolderId: stelaFolder.parentFolder?.id,
 		pathAsText: stelaFolder.paths?.names,
+		pathAsArchiveNbr: stelaFolder.paths?.archiveNumbers,
+		pathAsFolder_linkId: stelaFolder.paths?.folderLinkIds?.map((folderLinkId) =>
+			toFolderLinkId(folderLinkId),
+		),
 		ParentFolderVOs: [new FolderVO({ folderId: stelaFolder.parentFolder?.id })],
 		ChildFolderVOs: childFolderVOs,
 		RecordVOs: childRecordVOs,
@@ -388,6 +402,27 @@ export class FolderRepo extends BaseRepo {
 			Results: simulatedV1FolderResponseResults,
 		});
 		return folderResponse;
+	}
+
+	/**
+	 * Stela can only look a folder up by numeric folderId, but our routes and
+	 * breadcrumbs address folders by archiveNbr + folder_linkId, so the id is
+	 * resolved through the v1 endpoint first. Separate from getWithChildren
+	 * because that v1 lookup needs an auth token a share-token visitor lacks.
+	 */
+	public async getWithChildrenByIdentifier(
+		folderVO: FolderVO,
+	): Promise<FolderResponse> {
+		if (folderVO.folderId) {
+			return await this.getWithChildren([folderVO]);
+		}
+
+		const identityResponse = await this.get([folderVO]);
+		if (!identityResponse.isSuccessful) {
+			throw identityResponse;
+		}
+
+		return await this.getWithChildren([identityResponse.getFolderVO()]);
 	}
 
 	public navigateLean(folderVO: FolderVO): Observable<FolderResponse> {
