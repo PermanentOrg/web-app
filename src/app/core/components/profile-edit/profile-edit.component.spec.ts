@@ -146,7 +146,7 @@ describe('ProfileEditComponent', () => {
 			{
 				data: { profileItem: item },
 				height: 'auto',
-				width: '600px',
+				width: '640px',
 			},
 		);
 	});
