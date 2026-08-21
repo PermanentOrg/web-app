@@ -1,46 +1,115 @@
-@import 'variables';
+@import 'colors';
+@import 'fonts';
+@import 'mixins';
 
 :host {
 	display: block;
-	flex: 1;
-	max-width: 100%;
-	background-color: $PR-brand-white;
 }
 
-// The global `pr-dialog .dialog-content` rules do not apply to CDK-opened
-// dialogs, so the flex structure is declared here alongside the background.
-.dialog-content {
+// Out of flow: an inline `svg` opens a line box and pushes the card down.
+.pr-icon-gradient-defs {
+	position: absolute;
+	width: 0;
+	height: 0;
+}
+
+.pr-icon-gradient-start {
+	stop-color: $PR-brand-purple;
+}
+
+.pr-icon-gradient-end {
+	stop-color: $PR-brand-yellow;
+}
+
+.pr-uncertain-location-dialog {
+	background: $PR-brand-white;
+	border-radius: 12px;
+	box-shadow: 0 8px 32px rgba($PR-brand-black, 0.12);
+}
+
+.pr-dialog-header {
 	display: flex;
-	flex-direction: column;
-	height: 100%;
-	background-color: $PR-brand-white;
-}
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	height: 64px;
+	padding: 0 20px;
+	border-bottom: 1px solid $PR-blue-50;
 
-.header {
-	@include tabbedDialogHeader(none, $body-color);
-	font-weight: $font-weight-bold;
-}
-
-.dialog-body {
-	flex: 1 1 auto;
-	overflow-y: auto;
-	padding: 0 $grid-unit;
-
-	p:last-child {
-		margin-bottom: 0;
+	h2 {
+		// No `@font-face` declares a plain 'Usual'; faces are named per weight.
+		font-family: 'UsualMedium', sans-serif;
+		font-size: 16px;
+		line-height: 24px;
+		letter-spacing: -0.01em;
+		margin: 0;
+		color: $PR-blue-900;
 	}
 }
 
-.dialog-footer {
-	flex: 0 0 auto;
+.pr-close-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 4px;
+	color: $PR-blue-200;
 	display: flex;
-	justify-content: flex-end;
-	padding: $grid-unit;
+	align-items: center;
 
-	// `button.btn` is globally `display: block; margin: 10px auto; width: 100%`,
-	// and those auto margins would win over `justify-content` above.
-	button {
-		margin: 0;
-		width: auto;
+	&:hover {
+		color: $PR-blue-400;
+	}
+
+	.material-icons {
+		font-size: 20px;
+	}
+}
+
+.pr-dialog-content {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	padding: 32px;
+}
+
+.pr-address-fields {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.pr-dialog-footer {
+	@include panel-footer;
+	border-top: none;
+	justify-content: flex-end;
+	gap: 24px;
+	padding: 32px;
+}
+
+.pr-btn-cancel,
+.pr-btn-save {
+	@include usual-text;
+	font-family: 'UsualMedium', sans-serif;
+	padding: 16px 24px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pr-btn-cancel {
+	background: $PR-brand-white;
+	color: $PR-blue-900;
+}
+
+.pr-btn-save {
+	background: $PR-blue-900;
+	color: $PR-brand-white;
+
+	&:hover {
+		background: $PR-blue-800;
 	}
 }

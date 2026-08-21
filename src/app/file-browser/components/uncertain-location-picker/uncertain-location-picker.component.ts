@@ -1,21 +1,67 @@
-import { Component, Inject, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { ItemVO } from '@models';
+import { ItemVO, LocnVOData } from '@models';
 import { ProfileItemVOData } from '@models/profile-item-vo';
+import {
+	ICON_GRADIENT_ID,
+	IconTextInputComponent,
+} from '@shared/components/icon-text-input/icon-text-input.component';
+import {
+	faFlagUsa,
+	faHouse,
+	faHouseBuilding,
+	faInputNumeric,
+	faMountainSun,
+	faSignsPost,
+} from '@fortawesome/pro-regular-svg-icons';
+
+/** Each key is the `LocnVOData` field that part of the address maps onto. */
+export const LOCATION_FIELDS = [
+	{ key: 'sublocation', label: 'Postal/Delivery Address', icon: faSignsPost },
+	{ key: 'city', label: 'City/Town/Village', icon: faHouseBuilding },
+	{
+		key: 'adminOneName',
+		label: 'State/Province/District',
+		icon: faMountainSun,
+	},
+	{ key: 'postalCode', label: 'Postal Code', icon: faInputNumeric },
+	{ key: 'country', label: 'Country', icon: faFlagUsa },
+] as const satisfies ReadonlyArray<{
+	key: keyof LocnVOData;
+	label: string;
+	// Typed by example: the icon packages ship their own copy of these types,
+	// which does not unify with the one the core package exports.
+	icon: typeof faHouse;
+}>;
+
+export interface UncertainLocationPickerData {
+	item?: ItemVO;
+	profileItem?: ProfileItemVOData;
+}
 
 @Component({
 	selector: 'pr-uncertain-location-picker',
+	standalone: true,
+	imports: [CommonModule, IconTextInputComponent],
 	templateUrl: './uncertain-location-picker.component.html',
 	styleUrls: ['./uncertain-location-picker.component.scss'],
-	standalone: false,
 })
-export class UncertainLocationPickerComponent {
+export class UncertainLocationPickerComponent implements OnInit {
+	readonly fields = LOCATION_FIELDS;
+	readonly nameIcon = faHouse;
+	readonly iconGradientId = ICON_GRADIENT_ID;
+
 	public item: ItemVO;
 	public profileItem: ProfileItemVOData;
 
+	location = signal<LocnVOData>({});
+
 	constructor(
-		@Optional() @Inject(DIALOG_DATA) public dialogData: any,
-		@Optional() private dialogRef: DialogRef,
+		@Optional()
+		@Inject(DIALOG_DATA)
+		public dialogData: UncertainLocationPickerData,
+		@Optional() private dialogRef: DialogRef<LocnVOData>,
 	) {
 		if (this.dialogData) {
 			this.item = this.dialogData.item;
@@ -23,7 +69,22 @@ export class UncertainLocationPickerComponent {
 		}
 	}
 
+	ngOnInit(): void {
+		const existing = this.item?.LocnVO ?? this.profileItem?.LocnVOs?.[0];
+		if (existing) {
+			this.location.set({ ...existing });
+		}
+	}
+
+	public setField(key: keyof LocnVOData, value: string): void {
+		this.location.update((locn) => ({ ...locn, [key]: value }));
+	}
+
 	public cancel(): void {
 		this.dialogRef?.close();
+	}
+
+	public save(): void {
+		this.dialogRef?.close(this.location());
 	}
 }

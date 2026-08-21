@@ -1,18 +1,50 @@
-<div class="dialog-content">
-	<div class="header">
-		<span>Edit location</span>
-		<button class="btn" (click)="cancel()" aria-label="Close">
+<!-- The gradient every `pr-icon-text-input` below fills its icon from. -->
+<svg class="pr-icon-gradient-defs" aria-hidden="true" focusable="false">
+	<defs>
+		<linearGradient [attr.id]="iconGradientId" x1="0" y1="0" x2="1" y2="0">
+			<stop class="pr-icon-gradient-start" offset="0%" />
+			<stop class="pr-icon-gradient-end" offset="100%" />
+		</linearGradient>
+	</defs>
+</svg>
+
+<div class="pr-uncertain-location-dialog">
+	<div class="pr-dialog-header">
+		<h2>Add a place or address…</h2>
+		<button
+			type="button"
+			class="pr-close-button"
+			aria-label="Close"
+			(click)="cancel()"
+		>
 			<i class="material-icons">close</i>
 		</button>
 	</div>
-	<div class="dialog-body">
-		<p>
-			We're building a new way to record locations, including places that are
-			approximate or uncertain.
-		</p>
-		<p>Location editing is not available here yet.</p>
+
+	<div class="pr-dialog-content">
+		<pr-icon-text-input
+			[icon]="nameIcon"
+			label="Name this place"
+			[value]="location().name ?? ''"
+			(valueChange)="setField('name', $event)"
+		/>
+
+		<div class="pr-address-fields">
+			@for (field of fields; track field.key) {
+				<pr-icon-text-input
+					[icon]="field.icon"
+					[label]="field.label"
+					[value]="location()[field.key] ?? ''"
+					(valueChange)="setField(field.key, $event)"
+				/>
+			}
+		</div>
 	</div>
-	<div class="dialog-footer">
-		<button class="btn btn-primary" (click)="cancel()">Close</button>
+
+	<div class="pr-dialog-footer">
+		<button type="button" class="pr-btn-cancel" (click)="cancel()">
+			Cancel
+		</button>
+		<button type="button" class="pr-btn-save" (click)="save()">Save</button>
 	</div>
 </div>
