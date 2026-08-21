@@ -1,0 +1,30 @@
+<div class="pr-icon-text-input" [class.disabled]="disabled">
+	<span class="pr-icon-text-input-icon" aria-hidden="true">
+		<fa-icon [icon]="icon" />
+	</span>
+	<input
+		type="text"
+		class="pr-icon-text-input-control"
+		[value]="value"
+		[placeholder]="label"
+		[attr.aria-label]="label"
+		[disabled]="disabled"
+		(input)="onInput($event)"
+	/>
+	@if (value) {
+		<!--
+			Safari and Firefox do not focus a button on mousedown, so without this
+			the input would blur, `:focus-within` would drop, and the button would
+			be display:none before the click landed.
+		-->
+		<button
+			type="button"
+			class="pr-icon-text-input-clear"
+			[attr.aria-label]="'Clear ' + label"
+			(mousedown)="$event.preventDefault()"
+			(click)="clear()"
+		>
+			<i class="material-icons">cancel</i>
+		</button>
+	}
+</div>

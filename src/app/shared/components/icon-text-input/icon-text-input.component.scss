@@ -1,0 +1,86 @@
+@import 'colors';
+@import 'fonts';
+@import 'mixins';
+
+:host {
+	display: block;
+}
+
+.pr-icon-text-input {
+	@include input-container;
+	height: 48px;
+	border-radius: 6px;
+	// Lighter at rest than the shared `input-container` default; the darker
+	// line is what marks the focused field in the design.
+	border-color: $PR-blue-50;
+	padding: 0 12px 0 8px;
+	gap: 16px;
+
+	&:focus-within {
+		@include input-focus-state;
+		border-color: $PR-blue-100;
+
+		// Only the field being edited offers to clear itself, as in the design.
+		.pr-icon-text-input-clear {
+			display: flex;
+		}
+	}
+
+	&.disabled {
+		opacity: 0.5;
+	}
+}
+
+// A leading tile inset within the field, rather than the trailing icon block
+// `icon-wrapper` describes.
+.pr-icon-text-input-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 32px;
+	height: 32px;
+	background: $PR-blue-25;
+	border-radius: 4px;
+	font-size: 16px;
+
+	// The icon takes the brand gradient, which an SVG can only reference by id,
+	// so the host has to render the definition — see `ICON_GRADIENT_ID`. The
+	// trailing colour is what paints the icon when that definition is absent,
+	// since an unresolved paint reference draws nothing at all.
+	//
+	// `::ng-deep` because Font Awesome writes this `svg` in at runtime, so it
+	// never carries the attribute an encapsulated selector matches on.
+	::ng-deep svg path {
+		fill: url('#pr-icon-gradient') $PR-blue-600;
+	}
+}
+
+.pr-icon-text-input-control {
+	@include input-segment;
+	// `usual-text` asks for a 'Usual' family that no `@font-face` declares;
+	// the real faces are named per weight.
+	font-family: 'UsualRegular', sans-serif;
+	text-align: left;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.pr-icon-text-input-clear {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	// `display` rather than `visibility` so it leaves the tab order too.
+	display: none;
+	align-items: center;
+	color: $PR-blue-900;
+
+	&:hover {
+		color: $PR-blue-700;
+	}
+
+	.material-icons {
+		font-size: 16px;
+	}
+}
