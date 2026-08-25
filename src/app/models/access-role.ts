@@ -22,6 +22,46 @@ export type PermissionsLevel =
 	| 'owner'
 	| 'viewer';
 
+/** Mirrors Stela's ArchiveMembershipRole enum */
+export type ArchiveMembershipRoleType =
+	| 'contributor'
+	| 'curator'
+	| 'editor'
+	| 'manager'
+	| 'owner'
+	| 'viewer';
+
+export const ARCHIVE_MEMBERSHIP_ROLE_TO_ACCESS_ROLE: Record<
+	ArchiveMembershipRoleType,
+	AccessRoleType
+> = {
+	contributor: 'access.role.contributor',
+	curator: 'access.role.curator',
+	editor: 'access.role.editor',
+	manager: 'access.role.manager',
+	owner: 'access.role.owner',
+	viewer: 'access.role.viewer',
+};
+
+function isArchiveMembershipRole(
+	value: unknown,
+): value is ArchiveMembershipRoleType {
+	return (
+		typeof value === 'string' &&
+		Object.hasOwn(ARCHIVE_MEMBERSHIP_ROLE_TO_ACCESS_ROLE, value)
+	);
+}
+
+export function getAccessRoleFromArchiveMembershipRole(
+	archiveMembershipRole: ArchiveMembershipRoleType | undefined,
+): AccessRoleType | undefined {
+	if (!isArchiveMembershipRole(archiveMembershipRole)) {
+		return undefined;
+	}
+
+	return ARCHIVE_MEMBERSHIP_ROLE_TO_ACCESS_ROLE[archiveMembershipRole];
+}
+
 // Mapping for share link permissions. Note the stela share link API
 // mistakenly returns "manager" where it should use "curator" -- see
 // https://github.com/PermanentOrg/stela/issues/540

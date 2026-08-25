@@ -466,5 +466,47 @@ describe('RecordRepo', () => {
 			expect(record.thumbURL2000).toBe('https://example.com/2000');
 			expect(record.thumbnail256).toBe('https://example.com/256');
 		});
+
+		it("should translate Stela's role into ours", () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				accessRole: 'viewer',
+			} as any);
+
+			expect(record.accessRole).toBe('access.role.viewer');
+		});
+
+		it('should translate manager to manager, not curator', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				accessRole: 'manager',
+			} as any);
+
+			expect(record.accessRole).toBe('access.role.manager');
+		});
+
+		it('should leave the role undefined when Stela sends nothing', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+			} as any);
+
+			expect(record.accessRole).toBeUndefined();
+		});
+
+		it('should merge onto an existing record without breaking its role', () => {
+			const existingRecord = new RecordVO({
+				recordId: 42,
+				accessRole: 'access.role.curator',
+			});
+
+			existingRecord.update(
+				convertStelaRecordToRecordVO({
+					...baseStelaRecord,
+					accessRole: 'owner',
+				} as any),
+			);
+
+			expect(existingRecord.accessRole).toBe('access.role.owner');
+		});
 	});
 });
