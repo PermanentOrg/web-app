@@ -113,7 +113,7 @@
 		"angular-eslint": "^21.4.0",
 		"dotenv": "^17.4.2",
 		"eslint": "^9.39.4",
-		"eslint-config-love": "^154.0.0",
+		"eslint-config-love": "154.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-jasmine": "^4.2.2",
 		"eslint-plugin-jsdoc": "^63.0.7",
