@@ -1,0 +1,90 @@
+@import 'variables';
+
+:host {
+	display: block;
+}
+
+button {
+	margin-bottom: 0;
+}
+
+.input-group-vertical {
+	margin: 0px;
+	border-radius: 0.25rem;
+	background-color: white;
+	overflow: hidden;
+}
+
+.input-vertical.checkbox {
+	font-size: 85%;
+	overflow: hidden;
+
+	img {
+		height: 20px;
+		float: right;
+	}
+}
+
+.input-vertical-error {
+	color: $danger;
+	padding-top: $grid-unit * 0.5;
+}
+
+.success-message {
+	margin-top: $grid-unit;
+}
+
+.pledge-buttons {
+	display: flex;
+	overflow: hidden;
+	border-radius: 0.25rem;
+
+	.pledge-button {
+		padding: 0.85rem 0;
+		line-height: 1.5;
+		flex: 1 1 auto;
+		flex-wrap: wrap;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: $PR-orange;
+		color: white;
+		font-weight: 500;
+		cursor: pointer;
+		user-select: none;
+		transition: $btn-transition;
+
+		span {
+			font-weight: 300;
+			font-size: 80%;
+			flex: 0 0 100%;
+			text-align: center;
+			line-height: 1.2;
+		}
+
+		&:hover {
+			transition: $btn-transition;
+			background: darken($PR-orange, 10%);
+		}
+
+		&.active {
+			transition: 0s all;
+			background: darken($PR-orange, 7%);
+			box-shadow: $btn-active-box-shadow;
+		}
+
+		&:focus {
+			box-shadow: 0 0 0 $btn-focus-width rgba($PR-orange, 0.5);
+		}
+
+		input {
+			display: inline-block;
+			width: 4em;
+			padding: 0.25rem;
+			&::-webkit-inner-spin-button,
+			&::-webkit-outer-spin-button {
+				appearance: none;
+			}
+		}
+	}
+}
