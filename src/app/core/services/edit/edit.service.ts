@@ -631,16 +631,19 @@ export class EditService {
 	}
 
 	async openLocationDialog(item: ItemVO) {
+		const isUncertainLocationsEnabled = this.feature.isEnabled(
+			'uncertain-locations',
+		);
 		const picker: ComponentType<
 			LocationPickerComponent | UncertainLocationPickerComponent
-		> = this.feature.isEnabled('uncertain-locations')
+		> = isUncertainLocationsEnabled
 			? UncertainLocationPickerComponent
 			: LocationPickerComponent;
 		this.dialog.open(picker, {
 			data: { item },
 			panelClass: 'dialog',
 			height: 'auto',
-			width: '600px',
+			width: isUncertainLocationsEnabled ? '640px' : '600px',
 		});
 	}
 

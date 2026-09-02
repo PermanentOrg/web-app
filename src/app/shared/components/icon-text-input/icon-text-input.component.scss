@@ -1,0 +1,76 @@
+@import 'colors';
+@import 'fonts';
+@import 'mixins';
+
+:host {
+	display: block;
+}
+
+.pr-icon-text-input {
+	@include input-container;
+	height: 48px;
+	border-radius: 6px;
+	border-color: $PR-blue-50;
+	padding: 0 12px 0 8px;
+	gap: 16px;
+
+	&:focus-within {
+		@include input-focus-state;
+		border-color: $PR-blue-100;
+
+		.pr-icon-text-input-clear {
+			display: flex;
+		}
+	}
+
+	&.disabled {
+		opacity: 0.5;
+	}
+}
+
+.pr-icon-text-input-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 32px;
+	height: 32px;
+	background: $PR-blue-25;
+	border-radius: 4px;
+	font-size: 16px;
+
+	// `::ng-deep`: Font Awesome writes this `svg` in at runtime, so it carries
+	// no encapsulation attribute. The colour after the url is not a fallback
+	// nicety — an unresolved paint reference draws nothing.
+	::ng-deep svg path {
+		fill: url('#pr-icon-gradient') $PR-blue-600;
+	}
+}
+
+.pr-icon-text-input-control {
+	@include input-segment;
+	// No `@font-face` declares a plain 'Usual'; the faces are named per weight.
+	font-family: 'UsualRegular', sans-serif;
+	text-align: left;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.pr-icon-text-input-clear {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	// `display` rather than `visibility` so it leaves the tab order too.
+	display: none;
+	align-items: center;
+	color: $PR-blue-900;
+
+	&:hover {
+		color: $PR-blue-700;
+	}
+
+	.material-icons {
+		font-size: 16px;
+	}
+}

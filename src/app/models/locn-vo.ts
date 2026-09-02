@@ -1,6 +1,32 @@
 import { BaseVOData } from '@models/base-vo';
 
-export type LocationPrecision = 'approximate' | 'uncertain' | 'unknown';
+// Loose while the vocabulary is in flux: the stored values are moving to
+// `approximate-known`, `uncertain-known` and `approximate-uncertain-known`,
+// which the back end does not accept yet.
+export type LocationPrecision = string;
+
+export enum LocationQualifier {
+	Approximate = 'approximate',
+	Uncertain = 'uncertain',
+	Unknown = 'unknown',
+}
+
+/**
+ * How sure we are of a place. `approximate` and `uncertain` can both apply;
+ * `unknown` stands alone and means there is nothing to record. All three off
+ * means the place is known exactly.
+ */
+export interface LocationQualifierFlags {
+	approximate: boolean;
+	uncertain: boolean;
+	unknown: boolean;
+}
+
+export const DEFAULT_LOCATION_QUALIFIERS: LocationQualifierFlags = {
+	approximate: false,
+	uncertain: false,
+	unknown: false,
+};
 
 export interface LocnVOData extends BaseVOData {
 	locnId?: number;
