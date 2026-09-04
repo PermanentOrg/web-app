@@ -1,16 +1,8 @@
-<div class="pr-uncertain-location-dialog">
-	<div class="pr-dialog-header">
-		<h2>Add a place or address…</h2>
-		<button
-			type="button"
-			class="pr-close-button"
-			aria-label="Close"
-			(click)="cancel()"
-		>
-			<i class="material-icons">close</i>
-		</button>
-	</div>
-
+<pr-dialog-frame
+	heading="Add a place or address…"
+	(cancelled)="cancel()"
+	(confirmed)="save()"
+>
 	<div class="pr-dialog-content">
 		<div class="pr-qualifiers-row">
 			<span class="pr-qualifiers-label">This place is:</span>
@@ -53,16 +45,13 @@
 		</div>
 	</div>
 
-	<div class="pr-dialog-footer">
-		<button type="button" class="pr-clear-link" (click)="clearAll()">
-			<i class="material-icons">backspace</i>
-			<span>Clear place and address</span>
-		</button>
-		<div class="pr-dialog-actions">
-			<button type="button" class="pr-btn-cancel" (click)="cancel()">
-				Cancel
-			</button>
-			<button type="button" class="pr-btn-save" (click)="save()">Save</button>
-		</div>
-	</div>
-</div>
+	<button
+		type="button"
+		class="pr-clear-link"
+		prDialogFooterAside
+		(click)="clearAll()"
+	>
+		<i class="material-icons">backspace</i>
+		<span>Clear place and address</span>
+	</button>
+</pr-dialog-frame>
