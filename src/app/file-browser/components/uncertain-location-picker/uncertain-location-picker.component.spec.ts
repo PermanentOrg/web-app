@@ -108,14 +108,6 @@ describe('UncertainLocationPickerComponent', () => {
 			]);
 		});
 
-		it('should point the icons at the gradient the dialog defines', () => {
-			const gradient = fixture.nativeElement.querySelector(
-				`linearGradient#${component.iconGradientId}`,
-			);
-
-			expect(gradient).not.toBeNull();
-		});
-
 		it('should start with empty fields', () => {
 			getFields().forEach((input) => {
 				expect(input.value).toBe('');

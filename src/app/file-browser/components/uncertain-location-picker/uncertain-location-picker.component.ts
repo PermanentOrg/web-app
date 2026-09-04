@@ -17,10 +17,7 @@ import {
 	LocnVOData,
 } from '@models';
 import { ProfileItemVOData } from '@models/profile-item-vo';
-import {
-	ICON_GRADIENT_ID,
-	IconTextInputComponent,
-} from '@shared/components/icon-text-input/icon-text-input.component';
+import { IconTextInputComponent } from '@shared/components/icon-text-input/icon-text-input.component';
 import {
 	faFlagUsa,
 	faHouse,
@@ -112,7 +109,6 @@ const toQualifierFlags = (
 export class UncertainLocationPickerComponent implements OnInit {
 	readonly fields = LOCATION_FIELDS;
 	readonly nameIcon = faHouse;
-	readonly iconGradientId = ICON_GRADIENT_ID;
 	readonly qualifierOptions = LOCATION_QUALIFIER_OPTIONS;
 	readonly LocationQualifier = LocationQualifier;
 

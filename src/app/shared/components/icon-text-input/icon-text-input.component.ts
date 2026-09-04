@@ -3,8 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-/** The host renders the gradient definition; an SVG fill can only cite an id. */
-export const ICON_GRADIENT_ID = 'pr-icon-gradient';
+let gradientCount = 0;
+
+const takeGradientId = (): string => {
+	gradientCount += 1;
+	return `pr-icon-text-input-gradient-${gradientCount}`;
+};
 
 @Component({
 	selector: 'pr-icon-text-input',
@@ -21,8 +25,12 @@ export class IconTextInputComponent {
 
 	@Input() value = '';
 	@Input() disabled = false;
+	@Input() invalid = false;
 
 	@Output() valueChange = new EventEmitter<string>();
+
+	readonly gradientId = takeGradientId();
+	readonly iconFill = `url('#${this.gradientId}')`;
 
 	onInput(event: Event): void {
 		this.valueChange.emit((event.target as HTMLInputElement).value);
