@@ -17,6 +17,7 @@ import {
 	LocnVOData,
 } from '@models';
 import { ProfileItemVOData } from '@models/profile-item-vo';
+import { DialogFrameComponent } from '@shared/components/dialog-frame/dialog-frame.component';
 import { IconTextInputComponent } from '@shared/components/icon-text-input/icon-text-input.component';
 import {
 	faFlagUsa,
@@ -102,7 +103,7 @@ const toQualifierFlags = (
 @Component({
 	selector: 'pr-uncertain-location-picker',
 	standalone: true,
-	imports: [CommonModule, IconTextInputComponent],
+	imports: [CommonModule, DialogFrameComponent, IconTextInputComponent],
 	templateUrl: './uncertain-location-picker.component.html',
 	styleUrls: ['./uncertain-location-picker.component.scss'],
 })

@@ -1,0 +1,36 @@
+<div class="pr-dialog-frame">
+	<div class="pr-dialog-header">
+		<h2>{{ heading }}</h2>
+		<button
+			type="button"
+			class="pr-close-button"
+			aria-label="Close"
+			(click)="cancelled.emit()"
+		>
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+
+	<div class="pr-dialog-body">
+		<ng-content></ng-content>
+	</div>
+
+	<div class="pr-dialog-footer">
+		<div class="pr-dialog-footer-aside">
+			<ng-content select="[prDialogFooterAside]"></ng-content>
+		</div>
+		<div class="pr-dialog-actions">
+			<button type="button" class="pr-btn-cancel" (click)="cancelled.emit()">
+				{{ cancelLabel }}
+			</button>
+			<button
+				type="button"
+				class="pr-btn-confirm"
+				[disabled]="confirmDisabled"
+				(click)="confirmed.emit()"
+			>
+				{{ confirmLabel }}
+			</button>
+		</div>
+	</div>
+</div>
