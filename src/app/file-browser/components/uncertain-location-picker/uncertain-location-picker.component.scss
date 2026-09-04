@@ -6,21 +6,6 @@
 	display: block;
 }
 
-// Out of flow: an inline `svg` opens a line box and pushes the card down.
-.pr-icon-gradient-defs {
-	position: absolute;
-	width: 0;
-	height: 0;
-}
-
-.pr-icon-gradient-start {
-	stop-color: $PR-brand-purple;
-}
-
-.pr-icon-gradient-end {
-	stop-color: $PR-brand-yellow;
-}
-
 .pr-uncertain-location-dialog {
 	background: $PR-brand-white;
 	border-radius: 12px;

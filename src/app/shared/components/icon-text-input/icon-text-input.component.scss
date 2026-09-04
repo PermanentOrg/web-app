@@ -23,6 +23,14 @@
 		}
 	}
 
+	// After the focus rule, and naming the focused case outright: focus is
+	// when the value is being typed, which is when saying it is unreadable
+	// matters most.
+	&.invalid,
+	&.invalid:focus-within {
+		border-color: $PR-red-300;
+	}
+
 	&.disabled {
 		opacity: 0.5;
 	}
@@ -43,8 +51,22 @@
 	// no encapsulation attribute. The colour after the url is not a fallback
 	// nicety — an unresolved paint reference draws nothing.
 	::ng-deep svg path {
-		fill: url('#pr-icon-gradient') $PR-blue-600;
+		fill: var(--pr-icon-text-input-fill) $PR-blue-600;
 	}
+}
+
+.pr-icon-text-input-gradient {
+	position: absolute;
+	width: 0;
+	height: 0;
+}
+
+.pr-icon-gradient-start {
+	stop-color: $PR-brand-purple;
+}
+
+.pr-icon-gradient-end {
+	stop-color: $PR-brand-yellow;
 }
 
 .pr-icon-text-input-control {

@@ -1,5 +1,21 @@
-<div class="pr-icon-text-input" [class.disabled]="disabled">
-	<span class="pr-icon-text-input-icon" aria-hidden="true">
+<div
+	class="pr-icon-text-input"
+	[class.disabled]="disabled"
+	[class.invalid]="invalid"
+>
+	<svg class="pr-icon-text-input-gradient" aria-hidden="true" focusable="false">
+		<defs>
+			<linearGradient [attr.id]="gradientId" x1="0" y1="0" x2="1" y2="0">
+				<stop class="pr-icon-gradient-start" offset="0%" />
+				<stop class="pr-icon-gradient-end" offset="100%" />
+			</linearGradient>
+		</defs>
+	</svg>
+	<span
+		class="pr-icon-text-input-icon"
+		aria-hidden="true"
+		[style.--pr-icon-text-input-fill]="iconFill"
+	>
 		<fa-icon [icon]="icon" />
 	</span>
 	<input
