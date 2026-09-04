@@ -16,6 +16,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
+import { CoordinatePickerComponent } from '@fileBrowser/components/coordinate-picker/coordinate-picker.component';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 import { UncertainLocationPickerComponent } from '@fileBrowser/components/uncertain-location-picker/uncertain-location-picker.component';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
@@ -568,6 +569,24 @@ describe('EditService', () => {
 
 			expect(dialogService.open).toHaveBeenCalledOnceWith(
 				UncertainLocationPickerComponent,
+				{
+					data: { item: record },
+					panelClass: 'dialog',
+					height: 'auto',
+					width: '640px',
+				},
+			);
+		});
+	});
+
+	describe('openCoordinateDialog', () => {
+		it('should open CoordinatePickerComponent for the item', () => {
+			const record = new RecordVO({ recordId: 123 });
+
+			service.openCoordinateDialog(record);
+
+			expect(dialogService.open).toHaveBeenCalledOnceWith(
+				CoordinatePickerComponent,
 				{
 					data: { item: record },
 					panelClass: 'dialog',

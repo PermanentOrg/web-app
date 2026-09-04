@@ -17,10 +17,8 @@ import {
 	LocnVOData,
 } from '@models';
 import { ProfileItemVOData } from '@models/profile-item-vo';
-import {
-	ICON_GRADIENT_ID,
-	IconTextInputComponent,
-} from '@shared/components/icon-text-input/icon-text-input.component';
+import { DialogFrameComponent } from '@shared/components/dialog-frame/dialog-frame.component';
+import { IconTextInputComponent } from '@shared/components/icon-text-input/icon-text-input.component';
 import {
 	faFlagUsa,
 	faHouse,
@@ -105,14 +103,13 @@ const toQualifierFlags = (
 @Component({
 	selector: 'pr-uncertain-location-picker',
 	standalone: true,
-	imports: [CommonModule, IconTextInputComponent],
+	imports: [CommonModule, DialogFrameComponent, IconTextInputComponent],
 	templateUrl: './uncertain-location-picker.component.html',
 	styleUrls: ['./uncertain-location-picker.component.scss'],
 })
 export class UncertainLocationPickerComponent implements OnInit {
 	readonly fields = LOCATION_FIELDS;
 	readonly nameIcon = faHouse;
-	readonly iconGradientId = ICON_GRADIENT_ID;
 	readonly qualifierOptions = LOCATION_QUALIFIER_OPTIONS;
 	readonly LocationQualifier = LocationQualifier;
 

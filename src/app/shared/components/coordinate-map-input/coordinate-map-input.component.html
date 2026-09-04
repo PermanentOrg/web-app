@@ -1,0 +1,20 @@
+<google-map
+	[height]="height"
+	width="100%"
+	[options]="mapOptions"
+	(mapClick)="onMapClick($event)"
+>
+	@if (markerPosition(); as position) {
+		<map-marker [position]="position" [options]="markerOptions" />
+	}
+</google-map>
+
+<div class="pr-coordinate-field">
+	<pr-icon-text-input
+		[icon]="coordinateIcon"
+		[label]="label"
+		[value]="coordinateText()"
+		[invalid]="!isValid()"
+		(valueChange)="onCoordinateTextChange($event)"
+	/>
+</div>

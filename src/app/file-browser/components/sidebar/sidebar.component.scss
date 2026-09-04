@@ -75,6 +75,26 @@ $sidebar-thumb-height: 200px;
 	.sidebar-item-content-empty {
 		color: $text-muted;
 	}
+
+	.sidebar-coordinates {
+		white-space: pre-wrap;
+	}
+
+	.sidebar-location-button {
+		display: block;
+		width: 100%;
+		padding: 0;
+		border: none;
+		background: none;
+		font: inherit;
+		color: inherit;
+		text-align: left;
+		cursor: pointer;
+
+		&:disabled {
+			cursor: default;
+		}
+	}
 }
 
 .sidebar-detail {

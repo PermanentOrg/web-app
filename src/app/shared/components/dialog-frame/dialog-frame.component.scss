@@ -1,0 +1,96 @@
+@import 'colors';
+@import 'fonts';
+@import 'mixins';
+
+:host {
+	display: block;
+}
+
+.pr-dialog-frame {
+	background: $PR-brand-white;
+	border-radius: 12px;
+	box-shadow: 0 8px 32px rgba($PR-brand-black, 0.12);
+}
+
+.pr-dialog-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	height: 64px;
+	padding: 0 20px;
+	border-bottom: 1px solid $PR-blue-50;
+
+	h2 {
+		// No `@font-face` declares a plain 'Usual'; faces are named per weight.
+		font-family: 'UsualMedium', sans-serif;
+		font-size: 16px;
+		line-height: 24px;
+		letter-spacing: -0.01em;
+		margin: 0;
+		color: $PR-blue-900;
+	}
+}
+
+.pr-close-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 4px;
+	color: $PR-blue-200;
+	display: flex;
+	align-items: center;
+
+	&:hover {
+		color: $PR-blue-400;
+	}
+
+	.material-icons {
+		font-size: 20px;
+	}
+}
+
+.pr-dialog-footer {
+	@include panel-footer;
+	border-top: none;
+	gap: 24px;
+	padding: 32px;
+}
+
+.pr-dialog-actions {
+	display: flex;
+	gap: 24px;
+}
+
+.pr-btn-cancel,
+.pr-btn-confirm {
+	@include usual-text;
+	font-family: 'UsualMedium', sans-serif;
+	padding: 16px 24px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pr-btn-cancel {
+	background: $PR-brand-white;
+	color: $PR-blue-900;
+}
+
+.pr-btn-confirm {
+	background: $PR-blue-900;
+	color: $PR-brand-white;
+
+	&:hover:not(:disabled) {
+		background: $PR-blue-800;
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}

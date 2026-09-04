@@ -148,32 +148,71 @@
 		}
 		<div class="sidebar-item">
 			<label>Location</label>
-			<div
-				class="sidebar-item-content"
-				(click)="onLocationClick()"
-				[class.can-edit]="canEdit"
-			>
-				@if (selectedItem.LocnVO | prLocation; as location) {
-					@if (location.name) {
-						<strong>{{ location.name }}</strong>
-						<br />
+			@if (showUncertainLocations) {
+				<button
+					type="button"
+					class="sidebar-item-content sidebar-location-button"
+					[disabled]="!canEdit"
+					(click)="onCoordinateClick()"
+				>
+					@if (coordinateDisplay) {
+						<span class="sidebar-coordinates">{{ coordinateDisplay }}</span>
+					} @else {
+						<span class="sidebar-item-content-empty">
+							{{ canEdit ? 'Add coordinates…' : 'No coordinates' }}
+						</span>
 					}
-					<span>{{ location.line1 }}, {{ location.line2 }}</span>
-				}
-				@if (!selectedItem.LocnVO && !canEdit) {
-					<span class="sidebar-item-content-empty"> No location </span>
-				}
-				@if (!selectedItem.LocnVO && canEdit) {
-					<span class="sidebar-item-content-empty">
-						Click to set location
-					</span>
-				}
-			</div>
+				</button>
+				<button
+					type="button"
+					class="sidebar-item-content sidebar-location-button"
+					[disabled]="!canEdit"
+					(click)="onLocationClick()"
+				>
+					@if (addressDisplay; as address) {
+						@if (address.name) {
+							<strong>{{ address.name }}</strong>
+							@if (address.line) {
+								<br />
+							}
+						}
+						@if (address.line) {
+							<span>{{ address.line }}</span>
+						}
+					} @else {
+						<span class="sidebar-item-content-empty">
+							{{ canEdit ? 'Add a place or address…' : 'No place or address' }}
+						</span>
+					}
+				</button>
+			} @else {
+				<div
+					class="sidebar-item-content"
+					(click)="onLocationClick()"
+					[class.can-edit]="canEdit"
+				>
+					@if (selectedItem.LocnVO | prLocation; as location) {
+						@if (location.name) {
+							<strong>{{ location.name }}</strong>
+							<br />
+						}
+						<span>{{ location.line1 }}, {{ location.line2 }}</span>
+					}
+					@if (!selectedItem.LocnVO && !canEdit) {
+						<span class="sidebar-item-content-empty"> No location </span>
+					}
+					@if (!selectedItem.LocnVO && canEdit) {
+						<span class="sidebar-item-content-empty">
+							Click to set location
+						</span>
+					}
+				</div>
+			}
 			<div
 				class="sidebar-item-content"
-				(click)="onLocationClick()"
+				(click)="onMapPreviewClick()"
 				tabindex="0"
-				(keydown)="onLocationEnterPress($event)"
+				(keydown)="onMapPreviewEnterPress($event)"
 				[class.can-edit]="canEdit"
 			>
 				<pr-static-map [location]="selectedItem.LocnVO"></pr-static-map>

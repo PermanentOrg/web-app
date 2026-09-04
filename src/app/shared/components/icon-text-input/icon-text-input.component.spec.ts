@@ -11,6 +11,7 @@ import { IconTextInputComponent } from './icon-text-input.component';
 		label="Name"
 		[value]="value"
 		[disabled]="disabled"
+		[invalid]="invalid"
 		(valueChange)="onValueChange($event)"
 	/>`,
 })
@@ -18,6 +19,7 @@ class TestHostComponent {
 	icon = faHouse;
 	value = '';
 	disabled = false;
+	invalid = false;
 	lastEmittedValue: string | null = null;
 
 	onValueChange(newValue: string): void {
@@ -56,12 +58,62 @@ describe('IconTextInputComponent', () => {
 		expect(getInput().getAttribute('aria-label')).toBe('Name');
 	});
 
-	it('should paint the icon with the gradient', () => {
+	it('should define the gradient it paints its own icon with', () => {
+		const component = fixture.debugElement.query(
+			(node) => node.name === 'pr-icon-text-input',
+		).componentInstance as IconTextInputComponent;
+		const gradient = fixture.nativeElement.querySelector(
+			`linearGradient#${component.gradientId}`,
+		);
+
+		expect(gradient).not.toBeNull();
+	});
+
+	it('should paint the icon with that gradient', () => {
+		const component = fixture.debugElement.query(
+			(node) => node.name === 'pr-icon-text-input',
+		).componentInstance as IconTextInputComponent;
 		const path: SVGPathElement = fixture.nativeElement.querySelector(
 			'.pr-icon-text-input-icon svg path',
 		);
 
-		expect(getComputedStyle(path).fill).toContain('pr-icon-gradient');
+		expect(getComputedStyle(path).fill).toContain(component.gradientId);
+	});
+
+	it('should give each instance its own gradient id', () => {
+		const second = TestBed.createComponent(TestHostComponent);
+		second.detectChanges();
+		const idOf = (host: ComponentFixture<TestHostComponent>): string =>
+			(
+				host.debugElement.query((node) => node.name === 'pr-icon-text-input')
+					.componentInstance as IconTextInputComponent
+			).gradientId;
+
+		expect(idOf(second)).not.toBe(idOf(fixture));
+	});
+
+	it('should mark itself invalid on request', () => {
+		hostComponent.invalid = true;
+		fixture.detectChanges();
+
+		expect(
+			fixture.nativeElement.querySelector('.pr-icon-text-input.invalid'),
+		).not.toBeNull();
+	});
+
+	it('should keep the invalid border while the field is being typed in', () => {
+		hostComponent.invalid = true;
+		fixture.detectChanges();
+		const field: HTMLElement = fixture.nativeElement.querySelector(
+			'.pr-icon-text-input',
+		);
+		const borderWhenIdle = getComputedStyle(field).borderColor;
+
+		getInput().focus();
+		fixture.detectChanges();
+
+		expect(field.matches(':focus-within')).toBeTrue();
+		expect(getComputedStyle(field).borderColor).toBe(borderWhenIdle);
 	});
 
 	it('should emit the typed value', () => {
