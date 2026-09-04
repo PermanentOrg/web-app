@@ -109,6 +109,7 @@ const mockDataService = {
 
 const mockEditService = {
 	openLocationDialog: (_: any) => {},
+	openCoordinateDialog: (_: any) => {},
 	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
 };
 
@@ -132,8 +133,10 @@ class MockAccountService {
 	}
 }
 
+let enabledFlags: string[] = [];
+
 const mockFeatureFlagService = {
-	isEnabled: (_flag: string) => false,
+	isEnabled: (flag: string) => enabledFlags.includes(flag),
 };
 
 describe('SidebarComponent', () => {
@@ -141,6 +144,7 @@ describe('SidebarComponent', () => {
 	let fixture: ComponentFixture<SidebarComponent>;
 
 	beforeEach(async () => {
+		enabledFlags = [];
 		closedSubject = new Subject<DateTimeModel | undefined>();
 
 		selectedItemsSubject = new BehaviorSubject<Set<any>>(
@@ -215,7 +219,7 @@ describe('SidebarComponent', () => {
 			'openLocationDialog',
 		).and.callThrough();
 
-		component.onLocationEnterPress(
+		component.onMapPreviewEnterPress(
 			new KeyboardEvent('keydown', { key: 'Enter' }),
 		);
 
@@ -694,6 +698,157 @@ describe('SidebarComponent', () => {
 			expect(fetchFullItemsSpy).toHaveBeenCalledWith([
 				mockDataService.currentFolder,
 			]);
+		});
+	});
+
+	describe('the location section', () => {
+		const getLocationButtons = (): HTMLButtonElement[] =>
+			Array.from(
+				fixture.nativeElement.querySelectorAll('.sidebar-location-button'),
+			);
+
+		describe('with uncertain locations off', () => {
+			it('should offer the one dialog that covers both halves', () => {
+				expect(component.showUncertainLocations).toBeFalse();
+				expect(getLocationButtons().length).toBe(0);
+			});
+		});
+
+		describe('with uncertain locations on', () => {
+			beforeEach(() => {
+				enabledFlags = ['uncertain-locations'];
+				fixture = TestBed.createComponent(SidebarComponent);
+				component = fixture.componentInstance;
+				component.canEdit = true;
+				fixture.detectChanges();
+			});
+
+			it('should split the coordinates and the address into their own buttons', () => {
+				const [coordinates, address] = getLocationButtons();
+
+				expect(getLocationButtons().length).toBe(2);
+				expect(coordinates.textContent.trim()).toBe('Add coordinates…');
+				expect(address.textContent.trim()).toBe('Add a place or address…');
+			});
+
+			it('should open the coordinate dialog from the coordinate button', () => {
+				const editService = TestBed.inject(EditService);
+				spyOn(editService, 'openCoordinateDialog');
+
+				getLocationButtons()[0].click();
+
+				expect(editService.openCoordinateDialog).toHaveBeenCalledWith(
+					component.selectedItem,
+				);
+			});
+
+			it('should open the address dialog from the address button', () => {
+				const editService = TestBed.inject(EditService);
+				spyOn(editService, 'openLocationDialog');
+
+				getLocationButtons()[1].click();
+
+				expect(editService.openLocationDialog).toHaveBeenCalledWith(
+					component.selectedItem,
+				);
+			});
+
+			it('should leave both buttons alone when the item is read only', () => {
+				component.canEdit = false;
+				fixture.detectChanges();
+
+				expect(getLocationButtons().map((button) => button.disabled)).toEqual([
+					true,
+					true,
+				]);
+			});
+
+			it('should write the stored pair the way the dialog writes it', () => {
+				component.selectedItem = new RecordVO({
+					LocnVO: { latitude: 38.70786, longitude: -9.400139 },
+				});
+
+				expect(component.coordinateDisplay).toBe(`38°42'28.3" N  9°24'00.5" W`);
+			});
+
+			it('should leave the address row empty when only coordinates are stored', () => {
+				component.selectedItem = new RecordVO({
+					LocnVO: { latitude: 38.70786, longitude: -9.400139 },
+				});
+
+				expect(component.addressDisplay).toBeNull();
+			});
+
+			it('should hand the address row the address parts on one line', () => {
+				component.selectedItem = new RecordVO({
+					LocnVO: {
+						sublocation: '55 Rue Plumet',
+						city: 'Lisbon',
+						country: 'Portugal',
+					},
+				});
+
+				expect(component.addressDisplay).toEqual({
+					name: null,
+					line: '55 Rue Plumet, Lisbon, Portugal',
+				});
+			});
+
+			it('should keep the coordinates out of the address row', () => {
+				component.selectedItem = new RecordVO({
+					LocnVO: {
+						country: 'Portugal',
+						latitude: 38.70786,
+						longitude: -9.400139,
+					},
+				});
+
+				expect(component.addressDisplay).toEqual({
+					name: null,
+					line: 'Portugal',
+				});
+			});
+
+			it('should show a place that has a name and nothing else', () => {
+				component.selectedItem = new RecordVO({
+					LocnVO: { name: "Grandma's house", latitude: 38.70786 },
+				});
+
+				expect(component.addressDisplay).toEqual({
+					name: "Grandma's house",
+					line: null,
+				});
+			});
+
+			it('should show a postal code the address dialog collected', () => {
+				component.selectedItem = new RecordVO({
+					LocnVO: { postalCode: '1200-109' },
+				});
+
+				expect(component.addressDisplay).toEqual({
+					name: null,
+					line: '1200-109',
+				});
+			});
+
+			it('should hand the template one stable object across checks', () => {
+				component.selectedItem = new RecordVO({
+					LocnVO: { city: 'Lisbon' },
+				});
+
+				expect(component.addressDisplay).toBe(component.addressDisplay);
+			});
+
+			it('should send the map preview to the coordinate dialog', () => {
+				const editService = TestBed.inject(EditService);
+				spyOn(editService, 'openCoordinateDialog');
+
+				component.onMapPreviewClick();
+
+				expect(editService.openCoordinateDialog).toHaveBeenCalledWith(
+					component.selectedItem,
+				);
+			});
 		});
 	});
 });

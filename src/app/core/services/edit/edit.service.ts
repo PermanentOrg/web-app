@@ -42,6 +42,7 @@ import { PublishComponent } from '@fileBrowser/components/publish/publish.compon
 import { EditTagsComponent } from '@fileBrowser/components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 import { UncertainLocationPickerComponent } from '@fileBrowser/components/uncertain-location-picker/uncertain-location-picker.component';
+import { CoordinatePickerComponent } from '@fileBrowser/components/coordinate-picker/coordinate-picker.component';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
@@ -644,6 +645,20 @@ export class EditService {
 			panelClass: 'dialog',
 			height: 'auto',
 			width: isUncertainLocationsEnabled ? '640px' : '600px',
+		});
+	}
+
+	/**
+	 * The coordinate half of a location, which the uncertain address modal
+	 * leaves alone. Only reachable behind `uncertain-locations`, which is what
+	 * splits a location into an address and a pair in the first place.
+	 */
+	openCoordinateDialog(item: ItemVO): void {
+		this.dialog.open(CoordinatePickerComponent, {
+			data: { item },
+			panelClass: 'dialog',
+			height: 'auto',
+			width: '640px',
 		});
 	}
 

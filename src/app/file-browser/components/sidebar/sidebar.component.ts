@@ -7,7 +7,7 @@ import {
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { some } from 'lodash';
-import { ItemVO, FolderVO, ArchiveVO, AccessRole } from '@models';
+import { ItemVO, FolderVO, ArchiveVO, AccessRole, LocnVOData } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -18,10 +18,39 @@ import {
 	EdtfService,
 } from '@shared/services/edtf-service/edtf.service';
 import { MessageService } from '@shared/services/message/message.service';
+import {
+	coordinatesFromLocation,
+	formatCoordinates,
+} from '@shared/utilities/coordinates';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
 
 type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
+
+const ADDRESS_LINE_FIELDS = [
+	'sublocation',
+	'city',
+	'adminOneName',
+	'postalCode',
+	'country',
+] as const satisfies ReadonlyArray<keyof LocnVOData>;
+
+export interface SidebarAddressDisplay {
+	name: string | null;
+	line: string | null;
+}
+
+const toAddressDisplay = (
+	location: LocnVOData | null,
+): SidebarAddressDisplay | null => {
+	const line = ADDRESS_LINE_FIELDS.map((field) => location?.[field])
+		.filter(Boolean)
+		.join(', ');
+	const name = location?.name || null;
+
+	return name || line ? { name, line: line || null } : null;
+};
+
 @Component({
 	selector: 'pr-sidebar',
 	templateUrl: './sidebar.component.html',
@@ -50,7 +79,12 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 
 	showEdtfDatePicker: boolean;
 
+	showUncertainLocations: boolean;
+
 	displayTimeObject: DateTimeModel | null = null;
+
+	private cachedAddressDisplaySource: LocnVOData | null = null;
+	private cachedAddressDisplay: SidebarAddressDisplay | null = null;
 
 	private updateDisplayTimeObject(): void {
 		const timeSource =
@@ -104,6 +138,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	) {
 		this.currentArchive = this.accountService.getArchive();
 		this.showEdtfDatePicker = this.feature.isEnabled('edtf-date');
+		this.showUncertainLocations = this.feature.isEnabled('uncertain-locations');
 
 		this.subscriptions.push(
 			this.dataService.selectedItems$().subscribe(async (selectedItems) => {
@@ -281,15 +316,43 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		}
 	}
 
+	get coordinateDisplay(): string | null {
+		const coordinates = coordinatesFromLocation(this.selectedItem?.LocnVO);
+		return coordinates ? formatCoordinates(coordinates) : null;
+	}
+
+	get addressDisplay(): SidebarAddressDisplay | null {
+		const location = this.selectedItem?.LocnVO ?? null;
+		if (location !== this.cachedAddressDisplaySource) {
+			this.cachedAddressDisplaySource = location;
+			this.cachedAddressDisplay = toAddressDisplay(location);
+		}
+		return this.cachedAddressDisplay;
+	}
+
 	onLocationClick() {
 		if (this.canEdit) {
 			this.editService.openLocationDialog(this.selectedItem);
 		}
 	}
 
-	onLocationEnterPress(e: KeyboardEvent): void {
-		if (this.canEdit && e.key === 'Enter') {
-			this.editService.openLocationDialog(this.selectedItem);
+	onCoordinateClick() {
+		if (this.canEdit) {
+			this.editService.openCoordinateDialog(this.selectedItem);
+		}
+	}
+
+	onMapPreviewClick(): void {
+		if (this.showUncertainLocations) {
+			this.onCoordinateClick();
+			return;
+		}
+		this.onLocationClick();
+	}
+
+	onMapPreviewEnterPress(e: KeyboardEvent): void {
+		if (e.key === 'Enter') {
+			this.onMapPreviewClick();
 		}
 	}
 
