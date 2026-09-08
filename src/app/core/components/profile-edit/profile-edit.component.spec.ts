@@ -128,7 +128,6 @@ describe('ProfileEditComponent', () => {
 			{
 				data: { profileItem: item },
 				height: 'auto',
-				width: '600px',
 			},
 		);
 	});
@@ -146,7 +145,6 @@ describe('ProfileEditComponent', () => {
 			{
 				data: { profileItem: item },
 				height: 'auto',
-				width: '640px',
 			},
 		);
 	});
