@@ -12,6 +12,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { getFolderErrorMessage } from '@shared/utilities/folder-error-message';
 
 import { FolderVO } from '@root/app/models';
+import { toFolderLinkId } from '@shared/services/api/folder.repo';
 
 @Injectable()
 export class LeanFolderResolveService {
@@ -31,7 +32,7 @@ export class LeanFolderResolveService {
 		if (route.params.archiveNbr && route.params.folderLinkId) {
 			targetFolder = new FolderVO({
 				archiveNbr: route.params.archiveNbr,
-				folder_linkId: route.params.folderLinkId,
+				folder_linkId: toFolderLinkId(route.params.folderLinkId),
 			});
 		} else if (state.url === '/apps') {
 			const apps = find(this.accountService.getRootFolder().ChildItemVOs, {

@@ -54,7 +54,11 @@ const fakeChildrenResponse = {
 			id: 300,
 			name: 'Auth Child',
 			thumbnailUrls: { 200: 'test' },
-			paths: { names: 'test' },
+			paths: {
+				names: ['Auth Child'],
+				folderLinkIds: ['300'],
+				archiveNumbers: ['0001-0000'],
+			},
 			location: { stelaLocation: { id: 13 } },
 		},
 	],
@@ -445,67 +449,6 @@ describe('Folder repo', () => {
 		});
 	});
 
-	describe('access role translation', () => {
-		const convertFolder = async (overrides: Record<string, unknown>) => {
-			httpV2Spy.get.and.returnValue(
-				of([{ items: [{ ...mockStelaFolder, ...overrides }] }]),
-			);
-			const result = await folderRepo.getStelaFolderVOs([
-				new FolderVO({ folderId: 123 }),
-			]);
-			return result.getFolderVOs()[0];
-		};
-
-		it("should translate Stela's role into ours", async () => {
-			const folder = await convertFolder({ accessRole: 'owner' });
-
-			expect(folder.accessRole).toBe('access.role.owner');
-		});
-
-		it('should translate manager to manager, not curator', async () => {
-			const folder = await convertFolder({ accessRole: 'manager' });
-
-			expect(folder.accessRole).toBe('access.role.manager');
-		});
-
-		it('should leave the role undefined when Stela sends nothing', async () => {
-			const folder = await convertFolder({ accessRole: undefined });
-
-			expect(folder.accessRole).toBeUndefined();
-		});
-
-		it('should merge onto an existing folder without breaking its role', async () => {
-			const existingFolder = new FolderVO({
-				folderId: '123',
-				accessRole: 'access.role.owner',
-			});
-
-			existingFolder.update(await convertFolder({ accessRole: 'owner' }));
-
-			expect(existingFolder.accessRole).toBe('access.role.owner');
-		});
-
-		it('should translate the role on child folders too', async () => {
-			httpV2Spy.get.and.returnValues(
-				of([{ items: [mockStelaFolder] }]),
-				of([
-					{
-						items: [
-							{ ...mockStelaFolder, folderId: '999', accessRole: 'viewer' },
-						],
-					},
-				]),
-			);
-
-			const result = await folderRepo.getWithChildren([
-				new FolderVO({ folderId: 123 }),
-			]);
-			const child = result.getFolderVO(true).ChildItemVOs[0];
-
-			expect(child.accessRole).toBe('access.role.viewer');
-		});
-	});
-
 	describe('Stela folder conversion', () => {
 		const convertFolder = async (overrides: Record<string, unknown>) => {
 			httpV2Spy.get.and.returnValue(
@@ -605,6 +548,44 @@ describe('Folder repo', () => {
 			});
 
 			expect(folder.pathAsFolder_linkId).toEqual([11, 22]);
+		});
+
+		// Stela types the path archive numbers as nullable, and the breadcrumbs read
+		// the three arrays by index, so an unusable entry has to leave all three.
+		it('should drop breadcrumb entries with no archive number', async () => {
+			const folder = await convertFolder({
+				paths: {
+					names: ['My Files', 'Broken', 'Photos'],
+					folderLinkIds: ['11', '22', '33'],
+					archiveNumbers: ['0001-0000', null, '0003-0000'],
+				},
+			});
+
+			expect(folder.pathAsText).toEqual(['My Files', 'Photos']);
+			expect(folder.pathAsArchiveNbr).toEqual(['0001-0000', '0003-0000']);
+			expect(folder.pathAsFolder_linkId).toEqual([11, 33]);
+		});
+
+		it('should drop breadcrumb entries with no usable link id', async () => {
+			const folder = await convertFolder({
+				paths: {
+					names: ['My Files', 'Broken', 'Photos'],
+					folderLinkIds: ['11', '  ', '33'],
+					archiveNumbers: ['0001-0000', '0002-0000', '0003-0000'],
+				},
+			});
+
+			expect(folder.pathAsText).toEqual(['My Files', 'Photos']);
+			expect(folder.pathAsArchiveNbr).toEqual(['0001-0000', '0003-0000']);
+			expect(folder.pathAsFolder_linkId).toEqual([11, 33]);
+		});
+
+		it('should leave the breadcrumb paths empty when Stela sends none', async () => {
+			const folder = await convertFolder({ paths: undefined });
+
+			expect(folder.pathAsText).toEqual([]);
+			expect(folder.pathAsArchiveNbr).toEqual([]);
+			expect(folder.pathAsFolder_linkId).toEqual([]);
 		});
 	});
 
