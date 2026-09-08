@@ -28,6 +28,7 @@ import { SharingDialogComponent } from './components/sharing-dialog/sharing-dial
 
 import { DownloadButtonComponent } from './components/download-button/download-button.component';
 import { SidebarDatePickerComponent } from './components/sidebar-date-picker/sidebar-date-picker.component';
+import { SidebarLocationComponent } from './components/sidebar-location/sidebar-location.component';
 
 @NgModule({
 	imports: [
@@ -38,6 +39,7 @@ import { SidebarDatePickerComponent } from './components/sidebar-date-picker/sid
 		InViewportModule,
 		FontAwesomeModule,
 		SidebarDatePickerComponent,
+		SidebarLocationComponent,
 	],
 	exports: [
 		FileListComponent,

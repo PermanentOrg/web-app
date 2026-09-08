@@ -1,0 +1,23 @@
+@use 'variables' as *;
+
+:host {
+	display: block;
+	padding: $grid-unit * 0.5 $grid-unit;
+}
+
+label {
+	font-weight: 600;
+	margin-bottom: $grid-unit * 0.5;
+}
+
+.sidebar-item-content {
+	min-height: $line-height-base * 1rem;
+
+	&.can-edit {
+		cursor: pointer;
+	}
+}
+
+.sidebar-item-content-empty {
+	color: $text-muted;
+}
