@@ -100,7 +100,7 @@ describe('LeanFolderResolveService', () => {
 		const requestedFolder = getSpy.calls.mostRecent().args[0];
 
 		expect(requestedFolder.archiveNbr).toBe('0001-0005');
-		expect(requestedFolder.folder_linkId).toBe('99' as any);
+		expect(requestedFolder.folder_linkId).toBe(99);
 		expect(requestedFolder.folderId).toBeUndefined();
 		expect(result.displayName).toBe('Deep Linked');
 	});

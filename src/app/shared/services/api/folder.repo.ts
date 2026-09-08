@@ -102,10 +102,7 @@ type StelaFolderChild = StelaFolder | StelaRecord;
 const isStelaRecord = (child: StelaFolderChild): child is StelaRecord =>
 	child && 'recordId' in child;
 
-// Returns undefined rather than NaN for a missing id, so callers can tell
-// "not provided" apart from a real link id. Accepts numbers as well as strings
-// because different Stela endpoints disagree on which one they send.
-const toFolderLinkId = (
+export const toFolderLinkId = (
 	folderLinkId: string | number | null | undefined,
 ): number | undefined => {
 	if (typeof folderLinkId === 'number') {
@@ -120,6 +117,40 @@ const toFolderLinkId = (
 	}
 	const parsedFolderLinkId = Number(folderLinkId);
 	return Number.isFinite(parsedFolderLinkId) ? parsedFolderLinkId : undefined;
+};
+
+interface FolderBreadcrumbPaths {
+	pathAsText: string[];
+	pathAsArchiveNbr: string[];
+	pathAsFolder_linkId: number[];
+}
+
+// The breadcrumb components read the three path arrays positionally, so an
+// ancestor without an archive number or a link id would build a URL nothing can
+// navigate to. Dropping it from all three arrays keeps them aligned.
+const convertStelaPathsToBreadcrumbPaths = (
+	paths: StelaFolder['paths'] | undefined,
+): FolderBreadcrumbPaths => {
+	const breadcrumbPaths: FolderBreadcrumbPaths = {
+		pathAsText: [],
+		pathAsArchiveNbr: [],
+		pathAsFolder_linkId: [],
+	};
+
+	(paths?.names ?? []).forEach((name, pathIndex) => {
+		const archiveNbr = paths.archiveNumbers?.[pathIndex];
+		const folderLinkId = toFolderLinkId(paths.folderLinkIds?.[pathIndex]);
+
+		if (!archiveNbr || folderLinkId === undefined) {
+			return;
+		}
+
+		breadcrumbPaths.pathAsText.push(name);
+		breadcrumbPaths.pathAsArchiveNbr.push(archiveNbr);
+		breadcrumbPaths.pathAsFolder_linkId.push(folderLinkId);
+	});
+
+	return breadcrumbPaths;
 };
 
 const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
@@ -172,11 +203,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		status: stelaFolder.status,
 		publicDT: stelaFolder.publicAt,
 		parentFolderId: stelaFolder.parentFolder?.id,
-		pathAsText: stelaFolder.paths?.names,
-		pathAsArchiveNbr: stelaFolder.paths?.archiveNumbers,
-		pathAsFolder_linkId: stelaFolder.paths?.folderLinkIds?.map((folderLinkId) =>
-			toFolderLinkId(folderLinkId),
-		),
+		...convertStelaPathsToBreadcrumbPaths(stelaFolder.paths),
 		ParentFolderVOs: [new FolderVO({ folderId: stelaFolder.parentFolder?.id })],
 		ChildFolderVOs: childFolderVOs,
 		RecordVOs: childRecordVOs,
