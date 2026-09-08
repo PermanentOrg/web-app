@@ -485,12 +485,30 @@ describe('RecordRepo', () => {
 			expect(record.accessRole).toBe('access.role.manager');
 		});
 
-		it('should leave the role undefined when Stela sends nothing', () => {
+		it('should add no role at all when Stela sends nothing', () => {
 			const record = convertStelaRecordToRecordVO({
 				...baseStelaRecord,
 			} as any);
 
-			expect(record.accessRole).toBeUndefined();
+			expect(Object.hasOwn(record, 'accessRole')).toBeFalse();
+		});
+
+		it('should add no role at all when Stela sends null', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				accessRole: null,
+			} as any);
+
+			expect(Object.hasOwn(record, 'accessRole')).toBeFalse();
+		});
+
+		it('should add no role at all when Stela sends one we cannot translate', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				accessRole: 'archivist',
+			} as any);
+
+			expect(Object.hasOwn(record, 'accessRole')).toBeFalse();
 		});
 
 		it('should merge onto an existing record without breaking its role', () => {
