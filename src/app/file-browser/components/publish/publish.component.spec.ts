@@ -85,6 +85,11 @@ describe('PublishComponent', () => {
 
 		showErrorSpy = jasmine.createSpy('showError');
 
+		await init({ folder_linkType: 'linkType' });
+	});
+
+	async function init(dialogItem: unknown) {
+		TestBed.resetTestingModule();
 		await TestBed.configureTestingModule({
 			declarations: [PublishComponent],
 			providers: [
@@ -93,7 +98,7 @@ describe('PublishComponent', () => {
 				{
 					provide: DIALOG_DATA,
 					useValue: {
-						item: { folder_linkType: 'linkType' },
+						item: dialogItem,
 					},
 				},
 				{ provide: DialogRef, useClass: MockDialogRef },
@@ -113,10 +118,49 @@ describe('PublishComponent', () => {
 		fixture = TestBed.createComponent(PublishComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
-	});
+	}
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
+	});
+
+	describe('Stela-shaped items with no folder_linkType', () => {
+		it('should render the Publish title for a private folder without throwing', async () => {
+			await init(
+				new FolderVO({
+					folderId: '900',
+					archiveNbr: '0002-0001',
+					folder_linkId: 12,
+					displayName: 'Trip to Iceland',
+					type: 'type.folder.private',
+				}),
+			);
+
+			expect(component.isPublicSourceItem).toBeFalse();
+
+			const pageTitle = fixture.nativeElement.querySelector('.page-title');
+
+			expect(pageTitle.textContent).toContain('Publish');
+			expect(pageTitle.textContent).not.toContain('Get public link for');
+		});
+
+		it('should treat a public folder as already published', async () => {
+			await init(
+				new FolderVO({
+					folderId: '901',
+					archiveNbr: '0001-0002',
+					folder_linkId: 71,
+					displayName: 'Trip to Iceland',
+					type: 'type.folder.public',
+				}),
+			);
+
+			expect(component.isPublicSourceItem).toBeTrue();
+			expect(component.publicItem).toBe(component.sourceItem);
+			expect(component.publicLink).toContain(
+				'/p/archive/0001-0000/0001-0002/71',
+			);
+		});
 	});
 
 	it('should disable the public to internet archive button if the user does not have the correct access role', () => {
