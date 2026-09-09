@@ -32,6 +32,7 @@ export class PublishComponent {
 	public linkCopied = false;
 	public iaLinkCopied = false;
 	public isAtleastManager = false;
+	public isPublicSourceItem = false;
 
 	@ViewChild('publicLinkInput', { static: false }) publicLinkInput: ElementRef;
 	@ViewChild('iaLinkInput', { static: false }) iaLinkInput: ElementRef;
@@ -54,7 +55,14 @@ export class PublishComponent {
 		this.isAtleastManager =
 			this.getRole().includes('manager') || this.getRole().includes('owner');
 
-		if (this.sourceItem?.folder_linkType?.includes('public')) {
+		// Stela folders carry no folder_linkType, so public-ness also has to be
+		// read off the folder type, the same way the sidebar decides it.
+		this.isPublicSourceItem = !!(
+			this.sourceItem?.folder_linkType?.includes('public') ||
+			this.sourceItem?.type?.includes('public')
+		);
+
+		if (this.isPublicSourceItem) {
 			this.publicItem = this.sourceItem;
 			this.publicLink = this.linkPipe.transform(this.publicItem);
 			this.checkInternetArchiveLink();
