@@ -1,8 +1,9 @@
 <label>Location</label>
-<div
-	class="sidebar-item-content"
+<button
+	type="button"
+	class="sidebar-item-content sidebar-location-button"
+	[disabled]="!canEdit"
 	(click)="onEditClick()"
-	[class.can-edit]="canEdit"
 >
 	@if (location | prLocation; as address) {
 		@if (address.name) {
@@ -17,13 +18,13 @@
 	@if (!location && canEdit) {
 		<span class="sidebar-item-content-empty"> Click to set location </span>
 	}
-</div>
-<div
-	class="sidebar-item-content"
+</button>
+<button
+	type="button"
+	class="sidebar-item-content sidebar-location-button"
+	aria-label="Edit location"
+	[disabled]="!canEdit"
 	(click)="onEditClick()"
-	tabindex="0"
-	(keydown)="onEditEnterPress($event)"
-	[class.can-edit]="canEdit"
 >
 	<pr-static-map [location]="location"></pr-static-map>
-</div>
+</button>

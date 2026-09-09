@@ -12,12 +12,24 @@ label {
 
 .sidebar-item-content {
 	min-height: $line-height-base * 1rem;
-
-	&.can-edit {
-		cursor: pointer;
-	}
 }
 
 .sidebar-item-content-empty {
 	color: $text-muted;
+}
+
+.sidebar-location-button {
+	display: block;
+	width: 100%;
+	padding: 0;
+	border: none;
+	background: none;
+	font: inherit;
+	color: inherit;
+	text-align: left;
+	cursor: pointer;
+
+	&:disabled {
+		cursor: default;
+	}
 }

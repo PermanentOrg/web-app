@@ -21,10 +21,4 @@ export class SidebarLocationComponent {
 			this.editRequested.emit();
 		}
 	}
-
-	public onEditEnterPress(event: KeyboardEvent): void {
-		if (event.key === 'Enter') {
-			this.onEditClick();
-		}
-	}
 }

@@ -9,6 +9,9 @@ describe('SidebarLocationComponent', () => {
 	const query = <T extends HTMLElement>(selector: string): T =>
 		fixture.nativeElement.querySelector(selector);
 
+	const queryAll = <T extends HTMLElement>(selector: string): T[] =>
+		Array.from(fixture.nativeElement.querySelectorAll(selector));
+
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			imports: [SidebarLocationComponent, SharedModule],
@@ -68,27 +71,33 @@ describe('SidebarLocationComponent', () => {
 		let edits = 0;
 		component.editRequested.subscribe(() => (edits += 1));
 
-		fixture.nativeElement.querySelectorAll('.sidebar-item-content')[1].click();
+		queryAll<HTMLButtonElement>('.sidebar-item-content')[1].click();
 
 		expect(edits).toBe(1);
 	});
 
-	it('should ask for an edit on Enter over the map preview', () => {
-		let edits = 0;
-		component.editRequested.subscribe(() => (edits += 1));
+	it('should offer an editor buttons the keyboard can reach', () => {
+		const buttons = queryAll<HTMLButtonElement>('button.sidebar-item-content');
 
-		component.onEditEnterPress(new KeyboardEvent('keydown', { key: 'Enter' }));
-
-		expect(edits).toBe(1);
+		expect(buttons.length).toBe(2);
+		expect(buttons.every((button) => !button.disabled)).toBeTrue();
 	});
 
-	it('should ignore keys other than Enter over the map preview', () => {
-		let edits = 0;
-		component.editRequested.subscribe(() => (edits += 1));
+	it('should give the map preview a name a screen reader can announce', () => {
+		const mapButton = queryAll<HTMLButtonElement>(
+			'button.sidebar-item-content',
+		)[1];
 
-		component.onEditEnterPress(new KeyboardEvent('keydown', { key: 'a' }));
+		expect(mapButton.getAttribute('aria-label')).toBe('Edit location');
+	});
 
-		expect(edits).toBe(0);
+	it('should take the location out of reach when the item is read only', () => {
+		component.canEdit = false;
+		fixture.detectChanges();
+
+		const buttons = queryAll<HTMLButtonElement>('button.sidebar-item-content');
+
+		expect(buttons.every((button) => button.disabled)).toBeTrue();
 	});
 
 	it('should ask for nothing at all when the item is read only', () => {
@@ -97,8 +106,7 @@ describe('SidebarLocationComponent', () => {
 		let edits = 0;
 		component.editRequested.subscribe(() => (edits += 1));
 
-		query('.sidebar-item-content').click();
-		component.onEditEnterPress(new KeyboardEvent('keydown', { key: 'Enter' }));
+		query<HTMLButtonElement>('.sidebar-item-content').click();
 
 		expect(edits).toBe(0);
 	});
