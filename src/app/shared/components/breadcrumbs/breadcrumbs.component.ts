@@ -186,9 +186,18 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 		}
 
 		if (showRootBreadcrumb) {
-			this.breadcrumbs.push(new Breadcrumb(0, rootUrl, folder.pathAsText[0]));
-			if (this.breadcrumbs[0].routerPath === '/private')
-				this.breadcrumbs[0].text = 'Private';
+			// A shared folder's path is rooted in the sharing archive's own tree,
+			// so its first path name ("My Files") would link back to this user's
+			// private workspace. The root crumb must be the workspace, not the path.
+			if (rootUrl === '/shares') {
+				this.breadcrumbs.push(
+					new Breadcrumb(0, rootUrl, 'Shares', null, null, true),
+				);
+			} else {
+				this.breadcrumbs.push(new Breadcrumb(0, rootUrl, folder.pathAsText[0]));
+				if (this.breadcrumbs[0].routerPath === '/private')
+					this.breadcrumbs[0].text = 'Private';
+			}
 		}
 
 		if (isInPublicArchive) {

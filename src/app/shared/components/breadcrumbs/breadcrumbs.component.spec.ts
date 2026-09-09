@@ -127,4 +127,20 @@ describe('BreadcrumbsComponent', () => {
 		expect(component.breadcrumbs[0].text).toEqual('Shares');
 		expect(component.breadcrumbs[1].routerPath).toContain('/shares/test2');
 	});
+
+	it('should keep the Shares root even when the folder path starts in the sharing archive', async () => {
+		await init('/shares/test2/2');
+		const sharedFolderFromAnotherArchive = new FolderVO({
+			pathAsArchiveNbr: ['test1', 'test2', 'test3'],
+			pathAsText: ['My Files', 'shared folder', 'shared inner folder'],
+			pathAsFolder_linkId: [1, 2, 3],
+		});
+		TestBed.inject(DataService).setCurrentFolder(
+			sharedFolderFromAnotherArchive,
+		);
+
+		expect(component.breadcrumbs[0].text).toEqual('Shares');
+		expect(component.breadcrumbs[0].routerPath).toEqual('/shares');
+		expect(component.breadcrumbs[1].routerPath).toEqual('/shares/test2/2');
+	});
 });
