@@ -1,6 +1,6 @@
 import { FolderVO, FolderVOData, ItemVO, RecordVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
 import {
 	getOptionalAccessRoleField,
@@ -458,18 +458,6 @@ export class FolderRepo extends BaseRepo {
 		}
 
 		return await this.getWithChildren([identityResponse.getFolderVO()]);
-	}
-
-	public navigateLean(folderVO: FolderVO): Observable<FolderResponse> {
-		const data = [
-			{
-				FolderVO: new FolderVO(folderVO),
-			},
-		];
-
-		return this.http.sendRequest<FolderResponse>('/folder/navigateLean', data, {
-			ResponseClass: FolderResponse,
-		});
 	}
 
 	public async post(folderVOs: FolderVO[]): Promise<FolderResponse> {
