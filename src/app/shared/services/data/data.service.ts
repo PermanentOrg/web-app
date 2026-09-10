@@ -1,5 +1,4 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { remove, find, findIndex, noop } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -20,12 +19,15 @@ import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';
 import { TagsService } from '@core/services/tags/tags.service';
+import { SortType } from '@models/vo-types';
+import { sortChildItems } from '@shared/utilities/sort-child-items';
 
 const THUMBNAIL_REFRESH_INTERVAL = 3000;
 
 // Identifiers reach us as numbers from the PHP API and as strings from stela, and
-// a single item can carry both over its lifetime: a record loaded via navigateLean
-// has a numeric parentFolderId until update() overwrites it with stela's string.
+// a single item can carry both over its lifetime: a folder created through the
+// PHP API has a numeric parentFolderId until a stela fetch overwrites it with a
+// string.
 // Compare them as strings so the source of the id does not change the answer.
 // Null and undefined never match, including each other.
 type ItemId = string | number | null | undefined;
@@ -450,97 +452,102 @@ export class DataService {
 			});
 	}
 
-	public async refreshCurrentFolder(sortOnly = false) {
-		this.debug('refreshCurrentFolder (sortOnly = %o)', sortOnly);
+	public async refreshCurrentFolder(): Promise<void> {
+		this.debug('refreshCurrentFolder');
 
-		return await this.api.folder
-			.navigateLean(this.currentFolder)
-			.pipe(
-				map((response: FolderResponse) => {
-					this.debug('refreshCurrentFolder data fetched', sortOnly);
+		const response = await this.api.folder.getWithChildrenByIdentifier(
+			this.currentFolder,
+		);
+		this.debug('refreshCurrentFolder data fetched');
 
-					if (!response.isSuccessful) {
-						throw response;
-					}
+		if (!response.isSuccessful) {
+			throw response;
+		}
 
-					return response.getFolderVO(true);
-				}),
-			)
-			.toPromise()
-			.then((updatedFolder: FolderVO) => {
-				this.updateChildItems(this.currentFolder, updatedFolder, sortOnly);
-				this.hideItemsInCurrentFolder();
-				this.debug('refreshCurrentFolder done', sortOnly);
-				this.folderUpdate.emit(this.currentFolder);
-				this.currentHiddenItems = [];
-			});
+		const updatedFolder = response.getFolderVO(true);
+		this.updateChildItems(this.currentFolder, updatedFolder);
+		this.reapplyUnsavedSort(updatedFolder.sort);
+		this.hideItemsInCurrentFolder();
+		this.debug('refreshCurrentFolder done');
+		this.folderUpdate.emit(this.currentFolder);
+		this.currentHiddenItems = [];
 	}
 
-	public updateChildItems(
-		folder1: FolderVO,
-		folder2: FolderVO,
-		sortOnly = false,
-	) {
-		this.debug('updateChildItems (sortOnly = %o)', sortOnly);
+	public sortCurrentFolder(sort: SortType): void {
+		this.debug('sortCurrentFolder %s', sort);
+
+		this.currentFolder.update({ sort });
+		this.currentFolder.ChildItemVOs = sortChildItems(
+			this.currentFolder.ChildItemVOs,
+			sort,
+		);
+		this.folderUpdate.emit(this.currentFolder);
+	}
+
+	// Stela orders children by the sort saved on the folder, while a sort picked in
+	// the list header lives only on the current folder until it is saved. Without
+	// this, every refresh would snap a previewed sort back to the saved order.
+	private reapplyUnsavedSort(savedSort: SortType | undefined): void {
+		const previewedSort = this.currentFolder.sort;
+		if (!previewedSort || previewedSort === savedSort) {
+			return;
+		}
+
+		this.currentFolder.ChildItemVOs = sortChildItems(
+			this.currentFolder.ChildItemVOs,
+			previewedSort,
+		);
+	}
+
+	public updateChildItems(folder1: FolderVO, folder2: FolderVO): void {
+		this.debug('updateChildItems');
 
 		if (!folder2.ChildItemVOs || !folder2.ChildItemVOs.length) {
 			folder1.ChildItemVOs = folder2.ChildItemVOs;
-			this.debug('updateChildItems done no child items', sortOnly);
+			this.debug('updateChildItems done no child items');
 			return;
 		}
 
 		const original = folder1.ChildItemVOs as ItemVO[];
 		const updated = folder2.ChildItemVOs as ItemVO[];
 
-		const originalItemsById = new Map<number, ItemVO>();
-		const updatedItemsById = new Map<number, ItemVO>();
+		// Keyed by stringified folder_linkId because it arrives as a number from
+		// the PHP API and as a string from some stela responses.
+		const originalItemsById = new Map<string, ItemVO>();
+		const updatedItemsById = new Map<string, ItemVO>();
+		const updatedOrderedIds: string[] = [];
 
-		const updatedOrderedIds: number[] = [];
-
-		if (sortOnly) {
-			for (const item of original) {
-				originalItemsById.set(item.folder_linkId, item);
-			}
-
-			const sortedItems: ItemVO[] = updated.map((item) =>
-				originalItemsById.get(item.folder_linkId),
-			);
-
-			folder1.ChildItemVOs = sortedItems;
-		} else {
-			for (const item of updated) {
-				updatedItemsById.set(item.folder_linkId, item);
-				updatedOrderedIds.push(item.folder_linkId);
-			}
-
-			for (const item of original) {
-				originalItemsById.set(item.folder_linkId, item);
-
-				if (updatedItemsById.has(item.folder_linkId)) {
-					const updatedItem = updatedItemsById.get(item.folder_linkId);
-					const dataToUpdate: FolderVOData | RecordVOData = {
-						updatedDT: updatedItem.updatedDT,
-					};
-					item.update(dataToUpdate);
-				} else if (this.selectedItems.has(item)) {
-					this.selectedItems.delete(item);
-					this.selectedItemsSubject.next(this.selectedItems);
-				}
-			}
-
-			const finalUpdatedItems: ItemVO[] = updatedOrderedIds.map((id) => {
-				const isNew = !originalItemsById.has(id);
-				const item = isNew
-					? updatedItemsById.get(id)
-					: originalItemsById.get(id);
-				if (isNew) {
-					item.isNewlyCreated = true;
-				}
-				return item;
-			});
-
-			folder1.ChildItemVOs = finalUpdatedItems;
+		for (const item of updated) {
+			updatedItemsById.set(String(item.folder_linkId), item);
+			updatedOrderedIds.push(String(item.folder_linkId));
 		}
+
+		for (const item of original) {
+			const itemId = String(item.folder_linkId);
+			originalItemsById.set(itemId, item);
+
+			if (updatedItemsById.has(itemId)) {
+				const updatedItem = updatedItemsById.get(itemId);
+				const dataToUpdate: FolderVOData | RecordVOData = {
+					updatedDT: updatedItem.updatedDT,
+				};
+				item.update(dataToUpdate);
+			} else if (this.selectedItems.has(item)) {
+				this.selectedItems.delete(item);
+				this.selectedItemsSubject.next(this.selectedItems);
+			}
+		}
+
+		folder1.ChildItemVOs = updatedOrderedIds.map((itemId) => {
+			const existingItem = originalItemsById.get(itemId);
+			if (existingItem) {
+				return existingItem;
+			}
+
+			const newItem = updatedItemsById.get(itemId);
+			newItem.isNewlyCreated = true;
+			return newItem;
+		});
 
 		this.debug('updateChildItems done %d items', folder1.ChildItemVOs.length);
 	}

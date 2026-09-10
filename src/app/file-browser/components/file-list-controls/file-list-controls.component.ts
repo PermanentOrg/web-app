@@ -279,22 +279,16 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 		return this.initialSortType !== this.data.currentFolder?.sort;
 	}
 
-	async setSort(sort: SortType) {
+	setSort(sort: SortType) {
 		if (this.isSorting) {
 			return;
 		}
 
 		this.isSorting = true;
-		const originalSort = this.data.currentFolder.sort;
-		this.data.currentFolder.update({ sort });
-		this.getSortFromCurrentFolder();
+		this.isSorting$.next(true);
 		try {
-			this.isSorting$.next(true);
-			await this.data.refreshCurrentFolder(true);
-		} catch (err) {
-			this.data.currentFolder.update({ sort: originalSort });
+			this.data.sortCurrentFolder(sort);
 			this.getSortFromCurrentFolder();
-			throw err;
 		} finally {
 			this.isSorting = false;
 			this.isSorting$.next(false);
