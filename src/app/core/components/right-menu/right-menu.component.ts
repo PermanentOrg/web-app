@@ -15,7 +15,7 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { Subscription } from 'rxjs';
-import { BaseResponse } from '@shared/services/api/base';
+import { getFolderErrorMessage } from '@shared/utilities/folder-error-message';
 
 @Component({
 	selector: 'pr-right-menu',
@@ -177,16 +177,12 @@ export class RightMenuComponent implements OnInit {
 						createResolve();
 						this.dataService.showItem(folder);
 					})
-					.catch((err) => {
-						if (err instanceof BaseResponse) {
-							this.message.showError({
-								message: err.getMessage(),
-								translate: true,
-							});
-							createReject();
-						} else {
-							throw err;
-						}
+					.catch((err: unknown) => {
+						this.message.showError({
+							message: getFolderErrorMessage(err),
+							translate: true,
+						});
+						createReject();
 					});
 			});
 	}
