@@ -4,11 +4,9 @@ import { cloneDeep } from 'lodash';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, RecordVO } from '@root/app/models';
+import { FolderVO, FolderVOData, RecordVO } from '@root/app/models';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { of } from 'rxjs';
-import { HttpTestingController } from '@angular/common/http/testing';
-import { environment } from '@root/environments/environment';
 import { DataStatus } from '@models/data-status.enum';
 
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -236,26 +234,230 @@ describe('DataService', () => {
 		await service.fetchFullItems([]);
 	});
 
-	it('should refresh the current folder with latest data', (done) => {
-		const service = TestBed.inject(DataService);
-		const httpMock = TestBed.inject(HttpTestingController);
-		const navigateResponse = new FolderResponse(navigateMinData);
-		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
-		const childItemCount = currentFolder.ChildItemVOs.length;
+	describe('refreshCurrentFolder', () => {
+		const berlinFolderData = {
+			folderId: '1',
+			folder_linkId: 1,
+			displayName: 'Berlin',
+			updatedDT: '2024-01-01T00:00:00.000Z',
+		};
+		const amsterdamRecordData = {
+			recordId: '2',
+			folder_linkId: 2,
+			displayName: 'Amsterdam',
+			updatedDT: '2024-01-01T00:00:00.000Z',
+		};
+		const cairoRecordData = {
+			recordId: '3',
+			folder_linkId: 3,
+			displayName: 'Cairo',
+			updatedDT: '2024-01-01T00:00:00.000Z',
+		};
 
-		currentFolder.ChildItemVOs = [];
-		service.setCurrentFolder(currentFolder);
+		const buildFolderResponse = (folderData: FolderVOData) =>
+			new FolderResponse({
+				isSuccessful: true,
+				Results: [{ data: [{ FolderVO: folderData }] }],
+			});
 
-		service
-			.refreshCurrentFolder()
-			.then(() => {
-				expect(currentFolder.ChildItemVOs.length).toBe(childItemCount);
-				done();
-			})
-			.catch(done.fail);
+		const namesOf = (folder: FolderVO) =>
+			folder.ChildItemVOs.map((item) => item.displayName);
 
-		const req = httpMock.expectOne(`${environment.apiUrl}/folder/navigateLean`);
-		req.flush(navigateMinData);
+		let service: DataService;
+		let getWithChildrenByIdentifier: jasmine.Spy;
+		let folderUpdate: jasmine.Spy;
+		let currentFolder: FolderVO;
+
+		beforeEach(() => {
+			service = TestBed.inject(DataService);
+			const api = TestBed.inject(ApiService);
+			getWithChildrenByIdentifier = spyOn(
+				api.folder,
+				'getWithChildrenByIdentifier',
+			);
+			folderUpdate = jasmine.createSpy('folderUpdate');
+			service.folderUpdate.subscribe(folderUpdate);
+			currentFolder = new FolderVO(
+				{
+					folderId: '10',
+					folder_linkId: 100,
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [berlinFolderData, amsterdamRecordData],
+				},
+				true,
+			);
+			service.setCurrentFolder(currentFolder);
+		});
+
+		it('should fetch the current folder through getWithChildrenByIdentifier', async () => {
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [amsterdamRecordData, berlinFolderData],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(getWithChildrenByIdentifier).toHaveBeenCalledWith(currentFolder);
+			expect(folderUpdate).toHaveBeenCalledWith(currentFolder);
+		});
+
+		it('should keep existing children by reference and merge their updated timestamp', async () => {
+			const [berlin, amsterdam] = currentFolder.ChildItemVOs;
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [
+						{ ...amsterdamRecordData, updatedDT: '2024-06-01T00:00:00.000Z' },
+						berlinFolderData,
+					],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(currentFolder.ChildItemVOs[0]).toBe(amsterdam);
+			expect(currentFolder.ChildItemVOs[1]).toBe(berlin);
+			expect(amsterdam.updatedDT).toBe('2024-06-01T00:00:00.000Z');
+			expect(amsterdam.isNewlyCreated).toBeFalse();
+		});
+
+		it('should append children new since the last refresh in the server order and flag them', async () => {
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [
+						amsterdamRecordData,
+						berlinFolderData,
+						cairoRecordData,
+					],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(namesOf(currentFolder)).toEqual(['Amsterdam', 'Berlin', 'Cairo']);
+			expect(currentFolder.ChildItemVOs[2].isNewlyCreated).toBeTrue();
+			expect(currentFolder.ChildItemVOs[2].isRecord).toBeTrue();
+		});
+
+		it('should drop children the server no longer returns and deselect them', async () => {
+			const [berlin, amsterdam] = currentFolder.ChildItemVOs;
+			service.clickItemSingle(berlin);
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [amsterdamRecordData],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(currentFolder.ChildItemVOs).toEqual([amsterdam]);
+			expect(service.getSelectedItems().has(berlin)).toBeFalse();
+		});
+
+		it('should match children whose link ids differ in type', async () => {
+			const [berlin] = currentFolder.ChildItemVOs;
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [
+						{ ...amsterdamRecordData, folder_linkId: '2' },
+						{ ...berlinFolderData, folder_linkId: '1' },
+					],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(currentFolder.ChildItemVOs[1]).toBe(berlin);
+			expect(berlin.isNewlyCreated).toBeFalse();
+		});
+
+		it('should re-apply a previewed sort that is not saved on the folder yet', async () => {
+			currentFolder.update({ sort: 'sort.alphabetical_desc' });
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [
+						amsterdamRecordData,
+						berlinFolderData,
+						cairoRecordData,
+					],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(namesOf(currentFolder)).toEqual(['Cairo', 'Berlin', 'Amsterdam']);
+			expect(currentFolder.sort).toBe('sort.alphabetical_desc');
+		});
+
+		it('should keep the server order when the current sort is the saved one', async () => {
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [
+						cairoRecordData,
+						berlinFolderData,
+						amsterdamRecordData,
+					],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(namesOf(currentFolder)).toEqual(['Cairo', 'Berlin', 'Amsterdam']);
+		});
+
+		it('should reject with the raw error and leave the children alone when the fetch fails', async () => {
+			const stelaError = new Error('stela is down');
+			getWithChildrenByIdentifier.and.rejectWith(stelaError);
+
+			await expectAsync(service.refreshCurrentFolder()).toBeRejectedWith(
+				stelaError,
+			);
+
+			expect(namesOf(currentFolder)).toEqual(['Berlin', 'Amsterdam']);
+			expect(folderUpdate).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('sortCurrentFolder', () => {
+		it('should reorder the children in place, store the sort and announce the update', () => {
+			const service = TestBed.inject(DataService);
+			const currentFolder = new FolderVO(
+				{
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [
+						{ recordId: '2', folder_linkId: 2, displayName: 'Amsterdam' },
+						{ folderId: '1', folder_linkId: 1, displayName: 'Berlin' },
+					],
+				},
+				true,
+			);
+			const [amsterdam, berlin] = currentFolder.ChildItemVOs;
+			service.setCurrentFolder(currentFolder);
+			const folderUpdate = jasmine.createSpy('folderUpdate');
+			service.folderUpdate.subscribe(folderUpdate);
+
+			service.sortCurrentFolder('sort.alphabetical_desc');
+
+			expect(currentFolder.sort).toBe('sort.alphabetical_desc');
+			expect(currentFolder.ChildItemVOs[0]).toBe(berlin);
+			expect(currentFolder.ChildItemVOs[1]).toBe(amsterdam);
+			expect(folderUpdate).toHaveBeenCalledWith(currentFolder);
+		});
 	});
 
 	it('should add items to thumbRefreshQueue that meet the criteria', (done) => {
