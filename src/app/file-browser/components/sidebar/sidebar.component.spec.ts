@@ -41,13 +41,6 @@ class MockPrDatePipe implements PipeTransform {
 	}
 }
 
-@Pipe({ name: 'prLocation', standalone: false })
-class MockPrLocationPipe implements PipeTransform {
-	transform(value: any): string {
-		return value || '';
-	}
-}
-
 @Pipe({ name: 'asRecord', standalone: false })
 class MockAsRecordPipe implements PipeTransform {
 	transform(value: any): any {
@@ -158,7 +151,6 @@ describe('SidebarComponent', () => {
 				MockPrConstantsPipe,
 				MockGetAltTextPipe,
 				MockPrDatePipe,
-				MockPrLocationPipe,
 				MockAsRecordPipe,
 				MockAsFolderPipe,
 				MockDsFileSizePipe,
@@ -209,19 +201,6 @@ describe('SidebarComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should open location dialog on Enter key press if editable', () => {
-		const locationDialogSpy = spyOn(
-			mockEditService,
-			'openLocationDialog',
-		).and.callThrough();
-
-		component.onLocationEnterPress(
-			new KeyboardEvent('keydown', { key: 'Enter' }),
-		);
-
-		expect(locationDialogSpy).toHaveBeenCalledWith(component.selectedItem);
-	});
-
 	it('should set currentTab correctly when setCurrentTab is called', () => {
 		component.setCurrentTab('info');
 		fixture.detectChanges();
@@ -236,11 +215,10 @@ describe('SidebarComponent', () => {
 		expect(component.currentTab).toBe('sharing');
 	});
 
-	it('should call editService.openLocationDialog when onLocationClick is called if editable', () => {
+	it('should open the location dialog when the location section asks', () => {
 		const editService = TestBed.inject(EditService);
 		spyOn(editService, 'openLocationDialog');
 
-		component.canEdit = true;
 		component.selectedItem = new RecordVO({});
 
 		component.onLocationClick();

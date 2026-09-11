@@ -1,0 +1,30 @@
+<label>Location</label>
+<button
+	type="button"
+	class="sidebar-item-content sidebar-location-button"
+	[disabled]="!canEdit"
+	(click)="onEditClick()"
+>
+	@if (location | prLocation; as address) {
+		@if (address.name) {
+			<strong>{{ address.name }}</strong>
+			<br />
+		}
+		<span>{{ address.line1 }}, {{ address.line2 }}</span>
+	}
+	@if (!location && !canEdit) {
+		<span class="sidebar-item-content-empty"> No location </span>
+	}
+	@if (!location && canEdit) {
+		<span class="sidebar-item-content-empty"> Click to set location </span>
+	}
+</button>
+<button
+	type="button"
+	class="sidebar-item-content sidebar-location-button"
+	aria-label="Edit location"
+	[disabled]="!canEdit"
+	(click)="onEditClick()"
+>
+	<pr-static-map [location]="location"></pr-static-map>
+</button>
