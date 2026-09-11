@@ -63,11 +63,9 @@ describe('UncertainLocationPickerComponent', () => {
 			expect(component.item).toBe(item);
 		});
 
-		it('should start the card at the top, with no room taken by the gradient', () => {
+		it('should start the card at the top of the host', () => {
 			const host: HTMLElement = fixture.nativeElement;
-			const card: HTMLElement = host.querySelector(
-				'.pr-uncertain-location-dialog',
-			);
+			const card: HTMLElement = host.querySelector('.pr-dialog-frame');
 			const gap =
 				card.getBoundingClientRect().top - host.getBoundingClientRect().top;
 
