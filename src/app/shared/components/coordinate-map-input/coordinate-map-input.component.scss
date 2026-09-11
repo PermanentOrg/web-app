@@ -1,0 +1,15 @@
+@import 'colors';
+
+:host {
+	display: block;
+	position: relative;
+}
+
+.pr-coordinate-field {
+	position: absolute;
+	top: 16px;
+	left: 16px;
+	right: 16px;
+	border-radius: 6px;
+	box-shadow: 0 2px 8px rgba($PR-brand-black, 0.16);
+}
