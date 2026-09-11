@@ -553,7 +553,6 @@ describe('EditService', () => {
 					data: { item: record },
 					panelClass: 'dialog',
 					height: 'auto',
-					width: '600px',
 				},
 			);
 		});
@@ -572,7 +571,6 @@ describe('EditService', () => {
 					data: { item: record },
 					panelClass: 'dialog',
 					height: 'auto',
-					width: '640px',
 				},
 			);
 		});

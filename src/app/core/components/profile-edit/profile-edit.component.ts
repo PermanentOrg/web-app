@@ -274,7 +274,6 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 			this.dialog.open(picker, {
 				data: { profileItem: item },
 				height: 'auto',
-				width: isUncertainLocationsEnabled ? '640px' : '600px',
 			});
 		} finally {
 			this.updateProgress();

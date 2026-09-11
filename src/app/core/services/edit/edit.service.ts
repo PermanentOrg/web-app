@@ -643,7 +643,6 @@ export class EditService {
 			data: { item },
 			panelClass: 'dialog',
 			height: 'auto',
-			width: isUncertainLocationsEnabled ? '640px' : '600px',
 		});
 	}
 

@@ -4,6 +4,8 @@
 
 :host {
 	display: block;
+	width: 640px;
+	max-width: 100%;
 }
 
 // Out of flow: an inline `svg` opens a line box and pushes the card down.
