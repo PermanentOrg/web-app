@@ -506,4 +506,153 @@ describe('EditDateTimeModalComponent', () => {
 
 		expect(component.edtfValue()).toBe('2026-XX-18');
 	});
+
+	describe('timezone', () => {
+		beforeEach(() => {
+			// The shared dialog data is flagged approximate, and the EDTF grammar
+			// rejects a qualifier on a datetime, so clear it before serializing.
+			component.qualifiers.set({
+				approximate: false,
+				uncertain: false,
+				unknown: false,
+			});
+		});
+
+		it('should start empty when the data carries no zone', () => {
+			expect(component.selectedTimezoneId()).toBeNull();
+		});
+
+		it('should start empty for an unusable stored zone', () => {
+			component.data.time.timezoneId = 'Not/AZone';
+			component.ngOnInit();
+
+			expect(component.selectedTimezoneId()).toBeNull();
+		});
+
+		it('should clear the zone along with the start date and time', () => {
+			component.onTimezoneChange('Europe/Bucharest');
+			component.clearStart();
+
+			expect(component.selectedTimezoneId()).toBeNull();
+		});
+
+		it('should clear the zone along with the end date and time', () => {
+			component.onTimezoneChange('Europe/Bucharest');
+			component.clearEnd();
+
+			expect(component.selectedTimezoneId()).toBeNull();
+		});
+
+		it('should accept being emptied again', () => {
+			component.onTimezoneChange('Europe/Bucharest');
+			component.onTimezoneChange(null);
+
+			expect(component.selectedTimezoneId()).toBeNull();
+		});
+
+		it('should drive the offset written into the EDTF value', () => {
+			component.date.set({ year: '1985', month: '05', day: '12' });
+			component.time.set({
+				hours: '12',
+				minutes: '45',
+				seconds: '00',
+				format: 'pm',
+			});
+			component.onTimezoneChange('Europe/Bucharest');
+
+			expect(component.edtfValue()).toBe('1985-05-12T12:45:00+03:00');
+		});
+
+		it('should apply one zone to both sides of a range', () => {
+			component.date.set({ year: '1985', month: '05', day: '12' });
+			component.time.set({
+				hours: '12',
+				minutes: '45',
+				seconds: '00',
+				format: 'pm',
+			});
+			component.toggleDateRange();
+			component.endDate.set({ year: '2026', month: '01', day: '15' });
+			component.endTime.set({
+				hours: '10',
+				minutes: '00',
+				seconds: '00',
+				format: 'am',
+			});
+			component.onTimezoneChange('Europe/Bucharest');
+
+			expect(component.edtfValue()).toBe(
+				'1985-05-12T12:45:00+03:00/2026-01-15T10:00:00+02:00',
+			);
+		});
+
+		it('should hand the chosen zone back to the caller on save', () => {
+			component.onTimezoneChange('Europe/Bucharest');
+			component.toggleDateRange();
+			component.onSave();
+			const saved = dialogRefSpy.close.calls.mostRecent()
+				.args[0] as DateTimeModel;
+
+			expect(saved.time.timezoneId).toBe('Europe/Bucharest');
+			expect(saved.endTime.timezoneId).toBe('Europe/Bucharest');
+		});
+
+		it('should write no offset when there is no usable zone', () => {
+			component.selectedTimezoneId.set(null);
+			component.date.set({ year: '1985', month: '05', day: '12' });
+			component.time.set({
+				hours: '12',
+				minutes: '45',
+				seconds: '00',
+				format: 'pm',
+			});
+
+			expect(component.edtfValue()).toBe('1985-05-12T12:45:00');
+		});
+
+		it('should drop the parsed offset when the zone is cleared', () => {
+			component.date.set({ year: '1985', month: '05', day: '12' });
+			component.time.set({
+				hours: '12',
+				minutes: '45',
+				seconds: '00',
+				format: 'pm',
+				timezoneOffset: '+03:00',
+			});
+			component.selectedTimezoneId.set('Europe/Bucharest');
+
+			component.onTimezoneChange(null);
+
+			expect(component.time().timezoneOffset).toBeUndefined();
+			expect(component.edtfValue()).toBe('1985-05-12T12:45:00');
+		});
+
+		it('should drop the offset on both sides of a range when cleared', () => {
+			component.useDateRange.set(true);
+			component.time.update((time) => ({
+				...time,
+				timezoneOffset: '+03:00',
+			}));
+			component.endTime.update((time) => ({
+				...time,
+				timezoneOffset: '+03:00',
+			}));
+
+			component.onTimezoneChange(null);
+
+			expect(component.time().timezoneOffset).toBeUndefined();
+			expect(component.endTime().timezoneOffset).toBeUndefined();
+		});
+
+		it('should keep the parsed offset when a real zone is chosen', () => {
+			component.time.update((time) => ({
+				...time,
+				timezoneOffset: '+03:00',
+			}));
+
+			component.onTimezoneChange('Europe/Bucharest');
+
+			expect(component.time().timezoneOffset).toBe('+03:00');
+		});
+	});
 });
