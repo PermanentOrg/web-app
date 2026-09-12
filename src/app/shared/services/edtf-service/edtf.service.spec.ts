@@ -1,3 +1,5 @@
+import { TestBed } from '@angular/core/testing';
+import { TimezoneService } from '@shared/services/timezone-service/timezone.service';
 import {
 	EdtfService,
 	DateTimeModel,
@@ -6,22 +8,14 @@ import {
 	INVALID_DAY_FOR_MONTH_ERROR,
 } from './edtf.service';
 
-// Mirrors the service's local-offset stamping so the expectations stay
-// green in any timezone the tests run in.
-const localTimezoneOffset = (): string => {
-	const offsetMinutes = -new Date().getTimezoneOffset();
-	const sign = offsetMinutes < 0 ? '-' : '+';
-	const absoluteMinutes = Math.abs(offsetMinutes);
-	const hours = String(Math.floor(absoluteMinutes / 60)).padStart(2, '0');
-	const minutes = String(absoluteMinutes % 60).padStart(2, '0');
-	return `${sign}${hours}:${minutes}`;
-};
-
 describe('EdtfService', () => {
 	let service: EdtfService;
+	let timezoneService: TimezoneService;
 
 	beforeEach(() => {
-		service = new EdtfService();
+		TestBed.configureTestingModule({});
+		service = TestBed.inject(EdtfService);
+		timezoneService = TestBed.inject(TimezoneService);
 	});
 
 	describe('toDateTimeModel', () => {
@@ -188,11 +182,17 @@ describe('EdtfService', () => {
 				expect(result.time.timezoneOffset).toBe('+05:30');
 			});
 
-			it('should not set a timezone offset for unmarked or Z-marked times', () => {
+			it('should not set a timezone offset for an unmarked time', () => {
 				const unmarked = service.toDateTimeModel('1985-05-20T14:30:45');
-				const utcMarked = service.toDateTimeModel('1985-05-20T14:30:45Z');
 
 				expect(unmarked.time.timezoneOffset).toBeUndefined();
+			});
+
+			it('should not set a timezone offset for a Z-marked time', () => {
+				// 'Z' names no place, so there is nothing in it to recover a zone
+				// from and nothing is invented from the reader's own machine.
+				const utcMarked = service.toDateTimeModel('1985-05-20T14:30:45Z');
+
 				expect(utcMarked.time.timezoneOffset).toBeUndefined();
 			});
 
@@ -673,7 +673,7 @@ describe('EdtfService', () => {
 				expect(result).toBe('1985-05-20T14:30:45+05:30');
 			});
 
-			it('should stamp the local timezone offset when the model has none', () => {
+			it('should write no offset at all when the model has none', () => {
 				const model: DateTimeModel = {
 					date: { year: '1985', month: '05', day: '20' },
 					time: {
@@ -686,7 +686,7 @@ describe('EdtfService', () => {
 
 				const result = service.toEdtfDate(model);
 
-				expect(result).toBe(`1985-05-20T14:30:45${localTimezoneOffset()}`);
+				expect(result).toBe('1985-05-20T14:30:45');
 			});
 		});
 
@@ -1013,71 +1013,6 @@ describe('EdtfService', () => {
 
 				expect(service.toEdtfDate(model)).toBe('1985-05');
 			});
-		});
-	});
-
-	describe('browserTimezoneAbbreviation', () => {
-		const stubTimezoneName = (timezoneName: string): void => {
-			spyOn(Intl, 'DateTimeFormat').and.returnValue({
-				formatToParts: () => [{ type: 'timeZoneName', value: timezoneName }],
-			} as unknown as Intl.DateTimeFormat);
-		};
-
-		const sampleDate = { year: '1985', month: '05', day: '20' };
-		const sampleTime = {
-			hours: '02',
-			minutes: '30',
-			seconds: '00',
-			format: 'pm' as const,
-		};
-
-		it('should return empty string when time has no hours', () => {
-			const result = service.browserTimezoneAbbreviation(sampleDate, {
-				hours: '',
-				format: 'am',
-			});
-
-			expect(result).toBe('');
-		});
-
-		it('should keep named abbreviations unchanged', () => {
-			stubTimezoneName('EDT');
-
-			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
-				'EDT',
-			);
-		});
-
-		it('should pad a whole-hour offset to +/-HH:MM', () => {
-			stubTimezoneName('GMT+3');
-
-			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
-				'GMT+03:00',
-			);
-		});
-
-		it('should pad a half-hour positive offset to +/-HH:MM', () => {
-			stubTimezoneName('GMT+5:30');
-
-			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
-				'GMT+05:30',
-			);
-		});
-
-		it('should pad a negative offset to +/-HH:MM', () => {
-			stubTimezoneName('GMT-9:30');
-
-			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
-				'GMT-09:30',
-			);
-		});
-
-		it('should leave an already-normalized offset unchanged', () => {
-			stubTimezoneName('GMT+03:00');
-
-			expect(service.browserTimezoneAbbreviation(sampleDate, sampleTime)).toBe(
-				'GMT+03:00',
-			);
 		});
 	});
 
@@ -1592,20 +1527,20 @@ describe('EdtfService', () => {
 			expect(result).toBe(edtfString);
 		});
 
-		it('should stamp the local offset on a date-time without timezone marker', () => {
+		it('should roundtrip a date-time without a timezone marker unchanged', () => {
 			const model = service.toDateTimeModel('1985-05-20T23:23:23');
 			const result = service.toEdtfDate(model);
 
-			expect(result).toBe(`1985-05-20T23:23:23${localTimezoneOffset()}`);
+			expect(result).toBe('1985-05-20T23:23:23');
 		});
 
-		it('should replace a fabricated Z marker with the local offset', () => {
+		it('should drop a fabricated Z marker rather than inventing an offset', () => {
 			// The folder/record VO layer rewrites offset-less values to
 			// '….000Z', so Z is treated as "no offset" rather than real UTC.
 			const model = service.toDateTimeModel('1985-05-20T23:23:23.000Z');
 			const result = service.toEdtfDate(model);
 
-			expect(result).toBe(`1985-05-20T23:23:23${localTimezoneOffset()}`);
+			expect(result).toBe('1985-05-20T23:23:23');
 		});
 
 		it('should roundtrip partial year (198X)', () => {
@@ -1772,6 +1707,325 @@ describe('EdtfService', () => {
 			expect(
 				service.formatDateForDisplay({ year: '1985', month: '05', day: '0' }),
 			).toBe('May 1985');
+		});
+	});
+
+	describe('clearing the timezone (PER-10623 scenario)', () => {
+		it('should not infer the zone back after a clear round trip', () => {
+			const saved = service.toEdtfDate({
+				date: { year: '2026', month: '07', day: '15' },
+				time: {
+					hours: '12',
+					minutes: '45',
+					seconds: '00',
+					format: 'pm',
+					timezoneId: 'Europe/Bucharest',
+				},
+			});
+
+			expect(saved).toBe('2026-07-15T12:45:00+03:00');
+
+			const reopened = service.withTimezone(
+				service.toDateTimeModel(saved),
+				'Europe/Bucharest',
+			);
+
+			expect(reopened.time.timezoneId).toBe('Europe/Bucharest');
+
+			// What the picker does on clear: the offset goes with the zone.
+			const cleared = {
+				...reopened,
+				time: {
+					...reopened.time,
+					timezoneId: undefined,
+					timezoneOffset: undefined,
+				},
+			};
+			const clearedEdtf = service.toEdtfDate(cleared);
+
+			expect(clearedEdtf).toBe('2026-07-15T12:45:00');
+			expect(service.getPersistableTimezoneId(cleared)).toBeNull();
+
+			const reloaded = service.withTimezone(
+				service.toDateTimeModel(clearedEdtf),
+				null,
+			);
+
+			expect(reloaded.time.timezoneId).toBeUndefined();
+		});
+	});
+
+	describe('withTimezone', () => {
+		const parsedWithOffset = (): DateTimeModel =>
+			service.toDateTimeModel('1985-05-12T12:45:00+02:00');
+
+		it('should stamp the identifier the item stores', () => {
+			const model = service.withTimezone(
+				parsedWithOffset(),
+				'Europe/Bucharest',
+			);
+
+			expect(model.time.timezoneId).toEqual('Europe/Bucharest');
+		});
+
+		it('should infer a zone from the offset when the item stores none', () => {
+			const model = service.withTimezone(parsedWithOffset(), null);
+
+			expect(model.time.timezoneId).toEqual(
+				timezoneService.getFirstTimezoneIdForOffset('+02:00'),
+			);
+		});
+
+		it('should prefer the stored zone over the one the offset implies', () => {
+			const model = service.withTimezone(
+				parsedWithOffset(),
+				'Europe/Bucharest',
+			);
+
+			expect(model.time.timezoneId).toEqual('Europe/Bucharest');
+		});
+
+		it('should infer when the stored value is unusable', () => {
+			for (const stored of ['', '   ', 'Not/AZone', 42, {}]) {
+				expect(
+					service.withTimezone(parsedWithOffset(), stored).time.timezoneId,
+				).toEqual(timezoneService.getFirstTimezoneIdForOffset('+02:00'));
+			}
+		});
+
+		it('should infer from the end side when only it carries an offset', () => {
+			const model = service.toDateTimeModel('1985/2026-01-15T10:00:00-05:00');
+
+			expect(service.withTimezone(model, null).time.timezoneId).toEqual(
+				timezoneService.getFirstTimezoneIdForOffset('-05:00'),
+			);
+		});
+
+		it('should apply the inferred zone to both sides of a range', () => {
+			const model = service.withTimezone(
+				service.toDateTimeModel(
+					'1985-05-12T12:45:00+02:00/2026-01-15T10:00:00+02:00',
+				),
+				null,
+			);
+
+			expect(model.endTime.timezoneId).toEqual(model.time.timezoneId);
+		});
+
+		it('should leave a date with no time without a zone', () => {
+			const model = service.withTimezone(
+				service.toDateTimeModel('1985-05-12'),
+				null,
+			);
+
+			expect(model.time.timezoneId).toBeUndefined();
+		});
+
+		it('should leave an unmarked time without a zone', () => {
+			const model = service.withTimezone(
+				service.toDateTimeModel('1985-05-12T12:45:00'),
+				null,
+			);
+
+			expect(model.time.timezoneId).toBeUndefined();
+		});
+
+		it('should leave a Z-marked time without a zone', () => {
+			const model = service.withTimezone(
+				service.toDateTimeModel('1985-05-12T12:45:00Z'),
+				null,
+			);
+
+			expect(model.time.timezoneId).toBeUndefined();
+		});
+
+		it('should still prefer a stored zone over a Z-marked time', () => {
+			const model = service.withTimezone(
+				service.toDateTimeModel('1985-05-12T12:45:00Z'),
+				'Europe/Bucharest',
+			);
+
+			expect(model.time.timezoneId).toEqual('Europe/Bucharest');
+		});
+
+		it('should persist the inferred zone once the date is saved', () => {
+			const model = service.withTimezone(parsedWithOffset(), null);
+
+			expect(service.getPersistableTimezoneId(model)).toEqual(
+				model.time.timezoneId,
+			);
+		});
+
+		it('should still return null for an item with neither date nor zone', () => {
+			expect(service.withTimezone(null, null)).toBeNull();
+		});
+	});
+
+	describe('timezone-driven offsets', () => {
+		const dateTimeIn = (
+			timezoneId: string | undefined,
+			overrides: Partial<DateTimeModel> = {},
+		): DateTimeModel => ({
+			date: { year: '1985', month: '05', day: '12' },
+			time: {
+				hours: '12',
+				minutes: '45',
+				seconds: '00',
+				format: 'pm',
+				timezoneId,
+			},
+			...overrides,
+		});
+
+		it('should stamp the offset the chosen zone was on at that date', () => {
+			expect(service.toEdtfDate(dateTimeIn('Europe/Bucharest'))).toBe(
+				'1985-05-12T12:45:00+03:00',
+			);
+		});
+
+		it('should follow daylight saving for the date being edited', () => {
+			const winter = dateTimeIn('Europe/Bucharest', {
+				date: { year: '2026', month: '01', day: '15' },
+			});
+			const summer = dateTimeIn('Europe/Bucharest', {
+				date: { year: '2026', month: '07', day: '15' },
+			});
+
+			expect(service.toEdtfDate(winter)).toBe('2026-01-15T12:45:00+02:00');
+			expect(service.toEdtfDate(summer)).toBe('2026-07-15T12:45:00+03:00');
+		});
+
+		it('should follow historical offset changes', () => {
+			expect(service.toEdtfDate(dateTimeIn('Asia/Kathmandu'))).toBe(
+				'1985-05-12T12:45:00+05:30',
+			);
+		});
+
+		it('should prefer the chosen zone over an offset carried in from parsing', () => {
+			const model = dateTimeIn('Europe/Bucharest');
+			model.time.timezoneOffset = '-05:00';
+
+			expect(service.toEdtfDate(model)).toBe('1985-05-12T12:45:00+03:00');
+		});
+
+		it('should fall back to the parsed offset when the zone is unusable', () => {
+			const model = dateTimeIn('Not/AZone');
+			model.time.timezoneOffset = '-05:00';
+
+			expect(service.toEdtfDate(model)).toBe('1985-05-12T12:45:00-05:00');
+		});
+
+		it('should write no offset when nothing else is known', () => {
+			// The editing machine's zone is a fact about the reader, never the
+			// item, so an unknown zone leaves the time unmarked instead.
+			expect(service.toEdtfDate(dateTimeIn(undefined))).toBe(
+				'1985-05-12T12:45:00',
+			);
+		});
+
+		it('should drop the parsed offset once the zone is cleared', () => {
+			// Clearing the picker strips time.timezoneOffset, which is what stops
+			// the same zone being inferred straight back on the next read.
+			const model = dateTimeIn(undefined);
+			delete model.time.timezoneOffset;
+
+			expect(service.toEdtfDate(model)).toBe('1985-05-12T12:45:00');
+			expect(service.withTimezone(model, null).time.timezoneId).toBeUndefined();
+		});
+
+		it('should apply the chosen zone to both sides of a range', () => {
+			const model = dateTimeIn('Europe/Bucharest', {
+				endDate: { year: '2026', month: '01', day: '15' },
+				endTime: {
+					hours: '10',
+					minutes: '00',
+					seconds: '00',
+					format: 'am',
+					timezoneId: 'Europe/Bucharest',
+				},
+			});
+
+			expect(service.toEdtfDate(model)).toBe(
+				'1985-05-12T12:45:00+03:00/2026-01-15T10:00:00+02:00',
+			);
+		});
+
+		it('should ignore the zone for a date with no time', () => {
+			expect(
+				service.getPersistableTimezoneId({
+					date: { year: '1985', month: '05', day: '12' },
+					time: { format: 'am', timezoneId: 'Europe/Bucharest' },
+				}),
+			).toBeNull();
+		});
+
+		it('should ignore the zone when the time cannot be read', () => {
+			expect(
+				service.getPersistableTimezoneId({
+					date: { year: '1985', month: '05', day: '12' },
+					time: {
+						hours: '99',
+						minutes: '00',
+						format: 'h24',
+						timezoneId: 'Europe/Bucharest',
+					},
+				}),
+			).toBeNull();
+		});
+
+		it('should keep the zone when a readable time is present', () => {
+			expect(
+				service.getPersistableTimezoneId({
+					date: { year: '1985', month: '05', day: '12' },
+					time: {
+						hours: '12',
+						minutes: '45',
+						format: 'pm',
+						timezoneId: 'Europe/Bucharest',
+					},
+				}),
+			).toEqual('Europe/Bucharest');
+		});
+
+		it('should keep the zone when only the end side carries a time', () => {
+			expect(
+				service.getPersistableTimezoneId({
+					date: { year: '1985', month: '05', day: '12' },
+					time: { format: 'am', timezoneId: 'Europe/Bucharest' },
+					endDate: { year: '2026', month: '01', day: '15' },
+					endTime: {
+						hours: '10',
+						minutes: '00',
+						format: 'am',
+						timezoneId: 'Europe/Bucharest',
+					},
+				}),
+			).toEqual('Europe/Bucharest');
+		});
+
+		it('should return null when no zone was chosen at all', () => {
+			expect(
+				service.getPersistableTimezoneId({
+					date: { year: '1985', month: '05', day: '12' },
+					time: { hours: '12', minutes: '45', format: 'pm' },
+				}),
+			).toBeNull();
+		});
+
+		it('should reject a time that cannot be read, so save stays disabled', () => {
+			expect(() =>
+				service.toEdtfDate({
+					date: { year: '1985', month: '05', day: '12' },
+					time: { hours: '99', minutes: '00', format: 'h24' },
+				}),
+			).toThrow();
+		});
+
+		it('should survive a parse and re-serialize roundtrip', () => {
+			const edtfString = service.toEdtfDate(dateTimeIn('Europe/Bucharest'));
+			const parsed = service.toDateTimeModel(edtfString);
+
+			expect(service.toEdtfDate(parsed)).toBe(edtfString);
 		});
 	});
 });
