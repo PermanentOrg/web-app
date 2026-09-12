@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import edtf, { Date as EdtfDate, Interval as EdtfInterval } from 'edtf';
 import {
 	format,
@@ -8,6 +8,7 @@ import {
 	isValid,
 	parse,
 } from 'date-fns';
+import { TimezoneService } from '@shared/services/timezone-service/timezone.service';
 
 export enum DateQualifier {
 	Approximate = 'approximate',
@@ -70,6 +71,7 @@ export interface TimeModel {
 	seconds?: string;
 	format: TimeFormat;
 	timezoneOffset?: string;
+	timezoneId?: string;
 }
 
 export interface DateTimeModel {
@@ -85,6 +87,8 @@ export interface DateTimeModel {
 	providedIn: 'root',
 })
 export class EdtfService {
+	private readonly timezoneService = inject(TimezoneService);
+
 	toDateTimeModel(edtfString: string): DateTimeModel | null {
 		try {
 			if (!edtfString) {
@@ -271,7 +275,7 @@ export class EdtfService {
 		// Strip any time/timezone the library may append (e.g. T00:00:00.000Z)
 		let result = edtfObject.toEDTF().replace(/T.*$/, '');
 
-		const timeStr = hasTime ? this.buildTimeString(time) : '';
+		const timeStr = hasTime ? this.buildTimeString(date, time) : '';
 
 		if (timeStr) {
 			result = `${result}${timeStr}`;
@@ -410,7 +414,7 @@ export class EdtfService {
 		return parts.join('-');
 	}
 
-	private buildTimeString(time: TimeModel): string {
+	private buildTimeString(date: DateModel, time: TimeModel): string {
 		if (!time?.hours) return '';
 
 		const converted = this.parseTimeAs24Hour(time);
@@ -418,18 +422,113 @@ export class EdtfService {
 			throw new Error('Invalid time');
 		}
 
-		const timezoneOffset = time.timezoneOffset ?? this.localTimezoneOffset();
+		// A chosen timezone wins, because its offset depends on the date being
+		// edited; an unusable one falls back to whatever the string was parsed
+		// with. With neither, the time is written unmarked rather than stamped
+		// with the offset of whoever happens to be editing — clearing the
+		// timezone has to actually clear it, and the reader's own zone was never
+		// a fact about the item.
+		const timezoneOffset =
+			this.getTimezoneOffset(date, time, time.timezoneId) ??
+			time.timezoneOffset ??
+			'';
 		const pad = (n: number): string => String(n).padStart(2, '0');
 		return `T${pad(converted.hour)}:${pad(converted.minute)}:${pad(converted.second)}${timezoneOffset}`;
 	}
 
-	private localTimezoneOffset(): string {
-		const offsetMinutes = -new Date().getTimezoneOffset();
-		const sign = offsetMinutes < 0 ? '-' : '+';
-		const absoluteMinutes = Math.abs(offsetMinutes);
-		const hours = String(Math.floor(absoluteMinutes / 60)).padStart(2, '0');
-		const minutes = String(absoluteMinutes % 60).padStart(2, '0');
-		return `${sign}${hours}:${minutes}`;
+	/**
+	 * An EDTF string only carries an offset, and an offset cannot be turned back
+	 * into a place, so the identifier the item stores is stamped onto the parsed
+	 * model here. An item holding a zone but no date still yields a model, so
+	 * the pickers can show that zone instead of silently replacing it.
+	 */
+	withTimezone(
+		dateTimeModel: DateTimeModel | null,
+		timezone: unknown,
+	): DateTimeModel | null {
+		const timezoneId =
+			this.timezoneService.resolveTimezoneId(timezone) ??
+			this.inferTimezoneIdFromOffset(dateTimeModel) ??
+			undefined;
+
+		if (!dateTimeModel) {
+			return timezoneId
+				? {
+						date: { year: '', month: '', day: '' },
+						time: { ...DEFAULT_TIME, timezoneId },
+					}
+				: null;
+		}
+
+		return {
+			...dateTimeModel,
+			time: { ...dateTimeModel.time, timezoneId },
+			...(dateTimeModel.endTime
+				? { endTime: { ...dateTimeModel.endTime, timezoneId } }
+				: {}),
+		};
+	}
+
+	/**
+	 * An item written before timezones were stored carries no place, only the
+	 * offset its EDTF string was stamped with. An offset belongs to many places
+	 * at once, so the zone recovered from it is a guess rather than a fact — but
+	 * it reads the same offset the date already has, and it becomes the item's
+	 * stored zone the next time the date is saved.
+	 */
+	private inferTimezoneIdFromOffset(
+		dateTimeModel: DateTimeModel | null,
+	): string | null {
+		const timezoneOffset =
+			dateTimeModel?.time?.timezoneOffset ??
+			dateTimeModel?.endTime?.timezoneOffset;
+		return this.timezoneService.getFirstTimezoneIdForOffset(timezoneOffset);
+	}
+
+	/**
+	 * A timezone only means something next to a time, since a bare date carries
+	 * no offset. Returns the identifier worth storing on the item, or null when
+	 * neither side of the model holds a time that can be read.
+	 */
+	getPersistableTimezoneId(dateTimeModel: DateTimeModel): string | null {
+		if (!dateTimeModel) {
+			return null;
+		}
+		const hasReadableTime =
+			this.isTimeReadable(dateTimeModel.time) ||
+			this.isTimeReadable(dateTimeModel.endTime);
+		return hasReadableTime ? (dateTimeModel.time?.timezoneId ?? null) : null;
+	}
+
+	private isTimeReadable(time?: TimeModel): boolean {
+		return !!time?.hours && this.parseTimeAs24Hour(time) !== null;
+	}
+
+	/**
+	 * The '+/-HH:MM' a zone was on at the given wall-clock reading, or null when
+	 * the zone or the date is incomplete. A timezone alone is not enough: the
+	 * same zone sits on different offsets across daylight saving and history.
+	 */
+	getTimezoneOffset(
+		date: DateModel,
+		time: TimeModel,
+		timezoneId: string | undefined,
+	): string | null {
+		if (!timezoneId || !date?.year || !date?.month || !date?.day) {
+			return null;
+		}
+		const time24Hour = this.parseTimeAs24Hour(time);
+		if (!time24Hour) {
+			return null;
+		}
+		return this.timezoneService.getOffsetForWallClock(timezoneId, {
+			year: parseInt(date.year, 10),
+			month: parseInt(date.month, 10),
+			day: parseInt(date.day, 10),
+			hour: time24Hour.hour,
+			minute: time24Hour.minute,
+			second: time24Hour.second,
+		});
 	}
 
 	private extDateToDateTimeModel(
@@ -494,6 +593,9 @@ export class EdtfService {
 		};
 	}
 
+	// Only an explicit '+HH:MM' or '-HH:MM' is read as an offset. 'Z' is UTC but
+	// names no place, and an unmarked time names neither, so both leave the
+	// offset absent and nothing is inferred from them.
 	private extractRawTime(edtfString: string): {
 		hours: number;
 		minutes: number;
@@ -583,47 +685,6 @@ export class EdtfService {
 		}
 
 		return model;
-	}
-
-	buildReferenceDate(date: DateModel, time: TimeModel): Date {
-		const year = parseInt(date?.year ?? '', 10);
-		if (Number.isNaN(year)) return new Date();
-		const month = date.month ? parseInt(date.month, 10) - 1 : 0;
-		const day = date.day ? parseInt(date.day, 10) : 1;
-		const time24 = time?.hours ? this.parseTimeAs24Hour(time) : null;
-		return new Date(
-			year,
-			month,
-			day,
-			time24?.hour ?? 0,
-			time24?.minute ?? 0,
-			time24?.second ?? 0,
-		);
-	}
-
-	browserTimezoneAbbreviation(date: DateModel, time: TimeModel): string {
-		if (!time?.hours) return '';
-		try {
-			const referenceDate = this.buildReferenceDate(date, time);
-			const parts = new Intl.DateTimeFormat('en-US', {
-				timeZoneName: 'short',
-			}).formatToParts(referenceDate);
-			const timezoneName =
-				parts.find((part) => part.type === 'timeZoneName')?.value ?? '';
-			return this.normalizeTimezoneOffsetDisplay(timezoneName);
-		} catch {
-			return '';
-		}
-	}
-
-	// Intl 'short' renders offset-only zones as e.g. GMT+3 or GMT+5:30;
-	// rewrite the offset part to the canonical +/-HH:MM form (GMT+03:00).
-	private normalizeTimezoneOffsetDisplay(timezoneName: string): string {
-		const offsetMatch = /([+-])(\d{1,2})(?::(\d{2}))?/.exec(timezoneName);
-		if (!offsetMatch) return timezoneName;
-		const [rawOffset, sign, offsetHours, offsetMinutes] = offsetMatch;
-		const normalizedOffset = `${sign}${offsetHours.padStart(2, '0')}:${offsetMinutes ?? '00'}`;
-		return timezoneName.replace(rawOffset, normalizedOffset);
 	}
 
 	parseTimeAs24Hour(
