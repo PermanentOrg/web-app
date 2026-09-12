@@ -281,6 +281,67 @@ describe('Folder repo', () => {
 			});
 		});
 
+		it('should send the timezone as location metadata when the folder has one', async () => {
+			const folderVO = new FolderVO({
+				folderId: 123,
+				displayTime: '1985-05-20T00:00:00Z',
+				timezone: 'Europe/Bucharest',
+			});
+
+			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
+
+			await folderRepo.updateStelaFolder(folderVO);
+
+			expect(httpV2Spy.patch).toHaveBeenCalledWith('v2/folder/123', {
+				displayTime: '1985-05-20T00:00:00Z',
+				location: { timezone: 'Europe/Bucharest' },
+			});
+		});
+
+		it('should send a null timezone only when it is explicitly cleared', async () => {
+			const folderVO = new FolderVO({
+				folderId: 123,
+				displayTime: null,
+				timezone: null,
+			});
+
+			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
+
+			await folderRepo.updateStelaFolder(folderVO);
+
+			expect(httpV2Spy.patch).toHaveBeenCalledWith('v2/folder/123', {
+				displayTime: null,
+				location: { timezone: null },
+			});
+		});
+
+		it('should lift the timezone off the location and onto the folder', async () => {
+			const folderVO = new FolderVO({ folderId: 123 });
+
+			httpV2Spy.patch.and.returnValue(
+				of([
+					{
+						...mockStelaFolder,
+						location: { id: '1', timezone: 'Europe/Bucharest' },
+					},
+				]),
+			);
+
+			const result = await folderRepo.updateStelaFolder(folderVO);
+
+			expect(result.Results[0][0].FolderVO.timezone).toBe('Europe/Bucharest');
+		});
+
+		it('should null the timezone when the folder has none', async () => {
+			const folderVO = new FolderVO({ folderId: 123 });
+
+			httpV2Spy.patch.and.returnValue(of([mockStelaFolder]));
+
+			const result = await folderRepo.updateStelaFolder(folderVO);
+
+			expect(result.Results[0][0].FolderVO.timezone).toBeNull();
+		});
+
 		it('should convert response StelaFolder to FolderVO', async () => {
 			const folderVO = new FolderVO({
 				folderId: 123,
