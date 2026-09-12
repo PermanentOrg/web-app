@@ -352,30 +352,47 @@ export class EditService {
 		property: KeysOfType<ItemVO, string>,
 		value: string,
 	) {
-		if (item) {
-			const originalValue = item[property];
-			const newData: Partial<ItemVO> = {};
-			newData[property] = value;
-			try {
-				item.update(newData);
-				await this.updateItems([item], [property]);
-			} catch (err) {
-				const revertData: Partial<ItemVO> = {};
-				revertData[property] = originalValue;
-				item.update(revertData);
+		const newData: Partial<ItemVO> = {};
+		newData[property] = value;
+		await this.saveItemVoProperties(item, newData, [property]);
+	}
 
-				if (err instanceof FolderResponse || err instanceof RecordResponse) {
-					this.message.showError({
-						message: err.getMessage(),
-						translate: true,
-					});
-				} else {
-					console.error('Failed to save item property', err);
-					this.message.showError({
-						message: 'error.generic.update_fail',
-						translate: true,
-					});
-				}
+	/**
+	 * Applies several properties in one optimistic update so fields that belong
+	 * together — a date and the timezone it was recorded in — reach the backend
+	 * in a single request and revert together when it fails.
+	 */
+	public async saveItemVoProperties(
+		item: ItemVO,
+		changes: Partial<ItemVO>,
+		whitelist: (keyof ItemVO)[],
+	) {
+		if (!item) {
+			return;
+		}
+
+		const originalValues: Record<string, unknown> = {};
+		Object.keys(changes).forEach((key) => {
+			originalValues[key] = item[key];
+		});
+
+		try {
+			item.update(changes);
+			await this.updateItems([item], whitelist);
+		} catch (err) {
+			item.update(originalValues as Partial<ItemVO>);
+
+			if (err instanceof FolderResponse || err instanceof RecordResponse) {
+				this.message.showError({
+					message: err.getMessage(),
+					translate: true,
+				});
+			} else {
+				console.error('Failed to save item property', err);
+				this.message.showError({
+					message: 'error.generic.update_fail',
+					translate: true,
+				});
 			}
 		}
 	}
@@ -432,6 +449,10 @@ export class EditService {
 						newData.displayTime = updatedItem.displayTime;
 					}
 
+					if (updatedItem.timezone) {
+						newData.timezone = updatedItem.timezone;
+					}
+
 					if (updatedItem.displayDT) {
 						newData.displayDT = updatedItem.displayDT;
 					}
@@ -462,6 +483,10 @@ export class EditService {
 
 				if (res.displayTime) {
 					newData.displayTime = res.displayTime;
+				}
+
+				if (res.timezone) {
+					newData.timezone = res.timezone;
 				}
 
 				if (res.displayDT) {

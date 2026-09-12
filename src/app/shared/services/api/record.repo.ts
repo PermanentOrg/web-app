@@ -86,6 +86,10 @@ export interface StelaLocation {
 	longitude?: number | null;
 	altitudeMeters?: number | null;
 	precision?: LocationPrecision | null;
+	// Stela treats the timezone as location metadata but stores it on the record
+	// or folder row, so it arrives here even when there is no location to speak
+	// of. It is a free-text column, so nothing guarantees a usable value.
+	timezone?: string | null;
 	// Legacy columns still returned by stela for backwards compatibility. Used
 	// to shim locations that predate (or were geocoded without) the new fields.
 	streetNumber?: string | null;
@@ -174,13 +178,25 @@ export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 		},
 	});
 
+/**
+ * Stela takes the timezone as location metadata. Its location schema rejects an
+ * empty object and may not be sent alongside locationId, so an untouched
+ * timezone omits the key entirely and only an explicit clear sends null.
+ */
+export const buildTimezonePatch = (
+	timezone: string | null | undefined,
+): { location?: { timezone: string | null } } =>
+	timezone === undefined ? {} : { location: { timezone } };
+
 export const convertStelaLocationToLocnVOData = (
 	stelaLocation: StelaLocation | null | undefined,
 ): LocnVOData | null => {
 	if (!stelaLocation?.id) {
 		return null;
 	}
-	const { state, precision, ...rest } = stelaLocation;
+	// The timezone rides along on the location but belongs to the record or
+	// folder, so it is lifted onto the item rather than into the location VO.
+	const { state, precision, timezone, ...rest } = stelaLocation;
 	// Legacy shim: locations geocoded before the IPTC fields existed — or by
 	// backend paths (e.g. EXIF geocoding on upload) that still only write the
 	// legacy columns — arrive without name/sublocation/city. Fall back to the
@@ -222,6 +238,7 @@ export const convertStelaRecordToRecordVO = (
 		accessRole: getAccessRoleFromArchiveMembershipRole(stelaRecord.accessRole),
 		displayDT: stelaRecord.displayDate,
 		displayTime: stelaRecord.displayTime,
+		timezone: stelaRecord.location?.timezone ?? null,
 		folder_linkId: Number.parseInt(stelaRecord.folderLinkId, 10),
 		folder_linkType: stelaRecord.folderLinkType,
 		LocnVO: convertStelaLocationToLocnVOData(stelaRecord.location),
@@ -521,11 +538,12 @@ export class RecordRepo extends BaseRepo {
 			recordVO.recordId ??
 			(await this.getRecordIdByArchiveNbr(recordVO.archiveNbr));
 
-		// For now we only send displayTime. This will evolve until we can
-		// update the whole record using this method.
+		// For now we only send displayTime and the timezone. This will evolve
+		// until we can update the whole record using this method.
 		const stelaRecord = await firstValueFrom(
 			this.httpV2.patch<StelaRecord>(`v2/records/${recordId}`, {
 				displayTime: recordVO.displayTime,
+				...buildTimezonePatch(recordVO.timezone),
 			}),
 		);
 
