@@ -12,6 +12,7 @@ import {
 	convertStelaRecordToRecordVO,
 	convertStelaSharetoShareVO,
 	convertStelaTagToTagVO,
+	buildTimezonePatch,
 	StelaLocation,
 	StelaShare,
 	StelaTag,
@@ -112,6 +113,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		displayDT: stelaFolder.displayTimestamp,
 		displayEndDT: stelaFolder.displayEndTimestamp,
 		displayTime: stelaFolder.displayTime,
+		timezone: stelaFolder.location?.timezone ?? null,
 		derivedDT: stelaFolder.displayTimestamp,
 		derivedEndDT: stelaFolder.displayEndTimestamp,
 		note: '',
@@ -249,6 +251,7 @@ export class FolderRepo extends BaseRepo {
 	public async updateStelaFolder(folderVO: FolderVO): Promise<FolderResponse> {
 		const payload = {
 			displayTime: folderVO.displayTime,
+			...buildTimezonePatch(folderVO.timezone),
 		};
 
 		const response = await firstValueFrom(
