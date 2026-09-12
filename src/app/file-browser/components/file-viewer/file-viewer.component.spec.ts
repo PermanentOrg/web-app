@@ -119,6 +119,7 @@ describe('FileViewerComponent', () => {
 	let tagsService: MockTagsService;
 	let navigatedUrl: string[];
 	let savedProperty: { name: string; value: any };
+	let savedProperties: Record<string, any>;
 	let hasAccess: boolean;
 	let openedDialogs: string[];
 	let downloaded: boolean;
@@ -147,6 +148,7 @@ describe('FileViewerComponent', () => {
 		};
 		folderChildren = [];
 		savedProperty = undefined;
+		savedProperties = undefined;
 		hasAccess = true;
 		openedDialogs = [];
 		downloaded = false;
@@ -212,6 +214,13 @@ describe('FileViewerComponent', () => {
 					useValue: {
 						async saveItemVoProperty(_record: any, name: string, value: any) {
 							savedProperty = { name: name as string, value };
+						},
+						async saveItemVoProperties(
+							_record: any,
+							changes: Record<string, any>,
+							_whitelist: any,
+						) {
+							savedProperties = changes;
 						},
 						async openLocationDialog(_item: any) {
 							openedDialogs.push('location');
@@ -361,7 +370,9 @@ describe('FileViewerComponent', () => {
 				time: { format: 'am' },
 			});
 
-			expect(savedProperty).toEqual({ name: 'displayTime', value: null });
+			expect(savedProperties).toEqual(
+				jasmine.objectContaining({ displayTime: null }),
+			);
 		});
 
 		it('should save the EDTF string unchanged for a non-empty date', async () => {
@@ -373,10 +384,9 @@ describe('FileViewerComponent', () => {
 				time: { format: 'am' },
 			});
 
-			expect(savedProperty).toEqual({
-				name: 'displayTime',
-				value: '1990-06-15',
-			});
+			expect(savedProperties).toEqual(
+				jasmine.objectContaining({ displayTime: '1990-06-15' }),
+			);
 		});
 
 		it('should re-sync the picker to the reverted value after a failed backend save', async () => {
@@ -385,9 +395,9 @@ describe('FileViewerComponent', () => {
 
 			// Mimic EditService on a server failure: optimistic update now,
 			// revert on a later macrotask. The re-sync must wait for this.
-			spyOn(TestBed.inject(EditService), 'saveItemVoProperty').and.callFake(
-				async (item, _property, value) => {
-					item.displayTime = value;
+			spyOn(TestBed.inject(EditService), 'saveItemVoProperties').and.callFake(
+				async (item, changes: any) => {
+					item.displayTime = changes.displayTime;
 					await new Promise((resolve) => {
 						setTimeout(resolve);
 					});
@@ -403,7 +413,7 @@ describe('FileViewerComponent', () => {
 			expect(component.displayTimeObject?.date.year).toBe('1985');
 		});
 
-		it('should show an empty date when displayTime is explicitly null, ignoring displayDT', async () => {
+		it('should show an empty date when displayTime is explicitly null', async () => {
 			activatedRouteData.currentRecord = new RecordVO({
 				type: 'document',
 				displayName: 'Cleared Doc',
@@ -416,7 +426,7 @@ describe('FileViewerComponent', () => {
 			expect(component.displayTimeObject).toBeNull();
 		});
 
-		it('should fall back to displayDT when displayTime is undefined', async () => {
+		it('should ignore displayDT entirely, matching the info sidebar', async () => {
 			activatedRouteData.currentRecord = new RecordVO({
 				type: 'document',
 				displayName: 'Legacy Doc',
@@ -425,7 +435,7 @@ describe('FileViewerComponent', () => {
 			});
 			await recreateComponent();
 
-			expect(component.displayTimeObject?.date.year).toBe('1985');
+			expect(component.displayTimeObject).toBeNull();
 		});
 	});
 
