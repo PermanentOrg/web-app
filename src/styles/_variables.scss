@@ -181,7 +181,13 @@ $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 $input-border-color: $gray-400;
 $input-focus-border-color: $form-border-focus;
 $input-focus-bg: white;
-$input-focus-box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+
+$focus-ring-width: 0.125rem;
+$focus-ring-opacity: 0.35;
+$focus-ring-blur: 0.25rem;
+$focus-ring-color: rgba($primary, $focus-ring-opacity);
+$focus-ring-box-shadow: 0 0 $focus-ring-blur $focus-ring-width $focus-ring-color;
+$form-select-focus-box-shadow: $focus-ring-box-shadow;
 
 @import 'bootstrap/scss/variables';
 @import 'utilities';
