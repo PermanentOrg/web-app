@@ -110,6 +110,7 @@ const mockDataService = {
 const mockEditService = {
 	openLocationDialog: (_: any) => {},
 	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
+	saveItemVoProperties: (_item: any, _changes: any, _whitelist: any) => {},
 };
 
 let closedSubject: Subject<DateTimeModel | undefined>;
@@ -476,9 +477,9 @@ describe('SidebarComponent', () => {
 
 		it('should recompute the display time object when a new date is saved', async () => {
 			const editService = TestBed.inject(EditService);
-			spyOn(editService, 'saveItemVoProperty').and.callFake(
-				async (item: any, prop: any, value: any) => {
-					item[prop] = value;
+			spyOn(editService, 'saveItemVoProperties').and.callFake(
+				async (item: any, changes: any) => {
+					Object.assign(item, changes);
 				},
 			);
 
@@ -528,14 +529,14 @@ describe('SidebarComponent', () => {
 	});
 
 	describe('saveDisplayTime null handling', () => {
-		let saveItemVoPropertySpy: jasmine.Spy;
+		let saveItemVoPropertiesSpy: jasmine.Spy;
 
 		beforeEach(() => {
-			saveItemVoPropertySpy = spyOn(
+			saveItemVoPropertiesSpy = spyOn(
 				mockEditService,
-				'saveItemVoProperty',
-			).and.callFake(async (item: any, prop: any, value: any) => {
-				item[prop] = value;
+				'saveItemVoProperties',
+			).and.callFake(async (item: any, changes: any) => {
+				Object.assign(item, changes);
 			});
 		});
 
@@ -547,10 +548,10 @@ describe('SidebarComponent', () => {
 				time: { format: 'am' },
 			});
 
-			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
+			expect(saveItemVoPropertiesSpy).toHaveBeenCalledWith(
 				component.selectedItem,
-				'displayTime',
-				null,
+				jasmine.objectContaining({ displayTime: null }),
+				['displayTime'],
 			);
 		});
 
@@ -562,10 +563,10 @@ describe('SidebarComponent', () => {
 				time: { format: 'am' },
 			});
 
-			expect(saveItemVoPropertySpy).toHaveBeenCalledWith(
+			expect(saveItemVoPropertiesSpy).toHaveBeenCalledWith(
 				component.selectedItem,
-				'displayTime',
-				'1990-06-15',
+				jasmine.objectContaining({ displayTime: '1990-06-15' }),
+				['displayTime'],
 			);
 		});
 	});
@@ -615,7 +616,7 @@ describe('SidebarComponent', () => {
 		it('should save displayTime when modal returns a result', () => {
 			const saveSpy = spyOn(
 				mockEditService,
-				'saveItemVoProperty',
+				'saveItemVoProperties',
 			).and.callThrough();
 
 			const modalData: DateTimeModel = {
@@ -642,15 +643,15 @@ describe('SidebarComponent', () => {
 
 			expect(saveSpy).toHaveBeenCalledWith(
 				component.selectedItem,
-				'displayTime',
-				jasmine.any(String),
+				jasmine.objectContaining({ displayTime: jasmine.any(String) }),
+				['displayTime'],
 			);
 		});
 
 		it('should refresh the cached display time after saving from the modal', async () => {
-			spyOn(mockEditService, 'saveItemVoProperty').and.callFake(
-				async (item: any, prop: any, value: any) => {
-					item[prop] = value;
+			spyOn(mockEditService, 'saveItemVoProperties').and.callFake(
+				async (item: any, changes: any) => {
+					Object.assign(item, changes);
 				},
 			);
 
@@ -671,7 +672,7 @@ describe('SidebarComponent', () => {
 		});
 
 		it('should not save when the modal closes after the sidebar is destroyed', () => {
-			const saveSpy = spyOn(mockEditService, 'saveItemVoProperty');
+			const saveSpy = spyOn(mockEditService, 'saveItemVoProperties');
 
 			const modalData: DateTimeModel = {
 				date: { year: '1985', month: '05', day: '' },
@@ -702,7 +703,7 @@ describe('SidebarComponent', () => {
 		it('should not save when modal is dismissed', () => {
 			const saveSpy = spyOn(
 				mockEditService,
-				'saveItemVoProperty',
+				'saveItemVoProperties',
 			).and.callThrough();
 
 			const modalData: DateTimeModel = {
