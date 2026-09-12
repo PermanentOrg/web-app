@@ -57,9 +57,10 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	private updateDisplayTimeObject(): void {
 		const timeSource = this.selectedItem?.displayTime;
 		try {
-			this.displayTimeObject = timeSource
-				? this.edtfService.toDateTimeModel(timeSource)
-				: null;
+			this.displayTimeObject = this.edtfService.withTimezone(
+				timeSource ? this.edtfService.toDateTimeModel(timeSource) : null,
+				this.selectedItem?.timezone,
+			);
 		} catch (err) {
 			this.displayTimeObject = null;
 			this.message.showError({ message: err?.message });
@@ -273,7 +274,17 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		try {
 			const edtfDate = this.edtfService.toEdtfDate(result);
 			const newDisplayTime = edtfDate === '' ? null : edtfDate;
-			await this.onFinishEditing('displayTime', newDisplayTime);
+			// The date and the zone it was recorded in go out together so one
+			// request carries both and a failure reverts both.
+			await this.editService.saveItemVoProperties(
+				this.selectedItem,
+				{
+					displayTime: newDisplayTime,
+					timezone: this.edtfService.getPersistableTimezoneId(result),
+				},
+				['displayTime'],
+			);
+			this.cdr.markForCheck();
 		} catch (err) {
 			this.message.showError({ message: err?.message });
 		} finally {
