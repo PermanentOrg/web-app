@@ -4,7 +4,13 @@
 :host {
 	position: relative;
 	display: block;
-	height: 40px;
+	min-height: 40px;
+}
+
+.pr-date-input-wrap {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
 }
 
 .pr-date-input-group {
@@ -15,6 +21,14 @@
 	&.active {
 		@include input-focus-state;
 	}
+
+	&.has-error {
+		@include input-error-state;
+	}
+}
+
+.pr-input-error {
+	@include input-error-message;
 }
 
 .pr-date-segment {

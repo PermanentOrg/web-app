@@ -1,7 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { DateModel } from '@shared/services/edtf-service/edtf.service';
-import { DatepickerInputComponent } from './datepicker-input.component';
+import {
+	DateModel,
+	DAY_RANGE_ERROR,
+	INVALID_DAY_FOR_MONTH_ERROR,
+	MONTH_RANGE_ERROR,
+} from '@shared/services/edtf-service/edtf.service';
+import {
+	DatepickerInputComponent,
+	INVALID_CHARS_ERROR,
+} from './datepicker-input.component';
 
 @Component({
 	standalone: true,
@@ -46,22 +54,20 @@ describe('DatepickerInputComponent', () => {
 	const mockEvent = (value: string): Event =>
 		({ target: { value } }) as unknown as Event;
 
+	// --- Valid input ---
+
 	it('should accept valid 4-digit year and emit', () => {
 		component.updateYear(mockEvent('2026'));
 
 		expect(hostComponent.lastEmittedDate?.year).toBe('2026');
+		expect(component.fieldErrors.year()).toBeNull();
 	});
 
 	it('should emit incomplete year as raw digits (no X in input)', () => {
 		component.updateYear(mockEvent('202'));
 
 		expect(hostComponent.lastEmittedDate?.year).toBe('202');
-	});
-
-	it('should reject non-numeric year', () => {
-		component.updateYear(mockEvent('20ab'));
-
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(component.fieldErrors.year()).toBeNull();
 	});
 
 	it('should accept year padded with leading zeros (ISO 8601)', () => {
@@ -74,40 +80,81 @@ describe('DatepickerInputComponent', () => {
 		component.updateMonth(mockEvent('06'));
 
 		expect(hostComponent.lastEmittedDate?.month).toBe('06');
+		expect(component.fieldErrors.month()).toBeNull();
 	});
 
-	it('should emit single digit month', () => {
+	it('should accept single digit month', () => {
 		component.updateMonth(mockEvent('1'));
 
 		expect(hostComponent.lastEmittedDate?.month).toBe('1');
+		expect(component.fieldErrors.month()).toBeNull();
 	});
 
-	it('should not emit or auto-focus for invalid month', () => {
+	it('should accept day 29 for February in leap year', () => {
+		hostComponent.date = { year: '2024', month: '02', day: '' };
+		fixture.detectChanges();
+		component.updateDay(mockEvent('29'));
+
+		expect(hostComponent.lastEmittedDate?.day).toBe('29');
+		expect(component.fieldErrors.day()).toBeNull();
+	});
+
+	// --- Invalid input now emits AND surfaces an error ---
+
+	it('should emit invalid characters in the year and surface the invalid-characters error', () => {
+		component.updateYear(mockEvent('20ab'));
+
+		expect(hostComponent.lastEmittedDate?.year).toBe('20ab');
+		expect(component.fieldErrors.year()).toBe(INVALID_CHARS_ERROR);
+		expect(component.currentError()).toBe(INVALID_CHARS_ERROR);
+	});
+
+	it('should emit out-of-range month and surface the month error', () => {
 		component.updateMonth(mockEvent('13'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.month).toBe('13');
+		expect(component.fieldErrors.month()).toBe(MONTH_RANGE_ERROR);
 	});
 
-	it('should reject non-numeric month', () => {
+	it('should NOT surface the month range error while only one digit has been typed', () => {
+		component.updateMonth(mockEvent('5'));
+
+		expect(hostComponent.lastEmittedDate?.month).toBe('5');
+		expect(component.fieldErrors.month()).toBeNull();
+	});
+
+	it('should NOT surface the day range error while only one digit has been typed', () => {
+		hostComponent.date = { year: '2026', month: '02', day: '' };
+		fixture.detectChanges();
+		component.updateDay(mockEvent('9'));
+
+		expect(hostComponent.lastEmittedDate?.day).toBe('9');
+		expect(component.fieldErrors.day()).toBeNull();
+	});
+
+	it('should emit invalid characters in the month and surface the invalid-characters error', () => {
 		component.updateMonth(mockEvent('ab'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.month).toBe('ab');
+		expect(component.fieldErrors.month()).toBe(INVALID_CHARS_ERROR);
 	});
 
-	it('should accept valid 2-digit day for month and emit', () => {
-		hostComponent.date = { year: '2026', month: '01', day: '' };
+	it('should emit day 31 in April and surface the day-for-month error', () => {
+		hostComponent.date = { year: '2026', month: '04', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('31'));
 
 		expect(hostComponent.lastEmittedDate?.day).toBe('31');
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
 	});
 
-	it('should emit single digit day', () => {
+	it('should surface the range error for a day greater than 31', () => {
 		hostComponent.date = { year: '2026', month: '01', day: '' };
 		fixture.detectChanges();
-		component.updateDay(mockEvent('3'));
+		component.updateDay(mockEvent('32'));
 
-		expect(hostComponent.lastEmittedDate?.day).toBe('3');
+		expect(hostComponent.lastEmittedDate?.day).toBe('32');
+		expect(component.fieldErrors.day()).toBe(DAY_RANGE_ERROR);
 	});
 
 	it('should allow backspacing a left-padded day down to a single "0" without reverting', () => {
@@ -121,55 +168,118 @@ describe('DatepickerInputComponent', () => {
 		expect(hostComponent.lastEmittedDate?.day).toBe('0');
 	});
 
-	it('should not emit day greater than max for month', () => {
+	it('should emit day 30 in February and surface the day-for-month error', () => {
 		hostComponent.date = { year: '2026', month: '02', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('30'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.day).toBe('30');
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
 	});
 
-	it('should accept day 29 for February in leap year', () => {
-		hostComponent.date = { year: '2024', month: '02', day: '' };
-		fixture.detectChanges();
-		component.updateDay(mockEvent('29'));
-
-		expect(hostComponent.lastEmittedDate?.day).toBe('29');
-	});
-
-	it('should not emit day 29 for February in non-leap year', () => {
+	it('should emit day 29 in February of a non-leap year and surface the day-for-month error', () => {
 		hostComponent.date = { year: '2025', month: '02', day: '' };
 		fixture.detectChanges();
 		component.updateDay(mockEvent('29'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.day).toBe('29');
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
 	});
 
-	it('should not emit day 31 for 30-day months', () => {
-		hostComponent.date = { year: '2026', month: '04', day: '' };
+	it('should surface the day-for-month error for Feb 29 given a single-digit month', () => {
+		hostComponent.date = { year: '2021', month: '2', day: '' };
 		fixture.detectChanges();
-		component.updateDay(mockEvent('31'));
+		component.updateDay(mockEvent('29'));
 
-		expect(hostComponent.lastEmittedDate).toBeNull();
+		expect(hostComponent.lastEmittedDate?.day).toBe('29');
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
 	});
 
-	it('should allow typing first digit 0 or 1 for month', () => {
-		const input = { value: '0' } as HTMLInputElement;
-		component.updateMonth({ target: input } as unknown as Event);
-
-		expect(input.value).toBe('0');
-	});
-
-	it('should reject first digit > 1 for month', () => {
-		hostComponent.date = { year: '', month: '', day: '' };
+	it('should re-validate the day when the month changes', () => {
+		hostComponent.date = { year: '2026', month: '01', day: '31' };
 		fixture.detectChanges();
-		const input = { value: '5' } as HTMLInputElement;
-		component.updateMonth({ target: input } as unknown as Event);
 
-		expect(input.value).toBe('');
+		expect(component.fieldErrors.day()).toBeNull();
+
+		component.updateMonth(mockEvent('04'));
+
+		expect(component.fieldErrors.day()).toBe(INVALID_DAY_FOR_MONTH_ERROR);
 	});
 
-	it('should emit when clearing year field', () => {
+	it('should surface the range error inline for a lone "0" month', () => {
+		component.updateMonth(mockEvent('0'));
+
+		expect(hostComponent.lastEmittedDate?.month).toBe('0');
+		expect(component.fieldErrors.month()).toBe(MONTH_RANGE_ERROR);
+	});
+
+	it('should surface the range error inline for a lone "0" day', () => {
+		hostComponent.date = { year: '2026', month: '01', day: '' };
+		fixture.detectChanges();
+		component.updateDay(mockEvent('0'));
+
+		expect(hostComponent.lastEmittedDate?.day).toBe('0');
+		expect(component.fieldErrors.day()).toBe(DAY_RANGE_ERROR);
+	});
+
+	it('should attribute a lone "0" month to the month field, not the day', () => {
+		hostComponent.date = { year: '2024', month: '', day: '31' };
+		fixture.detectChanges();
+		component.updateMonth(mockEvent('0'));
+
+		expect(component.fieldErrors.month()).toBe(MONTH_RANGE_ERROR);
+		expect(component.fieldErrors.day()).toBeNull();
+	});
+
+	it('should clear the year error when the field is cleared', () => {
+		component.updateYear(mockEvent('20ab'));
+
+		expect(component.fieldErrors.year()).not.toBeNull();
+
+		component.updateYear(mockEvent(''));
+
+		expect(component.fieldErrors.year()).toBeNull();
+	});
+
+	// --- Auto-focus behavior ---
+
+	it('should auto-focus the month input after a valid 4-digit year', () => {
+		const focusSpy = spyOn(
+			component.monthInput.nativeElement,
+			'focus',
+		).and.callThrough();
+		component.updateYear(mockEvent('2026'));
+
+		expect(focusSpy).toHaveBeenCalled();
+	});
+
+	it('should NOT auto-focus the month input when the year has invalid characters', () => {
+		const focusSpy = spyOn(component.monthInput.nativeElement, 'focus');
+		component.updateYear(mockEvent('20ab'));
+
+		expect(focusSpy).not.toHaveBeenCalled();
+	});
+
+	it('should auto-focus the day input after a valid 2-digit month', () => {
+		const focusSpy = spyOn(
+			component.dayInput.nativeElement,
+			'focus',
+		).and.callThrough();
+		component.updateMonth(mockEvent('06'));
+
+		expect(focusSpy).toHaveBeenCalled();
+	});
+
+	it('should NOT auto-focus the day input when the month is out of range', () => {
+		const focusSpy = spyOn(component.dayInput.nativeElement, 'focus');
+		component.updateMonth(mockEvent('13'));
+
+		expect(focusSpy).not.toHaveBeenCalled();
+	});
+
+	// --- Misc ---
+
+	it('should emit when clearing the year field', () => {
 		hostComponent.date = { year: '2026', month: '02', day: '18' };
 		fixture.detectChanges();
 		component.updateYear(mockEvent(''));
@@ -201,8 +311,24 @@ describe('DatepickerInputComponent', () => {
 		expect(component.showDatepicker()).toBeFalse();
 	});
 
-	it('should emit date and close datepicker on date select', () => {
+	it('should toggle datepicker via keyboard (Enter and Space)', () => {
+		const iconButton: HTMLElement =
+			fixture.nativeElement.querySelector('.pr-icon-button');
+
+		iconButton.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+		fixture.detectChanges();
+
+		expect(component.showDatepicker()).toBeTrue();
+
+		iconButton.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+		fixture.detectChanges();
+
+		expect(component.showDatepicker()).toBeFalse();
+	});
+
+	it('should emit date and clear errors on date select', () => {
 		component.showDatepicker.set(true);
+		component.fieldErrors.month.set(MONTH_RANGE_ERROR);
 		component.onDateSelect({ year: 2026, month: 3, day: 15 });
 
 		expect(hostComponent.lastEmittedDate).toEqual({
@@ -212,6 +338,7 @@ describe('DatepickerInputComponent', () => {
 		});
 
 		expect(component.showDatepicker()).toBeFalse();
+		expect(component.currentError()).toBeNull();
 	});
 
 	it('should return null datepickerModel for incomplete date', () => {
@@ -228,5 +355,12 @@ describe('DatepickerInputComponent', () => {
 		} as unknown as MouseEvent);
 
 		expect(component.showDatepicker()).toBeFalse();
+	});
+
+	it('should refresh errors from incoming @Input date on changes', () => {
+		hostComponent.date = { year: '2026', month: '13', day: '' };
+		fixture.detectChanges();
+
+		expect(component.fieldErrors.month()).toBe(MONTH_RANGE_ERROR);
 	});
 });

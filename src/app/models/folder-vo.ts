@@ -49,7 +49,7 @@ export class FolderVO
 	public displayName;
 	public displayDT;
 	public displayEndDT;
-	public displayTime?: string;
+	public displayTime?: string | null;
 	public derivedDT;
 	public derivedEndDT;
 	public altText;
@@ -182,7 +182,7 @@ export interface FolderVOData extends BaseVOData {
 	displayName?: any;
 	displayDT?: any;
 	displayEndDT?: any;
-	displayTime?: string;
+	displayTime?: string | null;
 	derivedDT?: any;
 	derivedEndDT?: any;
 	note?: any;

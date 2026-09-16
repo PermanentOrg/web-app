@@ -454,6 +454,72 @@ describe('EditService', () => {
 		expect(apiService.folder.getStelaFolderVOs).not.toHaveBeenCalled();
 	});
 
+	it('should reconcile a folder when the Stela response has a string folderId and no folder_linkId', async () => {
+		// The in-memory folder holds a numeric folderId and a folder_linkId, while
+		// the Stela response VO has a string folderId and no folder_linkId — the
+		// mismatch that previously left the folder unmatched and threw on update.
+		const folder = new FolderVO({
+			folderId: 1,
+			folder_linkId: 100,
+			displayName: 'Test Folder',
+		});
+		const updatedFolderVO = new FolderVO({
+			folderId: '1' as unknown as number,
+			updatedDT: '2024-03-03',
+			displayTime: '1990-07',
+		});
+		const mockFolderResponse = {
+			getFolderVOs: jasmine
+				.createSpy('getFolderVOs')
+				.and.returnValue([updatedFolderVO]),
+		};
+
+		(apiService.folder.updateStelaFolder as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+		(apiService.folder.getStelaFolderVOs as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+		folder.update = jasmine.createSpy('update');
+
+		await service.updateItems([folder], ['displayTime']);
+
+		expect(folder.update).toHaveBeenCalledWith(
+			jasmine.objectContaining({
+				updatedDT: '2024-03-03',
+				displayTime: '1990-07',
+			}),
+		);
+	});
+
+	it('should not throw when a response folder matches no in-memory folder', async () => {
+		const folder = new FolderVO({
+			folderId: 1,
+			folder_linkId: 100,
+			displayName: 'Test Folder',
+		});
+		const unmatchedVO = new FolderVO({
+			folderId: '999' as unknown as number,
+			updatedDT: '2024-03-03',
+		});
+		const mockFolderResponse = {
+			getFolderVOs: jasmine
+				.createSpy('getFolderVOs')
+				.and.returnValue([unmatchedVO]),
+		};
+
+		(apiService.folder.updateStelaFolder as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+		(apiService.folder.getStelaFolderVOs as jasmine.Spy).and.returnValue(
+			Promise.resolve(mockFolderResponse),
+		);
+
+		await expectAsync(
+			service.updateItems([folder], ['displayTime']),
+		).toBeResolved();
+	});
+
 	it('should revert property and show a translatable generic error when updateStelaRecord fails', async () => {
 		const messageService = TestBed.inject(MessageService);
 		spyOn(messageService, 'showError');
