@@ -89,14 +89,21 @@
 		</div>
 		<div class="second-row">
 			@if (!showAccess || !item.ShareArchiveVO) {
-				<span>
-					{{ startDisplayTime | prDate: item.TimezoneVO : 'date' }}
-					@if (item.dataStatus > 0) {
-						<span @ngIfFadeInAnimation>{{
-							startDisplayTime | prDate: item.TimezoneVO : 'time'
-						}}</span>
-					}
-				</span>
+				@if (showEdtfDate) {
+					<pr-edtf-date-display
+						[displayTime]="item.displayTime"
+						[showTime]="item.dataStatus > 0"
+					/>
+				} @else {
+					<span>
+						{{ startDisplayTime | prDate: item.TimezoneVO : 'date' }}
+						@if (item.dataStatus > 0) {
+							<span @ngIfFadeInAnimation>{{
+								startDisplayTime | prDate: item.TimezoneVO : 'time'
+							}}</span>
+						}
+					</span>
+				}
 			}
 			@if (showAccess || item.ShareArchiveVO) {
 				<span> Shared by The {{ item.ShareArchiveVO?.fullName }} Archive </span>
@@ -110,15 +117,24 @@
 	}
 	@if (!showAccess) {
 		<div class="date">
-			@if (item.dataStatus > 0) {
-				<div class="date-top" @ngIfFadeInAnimation>
-					{{ startDisplayTime | prDate: item.TimezoneVO : 'date' }}
-				</div>
-			}
-			@if (item.dataStatus > 0) {
-				<div class="date-bottom" @ngIfFadeInAnimation>
-					{{ startDisplayTime | prDate: item.TimezoneVO : 'time' }}
-				</div>
+			@if (showEdtfDate) {
+				@if (item.dataStatus > 0) {
+					<pr-edtf-date-display
+						[displayTime]="item.displayTime"
+						@ngIfFadeInAnimation
+					/>
+				}
+			} @else {
+				@if (item.dataStatus > 0) {
+					<div class="date-top" @ngIfFadeInAnimation>
+						{{ startDisplayTime | prDate: item.TimezoneVO : 'date' }}
+					</div>
+				}
+				@if (item.dataStatus > 0) {
+					<div class="date-bottom" @ngIfFadeInAnimation>
+						{{ startDisplayTime | prDate: item.TimezoneVO : 'time' }}
+					</div>
+				}
 			}
 		</div>
 	}
