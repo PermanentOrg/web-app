@@ -87,3 +87,26 @@ ngb-timepicker {
 		justify-content: center;
 	}
 }
+
+// The tooltip window is appended to the body, outside this component's styles,
+// so its overrides have to be global. Bootstrap caps the window at 200px, which
+// is narrower than a full date and time and leaves the value running past the
+// background.
+.edtf-date-tooltip {
+	.tooltip-inner {
+		max-width: none;
+		padding: $grid-unit * 0.5 $grid-unit * 0.75;
+		text-align: left;
+	}
+
+	.tooltip-line {
+		white-space: nowrap;
+		line-height: 1.5;
+
+		.label {
+			display: inline-block;
+			width: 3.2em;
+			opacity: 0.65;
+		}
+	}
+}

@@ -61,7 +61,8 @@ $file-list-controls-height: 4 * $grid-unit;
 $file-list-thumb-col-width: $file-list-row-height;
 $file-list-type-col-width: 8rem;
 $file-list-access-col-width: $file-list-type-col-width;
-$file-list-date-col-width: 8rem;
+$file-list-date-col-width: 11.5rem;
+$file-list-date-col-width-wide: 14rem;
 $file-list-name-col-width: 30rem;
 $file-list-shared-by-col-width: 20rem;
 $file-list-shared-icon-col-width: 2rem;
@@ -71,6 +72,7 @@ $phone: 450px;
 $tablet: 768px;
 $tablet-horizontal: 900px;
 $desktop: 1200px;
+$desktop-wide: 1440px;
 
 $scrollbar-margin: pxToGrid(20px);
 
@@ -109,6 +111,15 @@ $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 	margin-right: auto;
 }
 
+@function file-list-name-basis($date-col-width) {
+	$ui-width-px: $left-menu-width + $sidebar-width - (4 * $grid-unit);
+	$list-items-width-px: $scrollbar-margin + $file-list-row-height + $grid-unit;
+	$list-items-width-em: $file-list-type-col-width + $date-col-width;
+	@return calc(
+		100vw - #{$ui-width-px + $list-items-width-px} - #{$list-items-width-em}
+	);
+}
+
 @mixin has-breadcrumbs {
 	// padding-top: 34px;
 	display: block;
@@ -120,12 +131,11 @@ $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 	@include after($desktop) {
 		padding-right: 0.5rem;
 		flex-grow: 0;
-		$ui-width-px: $left-menu-width + $sidebar-width - (4 * $grid-unit);
-		$list-items-width-em: $file-list-type-col-width + $file-list-date-col-width;
-		$list-items-width-px: $scrollbar-margin + $file-list-row-height + $grid-unit;
-		flex-basis: calc(
-			100vw - #{$ui-width-px + $list-items-width-px} - #{$list-items-width-em}
-		);
+		flex-basis: file-list-name-basis($file-list-date-col-width);
+	}
+
+	@include after($desktop-wide) {
+		flex-basis: file-list-name-basis($file-list-date-col-width-wide);
 	}
 }
 
@@ -150,6 +160,12 @@ $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 @mixin file-list-col-date {
 	width: $file-list-date-col-width;
 	flex: 0 0 $file-list-date-col-width;
+	padding-right: $grid-unit * 0.25;
+
+	@include after($desktop-wide) {
+		width: $file-list-date-col-width-wide;
+		flex-basis: $file-list-date-col-width-wide;
+	}
 
 	@include until($desktop) {
 		display: none;
