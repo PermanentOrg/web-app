@@ -1,0 +1,49 @@
+<span
+	class="value"
+	[ngbTooltip]="fullValue"
+	[disableTooltip]="!tooltip()"
+	container="body"
+	tooltipClass="pr-tooltip edtf-date-tooltip"
+>
+	<span class="part">
+		@for (segment of dateSegments(); track $index) {
+			<span [class.annotation]="segment.isAnnotation">{{ segment.text }}</span>
+		}
+		@if (hasTime()) {
+			<span class="separator">&bull;</span>
+		}
+		@if (tooltip() && !dateEndSegments().length) {
+			<i class="material-icons more-info">info</i>
+		}
+	</span>
+	@if (dateEndSegments().length) {
+		<span class="part">
+			@for (segment of dateEndSegments(); track $index) {
+				<span [class.annotation]="segment.isAnnotation">{{
+					segment.text
+				}}</span>
+			}
+			@if (tooltip()) {
+				<i class="material-icons more-info">info</i>
+			}
+		</span>
+	}
+	@if (hasTime()) {
+		<span class="part" @ngIfFadeInAnimation>
+			@for (segment of timeSegments(); track $index) {
+				<span [class.annotation]="segment.isAnnotation">{{
+					segment.text
+				}}</span>
+			}
+		</span>
+	}
+</span>
+
+<ng-template #fullValue>
+	@if (tooltip(); as lines) {
+		<div class="tooltip-line">
+			<span class="label">From</span>{{ lines.from }}
+		</div>
+		<div class="tooltip-line"><span class="label">To</span>{{ lines.to }}</div>
+	}
+</ng-template>
