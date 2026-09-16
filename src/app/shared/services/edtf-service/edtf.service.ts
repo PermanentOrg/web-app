@@ -371,7 +371,7 @@ export class EdtfService {
 		return this.padWithX(value, 2);
 	}
 
-	private padWithX(value: string, width: number): string {
+	padWithX(value: string, width: number): string {
 		const v = value ?? '';
 		return v.length >= width ? v : v + 'X'.repeat(width - v.length);
 	}
