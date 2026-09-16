@@ -1,0 +1,37 @@
+@import 'variables';
+
+:host {
+	display: block;
+	min-width: 0;
+}
+
+// Each part is unbreakable and the row wraps between them, so a value too wide
+// for its column moves its end onto a second line instead of being cut off.
+.value {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	column-gap: 0.35em;
+}
+
+.part {
+	white-space: nowrap;
+}
+
+.separator {
+	margin-left: 0.35em;
+}
+
+// Opacity rather than a fixed colour so an annotation reads as lighter both in
+// the Date column and in the already-muted row under the item name.
+.annotation {
+	opacity: 0.65;
+}
+
+.more-info {
+	font-size: 1.1em;
+	line-height: 1;
+	vertical-align: text-bottom;
+	margin-left: 0.4em;
+	opacity: 0.65;
+}
