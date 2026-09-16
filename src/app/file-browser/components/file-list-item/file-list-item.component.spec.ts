@@ -15,6 +15,7 @@ import { EditService } from '@core/services/edit/edit.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { EdtfDateDisplayComponent } from '@shared/components/edtf-date-display/edtf-date-display.component';
 import { FileListItemComponent } from './file-list-item.component';
 
 @Pipe({ name: 'itemTypeIcon' })
@@ -37,6 +38,21 @@ export class MockPrConstantsPipe implements PipeTransform {
 		return `mocked-${value}`;
 	}
 }
+
+const buildTestItem = (): any =>
+	({
+		displayDT: new Date().toISOString(),
+		displayName: 'Test Item',
+		archiveNbr: '123',
+		folder_linkId: '456',
+		type: '',
+		isFolder: false,
+		isRecord: false,
+		dataStatus: 0,
+		isFetching: false,
+		update: jasmine.createSpy(),
+		fetched: Promise.resolve(true),
+	}) as any;
 
 describe('FileListItemComponent', () => {
 	let component: FileListItemComponent;
@@ -78,7 +94,12 @@ describe('FileListItemComponent', () => {
 		mockFeatureFlagService.isEnabled.and.returnValue(false);
 
 		await TestBed.configureTestingModule({
-			imports: [MockItemTypeIconPipe, MockPrDatePipe, MockPrConstantsPipe],
+			imports: [
+				MockItemTypeIconPipe,
+				MockPrDatePipe,
+				MockPrConstantsPipe,
+				EdtfDateDisplayComponent,
+			],
 			declarations: [FileListItemComponent, GetThumbnailPipe],
 			providers: [
 				provideNoopAnimations(),
@@ -150,19 +171,7 @@ describe('FileListItemComponent', () => {
 		component = fixture.componentInstance;
 		editService = TestBed.inject(EditService);
 
-		component.item = {
-			displayDT: new Date().toISOString(),
-			displayName: 'Test Item',
-			archiveNbr: '123',
-			folder_linkId: '456',
-			type: '',
-			isFolder: false,
-			isRecord: false,
-			dataStatus: 0,
-			isFetching: false,
-			update: jasmine.createSpy(),
-			fetched: Promise.resolve(true),
-		} as any;
+		component.item = buildTestItem();
 
 		component.folderView = '' as any;
 		fixture.detectChanges();
@@ -581,12 +590,17 @@ describe('FileListItemComponent', () => {
 			mockFeatureFlagService.isEnabled.and.callFake(
 				(flag: string) => flag === 'edtf-date',
 			);
+			// The flag is read in the constructor, so the fixture has to be
+			// built again for the new value to take.
+			fixture = TestBed.createComponent(FileListItemComponent);
+			component = fixture.componentInstance;
+			component.item = buildTestItem();
+			component.folderView = '' as any;
 		});
 
 		it('should not fall back to displayDT when displayTime is missing', () => {
 			component.item.displayTime = undefined;
 			component.item.displayDT = '2023-01-01T00:00:00.000Z';
-			fixture.detectChanges();
 
 			expect(component.startDisplayTime).toBe('');
 		});
@@ -594,7 +608,6 @@ describe('FileListItemComponent', () => {
 		it('should show nothing when displayTime was explicitly cleared', () => {
 			component.item.displayTime = null;
 			component.item.displayDT = '2023-01-01T00:00:00.000Z';
-			fixture.detectChanges();
 
 			expect(component.startDisplayTime).toBe('');
 		});
@@ -602,9 +615,53 @@ describe('FileListItemComponent', () => {
 		it('should still show the displayTime start date', () => {
 			component.item.displayTime = '2020-06-10/2026-06-15';
 			component.item.displayDT = '2023-01-01T00:00:00.000Z';
-			fixture.detectChanges();
 
 			expect(component.startDisplayTime).toBe('2020-06-10');
+		});
+
+		it('should render the public-archive date from the EDTF value', async () => {
+			component.item.displayTime = '1985-04';
+			component.item.displayDT = '2023-01-01T00:00:00.000Z';
+
+			await component.ngOnInit();
+
+			expect(component.date).toBe('April 1985');
+		});
+
+		it('should leave the public-archive date empty when there is no EDTF value', async () => {
+			component.item.displayTime = undefined;
+			component.item.displayDT = '2023-01-01T00:00:00.000Z';
+
+			await component.ngOnInit();
+
+			expect(component.date).toBe('');
+		});
+
+		it('should never put an unreadable value in the public-archive date', async () => {
+			component.item.displayTime = 'XXXX-XX-XX';
+
+			await component.ngOnInit();
+
+			expect(component.date).toBe('Unknown');
+			expect(component.date).not.toContain('Invalid');
+			expect(component.date).not.toContain('NaN');
+		});
+	});
+
+	describe('with the edtf-date feature flag disabled', () => {
+		it('should keep falling back to displayDT', () => {
+			component.item.displayTime = undefined;
+			component.item.displayDT = '2023-01-01T00:00:00.000Z';
+
+			expect(component.startDisplayTime).toBe('2023-01-01T00:00:00.000Z');
+		});
+
+		it('should not print Invalid Date for an EDTF value it cannot read', async () => {
+			component.item.displayTime = '198X';
+
+			await component.ngOnInit();
+
+			expect(component.date).toBe('');
 		});
 	});
 });
