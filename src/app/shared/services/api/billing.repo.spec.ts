@@ -9,6 +9,7 @@ import { HttpService } from '@shared/services/http/http.service';
 import {
 	BillingRepo,
 	ClaimingPromoResponse,
+	StoragePurchaseIntentResponse,
 } from '@shared/services/api/billing.repo';
 import {
 	provideHttpClient,
@@ -70,5 +71,21 @@ describe('BillingRepo', () => {
 		const response = await promise;
 
 		expect(response).toEqual([mockResponse]);
+	});
+
+	it('creates a storage purchase intent and unwraps the data envelope', async () => {
+		const promise = repo.createStoragePurchaseIntent(10);
+
+		const req = httpMock.expectOne(apiUrl('/v2/storage-purchases'));
+
+		expect(req.request.method).toBe('POST');
+		expect(req.request.body).toEqual({ amountInUSD: 10 });
+
+		req.flush({ data: { clientSecret: 'pi_test_secret_abc' } });
+		const response = await promise;
+
+		expect(response).toEqual(
+			new StoragePurchaseIntentResponse({ clientSecret: 'pi_test_secret_abc' }),
+		);
 	});
 });

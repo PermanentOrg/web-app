@@ -1,0 +1,30 @@
+<div class="dialog-content">
+	<div class="header">
+		<span>Storage Purchase</span>
+		<button class="btn" (click)="onDoneClick()">
+			<i class="material-icons">close</i>
+		</button>
+	</div>
+	<div class="content">
+		@switch (stage) {
+			@case ('loading') {
+				<pr-loading-spinner [isFullScreen]="true"></pr-loading-spinner>
+			}
+			@case ('success') {
+				<p class="success-message">
+					Success! {{ amountInGb }} GB of Permanent storage has been added to
+					your account.
+				</p>
+			}
+			@case ('failure') {
+				<p>
+					We couldn't confirm your payment. If you were charged, please contact
+					support.
+				</p>
+			}
+			@case ('missing') {
+				<p>We couldn't find that purchase.</p>
+			}
+		}
+	</div>
+</div>

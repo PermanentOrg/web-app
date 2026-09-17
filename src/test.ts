@@ -20,7 +20,10 @@ import {
 import { CountUpDirective, CountUpModule } from 'ngx-countup';
 import { installNgMocksMatchers } from './test/ng-mocks-matchers';
 
-window.Stripe = () => ({
+// Cast to `any`: @stripe/stripe-js augments the global `Window.Stripe` type
+// with the real (strict) Stripe.js typings, which this loose test mock
+// intentionally does not implement in full.
+window.Stripe = (() => ({
 	elements: () => ({
 		create: (card, options) => {},
 	}),
@@ -31,7 +34,7 @@ window.Stripe = () => ({
 		},
 		error: false,
 	}),
-});
+})) as any;
 
 // Disable loading of external Google Maps API
 window.doNotLoadGoogleMapsAPI = true;
