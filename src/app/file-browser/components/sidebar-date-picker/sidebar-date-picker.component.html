@@ -77,6 +77,10 @@
 				</button>
 			</div>
 
+			@if (!isEdtfValid()) {
+				<span class="pr-edtf-error">{{ edtfErrorMessage() }}</span>
+			}
+
 			<div class="pr-sidebar-date-picker-footer">
 				<button class="pr-more-options-btn" (click)="onMoreOptions()">
 					<i class="material-icons">tune</i>
@@ -85,7 +89,11 @@
 
 				<div class="pr-sidebar-date-picker-actions">
 					<button class="pr-btn-cancel" (click)="onCancel()">Cancel</button>
-					<button class="pr-btn-save" (click)="onSave()">
+					<button
+						class="pr-btn-save"
+						[disabled]="!isEdtfValid()"
+						(click)="onSave()"
+					>
 						<i class="material-icons">keyboard_return</i>
 					</button>
 				</div>

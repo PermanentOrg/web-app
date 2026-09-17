@@ -147,6 +147,12 @@
 		}
 	}
 
+	.pr-edtf-error {
+		@include edtf-error-message;
+		display: block;
+		padding: 4px 16px;
+	}
+
 	.pr-sidebar-date-picker-footer {
 		@include panel-footer;
 		padding: 12px 16px;
@@ -208,6 +214,11 @@
 
 		&:hover {
 			background: $PR-blue-800;
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
 		}
 
 		.material-icons {
