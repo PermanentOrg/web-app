@@ -358,6 +358,26 @@ export class DataService {
 		itemResolvers.clear();
 	}
 
+	/**
+	 * The record endpoint makes no guarantee that it returns one record per
+	 * requested id, or that it returns them in the order they were requested -
+	 * records the caller cannot see, or that have no files yet, are simply left
+	 * out of the response. Matching on identity rather than on array position
+	 * keeps a short response from writing one record's data onto another, and
+	 * keeps a record that was left out from being marked as fully fetched.
+	 */
+	private findFetchedRecord(
+		record: RecordVO,
+		fetchedRecords: Array<any | RecordVO>,
+	): RecordVO | undefined {
+		return fetchedRecords?.find(
+			(fetchedRecord) =>
+				(record.recordId &&
+					Number(fetchedRecord.recordId) === Number(record.recordId)) ||
+				(record.archiveNbr && fetchedRecord.archiveNbr === record.archiveNbr),
+		);
+	}
+
 	public async fetchFullItems(items: Array<ItemVO>, withChildren?: boolean) {
 		this.debug('fetchFullItems %d items requested', items.length);
 
@@ -416,10 +436,15 @@ export class DataService {
 					fullFolders = folderResponse.getFolderVOs();
 				}
 
-				for (let i = 0; i < records.length; i += 1) {
-					records[i].update(fullRecords[i]);
-					records[i].dataStatus = DataStatus.Full;
-					this.tags.checkTagsOnItem(records[i]);
+				for (const record of records) {
+					const fullRecord = this.findFetchedRecord(record, fullRecords);
+					if (!fullRecord) {
+						continue;
+					}
+
+					record.update(fullRecord);
+					record.dataStatus = DataStatus.Full;
+					this.tags.checkTagsOnItem(record);
 				}
 
 				for (let i = 0; i < folders.length; i += 1) {

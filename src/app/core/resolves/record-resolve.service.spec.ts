@@ -80,6 +80,23 @@ describe('RecordResolveService', () => {
 		expect(spy).toHaveBeenCalledWith('1234-abcd');
 	});
 
+	it('should fail rather than return a lean record when the fetch fails', async () => {
+		const record = new RecordVO(
+			{ displayName: 'Test Record', archiveNbr: '1234-abcd' },
+			{ dataStatus: DataStatus.Lean },
+		);
+		spyOn(data, 'getItemByArchiveNbr').and.returnValue(record);
+		spyOn(data, 'fetchFullItems').and.resolveTo(undefined);
+		let displayedErrorMessage: string;
+		spyOn(message, 'showError').and.callFake((data: MessageDisplayOptions) => {
+			displayedErrorMessage = data.message;
+		});
+
+		await expectAsync(service.resolve(route.snapshot, null)).toBeRejected();
+
+		expect(displayedErrorMessage).toBe('There was a problem loading this item');
+	});
+
 	it('should call record/get if a record is not cached', async () => {
 		spyOn(data, 'getItemByArchiveNbr').and.returnValue(undefined);
 		const apiSpy = spyOn(api.record, 'get').and.resolveTo(

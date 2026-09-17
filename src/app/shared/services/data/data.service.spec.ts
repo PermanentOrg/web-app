@@ -5,7 +5,10 @@ import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, RecordVO } from '@root/app/models';
-import { FolderResponse } from '@shared/services/api/index.repo';
+import {
+	FolderResponse,
+	RecordResponse,
+} from '@shared/services/api/index.repo';
 import { of } from 'rxjs';
 import { HttpTestingController } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
@@ -226,6 +229,46 @@ describe('DataService', () => {
 		}, 3000);
 	});
 	/* eslint-enable jasmine/no-disabled-tests */
+
+	it('should only apply full data to the records it was actually returned for', async () => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const omittedRecord = new RecordVO(
+			{ recordId: 1, archiveNbr: 'aaaa-0001', displayName: 'omitted record' },
+			{ dataStatus: DataStatus.Lean },
+		);
+		const returnedRecord = new RecordVO(
+			{ recordId: 2, archiveNbr: 'aaaa-0002', displayName: 'returned record' },
+			{ dataStatus: DataStatus.Lean },
+		);
+		spyOn(api.record, 'get').and.resolveTo(
+			new RecordResponse({
+				isSuccessful: true,
+				Results: [
+					{
+						data: [
+							{
+								RecordVO: {
+									recordId: '2',
+									archiveNbr: 'aaaa-0002',
+									displayName: 'returned record with files',
+									FileVOs: [{ fileId: 20, fileURL: 'https://example.com' }],
+								},
+							},
+						],
+					},
+				],
+			}),
+		);
+
+		await service.fetchFullItems([omittedRecord, returnedRecord]);
+
+		expect(omittedRecord.displayName).toBe('omitted record');
+		expect(omittedRecord.FileVOs).toBeUndefined();
+		expect(omittedRecord.dataStatus).toBe(DataStatus.Lean);
+		expect(returnedRecord.displayName).toBe('returned record with files');
+		expect(returnedRecord.dataStatus).toBe(DataStatus.Full);
+	});
 
 	it('should handle an empty array when fetching full data', async () => {
 		const service = TestBed.inject(DataService);

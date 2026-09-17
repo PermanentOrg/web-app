@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { gsap } from 'gsap';
 
 import { RecordVO } from '@root/app/models';
@@ -15,24 +15,35 @@ const FADE_IN_DURATION = 0.3;
 export class VideoComponent implements OnInit {
 	@Input() item: RecordVO;
 
-	private videoWrapperElem: Element;
 	private videoElem: Element;
-	public videoSrc: string;
-	public isProcessing: boolean;
+	private hasVideoStartedLoading = false;
 
-	constructor(
-		private elementRef: ElementRef,
-		private renderer: Renderer2,
-	) {}
+	constructor(private elementRef: ElementRef) {}
+
+	/**
+	 * The record is updated in place once its files arrive, so its object
+	 * reference never changes and ngOnChanges never fires. Reading the file off
+	 * the record on every change detection run is what lets the player replace
+	 * the placeholder when the files show up after the first render.
+	 */
+	public get videoSrc(): string | undefined {
+		return GetAccessFile(this.item)?.fileURL;
+	}
+
+	public get isProcessing(): boolean {
+		return !this.videoSrc;
+	}
+
+	public get isLoading(): boolean {
+		return !this.isProcessing && !this.hasVideoStartedLoading;
+	}
 
 	ngOnInit() {
 		this.videoElem = this.elementRef.nativeElement.querySelector('video');
-		this.videoWrapperElem =
-			this.elementRef.nativeElement.querySelector('.pr-video-wrapper');
 
-		this.videoElem.addEventListener('loadstart', (event) => {
+		this.videoElem.addEventListener('loadstart', () => {
 			setTimeout(() => {
-				this.renderer.removeClass(this.videoWrapperElem, 'loading');
+				this.hasVideoStartedLoading = true;
 				gsap.from(this.videoElem, {
 					duration: FADE_IN_DURATION,
 					opacity: 0,
@@ -40,15 +51,5 @@ export class VideoComponent implements OnInit {
 				});
 			}, 250);
 		});
-
-		const accessFile = GetAccessFile(this.item);
-
-		if (accessFile) {
-			this.videoSrc = accessFile.fileURL;
-			this.isProcessing = false;
-		} else {
-			this.renderer.removeClass(this.videoWrapperElem, 'loading');
-			this.isProcessing = true;
-		}
 	}
 }

@@ -29,7 +29,18 @@ export class RecordResolveService {
 			if (localItem && localItem.dataStatus === DataStatus.Full) {
 				return await Promise.resolve(localItem as RecordVO);
 			} else if (localItem) {
-				await this.dataService.fetchFullItems([localItem]);
+				const didFetchSucceed = await this.dataService.fetchFullItems([
+					localItem,
+				]);
+				if (!didFetchSucceed) {
+					this.message.showError({
+						message: 'There was a problem loading this item',
+						translate: false,
+					});
+					throw new Error(
+						`Failed to fetch record ${route.params.recArchiveNbr}`,
+					);
+				}
 				return localItem as RecordVO;
 			} else {
 				const response = await this.api.record.get([
