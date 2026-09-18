@@ -3,7 +3,7 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
 import {
-	getAccessRoleFromArchiveMembershipRole,
+	getOptionalAccessRoleField,
 	type ArchiveMembershipRoleType,
 } from '@models/access-role';
 import { ShareLink } from '@root/app/share-links/models/share-link';
@@ -74,8 +74,10 @@ interface StelaFolder {
 	imageRatio: number;
 	paths: {
 		names: string[];
+		folderLinkIds: string[];
+		archiveNumbers: Array<string | null>;
 	};
-	accessRole: ArchiveMembershipRoleType;
+	accessRole?: ArchiveMembershipRoleType;
 	publicAt: string;
 	sort: string;
 	thumbnailUrls?: {
@@ -100,10 +102,7 @@ type StelaFolderChild = StelaFolder | StelaRecord;
 const isStelaRecord = (child: StelaFolderChild): child is StelaRecord =>
 	child && 'recordId' in child;
 
-// Returns undefined rather than NaN for a missing id, so callers can tell
-// "not provided" apart from a real link id. Accepts numbers as well as strings
-// because different Stela endpoints disagree on which one they send.
-const toFolderLinkId = (
+export const toFolderLinkId = (
 	folderLinkId: string | number | null | undefined,
 ): number | undefined => {
 	if (typeof folderLinkId === 'number') {
@@ -120,6 +119,40 @@ const toFolderLinkId = (
 	return Number.isFinite(parsedFolderLinkId) ? parsedFolderLinkId : undefined;
 };
 
+interface FolderBreadcrumbPaths {
+	pathAsText: string[];
+	pathAsArchiveNbr: string[];
+	pathAsFolder_linkId: number[];
+}
+
+// The breadcrumb components read the three path arrays positionally, so an
+// ancestor without an archive number or a link id would build a URL nothing can
+// navigate to. Dropping it from all three arrays keeps them aligned.
+const convertStelaPathsToBreadcrumbPaths = (
+	paths: StelaFolder['paths'] | undefined,
+): FolderBreadcrumbPaths => {
+	const breadcrumbPaths: FolderBreadcrumbPaths = {
+		pathAsText: [],
+		pathAsArchiveNbr: [],
+		pathAsFolder_linkId: [],
+	};
+
+	(paths?.names ?? []).forEach((name, pathIndex) => {
+		const archiveNbr = paths.archiveNumbers?.[pathIndex];
+		const folderLinkId = toFolderLinkId(paths.folderLinkIds?.[pathIndex]);
+
+		if (!archiveNbr || folderLinkId === undefined) {
+			return;
+		}
+
+		breadcrumbPaths.pathAsText.push(name);
+		breadcrumbPaths.pathAsArchiveNbr.push(archiveNbr);
+		breadcrumbPaths.pathAsFolder_linkId.push(folderLinkId);
+	});
+
+	return breadcrumbPaths;
+};
+
 const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 	stelaFolder.children ??= [];
 	const childFolderVOs = stelaFolder.children
@@ -128,8 +161,10 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 	const childRecordVOs = stelaFolder.children
 		.filter(isStelaRecord)
 		.map(convertStelaRecordToRecordVO);
+	const { accessRole: stelaAccessRole, ...stelaFolderWithoutAccessRole } =
+		stelaFolder;
 	return new FolderVO({
-		...stelaFolder,
+		...stelaFolderWithoutAccessRole,
 		folderId: stelaFolder.folderId,
 		archiveId: stelaFolder.archive?.id,
 		archiveNbr: stelaFolder.archiveNumber,
@@ -156,7 +191,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		view: stelaFolder.view,
 		imageRatio: stelaFolder.imageRatio,
 		type: stelaFolder.type,
-		accessRole: getAccessRoleFromArchiveMembershipRole(stelaFolder.accessRole),
+		...getOptionalAccessRoleField(stelaAccessRole),
 		thumbStatus: stelaFolder.status,
 		thumbURL200: stelaFolder.thumbnailUrls?.['200'],
 		thumbURL500: stelaFolder.thumbnailUrls?.['500'],
@@ -168,7 +203,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		status: stelaFolder.status,
 		publicDT: stelaFolder.publicAt,
 		parentFolderId: stelaFolder.parentFolder?.id,
-		pathAsText: stelaFolder.paths?.names,
+		...convertStelaPathsToBreadcrumbPaths(stelaFolder.paths),
 		ParentFolderVOs: [new FolderVO({ folderId: stelaFolder.parentFolder?.id })],
 		ChildFolderVOs: childFolderVOs,
 		RecordVOs: childRecordVOs,
@@ -394,6 +429,27 @@ export class FolderRepo extends BaseRepo {
 			Results: simulatedV1FolderResponseResults,
 		});
 		return folderResponse;
+	}
+
+	/**
+	 * Stela can only look a folder up by numeric folderId, but our routes and
+	 * breadcrumbs address folders by archiveNbr + folder_linkId, so the id is
+	 * resolved through the v1 endpoint first. Separate from getWithChildren
+	 * because that v1 lookup needs an auth token a share-token visitor lacks.
+	 */
+	public async getWithChildrenByIdentifier(
+		folderVO: FolderVO,
+	): Promise<FolderResponse> {
+		if (folderVO.folderId) {
+			return await this.getWithChildren([folderVO]);
+		}
+
+		const identityResponse = await this.get([folderVO]);
+		if (!identityResponse.isSuccessful) {
+			throw identityResponse;
+		}
+
+		return await this.getWithChildren([identityResponse.getFolderVO()]);
 	}
 
 	public navigateLean(folderVO: FolderVO): Observable<FolderResponse> {
