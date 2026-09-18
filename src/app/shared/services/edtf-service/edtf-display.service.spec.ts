@@ -49,6 +49,7 @@ describe('EdtfDisplayService', () => {
 			[7, '156X-12-25', 'Dec. 25, 156X', ''],
 			[8, '1900-01-01', 'Jan. 1, 1900', ''],
 			[9, '1964/2008', '1964 — 2008', ''],
+			[10, '198X?', '198X ?', ''],
 			[11, '1984%', '1984 %', ''],
 			[12, '1984?', '1984 ?', ''],
 			[13, '1984~', '1984 ~', ''],
@@ -189,12 +190,6 @@ describe('EdtfDisplayService', () => {
 	describe('values it cannot parse', () => {
 		it('should show the stored string rather than an error', () => {
 			expect(dateTextOf('not-a-date')).toBe('not-a-date');
-		});
-
-		it('should show a qualifier on unspecified digits verbatim', () => {
-			// Not a supported value: the edtf grammar rejects a qualifier sitting
-			// on X digits, so it falls through to the stored string.
-			expect(dateTextOf('198X?')).toBe('198X?');
 		});
 
 		it('should render nothing for an absent value', () => {
