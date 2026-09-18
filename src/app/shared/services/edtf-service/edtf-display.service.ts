@@ -118,7 +118,10 @@ export class EdtfDisplayService {
 		}
 
 		const yearDisplay = this.edtfService.padWithX(yearValue, 4);
-		const monthIndex = this.toMonthIndex(monthValue);
+		const monthDisplay = hasMonth
+			? this.edtfService.padMonthOrDay(monthValue)
+			: 'XX';
+		const monthIndex = this.toMonthIndex(monthDisplay);
 
 		if (monthIndex !== NO_MONTH_INDEX && hasDay) {
 			const monthName = options.abbreviateMonthWithDay
@@ -138,10 +141,7 @@ export class EdtfDisplayService {
 			return yearDisplay;
 		}
 
-		const parts = [
-			yearDisplay,
-			hasMonth ? this.edtfService.padWithX(monthValue, 2) : 'XX',
-		];
+		const parts = [yearDisplay, monthDisplay];
 		if (hasDay) {
 			parts.push(dayValue.padStart(2, '0'));
 		}
