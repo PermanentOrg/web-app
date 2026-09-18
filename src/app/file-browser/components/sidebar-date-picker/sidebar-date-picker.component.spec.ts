@@ -222,7 +222,9 @@ describe('SidebarDatePickerComponent', () => {
 			expect(toValue.textContent.trim()).toBe('June 1990');
 		});
 
-		it('should show a browser-default timezone label when time is entered', () => {
+		it('should show no timezone label when the item stores no zone', () => {
+			// The viewer's own zone used to be shown here, which said nothing
+			// about when the item was actually recorded.
 			host.displayTime = {
 				date: { year: '1985', month: '05', day: '20' },
 				time: {
@@ -234,7 +236,7 @@ describe('SidebarDatePickerComponent', () => {
 			};
 			fixture.detectChanges();
 
-			expect(component.startTimezone()).not.toBe('');
+			expect(component.startTimezone()).toBe('');
 		});
 
 		it('should not show a timezone label when no time is entered', () => {
@@ -842,6 +844,114 @@ describe('SidebarDatePickerComponent', () => {
 			expect(rows[0].textContent).toContain('April 12, 1985');
 			expect(rows[1].textContent).toContain('To');
 			expect(rows[1].textContent).toContain('Unknown');
+		});
+	});
+
+	describe('timezone', () => {
+		const displayTimeIn = (
+			timezoneId?: string,
+			timezoneOffset?: string,
+		): DateTimeModel => ({
+			date: { year: '1985', month: '05', day: '12' },
+			time: {
+				hours: '12',
+				minutes: '45',
+				seconds: '00',
+				format: 'pm',
+				timezoneId,
+				timezoneOffset,
+			},
+		});
+
+		it('should take the zone from the value it is given', () => {
+			host.displayTime = displayTimeIn('Europe/Bucharest');
+			fixture.detectChanges();
+
+			expect(component._selectedTimezoneId()).toBe('Europe/Bucharest');
+		});
+
+		it('should stay empty when the value carries no zone', () => {
+			host.displayTime = displayTimeIn();
+			fixture.detectChanges();
+
+			expect(component._selectedTimezoneId()).toBeNull();
+		});
+
+		it('should stay empty for an unusable stored value', () => {
+			host.displayTime = displayTimeIn('Not/AZone');
+			fixture.detectChanges();
+
+			expect(component._selectedTimezoneId()).toBeNull();
+		});
+
+		it('should clear the zone along with the date and time', () => {
+			host.displayTime = displayTimeIn('Europe/Bucharest');
+			fixture.detectChanges();
+			component.open();
+			component.clearAll();
+
+			expect(component._selectedTimezoneId()).toBeNull();
+		});
+
+		it('should show the offset that zone was on at the item date', () => {
+			host.displayTime = displayTimeIn('Europe/Bucharest');
+			fixture.detectChanges();
+
+			expect(component.startTimezone()).toBe('GMT+03:00');
+		});
+
+		it('should hand the chosen zone to the save handler', () => {
+			host.displayTime = displayTimeIn('Europe/Bucharest');
+			fixture.detectChanges();
+			component.open();
+			component.onTimezoneChange('Asia/Kathmandu');
+			component.onSave();
+
+			expect(host.savedValue.time.timezoneId).toBe('Asia/Kathmandu');
+		});
+
+		it('should carry the zone through to the modal handoff', () => {
+			host.displayTime = displayTimeIn('Europe/Bucharest');
+			fixture.detectChanges();
+			component.onMoreOptions();
+
+			expect(host.moreOptionsData.time.timezoneId).toBe('Europe/Bucharest');
+		});
+
+		it('should drop the parsed offset when the zone is cleared', () => {
+			// Without this the offset survives the clear, the same zone is
+			// inferred straight back on the next read, and the clear is undone.
+			host.displayTime = displayTimeIn('Europe/Bucharest', '+03:00');
+			fixture.detectChanges();
+			component.open();
+
+			expect(component._time().timezoneOffset).toBe('+03:00');
+
+			component.onTimezoneChange(null);
+
+			expect(component._time().timezoneOffset).toBeUndefined();
+			expect(component._endTime().timezoneOffset).toBeUndefined();
+		});
+
+		it('should save a cleared zone with no offset and no identifier', () => {
+			host.displayTime = displayTimeIn('Europe/Bucharest', '+03:00');
+			fixture.detectChanges();
+			component.open();
+			component.onTimezoneChange(null);
+			component.onSave();
+
+			expect(host.savedValue.time.timezoneId).toBeUndefined();
+			expect(host.savedValue.time.timezoneOffset).toBeUndefined();
+		});
+
+		it('should keep the parsed offset when a real zone is chosen', () => {
+			host.displayTime = displayTimeIn('Europe/Bucharest', '+03:00');
+			fixture.detectChanges();
+			component.open();
+
+			component.onTimezoneChange('Asia/Kathmandu');
+
+			expect(component._time().timezoneOffset).toBe('+03:00');
 		});
 	});
 });

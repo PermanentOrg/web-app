@@ -131,6 +131,10 @@
 		padding: 16px;
 	}
 
+	.pr-timezone-field {
+		display: block;
+	}
+
 	.pr-clear-btn {
 		@include clear-btn;
 		margin-top: 4px;
