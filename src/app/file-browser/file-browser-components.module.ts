@@ -16,6 +16,7 @@ import {
 	FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
 import { faFileArchive } from '@fortawesome/free-solid-svg-icons';
+import { EdtfDateDisplayComponent } from '@shared/components/edtf-date-display/edtf-date-display.component';
 import { FolderViewComponent } from './components/folder-view/folder-view.component';
 import { PublishComponent } from './components/publish/publish.component';
 import { FolderDescriptionComponent } from './components/folder-description/folder-description.component';
@@ -40,6 +41,7 @@ import { SidebarLocationComponent } from './components/sidebar-location/sidebar-
 		FontAwesomeModule,
 		SidebarDatePickerComponent,
 		SidebarLocationComponent,
+		EdtfDateDisplayComponent,
 	],
 	exports: [
 		FileListComponent,

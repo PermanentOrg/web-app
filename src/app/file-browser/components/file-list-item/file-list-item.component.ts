@@ -34,6 +34,7 @@ import {
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { EdtfService } from '@shared/services/edtf-service/edtf.service';
+import { EdtfDisplayService } from '@shared/services/edtf-service/edtf-display.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import {
 	RecordResponse,
@@ -206,6 +207,7 @@ export class FileListItemComponent
 	public canEdit = true;
 	public isZip = false;
 	public date: string = '';
+	public showEdtfDate = false;
 	public isUnlistedShare = false;
 	public recordThumbnailUrl: string | undefined;
 
@@ -251,29 +253,39 @@ export class FileListItemComponent
 		@Inject(DOCUMENT) private document: Document,
 		private shareLinksService: ShareLinksService,
 		private edtfService: EdtfService,
+		private edtfDisplayService: EdtfDisplayService,
 		private featureFlagService: FeatureFlagService,
-	) {}
+	) {
+		this.showEdtfDate = this.featureFlagService.isEnabled('edtf-date');
+	}
 
 	get startDisplayTime(): string {
 		const edtfStartDate = this.edtfService.getEdtfIntervalStartDate(
 			this.item.displayTime,
 		);
 
-		// Once the edtf-date UI ships, displayTime is authoritative (a null
-		// value means the user cleared the date, so nothing is shown). Until
-		// then, items may only have displayDT populated, so keep the fallback.
-		if (this.featureFlagService.isEnabled('edtf-date')) {
+		if (this.showEdtfDate) {
 			return edtfStartDate;
 		}
 
 		return edtfStartDate || this.item.displayDT;
 	}
 
+	private getPublicArchiveDate(): string {
+		if (this.showEdtfDate) {
+			return this.edtfDisplayService.formatToPlainText(this.item.displayTime);
+		}
+
+		const legacyDate = new Date(this.startDisplayTime);
+		return Number.isNaN(legacyDate.getTime())
+			? ''
+			: getFormattedDate(legacyDate);
+	}
+
 	async ngOnInit() {
 		this.isInSharePreview =
 			this.router.routerState.snapshot.url.includes('/share/');
-		const date = new Date(this.startDisplayTime);
-		this.date = getFormattedDate(date);
+		this.date = this.getPublicArchiveDate();
 
 		// Only a share preview can be an unlisted share: the token that decides it
 		// is set by SharePreviewComponent and cleared when it is destroyed, so
