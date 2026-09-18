@@ -1,0 +1,11 @@
+<pr-dialog-frame
+	heading="Choose GPS Coordinates"
+	[confirmDisabled]="!isValid()"
+	(cancelled)="cancel()"
+	(confirmed)="save()"
+>
+	<pr-coordinate-map-input
+		[(coordinates)]="coordinates"
+		(validityChange)="onValidityChange($event)"
+	/>
+</pr-dialog-frame>

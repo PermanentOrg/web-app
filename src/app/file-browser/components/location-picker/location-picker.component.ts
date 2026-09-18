@@ -21,12 +21,11 @@ import { MessageService } from '@shared/services/message/message.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { ProfileItemVOData } from '@models/profile-item-vo';
 import { ProfileService } from '@shared/services/profile/profile.service';
-
-const DEFAULT_ZOOM = 12;
-const DEFAULT_CENTER: google.maps.LatLngLiteral = {
-	lat: 39.8333333,
-	lng: -98.585522,
-};
+import {
+	CONTINENTAL_US_CENTER,
+	LOCATED_ZOOM,
+	WHOLE_COUNTRY_ZOOM,
+} from '@shared/utilities/map-view';
 
 @Component({
 	selector: 'pr-location-picker',
@@ -41,15 +40,15 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 	@Input() archive: ArchiveVO;
 
 	mapOptions: google.maps.MapOptions = {
-		zoom: DEFAULT_ZOOM,
+		zoom: LOCATED_ZOOM,
 		streetViewControl: false,
 		fullscreenControl: false,
 		mapTypeControl: false,
 		clickableIcons: false,
 	};
 
-	zoom = 4;
-	center: google.maps.LatLng = new google.maps.LatLng(DEFAULT_CENTER);
+	zoom = WHOLE_COUNTRY_ZOOM;
+	center: google.maps.LatLng = new google.maps.LatLng(CONTINENTAL_US_CENTER);
 
 	height: string;
 	width: string;
