@@ -5,7 +5,10 @@ import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, FolderVOData, RecordVO } from '@root/app/models';
-import { FolderResponse } from '@shared/services/api/index.repo';
+import {
+	FolderResponse,
+	RecordResponse,
+} from '@shared/services/api/index.repo';
 import { of } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
 
@@ -232,6 +235,104 @@ describe('DataService', () => {
 		service.setCurrentFolder(currentFolder);
 
 		await service.fetchFullItems([]);
+	});
+
+	describe('fetchFullItems', () => {
+		const buildRecordResponse = (recordsData: object[]) =>
+			new RecordResponse({
+				isSuccessful: true,
+				Results: recordsData.map((recordData) => ({
+					data: [{ RecordVO: recordData }],
+				})),
+			});
+
+		const buildFolderVOsResponse = (foldersData: FolderVOData[]) =>
+			new FolderResponse({
+				isSuccessful: true,
+				Results: foldersData.map((folderData) => ({
+					data: [{ FolderVO: folderData }],
+				})),
+			});
+
+		let service: DataService;
+		let recordGet: jasmine.Spy;
+		let getStelaFolderVOs: jasmine.Spy;
+
+		beforeEach(() => {
+			service = TestBed.inject(DataService);
+			const api = TestBed.inject(ApiService);
+			recordGet = spyOn(api.record, 'get');
+			getStelaFolderVOs = spyOn(api.folder, 'getStelaFolderVOs');
+			service.setCurrentFolder(testFolder);
+		});
+
+		it('should match records to the response by recordId, not by position', async () => {
+			const firstRecord = new RecordVO({ recordId: '11', archiveNbr: 'a' });
+			const secondRecord = new RecordVO({ recordId: '22', archiveNbr: 'b' });
+			recordGet.and.resolveTo(
+				buildRecordResponse([
+					{ recordId: '22', displayName: 'second' },
+					{ recordId: '11', displayName: 'first' },
+				]),
+			);
+
+			await service.fetchFullItems([firstRecord, secondRecord]);
+
+			expect(firstRecord.displayName).toBe('first');
+			expect(secondRecord.displayName).toBe('second');
+		});
+
+		it('should leave a record the response skipped below Full so it can be fetched again', async () => {
+			const returnedRecord = new RecordVO({ recordId: '11', archiveNbr: 'a' });
+			const skippedRecord = new RecordVO({
+				recordId: '22',
+				archiveNbr: 'b',
+				displayName: 'lean name',
+			});
+			recordGet.and.resolveTo(
+				buildRecordResponse([{ recordId: '11', displayName: 'first' }]),
+			);
+
+			await service.fetchFullItems([returnedRecord, skippedRecord]);
+
+			expect(returnedRecord.dataStatus).toBe(DataStatus.Full);
+			expect(skippedRecord.dataStatus).toBeLessThan(DataStatus.Full);
+			expect(skippedRecord.displayName).toBe('lean name');
+		});
+
+		it('should match folders to the response by folderId, not by position', async () => {
+			const folderWithoutId = new FolderVO({ folder_linkId: 1 });
+			const folderWithId = new FolderVO({ folderId: '33', folder_linkId: 2 });
+			getStelaFolderVOs.and.resolveTo(
+				buildFolderVOsResponse([{ folderId: '33', displayName: 'real name' }]),
+			);
+
+			await service.fetchFullItems([folderWithoutId, folderWithId]);
+
+			expect(folderWithId.displayName).toBe('real name');
+			expect(folderWithoutId.displayName).toBeUndefined();
+			expect(folderWithoutId.dataStatus).toBeLessThan(DataStatus.Full);
+		});
+
+		it('should clear isFetching once the items have been fetched', async () => {
+			const record = new RecordVO({ recordId: '11', archiveNbr: 'a' });
+			recordGet.and.resolveTo(
+				buildRecordResponse([{ recordId: '11', displayName: 'first' }]),
+			);
+
+			await service.fetchFullItems([record]);
+
+			expect(record.isFetching).toBeFalse();
+		});
+
+		it('should clear isFetching when the request fails', async () => {
+			const record = new RecordVO({ recordId: '11', archiveNbr: 'a' });
+			recordGet.and.rejectWith(new Error('nope'));
+
+			await service.fetchFullItems([record]);
+
+			expect(record.isFetching).toBeFalse();
+		});
 	});
 
 	describe('refreshCurrentFolder', () => {

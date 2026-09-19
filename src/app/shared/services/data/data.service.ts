@@ -40,6 +40,22 @@ const isSameId = (a: ItemId, b: ItemId): boolean => {
 	return String(a) === String(b);
 };
 
+const indexItemsById = <T>(
+	items: T[] = [],
+	getId: (item: T) => ItemId,
+): Map<string, T> => {
+	const itemsById = new Map<string, T>();
+
+	items.forEach((item) => {
+		const id = getId(item);
+		if (id !== null && id !== undefined) {
+			itemsById.set(String(id), item);
+		}
+	});
+
+	return itemsById;
+};
+
 export type SelectedItemsSet = Set<ItemVO>;
 
 export interface SelectKeyEvent {
@@ -375,6 +391,7 @@ export class DataService {
 				itemResolves.push(resolve);
 				itemRejects.push(reject);
 			});
+			item.fetched.catch(noop);
 
 			if (item.isRecord) {
 				records.push(item);
@@ -418,23 +435,42 @@ export class DataService {
 					fullFolders = folderResponse.getFolderVOs();
 				}
 
-				for (let i = 0; i < records.length; i += 1) {
-					records[i].update(fullRecords[i]);
-					records[i].dataStatus = DataStatus.Full;
-					this.tags.checkTagsOnItem(records[i]);
-				}
+				const fullRecordsById = indexItemsById(
+					fullRecords,
+					(fullRecord) => fullRecord.recordId,
+				);
+				const fullFoldersById = indexItemsById(
+					fullFolders,
+					(fullFolder) => fullFolder.folderId,
+				);
 
-				for (let i = 0; i < folders.length; i += 1) {
-					const folder = folders[i] as FolderVO;
+				records.forEach((record: RecordVO) => {
+					const fullRecord = fullRecordsById.get(String(record.recordId));
+					if (!fullRecord) {
+						return;
+					}
+
+					record.update(fullRecord);
+					record.dataStatus = DataStatus.Full;
+					this.tags.checkTagsOnItem(record);
+				});
+
+				folders.forEach((folder: FolderVO) => {
+					const fullFolder = fullFoldersById.get(String(folder.folderId));
+					if (!fullFolder) {
+						return;
+					}
+
 					folder.update(
-						fullFolders[i] as FolderVOData,
-						folders[i] === this.currentFolder,
+						fullFolder as FolderVOData,
+						folder === this.currentFolder,
 					);
 					folder.dataStatus = DataStatus.Full;
-					this.tags.checkTagsOnItem(folders[i]);
-				}
+					this.tags.checkTagsOnItem(folder);
+				});
 
 				itemResolves.forEach((resolve, index) => {
+					items[index].isFetching = false;
 					items[index].fetched = null;
 					this.byArchiveNbr[items[index].archiveNbr] = items[index];
 					resolve();
@@ -446,6 +482,7 @@ export class DataService {
 			})
 			.catch(() => {
 				itemRejects.forEach((reject, index) => {
+					items[index].isFetching = false;
 					items[index].fetched = null;
 					reject();
 				});
