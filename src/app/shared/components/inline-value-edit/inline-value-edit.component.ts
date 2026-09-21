@@ -39,6 +39,9 @@ export type InlineValueEditType =
 	| 'external';
 
 type ValueType = string | number;
+
+let inlineValueEditInstanceCount = 0;
+
 @Component({
 	selector: 'pr-inline-value-edit',
 	templateUrl: './inline-value-edit.component.html',
@@ -80,6 +83,8 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 	@ViewChild('input') inputElementRef: ElementRef;
 	@ViewChild(NgModel) ngModel: NgModel;
 	@ViewChild('datePicker') datePicker: NgbDatepicker;
+
+	readonly inputElementId = `inline-value-edit-${(inlineValueEditInstanceCount += 1)}`;
 
 	isEditing = false;
 	editValue: ValueType;
