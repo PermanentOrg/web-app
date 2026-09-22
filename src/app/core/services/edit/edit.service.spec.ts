@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 import { EditService } from '@core/services/edit/edit.service';
@@ -8,6 +9,7 @@ import { ArchiveVO, FolderVO, RecordVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { RecordRepo } from '@shared/services/api/record.repo';
 import { FolderRepo } from '@shared/services/api/folder.repo';
+import { LocnRepo } from '@shared/services/api/locn.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { DataService } from '@shared/services/data/data.service';
 import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
@@ -18,6 +20,7 @@ import { SharingComponent } from '@fileBrowser/components/sharing/sharing.compon
 import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 import { UncertainLocationPickerComponent } from '@fileBrowser/components/uncertain-location-picker/uncertain-location-picker.component';
+import { CoordinatePickerComponent } from '@fileBrowser/components/coordinate-picker/coordinate-picker.component';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
@@ -639,6 +642,99 @@ describe('EditService', () => {
 					height: 'auto',
 				},
 			);
+		});
+	});
+
+	describe('editing coordinates', () => {
+		const LISBON = { latitude: 38.70786, longitude: -9.400139 };
+		const SAVED_LOCATION = { ...LISBON, locnId: 42 };
+
+		let record: RecordVO;
+		let messageService: MessageService;
+
+		const closeWith = (result: unknown): void => {
+			dialogService.open.and.returnValue({ closed: of(result) } as any);
+		};
+
+		beforeEach(() => {
+			record = new RecordVO({ recordId: 123, LocnVO: { city: 'Lisbon' } });
+			messageService = TestBed.inject(MessageService);
+			spyOn(messageService, 'showError');
+			spyOn(service, 'updateItems').and.resolveTo();
+			apiService.locn = {
+				create: jasmine
+					.createSpy('create')
+					.and.resolveTo({ getLocnVO: () => SAVED_LOCATION }),
+			} as unknown as LocnRepo;
+		});
+
+		it('should open the coordinate picker on the item location', async () => {
+			closeWith(undefined);
+
+			await service.openCoordinateDialog(record);
+
+			expect(dialogService.open).toHaveBeenCalledOnceWith(
+				CoordinatePickerComponent,
+				{
+					data: { location: record.LocnVO },
+					panelClass: 'dialog',
+					height: 'auto',
+				},
+			);
+		});
+
+		it('should save nothing when the picker is cancelled', async () => {
+			closeWith(undefined);
+
+			await service.openCoordinateDialog(record);
+
+			expect(apiService.locn.create).not.toHaveBeenCalled();
+			expect(service.updateItems).not.toHaveBeenCalled();
+		});
+
+		it('should store the chosen location and point the item at it', async () => {
+			const chosen = { ...LISBON, city: 'Lisbon' };
+			closeWith({ location: chosen });
+
+			await service.openCoordinateDialog(record);
+
+			expect(apiService.locn.create).toHaveBeenCalledWith(chosen);
+			expect(record.LocnVO).toEqual(SAVED_LOCATION);
+			expect(record.locnId).toBe(42);
+			expect(service.updateItems).toHaveBeenCalledWith([record], ['LocnVO']);
+		});
+
+		it('should tell the user when the location fails to save', async () => {
+			closeWith({ location: LISBON });
+			(apiService.locn.create as jasmine.Spy).and.rejectWith(new Error());
+
+			await service.openCoordinateDialog(record);
+
+			expect(messageService.showError).toHaveBeenCalledWith({
+				message: 'There was a problem saving the location.',
+			});
+		});
+
+		it('should save typed coordinates alongside the address', async () => {
+			await service.saveItemCoordinates(record, LISBON);
+
+			expect(apiService.locn.create).toHaveBeenCalledWith({
+				city: 'Lisbon',
+				...LISBON,
+			});
+
+			expect(record.LocnVO).toEqual(SAVED_LOCATION);
+			expect(service.updateItems).toHaveBeenCalledWith([record], ['LocnVO']);
+		});
+
+		it('should clear coordinates while keeping the address', async () => {
+			await service.saveItemCoordinates(record, null);
+
+			expect(apiService.locn.create).toHaveBeenCalledWith({
+				city: 'Lisbon',
+				latitude: null,
+				longitude: null,
+			});
 		});
 	});
 

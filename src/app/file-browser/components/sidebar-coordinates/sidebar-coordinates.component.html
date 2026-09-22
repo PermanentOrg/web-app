@@ -1,0 +1,67 @@
+@if (isEditing()) {
+	<form
+		class="pr-sidebar-coordinates-editor"
+		[class.invalid]="!isDraftValid()"
+		(submit)="$event.preventDefault(); submit()"
+		(keydown.escape)="cancel()"
+	>
+		<input
+			#draftInput
+			type="text"
+			class="pr-sidebar-coordinates-input"
+			placeholder="Add coordinates…"
+			aria-label="Coordinates"
+			[value]="draft()"
+			[attr.aria-invalid]="!isDraftValid()"
+			(input)="onDraftInput($event)"
+		/>
+		<div class="pr-sidebar-coordinates-actions">
+			<button
+				type="button"
+				class="pr-sidebar-coordinates-map"
+				(click)="chooseOnMap()"
+			>
+				<fa-icon [icon]="mapIcon" />
+				<span>Choose on map</span>
+			</button>
+			<button
+				type="button"
+				class="pr-sidebar-coordinates-cancel"
+				(click)="cancel()"
+			>
+				Cancel
+			</button>
+			<button
+				type="submit"
+				class="pr-sidebar-coordinates-submit"
+				aria-label="Save coordinates"
+				[disabled]="!isDraftValid()"
+			>
+				<fa-icon [icon]="submitIcon" />
+			</button>
+		</div>
+	</form>
+} @else if (formattedCoordinates(); as coordinates) {
+	<div class="pr-sidebar-coordinates-row">
+		<span class="pr-sidebar-coordinates-value">{{ coordinates }}</span>
+		@if (canEdit()) {
+			<button
+				type="button"
+				class="pr-sidebar-coordinates-edit"
+				aria-label="Edit coordinates"
+				(click)="startEditing()"
+			>
+				<fa-icon [icon]="editIcon" />
+			</button>
+		}
+	</div>
+} @else if (canEdit()) {
+	<button
+		type="button"
+		class="pr-sidebar-coordinates-add"
+		(click)="startEditing()"
+	>
+		<span>Add coordinates…</span>
+		<fa-icon class="pr-sidebar-coordinates-add-icon" [icon]="addIcon" />
+	</button>
+}

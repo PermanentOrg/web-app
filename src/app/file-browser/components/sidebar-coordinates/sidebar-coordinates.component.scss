@@ -1,0 +1,137 @@
+@use 'variables' as *;
+@import 'colors';
+
+:host {
+	display: block;
+}
+
+%unstyled-button {
+	border: none;
+	background: none;
+	font: inherit;
+	color: inherit;
+	cursor: pointer;
+}
+
+.pr-sidebar-coordinates-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	min-height: 40px;
+	color: $PR-blue-900;
+}
+
+.pr-sidebar-coordinates-edit {
+	@extend %unstyled-button;
+	padding: 4px;
+	color: $PR-blue-400;
+
+	&:hover,
+	&:focus-visible {
+		color: $PR-blue-900;
+	}
+}
+
+.pr-sidebar-coordinates-add {
+	@extend %unstyled-button;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height: 40px;
+	padding: 0 8px 0 12px;
+	border-radius: 6px;
+	color: $PR-blue-400;
+	text-align: left;
+
+	.pr-sidebar-coordinates-add-icon {
+		visibility: hidden;
+		color: $PR-blue-900;
+	}
+
+	&:hover,
+	&:focus-visible {
+		background: $PR-blue-25;
+
+		.pr-sidebar-coordinates-add-icon {
+			visibility: visible;
+		}
+	}
+}
+
+.pr-sidebar-coordinates-editor {
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid $PR-blue-100;
+	border-radius: 6px;
+	background: white;
+	box-shadow: 0 0 0 4px rgba($PR-blue-900, 0.03);
+	overflow: hidden;
+
+	&.invalid {
+		border-color: $PR-red-300;
+	}
+}
+
+.pr-sidebar-coordinates-input {
+	display: block;
+	width: 100%;
+	padding: 16px;
+	border: none;
+	background: none;
+	font: inherit;
+	color: $PR-blue-900;
+
+	&::placeholder {
+		color: $PR-blue-200;
+	}
+
+	&:focus {
+		outline: none;
+	}
+}
+
+.pr-sidebar-coordinates-actions {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 12px;
+	background: $PR-blue-25;
+	color: $PR-blue-900;
+	font-size: $font-size-sm;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.pr-sidebar-coordinates-map {
+	@extend %unstyled-button;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-right: auto;
+	padding: 0;
+}
+
+.pr-sidebar-coordinates-cancel {
+	@extend %unstyled-button;
+	padding: 0;
+}
+
+.pr-sidebar-coordinates-submit {
+	@extend %unstyled-button;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 4px;
+	background: $PR-blue-900;
+	color: white;
+
+	&:disabled {
+		background: $PR-blue-200;
+		cursor: default;
+	}
+}

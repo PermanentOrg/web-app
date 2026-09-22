@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
 import { partition } from 'lodash';
-import { Subject } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
 import debug from 'debug';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -16,6 +16,7 @@ import {
 	FolderVOData,
 	RecordVOData,
 	ShareVO,
+	LocnVOData,
 } from '@root/app/models';
 
 import { ShareLink } from '@root/app/share-links/models/share-link';
@@ -36,12 +37,18 @@ import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
+import { Coordinates } from '@shared/utilities/coordinates';
 import { EventService } from '@shared/services/event/event.service';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import { PublishComponent } from '@fileBrowser/components/publish/publish.component';
 import { EditTagsComponent } from '@fileBrowser/components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 import { UncertainLocationPickerComponent } from '@fileBrowser/components/uncertain-location-picker/uncertain-location-picker.component';
+import {
+	CoordinatePickerComponent,
+	CoordinatePickerData,
+	CoordinatePickerResult,
+} from '@fileBrowser/components/coordinate-picker/coordinate-picker.component';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
@@ -649,6 +656,49 @@ export class EditService {
 			panelClass: 'dialog',
 			height: 'auto',
 		});
+	}
+
+	public async openCoordinateDialog(item: ItemVO): Promise<void> {
+		const dialogRef = this.dialog.open<
+			CoordinatePickerComponent,
+			CoordinatePickerResult,
+			CoordinatePickerData
+		>(CoordinatePickerComponent, {
+			data: { location: item.LocnVO },
+			panelClass: 'dialog',
+			height: 'auto',
+		});
+		const result = await firstValueFrom(dialogRef.closed);
+		if (result) {
+			await this.saveItemLocation(item, result.location);
+		}
+	}
+
+	public async saveItemCoordinates(
+		item: ItemVO,
+		coordinates: Coordinates | null,
+	): Promise<void> {
+		await this.saveItemLocation(item, {
+			...item.LocnVO,
+			latitude: coordinates?.latitude ?? null,
+			longitude: coordinates?.longitude ?? null,
+		});
+	}
+
+	private async saveItemLocation(
+		item: ItemVO,
+		location: LocnVOData,
+	): Promise<void> {
+		try {
+			const response = await this.api.locn.create(location);
+			const locnVO = response.getLocnVO();
+			item.update({ LocnVO: locnVO, locnId: locnVO.locnId });
+			await this.updateItems([item], ['LocnVO']);
+		} catch {
+			this.message.showError({
+				message: 'There was a problem saving the location.',
+			});
+		}
 	}
 
 	public async openFolderPicker(

@@ -149,7 +149,10 @@
 		<pr-sidebar-location
 			[location]="selectedItem.LocnVO"
 			[canEdit]="canEdit"
+			[showUncertainLocations]="showUncertainLocations"
 			(editRequested)="onLocationClick()"
+			(coordinatesChange)="onCoordinatesChange($event)"
+			(coordinatesMapRequested)="onCoordinatesMapRequested()"
 		/>
 		<div class="sidebar-item">
 			<div class="sidebar-item-content">

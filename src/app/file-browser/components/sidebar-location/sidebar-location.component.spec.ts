@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SharedModule } from '@shared/shared.module';
+import { Coordinates } from '@shared/utilities/coordinates';
 import { SidebarLocationComponent } from './sidebar-location.component';
 
 describe('SidebarLocationComponent', () => {
@@ -98,6 +99,59 @@ describe('SidebarLocationComponent', () => {
 		const buttons = queryAll<HTMLButtonElement>('button.sidebar-item-content');
 
 		expect(buttons.every((button) => button.disabled)).toBeTrue();
+	});
+
+	it('should leave coordinates out of the original location display', () => {
+		expect(query('pr-sidebar-coordinates')).toBeNull();
+	});
+
+	it('should show coordinates when showing uncertain locations', () => {
+		fixture.componentRef.setInput('showUncertainLocations', true);
+		fixture.detectChanges();
+
+		expect(query('pr-sidebar-coordinates')).not.toBeNull();
+	});
+
+	it('should leave out the original address and map when showing uncertain locations', () => {
+		fixture.componentRef.setInput('location', { city: 'Lisbon' });
+		fixture.componentRef.setInput('showUncertainLocations', true);
+		fixture.detectChanges();
+
+		expect(query('.sidebar-location-button')).toBeNull();
+		expect(query('pr-static-map')).toBeNull();
+	});
+
+	describe('when showing uncertain locations', () => {
+		beforeEach(() => {
+			fixture.componentRef.setInput('showUncertainLocations', true);
+			fixture.detectChanges();
+			query<HTMLButtonElement>('.pr-sidebar-coordinates-add').click();
+			fixture.detectChanges();
+		});
+
+		it('should pass on coordinates typed into the sidebar', () => {
+			const changes: Array<Coordinates | null> = [];
+			component.coordinatesChange.subscribe((coordinates) =>
+				changes.push(coordinates),
+			);
+			const input = query<HTMLInputElement>('.pr-sidebar-coordinates-input');
+			input.value = '38.70786, -9.400139';
+			input.dispatchEvent(new Event('input'));
+			fixture.detectChanges();
+
+			query<HTMLButtonElement>('.pr-sidebar-coordinates-submit').click();
+
+			expect(changes).toEqual([{ latitude: 38.70786, longitude: -9.400139 }]);
+		});
+
+		it('should pass on a request to choose on the map', () => {
+			let mapRequests = 0;
+			component.coordinatesMapRequested.subscribe(() => (mapRequests += 1));
+
+			query<HTMLButtonElement>('.pr-sidebar-coordinates-map').click();
+
+			expect(mapRequests).toBe(1);
+		});
 	});
 
 	it('should ask for nothing at all when the item is read only', () => {

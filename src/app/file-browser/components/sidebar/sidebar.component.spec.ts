@@ -102,6 +102,8 @@ const mockDataService = {
 
 const mockEditService = {
 	openLocationDialog: (_: any) => {},
+	openCoordinateDialog: async (_: any) => {},
+	saveItemCoordinates: async (_item: any, _coordinates: any) => {},
 	saveItemVoProperty: (_item: any, _prop: any, _value: any) => {},
 };
 
@@ -224,6 +226,34 @@ describe('SidebarComponent', () => {
 		component.onLocationClick();
 
 		expect(editService.openLocationDialog).toHaveBeenCalledWith(
+			component.selectedItem,
+		);
+	});
+
+	it('should save coordinates typed into the sidebar', async () => {
+		const editService = TestBed.inject(EditService);
+		spyOn(editService, 'saveItemCoordinates').and.resolveTo();
+		const coordinates = { latitude: 38.70786, longitude: -9.400139 };
+
+		component.selectedItem = new RecordVO({});
+
+		await component.onCoordinatesChange(coordinates);
+
+		expect(editService.saveItemCoordinates).toHaveBeenCalledWith(
+			component.selectedItem,
+			coordinates,
+		);
+	});
+
+	it('should open the coordinate dialog when the map is asked for', async () => {
+		const editService = TestBed.inject(EditService);
+		spyOn(editService, 'openCoordinateDialog').and.resolveTo();
+
+		component.selectedItem = new RecordVO({});
+
+		await component.onCoordinatesMapRequested();
+
+		expect(editService.openCoordinateDialog).toHaveBeenCalledWith(
 			component.selectedItem,
 		);
 	});

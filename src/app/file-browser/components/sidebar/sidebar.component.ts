@@ -10,6 +10,7 @@ import { some } from 'lodash';
 import { ItemVO, FolderVO, ArchiveVO, AccessRole } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
+import { Coordinates } from '@shared/utilities/coordinates';
 import { AccountService } from '@shared/services/account/account.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
@@ -49,6 +50,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	originalFileExtension: string = '';
 
 	showEdtfDatePicker: boolean;
+	showUncertainLocations: boolean;
 
 	displayTimeObject: DateTimeModel | null = null;
 
@@ -105,6 +107,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	) {
 		this.currentArchive = this.accountService.getArchive();
 		this.showEdtfDatePicker = this.feature.isEnabled('edtf-date');
+		this.showUncertainLocations = this.feature.isEnabled('uncertain-locations');
 
 		this.subscriptions.push(
 			this.dataService.selectedItems$().subscribe(async (selectedItems) => {
@@ -285,6 +288,14 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 
 	onLocationClick() {
 		this.editService.openLocationDialog(this.selectedItem);
+	}
+
+	async onCoordinatesChange(coordinates: Coordinates | null) {
+		await this.editService.saveItemCoordinates(this.selectedItem, coordinates);
+	}
+
+	async onCoordinatesMapRequested() {
+		await this.editService.openCoordinateDialog(this.selectedItem);
 	}
 
 	onShareClick() {
