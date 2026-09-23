@@ -25,7 +25,10 @@ import {
 	applyTimezoneOffset,
 } from '@shared/utilities/dateTime';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { InlineValueEditComponent } from './inline-value-edit.component';
+import {
+	InlineValueEditComponent,
+	InlineValueEditType,
+} from './inline-value-edit.component';
 
 describe('InlineValueEditComponent', () => {
 	let component: InlineValueEditComponent;
@@ -460,6 +463,40 @@ describe('InlineValueEditComponent', () => {
 		fixture.detectChanges();
 
 		expect(component.isEditing).toBeTrue();
+	});
+
+	it('should disable browser autofill on every editable control type', () => {
+		const controlSelectorsByType: Array<[InlineValueEditType, string]> = [
+			['text', 'input'],
+			['textarea', 'textarea'],
+			['select', 'select'],
+		];
+
+		for (const [type, selector] of controlSelectorsByType) {
+			const typeFixture = TestBed.createComponent(InlineValueEditComponent);
+			typeFixture.componentInstance.type = type;
+			typeFixture.detectChanges();
+
+			const control = typeFixture.debugElement.query(By.css(selector))
+				.nativeElement as HTMLElement;
+
+			expect(control.getAttribute('autocomplete')).toBe('off');
+		}
+	});
+
+	it('should give each instance a unique control id and name', () => {
+		const otherFixture = TestBed.createComponent(InlineValueEditComponent);
+		otherFixture.detectChanges();
+
+		const input = fixture.debugElement.query(By.css('input'))
+			.nativeElement as HTMLInputElement;
+		const otherInput = otherFixture.debugElement.query(By.css('input'))
+			.nativeElement as HTMLInputElement;
+
+		expect(input.id).toBeTruthy();
+		expect(input.id).toBe(input.name);
+		expect(otherInput.id).toBe(otherInput.name);
+		expect(input.id).not.toBe(otherInput.id);
 	});
 
 	it('should NOT start editing when clicking on a link', () => {
