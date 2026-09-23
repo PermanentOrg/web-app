@@ -236,6 +236,15 @@ describe('RecordRepo', () => {
 			).toBeNull();
 		});
 
+		it('keeps the timezone out of the location VO', () => {
+			const result = convertStelaLocationToLocnVOData({
+				id: '42',
+				timezone: 'Europe/Bucharest',
+			} as StelaLocation);
+
+			expect('timezone' in result).toBeFalse();
+		});
+
 		it('parses the id and remaps state/precision onto the LocnVO shape', () => {
 			const stelaLocation: StelaLocation = {
 				id: '42',
@@ -370,6 +379,57 @@ describe('RecordRepo', () => {
 			expect(result).toBeInstanceOf(RecordResponse);
 		});
 
+		it('should send the timezone as location metadata when the record has one', async () => {
+			const recordVO = new RecordVO({
+				recordId: 42,
+				displayTime: '1985-05-20T00:00:00.000Z',
+				timezone: 'Europe/Bucharest',
+			});
+
+			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+
+			await repo.updateStelaRecord(recordVO);
+
+			expect(httpV2PatchSpy).toHaveBeenCalledWith('v2/records/42', {
+				displayTime: '1985-05-20T00:00:00.000Z',
+				location: { timezone: 'Europe/Bucharest' },
+			});
+		});
+
+		it('should send a null timezone only when it is explicitly cleared', async () => {
+			const recordVO = new RecordVO({
+				recordId: 42,
+				displayTime: null,
+				timezone: null,
+			});
+
+			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+
+			await repo.updateStelaRecord(recordVO);
+
+			expect(httpV2PatchSpy).toHaveBeenCalledWith('v2/records/42', {
+				displayTime: null,
+				location: { timezone: null },
+			});
+		});
+
+		it('should omit location entirely when the timezone is untouched', async () => {
+			// Stela rejects an empty location object, so an untouched timezone
+			// must not send the key at all.
+			const recordVO = new RecordVO({
+				recordId: 42,
+				displayTime: '1985-05-20T00:00:00.000Z',
+			});
+
+			httpV2PatchSpy.and.returnValue(of([fakeStelaRecord]));
+
+			await repo.updateStelaRecord(recordVO);
+
+			expect(httpV2PatchSpy).toHaveBeenCalledWith('v2/records/42', {
+				displayTime: '1985-05-20T00:00:00.000Z',
+			});
+		});
+
 		it('should look up recordId by archiveNbr when recordId is not available', async () => {
 			const recordVO = new RecordVO({
 				archiveNbr: 'archive-100',
@@ -446,6 +506,36 @@ describe('RecordRepo', () => {
 			} as any);
 
 			expect(record.displayTime).toBeUndefined();
+		});
+
+		it('should lift the timezone off the location and onto the record', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				location: { id: '42', timezone: 'Europe/Bucharest' },
+			} as any);
+
+			expect(record.timezone).toBe('Europe/Bucharest');
+		});
+
+		it('should keep the timezone even when there is no location row', () => {
+			// Stela reads the timezone off the record row but nests it in the
+			// location object, so it arrives with a null location id.
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				location: { id: null, timezone: 'Europe/Bucharest' },
+			} as any);
+
+			expect(record.timezone).toBe('Europe/Bucharest');
+			expect(record.LocnVO).toBeNull();
+		});
+
+		it('should null the timezone when the record has none', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				location: { id: '42' },
+			} as any);
+
+			expect(record.timezone).toBeNull();
 		});
 
 		it('maps thumbnailUrls to all thumb fields', () => {
