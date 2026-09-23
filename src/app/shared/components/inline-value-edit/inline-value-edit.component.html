@@ -10,7 +10,8 @@
 						name="text"
 						class="form-control"
 						[class.is-editing]="isEditing"
-						[(ngModel)]="editValue"
+						[ngModel]="editValue"
+						(ngModelChange)="onEditValueChange($event)"
 						#input
 						#model="ngModel"
 						[required]="required"
