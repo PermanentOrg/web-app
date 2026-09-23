@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
@@ -8,6 +8,11 @@ import { FormInputSelectOption } from '@shared/components/form-input/form-input.
 import { Router, ActivatedRoute } from '@angular/router';
 import { EventService } from '@shared/services/event/event.service';
 import { savePropertyOnAccount } from '@shared/services/account/account.service.helpers';
+import {
+	UNSUPPORTED_PHONE_COUNTRY_NOTICE,
+	storedPhoneNumberNeedsCountryWarning,
+	typedPhoneNumberNeedsCountryWarning,
+} from '@shared/utilities/phone-number';
 
 @Component({
 	selector: 'pr-account-settings',
@@ -20,6 +25,8 @@ export class AccountSettingsComponent implements OnInit {
 	public countries: FormInputSelectOption[];
 	public states: FormInputSelectOption[];
 	public waiting = false;
+
+	private readonly phoneNumberBeingEdited = signal<string | null>(null);
 
 	constructor(
 		private accountService: AccountService,
@@ -48,6 +55,30 @@ export class AccountSettingsComponent implements OnInit {
 			action: 'open_login_info',
 			entity: 'account',
 		});
+	}
+
+	public get phoneNumberWarning(): string | null {
+		if (this.account.phoneStatus === 'status.auth.verified') {
+			return null;
+		}
+
+		const beingEdited = this.phoneNumberBeingEdited();
+		const needsWarning =
+			beingEdited === null
+				? storedPhoneNumberNeedsCountryWarning(this.account.primaryPhone)
+				: typedPhoneNumberNeedsCountryWarning(beingEdited);
+
+		return needsWarning ? UNSUPPORTED_PHONE_COUNTRY_NOTICE : null;
+	}
+
+	onPhoneNumberTyped(value: string) {
+		this.phoneNumberBeingEdited.set(value ?? '');
+	}
+
+	onPhoneNumberEditingChange(isEditing: boolean) {
+		if (!isEditing) {
+			this.phoneNumberBeingEdited.set(null);
+		}
 	}
 
 	async onSaveProfileInfo(prop: keyof AccountVO, value: string) {
