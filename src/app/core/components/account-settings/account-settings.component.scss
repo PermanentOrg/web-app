@@ -75,3 +75,30 @@ p {
 form {
 	@include tabbedDialogPanelForm;
 }
+
+.settings-item-note {
+	font-size: $font-size-sm;
+	padding-bottom: $grid-unit * 0.5;
+
+	@include desktop {
+		padding-left: 12rem;
+	}
+}
+
+.settings-group-note {
+	font-size: $font-size-sm;
+	color: $gray-dark;
+	padding: 0 0 $grid-unit * 0.5;
+	margin: 0;
+}
+
+.phone-number-warning {
+	color: $PR-yellow-700;
+	display: flex;
+	align-items: center;
+	gap: $grid-unit * 0.25;
+
+	i {
+		font-size: $mat-icon-sm;
+	}
+}

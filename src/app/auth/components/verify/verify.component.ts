@@ -86,7 +86,11 @@ export class VerifyComponent implements OnInit {
 
 			if (this.canSendCodes('phone')) {
 				if (queryParams.sendSms) {
-					this.accountService.resendPhoneVerification();
+					this.accountService
+						.resendPhoneVerification()
+						.catch((response: unknown) => {
+							this.showCodeSendError(response);
+						});
 				}
 			}
 		}
@@ -231,6 +235,16 @@ export class VerifyComponent implements OnInit {
 					this.router.navigate(['/']);
 				}
 			});
+	}
+
+	private showCodeSendError(response: unknown): void {
+		this.message.showError({
+			message:
+				response instanceof AuthResponse
+					? response.getMessage()
+					: 'error.generic.internal',
+			translate: true,
+		});
 	}
 
 	public resolveCaptcha(response: string): void {
