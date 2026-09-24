@@ -1,0 +1,105 @@
+@import 'colors';
+@import 'mixins';
+
+$icon-size: 96px;
+$content-width: 560px;
+
+:host {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+	background-color: $PR-blue-25;
+	z-index: 1;
+}
+
+.record-preview-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 24px;
+	max-width: $content-width;
+	text-align: center;
+}
+
+.record-preview-state-icon {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: $icon-size;
+	height: $icon-size;
+}
+
+.record-preview-state-icon-extension {
+	position: absolute;
+	right: 0;
+	bottom: 16px;
+	height: 28px;
+	padding: 0 10px;
+	display: flex;
+	align-items: center;
+	border-radius: 6px;
+	background-image: linear-gradient(115deg, $PR-purple 0%, $PR-orange 100%);
+	color: $PR-brand-white;
+	font-family: 'Usual', sans-serif;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 24px;
+	letter-spacing: 2.56px;
+	text-transform: uppercase;
+}
+
+.record-preview-state-heading {
+	margin: 0;
+	color: $PR-blue-900;
+	font-family: 'Usual', sans-serif;
+	font-weight: 600;
+	font-size: 24px;
+	line-height: 32px;
+	letter-spacing: -0.48px;
+}
+
+.record-preview-state-body {
+	@include usual-text;
+	margin: 0;
+	color: $PR-blue-600;
+}
+
+.record-preview-state-download {
+	@include usual-text;
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	height: 56px;
+	padding: 16px 24px;
+	border: none;
+	border-radius: 12px;
+	background-color: $PR-blue-900;
+	color: $PR-brand-white;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.record-preview-state-download-extension {
+	display: flex;
+	align-items: center;
+	height: 24px;
+	padding: 0 8px;
+	border-radius: 4px;
+	background-color: $PR-brand-white;
+	color: $PR-blue-900;
+	font-size: 10px;
+	line-height: 16px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	font-weight: 400;
+}
+
+.record-preview-state-help-link {
+	@include usual-text;
+	color: $PR-blue-900;
+	text-decoration: underline;
+}
