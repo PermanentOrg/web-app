@@ -15,6 +15,10 @@ import { EditService } from '@core/services/edit/edit.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { RecordVO } from '@models/record-vo';
+import { FileFormat } from '@models/file-vo';
+import { GeneratedFileStatus } from '@models/generated-file-status';
+import { RecordThumbnailPlaceholder } from '@models/record-thumbnail-placeholder';
 import { FileListItemComponent } from './file-list-item.component';
 
 @Pipe({ name: 'itemTypeIcon' })
@@ -605,6 +609,140 @@ describe('FileListItemComponent', () => {
 			fixture.detectChanges();
 
 			expect(component.startDisplayTime).toBe('2020-06-10');
+		});
+	});
+
+	describe('access copy status', () => {
+		const makeRecord = (fields: Partial<RecordVO>) =>
+			new RecordVO({
+				displayName: "Grandma Ruth's Recipes",
+				archiveNbr: '0001-0001',
+				folder_linkId: 1,
+				type: 'type.record.document',
+				FileVOs: [
+					{
+						fileId: 1,
+						size: 1024,
+						format: FileFormat.Original,
+						fileURL: 'https://example.com/original',
+						downloadURL: 'https://example.com/download',
+						type: 'type.file.document.docx',
+					},
+				],
+				...fields,
+			});
+
+		const showItem = async (item: RecordVO) => {
+			component.item = item;
+			await component.ngOnInit();
+			fixture.detectChanges();
+		};
+
+		const statusLine = (): HTMLElement | null =>
+			fixture.nativeElement.querySelector('.preview-status');
+
+		const placeholderElement = (): HTMLElement | null =>
+			fixture.nativeElement.querySelector('.thumbnail-placeholder');
+
+		it('shows that the viewable copy is being prepared', async () => {
+			await showItem(
+				makeRecord({
+					accessCopyStatus: GeneratedFileStatus.Processing,
+					thumbnail256Status: GeneratedFileStatus.Processing,
+				}),
+			);
+
+			expect(component.thumbnailPlaceholder).toBe(
+				RecordThumbnailPlaceholder.Preparing,
+			);
+
+			expect(
+				placeholderElement().querySelector('img').getAttribute('src'),
+			).toBe('assets/svg/access-copy/row-preparing.svg');
+
+			expect(statusLine().getAttribute('data-preview-status')).toBe(
+				'preparing',
+			);
+
+			expect(statusLine().textContent).toContain('Preparing to view...');
+			expect(statusLine().textContent).toContain('Stored');
+		});
+
+		it('shows that the preview is unavailable when the copy failed', async () => {
+			await showItem(
+				makeRecord({
+					accessCopyStatus: GeneratedFileStatus.Failed,
+					thumbnail256Status: GeneratedFileStatus.Failed,
+				}),
+			);
+
+			expect(component.thumbnailPlaceholder).toBe(
+				RecordThumbnailPlaceholder.Failed,
+			);
+
+			expect(statusLine().getAttribute('data-preview-status')).toBe('failed');
+			expect(statusLine().textContent).toContain('Preview unavailable');
+		});
+
+		it('shows the file type and no status line when no copy will be made', async () => {
+			await showItem(
+				makeRecord({
+					type: 'type.record.image',
+					uploadFileName: 'family-history-graph.svg',
+					FileVOs: [],
+					accessCopyStatus: null,
+					thumbnail256Status: null,
+				}),
+			);
+
+			expect(component.thumbnailPlaceholder).toBe(
+				RecordThumbnailPlaceholder.FileType,
+			);
+
+			expect(
+				placeholderElement().querySelector(
+					'.thumbnail-placeholder-file-extension',
+				).textContent,
+			).toBe('svg');
+
+			expect(statusLine()).toBeNull();
+		});
+
+		it('keeps an existing thumbnail and shows no placeholder', async () => {
+			await showItem(
+				makeRecord({
+					thumbURL200: 'https://example.com/thumb200.jpg',
+					accessCopyStatus: GeneratedFileStatus.Failed,
+					thumbnail256Status: GeneratedFileStatus.Failed,
+				}),
+			);
+
+			expect(component.thumbnailPlaceholder).toBeUndefined();
+			expect(placeholderElement()).toBeNull();
+		});
+
+		it('shows nothing new in grid view', async () => {
+			component.inGridView = true;
+			component.item = makeRecord({
+				accessCopyStatus: GeneratedFileStatus.Processing,
+			});
+
+			expect(component.thumbnailPlaceholder).toBeUndefined();
+			expect(component.previewStatusLabel).toBeUndefined();
+		});
+
+		it('shows nothing new behind the stock image of a listed share preview', async () => {
+			const router = TestBed.inject(Router);
+			(router.routerState.snapshot as any).url = '/share/test';
+
+			await showItem(
+				makeRecord({ accessCopyStatus: GeneratedFileStatus.Processing }),
+			);
+
+			expect(component.thumbnailPlaceholder).toBeUndefined();
+			expect(component.previewStatusLabel).toBeUndefined();
+
+			(router.routerState.snapshot as any).url = '/';
 		});
 	});
 });

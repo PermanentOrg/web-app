@@ -1,0 +1,33 @@
+<div class="record-preview-state" [attr.data-preview-state]="previewState()">
+	<div class="record-preview-state-icon">
+		<img [src]="content().iconSource" alt="" />
+		@if (content().showsFileExtensionOnIcon && fileExtension()) {
+			<span class="record-preview-state-icon-extension">{{
+				fileExtension()
+			}}</span>
+		}
+	</div>
+	<h2 class="record-preview-state-heading">{{ content().heading }}</h2>
+	<p class="record-preview-state-body">{{ content().body }}</p>
+	@if (canDownload()) {
+		<button
+			type="button"
+			class="record-preview-state-download"
+			(click)="downloadOriginal.emit()"
+		>
+			Download original
+			@if (fileExtension()) {
+				<span class="record-preview-state-download-extension">{{
+					fileExtension()
+				}}</span>
+			}
+		</button>
+	}
+	<a
+		class="record-preview-state-help-link"
+		[href]="helpLink"
+		target="_blank"
+		rel="noopener noreferrer"
+		>{{ content().helpLinkText }}</a
+	>
+</div>

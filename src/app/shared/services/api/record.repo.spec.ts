@@ -14,6 +14,7 @@ import {
 	StelaLocation,
 } from '@shared/services/api/record.repo';
 import { RecordVO } from '@root/app/models';
+import { GeneratedFileStatus } from '@models/generated-file-status';
 import {
 	provideHttpClient,
 	withInterceptorsFromDi,
@@ -465,6 +466,37 @@ describe('RecordRepo', () => {
 			expect(record.thumbURL1000).toBe('https://example.com/1000');
 			expect(record.thumbURL2000).toBe('https://example.com/2000');
 			expect(record.thumbnail256).toBe('https://example.com/256');
+		});
+
+		it('maps the thumbnail and access copy statuses', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				accessCopyStatus: 'processing',
+				thumbnailUrls: { width256Status: 'failed' },
+			} as any);
+
+			expect(record.accessCopyStatus).toBe(GeneratedFileStatus.Processing);
+			expect(record.thumbnail256Status).toBe(GeneratedFileStatus.Failed);
+		});
+
+		it('keeps a null status, which means no copy will ever be made', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				accessCopyStatus: null,
+				thumbnailUrls: { width256Status: null },
+			} as any);
+
+			expect(record.accessCopyStatus).toBeNull();
+			expect(record.thumbnail256Status).toBeNull();
+		});
+
+		it('leaves the statuses undefined when Stela does not send them', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+			} as any);
+
+			expect(record.accessCopyStatus).toBeUndefined();
+			expect(record.thumbnail256Status).toBeUndefined();
 		});
 
 		it("should translate Stela's role into ours", () => {

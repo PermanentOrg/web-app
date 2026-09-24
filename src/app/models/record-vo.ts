@@ -11,7 +11,8 @@ import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
 import { HasThumbnails } from './get-thumbnail';
-import { FileFormat, PermanentFile } from './file-vo';
+import { FileFormat, getFileExtension, PermanentFile } from './file-vo';
+import { GeneratedFileStatus } from './generated-file-status';
 
 interface RecordVoOptions {
 	dataStatus: DataStatus;
@@ -81,6 +82,9 @@ export class RecordVO
 	// New thumbnails
 	public thumbnail256: string;
 	public thumbnail256CloudPath: string;
+	public thumbnail256Status?: GeneratedFileStatus | null;
+
+	public accessCopyStatus?: GeneratedFileStatus | null;
 
 	// Statuses
 	public fileStatus;
@@ -168,7 +172,7 @@ export class RecordVO
 			(file) => file.format === FileFormat.Original,
 		).map((file) => ({
 			name: file.type,
-			extension: file.type.split('.').pop(),
+			extension: getFileExtension(file),
 		}));
 	}
 }
@@ -206,6 +210,8 @@ export interface RecordVOData extends BaseVOData {
 	thumbURL2000?: string;
 	thumbnail256?: string;
 	thumbnail256CloudPath?: string;
+	thumbnail256Status?: GeneratedFileStatus | null;
+	accessCopyStatus?: GeneratedFileStatus | null;
 	thumbDT?: any;
 	fileStatus?: any;
 	status?: any;

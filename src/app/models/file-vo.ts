@@ -13,3 +13,7 @@ export interface PermanentFile {
 	downloadURL: string;
 	type: string;
 }
+
+export function getFileExtension(file: PermanentFile): string {
+	return file.type.split('.').pop();
+}
