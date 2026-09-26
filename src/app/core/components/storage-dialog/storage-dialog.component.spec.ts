@@ -5,6 +5,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { DialogRef } from '@angular/cdk/dialog';
 import { EventService } from '@shared/services/event/event.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { StorageDialogComponent } from './storage-dialog.component';
 
 @NgModule()
@@ -18,6 +19,10 @@ class MockDialogRef {
 
 describe('StorageDialogComponent', () => {
 	let mockActivatedRoute;
+	let mockFeatureFlagService: {
+		isEnabled: jasmine.Spy;
+		fetchFromApi: jasmine.Spy;
+	};
 	const paramMap = new BehaviorSubject(convertToParamMap({}));
 	const queryParamMap = new BehaviorSubject(convertToParamMap({}));
 
@@ -27,9 +32,19 @@ describe('StorageDialogComponent', () => {
 			queryParamMap: queryParamMap.asObservable(),
 			snapshot: { fragment: null },
 		};
+		mockFeatureFlagService = {
+			isEnabled: jasmine.createSpy('isEnabled').and.returnValue(false),
+			fetchFromApi: jasmine
+				.createSpy('fetchFromApi')
+				.and.returnValue(Promise.resolve()),
+		};
 		await MockBuilder(StorageDialogComponent, DummyModule)
 			.provide({ provide: DialogRef, useClass: MockDialogRef })
 			.provide({ provide: ActivatedRoute, useValue: mockActivatedRoute })
+			.provide({
+				provide: FeatureFlagService,
+				useValue: mockFeatureFlagService,
+			})
 			.keep(EventService);
 	});
 
@@ -79,5 +94,52 @@ describe('StorageDialogComponent', () => {
 		await fixture.whenStable();
 
 		expect(eventCalled).toBeTrue();
+	});
+
+	it('defaults showPaymentIntentFlow to false and renders the legacy pledge form', async () => {
+		const fixture = MockRender(StorageDialogComponent);
+		await fixture.whenStable();
+		fixture.detectChanges();
+
+		expect(fixture.point.componentInstance.showPaymentIntentFlow).toBe(false);
+		expect(fixture.nativeElement.querySelector('pr-new-pledge')).not.toBeNull();
+
+		expect(
+			fixture.nativeElement.querySelector('pr-payment-intent-form'),
+		).toBeNull();
+	});
+
+	it('shows the PaymentIntent form when the flag is enabled', async () => {
+		mockFeatureFlagService.isEnabled.and.callFake(
+			(flag: string) => flag === 'storage-purchase-payment-intent',
+		);
+		const fixture = MockRender(StorageDialogComponent);
+		await fixture.whenStable();
+		fixture.detectChanges();
+
+		expect(fixture.point.componentInstance.showPaymentIntentFlow).toBe(true);
+		expect(
+			fixture.nativeElement.querySelector('pr-payment-intent-form'),
+		).not.toBeNull();
+
+		expect(fixture.nativeElement.querySelector('pr-new-pledge')).toBeNull();
+	});
+
+	it('re-confirms the flag after ngOnInit even if the constructor read a stale value', async () => {
+		// Simulates FeatureFlagService's fire-and-forget bootstrap fetch not
+		// having resolved yet when the dialog's constructor runs.
+		mockFeatureFlagService.isEnabled.and.returnValue(false);
+		const fixture = MockRender(StorageDialogComponent);
+
+		expect(fixture.point.componentInstance.showPaymentIntentFlow).toBe(false);
+
+		mockFeatureFlagService.isEnabled.and.callFake(
+			(flag: string) => flag === 'storage-purchase-payment-intent',
+		);
+		await fixture.whenStable();
+		fixture.detectChanges();
+
+		expect(fixture.point.componentInstance.showPaymentIntentFlow).toBe(true);
+		expect(mockFeatureFlagService.fetchFromApi).toHaveBeenCalled();
 	});
 });

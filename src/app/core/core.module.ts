@@ -60,6 +60,8 @@ import { AccountSecurityComponent } from './components/account-security/account-
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-auth.component';
 import { RedeemGiftComponent } from './components/redeem-gift/redeem-gift.component';
+import { PaymentIntentFormComponent } from './components/payment-intent-form/payment-intent-form.component';
+import { PaymentIntentConfirmComponent } from './components/payment-intent-confirm/payment-intent-confirm.component';
 
 @NgModule({
 	imports: [
@@ -116,6 +118,8 @@ import { RedeemGiftComponent } from './components/redeem-gift/redeem-gift.compon
 		ChangePasswordComponent,
 		TwoFactorAuthComponent,
 		RedeemGiftComponent,
+		PaymentIntentFormComponent,
+		PaymentIntentConfirmComponent,
 	],
 	providers: [
 		FolderViewService,
