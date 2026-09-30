@@ -6,6 +6,7 @@ import {
 	TagVOData,
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
+import { SearchPublicArchivesResponse } from '@public/types/public-archive-search';
 import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
@@ -27,18 +28,18 @@ export class SearchRepo extends BaseRepo {
 		);
 	}
 
-	public archiveByNameObservable(query: string): Observable<SearchResponse> {
-		const data = [
-			{
-				SearchVO: {
-					query,
-				},
-			},
-		];
-
-		return this.http.sendRequest<SearchResponse>('/search/archive', data, {
-			ResponseClass: SearchResponse,
-		});
+	public publicArchivesObservable(
+		query: string,
+		pageSize: number,
+	): Observable<SearchPublicArchivesResponse> {
+		return getFirst(
+			this.httpV2.get<SearchPublicArchivesResponse>(
+				'v2/archives/public/search',
+				{ query, pageSize },
+				null,
+				{ authToken: false },
+			),
+		);
 	}
 
 	public itemsByNameObservable(

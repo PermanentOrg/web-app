@@ -131,12 +131,12 @@
 			"lookup": "Data lookup failed (FL)"
 		},
 		"generic": {
-			"create_fail": "Sorry for the inconvenience, the action could not be completed please try again.",
+			"create_fail": "Sorry for the inconvenience, the action could not be completed. Please try again.",
 			"exclusivity_fail": "There was more than 1 item identified so the action requested could not be completed",
-			"hard_delete_fail": "Sorry for the inconvenience, the action could not be completed please try again.",
-			"internal": "Sorry for the inconvenience, the action could not be completed please try again.",
+			"hard_delete_fail": "Sorry for the inconvenience, the action could not be completed. Please try again.",
+			"internal": "Sorry for the inconvenience, the action could not be completed. Please try again.",
 			"invalid_csrf": "We apologize for the inconvenience but our system could not verify all of the necessary information we need to keep your connection secure. You may need to log out, delete your cookies, and clear your cache.",
-			"orphaning_fail": "Sorry for the inconvenience, the action could not be completed please try again.",
+			"orphaning_fail": "Sorry for the inconvenience, the action could not be completed. Please try again.",
 			"no_action_permission": "You do not have permission to perform this action. Please contact the owner to ask for permission. If you are the file owner and are getting this message, please contact Support and let us know.",
 			"no_archive_selected": "Please select a permanent archive and then retry",
 			"no_object_permission": "You do not have permission to access this item. Please contact the owner to ask for permission. If you are the file owner and are getting this message, please contact Support and let us know.",

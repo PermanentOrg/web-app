@@ -30,6 +30,7 @@ import { ArchiveSearchComponent } from './components/archive-search/archive-sear
 import { PublicArchiveWebLinksComponent } from './components/public-archive-web-links/public-archive-web-links.component';
 import { PublicSearchResultsComponent } from './components/public-search-results/public-search-results.component';
 import { PublicSearchBarResultsComponent } from './components/public-search-bar-results/public-search-bar-results.component';
+import { PublicArchiveSearchResultComponent } from './components/public-archive-search-result/public-archive-search-result.component';
 
 @NgModule({
 	declarations: [
@@ -42,6 +43,7 @@ import { PublicSearchBarResultsComponent } from './components/public-search-bar-
 		PublicArchiveWebLinksComponent,
 		PublicSearchResultsComponent,
 		PublicSearchBarResultsComponent,
+		PublicArchiveSearchResultComponent,
 	],
 	exports: [SearchBoxComponent],
 	imports: [

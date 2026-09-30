@@ -1,0 +1,79 @@
+@import 'variables';
+
+$thumb-size: 50px;
+$match-thumb-size: 24px;
+
+:host {
+	display: block;
+}
+
+.archive {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.archive-thumb {
+	width: $thumb-size;
+	height: $thumb-size;
+	margin-right: 10px;
+	flex: 0 0 $thumb-size;
+}
+
+.archive-name {
+	font-weight: 600;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: 1.2;
+}
+
+.matches {
+	list-style: none;
+	margin: 4px 0 0;
+	padding: 0 0 0 ($thumb-size + 10px);
+}
+
+.match {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 2px 0;
+	font-size: 0.85em;
+	cursor: pointer;
+
+	&:hover .match-name {
+		text-decoration: underline;
+	}
+}
+
+.match-thumb {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: $match-thumb-size;
+	height: $match-thumb-size;
+	flex: 0 0 $match-thumb-size;
+}
+
+.match-icon {
+	font-size: 18px;
+}
+
+.match-name {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.match-detail {
+	flex: 0 0 auto;
+	opacity: 0.75;
+}
+
+.more-matches {
+	padding-left: $thumb-size + 10px;
+	font-size: 0.8em;
+	opacity: 0.75;
+}

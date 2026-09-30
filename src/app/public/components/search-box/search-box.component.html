@@ -29,18 +29,20 @@
 				</p>
 			}
 			@for (
-				archive of archiveResults;
-				track archiveResultTrackByFn(i, archive);
+				result of archiveResults;
+				track archiveResultTrackByFn(i, result);
 				let i = $index
 			) {
 				<div
 					class="search-box-result"
 					[ngClass]="{ active: i === activeResultIndex }"
 				>
-					<pr-archive-small
-						[archive]="archive"
-						(click)="onArchiveClick(archive)"
-					></pr-archive-small>
+					<pr-public-archive-search-result
+						[result]="result"
+						[maxMatches]="isPublicGallery ? 3 : 2"
+						(archiveClick)="onArchiveClick(result)"
+						(matchClick)="onMatchClick(result, $event)"
+					></pr-public-archive-search-result>
 				</div>
 			}
 		</div>

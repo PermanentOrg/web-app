@@ -1,0 +1,51 @@
+<div class="archive" (click)="archiveClick.emit(result)">
+	<div
+		class="archive-thumb"
+		prBgImage
+		[bgSrc]="result.archive.thumbnailUrls.width200"
+		[cover]="true"
+	></div>
+	<div class="archive-name">The {{ result.archive.name }} Archive</div>
+</div>
+@if (displayedMatches.length) {
+	<ul class="matches">
+		@for (match of displayedMatches; track $index) {
+			<li class="match" (click)="onMatchClick($event, match)">
+				@switch (match.matchType) {
+					@case ('milestone') {
+						<i class="material-icons match-icon">event</i>
+						<span class="match-name">{{ match.milestone.title }}</span>
+						@if (match.milestone.date) {
+							<span class="match-detail">{{ match.milestone.date }}</span>
+						}
+					}
+					@case ('item') {
+						<div
+							class="match-thumb"
+							prBgImage
+							[bgSrc]="match.item.thumbnailUrls.width200"
+							[cover]="true"
+						>
+							@if (!match.item.thumbnailUrls.width200) {
+								<i class="material-icons match-icon">{{
+									match.item.itemType === 'folder' ? 'folder' : 'description'
+								}}</i>
+							}
+						</div>
+						<span class="match-name">{{ match.item.displayName }}</span>
+						@if (match.matchedTags?.length) {
+							<span class="match-detail">
+								tagged {{ match.matchedTags[0].name }}
+							</span>
+						}
+					}
+				}
+			</li>
+		}
+	</ul>
+}
+@if (moreMatchCount > 0) {
+	<div class="more-matches">
+		+{{ moreMatchCount }} more {{ moreMatchCount === 1 ? 'match' : 'matches' }}
+	</div>
+}
