@@ -1,5 +1,6 @@
 import { RecordVO } from '@root/app/models';
 import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataService } from '@shared/services/data/data.service';
 import {
 	HasSubscriptions,
@@ -20,6 +21,7 @@ import {
 import { MessageService } from '@shared/services/message/message.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
+import { DocumentTypeService } from '../../services/document-type/document-type.service';
 
 type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
 @Component({
@@ -66,6 +68,19 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		}
 	}
 
+	get showDocumentType(): boolean {
+		return (
+			!!this.selectedItem?.isRecord &&
+			this.router.url.startsWith('/app/private')
+		);
+	}
+
+	get documentType(): string {
+		return this.documentTypeService.get(
+			(this.selectedItem as RecordVO).recordId,
+		);
+	}
+
 	get displayTime(): string {
 		return this.parseEdtfInterval('start');
 	}
@@ -102,6 +117,8 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		private editDateTimeModalService: EditDateTimeModalService,
 		private cdr: ChangeDetectorRef,
 		private feature: FeatureFlagService,
+		private router: Router,
+		private documentTypeService: DocumentTypeService,
 	) {
 		this.currentArchive = this.accountService.getArchive();
 		this.showEdtfDatePicker = this.feature.isEnabled('edtf-date');
@@ -248,6 +265,14 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 		await this.editService.saveItemVoProperty(
 			this.selectedItem,
 			property,
+			value,
+		);
+		this.cdr.markForCheck();
+	}
+
+	onDocumentTypeSaved(value: string) {
+		this.documentTypeService.set(
+			(this.selectedItem as RecordVO).recordId,
 			value,
 		);
 		this.cdr.markForCheck();

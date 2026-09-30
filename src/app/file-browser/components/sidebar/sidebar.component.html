@@ -66,6 +66,21 @@
 				type="textarea"
 			></pr-inline-value-edit>
 		</div>
+		@if (showDocumentType) {
+			<div class="sidebar-item">
+				<label>Document type</label>
+				<pr-inline-value-edit
+					[displayValue]="documentType"
+					[itemId]="selectedItem.folder_linkId"
+					[canEdit]="canEdit"
+					[maxLength]="50"
+					(doneEditing)="onDocumentTypeSaved($event)"
+					emptyMessage="Click to add document type"
+					readOnlyEmptyMessage="No document type"
+					type="text"
+				></pr-inline-value-edit>
+			</div>
+		}
 		<div class="sidebar-item">
 			<label>Alt Text</label>
 			<img

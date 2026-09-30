@@ -10,7 +10,9 @@ import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { EdtfService } from '@shared/services/edtf-service/edtf.service';
+import { Router } from '@angular/router';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
+import { DocumentTypeService } from '../../services/document-type/document-type.service';
 import { SidebarComponent } from './sidebar.component';
 
 @Pipe({ name: 'prTooltip', standalone: false })
@@ -125,6 +127,10 @@ class MockAccountService {
 	}
 }
 
+const mockRouter = {
+	url: '/app/private',
+};
+
 const mockFeatureFlagService = {
 	isEnabled: (_flag: string) => false,
 };
@@ -187,6 +193,10 @@ describe('SidebarComponent', () => {
 				{
 					provide: FeatureFlagService,
 					useValue: mockFeatureFlagService,
+				},
+				{
+					provide: Router,
+					useValue: mockRouter,
 				},
 			],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -738,6 +748,122 @@ describe('SidebarComponent', () => {
 			expect(fetchFullItemsSpy).toHaveBeenCalledWith([
 				mockDataService.currentFolder,
 			]);
+		});
+	});
+
+	describe('document type', () => {
+		let documentTypeService: DocumentTypeService;
+
+		const getDocumentTypeLabel = () =>
+			Array.from(
+				(fixture.nativeElement as HTMLElement).querySelectorAll('label'),
+			).find((label) => label.textContent.trim() === 'Document type');
+
+		const selectRecord = (recordId: number) => {
+			selectedItemsSubject.next(
+				new Set([
+					new RecordVO({
+						recordId,
+						accessRole: 'access.role.owner',
+					}),
+				]),
+			);
+			fixture.detectChanges();
+		};
+
+		beforeEach(() => {
+			documentTypeService = TestBed.inject(DocumentTypeService);
+		});
+
+		afterEach(() => {
+			mockRouter.url = '/app/private';
+		});
+
+		it('should show the document type field for a record in the private workspace', () => {
+			mockRouter.url = '/app/private/abc123';
+			selectRecord(1);
+
+			expect(component.showDocumentType).toBeTrue();
+			expect(getDocumentTypeLabel()).toBeTruthy();
+		});
+
+		it('should place the document type field directly below the description', () => {
+			selectRecord(1);
+
+			const labels = Array.from(
+				(fixture.nativeElement as HTMLElement).querySelectorAll(
+					'.sidebar-item > label',
+				),
+			).map((label) => label.textContent.trim());
+
+			expect(labels.indexOf('Document type')).toBe(
+				labels.indexOf('Description') + 1,
+			);
+		});
+
+		it('should not show the document type field in the public workspace', () => {
+			mockRouter.url = '/app/public/abc123';
+			selectRecord(1);
+
+			expect(component.showDocumentType).toBeFalse();
+			expect(getDocumentTypeLabel()).toBeUndefined();
+		});
+
+		it('should not show the document type field in the shares workspace', () => {
+			mockRouter.url = '/app/shares/withme';
+			selectRecord(1);
+
+			expect(component.showDocumentType).toBeFalse();
+			expect(getDocumentTypeLabel()).toBeUndefined();
+		});
+
+		it('should not show the document type field for a folder', () => {
+			selectedItemsSubject.next(
+				new Set([
+					new FolderVO({
+						folderId: 7,
+						type: 'type.folder.private',
+						accessRole: 'access.role.owner',
+					}),
+				]),
+			);
+			fixture.detectChanges();
+
+			expect(component.showDocumentType).toBeFalse();
+		});
+
+		it('should limit the document type to 50 characters', () => {
+			selectRecord(1);
+
+			const input = getDocumentTypeLabel().parentElement.querySelector(
+				'pr-inline-value-edit',
+			);
+
+			expect((input as unknown as { maxLength: number }).maxLength).toBe(50);
+		});
+
+		it('should keep the saved document type in memory without calling the API', () => {
+			const saveSpy = spyOn(mockEditService, 'saveItemVoProperty');
+			selectRecord(1);
+
+			component.onDocumentTypeSaved('Birth certificate');
+
+			expect(component.documentType).toBe('Birth certificate');
+			expect(documentTypeService.get(1)).toBe('Birth certificate');
+			expect(saveSpy).not.toHaveBeenCalled();
+		});
+
+		it('should show the saved document type again after selecting another record and coming back', () => {
+			selectRecord(1);
+			component.onDocumentTypeSaved('Letter');
+
+			selectRecord(2);
+
+			expect(component.documentType).toBe('');
+
+			selectRecord(1);
+
+			expect(component.documentType).toBe('Letter');
 		});
 	});
 });
