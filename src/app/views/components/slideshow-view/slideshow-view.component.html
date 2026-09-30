@@ -1,0 +1,39 @@
+@if (images.length && hasViewableImage) {
+	<ngb-carousel
+		#carousel
+		class="slideshow-carousel"
+		[interval]="0"
+		[animation]="false"
+		[wrap]="true"
+		[keyboard]="false"
+		[pauseOnHover]="false"
+		[pauseOnFocus]="false"
+		[showNavigationArrows]="images.length > 1"
+		[showNavigationIndicators]="false"
+		(slid)="onSlid($event)"
+	>
+		@for (image of images; track image; let i = $index) {
+			<ng-template ngbSlide [id]="slideId(i)">
+				@if (getSlideUrl(i); as url) {
+					<img
+						class="slideshow-image"
+						[src]="url"
+						[alt]="image.altText"
+						(load)="onImageLoad(i)"
+						(error)="onImageLoad(i)"
+					/>
+				}
+			</ng-template>
+		}
+	</ngb-carousel>
+} @else {
+	<div class="slideshow-empty">There are no images in this folder.</div>
+}
+<button
+	class="slideshow-close"
+	type="button"
+	aria-label="Exit slideshow"
+	(click)="exit()"
+>
+	<i class="material-icons">close</i>
+</button>

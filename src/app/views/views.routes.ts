@@ -11,6 +11,7 @@ import { SharedModule } from '@shared/shared.module';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { RoutesWithData } from '../app.routes';
 import { TimelineViewComponent } from './components/timeline-view/timeline-view.component';
+import { SlideshowViewComponent } from './components/slideshow-view/slideshow-view.component';
 
 const folderResolve = {
 	currentFolder: FolderResolveService,
@@ -48,6 +49,21 @@ export const routes: RoutesWithData = [
 						resolve: recordResolve,
 					},
 				],
+			},
+		],
+	},
+	{
+		path: 'slideshow',
+		children: [
+			{
+				path: '',
+				component: SlideshowViewComponent,
+				resolve: folderResolve,
+			},
+			{
+				path: ':archiveNbr/:folderLinkId',
+				component: SlideshowViewComponent,
+				resolve: folderResolve,
 			},
 		],
 	},

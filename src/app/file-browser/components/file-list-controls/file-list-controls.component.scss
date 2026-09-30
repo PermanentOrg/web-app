@@ -173,6 +173,39 @@ pr-folder-view-toggle {
 	flex: 0 0 auto;
 }
 
+.view-controls {
+	display: flex;
+	align-items: center;
+}
+
+// Matches the buttons in pr-folder-view-toggle
+.slideshow-button {
+	padding-left: $grid-unit * 0.5;
+	padding-right: $grid-unit * 0.5;
+	background: none;
+	border: none;
+	display: flex;
+	align-items: center;
+
+	i {
+		opacity: 0.5;
+		transition: opacity 0.125s $tweaked-ease;
+	}
+
+	&:hover i {
+		opacity: 0.7;
+		transition: opacity 0s $tweaked-ease;
+	}
+
+	&:focus {
+		box-shadow: none;
+	}
+
+	@include until(1100px) {
+		padding: 0 $grid-unit * 0.25;
+	}
+}
+
 .file-list-controls {
 	flex: 1 1 auto;
 	display: flex;

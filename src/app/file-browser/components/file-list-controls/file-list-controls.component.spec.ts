@@ -11,6 +11,7 @@ import { Subject, of } from 'rxjs';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { AccessRole } from '@models';
 import { ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 import { FileListControlsComponent } from './file-list-controls.component';
 
@@ -76,7 +77,14 @@ describe('FileListControlsComponent', () => {
 		dispatch: jasmine.createSpy('dispatch'),
 	};
 
+	let routerMock: { url: string; navigate: jasmine.Spy };
+
 	beforeEach(async () => {
+		routerMock = {
+			url: '/app/private',
+			navigate: jasmine.createSpy('navigate'),
+		};
+
 		await TestBed.configureTestingModule({
 			declarations: [FileListControlsComponent, TooltipsPipe],
 			providers: [
@@ -88,6 +96,7 @@ describe('FileListControlsComponent', () => {
 				{ provide: MessageService, useValue: messageServiceMock },
 				{ provide: FolderViewService, useValue: folderViewServiceMock },
 				{ provide: EventService, useValue: eventServiceMock },
+				{ provide: Router, useValue: routerMock },
 				{
 					provide: ElementRef,
 					useValue: new ElementRef({ nativeElement: {} }),
@@ -102,5 +111,26 @@ describe('FileListControlsComponent', () => {
 
 	it('should create the component', () => {
 		expect(component).toBeTruthy();
+	});
+
+	it('shows a slideshow button in the file browser', () => {
+		const button = fixture.nativeElement.querySelector('.slideshow-button');
+
+		expect(button).toBeTruthy();
+	});
+
+	it('hides the slideshow button outside the file browser', () => {
+		routerMock.url = '/app/shares';
+		fixture.detectChanges();
+
+		expect(fixture.nativeElement.querySelector('.slideshow-button')).toBeNull();
+	});
+
+	it('navigates to the slideshow when the button is clicked', () => {
+		fixture.nativeElement.querySelector('.slideshow-button').click();
+
+		expect(routerMock.navigate).toHaveBeenCalledWith(
+			jasmine.arrayContaining(['/app/private', 'view', 'slideshow']),
+		);
 	});
 });

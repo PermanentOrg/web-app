@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
 import {
@@ -15,7 +16,12 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { BaseResponse } from '@shared/services/api/base';
+import {
+	canStartSlideshow,
+	getSlideshowRoute,
+} from '@shared/utilities/slideshow';
 
 @Component({
 	selector: 'pr-right-menu',
@@ -40,6 +46,7 @@ export class RightMenuComponent implements OnInit {
 		multiSelect: false,
 		useGridView: false,
 		useListView: false,
+		slideshow: false,
 	};
 	public hasAllowedActions = false;
 
@@ -52,6 +59,7 @@ export class RightMenuComponent implements OnInit {
 		private account: AccountService,
 		private prompt: PromptService,
 		private folderViewService: FolderViewService,
+		private router: Router,
 	) {
 		this.dataService.currentFolderChange.subscribe(
 			(currentFolder: FolderVO) => {
@@ -63,6 +71,12 @@ export class RightMenuComponent implements OnInit {
 		this.folderViewService.viewChange.subscribe((folderView: FolderView) => {
 			this.setAvailableActions();
 		});
+
+		this.router.events
+			.pipe(filter((event) => event instanceof NavigationEnd))
+			.subscribe(() => {
+				this.setAvailableActions();
+			});
 
 		this.isMultiSelectEnabledSubscription =
 			this.dataService.multiSelectChange.subscribe((isEnabled) => {
@@ -82,6 +96,7 @@ export class RightMenuComponent implements OnInit {
 			this.allowedActions.folderActions = false;
 			this.allowedActions.useGridView = false;
 			this.allowedActions.useListView = false;
+			this.allowedActions.slideshow = false;
 			this.hasAllowedActions = false;
 			return false;
 		}
@@ -116,10 +131,16 @@ export class RightMenuComponent implements OnInit {
 			this.folderViewService.folderView !== FolderView.List &&
 			!isSpecialFolder;
 
+		this.allowedActions.slideshow = canStartSlideshow(
+			this.router.url,
+			this.currentFolder,
+		);
+
 		this.hasAllowedActions =
 			this.allowedActions.createFolder ||
 			this.allowedActions.useGridView ||
-			this.allowedActions.useListView;
+			this.allowedActions.useListView ||
+			this.allowedActions.slideshow;
 	}
 
 	hide(event: Event) {
@@ -131,6 +152,12 @@ export class RightMenuComponent implements OnInit {
 
 	setFolderView(folderView: FolderView) {
 		this.folderViewService.setFolderView(folderView);
+	}
+
+	startSlideshow() {
+		this.router.navigate(
+			getSlideshowRoute(this.router.url, this.currentFolder),
+		);
 	}
 
 	startMultiSelect() {

@@ -69,6 +69,7 @@ export const TOOLTIPS = {
 		viewToggle: {
 			list: 'Switch to list view',
 			grid: 'Switch to grid view',
+			slideshow: 'Start slideshow',
 		},
 		icons: {
 			share: 'This item is shared',

@@ -14,6 +14,9 @@
 				Switch to Grid View
 			</a>
 		}
+		@if (allowedActions.slideshow) {
+			<a class="menu-item" (click)="startSlideshow()"> Start Slideshow </a>
+		}
 		@if (allowedActions.createFolder) {
 			<a class="menu-item" (click)="createNewFolder()"> Create new folder </a>
 		}

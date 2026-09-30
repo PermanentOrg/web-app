@@ -89,7 +89,18 @@
 			}
 		</div>
 	</div>
-	<div>
+	<div class="view-controls">
+		@if (canStartSlideshow) {
+			<button
+				class="btn btn-sm slideshow-button"
+				type="button"
+				aria-label="Start slideshow"
+				[ngbTooltip]="'fileList.viewToggle.slideshow' | prTooltip"
+				(click)="onSlideshowClick()"
+			>
+				<i class="material-icons">slideshow</i>
+			</button>
+		}
 		<pr-folder-view-toggle></pr-folder-view-toggle>
 	</div>
 </div>

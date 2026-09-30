@@ -9,6 +9,7 @@ import {
 	ViewChild,
 	ElementRef,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataService } from '@shared/services/data/data.service';
 import {
 	HasSubscriptions,
@@ -31,6 +32,10 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { isKeyEventFromBody } from '@shared/utilities/events';
 import debug from 'debug';
 import { EventService } from '@shared/services/event/event.service';
+import {
+	canStartSlideshow,
+	getSlideshowRoute,
+} from '@shared/utilities/slideshow';
 
 interface FileListActions {
 	delete: boolean;
@@ -111,6 +116,7 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 		private api: ApiService,
 		private folderView: FolderViewService,
 		private event: EventService,
+		private router: Router,
 	) {
 		this.getSortFromCurrentFolder();
 		this.initialSortType = this.data.currentFolder?.sort;
@@ -136,6 +142,16 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 
 	ngOnDestroy() {
 		unsubscribeAll(this.subscriptions);
+	}
+
+	get canStartSlideshow() {
+		return canStartSlideshow(this.router.url, this.data.currentFolder);
+	}
+
+	onSlideshowClick() {
+		this.router.navigate(
+			getSlideshowRoute(this.router.url, this.data.currentFolder),
+		);
 	}
 
 	@HostListener('document:click', ['$event'])
