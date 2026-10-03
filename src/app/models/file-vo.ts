@@ -4,6 +4,12 @@ export const enum FileFormat {
 	ArchivematicaAccess = 'file.format.archivematica.access',
 }
 
+export enum GeneratedFileStatus {
+	Ok = 'ok',
+	Processing = 'processing',
+	Failed = 'failed',
+}
+
 export interface PermanentFile {
 	fileId: number;
 	size: number;
@@ -12,4 +18,8 @@ export interface PermanentFile {
 	fileURL: string;
 	downloadURL: string;
 	type: string;
+}
+
+export function getFileExtension(file: PermanentFile): string {
+	return file.type.split('.').pop();
 }
