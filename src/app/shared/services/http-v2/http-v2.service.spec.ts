@@ -261,6 +261,33 @@ describe('HttpV2Service', () => {
 		);
 	});
 
+	it('should not treat a 401 as an expired session when a request opts out', async () => {
+		let expirationObserved = false;
+		const subscription = service.tokenExpired.subscribe(() => {
+			expirationObserved = true;
+		});
+
+		const requestPromise = firstValueFrom(
+			service.put('/api/v2/health', {}, HealthResponse, {
+				treatUnauthorizedAsExpiredSession: false,
+			}),
+		);
+		const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+		request.flush(
+			{ error: 'error message' },
+			{
+				status: 401,
+				statusText: 'unauthorized',
+			},
+		);
+
+		await expectAsync(requestPromise).toBeRejected();
+
+		expect(expirationObserved).toBeFalse();
+
+		subscription.unsubscribe();
+	});
+
 	it('can have its stela domain configured', () => {
 		MockSecretService.stelaDomain = 'https://api.local.permanent.org/api/';
 

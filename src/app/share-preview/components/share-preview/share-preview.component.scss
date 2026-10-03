@@ -314,3 +314,11 @@ $share-preview-banner-height: 100px;
 		color: white;
 	}
 }
+
+pr-loading-spinner.unlisted-share-signup-loading {
+	position: fixed;
+	inset: 0;
+	z-index: 11;
+	border: none;
+	border-radius: 0;
+}

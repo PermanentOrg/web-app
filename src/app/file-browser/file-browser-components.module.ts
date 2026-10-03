@@ -16,6 +16,7 @@ import {
 	FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
 import { faFileArchive } from '@fortawesome/free-solid-svg-icons';
+import { ArchiveAvatarComponent } from '@shared/components/archive-avatar/archive-avatar.component';
 import { FolderViewComponent } from './components/folder-view/folder-view.component';
 import { PublishComponent } from './components/publish/publish.component';
 import { FolderDescriptionComponent } from './components/folder-description/folder-description.component';
@@ -35,6 +36,7 @@ import { SidebarLocationComponent } from './components/sidebar-location/sidebar-
 		CommonModule,
 		RouterModule,
 		SharedModule,
+		ArchiveAvatarComponent,
 		GoogleMapsModule,
 		InViewportModule,
 		FontAwesomeModule,

@@ -99,7 +99,9 @@ export class AccountRepo extends BaseRepo {
 
 	public async updateAccountTags(addTags: string[], removeTags: string[]) {
 		return await this.httpV2
-			.put<{}>(`/v2/account/tags`, { addTags, removeTags }, null)
+			.put<{}>(`/v2/account/tags`, { addTags, removeTags }, null, {
+				treatUnauthorizedAsExpiredSession: false,
+			})
 			.toPromise();
 	}
 }

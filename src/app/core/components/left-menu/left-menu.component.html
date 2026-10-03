@@ -20,12 +20,11 @@
 			</div>
 			<div class="menu-header-desktop" [class.show-shadow]="showArchiveOptions">
 				<div class="archive">
-					<div
+					<pr-archive-avatar
 						class="archive-thumb"
-						prBgImage
-						[bgSrc]="archiveThumbnail"
-						[cover]="true"
-					></div>
+						[thumbnailUrl]="archiveThumbnail"
+						[archiveName]="archive?.fullName"
+					></pr-archive-avatar>
 					<div class="archive-name-access">
 						<div
 							class="archive-options-toggle"

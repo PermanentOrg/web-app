@@ -130,12 +130,11 @@
 	@if (showAccess && !inGridView) {
 		<div class="shared-by">
 			@if (item.ShareArchiveVO) {
-				<div
+				<pr-archive-avatar
 					class="archive-thumb"
-					prBgImage
-					[bgSrc]="item.ShareArchiveVO | getThumbnail"
-					[cover]="true"
-				></div>
+					[thumbnailUrl]="item.ShareArchiveVO | getThumbnail"
+					[archiveName]="item.ShareArchiveVO.fullName"
+				></pr-archive-avatar>
 				<span>The {{ item.ShareArchiveVO?.fullName }} Archive</span>
 			}
 		</div>

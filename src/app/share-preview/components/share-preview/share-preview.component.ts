@@ -33,8 +33,11 @@ import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 import { DataService } from '@shared/services/data/data.service';
 import { ItemClickEvent } from '@fileBrowser/components/file-list/file-list.component';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
+import { UnlistedShareSignupService } from '../../services/unlisted-share-signup.service';
+import { UnlistedShareSignupDetails } from '../../models/unlisted-share-signup-details';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
+const UNLISTED_SHARE_SIGNUP_FOOTER_DELAY_IN_MILLISECONDS = 2000;
 
 enum FormType {
 	Signup,
@@ -104,6 +107,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 	public hideBannerObservable = this.hideBannerSubject.asObservable();
 	public isUnlistedShare = false;
 	public ephemeralFolder: FolderVO | null = null;
+	public isUnlistedShareSignupFooterVisible = false;
+	public isSubmittingUnlistedShareSignup = false;
+	private unlistedShareSignupFooterTimeout: ReturnType<typeof setTimeout>;
 
 	constructor(
 		private router: Router,
@@ -119,6 +125,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 		private shareLinksService: ShareLinksService,
 		private filesystemService: FilesystemService,
 		private dataService: DataService,
+		private unlistedShareSignupService: UnlistedShareSignupService,
 	) {
 		this.shareToken = this.route.snapshot.params.shareToken;
 
@@ -221,6 +228,12 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 			}, 1000);
 		}
 
+		if (!this.isLoggedIn && this.isUnlistedShare) {
+			this.unlistedShareSignupFooterTimeout = setTimeout(() => {
+				this.isUnlistedShareSignupFooterVisible = true;
+			}, UNLISTED_SHARE_SIGNUP_FOOTER_DELAY_IN_MILLISECONDS);
+		}
+
 		if (!this.accountService.isLoggedIn()) {
 			return;
 		}
@@ -254,6 +267,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		this.shareLinksService.currentShareToken = undefined;
+		clearTimeout(this.unlistedShareSignupFooterTimeout);
 
 		this.routerListener.unsubscribe();
 		this.accountListener.unsubscribe();
@@ -458,6 +472,48 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 			});
 
 			this.createAccountDialogIsOpen = true;
+		}
+	}
+
+	hideUnlistedShareSignupFooter() {
+		this.isUnlistedShareSignupFooterVisible = false;
+	}
+
+	async onUnlistedShareSignupSubmitted(
+		signupDetails: UnlistedShareSignupDetails,
+	) {
+		this.isSubmittingUnlistedShareSignup = true;
+		try {
+			const outcome = await this.unlistedShareSignupService.signUpAndOnboard(
+				signupDetails,
+				this.shareToken,
+			);
+			this.sendGaEvent('signup');
+
+			if (outcome === 'needs-verification') {
+				this.message.showMessage({
+					message: `Verify to continue as ${signupDetails.email}.`,
+					style: 'warning',
+				});
+				await this.router.navigate(['/app', 'auth', 'verify']);
+				return;
+			}
+
+			if (outcome === 'onboarded-without-share') {
+				this.message.showError({
+					message:
+						'Your account is ready, but we could not add this share to it.',
+				});
+			}
+			await this.router.navigate(['/app', 'shares']);
+		} catch (error) {
+			const apiErrorMessage = error?.error?.message;
+			this.message.showError({
+				message: apiErrorMessage ?? 'An error occurred. Please try again.',
+				translate: !!apiErrorMessage,
+			});
+		} finally {
+			this.isSubmittingUnlistedShareSignup = false;
 		}
 	}
 

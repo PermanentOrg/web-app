@@ -15,6 +15,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { cloneDeep } from 'lodash';
 
 import { SharedModule } from '@shared/shared.module';
+import { ComponentsModule } from '@root/app/component-library/components.module';
 import * as Testing from '@root/test/testbedConfig';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { AccountVO, ArchiveVO, RecordVO } from '@root/app/models';
@@ -26,7 +27,10 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { AccountService } from '@shared/services/account/account.service';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
+import { UnlistedShareSignupFooterComponent } from '../unlisted-share-signup-footer/unlisted-share-signup-footer.component';
+import { UnlistedShareSignupService } from '../../services/unlisted-share-signup.service';
 import { SharePreviewComponent } from './share-preview.component';
 
 export const mockAccountService = jasmine.createSpyObj('AccountService', [
@@ -80,7 +84,13 @@ const mockFilesystemService = {
 
 const mockMessageService = {
 	showMessage: jasmine.createSpy(),
+	showError: jasmine.createSpy(),
 };
+
+const mockUnlistedShareSignupService = jasmine.createSpyObj(
+	'UnlistedShareSignupService',
+	['signUpAndOnboard'],
+);
 
 describe('SharePreviewComponent', () => {
 	let component: SharePreviewComponent;
@@ -91,7 +101,12 @@ describe('SharePreviewComponent', () => {
 
 	beforeEach(async () => {
 		const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
-		config.imports.push(SharedModule, RouterTestingModule);
+		config.imports.push(
+			SharedModule,
+			RouterTestingModule,
+			ComponentsModule,
+			UnlistedShareSignupFooterComponent,
+		);
 		config.declarations.push(SharePreviewComponent);
 
 		const mockRoute = new ActivatedRoute();
@@ -141,6 +156,11 @@ describe('SharePreviewComponent', () => {
 		config.providers.push({
 			provide: MessageService,
 			useValue: mockMessageService,
+		});
+
+		config.providers.push({
+			provide: UnlistedShareSignupService,
+			useValue: mockUnlistedShareSignupService,
 		});
 
 		await TestBed.configureTestingModule(config).compileComponents();
@@ -215,6 +235,188 @@ describe('SharePreviewComponent', () => {
 
 		expect(dialogSpy).not.toHaveBeenCalled();
 	}));
+
+	describe('unlisted share signup footer', () => {
+		const signupFooterElement = (): HTMLElement =>
+			fixture.nativeElement.querySelector('pr-unlisted-share-signup-footer');
+
+		const loadShare = ({
+			isLoggedIn,
+			isUnlistedShare,
+		}: {
+			isLoggedIn: boolean;
+			isUnlistedShare: boolean;
+		}): void => {
+			spyOn(TestBed.inject(AccountService), 'isLoggedIn').and.returnValue(
+				isLoggedIn,
+			);
+			spyOn(mockShareLinksService, 'isUnlistedShare').and.returnValue(
+				isUnlistedShare,
+			);
+			mockFilesystemService.getFolder.and.callFake(async () => ({}));
+			spyOn(dialog, 'open').and.returnValue(
+				jasmine.createSpyObj('DialogRef', ['close']),
+			);
+			component.ngOnInit();
+			tick();
+		};
+
+		it('should show the footer two seconds after a logged out user loads an unlisted share', fakeAsync(() => {
+			loadShare({ isLoggedIn: false, isUnlistedShare: true });
+			tick(1999);
+			fixture.detectChanges();
+
+			expect(signupFooterElement()).toBeNull();
+
+			tick(1);
+			fixture.detectChanges();
+
+			expect(signupFooterElement()).not.toBeNull();
+		}));
+
+		it('should hide the footer once it is closed', fakeAsync(() => {
+			loadShare({ isLoggedIn: false, isUnlistedShare: true });
+			tick(2000);
+			fixture.detectChanges();
+
+			component.hideUnlistedShareSignupFooter();
+			fixture.detectChanges();
+
+			expect(signupFooterElement()).toBeNull();
+		}));
+
+		it('should not show the footer to a logged in user', fakeAsync(() => {
+			loadShare({ isLoggedIn: true, isUnlistedShare: true });
+			tick(2000);
+			fixture.detectChanges();
+
+			expect(signupFooterElement()).toBeNull();
+		}));
+
+		it('should not show the footer on a share that is not unlisted', fakeAsync(() => {
+			loadShare({ isLoggedIn: false, isUnlistedShare: false });
+			tick(2000);
+			fixture.detectChanges();
+
+			expect(signupFooterElement()).toBeNull();
+		}));
+
+		it('should not show the footer after the share has been left', fakeAsync(() => {
+			loadShare({ isLoggedIn: false, isUnlistedShare: true });
+			component.ngOnDestroy();
+			tick(2000);
+
+			expect(component.isUnlistedShareSignupFooterVisible).toBeFalse();
+		}));
+	});
+
+	describe('when the unlisted share signup footer is submitted', () => {
+		const signupDetails = {
+			email: 'jane@example.com',
+			password: 'password123',
+			agreedToTerms: true,
+			receivesUpdatesViaEmail: false,
+		};
+
+		beforeEach(() => {
+			mockMessageService.showMessage.calls.reset();
+			mockMessageService.showError.calls.reset();
+		});
+
+		it('should sign up and onboard with the current share token', async () => {
+			mockUnlistedShareSignupService.signUpAndOnboard.and.resolveTo(
+				'onboarded',
+			);
+
+			await component.onUnlistedShareSignupSubmitted(signupDetails);
+
+			expect(
+				mockUnlistedShareSignupService.signUpAndOnboard,
+			).toHaveBeenCalledWith(signupDetails, 'test');
+		});
+
+		it('should land the new user on the shared workspace', async () => {
+			mockUnlistedShareSignupService.signUpAndOnboard.and.resolveTo(
+				'onboarded',
+			);
+
+			await component.onUnlistedShareSignupSubmitted(signupDetails);
+
+			expect(router.navigate).toHaveBeenCalledWith(['/app', 'shares']);
+			expect(mockMessageService.showError).not.toHaveBeenCalled();
+		});
+
+		it('should show the loading layover until the flow finishes', async () => {
+			let finishSignup: (outcome: string) => void;
+			mockUnlistedShareSignupService.signUpAndOnboard.and.returnValue(
+				new Promise((resolve) => {
+					finishSignup = resolve;
+				}),
+			);
+
+			const submission =
+				component.onUnlistedShareSignupSubmitted(signupDetails);
+
+			expect(component.isSubmittingUnlistedShareSignup).toBeTrue();
+
+			fixture.detectChanges();
+
+			expect(
+				fixture.nativeElement.querySelector(
+					'pr-loading-spinner.unlisted-share-signup-loading',
+				),
+			).not.toBeNull();
+
+			finishSignup('onboarded');
+			await submission;
+			fixture.detectChanges();
+
+			expect(component.isSubmittingUnlistedShareSignup).toBeFalse();
+			expect(
+				fixture.nativeElement.querySelector(
+					'pr-loading-spinner.unlisted-share-signup-loading',
+				),
+			).toBeNull();
+		});
+
+		it('should still land on the shared workspace, with a warning, when the share could not be added', async () => {
+			mockUnlistedShareSignupService.signUpAndOnboard.and.resolveTo(
+				'onboarded-without-share',
+			);
+
+			await component.onUnlistedShareSignupSubmitted(signupDetails);
+
+			expect(mockMessageService.showError).toHaveBeenCalled();
+			expect(router.navigate).toHaveBeenCalledWith(['/app', 'shares']);
+		});
+
+		it('should send the user to verify their account when sign up needs it', async () => {
+			mockUnlistedShareSignupService.signUpAndOnboard.and.resolveTo(
+				'needs-verification',
+			);
+
+			await component.onUnlistedShareSignupSubmitted(signupDetails);
+
+			expect(router.navigate).toHaveBeenCalledWith(['/app', 'auth', 'verify']);
+			expect(router.navigate).not.toHaveBeenCalledWith(['/app', 'shares']);
+		});
+
+		it('should show the API error and stay on the share when sign up fails', async () => {
+			mockUnlistedShareSignupService.signUpAndOnboard.and.rejectWith({
+				error: { message: 'warning.signup.email_taken' },
+			});
+
+			await component.onUnlistedShareSignupSubmitted(signupDetails);
+
+			expect(mockMessageService.showError).toHaveBeenCalledWith({
+				message: 'warning.signup.email_taken',
+				translate: true,
+			});
+
+			expect(router.navigate).not.toHaveBeenCalledWith(['/app', 'shares']);
+			expect(component.isSubmittingUnlistedShareSignup).toBeFalse();
+		});
+	});
 
 	it('should not open dialog if already open', () => {
 		const dialogSpy = spyOn(dialog, 'open');

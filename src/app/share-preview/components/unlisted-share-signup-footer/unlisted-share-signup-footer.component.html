@@ -1,0 +1,102 @@
+<section class="signup-footer" aria-label="Sign up for Permanent">
+	<form
+		class="signup-footer-form"
+		[formGroup]="accountDetailsForm"
+		(ngSubmit)="submit()"
+	>
+		<div class="signup-footer-content">
+			<div class="account-details-fields">
+				<pr-form-input-glam
+					class="signup-footer-field"
+					[variant]="'dark'"
+					fieldName="email"
+					placeholder="Email"
+					type="email"
+					[control]="accountDetailsForm.controls.email"
+					[config]="{
+						autocomplete: 'username',
+						autocorrect: 'off',
+						autocapitalize: 'off',
+						spellcheck: 'off'
+					}"
+				></pr-form-input-glam>
+				<pr-form-input-glam
+					class="signup-footer-field"
+					[variant]="'dark'"
+					type="password"
+					fieldName="password"
+					placeholder="Password (min. 8 chars)"
+					[control]="accountDetailsForm.controls.password"
+					[config]="{
+						autocomplete: 'new-password',
+						autocorrect: 'off',
+						autocapitalize: 'off',
+						spellcheck: 'off'
+					}"
+				></pr-form-input-glam>
+				<pr-form-input-glam
+					class="signup-footer-field"
+					[variant]="'dark'"
+					type="password"
+					fieldName="confirmPassword"
+					placeholder="Confirm password"
+					[control]="accountDetailsForm.controls.confirmPassword"
+					[config]="{
+						autocomplete: 'new-password',
+						autocorrect: 'off',
+						autocapitalize: 'off',
+						spellcheck: 'off',
+						validateDirty: true
+					}"
+				></pr-form-input-glam>
+			</div>
+			<div class="consent-column">
+				<p class="signup-footer-prompt">Why not create an account?</p>
+				<div class="consent-option">
+					<pr-checkbox
+						class="receive-updates-checkbox"
+						[variant]="'secondary'"
+						[isChecked]="receivesUpdatesViaEmail()"
+						(isCheckedChange)="receivesUpdatesViaEmail.set(!!$event)"
+					></pr-checkbox>
+					<span class="consent-label"
+						>I agree to receive updates via email</span
+					>
+				</div>
+				<div class="consent-option">
+					<pr-checkbox
+						class="terms-checkbox"
+						[variant]="'secondary'"
+						[isChecked]="agreedToTerms()"
+						(isCheckedChange)="agreedToTerms.set(!!$event)"
+					></pr-checkbox>
+					<span class="consent-label">
+						I agree to the&nbsp;<a
+							href="https://www.permanent.org/terms/"
+							target="_blank"
+							aria-label="Permanent.org Terms of Service"
+							>Terms of Service</a
+						>
+					</span>
+				</div>
+				<pr-button
+					class="sign-up-button"
+					[buttonType]="'submit'"
+					[variant]="'secondary'"
+					[icon]="'auth/sign-up'"
+					[orientation]="'right'"
+					[disabled]="!canSubmit()"
+					>Sign Up</pr-button
+				>
+			</div>
+		</div>
+	</form>
+	<button
+		type="button"
+		class="signup-footer-close"
+		aria-label="Close sign up form"
+		(click)="close()"
+	>
+		<i class="material-icons">close</i>
+	</button>
+</section>

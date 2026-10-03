@@ -21,6 +21,7 @@ interface RequestOptions {
 	shareToken?: string | null;
 	useStelaDomain?: boolean;
 	responseType?: ResponseType;
+	treatUnauthorizedAsExpiredSession?: boolean;
 }
 
 const defaultOptions: RequestOptions = {
@@ -29,6 +30,7 @@ const defaultOptions: RequestOptions = {
 	shareToken: null,
 	useStelaDomain: true,
 	responseType: 'json',
+	treatUnauthorizedAsExpiredSession: true,
 };
 
 export function getFirst<T>(observable: Observable<T[]>): Observable<T> {
@@ -313,7 +315,7 @@ export class HttpV2Service {
 				return [response as T];
 			}),
 			catchError((err) => {
-				if (err.status === 401) {
+				if (err.status === 401 && options.treatUnauthorizedAsExpiredSession) {
 					this.tokenExpired.next();
 				}
 				return throwError(err);

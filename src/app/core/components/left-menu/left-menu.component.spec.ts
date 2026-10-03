@@ -7,6 +7,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { TEST_DATA } from '@core/core.module.spec';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
+import { ArchiveAvatarComponent } from '@shared/components/archive-avatar/archive-avatar.component';
 import { AccountVO, ArchiveVO } from '@models';
 import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 
@@ -29,6 +30,7 @@ describe('LeftMenuComponent', () => {
 		config.declarations.push(ArchiveStoragePayerComponent);
 		config.imports.push(NgbTooltipModule);
 		config.imports.push(NoopAnimationsModule);
+		config.imports.push(ArchiveAvatarComponent);
 
 		TestBed.configureTestingModule(config).compileComponents();
 
@@ -101,17 +103,17 @@ describe('LeftMenuComponent', () => {
 	});
 
 	it('should show a profile photo written onto the archive after the menu is rendered', () => {
-		const background = fixture.debugElement
+		const avatar = fixture.debugElement
 			.query(By.css('.menu-header-desktop .archive-thumb'))
-			.injector.get(BgImageSrcDirective);
+			.injector.get(ArchiveAvatarComponent);
 
-		expect(background.bgSrc).toBeFalsy();
+		expect(avatar.thumbnailUrl()).toBeFalsy();
 
 		// promptForProfilePicture() writes the new URLs onto this same instance, so
 		// the avatar has to notice a mutation that leaves the reference unchanged.
 		component.archive.thumbURL200 = 'https://example.com/thumb.jpg';
 		fixture.detectChanges();
 
-		expect(background.bgSrc).toBe('https://example.com/thumb.jpg');
+		expect(avatar.thumbnailUrl()).toBe('https://example.com/thumb.jpg');
 	});
 });

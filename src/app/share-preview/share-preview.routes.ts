@@ -8,6 +8,7 @@ import { FileListComponent } from '@fileBrowser/components/file-list/file-list.c
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
 import { AnnouncementModule } from '../announcement/announcement.module';
+import { ComponentsModule } from '../component-library/components.module';
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
 import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
 import { PreviewResolveService } from './resolves/preview-resolve.service';
@@ -19,6 +20,7 @@ import { InviteShareResolveService } from './resolves/invite-share-resolve.servi
 import { RelationshipShareResolveService } from './resolves/relationship-share-resolve.service';
 
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
+import { UnlistedShareSignupFooterComponent } from './components/unlisted-share-signup-footer/unlisted-share-signup-footer.component';
 
 const previewResolve = {
 	currentFolder: PreviewResolveService,
@@ -101,6 +103,8 @@ export const routes: Routes = [
 		FileBrowserComponentsModule,
 		NgbModule,
 		AnnouncementModule,
+		ComponentsModule,
+		UnlistedShareSignupFooterComponent,
 	],
 	declarations: [
 		SharePreviewComponent,

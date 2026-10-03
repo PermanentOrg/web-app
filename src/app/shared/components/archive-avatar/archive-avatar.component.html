@@ -1,0 +1,13 @@
+<span class="archive-avatar-initial" aria-hidden="true">{{
+	archiveInitial()
+}}</span>
+@if (shouldTryThumbnail()) {
+	<img
+		class="archive-avatar-thumbnail"
+		[class.loaded]="isThumbnailLoaded()"
+		[src]="thumbnailUrl()"
+		alt=""
+		(load)="onThumbnailLoad()"
+		(error)="onThumbnailError()"
+	/>
+}

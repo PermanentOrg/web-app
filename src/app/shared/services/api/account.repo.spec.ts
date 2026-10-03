@@ -104,4 +104,26 @@ describe('AccountRepo', () => {
 		expect(req.request.body.postalCode).toBe('12345');
 		req.flush(update);
 	});
+
+	it('should not treat a 401 from the tags update as an expired session', async () => {
+		const tokenExpiredSpy = jasmine.createSpy('tokenExpired');
+		const subscription =
+			TestBed.inject(HttpV2Service).tokenExpired.subscribe(tokenExpiredSpy);
+
+		const updatePromise = repo.updateAccountTags(['type:myself'], []);
+		const request = httpMock.expectOne((pendingRequest) =>
+			pendingRequest.url.endsWith('/v2/account/tags'),
+		);
+		request.flush(
+			{ error: 'upstream unauthorized' },
+			{ status: 401, statusText: 'Unauthorized' },
+		);
+
+		await expectAsync(updatePromise).toBeRejected();
+
+		expect(request.request.method).toBe('PUT');
+		expect(tokenExpiredSpy).not.toHaveBeenCalled();
+
+		subscription.unsubscribe();
+	});
 });

@@ -1,0 +1,103 @@
+@import 'variables';
+
+@mixin two-columns {
+	@media screen and (min-width: 768px) {
+		@content;
+	}
+}
+
+@keyframes slide-up {
+	from {
+		opacity: 0;
+		transform: translateY(100%);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0%);
+	}
+}
+
+:host {
+	display: block;
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: max(33.333%, 600px);
+	max-width: 100%;
+	margin: 0 auto;
+	z-index: 10;
+	animation: slide-up 0.3s ease;
+}
+
+.signup-footer {
+	position: relative;
+	padding: 40px 24px 24px;
+	border-radius: 12px 12px 0 0;
+	background-color: $PR-blue;
+	box-shadow: 0 -4px 4px 0 rgba($PR-brand-black, 0.25);
+}
+
+.signup-footer-form {
+	max-width: none;
+	margin: 0;
+	padding: 0;
+}
+
+.signup-footer-content {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+
+	@include two-columns {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 48px;
+	}
+}
+
+.account-details-fields,
+.consent-column {
+	display: flex;
+	flex: 1 1 0;
+	flex-direction: column;
+	gap: 16px;
+	min-width: 0;
+}
+
+.consent-column {
+	align-items: flex-start;
+}
+
+.signup-footer-prompt {
+	margin: 0;
+	color: $PR-orange;
+	font-family: 'UsualBold', sans-serif;
+	font-size: 16px;
+	line-height: 24px;
+}
+
+.consent-option {
+	display: flex;
+	align-items: center;
+}
+
+.consent-label,
+.consent-label > a {
+	margin: 0;
+	color: $PR-brand-white;
+	font-family: 'UsualRegular', sans-serif;
+	font-size: 14px;
+}
+
+.signup-footer-close {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	padding: 8px;
+	border: none;
+	background: none;
+	color: $PR-brand-white;
+	line-height: 0;
+	cursor: pointer;
+}

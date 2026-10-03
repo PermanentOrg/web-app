@@ -372,4 +372,17 @@
 		[closeEvent]="hideBannerObservable"
 	></pr-share-preview-footer>
 }
+@if (isUnlistedShareSignupFooterVisible) {
+	<pr-unlisted-share-signup-footer
+		[isSubmitting]="isSubmittingUnlistedShareSignup"
+		(closed)="hideUnlistedShareSignupFooter()"
+		(signupSubmitted)="onUnlistedShareSignupSubmitted($event)"
+	></pr-unlisted-share-signup-footer>
+}
+@if (isSubmittingUnlistedShareSignup) {
+	<pr-loading-spinner
+		class="unlisted-share-signup-loading"
+		[isFullScreen]="true"
+	></pr-loading-spinner>
+}
 <pr-prompt></pr-prompt>

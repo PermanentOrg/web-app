@@ -20,6 +20,7 @@ import { SearchModule } from '@search/search.module';
 import { PortalModule } from '@angular/cdk/portal';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { CountUpModule } from 'ngx-countup';
+import { ArchiveAvatarComponent } from '@shared/components/archive-avatar/archive-avatar.component';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { PledgeModule } from '../pledge/pledge.module';
 import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
@@ -64,6 +65,7 @@ import { RedeemGiftComponent } from './components/redeem-gift/redeem-gift.compon
 @NgModule({
 	imports: [
 		AnnouncementModule,
+		ArchiveAvatarComponent,
 		CommonModule,
 		SharedModule,
 		CoreRoutingModule,

@@ -235,6 +235,7 @@ $bg-transition-length: 0.075s;
 		height: $thumb-size;
 		flex: 0 0 $thumb-size;
 		border-radius: 50%;
+		margin: pxToGrid(5px);
 		margin-right: 10px;
 	}
 }
