@@ -1,5 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+	ComponentFixture,
+	TestBed,
+	fakeAsync,
+	flushMicrotasks,
+	tick,
+} from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -13,7 +20,7 @@ import { PublicProfileService } from '@public/services/public-profile/public-pro
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
-import { MockComponent } from 'ng-mocks';
+import { MockComponent, ngMocks } from 'ng-mocks';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { environment } from '@root/environments/environment';
 import { MessageService } from '@shared/services/message/message.service';
@@ -21,8 +28,15 @@ import {
 	DateTimeModel,
 	EdtfService,
 } from '@shared/services/edtf-service/edtf.service';
-import { TagsComponent } from '../../../shared/components/tags/tags.component';
+import {
+	FileFormat,
+	GeneratedFileStatus,
+	PermanentFile,
+} from '@models/file-vo';
+import { RecordPreviewState } from '@models/record-preview-state';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
+import { TagsComponent } from '../../../shared/components/tags/tags.component';
+import { RecordPreviewStateComponent } from '../record-preview-state/record-preview-state.component';
 import { FileViewerComponent } from './file-viewer.component';
 
 @Pipe({ name: 'dsFileSize', standalone: false })
@@ -163,7 +177,10 @@ describe('FileViewerComponent', () => {
 				MockPrLocationPipe,
 				GetThumbnailPipe,
 			],
-			imports: [HttpClientTestingModule],
+			imports: [
+				HttpClientTestingModule,
+				MockComponent(RecordPreviewStateComponent),
+			],
 			providers: [
 				{
 					provide: Router,
@@ -852,6 +869,208 @@ describe('FileViewerComponent', () => {
 
 			expect(locationSpan.textContent.trim()).toBe('Click to add location');
 		});
+	});
+
+	describe('Access copy states', () => {
+		function buildFile(format: FileFormat, type: string): PermanentFile {
+			return {
+				fileId: 1,
+				size: 100,
+				format,
+				fileURL: `https://example.com/${type}`,
+				downloadURL: `https://example.com/download/${type}`,
+				type,
+			};
+		}
+
+		function buildRecord(
+			recordType: string,
+			files: PermanentFile[],
+			accessCopyStatus: GeneratedFileStatus | null,
+		): RecordVO {
+			return new RecordVO({
+				displayName: 'Grandma Ruth',
+				TagVOs: [],
+				type: recordType,
+				FileVOs: files,
+				accessCopyStatus,
+			});
+		}
+
+		const docxOriginal = buildFile(
+			FileFormat.Original,
+			'type.file.document.docx',
+		);
+		const preparingDocument = () =>
+			buildRecord(
+				'type.record.document',
+				[docxOriginal],
+				GeneratedFileStatus.Processing,
+			);
+		const documentWithItsCopy = () =>
+			buildRecord(
+				'type.record.document',
+				[
+					docxOriginal,
+					buildFile(FileFormat.ArchivematicaAccess, 'type.file.pdf.pdf'),
+				],
+				GeneratedFileStatus.Ok,
+			);
+
+		function openViewerOn(record: RecordVO): void {
+			activatedRouteData.currentRecord = record;
+			fixture = TestBed.createComponent(FileViewerComponent);
+			component = fixture.componentInstance;
+			fixture.detectChanges();
+			flushMicrotasks();
+			fixture.detectChanges();
+		}
+
+		function closeViewer(): void {
+			fixture.destroy();
+			tick();
+		}
+
+		function findPreviewState() {
+			return fixture.debugElement.query(
+				By.directive(RecordPreviewStateComponent),
+			);
+		}
+
+		function stubRecordRefresh(refreshedRecord: RecordVO): jasmine.Spy {
+			return spyOn(TestBed.inject(ApiService).record, 'get').and.resolveTo({
+				getRecordVO: () => refreshedRecord,
+			} as any);
+		}
+
+		it('shows the preparing screen for a document whose copy is being made', fakeAsync(() => {
+			openViewerOn(preparingDocument());
+			const previewState = findPreviewState();
+
+			expect(previewState).toBeTruthy();
+			expect(ngMocks.input(previewState, 'previewState')).toBe(
+				RecordPreviewState.Preparing,
+			);
+
+			expect(ngMocks.input(previewState, 'fileExtension')).toBe('docx');
+			expect(fixture.nativeElement.querySelector('iframe')).toBeNull();
+			closeViewer();
+		}));
+
+		it('shows the failed screen for a document whose copy could not be made', fakeAsync(() => {
+			openViewerOn(
+				buildRecord(
+					'type.record.document',
+					[docxOriginal],
+					GeneratedFileStatus.Failed,
+				),
+			);
+
+			expect(ngMocks.input(findPreviewState(), 'previewState')).toBe(
+				RecordPreviewState.Failed,
+			);
+			closeViewer();
+		}));
+
+		it('shows the preparing screen for a TIFF, whose original a browser cannot display', fakeAsync(() => {
+			openViewerOn(
+				buildRecord(
+					'type.record.image',
+					[buildFile(FileFormat.Original, 'type.file.image.tiff')],
+					GeneratedFileStatus.Processing,
+				),
+			);
+
+			expect(ngMocks.input(findPreviewState(), 'previewState')).toBe(
+				RecordPreviewState.Preparing,
+			);
+			closeViewer();
+		}));
+
+		it('shows a JPEG from its original even while its copy is being made', fakeAsync(() => {
+			openViewerOn(
+				buildRecord(
+					'type.record.image',
+					[buildFile(FileFormat.Original, 'type.file.image.jpeg')],
+					GeneratedFileStatus.Processing,
+				),
+			);
+
+			expect(component.previewState).toBe(RecordPreviewState.Ready);
+			expect(findPreviewState()).toBeNull();
+			closeViewer();
+		}));
+
+		it('re-checks a preparing record after 10 seconds and shows it once its copy is ready', fakeAsync(() => {
+			const refreshSpy = stubRecordRefresh(documentWithItsCopy());
+			openViewerOn(preparingDocument());
+			tick(9999);
+
+			expect(refreshSpy).not.toHaveBeenCalled();
+
+			tick(1);
+			flushMicrotasks();
+			fixture.detectChanges();
+
+			expect(refreshSpy).toHaveBeenCalledTimes(1);
+			expect(component.previewState).toBe(RecordPreviewState.Ready);
+			expect(findPreviewState()).toBeNull();
+			closeViewer();
+		}));
+
+		it('keeps re-checking while the copy is still being made', fakeAsync(() => {
+			const refreshSpy = stubRecordRefresh(preparingDocument());
+			openViewerOn(preparingDocument());
+			tick(10000);
+			flushMicrotasks();
+			tick(10000);
+			flushMicrotasks();
+
+			expect(refreshSpy).toHaveBeenCalledTimes(2);
+			closeViewer();
+		}));
+
+		it('keeps re-checking after a failed request', fakeAsync(() => {
+			const refreshSpy = spyOn(
+				TestBed.inject(ApiService).record,
+				'get',
+			).and.rejectWith(new Error('network down'));
+			openViewerOn(preparingDocument());
+			tick(10000);
+			flushMicrotasks();
+			tick(10000);
+			flushMicrotasks();
+
+			expect(refreshSpy).toHaveBeenCalledTimes(2);
+			closeViewer();
+		}));
+
+		it('stops re-checking once the viewer is closed', fakeAsync(() => {
+			const refreshSpy = stubRecordRefresh(preparingDocument());
+			openViewerOn(preparingDocument());
+			closeViewer();
+			tick(10000);
+
+			expect(refreshSpy).not.toHaveBeenCalled();
+		}));
+
+		it('downloads the original from the state screen', fakeAsync(() => {
+			activatedRouteData.isPublicArchive = false;
+			openViewerOn(preparingDocument());
+			findPreviewState().triggerEventHandler('downloadOriginal', undefined);
+			flushMicrotasks();
+
+			expect(downloaded).toBeTrue();
+			closeViewer();
+		}));
+
+		it('does not offer the download in a public archive that disallows downloads', fakeAsync(() => {
+			activatedRouteData.isPublicArchive = true;
+			openViewerOn(preparingDocument());
+
+			expect(ngMocks.input(findPreviewState(), 'canDownload')).toBeFalse();
+			closeViewer();
+		}));
 	});
 
 	describe('displayTime fallback', () => {
