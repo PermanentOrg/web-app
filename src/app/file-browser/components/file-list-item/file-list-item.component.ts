@@ -69,6 +69,15 @@ import { ngIfFadeInAnimation } from '@shared/animations';
 import { RouteData } from '@root/app/app.routes';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
 import { GetThumbnail } from '@models/get-thumbnail';
+import {
+	getOriginalFileExtension,
+	getRecordPreviewState,
+	RecordPreviewState,
+} from '@models/record-preview-state';
+import {
+	getRecordThumbnailPlaceholder,
+	RecordThumbnailPlaceholder,
+} from '@models/record-thumbnail-placeholder';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ItemClickEvent } from '../file-list/file-list.component';
 import { SharingComponent } from '../sharing/sharing.component';
@@ -155,6 +164,24 @@ const DOUBLE_CLICK_TIMEOUT = 350;
 const MOUSE_DOWN_DRAG_TIMEOUT = 500;
 const DRAG_MIN_Y = 1;
 
+interface PreviewStatusLabel {
+	text: string;
+	tone: 'preparing' | 'failed';
+}
+
+const PREVIEW_STATUS_LABELS: Partial<
+	Record<RecordPreviewState, PreviewStatusLabel>
+> = {
+	[RecordPreviewState.Preparing]: {
+		text: 'Preparing to view...',
+		tone: 'preparing',
+	},
+	[RecordPreviewState.Failed]: {
+		text: 'Preview unavailable',
+		tone: 'failed',
+	},
+};
+
 @Component({
 	selector: 'pr-file-list-item',
 	templateUrl: './file-list-item.component.html',
@@ -208,6 +235,8 @@ export class FileListItemComponent
 	public date: string = '';
 	public isUnlistedShare = false;
 	public recordThumbnailUrl: string | undefined;
+
+	public readonly RecordThumbnailPlaceholder = RecordThumbnailPlaceholder;
 
 	private folderThumb: string;
 	private folderContentsType: FolderContentsType = FolderContentsType.NORMAL;
@@ -267,6 +296,35 @@ export class FileListItemComponent
 		}
 
 		return edtfStartDate || this.item.displayDT;
+	}
+
+	get thumbnailPlaceholder(): RecordThumbnailPlaceholder | undefined {
+		if (!this.showsRecordPreviewStatus || this.recordThumbnailUrl) {
+			return undefined;
+		}
+		return getRecordThumbnailPlaceholder(this.item as RecordVO);
+	}
+
+	get previewStatusLabel(): PreviewStatusLabel | undefined {
+		if (!this.showsRecordPreviewStatus) {
+			return undefined;
+		}
+		return PREVIEW_STATUS_LABELS[getRecordPreviewState(this.item as RecordVO)];
+	}
+
+	get originalFileExtension(): string | undefined {
+		return getOriginalFileExtension(this.item as RecordVO);
+	}
+
+	private get showsRecordPreviewStatus(): boolean {
+		const showsStockPreviewImage =
+			this.isInSharePreview && !this.isUnlistedShare;
+		return (
+			this.item.isRecord &&
+			!this.isZip &&
+			!this.inGridView &&
+			!showsStockPreviewImage
+		);
 	}
 
 	async ngOnInit() {

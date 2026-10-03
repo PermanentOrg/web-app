@@ -18,6 +18,7 @@ import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cach
 import { firstValueFrom } from 'rxjs';
 import { FileFormat, PermanentFile } from '@models/file-vo';
 import { ShareStatus } from '@models/share-vo';
+import { GeneratedFileStatus } from '@models/generated-file-status';
 import {
 	AccessRoleType,
 	getOptionalAccessRoleField,
@@ -120,6 +121,7 @@ export type StelaRecord = Omit<RecordVO, 'files' | 'accessRole'> & {
 	folderLinkType: FolderLinkType;
 	parentFolderLinkId: string;
 	thumbnailUrls?: {
+		width256Status?: GeneratedFileStatus | null;
 		'200'?: string;
 		'256'?: string;
 		'500'?: string;
@@ -218,6 +220,7 @@ export const convertStelaRecordToRecordVO = (
 			stelaRecord.thumbnailUrls?.['2000'] ?? stelaRecord.thumbURL2000,
 		thumbnail256:
 			stelaRecord.thumbnailUrls?.['256'] ?? stelaRecord.thumbnail256,
+		thumbnail256Status: stelaRecord.thumbnailUrls?.width256Status,
 		TagVOs: (stelaRecord.tags ?? []).map((stelaTag) =>
 			convertStelaTagToTagVO(stelaTag, stelaRecord.archiveId),
 		),

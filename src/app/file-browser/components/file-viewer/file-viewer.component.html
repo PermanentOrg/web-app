@@ -32,49 +32,58 @@
 				}
 				@if (currentRecord === record) {
 					<div class="full">
-						@if (
-							showThumbnail &&
-							isZoomableImage &&
-							!isDocument &&
-							!isVideo &&
-							!isAudio &&
-							!isWebArchive
-						) {
-							<pr-zooming-image-viewer
-								[item]="currentRecord"
-								(disableSwipe)="toggleSwipe($event)"
-								(isFullScreen)="toggleFullscreen($event)"
-							></pr-zooming-image-viewer>
-						}
-						@if (isWebArchive && replayUrl) {
-							<iframe
-								[src]="replayUrl"
-								width="100%"
-								height="100%"
-								frameborder="0"
-							></iframe>
-						}
-						@if (
-							showThumbnail &&
-							!isZoomableImage &&
-							!isDocument &&
-							!isVideo &&
-							!isAudio &&
-							!isWebArchive
-						) {
-							<pr-thumbnail [item]="currentRecord"></pr-thumbnail>
-						}
-						@if (isVideo) {
-							<pr-video [item]="currentRecord"></pr-video>
-						}
-						@if (isAudio) {
-							<pr-audio [item]="currentRecord"></pr-audio>
-						}
-						@if (isDocument && documentUrl) {
-							<iframe
-								[title]="currentRecord | getAltText"
-								[src]="documentUrl"
-							></iframe>
+						@if (previewState === RecordPreviewState.Ready) {
+							@if (
+								showThumbnail &&
+								isZoomableImage &&
+								!isDocument &&
+								!isVideo &&
+								!isAudio &&
+								!isWebArchive
+							) {
+								<pr-zooming-image-viewer
+									[item]="currentRecord"
+									(disableSwipe)="toggleSwipe($event)"
+									(isFullScreen)="toggleFullscreen($event)"
+								></pr-zooming-image-viewer>
+							}
+							@if (isWebArchive && replayUrl) {
+								<iframe
+									[src]="replayUrl"
+									width="100%"
+									height="100%"
+									frameborder="0"
+								></iframe>
+							}
+							@if (
+								showThumbnail &&
+								!isZoomableImage &&
+								!isDocument &&
+								!isVideo &&
+								!isAudio &&
+								!isWebArchive
+							) {
+								<pr-thumbnail [item]="currentRecord"></pr-thumbnail>
+							}
+							@if (isVideo) {
+								<pr-video [item]="currentRecord"></pr-video>
+							}
+							@if (isAudio) {
+								<pr-audio [item]="currentRecord"></pr-audio>
+							}
+							@if (isDocument && documentUrl) {
+								<iframe
+									[title]="currentRecord | getAltText"
+									[src]="documentUrl"
+								></iframe>
+							}
+						} @else {
+							<pr-record-preview-state
+								[previewState]="previewState"
+								[fileExtension]="originalFileExtension"
+								[canDownload]="canDownload()"
+								(downloadOriginal)="onDownloadClick()"
+							></pr-record-preview-state>
 						}
 					</div>
 				}

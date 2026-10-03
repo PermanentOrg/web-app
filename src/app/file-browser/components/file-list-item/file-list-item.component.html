@@ -47,7 +47,37 @@
 			</div>
 		}
 		@if (!item.isFolder && !isZip) {
-			<div prBgImage [bgSrc]="recordThumbnailUrl" [cover]="inGridView"></div>
+			<div
+				prBgImage
+				[bgSrc]="recordThumbnailUrl"
+				[cover]="inGridView"
+				[class.replaced-by-thumbnail-placeholder]="!!thumbnailPlaceholder"
+			></div>
+			@if (thumbnailPlaceholder; as placeholder) {
+				<div
+					class="thumbnail-placeholder"
+					[attr.data-placeholder]="placeholder"
+				>
+					@switch (placeholder) {
+						@case (RecordThumbnailPlaceholder.Preparing) {
+							<img src="assets/svg/access-copy/row-preparing.svg" alt="" />
+						}
+						@case (RecordThumbnailPlaceholder.Failed) {
+							<img src="assets/svg/access-copy/row-failed.svg" alt="" />
+						}
+						@case (RecordThumbnailPlaceholder.FileType) {
+							<span class="thumbnail-placeholder-file-type">
+								<img src="assets/svg/access-copy/row-file-outline.svg" alt="" />
+								@if (originalFileExtension) {
+									<span class="thumbnail-placeholder-file-extension">{{
+										originalFileExtension
+									}}</span>
+								}
+							</span>
+						}
+					}
+				</div>
+			}
 		}
 	</ng-container>
 	@if (inGridView && item.isFolder ? item.view : true) {
@@ -87,6 +117,13 @@
 				>
 			}
 		</div>
+		@if (previewStatusLabel; as statusLabel) {
+			<div class="preview-status" [attr.data-preview-status]="statusLabel.tone">
+				<span class="preview-status-label">{{ statusLabel.text }}</span>
+				<span class="preview-status-stored">•</span>
+				<span class="preview-status-stored">Stored</span>
+			</div>
+		}
 		<div class="second-row">
 			@if (!showAccess || !item.ShareArchiveVO) {
 				<span>

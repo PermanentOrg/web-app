@@ -1,5 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+	ComponentFixture,
+	fakeAsync,
+	flush,
+	flushMicrotasks,
+	TestBed,
+	tick,
+} from '@angular/core/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -21,9 +28,15 @@ import {
 	DateTimeModel,
 	EdtfService,
 } from '@shared/services/edtf-service/edtf.service';
-import { TagsComponent } from '../../../shared/components/tags/tags.component';
+import { GeneratedFileStatus } from '@models/generated-file-status';
+import { RecordPreviewState } from '@models/record-preview-state';
+import { FileFormat } from '@models/file-vo';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
-import { FileViewerComponent } from './file-viewer.component';
+import { TagsComponent } from '../../../shared/components/tags/tags.component';
+import {
+	FileViewerComponent,
+	PREPARING_RECORD_REFRESH_INTERVAL,
+} from './file-viewer.component';
 
 @Pipe({ name: 'dsFileSize', standalone: false })
 class MockFileSizePipe implements PipeTransform {
@@ -878,6 +891,146 @@ describe('FileViewerComponent', () => {
 				component.currentRecord.displayDT;
 
 			expect(displayValue).toBe('2024-01-01T00:00:00.000Z');
+		});
+	});
+
+	describe('access copy preview states', () => {
+		const originalDocx = {
+			fileId: 1,
+			size: 1024,
+			format: FileFormat.Original,
+			fileURL: 'https://example.com/original.docx',
+			downloadURL: 'https://example.com/original.docx?download',
+			type: 'type.file.document.docx',
+		};
+
+		const makeDocxRecord = (
+			accessCopyStatus: GeneratedFileStatus | null,
+			extraFiles: RecordVO['FileVOs'] = [],
+		) =>
+			new RecordVO({
+				displayName: "Grandma Ruth's Recipes",
+				type: 'type.record.document',
+				TagVOs: [],
+				archiveNbr: '0001-0001',
+				FileVOs: [originalDocx, ...extraFiles],
+				accessCopyStatus,
+			});
+
+		const showRecord = (record: RecordVO) => {
+			component.currentRecord = record;
+			component.records = [record];
+			component.currentIndex = 0;
+			component.initRecord();
+			fixture.detectChanges();
+		};
+
+		const renderedPreviewState = (): HTMLElement | null =>
+			fixture.nativeElement.querySelector('pr-record-preview-state');
+
+		it('shows the preparing state while the access copy is processing', () => {
+			showRecord(makeDocxRecord(GeneratedFileStatus.Processing));
+
+			expect(component.previewState).toBe(RecordPreviewState.Preparing);
+			expect(component.originalFileExtension).toBe('docx');
+			expect(renderedPreviewState()).toBeTruthy();
+		});
+
+		it('shows the failed state instead of the video player', () => {
+			showRecord(
+				new RecordVO({
+					type: 'type.record.video',
+					TagVOs: [],
+					FileVOs: [{ ...originalDocx, type: 'type.file.video.mp4' }],
+					accessCopyStatus: GeneratedFileStatus.Failed,
+				}),
+			);
+
+			expect(renderedPreviewState()).toBeTruthy();
+			expect(fixture.nativeElement.querySelector('pr-video')).toBeNull();
+		});
+
+		it('keeps showing a legacy converted copy even when Stela says it failed', () => {
+			showRecord(
+				makeDocxRecord(GeneratedFileStatus.Failed, [
+					{
+						...originalDocx,
+						fileId: 2,
+						format: FileFormat.Converted,
+						type: 'type.file.pdf.pdf',
+					},
+				]),
+			);
+
+			expect(component.previewState).toBe(RecordPreviewState.Ready);
+			expect(renderedPreviewState()).toBeNull();
+		});
+
+		it('refreshes a preparing record until its copy is ready', fakeAsync(() => {
+			const preparingRecord = makeDocxRecord(GeneratedFileStatus.Processing);
+			const readyRecord = makeDocxRecord(GeneratedFileStatus.Ok, [
+				{
+					...originalDocx,
+					fileId: 2,
+					format: FileFormat.ArchivematicaAccess,
+					type: 'type.file.pdf.pdf',
+				},
+			]);
+			const getRecords = spyOn(
+				TestBed.inject(ApiService).record,
+				'get',
+			).and.resolveTo({ getRecordVO: () => readyRecord } as any);
+
+			showRecord(preparingRecord);
+			tick(PREPARING_RECORD_REFRESH_INTERVAL - 1);
+
+			expect(getRecords).not.toHaveBeenCalled();
+
+			tick(1);
+			flushMicrotasks();
+
+			expect(getRecords).toHaveBeenCalledOnceWith([preparingRecord], null);
+			expect(component.previewState).toBe(RecordPreviewState.Ready);
+
+			tick(PREPARING_RECORD_REFRESH_INTERVAL);
+
+			expect(getRecords).toHaveBeenCalledTimes(1);
+			component.ngOnDestroy();
+			flush();
+		}));
+
+		it('stops refreshing once the viewer is closed', fakeAsync(() => {
+			const getRecords = spyOn(TestBed.inject(ApiService).record, 'get');
+
+			showRecord(makeDocxRecord(GeneratedFileStatus.Processing));
+			component.ngOnDestroy();
+			tick(PREPARING_RECORD_REFRESH_INTERVAL);
+			flush();
+
+			expect(getRecords).not.toHaveBeenCalled();
+		}));
+
+		it('does not refresh a record that is already ready', fakeAsync(() => {
+			const getRecords = spyOn(TestBed.inject(ApiService).record, 'get');
+
+			showRecord(makeDocxRecord(null));
+			tick(PREPARING_RECORD_REFRESH_INTERVAL);
+
+			expect(component.previewState).toBe(RecordPreviewState.Unavailable);
+			expect(getRecords).not.toHaveBeenCalled();
+			component.ngOnDestroy();
+			flush();
+		}));
+
+		it('hides the download button in a public archive that disallows downloads', () => {
+			component.isPublicArchive = true;
+			component.allowDownloads = false;
+
+			expect(component.canDownload()).toBeFalse();
+
+			component.allowDownloads = true;
+
+			expect(component.canDownload()).toBeTrue();
 		});
 	});
 });

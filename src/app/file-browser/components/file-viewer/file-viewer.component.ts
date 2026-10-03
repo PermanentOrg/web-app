@@ -27,6 +27,11 @@ import { SearchService } from '@search/services/search.service';
 import { ZoomingImageViewerComponent } from '@shared/components/zooming-image-viewer/zooming-image-viewer.component';
 import { FileFormat } from '@models/file-vo';
 import { GetAccessFile } from '@models/get-access-file';
+import {
+	getOriginalFileExtension,
+	getRecordPreviewState,
+	RecordPreviewState,
+} from '@models/record-preview-state';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { environment } from '@root/environments/environment';
@@ -38,6 +43,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { TagsService } from '../../../core/services/tags/tags.service';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
+
+export const PREPARING_RECORD_REFRESH_INTERVAL = 10000;
 
 @Component({
 	selector: 'pr-file-viewer',
@@ -58,6 +65,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	public isAudio = false;
 	public isDocument = false;
 	public isWebArchive = false;
+	public previewState = RecordPreviewState.Ready;
+	public originalFileExtension: string | undefined;
+	public readonly RecordPreviewState = RecordPreviewState;
 	public showThumbnail = true;
 	public isPublicArchive: boolean = false;
 	public allowDownloads: boolean = false;
@@ -95,6 +105,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	private tagsSubscription: Subscription;
 	private dateModalSubscription?: Subscription;
 	private isUnlistedShare = true;
+	private preparingRecordRefreshTimeout?: ReturnType<typeof setTimeout>;
+	private isClosed = false;
 
 	constructor(
 		private router: Router,
@@ -205,6 +217,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		this.itemTagsSubscription.unsubscribe();
 		this.tagsSubscription.unsubscribe();
 		this.dateModalSubscription?.unsubscribe();
+		this.isClosed = true;
+		clearTimeout(this.preparingRecordRefreshTimeout);
 	}
 
 	private setRecordsToPreview(resolvedRecord: RecordVO) {
@@ -260,8 +274,41 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		this.isWebArchive = this.currentRecord.type.includes('web_archive');
 		this.documentUrl = this.getDocumentUrl();
 		this.replayUrl = this.getReplayUrl();
+		this.previewState = getRecordPreviewState(this.currentRecord);
+		this.originalFileExtension = getOriginalFileExtension(this.currentRecord);
 		this.setCurrentTags();
 		this.updateDisplayTimeObject();
+		this.schedulePreparingRecordRefresh();
+	}
+
+	private schedulePreparingRecordRefresh(): void {
+		clearTimeout(this.preparingRecordRefreshTimeout);
+		if (this.isClosed || this.previewState !== RecordPreviewState.Preparing) {
+			return;
+		}
+		const recordBeingPrepared = this.currentRecord;
+		this.preparingRecordRefreshTimeout = setTimeout(() => {
+			void this.refreshPreparingRecord(recordBeingPrepared);
+		}, PREPARING_RECORD_REFRESH_INTERVAL);
+	}
+
+	private async refreshPreparingRecord(
+		recordBeingPrepared: RecordVO,
+	): Promise<void> {
+		try {
+			const response = await this.api.record.get(
+				[recordBeingPrepared],
+				this.isUnlistedShare ? this.shareLinksService.currentShareToken : null,
+			);
+			const refreshedRecord = response.getRecordVO();
+			if (refreshedRecord) {
+				recordBeingPrepared.update(refreshedRecord);
+			}
+		} finally {
+			if (this.currentRecord === recordBeingPrepared) {
+				this.initRecord();
+			}
+		}
 	}
 
 	toggleSwipe(value: boolean) {
@@ -526,6 +573,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
 	public onDownloadClick(): void {
 		this.dataService.downloadFile(this.currentRecord);
+	}
+
+	public canDownload(): boolean {
+		return !this.isPublicArchive || this.allowDownloads;
 	}
 
 	private setCurrentTags(): void {
