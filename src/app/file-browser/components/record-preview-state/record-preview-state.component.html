@@ -1,0 +1,30 @@
+<div class="preview-state" [attr.data-state]="previewState()">
+	<div class="icon">
+		<img
+			class="icon-image"
+			[class.outline-only]="isUnavailable()"
+			[src]="content().iconUrl"
+			alt=""
+		/>
+		@if (showsExtensionOnIcon()) {
+			<span class="icon-extension">{{ fileExtension() }}</span>
+		}
+	</div>
+	<h2 class="heading">{{ content().heading }}</h2>
+	<p class="body">{{ content().body }}</p>
+	@if (canDownload()) {
+		<button
+			type="button"
+			class="download-original"
+			(click)="downloadOriginal.emit()"
+		>
+			Download original
+			@if (fileExtension()) {
+				<span class="download-extension">{{ fileExtension() }}</span>
+			}
+		</button>
+	}
+	<a class="help-link" [href]="helpLink" target="_blank" rel="noopener">
+		{{ content().helpLinkText }}
+	</a>
+</div>
