@@ -362,7 +362,7 @@ export class EdtfService {
 
 	// Shared by serialization (toEdtfDate) and display (formatDateForDisplay)
 	// so a saved value always reads back the way the preview rendered it.
-	private padMonthOrDay(value: string): string {
+	padMonthOrDay(value: string): string {
 		// A single digit is zero-padded ('1' → '01', i.e. January / the 1st).
 		// '1' could in principle be the start of '10'–'12', but this runs on a
 		// finished value, not mid-keystroke, and the digits-only inputs give no
@@ -371,7 +371,7 @@ export class EdtfService {
 		return this.padWithX(value, 2);
 	}
 
-	private padWithX(value: string, width: number): string {
+	padWithX(value: string, width: number): string {
 		const v = value ?? '';
 		return v.length >= width ? v : v + 'X'.repeat(width - v.length);
 	}
