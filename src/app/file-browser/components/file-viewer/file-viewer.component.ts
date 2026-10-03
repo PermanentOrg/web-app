@@ -27,6 +27,18 @@ import { SearchService } from '@search/services/search.service';
 import { ZoomingImageViewerComponent } from '@shared/components/zooming-image-viewer/zooming-image-viewer.component';
 import { FileFormat } from '@models/file-vo';
 import { GetAccessFile } from '@models/get-access-file';
+import {
+	hasDocumentFile,
+	isAudioRecord,
+	isImageRecord,
+	isVideoRecord,
+	isWebArchiveRecord,
+} from '@models/record-media-type';
+import {
+	RecordPreviewState,
+	getOriginalFileExtension,
+	getRecordPreviewState,
+} from '@models/record-preview-state';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { environment } from '@root/environments/environment';
@@ -38,6 +50,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import { TagsService } from '../../../core/services/tags/tags.service';
 import { EditDateTimeModalService } from '../edit-date-time-modal/edit-date-time-modal.service';
+
+const PREPARING_RECORD_REFRESH_INTERVAL = 10000;
 
 @Component({
 	selector: 'pr-file-viewer',
@@ -58,6 +72,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	public isAudio = false;
 	public isDocument = false;
 	public isWebArchive = false;
+	public previewState = RecordPreviewState.Ready;
+	public originalFileExtension: string | undefined;
+	public readonly previewStates = RecordPreviewState;
 	public showThumbnail = true;
 	public isPublicArchive: boolean = false;
 	public allowDownloads: boolean = false;
@@ -95,6 +112,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	private tagsSubscription: Subscription;
 	private dateModalSubscription?: Subscription;
 	private isUnlistedShare = true;
+	private isClosed = false;
+	private preparingRecordRefreshTimeout: ReturnType<typeof setTimeout>;
 
 	constructor(
 		private router: Router,
@@ -197,6 +216,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
+		this.isClosed = true;
+		clearTimeout(this.preparingRecordRefreshTimeout);
 		// re-enable scrolling and return to initial scroll position
 		this.document.body.style.setProperty('overflow', '');
 		setTimeout(() => {
@@ -246,22 +267,56 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 	}
 
 	initRecord() {
-		this.isAudio = this.currentRecord.type.includes('audio');
-		this.isVideo = this.currentRecord.type.includes('video');
+		this.isAudio = isAudioRecord(this.currentRecord);
+		this.isVideo = isVideoRecord(this.currentRecord);
 		this.isZoomableImage =
-			this.currentRecord.type.includes('image') &&
+			isImageRecord(this.currentRecord) &&
 			this.currentRecord.FileVOs?.length &&
 			typeof ZoomingImageViewerComponent.chooseFullSizeImage(
 				this.currentRecord,
 			) !== 'undefined';
-		this.isDocument = this.currentRecord.FileVOs?.some(
-			(obj) => obj.type.includes('pdf') || obj.type.includes('txt'),
-		);
-		this.isWebArchive = this.currentRecord.type.includes('web_archive');
+		this.isDocument = hasDocumentFile(this.currentRecord);
+		this.isWebArchive = isWebArchiveRecord(this.currentRecord);
+		this.previewState = getRecordPreviewState(this.currentRecord);
+		this.originalFileExtension = getOriginalFileExtension(this.currentRecord);
 		this.documentUrl = this.getDocumentUrl();
 		this.replayUrl = this.getReplayUrl();
 		this.setCurrentTags();
 		this.updateDisplayTimeObject();
+		this.schedulePreparingRecordRefresh();
+	}
+
+	public get canDownload(): boolean {
+		return !this.isPublicArchive || this.allowDownloads;
+	}
+
+	private schedulePreparingRecordRefresh(): void {
+		clearTimeout(this.preparingRecordRefreshTimeout);
+		if (this.isClosed || this.previewState !== RecordPreviewState.Preparing) {
+			return;
+		}
+		const recordBeingPrepared = this.currentRecord;
+		this.preparingRecordRefreshTimeout = setTimeout(() => {
+			void this.refreshPreparingRecord(recordBeingPrepared);
+		}, PREPARING_RECORD_REFRESH_INTERVAL);
+	}
+
+	private async refreshPreparingRecord(
+		recordBeingPrepared: RecordVO,
+	): Promise<void> {
+		const shareToken = this.isUnlistedShare
+			? this.shareLinksService.currentShareToken
+			: null;
+		const refreshedRecord = await this.api.record
+			.get([recordBeingPrepared], shareToken)
+			.then((response) => response.getRecordVO())
+			.catch(() => undefined);
+		if (refreshedRecord) {
+			recordBeingPrepared.update(refreshedRecord);
+		}
+		if (!this.isClosed && recordBeingPrepared === this.currentRecord) {
+			this.initRecord();
+		}
 	}
 
 	toggleSwipe(value: boolean) {
