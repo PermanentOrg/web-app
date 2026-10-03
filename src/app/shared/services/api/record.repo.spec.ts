@@ -19,6 +19,7 @@ import {
 	withInterceptorsFromDi,
 } from '@angular/common/http';
 import { ShareLink } from '@root/app/share-links/models/share-link';
+import { GeneratedFileStatus } from '@models/file-vo';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 
 describe('RecordRepo', () => {
@@ -438,6 +439,32 @@ describe('RecordRepo', () => {
 			} as any);
 
 			expect(record.displayTime).toBe('1985-05-20T10:00:00+05:30');
+		});
+
+		it('should map accessCopyStatus from the stela record', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				accessCopyStatus: GeneratedFileStatus.Processing,
+			} as any);
+
+			expect(record.accessCopyStatus).toBe(GeneratedFileStatus.Processing);
+		});
+
+		it('should keep a null accessCopyStatus, which means no copy is expected', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				accessCopyStatus: null,
+			} as any);
+
+			expect(record.accessCopyStatus).toBeNull();
+		});
+
+		it('should leave accessCopyStatus undefined when stela does not send it', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+			} as any);
+
+			expect(record.accessCopyStatus).toBeUndefined();
 		});
 
 		it('should leave displayTime undefined when not present in stela record', () => {
