@@ -71,6 +71,9 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 	@HostBinding('class.always-show') @Input() alwaysShow = false;
 	@Output() doneEditing: EventEmitter<ValueType> =
 		new EventEmitter<ValueType>();
+	@Output() editValueChange: EventEmitter<ValueType> =
+		new EventEmitter<ValueType>();
+	@Output() editingChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 	@Output() externalEdit: EventEmitter<ValueType> =
 		new EventEmitter<ValueType>();
 	@Output() toggledDatePicker: EventEmitter<boolean> =
@@ -149,6 +152,8 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 			this.editValue = this.displayValue;
 		}
 		this.isEditing = true;
+		this.editValueChange.emit(this.editValue);
+		this.editingChange.emit(true);
 		this.focusInput();
 
 		if (!this.noScroll) {
@@ -178,6 +183,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 			this.doneEditing.emit(this.editValue);
 		}
 		this.isEditing = false;
+		this.editingChange.emit(false);
 		if (!skipBlur) {
 			this.blurInput();
 		}
@@ -189,6 +195,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 		}
 		this.editValue = this.displayValue;
 		this.isEditing = false;
+		this.editingChange.emit(false);
 		this.blurInput();
 	}
 
@@ -278,6 +285,11 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 		if (this.inputElementRef) {
 			(this.inputElementRef.nativeElement as HTMLInputElement).blur();
 		}
+	}
+
+	onEditValueChange(value: ValueType) {
+		this.editValue = value;
+		this.editValueChange.emit(value);
 	}
 
 	onTextInputBlur() {
