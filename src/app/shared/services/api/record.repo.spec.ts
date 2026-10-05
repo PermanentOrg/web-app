@@ -494,6 +494,32 @@ describe('RecordRepo', () => {
 			expect(record.thumbnail256).toBe('https://example.com/256');
 		});
 
+		it('should map the 256 thumbnail status from thumbnailUrls', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				thumbnailUrls: { width256Status: GeneratedFileStatus.Failed },
+			} as any);
+
+			expect(record.thumbnail256Status).toBe(GeneratedFileStatus.Failed);
+		});
+
+		it('should keep a null 256 thumbnail status, which means no thumbnail is expected', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				thumbnailUrls: { width256Status: null },
+			} as any);
+
+			expect(record.thumbnail256Status).toBeNull();
+		});
+
+		it('should leave the 256 thumbnail status undefined when stela does not send thumbnailUrls', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+			} as any);
+
+			expect(record.thumbnail256Status).toBeUndefined();
+		});
+
 		it("should translate Stela's role into ours", () => {
 			const record = convertStelaRecordToRecordVO({
 				...baseStelaRecord,
