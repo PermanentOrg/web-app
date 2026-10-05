@@ -69,11 +69,21 @@ import { ngIfFadeInAnimation } from '@shared/animations';
 import { RouteData } from '@root/app/app.routes';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
 import { GetThumbnail } from '@models/get-thumbnail';
+import {
+	RecordPreviewState,
+	getOriginalFileExtension,
+	getRecordPreviewState,
+} from '@models/record-preview-state';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ItemClickEvent } from '../file-list/file-list.component';
 import { SharingComponent } from '../sharing/sharing.component';
 import { PublishComponent } from '../publish/publish.component';
 import { EditTagsComponent } from '../edit-tags/edit-tags.component';
+import {
+	GeneratedRecordRowIcon,
+	RecordRowIcon,
+	getRecordRowIcon,
+} from '../record-row-icon/record-row-icon.component';
 
 export const ItemActions: { [key: string]: PromptButton } = {
 	Rename: {
@@ -150,6 +160,15 @@ export interface FileListItemVisibleEvent {
 	component: FileListItemComponent;
 }
 
+type RowPreviewStatusState =
+	| RecordPreviewState.Preparing
+	| RecordPreviewState.Failed;
+
+const PREVIEW_STATUS_LABELS: Record<RowPreviewStatusState, string> = {
+	[RecordPreviewState.Preparing]: 'Preparing to view...',
+	[RecordPreviewState.Failed]: 'Preview unavailable',
+};
+
 const SINGLE_CLICK_DELAY = 100;
 const DOUBLE_CLICK_TIMEOUT = 350;
 const MOUSE_DOWN_DRAG_TIMEOUT = 500;
@@ -208,6 +227,7 @@ export class FileListItemComponent
 	public date: string = '';
 	public isUnlistedShare = false;
 	public recordThumbnailUrl: string | undefined;
+	public readonly previewStatusLabels = PREVIEW_STATUS_LABELS;
 
 	private folderThumb: string;
 	private folderContentsType: FolderContentsType = FolderContentsType.NORMAL;
@@ -267,6 +287,37 @@ export class FileListItemComponent
 		}
 
 		return edtfStartDate || this.item.displayDT;
+	}
+
+	get generatedRowIcon(): GeneratedRecordRowIcon | undefined {
+		if (!this.showsGeneratedFileStates) {
+			return undefined;
+		}
+		const rowIcon = getRecordRowIcon(this.item as RecordVO);
+		return rowIcon === RecordRowIcon.Thumbnail ||
+			rowIcon === RecordRowIcon.Placeholder
+			? undefined
+			: rowIcon;
+	}
+
+	get previewStatusLine(): RowPreviewStatusState | undefined {
+		if (!this.showsGeneratedFileStates) {
+			return undefined;
+		}
+		const previewState = getRecordPreviewState(this.item as RecordVO);
+		return previewState in PREVIEW_STATUS_LABELS
+			? (previewState as RowPreviewStatusState)
+			: undefined;
+	}
+
+	get originalFileExtension(): string | undefined {
+		return getOriginalFileExtension(this.item as RecordVO);
+	}
+
+	private get showsGeneratedFileStates(): boolean {
+		const showsStockPreviewImage =
+			this.isInSharePreview && !this.isUnlistedShare;
+		return this.item.isRecord && !this.isZip && !showsStockPreviewImage;
 	}
 
 	async ngOnInit() {
