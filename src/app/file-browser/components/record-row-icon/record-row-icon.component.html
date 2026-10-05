@@ -1,0 +1,8 @@
+<div class="tile" [attr.data-icon]="icon()">
+	<div class="glyph">
+		<img class="glyph-image" [src]="iconUrl()" alt="" />
+		@if (showsExtension()) {
+			<span class="glyph-extension">{{ fileExtension() }}</span>
+		}
+	</div>
+</div>
