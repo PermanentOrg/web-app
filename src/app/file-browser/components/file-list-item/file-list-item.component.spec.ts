@@ -656,10 +656,8 @@ describe('FileListItemComponent', () => {
 				.join(' ');
 		}
 
-		function isPlaceholderReplaced(): boolean {
-			return fixture.debugElement
-				.query(By.css('[prBgImage]'))
-				.nativeElement.classList.contains('replaced-on-desktop');
+		function showsGreyPlaceholder(): boolean {
+			return !!fixture.debugElement.query(By.css('[prBgImage]'));
 		}
 
 		it('shows preparing and the status line for a document whose copy is being made', () => {
@@ -671,7 +669,7 @@ describe('FileListItemComponent', () => {
 			);
 
 			expect(rowIconInput('icon')).toBe(RecordRowIcon.Preparing);
-			expect(isPlaceholderReplaced()).toBeTrue();
+			expect(showsGreyPlaceholder()).toBeFalse();
 			expect(previewStatusText()).toBe('Preparing to view... • Stored');
 		});
 
@@ -722,7 +720,7 @@ describe('FileListItemComponent', () => {
 			);
 
 			expect(rowIconElement()).toBeNull();
-			expect(isPlaceholderReplaced()).toBeFalse();
+			expect(showsGreyPlaceholder()).toBeTrue();
 			expect(previewStatusText()).toBe('Preparing to view... • Stored');
 		});
 
@@ -735,7 +733,7 @@ describe('FileListItemComponent', () => {
 			);
 
 			expect(rowIconElement()).toBeNull();
-			expect(isPlaceholderReplaced()).toBeFalse();
+			expect(showsGreyPlaceholder()).toBeTrue();
 			expect(previewStatusText()).toBeUndefined();
 		});
 
@@ -750,7 +748,7 @@ describe('FileListItemComponent', () => {
 			);
 
 			expect(rowIconElement()).toBeNull();
-			expect(isPlaceholderReplaced()).toBeFalse();
+			expect(showsGreyPlaceholder()).toBeTrue();
 			expect(previewStatusText()).toBeUndefined();
 		});
 

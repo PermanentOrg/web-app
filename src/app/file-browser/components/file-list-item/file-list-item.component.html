@@ -48,17 +48,13 @@
 		}
 		@if (!item.isFolder && !isZip) {
 			@let listRowIcon = inGridView ? undefined : generatedRowIcon;
-			<div
-				prBgImage
-				[bgSrc]="recordThumbnailUrl"
-				[cover]="inGridView"
-				[class.replaced-on-desktop]="!!listRowIcon"
-			></div>
 			@if (listRowIcon) {
 				<pr-record-row-icon
 					[icon]="listRowIcon"
 					[fileExtension]="originalFileExtension"
 				></pr-record-row-icon>
+			} @else {
+				<div prBgImage [bgSrc]="recordThumbnailUrl" [cover]="inGridView"></div>
 			}
 		}
 	</ng-container>
