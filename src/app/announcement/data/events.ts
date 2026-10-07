@@ -2,6 +2,12 @@ import { AnnouncementEvent } from '../models/announcement-event';
 
 export const ANNOUNCEMENT_EVENTS: AnnouncementEvent[] = [
 	{
+		start: new Date('2026-10-12T15:00:00-05:00').getTime(),
+		end: new Date('2026-10-15T17:00:00-05:00').getTime(),
+		message:
+			'The Permanent.org platform will be temporarily unavailable on <strong>October 15th, 2026 from approximately 3-5pm Central Time</strong> while we perform routine maintenance. Thank you for your patience.',
+	},
+	{
 		start: new Date().getTime(),
 		end: new Date('2026-07-28T15:00:00-05:00').getTime(),
 		message:
