@@ -9,9 +9,8 @@ interface PreviewStateContent {
 	heading: string;
 	body: string;
 	helpLinkText: string;
+	helpLinkUrl: string;
 }
-
-export const ACCESS_COPY_HELP_LINK = 'about:blank';
 
 const PREVIEW_STATE_CONTENT: Record<UnreadyPreviewState, PreviewStateContent> =
 	{
@@ -20,18 +19,23 @@ const PREVIEW_STATE_CONTENT: Record<UnreadyPreviewState, PreviewStateContent> =
 			heading: "We're still preparing this file to view",
 			body: "Your original file is stored and safe. We're making a copy you can read in the browser, which usually takes a few minutes and can take longer after a large upload.",
 			helpLinkText: 'What does it mean when my file is processing?',
+			helpLinkUrl:
+				'https://permanent.zohodesk.com/portal/en/kb/articles/what-does-it-mean-when-my-file-is-processing',
 		},
 		[RecordPreviewState.Unavailable]: {
 			iconUrl: 'assets/svg/record-preview-state/unavailable.svg',
 			heading: "This file is stored, but we can't show it here",
 			body: "This isn't a format we can make a viewable copy of. Your original is kept exactly as you uploaded it and you can download it any time.",
 			helpLinkText: 'Which files can Permanent preview?',
+			helpLinkUrl:
+				'https://permanent.zohodesk.com/portal/en/kb/articles/file-types-that-we-accept-and-support',
 		},
 		[RecordPreviewState.Failed]: {
 			iconUrl: 'assets/svg/record-preview-state/failed.svg',
 			heading: "We couldn't make a copy of this file to view",
 			body: "Something went wrong while preparing it. This doesn't affect your original, which is stored exactly as you uploaded it. Download it to check it opens on your device.",
 			helpLinkText: 'Get help with this file',
+			helpLinkUrl: 'https://permanent.zohodesk.com/portal/en/newticket',
 		},
 	};
 
@@ -48,7 +52,6 @@ export class RecordPreviewStateComponent {
 
 	downloadOriginal = output<void>();
 
-	readonly helpLink = ACCESS_COPY_HELP_LINK;
 	readonly content = computed(() => PREVIEW_STATE_CONTENT[this.previewState()]);
 	readonly isUnavailable = computed(
 		() => this.previewState() === RecordPreviewState.Unavailable,
