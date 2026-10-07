@@ -24,9 +24,11 @@ describe('FileListControlsComponent', () => {
 			accessRole: AccessRole.Manager,
 		},
 		selectedItems$: () => of([]),
-		refreshCurrentFolder: jasmine
-			.createSpy('refreshCurrentFolder')
-			.and.returnValue(Promise.resolve(true)),
+		sortCurrentFolder: jasmine
+			.createSpy('sortCurrentFolder')
+			.and.callFake((sort: string) => {
+				dataServiceMock.currentFolder.sort = sort;
+			}),
 	};
 
 	const editServiceMock = {
@@ -77,6 +79,10 @@ describe('FileListControlsComponent', () => {
 	};
 
 	beforeEach(async () => {
+		dataServiceMock.currentFolder.sort = 'sort.alphabetical_asc';
+		dataServiceMock.sortCurrentFolder.calls.reset();
+		apiServiceMock.folder.sort.calls.reset();
+
 		await TestBed.configureTestingModule({
 			declarations: [FileListControlsComponent, TooltipsPipe],
 			providers: [
@@ -102,5 +108,41 @@ describe('FileListControlsComponent', () => {
 
 	it('should create the component', () => {
 		expect(component).toBeTruthy();
+	});
+
+	it('should preview a sort through the data service without a request', () => {
+		component.onSortClick('date');
+
+		expect(dataServiceMock.sortCurrentFolder).toHaveBeenCalledWith(
+			'sort.display_date_asc',
+		);
+
+		expect(apiServiceMock.folder.sort).not.toHaveBeenCalled();
+		expect(component.currentSort).toBe('date');
+		expect(component.sortDesc).toBeFalse();
+	});
+
+	it('should flip the direction when the active column is clicked again', () => {
+		component.onSortClick('name');
+
+		expect(dataServiceMock.sortCurrentFolder).toHaveBeenCalledWith(
+			'sort.alphabetical_desc',
+		);
+
+		expect(component.sortDesc).toBeTrue();
+	});
+
+	it('should mark the sort as changed until it is saved', async () => {
+		component.onSortClick('type');
+
+		expect(component.isSortChanged()).toBeTrue();
+
+		await component.saveSort();
+
+		expect(apiServiceMock.folder.sort).toHaveBeenCalledWith([
+			dataServiceMock.currentFolder,
+		]);
+
+		expect(component.isSortChanged()).toBeFalse();
 	});
 });

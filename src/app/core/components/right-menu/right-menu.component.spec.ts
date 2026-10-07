@@ -6,6 +6,10 @@ import { RightMenuComponent } from '@core/components/right-menu/right-menu.compo
 import { FolderVO, ArchiveVO } from '@models';
 import { DataService } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
+import { EditService } from '@core/services/edit/edit.service';
+import { MessageService } from '@shared/services/message/message.service';
+import { GENERIC_FOLDER_ERROR_MESSAGE } from '@shared/utilities/folder-error-message';
 
 describe('RightMenuComponent', () => {
 	let component: RightMenuComponent;
@@ -125,5 +129,69 @@ describe('RightMenuComponent', () => {
 
 		expect(component.hasAllowedActions).toBeFalsy();
 		expect(component.allowedActions.createFolder).toBeFalsy();
+	});
+
+	describe('createNewFolder', () => {
+		const newFolderName = 'Holidays';
+		let createFolder: jasmine.Spy;
+		let messageService: MessageService;
+		let folderCreationPromise: Promise<unknown>;
+
+		beforeEach(() => {
+			dataService.setCurrentFolder(
+				new FolderVO({
+					type: 'type.folder.private',
+					accessRole: 'access.role.owner',
+				}),
+			);
+			spyOn(TestBed.inject(PromptService), 'prompt').and.callFake(
+				async (fields, title, savePromise) => {
+					folderCreationPromise = savePromise;
+					return { folderName: newFolderName };
+				},
+			);
+			createFolder = spyOn(TestBed.inject(EditService), 'createFolder');
+			messageService = TestBed.inject(MessageService);
+			spyOn(messageService, 'showMessage');
+			spyOn(messageService, 'showError');
+		});
+
+		it('should create the folder in the current folder, refresh it and show the new folder', async () => {
+			const createdFolder = new FolderVO({ displayName: newFolderName });
+			createFolder.and.resolveTo(createdFolder);
+			const refreshCurrentFolder = spyOn(
+				dataService,
+				'refreshCurrentFolder',
+			).and.resolveTo();
+			const showItem = spyOn(dataService, 'showItem');
+
+			await component.createNewFolder();
+			await expectAsync(folderCreationPromise).toBeResolved();
+
+			expect(createFolder).toHaveBeenCalledWith(
+				newFolderName,
+				component.currentFolder,
+			);
+
+			expect(messageService.showMessage).toHaveBeenCalledWith({
+				message: `Folder "${newFolderName}" has been created`,
+				style: 'success',
+			});
+
+			expect(refreshCurrentFolder).toHaveBeenCalled();
+			expect(showItem).toHaveBeenCalledWith(createdFolder);
+		});
+
+		it('should show the generic folder error and reject the prompt when creating the folder fails', async () => {
+			createFolder.and.rejectWith(new Error('stela is down'));
+
+			await component.createNewFolder();
+			await expectAsync(folderCreationPromise).toBeRejected();
+
+			expect(messageService.showError).toHaveBeenCalledWith({
+				message: GENERIC_FOLDER_ERROR_MESSAGE,
+				translate: true,
+			});
+		});
 	});
 });
