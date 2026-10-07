@@ -326,9 +326,9 @@ describe('TimezoneService', () => {
 			);
 		});
 
-		it('should return null for an offset no zone sits on today', () => {
+		it('should return null for an offset no zone sits on at any time of year', () => {
 			expect(service.getFirstTimezoneIdForOffset('-12:00')).toBeNull();
-			expect(service.getFirstTimezoneIdForOffset('+13:45')).toBeNull();
+			expect(service.getFirstTimezoneIdForOffset('+13:15')).toBeNull();
 		});
 	});
 
