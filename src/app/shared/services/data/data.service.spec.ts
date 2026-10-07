@@ -430,6 +430,36 @@ describe('DataService', () => {
 			expect(namesOf(currentFolder)).toEqual(['Berlin', 'Amsterdam']);
 			expect(folderUpdate).not.toHaveBeenCalled();
 		});
+
+		it('should reject with the response and leave the children alone when it is unsuccessful', async () => {
+			const unsuccessfulResponse = new FolderResponse({
+				isSuccessful: false,
+				Results: [],
+			});
+			getWithChildrenByIdentifier.and.resolveTo(unsuccessfulResponse);
+
+			await expectAsync(service.refreshCurrentFolder()).toBeRejectedWith(
+				unsuccessfulResponse,
+			);
+
+			expect(namesOf(currentFolder)).toEqual(['Berlin', 'Amsterdam']);
+			expect(folderUpdate).not.toHaveBeenCalled();
+		});
+
+		it('should empty the children when the server returns none', async () => {
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(currentFolder.ChildItemVOs).toEqual([]);
+			expect(folderUpdate).toHaveBeenCalledWith(currentFolder);
+		});
 	});
 
 	describe('sortCurrentFolder', () => {

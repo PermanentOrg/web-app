@@ -93,6 +93,51 @@ describe('sortChildItems', () => {
 		]);
 	});
 
+	it('should break display date ties on display name ascending', () => {
+		const recordZurich = new RecordVO({
+			recordId: 5,
+			folder_linkId: 5,
+			displayName: 'Zurich',
+			displayDT: '2021-05-01T00:00:00.000Z',
+			type: 'type.record.image',
+		});
+
+		expect(
+			namesOf(
+				sortChildItems([recordZurich, folderBerlin], 'sort.display_date_desc'),
+			),
+		).toEqual(['Berlin', 'Zurich']);
+	});
+
+	it('should order items without a display name or type first ascending, keeping their relative order', () => {
+		const firstRecordWithoutNameOrType = new RecordVO({
+			recordId: 6,
+			folder_linkId: 6,
+		});
+		const secondRecordWithoutNameOrType = new RecordVO({
+			recordId: 7,
+			folder_linkId: 7,
+		});
+		const itemsWithMissingFields = [
+			recordCairo,
+			firstRecordWithoutNameOrType,
+			secondRecordWithoutNameOrType,
+		];
+		const expectedOrder = [
+			firstRecordWithoutNameOrType,
+			secondRecordWithoutNameOrType,
+			recordCairo,
+		];
+
+		expect(
+			sortChildItems(itemsWithMissingFields, 'sort.alphabetical_asc'),
+		).toEqual(expectedOrder);
+
+		expect(sortChildItems(itemsWithMissingFields, 'sort.type_asc')).toEqual(
+			expectedOrder,
+		);
+	});
+
 	it('should return a new array holding the same item references', () => {
 		const sortedItems = sortChildItems(items, 'sort.alphabetical_asc');
 
