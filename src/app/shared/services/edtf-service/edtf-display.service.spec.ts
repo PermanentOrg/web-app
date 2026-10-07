@@ -4,6 +4,7 @@ import {
 	EdtfDisplayService,
 	FILE_LIST_DATE_OPTIONS,
 } from './edtf-display.service';
+import { DateTimeModel, EdtfService } from './edtf.service';
 
 describe('EdtfDisplayService', () => {
 	let service: EdtfDisplayService;
@@ -88,6 +89,12 @@ describe('EdtfDisplayService', () => {
 
 		it('should render a range with both sides unknown', () => {
 			expect(dateTextOf('/')).toBe('Unknown — Unknown');
+		});
+
+		it('should print both years for a range across years', () => {
+			expect(dateTextOf('1985-04-12/1986-06-10')).toBe(
+				'Apr. 12, 1985 — Jun. 10, 1986',
+			);
 		});
 	});
 
@@ -185,6 +192,68 @@ describe('EdtfDisplayService', () => {
 		it('should drop the time on an open-ended interval', () => {
 			expect(timeTextOf('1985-04-12T09:00:00Z/..')).toBe('');
 		});
+
+		it('should keep the one time a same-day range carries', () => {
+			expect(timeTextOf('2001-09-24/2001-09-24T16:00:00Z')).toBe('4:00 PM');
+		});
+
+		it('should show no time for a same-day range carrying none', () => {
+			expect(timeTextOf('2001-09-24/2001-09-24')).toBe('');
+		});
+	});
+
+	describe('models the parser does not produce today', () => {
+		const stubParsedModel = (model: DateTimeModel): void => {
+			spyOn(TestBed.inject(EdtfService), 'toDateTimeModel').and.returnValue(
+				model,
+			);
+		};
+
+		const renderModel = (model: DateTimeModel): string => {
+			stubParsedModel(model);
+			const rendered = service.formatForDisplay('stubbed');
+			return [...rendered.date, ...rendered.time]
+				.map((segment) => segment.text)
+				.join(' ');
+		};
+
+		it('should render a 24-hour time zero-padded and without a meridian', () => {
+			expect(
+				renderModel({
+					date: { year: '1985', month: '04', day: '12' },
+					time: { hours: '7', minutes: '5', format: 'h24' },
+				}),
+			).toBe('Apr. 12, 1985 07:05');
+		});
+
+		it('should fill in missing minutes', () => {
+			expect(
+				renderModel({
+					date: { year: '1985', month: '04', day: '12' },
+					time: { hours: '07', format: 'pm' },
+				}),
+			).toBe('Apr. 12, 1985 7:00 PM');
+		});
+
+		it('should fill in missing seconds in the tooltip', () => {
+			stubParsedModel({
+				date: { year: '1985', month: '04', day: '12' },
+				time: { hours: '09', minutes: '00', format: 'am' },
+				endDate: { year: '1985', month: '06', day: '10' },
+				endTime: { format: 'am' },
+			});
+
+			expect(service.formatForTooltip('stubbed/stubbed')).toEqual({
+				from: 'Apr. 12, 1985 • 9:00:00 AM',
+				to: 'Jun. 10, 1985',
+			});
+		});
+
+		it('should treat a missing date as unknown', () => {
+			expect(renderModel({ date: undefined, time: { format: 'am' } })).toBe(
+				'Unknown',
+			);
+		});
 	});
 
 	describe('values it cannot parse', () => {
@@ -264,6 +333,20 @@ describe('EdtfDisplayService', () => {
 			expect(
 				service.formatForTooltip('2001-09-24T09:45:00Z/2001-09-24T16:00:00Z'),
 			).toBeNull();
+		});
+
+		it('should keep the qualifier and skip the time on a side without one', () => {
+			expect(
+				service.formatForTooltip('1985-04-12T09:00:00Z/1985-06-10~'),
+			).toEqual({
+				from: 'Apr. 12, 1985 • 9:00:00 AM',
+				to: 'Jun. 10, 1985 ~',
+			});
+		});
+
+		it('should say nothing for an absent value', () => {
+			expect(service.formatForTooltip(null)).toBeNull();
+			expect(service.formatForTooltip(undefined)).toBeNull();
 		});
 
 		it('should name an unknown side rather than leaving it blank', () => {
@@ -347,6 +430,20 @@ describe('EdtfDisplayService', () => {
 			expect(
 				service.formatDateForDisplay({ year: '', month: '', day: '' }),
 			).toBe('');
+		});
+
+		it('should render nothing for an absent date', () => {
+			expect(service.formatDateForDisplay(undefined)).toBe('');
+		});
+
+		it('should keep the numeric form for a month that does not exist', () => {
+			expect(service.formatDateForDisplay({ year: '1985', month: '13' })).toBe(
+				'1985-13',
+			);
+
+			expect(service.formatDateForDisplay({ year: '1985', month: '00' })).toBe(
+				'1985-00',
+			);
 		});
 	});
 });
