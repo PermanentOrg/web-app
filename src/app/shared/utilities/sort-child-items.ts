@@ -9,13 +9,18 @@ interface SortRule {
 	tiebreak?: CompareItems;
 }
 
+// Stela orders text by the database collation, which does not change with the
+// viewer, so the preview pins one locale instead of using the browser's.
+const textCollator = new Intl.Collator('en-US');
+
+const compareText = (firstText?: string, secondText?: string): number =>
+	textCollator.compare(firstText ?? '', secondText ?? '');
+
 const compareDisplayNames: CompareItems = (firstItem, secondItem) =>
-	String(firstItem.displayName ?? '').localeCompare(
-		String(secondItem.displayName ?? ''),
-	);
+	compareText(firstItem.displayName, secondItem.displayName);
 
 const compareTypes: CompareItems = (firstItem, secondItem) =>
-	String(firstItem.type ?? '').localeCompare(String(secondItem.type ?? ''));
+	compareText(firstItem.type, secondItem.type);
 
 // Postgres sorts NULL after every non-null value, so an undated item lands last
 // ascending and first descending. Parsing a missing date to +Infinity gives the

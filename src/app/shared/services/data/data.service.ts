@@ -21,6 +21,7 @@ import { debugSubscribable } from '@shared/utilities/debug';
 import { TagsService } from '@core/services/tags/tags.service';
 import { SortType } from '@models/vo-types';
 import { sortChildItems } from '@shared/utilities/sort-child-items';
+import { toFolderLinkId } from '@shared/services/api/folder.repo';
 
 const THUMBNAIL_REFRESH_INTERVAL = 3000;
 
@@ -511,23 +512,25 @@ export class DataService {
 		const original = folder1.ChildItemVOs as ItemVO[];
 		const updated = folder2.ChildItemVOs as ItemVO[];
 
-		// Keyed by stringified folder_linkId because it arrives as a number from
-		// the PHP API and as a string from some stela responses.
-		const originalItemsById = new Map<string, ItemVO>();
-		const updatedItemsById = new Map<string, ItemVO>();
-		const updatedOrderedIds: string[] = [];
+		// A child without a usable link id cannot be matched across refreshes, so
+		// it is taken from the server as is instead of being merged.
+		const updatedItemsByLinkId = new Map<number, ItemVO>();
+		const originalItemsByLinkId = new Map<number, ItemVO>();
 
 		for (const item of updated) {
-			updatedItemsById.set(String(item.folder_linkId), item);
-			updatedOrderedIds.push(String(item.folder_linkId));
+			const linkId = toFolderLinkId(item.folder_linkId);
+			if (linkId !== undefined) {
+				updatedItemsByLinkId.set(linkId, item);
+			}
 		}
 
 		for (const item of original) {
-			const itemId = String(item.folder_linkId);
-			originalItemsById.set(itemId, item);
+			const linkId = toFolderLinkId(item.folder_linkId);
+			const updatedItem =
+				linkId === undefined ? undefined : updatedItemsByLinkId.get(linkId);
 
-			if (updatedItemsById.has(itemId)) {
-				const updatedItem = updatedItemsById.get(itemId);
+			if (updatedItem) {
+				originalItemsByLinkId.set(linkId, item);
 				const dataToUpdate: FolderVOData | RecordVOData = {
 					updatedDT: updatedItem.updatedDT,
 				};
@@ -538,15 +541,19 @@ export class DataService {
 			}
 		}
 
-		folder1.ChildItemVOs = updatedOrderedIds.map((itemId) => {
-			const existingItem = originalItemsById.get(itemId);
+		folder1.ChildItemVOs = updated.map((updatedItem) => {
+			const linkId = toFolderLinkId(updatedItem.folder_linkId);
+			if (linkId === undefined) {
+				return updatedItem;
+			}
+
+			const existingItem = originalItemsByLinkId.get(linkId);
 			if (existingItem) {
 				return existingItem;
 			}
 
-			const newItem = updatedItemsById.get(itemId);
-			newItem.isNewlyCreated = true;
-			return newItem;
+			updatedItem.isNewlyCreated = true;
+			return updatedItem;
 		});
 
 		this.debug('updateChildItems done %d items', folder1.ChildItemVOs.length);

@@ -381,6 +381,76 @@ describe('DataService', () => {
 			expect(berlin.isNewlyCreated).toBeFalse();
 		});
 
+		it('should keep every child without a link id instead of collapsing them into one', async () => {
+			const firstRecordWithoutLinkId = {
+				...cairoRecordData,
+				folder_linkId: undefined,
+			};
+			const secondRecordWithoutLinkId = {
+				...cairoRecordData,
+				recordId: '4',
+				folder_linkId: undefined,
+				displayName: 'Dublin',
+			};
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [
+						amsterdamRecordData,
+						berlinFolderData,
+						firstRecordWithoutLinkId,
+						secondRecordWithoutLinkId,
+					],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(namesOf(currentFolder)).toEqual([
+				'Amsterdam',
+				'Berlin',
+				'Cairo',
+				'Dublin',
+			]);
+
+			expect(currentFolder.ChildItemVOs[2]).not.toBe(
+				currentFolder.ChildItemVOs[3],
+			);
+
+			expect(currentFolder.ChildItemVOs[2].isNewlyCreated).toBeFalse();
+		});
+
+		it('should not merge an existing child without a link id into a refreshed one', async () => {
+			const existingRecordWithoutLinkId = new RecordVO({
+				...cairoRecordData,
+				folder_linkId: undefined,
+			});
+			currentFolder.ChildItemVOs.push(existingRecordWithoutLinkId);
+			service.clickItemSingle(existingRecordWithoutLinkId);
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [
+						amsterdamRecordData,
+						berlinFolderData,
+						{ ...cairoRecordData, folder_linkId: undefined },
+					],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(currentFolder.ChildItemVOs[2]).not.toBe(
+				existingRecordWithoutLinkId,
+			);
+
+			expect(
+				service.getSelectedItems().has(existingRecordWithoutLinkId),
+			).toBeFalse();
+		});
+
 		it('should re-apply a previewed sort that is not saved on the folder yet', async () => {
 			currentFolder.update({ sort: 'sort.alphabetical_desc' });
 			getWithChildrenByIdentifier.and.resolveTo(
@@ -429,6 +499,36 @@ describe('DataService', () => {
 
 			expect(namesOf(currentFolder)).toEqual(['Berlin', 'Amsterdam']);
 			expect(folderUpdate).not.toHaveBeenCalled();
+		});
+
+		it('should reject with the response and leave the children alone when it is unsuccessful', async () => {
+			const unsuccessfulResponse = new FolderResponse({
+				isSuccessful: false,
+				Results: [],
+			});
+			getWithChildrenByIdentifier.and.resolveTo(unsuccessfulResponse);
+
+			await expectAsync(service.refreshCurrentFolder()).toBeRejectedWith(
+				unsuccessfulResponse,
+			);
+
+			expect(namesOf(currentFolder)).toEqual(['Berlin', 'Amsterdam']);
+			expect(folderUpdate).not.toHaveBeenCalled();
+		});
+
+		it('should empty the children when the server returns none', async () => {
+			getWithChildrenByIdentifier.and.resolveTo(
+				buildFolderResponse({
+					folderId: '10',
+					sort: 'sort.alphabetical_asc',
+					ChildItemVOs: [],
+				}),
+			);
+
+			await service.refreshCurrentFolder();
+
+			expect(currentFolder.ChildItemVOs).toEqual([]);
+			expect(folderUpdate).toHaveBeenCalledWith(currentFolder);
 		});
 	});
 
