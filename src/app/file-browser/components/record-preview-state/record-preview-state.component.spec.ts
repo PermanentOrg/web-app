@@ -1,9 +1,6 @@
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { RecordPreviewState } from '@models/record-preview-state';
-import {
-	ACCESS_COPY_HELP_LINK,
-	RecordPreviewStateComponent,
-} from './record-preview-state.component';
+import { RecordPreviewStateComponent } from './record-preview-state.component';
 
 describe('RecordPreviewStateComponent', () => {
 	beforeEach(async () => {
@@ -83,11 +80,28 @@ describe('RecordPreviewStateComponent', () => {
 		expect(ngMocks.findAll('.download-original').length).toBe(0);
 	});
 
-	it('opens the help link in a new tab', () => {
-		render(RecordPreviewState.Unavailable);
-		const helpLink = ngMocks.find('.help-link').nativeElement;
+	const helpLinkUrls: Array<[RecordPreviewState, string]> = [
+		[
+			RecordPreviewState.Preparing,
+			'https://permanent.zohodesk.com/portal/en/kb/articles/what-does-it-mean-when-my-file-is-processing',
+		],
+		[
+			RecordPreviewState.Unavailable,
+			'https://permanent.zohodesk.com/portal/en/kb/articles/file-types-that-we-accept-and-support',
+		],
+		[
+			RecordPreviewState.Failed,
+			'https://permanent.zohodesk.com/portal/en/newticket',
+		],
+	];
 
-		expect(helpLink.getAttribute('href')).toBe(ACCESS_COPY_HELP_LINK);
-		expect(helpLink.getAttribute('target')).toBe('_blank');
+	helpLinkUrls.forEach(([previewState, helpLinkUrl]) => {
+		it(`opens the ${previewState} help article in a new tab`, () => {
+			render(previewState);
+			const helpLink = ngMocks.find('.help-link').nativeElement;
+
+			expect(helpLink.getAttribute('href')).toBe(helpLinkUrl);
+			expect(helpLink.getAttribute('target')).toBe('_blank');
+		});
 	});
 });

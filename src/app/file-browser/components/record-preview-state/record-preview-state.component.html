@@ -24,7 +24,12 @@
 			}
 		</button>
 	}
-	<a class="help-link" [href]="helpLink" target="_blank" rel="noopener">
+	<a
+		class="help-link"
+		[href]="content().helpLinkUrl"
+		target="_blank"
+		rel="noopener"
+	>
 		{{ content().helpLinkText }}
 	</a>
 </div>
