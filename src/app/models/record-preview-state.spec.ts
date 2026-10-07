@@ -196,6 +196,20 @@ describe('getOriginalFileExtension', () => {
 		expect(getOriginalFileExtension(record)).toBe('docx');
 	});
 
+	it('reads the extension from the original that has content', () => {
+		const emptyPagesOriginal: PermanentFile = {
+			...buildFile(FileFormat.Original, 'type.file.document.pages'),
+			fileURL: null,
+			size: null,
+		};
+		const record = buildRecord('type.record.document', [
+			emptyPagesOriginal,
+			docxOriginal,
+		]);
+
+		expect(getOriginalFileExtension(record)).toBe('docx');
+	});
+
 	it('falls back to the upload file name when the original has no type', () => {
 		const record = new RecordVO({
 			type: 'type.record.unknown',

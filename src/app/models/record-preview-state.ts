@@ -11,6 +11,7 @@ import {
 	isVideoRecord,
 	isWebArchiveRecord,
 } from './record-media-type';
+import { GetOriginalFile } from './get-access-file';
 import { RecordVO } from './record-vo';
 
 export enum RecordPreviewState {
@@ -35,10 +36,6 @@ const ORIGINAL_TYPES_BROWSERS_CANNOT_DISPLAY = [
 	'type.file.audio.wma',
 ];
 
-function getOriginalFile(record: RecordVO): PermanentFile | undefined {
-	return record.FileVOs?.find((file) => file.format === FileFormat.Original);
-}
-
 function isViewableCopy(file: PermanentFile): boolean {
 	const isKnownArchivematicaCopy =
 		file.format === FileFormat.ArchivematicaAccess &&
@@ -55,7 +52,7 @@ function canShowFromOriginal(record: RecordVO): boolean {
 	if (isWebArchiveRecord(record)) {
 		return true;
 	}
-	const originalFileType = getOriginalFile(record)?.type;
+	const originalFileType = GetOriginalFile(record)?.type;
 	if (ORIGINAL_TYPES_BROWSERS_CANNOT_DISPLAY.includes(originalFileType)) {
 		return false;
 	}
@@ -85,7 +82,7 @@ export function getRecordPreviewState(record: RecordVO): RecordPreviewState {
 }
 
 export function getOriginalFileExtension(record: RecordVO): string | undefined {
-	const originalFile = getOriginalFile(record);
+	const originalFile = GetOriginalFile(record);
 	if (originalFile && originalFile.type !== UNKNOWN_FILE_TYPE) {
 		return getFileExtension(originalFile);
 	}
