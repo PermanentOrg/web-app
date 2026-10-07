@@ -377,6 +377,55 @@ describe('TimezoneDropdownComponent', () => {
 			pressKey(trigger(), 'ArrowDown');
 
 			expect(instance.isOpen()).toBeFalse();
+
+			instance.toggle();
+			instance.open();
+
+			expect(instance.isOpen()).toBeFalse();
+		});
+
+		it('should close when the trigger is clicked again', () => {
+			trigger().click();
+			fixture.detectChanges();
+			trigger().click();
+			fixture.detectChanges();
+
+			expect(instance.isOpen()).toBeFalse();
+		});
+
+		it('should close on a click outside but not on one inside', () => {
+			trigger().click();
+			fixture.detectChanges();
+			listbox().click();
+
+			expect(instance.isOpen()).toBeTrue();
+
+			document.body.click();
+
+			expect(instance.isOpen()).toBeFalse();
+		});
+
+		it('should open and then select with Space when there is no search field', () => {
+			const emitted: (string | null)[] = [];
+			instance.timezoneChange.subscribe((value) => emitted.push(value));
+			pressKey(trigger(), ' ');
+
+			expect(instance.isOpen()).toBeTrue();
+
+			pressKey(trigger(), ' ');
+
+			expect(emitted).toEqual([null]);
+			expect(instance.isOpen()).toBeFalse();
+		});
+
+		it('should ignore keys it does not handle', () => {
+			trigger().click();
+			fixture.detectChanges();
+			const activeOptionIndex = instance.activeOptionIndex();
+			pressKey(trigger(), 'a');
+
+			expect(instance.isOpen()).toBeTrue();
+			expect(instance.activeOptionIndex()).toEqual(activeOptionIndex);
 		});
 	});
 
@@ -403,6 +452,30 @@ describe('TimezoneDropdownComponent', () => {
 
 			expect(instance.visibleOptions().length).toEqual(0);
 			expect(element.querySelector('.pr-timezone-empty')).toBeTruthy();
+		});
+
+		it('should keep the panel open on arrows and End when nothing matches', () => {
+			const searchInput: HTMLElement = element.querySelector(
+				'.pr-timezone-search',
+			);
+			instance.onSearchTermChange('nowhere at all');
+			fixture.detectChanges();
+			pressKey(searchInput, 'ArrowDown');
+			pressKey(searchInput, 'End');
+
+			expect(instance.isOpen()).toBeTrue();
+			expect(instance.activeOption()).toBeNull();
+		});
+
+		it('should close without emitting on Enter when nothing matches', () => {
+			const emitted: (string | null)[] = [];
+			instance.timezoneChange.subscribe((value) => emitted.push(value));
+			instance.onSearchTermChange('nowhere at all');
+			fixture.detectChanges();
+			pressKey(element.querySelector('.pr-timezone-search'), 'Enter');
+
+			expect(emitted).toEqual([]);
+			expect(instance.isOpen()).toBeFalse();
 		});
 
 		it('should reset the active option when the term changes', () => {

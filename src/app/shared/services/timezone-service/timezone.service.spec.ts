@@ -1,4 +1,4 @@
-import { TimezoneService } from './timezone.service';
+import { TimezoneService, WallClockDateTime } from './timezone.service';
 
 describe('TimezoneService', () => {
 	let service: TimezoneService;
@@ -339,6 +339,81 @@ describe('TimezoneService', () => {
 			expect(service.resolveTimezoneId(browserTimezoneId)).toEqual(
 				browserTimezoneId,
 			);
+		});
+
+		it('should return null when the engine cannot report one', () => {
+			spyOn(Intl, 'DateTimeFormat').and.throwError('unsupported');
+
+			expect(service.getBrowserTimezoneId()).toBeNull();
+		});
+	});
+
+	describe('when the Intl APIs are missing or misbehave', () => {
+		const noon: WallClockDateTime = {
+			year: 2026,
+			month: 1,
+			day: 15,
+			hour: 12,
+			minute: 0,
+			second: 0,
+		};
+
+		const stubTimezoneName = (timezoneName: string): void => {
+			spyOn(Intl.DateTimeFormat.prototype, 'formatToParts').and.returnValue([
+				{ type: 'timeZoneName', value: timezoneName },
+			]);
+		};
+
+		it('should fall back to the browser zone when zones cannot be listed', () => {
+			spyOn(Intl, 'supportedValuesOf').and.throwError('unsupported');
+			const timezoneIds = service
+				.getGroupedOptions()
+				.flatMap((group) => group.options)
+				.map((option) => option.timezoneId);
+
+			expect(timezoneIds).toEqual([service.getBrowserTimezoneId()]);
+		});
+
+		it('should leave the country blank when region names are unavailable', () => {
+			spyOn(Intl, 'DisplayNames').and.throwError('unsupported');
+
+			expect(service.getOption('Europe/Bucharest').countryName).toEqual('');
+		});
+
+		it('should leave the country blank when a region name lookup fails', () => {
+			spyOn(Intl.DisplayNames.prototype, 'of').and.throwError('unsupported');
+
+			expect(service.getOption('Europe/Bucharest').countryName).toEqual('');
+		});
+
+		it('should leave the country blank when zones cannot be mapped to regions', () => {
+			spyOn(Intl, 'Locale').and.throwError('unsupported');
+
+			expect(service.getOption('Europe/Bucharest').countryName).toEqual('');
+		});
+
+		it('should read a bare GMT name as a zero offset', () => {
+			stubTimezoneName('GMT');
+
+			expect(service.getOffsetForWallClock('Europe/Bucharest', noon)).toEqual(
+				'+00:00',
+			);
+		});
+
+		it('should leave the offset label blank when the name carries no offset', () => {
+			stubTimezoneName('Eastern European Time');
+
+			expect(service.getOption('Europe/Bucharest').offsetLabel).toEqual('');
+		});
+
+		it('should return null when the offset cannot be read', () => {
+			spyOn(Intl.DateTimeFormat.prototype, 'formatToParts').and.throwError(
+				'unsupported',
+			);
+
+			expect(
+				service.getOffsetForWallClock('Europe/Bucharest', noon),
+			).toBeNull();
 		});
 	});
 });
