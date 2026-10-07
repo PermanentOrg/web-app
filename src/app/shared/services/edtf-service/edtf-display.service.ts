@@ -394,7 +394,7 @@ export class EdtfDisplayService {
 		return (
 			!!date.year &&
 			!!date.day &&
-			this.toMonthIndex(date.month ?? '') !== NO_MONTH_INDEX
+			this.toMonthIndex(date.month) !== NO_MONTH_INDEX
 		);
 	}
 
