@@ -3,7 +3,6 @@ import { FolderResponse } from '@shared/services/api/folder.repo';
 import { FolderVO } from '@models/index';
 import { DataStatus } from '@models/data-status.enum';
 import { ApiService } from '@shared/services/api/api.service';
-import { of } from 'rxjs';
 import { ShareLinksService } from '../share-links/services/share-links.service';
 import { FilesystemApiService } from './filesystem-api.service';
 
@@ -46,9 +45,9 @@ describe('FilesystemApiService', () => {
 				getWithChildren: jasmine
 					.createSpy('getWithChildren')
 					.and.returnValue(Promise.resolve(mockSuccessResponse)),
-				navigateLean: jasmine
-					.createSpy('navigateLean')
-					.and.returnValue(of(mockSuccessResponse)),
+				getWithChildrenByIdentifier: jasmine
+					.createSpy('getWithChildrenByIdentifier')
+					.and.returnValue(Promise.resolve(mockSuccessResponse)),
 			},
 		};
 
@@ -72,18 +71,30 @@ describe('FilesystemApiService', () => {
 		expect(service).toBeTruthy();
 	});
 
-	it('should navigate using navigateLean', async () => {
+	it('should navigate using getWithChildrenByIdentifier', async () => {
 		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
 
 		const folder = await service.navigate({ folderId });
 
-		expect(mockApiService.folder.navigateLean).toHaveBeenCalledWith(
-			jasmine.any(FolderVO),
-		);
+		expect(
+			mockApiService.folder.getWithChildrenByIdentifier,
+		).toHaveBeenCalledWith(jasmine.any(FolderVO));
 
 		expect(folder.folderId).toBe(folderId);
 		expect(folder.displayName).toBe('Unlisted Folder');
 		expect(folder.dataStatus).toBe(DataStatus.Lean);
+	});
+
+	it('should navigate by archiveNbr and folder_linkId without a folder id', async () => {
+		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
+
+		await service.navigate({ archiveNbr: '0001-0000' });
+
+		const [requestedFolder] =
+			mockApiService.folder.getWithChildrenByIdentifier.calls.mostRecent().args;
+
+		expect(requestedFolder.archiveNbr).toBe('0001-0000');
+		expect(requestedFolder.folderId).toBeUndefined();
 	});
 
 	it('should navigate using getWithChildren when in unlisted share', async () => {
@@ -104,8 +115,8 @@ describe('FilesystemApiService', () => {
 
 	it('should throw FolderResponse error if response is unsuccessful', async () => {
 		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
-		mockApiService.folder.navigateLean.and.returnValue(
-			of(mockUnsuccessfulResponse),
+		mockApiService.folder.getWithChildrenByIdentifier.and.resolveTo(
+			mockUnsuccessfulResponse,
 		);
 
 		try {
@@ -114,5 +125,14 @@ describe('FilesystemApiService', () => {
 		} catch (error) {
 			expect(error).toBeDefined();
 		}
+	});
+
+	it('should surface a rejection from getWithChildrenByIdentifier', async () => {
+		shareLinksServiceSpy.isUnlistedShare.and.resolveTo(false);
+		mockApiService.folder.getWithChildrenByIdentifier.and.rejectWith(
+			new Error('500 Internal Server Error'),
+		);
+
+		await expectAsync(service.navigate({ folderId })).toBeRejected();
 	});
 });

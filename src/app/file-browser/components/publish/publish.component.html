@@ -1,11 +1,7 @@
 <div class="dialog-content">
 	<div class="dialog-body">
 		<div class="page-title break-all">
-			{{
-				this.sourceItem.folder_linkType.includes('public')
-					? 'Get public link for'
-					: 'Publish'
-			}}
+			{{ isPublicSourceItem ? 'Get public link for' : 'Publish' }}
 			{{ sourceItem.displayName }}
 		</div>
 		@if (publicLink) {

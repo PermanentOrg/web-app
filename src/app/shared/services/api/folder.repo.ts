@@ -1,4 +1,4 @@
-import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
+import { FolderVO, FolderVOData, ItemVO, RecordVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
@@ -155,12 +155,20 @@ const convertStelaPathsToBreadcrumbPaths = (
 
 const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 	stelaFolder.children ??= [];
-	const childFolderVOs = stelaFolder.children
-		.filter((child): child is StelaFolder => !isStelaRecord(child))
-		.map(convertStelaFolderToFolderVO);
-	const childRecordVOs = stelaFolder.children
-		.filter(isStelaRecord)
-		.map(convertStelaRecordToRecordVO);
+	// Stela's children endpoint already ranks folders and records together by the
+	// parent folder's sort setting, so the incoming order is the order to render.
+	// Splitting the children by kind and concatenating them would discard it.
+	const childItemVOs: ItemVO[] = stelaFolder.children.map((child) =>
+		isStelaRecord(child)
+			? convertStelaRecordToRecordVO(child)
+			: convertStelaFolderToFolderVO(child),
+	);
+	const childFolderVOs = childItemVOs.filter(
+		(childItemVO): childItemVO is FolderVO => childItemVO instanceof FolderVO,
+	);
+	const childRecordVOs = childItemVOs.filter(
+		(childItemVO): childItemVO is RecordVO => childItemVO instanceof RecordVO,
+	);
 	const { accessRole: stelaAccessRole, ...stelaFolderWithoutAccessRole } =
 		stelaFolder;
 	return new FolderVO({
@@ -212,7 +220,7 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 		TagVOs: (stelaFolder.tags ?? []).map((stelaTag) =>
 			convertStelaTagToTagVO(stelaTag, stelaFolder.archive?.id),
 		),
-		ChildItemVOs: [...childRecordVOs, ...childFolderVOs],
+		ChildItemVOs: childItemVOs,
 		ShareVOs: (stelaFolder.shares ?? []).map(convertStelaSharetoShareVO),
 		isFolder: true,
 	});
