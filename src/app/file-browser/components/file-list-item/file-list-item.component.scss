@@ -173,6 +173,23 @@ $bg-transition-length: 0.075s;
 		}
 	}
 
+	.preview-status {
+		display: flex;
+		gap: 6px;
+		margin-top: 4px;
+		font-size: 12px;
+		line-height: 16px;
+		color: $PR-blue-400;
+
+		&[data-state='preparing'] .preview-status-label {
+			color: $PR-yellow-500;
+		}
+
+		&[data-state='failed'] .preview-status-label {
+			color: $PR-red-500;
+		}
+	}
+
 	.grid-view & {
 		height: $grid-info-section-height;
 		position: absolute;
@@ -267,6 +284,7 @@ $bg-transition-length: 0.075s;
 }
 
 [prBgImage],
+pr-record-row-icon,
 .file-list-item-folder-icon {
 	height: $row-height - ($grid-unit * 0.5);
 	width: $row-height - ($grid-unit * 0.5);
@@ -357,6 +375,7 @@ $bg-transition-length: 0.075s;
 	}
 
 	[prBgImage],
+	pr-record-row-icon,
 	.file-list-item-folder-icon {
 		margin-right: pxToGrid(5px) + $grid-unit;
 	}

@@ -86,6 +86,7 @@ export class RecordVO
 	// New thumbnails
 	public thumbnail256: string;
 	public thumbnail256CloudPath: string;
+	public thumbnail256Status?: GeneratedFileStatus | null;
 
 	// Statuses
 	public fileStatus;
@@ -212,6 +213,7 @@ export interface RecordVOData extends BaseVOData {
 	thumbURL2000?: string;
 	thumbnail256?: string;
 	thumbnail256CloudPath?: string;
+	thumbnail256Status?: GeneratedFileStatus | null;
 	thumbDT?: any;
 	fileStatus?: any;
 	status?: any;

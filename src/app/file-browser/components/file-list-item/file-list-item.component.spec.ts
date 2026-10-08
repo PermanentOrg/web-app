@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ElementRef, Pipe, PipeTransform } from '@angular/core';
+import { DebugElement, ElementRef, Pipe, PipeTransform } from '@angular/core';
 import { Subject, of } from 'rxjs';
 import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 
@@ -15,6 +15,15 @@ import { EditService } from '@core/services/edit/edit.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
+import { By } from '@angular/platform-browser';
+import { MockComponent, ngMocks } from 'ng-mocks';
+import { FileFormat, GeneratedFileStatus } from '@models/file-vo';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { buildPermanentFile } from '@models/testing/build-permanent-file';
+import {
+	RecordRowIcon,
+	RecordRowIconComponent,
+} from '../record-row-icon/record-row-icon.component';
 import { FileListItemComponent } from './file-list-item.component';
 
 @Pipe({ name: 'itemTypeIcon' })
@@ -78,7 +87,12 @@ describe('FileListItemComponent', () => {
 		mockFeatureFlagService.isEnabled.and.returnValue(false);
 
 		await TestBed.configureTestingModule({
-			imports: [MockItemTypeIconPipe, MockPrDatePipe, MockPrConstantsPipe],
+			imports: [
+				MockItemTypeIconPipe,
+				MockPrDatePipe,
+				MockPrConstantsPipe,
+				MockComponent(RecordRowIconComponent),
+			],
 			declarations: [FileListItemComponent, GetThumbnailPipe],
 			providers: [
 				provideNoopAnimations(),
@@ -605,6 +619,160 @@ describe('FileListItemComponent', () => {
 			fixture.detectChanges();
 
 			expect(component.startDisplayTime).toBe('2020-06-10');
+		});
+	});
+
+	describe('generated file states in the list view', () => {
+		function showRecord(
+			recordType: string,
+			originalFileType: string,
+			accessCopyStatus: GeneratedFileStatus | null | undefined,
+			thumbnail256Status: GeneratedFileStatus | null | undefined,
+			thumbnail256?: string,
+		): void {
+			Object.assign(component.item, {
+				isRecord: true,
+				type: recordType,
+				FileVOs: [buildPermanentFile(FileFormat.Original, originalFileType)],
+				accessCopyStatus,
+				thumbnail256Status,
+				thumbnail256,
+			});
+			fixture.detectChanges();
+		}
+
+		function rowIconElement(): DebugElement | null {
+			return fixture.debugElement.query(By.directive(RecordRowIconComponent));
+		}
+
+		function rowIconInput(inputName: 'icon' | 'fileExtension'): unknown {
+			return ngMocks.input(rowIconElement(), inputName);
+		}
+
+		function previewStatusText(): string | undefined {
+			const statusLine = fixture.debugElement.query(By.css('.preview-status'));
+			return statusLine?.children
+				.map((part) => part.nativeElement.textContent.trim())
+				.join(' ');
+		}
+
+		function showsGreyPlaceholder(): boolean {
+			return !!fixture.debugElement.query(By.css('[prBgImage]'));
+		}
+
+		it('shows preparing and the status line for a document whose copy is being made', () => {
+			showRecord(
+				'type.record.document',
+				'type.file.document.docx',
+				GeneratedFileStatus.Processing,
+				GeneratedFileStatus.Processing,
+			);
+
+			expect(rowIconInput('icon')).toBe(RecordRowIcon.Preparing);
+			expect(showsGreyPlaceholder()).toBeFalse();
+			expect(previewStatusText()).toBe('Preparing to view... • Stored');
+		});
+
+		it('shows failed and the status line for a document whose copy failed', () => {
+			showRecord(
+				'type.record.document',
+				'type.file.document.docx',
+				GeneratedFileStatus.Failed,
+				GeneratedFileStatus.Failed,
+			);
+
+			expect(rowIconInput('icon')).toBe(RecordRowIcon.Failed);
+			expect(previewStatusText()).toBe('Preview unavailable • Stored');
+		});
+
+		it('shows preparing with no status line for an image waiting only on its thumbnail', () => {
+			showRecord(
+				'type.record.image',
+				'type.file.image.jpeg',
+				GeneratedFileStatus.Processing,
+				GeneratedFileStatus.Processing,
+			);
+
+			expect(rowIconInput('icon')).toBe(RecordRowIcon.Preparing);
+			expect(previewStatusText()).toBeUndefined();
+		});
+
+		it('shows the file type with its extension for an MP4', () => {
+			showRecord(
+				'type.record.video',
+				'type.file.video.mp4',
+				GeneratedFileStatus.Processing,
+				null,
+			);
+
+			expect(rowIconInput('icon')).toBe(RecordRowIcon.FileType);
+			expect(rowIconInput('fileExtension')).toBe('mp4');
+			expect(previewStatusText()).toBeUndefined();
+		});
+
+		it('keeps the thumbnail and still says preparing for a TIFF whose copy is being made', () => {
+			showRecord(
+				'type.record.image',
+				'type.file.image.tiff',
+				GeneratedFileStatus.Processing,
+				GeneratedFileStatus.Ok,
+				'https://example.com/256',
+			);
+
+			expect(rowIconElement()).toBeNull();
+			expect(showsGreyPlaceholder()).toBeTrue();
+			expect(previewStatusText()).toBe('Preparing to view... • Stored');
+		});
+
+		it('keeps the placeholder while Stela has not reported on the record', () => {
+			showRecord(
+				'type.record.document',
+				'type.file.document.docx',
+				undefined,
+				undefined,
+			);
+
+			expect(rowIconElement()).toBeNull();
+			expect(showsGreyPlaceholder()).toBeTrue();
+			expect(previewStatusText()).toBeUndefined();
+		});
+
+		it('leaves the grid view as it is', () => {
+			component.folderView = FolderView.Grid;
+			component.ngOnChanges();
+			showRecord(
+				'type.record.document',
+				'type.file.document.docx',
+				GeneratedFileStatus.Processing,
+				GeneratedFileStatus.Processing,
+			);
+
+			expect(rowIconElement()).toBeNull();
+			expect(showsGreyPlaceholder()).toBeTrue();
+			expect(previewStatusText()).toBeUndefined();
+		});
+
+		it('leaves the stock images of a listed share preview as they are', async () => {
+			component.ngOnDestroy();
+			const router = TestBed.inject(Router);
+			(router.routerState.snapshot as any).url = '/share/test';
+			const shareLinksService = TestBed.inject(ShareLinksService);
+			spyOn(shareLinksService, 'isUnlistedShare').and.returnValue(
+				Promise.resolve(false),
+			);
+			await component.ngOnInit();
+
+			showRecord(
+				'type.record.document',
+				'type.file.document.docx',
+				GeneratedFileStatus.Processing,
+				GeneratedFileStatus.Processing,
+			);
+
+			expect(rowIconElement()).toBeNull();
+			expect(previewStatusText()).toBeUndefined();
+
+			(router.routerState.snapshot as any).url = '/';
 		});
 	});
 });

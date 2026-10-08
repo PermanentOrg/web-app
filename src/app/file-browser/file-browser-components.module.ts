@@ -30,6 +30,7 @@ import { DownloadButtonComponent } from './components/download-button/download-b
 import { SidebarDatePickerComponent } from './components/sidebar-date-picker/sidebar-date-picker.component';
 import { SidebarLocationComponent } from './components/sidebar-location/sidebar-location.component';
 import { RecordPreviewStateComponent } from './components/record-preview-state/record-preview-state.component';
+import { RecordRowIconComponent } from './components/record-row-icon/record-row-icon.component';
 
 @NgModule({
 	imports: [
@@ -42,6 +43,7 @@ import { RecordPreviewStateComponent } from './components/record-preview-state/r
 		SidebarDatePickerComponent,
 		SidebarLocationComponent,
 		RecordPreviewStateComponent,
+		RecordRowIconComponent,
 	],
 	exports: [
 		FileListComponent,
