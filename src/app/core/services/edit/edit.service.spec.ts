@@ -520,6 +520,64 @@ describe('EditService', () => {
 		).toBeResolved();
 	});
 
+	it('should send several properties in one update and revert them together on failure', async () => {
+		const messageService = TestBed.inject(MessageService);
+		spyOn(messageService, 'showError');
+		spyOn(console, 'error');
+
+		const record = new RecordVO({
+			recordId: 1,
+			displayTime: 'original-value',
+			timezone: 'America/Chicago',
+		});
+
+		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+			Promise.reject({}),
+		);
+		(apiService.record.update as jasmine.Spy).and.returnValue(
+			Promise.resolve([]),
+		);
+
+		await service.saveItemVoProperties(
+			record,
+			{ displayTime: 'new-value', timezone: 'Europe/Bucharest' },
+			['displayTime'],
+		);
+
+		expect(record.displayTime).toBe('original-value');
+		expect(record.timezone).toBe('America/Chicago');
+	});
+
+	it('should apply several properties before the update call', async () => {
+		const record = new RecordVO({ recordId: 1 });
+		let timezoneWhenSent: string;
+
+		(apiService.record.updateStelaRecord as jasmine.Spy).and.callFake(
+			async (sentRecord: RecordVO) => {
+				timezoneWhenSent = sentRecord.timezone;
+				return {};
+			},
+		);
+		(apiService.record.get as jasmine.Spy).and.returnValue(
+			Promise.resolve({ getRecordVOs: () => [] }),
+		);
+
+		await service.saveItemVoProperties(
+			record,
+			{ displayTime: '1985-05-20', timezone: 'Europe/Bucharest' },
+			['displayTime'],
+		);
+
+		expect(timezoneWhenSent).toBe('Europe/Bucharest');
+		expect(record.displayTime).toBe('1985-05-20');
+	});
+
+	it('should do nothing when there is no item to save', async () => {
+		await expectAsync(
+			service.saveItemVoProperties(null, { displayTime: 'x' }, ['displayTime']),
+		).toBeResolved();
+	});
+
 	it('should revert property and show a translatable generic error when updateStelaRecord fails', async () => {
 		const messageService = TestBed.inject(MessageService);
 		spyOn(messageService, 'showError');

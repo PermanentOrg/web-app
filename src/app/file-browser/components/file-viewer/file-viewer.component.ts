@@ -455,14 +455,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			return;
 		}
 		const record = this.currentRecord;
-		const hasExplicitlyClearedDate = record?.displayTime === null;
-		const timeSource = hasExplicitlyClearedDate
-			? null
-			: record?.displayTime || record?.displayDT;
+		const timeSource = record?.displayTime;
 		try {
-			this.displayTimeObject = timeSource
-				? this.edtfService.toDateTimeModel(timeSource)
-				: null;
+			this.displayTimeObject = this.edtfService.withTimezone(
+				timeSource ? this.edtfService.toDateTimeModel(timeSource) : null,
+				record?.timezone,
+			);
 		} catch (err) {
 			this.displayTimeObject = null;
 			this.message.showError({ message: err?.message });
@@ -487,7 +485,16 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		try {
 			const edtfDate = this.edtfService.toEdtfDate(result);
 			const newDisplayTime = edtfDate === '' ? null : edtfDate;
-			await this.onFinishEditing('displayTime', newDisplayTime);
+			// The date and the zone it was recorded in go out together so one
+			// request carries both and a failure reverts both.
+			await this.editService.saveItemVoProperties(
+				this.currentRecord as ItemVO,
+				{
+					displayTime: newDisplayTime,
+					timezone: this.edtfService.getPersistableTimezoneId(result),
+				},
+				['displayTime'],
+			);
 		} catch (err) {
 			this.message.showError({ message: err?.message });
 		} finally {

@@ -66,6 +66,15 @@
 				/>
 			</div>
 
+			<pr-timezone-dropdown
+				class="pr-timezone-field"
+				fieldLabel="Start date timezone"
+				[selectedTimezone]="selectedTimezoneId()"
+				[disabled]="startFieldsDisabled()"
+				[showSearch]="true"
+				(timezoneChange)="onTimezoneChange($event)"
+			/>
+
 			<button class="pr-clear-link" (click)="clearStart()">
 				<i class="material-icons">backspace</i>
 				<span>Clear start date and time</span>
@@ -131,6 +140,15 @@
 						(timeChange)="onTimeChange($event, endTime)"
 					/>
 				</div>
+
+				<pr-timezone-dropdown
+					class="pr-timezone-field"
+					fieldLabel="End date timezone"
+					[selectedTimezone]="selectedTimezoneId()"
+					[disabled]="endFieldsDisabled()"
+					[showSearch]="true"
+					(timezoneChange)="onTimezoneChange($event)"
+				/>
 
 				<button class="pr-clear-link" (click)="clearEnd()">
 					<i class="material-icons">backspace</i>
