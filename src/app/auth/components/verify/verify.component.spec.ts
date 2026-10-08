@@ -18,6 +18,7 @@ import { HttpService } from '@shared/services/http/http.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@shared/services/event/event.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
 
@@ -167,6 +168,40 @@ describe('VerifyComponent', () => {
 		const verifyPhoneResponse = require('@root/test/responses/auth.verify.verifyPhone.success.json');
 		const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
 		req.flush(verifyPhoneResponse);
+	});
+
+	it('reports a phone code that fails to send on arrival', async () => {
+		const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+		await init(unverifiedPhoneData, { sendSms: true });
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendTextCreatedAccount'),
+		);
+		request.flush({ isSuccessful: false, isSystemUp: true, Results: [] });
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(showErrorSpy).toHaveBeenCalled();
+	});
+
+	it('reports a failed send that is not a response object', async () => {
+		const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+		await init(unverifiedPhoneData, { sendSms: true });
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendTextCreatedAccount'),
+		);
+		request.error(new ProgressEvent('network down'));
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(showErrorSpy.calls.mostRecent().args[0].message).toBe(
+			'error.generic.internal',
+		);
 	});
 
 	it('should show CAPTCHA before verifying phone', async () => {

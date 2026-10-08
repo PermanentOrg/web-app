@@ -462,6 +462,48 @@ describe('InlineValueEditComponent', () => {
 		expect(component.isEditing).toBeTrue();
 	});
 
+	it('emits the edit value as it is typed', () => {
+		const emitted: unknown[] = [];
+		component.editValueChange.subscribe((value) => emitted.push(value));
+
+		component.displayValue = TEST_TEXT;
+		component.startEdit();
+
+		expect(emitted[0]).toBe(TEST_TEXT);
+
+		component.onEditValueChange('Partly typed');
+
+		expect(emitted[emitted.length - 1]).toBe('Partly typed');
+		expect(component.editValue).toBe('Partly typed');
+	});
+
+	it('reports when editing starts and when it ends with a save', () => {
+		const emitted: boolean[] = [];
+		component.editingChange.subscribe((isEditing) => emitted.push(isEditing));
+
+		component.displayValue = TEST_TEXT;
+		component.startEdit();
+
+		expect(emitted[emitted.length - 1]).toBeTrue();
+
+		component.onEditValueChange('Something else');
+		component.save();
+
+		expect(emitted[emitted.length - 1]).toBeFalse();
+	});
+
+	it('reports when editing ends with a cancel', () => {
+		const emitted: boolean[] = [];
+		component.editingChange.subscribe((isEditing) => emitted.push(isEditing));
+
+		component.displayValue = TEST_TEXT;
+		component.startEdit();
+		component.onEditValueChange('Something else');
+		component.cancel();
+
+		expect(emitted[emitted.length - 1]).toBeFalse();
+	});
+
 	it('should NOT start editing when clicking on a link', () => {
 		component.canEdit = true;
 		component.type = 'textarea';
