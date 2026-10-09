@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { remove, find, findIndex, noop } from 'lodash';
+import { remove, findIndex, noop } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 import {
@@ -12,6 +12,10 @@ import {
 } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { GetThumbnail } from '@models/get-thumbnail';
+import {
+	GetOriginalFile,
+	prioritizeRetrievableFiles,
+} from '@models/get-access-file';
 import {
 	FolderResponse,
 	RecordResponse,
@@ -601,10 +605,12 @@ export class DataService {
 
 		function getFile(fileItem: RecordVO, type?: string) {
 			if (type) {
-				return find(fileItem.FileVOs, { type });
+				return prioritizeRetrievableFiles(fileItem.FileVOs).find(
+					(file) => file.type === type,
+				);
 			}
 
-			return find(fileItem.FileVOs, { format: 'file.format.original' });
+			return GetOriginalFile(fileItem);
 		}
 	}
 

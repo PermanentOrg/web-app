@@ -25,8 +25,7 @@ import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { Subscription } from 'rxjs';
 import { SearchService } from '@search/services/search.service';
 import { ZoomingImageViewerComponent } from '@shared/components/zooming-image-viewer/zooming-image-viewer.component';
-import { FileFormat } from '@models/file-vo';
-import { GetAccessFile } from '@models/get-access-file';
+import { GetAccessFile, GetOriginalFile } from '@models/get-access-file';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { environment } from '@root/environments/environment';
@@ -277,9 +276,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			return false;
 		}
 
-		const original = this.currentRecord.FileVOs.find(
-			(file) => file.format === FileFormat.Original,
-		);
+		const original = GetOriginalFile(this.currentRecord);
 		const access = GetAccessFile(this.currentRecord);
 
 		let url;
@@ -301,9 +298,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 			return null;
 		}
 
-		const originalFileUrl = this.currentRecord?.FileVOs?.find(
-			(file) => file.format === FileFormat.Original,
-		)?.fileURL;
+		const originalFileUrl = GetOriginalFile(this.currentRecord)?.fileURL;
 
 		if (!originalFileUrl) {
 			return null;
