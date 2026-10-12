@@ -24,10 +24,6 @@ export async function savePropertyOnAccount(
 	const updateData = {
 		primaryEmail: account.primaryEmail,
 		[change.prop]: change.value,
-		phoneStatus:
-			change.prop === 'primaryPhone' && change.value === ''
-				? 'status.auth.unverified'
-				: account.phoneStatus,
 	};
 	account.update(updateData);
 	try {
