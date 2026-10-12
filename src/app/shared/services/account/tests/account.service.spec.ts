@@ -245,6 +245,44 @@ describe('AccountService', () => {
 		expect(instance.getAccount().spaceLeft).toEqual(100400);
 	});
 
+	describe('isEmailOrPhoneUnverified', () => {
+		it('should be true when the email is unverified', () => {
+			instance.setAccount(
+				new AccountVO({ emailStatus: 'status.auth.unverified' }),
+			);
+
+			expect(instance.isEmailOrPhoneUnverified()).toBeTrue();
+		});
+
+		it('should be true when a phone number is unverified', () => {
+			instance.setAccount(
+				new AccountVO({
+					emailStatus: 'status.auth.verified',
+					primaryPhone: '+15555550100',
+					phoneStatus: 'status.auth.unverified',
+				}),
+			);
+
+			expect(instance.isEmailOrPhoneUnverified()).toBeTrue();
+		});
+
+		it('should be false when the phone number was cleared but is still marked unverified', () => {
+			instance.setAccount(
+				new AccountVO({
+					emailStatus: 'status.auth.verified',
+					primaryPhone: '',
+					phoneStatus: 'status.auth.unverified',
+				}),
+			);
+
+			expect(instance.isEmailOrPhoneUnverified()).toBeFalse();
+		});
+
+		it('should be false when there is no account', () => {
+			expect(instance.isEmailOrPhoneUnverified()).toBeFalse();
+		});
+	});
+
 	describe('Log out on token expiration', () => {
 		it('HttpV2Service', async () => {
 			const logOut = spyOn(instance, 'logOut').and.rejectWith(false);

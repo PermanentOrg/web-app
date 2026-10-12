@@ -167,6 +167,16 @@ describe('MainComponent', () => {
 		});
 	});
 
+	it('should not show a prompt when the phone number was cleared but is still marked unverified', async () => {
+		const data = cloneDeep(
+			require('@root/test/responses/auth.verify.unverifiedPhone.success.json'),
+		);
+		data.Results[0].data[0].AccountVO.primaryPhone = '';
+		await init(data);
+
+		expect(messageService.showMessage).toHaveBeenCalledTimes(0);
+	});
+
 	it('should show a prompt when nothing is unverified', async () => {
 		const data = require('@root/test/responses/auth.login.success.json');
 		await init(data);

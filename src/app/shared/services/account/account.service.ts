@@ -337,7 +337,7 @@ export class AccountService {
 	public isEmailOrPhoneUnverified(): boolean {
 		return (
 			this.account?.emailStatus === 'status.auth.unverified' ||
-			this.account?.phoneStatus === 'status.auth.unverified'
+			!!this.account?.phoneNeedsVerification()
 		);
 	}
 
