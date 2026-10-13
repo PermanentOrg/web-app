@@ -6,54 +6,39 @@
 $primary: $PR-blue;
 $alternate: $PR-orange;
 $danger: $red;
-
 $btn-font-weight: 700;
 $font-weight-semibold: 600;
-
 $navbar-toggler-padding-y: 0px;
 $navbar-toggler-padding-x: 0px;
-
 $input-btn-padding-y: 0.85rem;
 $input-transition:
 	border-color 0.15s ease-in-out,
 	background-color 0.15s ease-in-out;
-
 $max-form-width: 400px;
-
 $darken-percent: 7%;
-
 $bottom-safe-area-padding: 40px;
-
 $default-transition-length: 0.5s;
 $shadow-color: rgba(black, 0.15);
 $shadow-color-dark: rgba(black, 0.45);
-
 $wordpress-shadow: 0em 0em 0.65em rgba(0, 0, 0, 0.8);
-
 $metadata-width: 350px;
-
 $public-max-width: 800px;
 $public-banner-height: pxToGrid(100px);
 $public-archive-header-height: pxToGrid(70px);
-
 $breadcrumb-divider: quote('>');
 $breadcrumb-height: pxToGrid(34px);
 $breadcrumb-height-desktop: 4 * $grid-unit;
 $timeline-breadcrumb-height: $breadcrumb-height;
 $timeline-folder-info-height: pxToGrid(50px);
-
 $left-menu-width: pxToGrid(220px);
 $navbar-height: pxToGrid(50px);
 $navbar-height-desktop: 4 * $grid-unit;
 $navbar-total-height: $navbar-height + $breadcrumb-height;
 $navbar-total-height-desktop: $navbar-height-desktop +
 	$breadcrumb-height-desktop;
-
 $navbar-button-icon-padding: 0.5rem;
-
 $sidebar-width: pxToGrid(300px);
 $sidebar-tab-height: 2 * $grid-unit;
-
 $file-list-row-height: pxToGrid(60px);
 $file-list-border: 1px solid $gray-300;
 $file-list-width-desktop: 100vw - #{$left-menu-width + $sidebar-width};
@@ -66,41 +51,28 @@ $file-list-name-col-width: 30rem;
 $file-list-shared-by-col-width: 20rem;
 $file-list-shared-icon-col-width: 2rem;
 $file-list-grid-gutter: $grid-unit;
-
 $phone: 450px;
 $tablet: 768px;
 $tablet-horizontal: 900px;
 $desktop: 1200px;
-
 $scrollbar-margin: pxToGrid(20px);
-
 $taylor-ease: cubic-bezier(0.77, 0, 0.175, 1);
 $tweaked-ease: cubic-bezier(0.63, 0.01, 0.3, 1);
-
 $slide-up-animation: slideUp;
-
 $menu-ease: $tweaked-ease;
 $menu-open-ease: $menu-ease;
 $menu-close-ease: $menu-ease;
 $menu-transition-length: 0.45s;
 $menu-transition-length-desktop: 0.5s;
-
 $form-border: rgba(231, 232, 237, 1);
-
 $form-border-error: rgba(254, 228, 226, 1);
 $form-background-error: rgba(255, 251, 250, 1);
-
 $form-background-focus: rgba(244, 246, 253, 1);
 $form-border-focus: rgba(208, 209, 219, 1);
-
 $form-background-dark: #131b4a;
-
 $form-default-text-color: #5a5f80;
-
 $form-label-dark: rgba(255, 255, 255, 0.64);
-
 $form-error-red: rgba(240, 68, 56, 1);
-
 $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 
 @mixin public-centered {
@@ -120,6 +92,7 @@ $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 	@include after($desktop) {
 		padding-right: 0.5rem;
 		flex-grow: 0;
+
 		$ui-width-px: $left-menu-width + $sidebar-width - (4 * $grid-unit);
 		$list-items-width-em: $file-list-type-col-width + $file-list-date-col-width;
 		$list-items-width-px: $scrollbar-margin + $file-list-row-height + $grid-unit;
@@ -182,7 +155,6 @@ $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 $input-border-color: $gray-400;
 $input-focus-border-color: $form-border-focus;
 $input-focus-bg: white;
-
 $focus-ring-width: 0.125rem;
 $focus-ring-opacity: 0.35;
 $focus-ring-blur: 0.25rem;
