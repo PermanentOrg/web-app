@@ -2,7 +2,6 @@
 	"extends": ["stylelint-config-standard-scss"],
 	"ignoreFiles": ["src/styles/vendor/**"],
 	"rules": {
-		"at-rule-no-vendor-prefix": null,
 		"block-no-empty": null,
 		"declaration-block-no-shorthand-property-overrides": null,
 		"font-family-no-missing-generic-family-keyword": null,
