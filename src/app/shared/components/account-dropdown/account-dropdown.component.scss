@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import 'variables';
 
 :host {
@@ -78,7 +79,7 @@ i.badge {
 		text-decoration: none;
 
 		&:hover {
-			background-color: darken(white, 4%);
+			background-color: color.adjust(white, $lightness: -4%);
 			text-decoration: none;
 		}
 

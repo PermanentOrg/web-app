@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @mixin desktop {
 	@media screen and (width >= 1000px) {
 		@content;
@@ -69,7 +71,7 @@
 
 	&:hover,
 	&:active {
-		background-color: lighten($color: $bg-color, $amount: 10%);
+		background-color: color.adjust($bg-color, $lightness: 10%);
 	}
 }
 
