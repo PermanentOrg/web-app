@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 .timeline {
 	$image-height: 40px;
 	$record-image-height: 100px;
@@ -8,17 +10,17 @@
 
 		&.timeline-perm-orange {
 			border-color: $PR-orange;
-			background-color: lighten($PR-orange, 30%);
+			background-color: color.adjust($PR-orange, $lightness: 30%);
 		}
 
 		&.timeline-perm-blue {
 			border-color: $PR-blue-900;
-			background-color: lighten($PR-blue-900, 70%);
+			background-color: color.adjust($PR-blue-900, $lightness: 70%);
 		}
 
 		&.timeline-perm-purple {
 			border-color: $PR-purple;
-			background-color: lighten($PR-purple, 70%);
+			background-color: color.adjust($PR-purple, $lightness: 70%);
 		}
 	}
 

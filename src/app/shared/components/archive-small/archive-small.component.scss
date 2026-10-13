@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import 'variables';
 
 :host {
@@ -126,7 +127,7 @@ $desktop-height: pxToGrid(60px);
 					}
 
 					&:hover {
-						background-color: darken(white, 4%);
+						background-color: color.adjust(white, $lightness: -4%);
 					}
 				}
 			}

@@ -21,7 +21,6 @@
 		"scss/at-function-pattern": null,
 		"scss/at-mixin-pattern": null,
 		"scss/dollar-variable-pattern": null,
-		"scss/no-global-function-names": null,
 		"scss/operator-no-newline-after": null,
 		"selector-class-pattern": null,
 		"selector-pseudo-element-no-unknown": [

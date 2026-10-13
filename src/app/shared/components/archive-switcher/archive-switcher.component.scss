@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import 'variables';
 
 :host {
@@ -86,7 +87,7 @@
 		background-color: $PR-orange-lightest;
 
 		::ng-deep pr-archive-small:hover {
-			background-color: darken($PR-orange-lightest, 4%);
+			background-color: color.adjust($PR-orange-lightest, $lightness: -4%);
 		}
 	}
 }

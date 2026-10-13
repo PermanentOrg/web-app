@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import 'variables';
 
 $min-input-width: 18rem;
@@ -94,7 +95,7 @@ form {
 
 		&.active,
 		&:hover {
-			background: darken($PR-orange, 7%);
+			background: color.adjust($PR-orange, $lightness: -7%);
 		}
 	}
 

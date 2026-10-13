@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 form {
 	padding: 10px;
 	margin: 0 auto;
@@ -80,7 +82,7 @@ form {
 		& > input:focus,
 		& > select:focus {
 			box-shadow: none;
-			background-color: darken(white, 3%);
+			background-color: color.adjust(white, $lightness: -3%);
 			border-color: $gray-500;
 		}
 

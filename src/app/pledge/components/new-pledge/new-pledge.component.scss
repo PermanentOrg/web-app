@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import 'variables';
 
 :host {
@@ -22,7 +23,7 @@ button {
 }
 
 .StripeElement--focus:not(.ng-invalid) {
-	background-color: darken(white, 3%);
+	background-color: color.adjust(white, $lightness: -3%);
 	border-color: $gray-500;
 }
 
@@ -67,12 +68,12 @@ button {
 
 		&:hover {
 			transition: $btn-transition;
-			background: darken($PR-orange, 10%);
+			background: color.adjust($PR-orange, $lightness: -10%);
 		}
 
 		&.active {
 			transition: 0s all;
-			background: darken($PR-orange, 7%);
+			background: color.adjust($PR-orange, $lightness: -7%);
 			box-shadow: $btn-active-box-shadow;
 		}
 
