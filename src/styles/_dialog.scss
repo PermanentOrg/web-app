@@ -20,6 +20,7 @@ $header-height: 3 * $grid-unit;
 		margin-left: auto;
 		flex: 0 0 auto;
 		width: auto;
+
 		@include gridHeightButton;
 
 		background: none;
@@ -35,6 +36,7 @@ $header-height: 3 * $grid-unit;
 	flex: 1 1 auto;
 	overflow-y: auto;
 	background-color: white;
+
 	@include desktop {
 		display: flex;
 		height: pxToGrid($height);
@@ -104,6 +106,7 @@ $header-height: 3 * $grid-unit;
 @mixin tabbedDialogPanel {
 	flex: 1 1 auto;
 	padding: 0 $grid-unit * 0.5;
+
 	@include desktop {
 		padding: $grid-unit;
 		overflow-y: auto;

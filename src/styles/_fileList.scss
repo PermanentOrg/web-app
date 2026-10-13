@@ -5,6 +5,7 @@ pr-sidebar {
 pr-file-list,
 pr-shares {
 	display: block;
+
 	@include after($tablet-horizontal) {
 		&.show-sidebar {
 			width: calc(100% - #{$sidebar-width});

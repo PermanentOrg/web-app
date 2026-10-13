@@ -18,6 +18,7 @@ $profile-sidebar-width: pxToGrid(360px);
 			$PR-blue-900 0%,
 			$PR-purple 66%,
 			mix($PR-purple, $PR-orange, 50%) 100%;
+
 		@include gradient(to top left, $list);
 	}
 
@@ -54,6 +55,7 @@ $profile-sidebar-width: pxToGrid(360px);
 	button {
 		margin: 0;
 		width: auto;
+
 		@include gridHeightButton;
 	}
 

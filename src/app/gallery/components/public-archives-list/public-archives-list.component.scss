@@ -69,6 +69,7 @@
 	h3 {
 		margin-bottom: 40px;
 	}
+
 	@include beforeDesktop {
 		margin-left: 0;
 
@@ -93,6 +94,7 @@
 	& > a {
 		font-size: 22px;
 	}
+
 	@include beforeDesktop {
 		width: 390px;
 		height: 250px;
@@ -119,6 +121,7 @@
 
 .see-more {
 	display: none;
+
 	@include beforeDesktop {
 		display: inline;
 	}

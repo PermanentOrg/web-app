@@ -34,6 +34,7 @@ $perm-blue: #131b4a;
 
 	img {
 		margin-right: 0.25rem;
+
 		@include desktop {
 			margin-right: 1rem;
 		}
@@ -70,6 +71,7 @@ $perm-blue: #131b4a;
 		font-size: 1.75em;
 		cursor: pointer;
 		margin-left: 0.75rem;
+
 		@include desktop {
 			margin-left: 1rem;
 		}

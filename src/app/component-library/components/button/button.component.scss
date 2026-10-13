@@ -7,6 +7,7 @@
 	& > .button-text {
 		color: $PR-brand-white;
 		margin: 0;
+
 		@include bodyMedium;
 
 		@if $isLink {
@@ -22,6 +23,7 @@
 	& > .button-text {
 		color: rgba($PR-blue-900, 1);
 		margin: 0;
+
 		@include bodyMedium;
 
 		@if $isLink {
@@ -130,6 +132,7 @@
 	&-text {
 		color: $PR-brand-white;
 		margin: 0;
+
 		@include bodyMedium;
 	}
 

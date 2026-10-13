@@ -15,6 +15,7 @@
 	@include pageTitle;
 
 	margin-bottom: 16px;
+
 	@include beforeDesktop {
 		margin-bottom: 10%;
 	}

@@ -60,6 +60,7 @@
 
 	&-text {
 		font-family: Usual;
+
 		@include marginBottomSearchResults();
 	}
 
@@ -129,6 +130,7 @@
 .profile-controls {
 	display: flex;
 	flex-direction: row;
+
 	@include beforeDesktop {
 		flex-direction: column;
 	}
