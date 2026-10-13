@@ -91,23 +91,23 @@ button {
 			}
 		}
 
-		@media screen and (max-width: 767px) {
+		@media screen and (width <= 767px) {
 			padding: 0.5rem 0;
 		}
 
-		@media screen and (max-width: 350px) {
+		@media screen and (width <= 350px) {
 			input {
 				width: 3em;
 			}
 		}
 
-		@media screen and (max-width: 300px) {
+		@media screen and (width <= 300px) {
 			input {
 				width: 2em;
 			}
 		}
 
-		@media screen and (max-width: 250px) {
+		@media screen and (width <= 250px) {
 			input {
 				width: 1.2em;
 			}

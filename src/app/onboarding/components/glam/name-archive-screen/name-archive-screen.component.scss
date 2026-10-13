@@ -4,11 +4,11 @@
 :host {
 	width: 560px;
 
-	@media screen and (max-width: 592px) {
+	@media screen and (width <= 592px) {
 		width: auto;
 	}
 
-	@media screen and (min-width: 769px) {
+	@media screen and (width >= 769px) {
 		margin-left: 64px;
 	}
 }
@@ -72,15 +72,15 @@
 	flex-direction: column;
 	justify-content: space-between;
 
-	@media screen and (max-width: 600px) {
+	@media screen and (width <= 600px) {
 		width: 100%;
 	}
 
-	@media screen and (max-width: 768px) {
+	@media screen and (width <= 768px) {
 		height: 45vh;
 	}
 
-	@media screen and (min-width: 768px) and (max-width: 900px) {
+	@media screen and (width >= 768px) and (width <= 900px) {
 		height: 81vh;
 	}
 
