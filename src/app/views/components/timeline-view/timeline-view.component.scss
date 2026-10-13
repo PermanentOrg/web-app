@@ -6,7 +6,6 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -61,12 +60,10 @@
 .timeline-folder-info {
 	background-color: $gray-700;
 	color: white;
-
 	position: absolute;
 	top: calc(100% - #{$timeline-folder-info-height});
 	width: 100%;
 	z-index: 2;
-
 	transform: translateY(0);
 	transition: transform $default-transition-length ease-in;
 

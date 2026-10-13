@@ -32,6 +32,7 @@
 
 		.pr-timezone-label {
 			@include usual-text;
+
 			color: $PR-blue-400;
 		}
 
@@ -100,6 +101,7 @@
 
 			.pr-tz-name {
 				@include usual-text;
+
 				color: $PR-blue-400;
 			}
 		}

@@ -133,6 +133,7 @@
 
 	.pr-clear-btn {
 		@include clear-btn;
+
 		margin-top: 4px;
 		width: 151px;
 
@@ -149,12 +150,14 @@
 
 	.pr-edtf-error {
 		@include edtf-error-message;
+
 		display: block;
 		padding: 4px 16px;
 	}
 
 	.pr-sidebar-date-picker-footer {
 		@include panel-footer;
+
 		padding: 12px 16px;
 	}
 

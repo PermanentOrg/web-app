@@ -36,6 +36,7 @@
 				color: $gray-dark;
 				white-space: pre-wrap;
 			}
+
 			display: table-cell;
 		}
 	}
@@ -58,6 +59,7 @@
 
 .no-plan-warning {
 	@extend .error;
+
 	display: flex;
 	flex-direction: row;
 	align-items: center;

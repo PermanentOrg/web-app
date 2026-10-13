@@ -190,6 +190,7 @@ a {
 	--bs-btn-bg: #{rgba(white, 0.2)};
 	--bs-btn-hover-bg: #{white};
 	--bs-btn-active-bg: #{white};
+
 	background: rgba(white, 0.2);
 	height: $size;
 	border-radius: $size * 0.5;
@@ -213,6 +214,7 @@ a {
 		--bs-btn-bg: #{$PR-purple};
 		--bs-btn-hover-bg: #{$PR-orange};
 		--bs-btn-active-bg: #{$PR-orange};
+
 		background: $PR-purple;
 		color: white;
 
@@ -317,7 +319,6 @@ $drag-outline-border: 5px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-
 		min-width: 15rem;
 		max-width: calc($file-list-width-desktop / 3);
 		// transform-origin: 50% 50%;
@@ -344,7 +345,6 @@ $drag-outline-border: 5px;
 		left: 50%;
 		transform: translateX(-50%);
 		background-color: $PR-orange;
-
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;
 

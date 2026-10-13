@@ -28,6 +28,7 @@ $banner-text: #856404;
 	&:hover {
 		color: lighten($banner-text, 25%);
 	}
+
 	transition: color 0.3s;
 	font-size: 1.75em;
 	cursor: pointer;

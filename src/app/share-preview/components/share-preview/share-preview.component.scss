@@ -157,7 +157,6 @@ $share-preview-banner-height: 100px;
 
 	@media screen and (max-width: $share-preview-max-width) {
 		width: 100%;
-
 		flex-wrap: wrap;
 
 		.share-preview-archive-thumb {
@@ -265,7 +264,6 @@ $share-preview-banner-height: 100px;
 	.share-preview-cover-content {
 		transform: translateY(100vh);
 		transition: transform $transition-length ease-in;
-
 		border-radius: 2rem;
 		flex: 0 1 500px;
 		padding: 4rem;

@@ -22,6 +22,7 @@
 		flex-direction: row;
 		text-align: left;
 	}
+
 	display: flex;
 	margin-left: 0;
 	flex-direction: column;
@@ -34,6 +35,7 @@
 			margin-right: 2%;
 			display: block;
 		}
+
 		display: none;
 	}
 
@@ -54,11 +56,13 @@
 	@include desktop {
 		margin-right: 65px;
 	}
+
 	text-align: center;
 }
 
 .btn-primary {
 	$bg-color: #5261b7;
+
 	background-color: $bg-color;
 	border: none;
 	margin-top: 0;
@@ -71,6 +75,7 @@
 
 .primary-link {
 	@extend .secondary-link;
+
 	font-weight: bold;
 }
 

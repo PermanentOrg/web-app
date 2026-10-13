@@ -24,13 +24,10 @@ form {
 
 	input {
 		background: none;
-
 		border: 0px solid;
 		border-bottom: 1px solid $PR-orange;
 		border-radius: 0px;
-
 		padding: 0.25rem 0;
-
 		color: white;
 	}
 }
@@ -60,6 +57,7 @@ form {
 			&::placeholder {
 				color: $PR-blue;
 			}
+
 			width: 100%;
 			outline: none;
 			color: $PR-blue;
@@ -78,12 +76,9 @@ form {
 	background: $PR-orange;
 	z-index: 10;
 	padding: 0px 10px 10px;
-
 	box-shadow: $box-shadow;
-
 	border-bottom-left-radius: 0.25rem;
 	border-bottom-right-radius: 0.25rem;
-
 	max-height: 400px;
 	overflow: hidden;
 	overflow-y: auto;
