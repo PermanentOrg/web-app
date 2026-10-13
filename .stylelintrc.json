@@ -2,14 +2,12 @@
 	"extends": ["stylelint-config-standard-scss"],
 	"ignoreFiles": ["src/styles/vendor/**"],
 	"rules": {
-		"alpha-value-notation": null,
 		"at-rule-no-vendor-prefix": null,
 		"block-no-empty": null,
 		"declaration-block-no-duplicate-properties": null,
 		"declaration-block-no-redundant-longhand-properties": null,
 		"declaration-block-no-shorthand-property-overrides": null,
 		"declaration-property-value-keyword-no-deprecated": null,
-		"font-family-name-quotes": null,
 		"font-family-no-missing-generic-family-keyword": null,
 		"function-name-case": [
 			"lower",
@@ -17,7 +15,6 @@
 				"ignoreFunctions": ["pxToGrid"]
 			}
 		],
-		"hue-degree-notation": null,
 		"keyframes-name-pattern": null,
 		"media-feature-range-notation": null,
 		"no-empty-source": null,
@@ -37,7 +34,6 @@
 		"scss/operator-no-newline-after": null,
 		"selector-class-pattern": null,
 		"selector-not-notation": null,
-		"selector-pseudo-element-colon-notation": null,
 		"selector-pseudo-element-no-unknown": [
 			true,
 			{

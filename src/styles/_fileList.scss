@@ -48,7 +48,7 @@ pr-shares {
 				padding-right: $grid-unit - ($file-list-grid-gutter * 0.5);
 			}
 
-			.file-list-scroll:after {
+			.file-list-scroll::after {
 				content: '';
 				display: table;
 				clear: both;
