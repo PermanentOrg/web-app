@@ -297,7 +297,7 @@ $share-preview-banner-height: 100px;
 		transition:
 			background-color $transition-length ease-out,
 			top 0s linear 0s;
-		background: rgb(0 0 0 / 0.4);
+		background: rgb(0 0 0 / 40%);
 		top: 0;
 
 		.share-preview-cover-content {
