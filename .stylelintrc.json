@@ -2,7 +2,6 @@
 	"extends": ["stylelint-config-standard-scss"],
 	"ignoreFiles": ["src/styles/vendor/**"],
 	"rules": {
-		"alpha-value-notation": null,
 		"at-rule-no-vendor-prefix": null,
 		"block-no-empty": null,
 		"declaration-block-no-duplicate-properties": null,
