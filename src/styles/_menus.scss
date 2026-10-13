@@ -3,7 +3,7 @@
 	top: 0;
 	bottom: 0;
 	width: 100%;
-	background-color: rgba(black, 0);
+	background-color: rgb(black, 0);
 	transition:
 		background-color $menu-transition-length $menu-open-ease,
 		visibility 0s linear $menu-transition-length;
