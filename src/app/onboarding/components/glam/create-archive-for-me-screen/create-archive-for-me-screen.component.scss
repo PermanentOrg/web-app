@@ -16,7 +16,7 @@ p {
 	& > .title {
 		width: 82%;
 		font-size: 56px;
-		font-family: 'UsualLight', sans-serif;
+		font-family: UsualLight, sans-serif;
 		line-height: 72px;
 
 		@media screen and (max-width: 1440px) {
@@ -26,18 +26,18 @@ p {
 
 	& .description {
 		font-size: 16px;
-		font-family: 'UsualRegular', sans-serif;
+		font-family: UsualRegular, sans-serif;
 	}
 
 	& .archive-type {
 		color: rgba($PR-brand-white, 0.64);
-		font-family: 'UsualRegular', sans-serif;
+		font-family: UsualRegular, sans-serif;
 		font-size: 10px;
 	}
 
 	& .archive-name {
 		font-size: 16px;
-		font-family: 'UsualRegular', sans-serif;
+		font-family: UsualRegular, sans-serif;
 	}
 
 	& .content {
