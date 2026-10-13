@@ -10,15 +10,15 @@
 	grid-template-columns: repeat(4, 1fr);
 	gap: 16px 50px;
 
-	@media (max-width: 1270px) and (min-width: 990px) {
+	@media (width <= 1270px) and (width >= 990px) {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	@media (max-width: 990px) {
+	@media (width <= 990px) {
 		grid-template-columns: repeat(2, 1fr);
 	}
 
-	@media (max-width: 768px) {
+	@media (width <= 768px) {
 		grid-template-columns: 1fr;
 	}
 }
@@ -28,11 +28,11 @@
 	font-size: 56px;
 	width: 500px;
 
-	@media screen and (max-width: 1024px) {
+	@media screen and (width <= 1024px) {
 		width: 400px;
 	}
 
-	@media screen and (max-width: 500px) {
+	@media screen and (width <= 500px) {
 		width: auto;
 		margin-top: 20px;
 	}
@@ -51,7 +51,7 @@
 .text-right {
 	width: 40%;
 
-	@media screen and (max-width: 500px) {
+	@media screen and (width <= 500px) {
 		width: auto;
 	}
 }
@@ -65,12 +65,12 @@ p {
 	gap: 15rem;
 	justify-content: space-between;
 
-	@media (max-width: 854px) {
+	@media (width <= 854px) {
 		flex-direction: column;
 		gap: 16px;
 	}
 
-	@media screen and (max-width: 425px) {
+	@media screen and (width <= 425px) {
 		padding: 0 60px;
 	}
 }
@@ -82,7 +82,7 @@ p {
 	gap: 32px;
 	margin-top: 24px;
 
-	@media (max-width: 1062px) {
+	@media (width <= 1062px) {
 		flex-direction: column;
 		gap: 2rem;
 	}
@@ -94,7 +94,7 @@ p {
 }
 
 .goal-container {
-	@media (max-width: 768px) {
+	@media (width <= 768px) {
 		display: flex;
 		justify-content: center;
 	}

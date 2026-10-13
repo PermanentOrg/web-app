@@ -23,7 +23,7 @@
 }
 
 @mixin afterTabletBeforeDesktop {
-	@media screen and (min-width: $tablet-horizontal) and (max-width: 1200px) {
+	@media screen and (min-width: $tablet-horizontal) and (width <= 1200px) {
 		@content;
 	}
 }

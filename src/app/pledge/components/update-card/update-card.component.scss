@@ -26,7 +26,7 @@ $pledge-banner-height: 100px;
 		}
 	}
 
-	@media screen and (max-width: 480px) {
+	@media screen and (width <= 480px) {
 		.banner-logo-wrapper {
 			flex: 0 1 200px;
 			margin-right: 5px;
