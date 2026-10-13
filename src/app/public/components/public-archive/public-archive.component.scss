@@ -297,7 +297,7 @@ $desktop-size: pxToGrid(200px);
 	&-text {
 		font-family: Usual;
 
-		@include marginBottomSearchResults();
+		@include marginBottomSearchResults;
 	}
 
 	&-archive-info {
@@ -317,7 +317,7 @@ $desktop-size: pxToGrid(200px);
 		margin-left: 5px;
 
 		&-container {
-			@include marginBottomSearchResults();
+			@include marginBottomSearchResults;
 
 			background: linear-gradient(
 				179.15deg,
