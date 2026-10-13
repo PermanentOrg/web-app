@@ -11,6 +11,7 @@
 
 .content {
 	@include tabbedDialogContent;
+
 	flex-direction: column;
 }
 
@@ -28,6 +29,7 @@
 
 form {
 	@include tabbedDialogPanelForm;
+
 	max-width: 600px;
 	padding-top: 0;
 }

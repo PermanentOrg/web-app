@@ -60,6 +60,7 @@
 
 	button {
 		@include gridHeightButtonSmall;
+
 		margin-left: $grid-unit * 0.5;
 	}
 }

@@ -15,6 +15,7 @@
 
 .pr-time-input-group {
 	@include input-container;
+
 	padding: 0 0 0 12px;
 
 	&:focus-within,
@@ -33,6 +34,7 @@
 
 .pr-time-segment {
 	@include input-segment;
+
 	width: 32px;
 }
 

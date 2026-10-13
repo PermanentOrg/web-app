@@ -33,6 +33,7 @@
 
 		.col-title::after {
 			@include material-icon;
+
 			content: 'expand_more';
 			margin-left: $grid-unit * 0.5;
 			font-size: $font-size-lg;
@@ -117,6 +118,7 @@
 
 	.name {
 		@include file-list-col-name;
+
 		margin-left: $file-list-thumb-col-width + $grid-unit;
 	}
 
@@ -195,7 +197,6 @@ pr-folder-view-toggle {
 
 		cursor: pointer;
 		user-select: none;
-
 		display: flex;
 		align-items: center;
 

@@ -89,6 +89,7 @@
 
 		&.button-dark {
 			@include darkButton();
+
 			border: 1px solid rgba($PR-brand-white, 0.32);
 		}
 	}
@@ -96,11 +97,13 @@
 	&-tertiary {
 		&.button-dark {
 			@include darkButton();
+
 			border: 1px solid transparent;
 		}
 
 		&.button-light {
 			@include lightButton();
+
 			border: 1px solid transparent;
 		}
 	}
@@ -136,12 +139,14 @@
 
 		&.button-dark {
 			@include darkButton(true);
+
 			font-size: 14px;
 			border: 1px solid transparent;
 		}
 
 		&.button-light {
 			@include lightButton(true);
+
 			font-size: 14px;
 			border: 1px solid transparent;
 		}

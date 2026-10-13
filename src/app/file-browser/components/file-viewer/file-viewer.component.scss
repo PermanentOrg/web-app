@@ -15,7 +15,6 @@ $button-size: 2rem;
 	left: 0;
 	right: 0;
 	background-color: $PR-brand-white;
-
 	-webkit-transform: translate3d(0, 0, 0);
 	-moz-transform: translate3d(0, 0, 0);
 	-ms-transform: translate3d(0, 0, 0);
@@ -138,7 +137,6 @@ iframe {
 	color: $PR-brand-white;
 	cursor: pointer;
 	display: flex;
-
 	align-items: center;
 	justify-content: center;
 
@@ -274,6 +272,7 @@ iframe {
 
 		.metadata-item-content {
 			$padding-y: 0.25rem;
+
 			padding: $padding-y 0;
 			min-height: $line-height-base * 1rem + (2 * $padding-y);
 		}
@@ -295,6 +294,7 @@ iframe {
 	.thumb-target {
 		--safe-area-inset-top: env(safe-area-inset-top);
 		--safe-area-inset-bottom: env(safe-area-inset-bottom);
+
 		top: calc(var(--safe-area-inset-top) + 30px);
 		bottom: calc(var(--safe-area-inset-bottom) + 30px);
 		left: env(safe-area-inset-left);

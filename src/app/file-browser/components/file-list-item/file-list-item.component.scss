@@ -217,6 +217,7 @@ $bg-transition-length: 0.075s;
 
 .date {
 	@include file-list-col-date;
+
 	font-size: $font-size-sm;
 }
 
@@ -226,6 +227,7 @@ $bg-transition-length: 0.075s;
 
 .shared-by {
 	@include file-list-col-shared-by;
+
 	display: flex;
 	align-items: center;
 
@@ -328,6 +330,7 @@ $bg-transition-length: 0.075s;
 .grid-view .grid-item-type-icon {
 	$diameter: $grid-unit * 2;
 	$margin: $grid-unit * 0.5;
+
 	position: absolute;
 	bottom: $grid-info-section-height + $margin;
 	right: $margin;

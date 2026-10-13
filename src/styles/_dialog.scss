@@ -6,7 +6,6 @@ $header-height: 3 * $grid-unit;
 	background-color: $color;
 	display: flex;
 	align-items: center;
-
 	color: $text-color;
 	font-size: $font-size-lg;
 	padding: 0 $grid-unit;
@@ -22,6 +21,7 @@ $header-height: 3 * $grid-unit;
 		flex: 0 0 auto;
 		width: auto;
 		@include gridHeightButton;
+
 		background: none;
 		outline: none;
 		display: flex;
@@ -166,6 +166,7 @@ $header-height: 3 * $grid-unit;
 			margin: 0;
 			margin-right: $grid-unit;
 		}
+
 		margin-bottom: $grid-unit;
 
 		@include beforeDesktop {
@@ -210,6 +211,7 @@ $header-height: 3 * $grid-unit;
 
 	button {
 		@include gridHeightButtonSmall;
+
 		margin: 0;
 		margin-right: auto;
 		margin-left: $labelWidth + $grid-unit;

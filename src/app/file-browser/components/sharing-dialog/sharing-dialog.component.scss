@@ -29,11 +29,13 @@ select.form-select {
 
 .header {
 	@include tabbedDialogHeader(none, $body-color);
+
 	font-weight: $font-weight-bold;
 }
 
 .header-small {
 	@include tabbedDialogHeader(none, $body-color);
+
 	font-size: $font-size-base;
 	font-weight: $font-weight-bold;
 }
@@ -82,7 +84,6 @@ p {
 	overflow-y: auto;
 	margin-bottom: $grid-unit;
 	height: $grid-unit * 8;
-
 	max-height: 10vh;
 }
 
@@ -92,6 +93,7 @@ p {
 
 	.btn {
 		@include gridHeightButton;
+
 		width: auto;
 		margin: 0;
 		margin-left: $grid-unit * 0.5;
@@ -134,6 +136,7 @@ p {
 
 		.btn {
 			@include gridHeightButtonSmall;
+
 			width: 6rem;
 			margin-left: $grid-unit * 0.5;
 		}
@@ -160,6 +163,7 @@ p {
 
 	button {
 		@include gridHeightButton;
+
 		flex: 0 0 6rem;
 		width: auto;
 		justify-content: center;
@@ -201,12 +205,14 @@ p {
 
 		select {
 			@include gridHeightInputSmall;
+
 			margin-left: -$grid-unit * 0.5;
 			margin-right: auto;
 		}
 
 		.btn {
 			@include gridHeightButtonSmall;
+
 			width: auto;
 			margin: 0;
 		}

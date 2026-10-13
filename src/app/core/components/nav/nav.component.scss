@@ -153,7 +153,6 @@ nav.nav-desktop {
 				width: $grid-unit * 0.5;
 				background: $red;
 				border-radius: 50%;
-
 				animation:
 					fadeIn 125ms $tweaked-ease,
 					scaleIn 250ms $tweaked-ease;
@@ -172,7 +171,6 @@ nav.nav-desktop {
 	}
 
 	border: 0px solid;
-
 	margin-top: 9px;
 	margin-bottom: 9px;
 }

@@ -14,7 +14,6 @@
 		"declaration-block-no-duplicate-properties": null,
 		"declaration-block-no-redundant-longhand-properties": null,
 		"declaration-block-no-shorthand-property-overrides": null,
-		"declaration-empty-line-before": null,
 		"declaration-property-value-keyword-no-deprecated": null,
 		"font-family-name-quotes": null,
 		"font-family-no-missing-generic-family-keyword": null,

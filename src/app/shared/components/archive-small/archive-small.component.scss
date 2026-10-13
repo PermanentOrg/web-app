@@ -71,6 +71,7 @@ $thumb-size: 50px;
 	button {
 		margin: 0;
 		@include gridHeightButtonSmall;
+
 		margin-left: $grid-unit * 0.5;
 	}
 }
@@ -79,6 +80,7 @@ $desktop-height: pxToGrid(60px);
 :host.large-on-desktop {
 	@include desktop {
 		$desktop-height: 4 * $grid-unit;
+
 		height: $desktop-height;
 		padding: 0;
 		padding-right: $grid-unit;

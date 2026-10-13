@@ -22,7 +22,6 @@ input {
 	max-height: 40vh;
 	overflow-y: auto;
 	box-shadow: $box-shadow-dark;
-
 	border-bottom-left-radius: $border-radius-lg;
 	border-bottom-right-radius: $border-radius-lg;
 
@@ -30,7 +29,6 @@ input {
 		height: $grid-unit * 3;
 		display: flex;
 		align-items: center;
-
 		padding: $grid-unit * 0.5;
 
 		&:hover {

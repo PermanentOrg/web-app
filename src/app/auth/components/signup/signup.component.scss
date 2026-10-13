@@ -7,6 +7,7 @@
 
 .page-title {
 	@include pageTitle;
+
 	margin-bottom: 10px;
 }
 
@@ -25,7 +26,6 @@
 	& > .checkbox-container {
 		margin-bottom: 32px;
 		justify-content: space-between;
-
 		display: flex;
 
 		> label,
