@@ -108,7 +108,7 @@ $desktop-height: pxToGrid(60px);
 			}
 
 			.dropdown-toggle {
-				&:after {
+				&::after {
 					display: none;
 				}
 			}

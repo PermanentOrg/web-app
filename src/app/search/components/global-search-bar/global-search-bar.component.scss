@@ -205,7 +205,7 @@ $result-padding-y: 0.25rem;
 	margin: 0;
 	margin-left: 0.5rem;
 
-	&:after {
+	&::after {
 		background: $PR-orange;
 	}
 
