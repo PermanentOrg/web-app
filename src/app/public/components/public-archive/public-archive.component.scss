@@ -26,7 +26,7 @@ $desktop-size: pxToGrid(200px);
 }
 
 @mixin banner-margin-offset-public-profile {
-	top: 0rem;
+	top: 0;
 }
 
 .banner-section {
@@ -103,11 +103,11 @@ $desktop-size: pxToGrid(200px);
 .profile-data {
 	font-size: $font-size-base * 0.9;
 	font-weight: $font-weight-light;
-	color: #777777;
+	color: #777;
 	font-family: 'Usual';
 
 	&-date {
-		color: #555555;
+		color: #555;
 		font-weight: $font-weight-normal;
 	}
 }
@@ -265,7 +265,7 @@ $desktop-size: pxToGrid(200px);
 		font-family: Usual;
 		font-size: 14px;
 		font-weight: 600;
-		letter-spacing: 0em;
+		letter-spacing: 0;
 		text-align: left;
 		color: #131b4a;
 	}
@@ -321,8 +321,8 @@ $desktop-size: pxToGrid(200px);
 
 			background: linear-gradient(
 				179.15deg,
-				rgba(19, 27, 74, 0.08) 0%,
-				rgba(54, 68, 147, 0.08) 100%
+				rgb(19 27 74 / 0.08) 0%,
+				rgb(54 68 147 / 0.08) 100%
 			);
 			border-radius: $border-radius;
 			display: flex;
@@ -347,7 +347,7 @@ $desktop-size: pxToGrid(200px);
 		font-weight: 400;
 		letter-spacing: -0.02em;
 		text-align: left;
-		color: #777777;
+		color: #777;
 	}
 }
 

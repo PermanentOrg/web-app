@@ -74,7 +74,7 @@
 
 	.timeline-folder-info-content {
 		height: $timeline-folder-info-height;
-		padding: 0px;
+		padding: 0;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -88,7 +88,7 @@
 
 	.timeline-folder-info-details {
 		max-width: $public-max-width;
-		padding: 10px 0px 0px;
+		padding: 10px 0 0;
 		margin: 0 auto;
 
 		> div {
@@ -100,7 +100,7 @@
 			font-size: small;
 			max-height: calc(50vh - #{$timeline-folder-info-height} - 30px);
 			overflow-y: auto;
-			margin-bottom: 0px;
+			margin-bottom: 0;
 			padding-bottom: 10px;
 		}
 	}

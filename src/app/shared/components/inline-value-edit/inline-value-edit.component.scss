@@ -11,7 +11,7 @@ $inline-padding-y: $grid-unit * 0.5;
 }
 
 form {
-	padding: 0px;
+	padding: 0;
 	margin: 0;
 	max-width: none;
 }
@@ -144,10 +144,10 @@ div.form-control {
 	& > input,
 	& > textarea {
 		position: absolute;
-		top: 0px;
+		top: 0;
 		left: -1 * $inline-padding-x;
 		right: -1 * $inline-padding-x;
-		bottom: 0px;
+		bottom: 0;
 		opacity: 0;
 		z-index: 0;
 		resize: none;
