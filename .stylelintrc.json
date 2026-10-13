@@ -12,7 +12,6 @@
 		"keyframes-name-pattern": null,
 		"no-empty-source": null,
 		"no-invalid-position-at-import-rule": null,
-		"number-max-precision": null,
 		"property-no-unknown": null,
 		"scss/at-extend-no-missing-placeholder": null,
 		"scss/at-function-pattern": null,
