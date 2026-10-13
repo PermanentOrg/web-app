@@ -33,7 +33,13 @@
 				"ignorePseudoElements": ["ng-deep"]
 			}
 		],
-		"value-keyword-case": null,
+		"value-keyword-case": [
+			"lower",
+			{
+				"camelCaseSvgKeywords": true,
+				"ignoreProperties": ["/^\\$/"]
+			}
+		],
 		"value-no-vendor-prefix": null
 	}
 }
