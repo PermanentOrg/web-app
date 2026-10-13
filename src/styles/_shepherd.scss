@@ -1,7 +1,7 @@
 .shepherd-element {
 	background: #fff;
 	border-radius: 5px;
-	box-shadow: 0 1px 4px rgb(0, 0, 0, 0.2);
+	box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
 	max-width: 400px;
 	opacity: 0;
 	outline: none;
@@ -140,7 +140,7 @@
 }
 
 .shepherd-text {
-	color: rgb(0, 0, 0, 0.75);
+	color: rgb(0 0 0 / 0.75);
 	font-size: 1rem;
 	line-height: 1.3em;
 	padding: 0.75em;
@@ -157,7 +157,7 @@
 .shepherd-cancel-icon {
 	background: transparent;
 	border: none;
-	color: hsl(0, 0%, 50.2%, 0.75);
+	color: hsl(0 0% 50.2% / 0.75);
 	font-size: 2em;
 	cursor: pointer;
 	font-weight: 400;
@@ -167,19 +167,19 @@
 }
 
 .shepherd-cancel-icon:hover {
-	color: rgb(0, 0, 0, 0.75);
+	color: rgb(0 0 0 / 0.75);
 }
 
 .shepherd-has-title .shepherd-content .shepherd-cancel-icon {
-	color: hsl(0, 0%, 50.2%, 0.75);
+	color: hsl(0 0% 50.2% / 0.75);
 }
 
 .shepherd-has-title .shepherd-content .shepherd-cancel-icon:hover {
-	color: rgb(0, 0, 0, 0.75);
+	color: rgb(0 0 0 / 0.75);
 }
 
 .shepherd-title {
-	color: rgb(0, 0, 0, 0.75);
+	color: rgb(0 0 0 / 0.75);
 	display: flex;
 	font-size: 1rem;
 	font-weight: 400;
