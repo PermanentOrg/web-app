@@ -2,7 +2,6 @@
 	"extends": ["stylelint-config-standard-scss"],
 	"ignoreFiles": ["src/styles/vendor/**"],
 	"rules": {
-		"block-no-empty": null,
 		"font-family-no-missing-generic-family-keyword": null,
 		"function-name-case": [
 			"lower",
