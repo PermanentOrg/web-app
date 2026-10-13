@@ -12,11 +12,11 @@
 	line-height: 24px;
 	font-weight: 600;
 	border: 1px solid $form-border;
-	padding: 14px 24px 14px 24px;
+	padding: 14px 24px;
 	height: 48px;
 
 	&-with-text {
-		padding: 28px 24px 14px 24px;
+		padding: 28px 24px 14px;
 	}
 
 	&-light.form-input-errors {
