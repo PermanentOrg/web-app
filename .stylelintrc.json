@@ -38,7 +38,6 @@
 				"ignorePseudoElements": ["ng-deep"]
 			}
 		],
-		"shorthand-property-no-redundant-values": null,
 		"value-keyword-case": null,
 		"value-no-vendor-prefix": null
 	}
