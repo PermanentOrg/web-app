@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use 'sass:math';
 @import 'variables';
 
@@ -98,7 +99,10 @@ $result-padding-y: 0.25rem;
 		align-items: center;
 		justify-content: flex-start;
 		user-select: none;
-		background-color: darken($PR-orange, $darken-percent + 3%);
+		background-color: color.adjust(
+			$PR-orange,
+			$lightness: -1 * ($darken-percent + 3%)
+		);
 	}
 
 	.search-results-all {
@@ -114,7 +118,10 @@ $result-padding-y: 0.25rem;
 
 		&:hover:not(.empty),
 		&.selected {
-			background-color: darken($PR-orange, $darken-percent);
+			background-color: color.adjust(
+				$PR-orange,
+				$lightness: -1 * $darken-percent
+			);
 		}
 
 		&.empty {
