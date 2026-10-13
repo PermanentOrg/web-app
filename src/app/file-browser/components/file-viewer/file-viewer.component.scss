@@ -10,10 +10,7 @@ $button-size: 2rem;
 
 .file-viewer {
 	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+	inset: 0;
 	background-color: $PR-brand-white;
 	-webkit-transform: translate3d(0, 0, 0);
 	-moz-transform: translate3d(0, 0, 0);
@@ -92,10 +89,7 @@ pr-video,
 pr-audio .thumb-preview,
 iframe {
 	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 5px;
-	right: 5px;
+	inset: 0 5px;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
@@ -107,10 +101,7 @@ iframe {
 
 .thumb-target {
 	position: absolute;
-	top: $toolbar-height;
-	bottom: $toolbar-height;
-	left: 0;
-	right: 0;
+	inset: $toolbar-height 0 $toolbar-height 0;
 
 	iframe {
 		width: 100%;
@@ -160,10 +151,7 @@ iframe {
 
 .thumb-wrapper {
 	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+	inset: 0;
 
 	&.prev {
 		transform: translateX(-100%);
@@ -216,8 +204,7 @@ iframe {
 		justify-content: flex-start;
 		align-items: stretch;
 		padding: 10px;
-		overflow-y: auto;
-		overflow-x: hidden;
+		overflow: hidden auto;
 
 		td:first-child {
 			font-weight: bold;
@@ -281,10 +268,8 @@ iframe {
 
 @supports (padding-left: env(safe-area-inset-left)) {
 	.file-viewer {
-		padding-top: env(safe-area-inset-top);
-		padding-left: env(safe-area-inset-left);
-		padding-right: env(safe-area-inset-right);
-		padding-bottom: env(safe-area-inset-bottom);
+		padding: env(safe-area-inset-top) env(safe-area-inset-right)
+			env(safe-area-inset-bottom) env(safe-area-inset-left);
 	}
 
 	.file-viewer-name {
@@ -295,10 +280,8 @@ iframe {
 		--safe-area-inset-top: env(safe-area-inset-top);
 		--safe-area-inset-bottom: env(safe-area-inset-bottom);
 
-		top: calc(var(--safe-area-inset-top) + 30px);
-		bottom: calc(var(--safe-area-inset-bottom) + 30px);
-		left: env(safe-area-inset-left);
-		right: env(safe-area-inset-right);
+		inset: calc(var(--safe-area-inset-top) + 30px) env(safe-area-inset-right)
+			calc(var(--safe-area-inset-bottom) + 30px) env(safe-area-inset-left);
 	}
 }
 
