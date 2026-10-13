@@ -26,7 +26,7 @@ $desktop-size: pxToGrid(200px);
 }
 
 @mixin banner-margin-offset-public-profile {
-	top: 0rem;
+	top: 0;
 }
 
 .banner-section {
@@ -265,7 +265,7 @@ $desktop-size: pxToGrid(200px);
 		font-family: Usual;
 		font-size: 14px;
 		font-weight: 600;
-		letter-spacing: 0em;
+		letter-spacing: 0;
 		text-align: left;
 		color: #131b4a;
 	}

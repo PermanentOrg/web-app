@@ -41,7 +41,7 @@
 }
 
 @mixin input-focus-state {
-	box-shadow: 0px 0px 0px 4px #131b4a08;
+	box-shadow: 0 0 0 4px #131b4a08;
 }
 
 @mixin input-error-state {

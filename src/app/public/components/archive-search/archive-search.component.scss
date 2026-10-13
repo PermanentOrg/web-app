@@ -29,7 +29,7 @@ form {
 	input {
 		background: none;
 		box-shadow: none;
-		border: 0px solid;
+		border: 0 solid;
 		padding: 0.25rem 0;
 	}
 }
@@ -88,7 +88,7 @@ form {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 0px 5px;
+	padding: 0 5px;
 
 	@media screen and (min-width: 801px) {
 		width: 800px;
