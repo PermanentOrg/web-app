@@ -34,7 +34,7 @@
 }
 
 .fullscreen {
-	@include fullscreen();
+	@include fullscreen;
 }
 
 @mixin positionReset {
