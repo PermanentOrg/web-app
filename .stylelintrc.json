@@ -4,7 +4,6 @@
 	"rules": {
 		"at-rule-no-vendor-prefix": null,
 		"block-no-empty": null,
-		"declaration-block-no-duplicate-properties": null,
 		"declaration-block-no-shorthand-property-overrides": null,
 		"declaration-property-value-keyword-no-deprecated": null,
 		"font-family-no-missing-generic-family-keyword": null,
