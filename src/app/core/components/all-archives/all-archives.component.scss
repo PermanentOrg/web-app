@@ -9,6 +9,7 @@
 		padding: 0 $grid-unit * 0.5;
 	}
 }
+
 .sidebar {
 	@include mainContentFloatSidebar;
 }
@@ -21,6 +22,7 @@ pr-archive-small {
 	margin-bottom: $grid-unit;
 
 	$thumb-size: 2 * $grid-unit;
+
 	.sidebar-archive-main {
 		height: pxToGrid(80px);
 		display: flex;
@@ -54,6 +56,7 @@ pr-archive-small {
 	.sidebar-archive-actions {
 		padding-top: $grid-unit;
 		display: flex;
+
 		button {
 			margin-top: 0;
 			margin-bottom: 0;

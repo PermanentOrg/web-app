@@ -57,6 +57,7 @@
 	flex: 0 0 auto;
 	display: flex;
 	align-items: center;
+
 	button {
 		@include gridHeightButtonSmall;
 		margin-left: $grid-unit * 0.5;

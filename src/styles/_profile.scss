@@ -90,6 +90,7 @@ $profile-sidebar-width: pxToGrid(360px);
 
 	> * {
 		flex: 1 1 100%;
+
 		&:not(:last-child) {
 			margin-right: $grid-unit;
 		}

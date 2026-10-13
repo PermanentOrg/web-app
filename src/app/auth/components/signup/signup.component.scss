@@ -27,6 +27,7 @@
 		justify-content: space-between;
 
 		display: flex;
+
 		> label,
 		label > a {
 			color: $PR-brand-white;
@@ -43,6 +44,7 @@ form {
 
 .terms {
 	text-decoration: underline;
+
 	&:hover {
 		cursor: pointer;
 	}
@@ -82,6 +84,7 @@ form {
 
 .terms {
 	text-decoration: underline;
+
 	&:hover {
 		cursor: pointer;
 	}

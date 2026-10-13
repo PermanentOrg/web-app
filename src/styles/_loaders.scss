@@ -9,6 +9,7 @@ $dual-ring-size: 95px;
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+
 .lds-dual-ring:after {
 	content: ' ';
 	display: block;
@@ -45,6 +46,7 @@ $dual-ring-size: 95px;
 		transform: rotate(180deg);
 		opacity: 0.6;
 	}
+
 	100% {
 		transform: rotate(360deg);
 		opacity: 1;
@@ -92,6 +94,7 @@ $fade-ring-opacity: 0.6;
 	transform: translateZ(0);
 	opacity: $fade-ring-opacity;
 }
+
 .fade-ring-loader:before {
 	width: 50%;
 	height: 50%;
@@ -102,6 +105,7 @@ $fade-ring-opacity: 0.6;
 	left: 0;
 	content: '';
 }
+
 .fade-ring-loader:after {
 	background: $PR-blue-900;
 	width: 75%;
@@ -131,6 +135,7 @@ $fade-ring-opacity: 0.6;
 		-webkit-transform: rotate(0deg);
 		transform: rotate(0deg);
 	}
+
 	100% {
 		-webkit-transform: rotate(360deg);
 		transform: rotate(360deg);
@@ -141,6 +146,7 @@ $fade-ring-opacity: 0.6;
 		-webkit-transform: rotate(0deg);
 		transform: rotate(0deg);
 	}
+
 	100% {
 		-webkit-transform: rotate(360deg);
 		transform: rotate(360deg);

@@ -13,6 +13,7 @@ $bg-transition-length: 0.075s;
 
 :host {
 	display: block;
+
 	&.grid-view {
 		width: 50%;
 		float: left;
@@ -302,6 +303,7 @@ $bg-transition-length: 0.075s;
 	.grid-view & {
 		position: relative;
 		font-size: 8rem;
+
 		> i,
 		> fa-icon {
 			font-size: 7rem;

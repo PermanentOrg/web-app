@@ -3,6 +3,7 @@
 $toolbar-height: 30px;
 $transition-length: 0.35s;
 $button-size: 2rem;
+
 :host {
 	@include fullscreenComponent;
 }
@@ -22,6 +23,7 @@ $button-size: 2rem;
 
 	&.minimal {
 		background-color: $PR-brand-black;
+
 		.file-viewer-close {
 			transform: translateY(-100%);
 		}
@@ -46,6 +48,7 @@ $button-size: 2rem;
 		line-height: $toolbar-height;
 		padding: 0px 5px;
 		cursor: pointer;
+
 		> span {
 			opacity: 0.5;
 		}
@@ -260,8 +263,10 @@ iframe {
 		min-height: 0;
 		overflow-y: auto;
 	}
+
 	.metadata-item {
 		padding: 5px 10px;
+
 		label {
 			font-weight: 600;
 			margin-bottom: 0px;

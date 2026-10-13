@@ -54,6 +54,7 @@ i.material-icons {
 	flex-wrap: wrap;
 	padding-top: 0.5rem;
 	padding-bottom: 0.25rem;
+
 	.tag {
 		padding: 0.25rem 0.5rem;
 		border-radius: $border-radius;
@@ -92,6 +93,7 @@ $result-gutter: 1rem;
 
 .result-loading {
 	padding-top: 2rem;
+
 	.fade-ring-loader {
 		width: $result-width;
 		height: $result-width;

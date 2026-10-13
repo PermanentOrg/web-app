@@ -139,6 +139,7 @@ $archive-options-shadow-offset: 0.5rem;
 
 	.menu-header {
 		padding: 10px;
+
 		strong {
 			display: block;
 		}
@@ -277,6 +278,7 @@ $archive-options-shadow-offset: 0.5rem;
 				justify-content: space-between;
 				user-select: none;
 				text-align: left;
+
 				i {
 					font-size: $mat-icon-lg;
 					transition: transform 250ms $tweaked-ease;
@@ -309,6 +311,7 @@ $archive-options-shadow-offset: 0.5rem;
 			display: initial;
 			flex: 0 0 auto;
 			background-color: $PR-blue-900;
+
 			hr {
 				margin: $grid-unit * 0.5;
 				border-color: $PR-brand-white;
@@ -354,6 +357,7 @@ $archive-options-shadow-offset: 0.5rem;
 			display: flex;
 			flex: 0 0 auto;
 			align-items: center;
+
 			img {
 				height: auto;
 				width: pxToGrid(160px);

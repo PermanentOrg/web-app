@@ -2,6 +2,7 @@
 
 .legacy-contact-form-section {
 	@extend .steward-email-section;
+
 	& > label {
 		flex-shrink: 0;
 		margin: auto;

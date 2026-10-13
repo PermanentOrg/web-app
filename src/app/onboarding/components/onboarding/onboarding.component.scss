@@ -47,6 +47,7 @@ $mobile-transition-breakpoint: 1200px;
 
 .progress-chunk {
 	opacity: 0.1;
+
 	&.completed {
 		background: linear-gradient(90deg, #8d0085 0%, #ff9400 100%);
 		opacity: 1;

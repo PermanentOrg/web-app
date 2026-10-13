@@ -13,6 +13,7 @@ form {
 
 .mfa-text {
 	@include pageText;
+
 	&-continue {
 		margin-bottom: 50px;
 	}

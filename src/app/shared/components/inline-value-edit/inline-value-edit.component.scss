@@ -166,6 +166,7 @@ div.form-control {
 		.inline-value-display,
 		select {
 			cursor: pointer;
+
 			&:hover {
 				border-color: rgba($input-border-color, 0.75);
 			}
@@ -188,6 +189,7 @@ div.form-control {
 :host.horizontal-controls {
 	display: flex;
 	align-items: center;
+
 	form {
 		display: flex;
 		align-items: center;
@@ -231,6 +233,7 @@ textarea {
 		.description-textarea-value {
 			cursor: pointer;
 			border: 1px solid transparent;
+
 			&:hover {
 				border: 1px solid rgba($input-border-color, 0.75);
 			}

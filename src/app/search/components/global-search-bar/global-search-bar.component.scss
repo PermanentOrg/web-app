@@ -186,6 +186,7 @@ $result-padding-y: 0.25rem;
 		flex-wrap: wrap;
 		padding: $result-padding-y * 2 $result-padding-x;
 		padding-bottom: $result-padding-y * 2 - 0.25rem;
+
 		.tag {
 			padding: 0.25rem 0.5rem;
 			border-radius: $border-radius;
@@ -205,6 +206,7 @@ $result-padding-y: 0.25rem;
 .fade-ring-loader {
 	margin: 0;
 	margin-left: 0.5rem;
+
 	&:after {
 		background: $PR-orange;
 	}

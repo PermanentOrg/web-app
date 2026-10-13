@@ -84,6 +84,7 @@ button {
 			display: inline-block;
 			width: 4em;
 			padding: 0.25rem;
+
 			&::-webkit-inner-spin-button,
 			&::-webkit-outer-spin-button {
 				appearance: none;
@@ -134,9 +135,11 @@ button {
 
 .contributors-link {
 	color: white;
+
 	&:visited {
 		color: white;
 	}
+
 	&:hover {
 		text-decoration-color: white;
 	}

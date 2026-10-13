@@ -48,11 +48,13 @@
 		opacity: 0.8;
 		color: $PR-brand-white;
 		border: 1px solid rgba($PR-brand-white, 0.16);
+
 		&:focus {
 			background-color: $form-background-dark !important;
 			opacity: 1;
 			border: 1px solid $form-border;
 		}
+
 		&::placeholder {
 			color: $PR-brand-white;
 		}
@@ -67,6 +69,7 @@
 	text-transform: uppercase;
 	left: 24px;
 	top: 7px;
+
 	&-dark {
 		color: $form-label-dark;
 	}

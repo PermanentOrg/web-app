@@ -30,6 +30,7 @@ $sidebar-thumb-height: 200px;
 
 		&:not(.active):not(.disabled) {
 			cursor: pointer;
+
 			&:hover {
 				background-color: $gray-100;
 			}
@@ -59,6 +60,7 @@ $sidebar-thumb-height: 200px;
 
 .sidebar-item {
 	padding: $grid-unit * 0.5 $grid-unit;
+
 	label {
 		font-weight: 600;
 		margin-bottom: $grid-unit * 0.5;
