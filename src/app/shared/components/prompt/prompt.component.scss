@@ -5,6 +5,7 @@ $transition-length: 0.4s;
 .menu-wrapper.visible {
 	.prompt {
 		transform: translateY(0);
+
 		// transition: transform $transition-length ease-out;
 	}
 }
@@ -14,6 +15,7 @@ $transition-length: 0.4s;
 	right: 0;
 	bottom: 0;
 	transform: translateY(100%);
+
 	// transition:  transform $transition-length ease-in;
 	max-height: 85vh;
 	overflow-y: auto;

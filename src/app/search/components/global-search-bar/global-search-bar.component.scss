@@ -29,6 +29,7 @@ input {
 	width: 100%;
 	background: rgba(white, 0.2);
 	border: 1px solid transparent;
+
 	// border-bottom: 1px solid $PR-orange;
 	border-radius: $border-radius;
 	height: 2 * $grid-unit;
@@ -48,6 +49,7 @@ input {
 		border-color: $PR-orange;
 		background-color: none;
 		outline: none;
+
 		// box-shadow: $box-shadow;
 	}
 }

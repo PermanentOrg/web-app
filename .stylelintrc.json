@@ -35,7 +35,6 @@
 		"scss/at-mixin-argumentless-call-parentheses": null,
 		"scss/at-mixin-pattern": null,
 		"scss/dollar-variable-pattern": null,
-		"scss/double-slash-comment-empty-line-before": null,
 		"scss/double-slash-comment-whitespace-inside": null,
 		"scss/function-quote-no-quoted-strings-inside": null,
 		"scss/load-partial-extension": null,
