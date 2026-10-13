@@ -179,7 +179,7 @@ $bg-transition-length: 0.075s;
 	.grid-view & {
 		height: $grid-info-section-height;
 		position: absolute;
-		bottom: 0px;
+		bottom: 0;
 		background: $PR-brand-white;
 		left: 0;
 		right: 0;
@@ -246,19 +246,19 @@ $bg-transition-length: 0.075s;
 
 .actions {
 	.right-menu-toggler {
-		padding: 0px 0.5rem;
+		padding: 0 0.5rem;
 		height: $file-list-row-height;
 	}
 
 	.grid-view & {
 		position: absolute;
-		bottom: 0px;
-		right: 0px;
-		margin: 0px;
-		padding: 0px;
+		bottom: 0;
+		right: 0;
+		margin: 0;
+		padding: 0;
 
 		.right-menu-toggler {
-			padding: 0px;
+			padding: 0;
 			height: $grid-info-section-height;
 		}
 	}
@@ -282,8 +282,8 @@ $bg-transition-length: 0.075s;
 		flex: 0 0 100%;
 		width: 100%;
 		padding-top: 100%;
-		margin: 0px;
-		box-shadow: inset 0px 0px 0px $grid-selected-border - 1px $gray-300;
+		margin: 0;
+		box-shadow: inset 0 0 0 $grid-selected-border - 1px $gray-300;
 		transition: box-shadow $bg-transition-length $tweaked-ease;
 		border-radius: $grid-unit * 0.5;
 		overflow: hidden;
@@ -291,13 +291,12 @@ $bg-transition-length: 0.075s;
 
 	.grid-view:hover & {
 		transition: box-shadow 0ms $tweaked-ease;
-		box-shadow: inset 0px 0px 0px $grid-selected-border - 1px
-			darken($gray-300, 10%);
+		box-shadow: inset 0 0 0 $grid-selected-border - 1px darken($gray-300, 10%);
 	}
 
 	.grid-view.selected & {
 		transition: box-shadow 0ms $tweaked-ease;
-		box-shadow: inset 0px 0px 0px $grid-selected-border $PR-orange;
+		box-shadow: inset 0 0 0 $grid-selected-border $PR-orange;
 	}
 }
 

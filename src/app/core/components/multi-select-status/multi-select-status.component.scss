@@ -11,7 +11,7 @@
 	background-color: $PR-orange;
 	color: $PR-brand-white;
 	transition: transform $default-transition-length ease-in;
-	padding: 0px 10px;
+	padding: 0 10px;
 
 	&.visible {
 		transform: translateY(0);

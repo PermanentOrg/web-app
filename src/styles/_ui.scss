@@ -84,7 +84,7 @@ a.btn {
 
 .mobile-safari.mobile-safari-menu-bar-showing {
 	.archive-list-button {
-		padding-bottom: 0px;
+		padding-bottom: 0;
 	}
 }
 
@@ -120,7 +120,7 @@ nav .btn {
 }
 
 .right-menu-toggler {
-	padding: 0px 0px;
+	padding: 0 0;
 	font-size: 1.25rem;
 	line-height: 1;
 	background-color: transparent;
@@ -253,7 +253,7 @@ button.btn-wordpress-alternate {
 .perm-banner {
 	flex: 0 0 100px;
 	height: 100px;
-	padding: 0px 0.5rem;
+	padding: 0 0.5rem;
 	color: white;
 	background-color: $PR-blue-900;
 

@@ -18,7 +18,7 @@
 .share-item-preview {
 	display: flex;
 	align-items: center;
-	padding: 0px 10px;
+	padding: 0 10px;
 
 	$preview-height: $file-list-row-height;
 
@@ -38,7 +38,7 @@
 }
 
 .share-item-members {
-	padding: 0px 10px 10px;
+	padding: 0 10px 10px;
 
 	pr-archive-small {
 		margin-bottom: 20px;
@@ -46,5 +46,5 @@
 }
 
 .share-link {
-	padding: 0px 10px 10px;
+	padding: 0 10px 10px;
 }
