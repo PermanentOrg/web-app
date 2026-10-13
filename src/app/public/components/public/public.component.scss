@@ -144,7 +144,7 @@ $public-max-width: 800px;
 		cursor: pointer;
 		margin: 0 auto;
 
-		@media screen and (max-width: 420px) {
+		@media screen and (width <= 420px) {
 			padding: 0.5rem 0;
 		}
 	}
@@ -155,7 +155,7 @@ $public-max-width: 800px;
 	}
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
 	.search-bar-focused {
 		& > a,
 		.banner-buttons {

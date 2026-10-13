@@ -10,7 +10,7 @@ p {
 .title {
 	font-size: 56px;
 
-	@media screen and (max-width: 465px) {
+	@media screen and (width <= 465px) {
 		text-align: center;
 		font-size: 36px;
 	}
@@ -20,7 +20,7 @@ p {
 	display: flex;
 	gap: 64px;
 
-	@media screen and (max-width: 900px) {
+	@media screen and (width <= 900px) {
 		flex-direction: column;
 		height: 100vh;
 	}
@@ -72,11 +72,11 @@ hr {
 	flex-direction: column;
 	height: 50vh;
 
-	@media screen and (max-width: 900px) {
+	@media screen and (width <= 900px) {
 		height: 60vh;
 	}
 
-	@media screen and (max-width: 465px) {
+	@media screen and (width <= 465px) {
 		padding: 0 50px;
 
 		& .archive-info {
@@ -89,7 +89,7 @@ hr {
 	display: flex;
 	justify-content: flex-end;
 
-	@media screen and (max-width: 465px) {
+	@media screen and (width <= 465px) {
 		padding: 20px;
 	}
 }
