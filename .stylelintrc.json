@@ -16,7 +16,6 @@
 				"ignoreFunctions": ["pxToGrid"]
 			}
 		],
-		"hue-degree-notation": null,
 		"keyframes-name-pattern": null,
 		"media-feature-range-notation": null,
 		"no-empty-source": null,
