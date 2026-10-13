@@ -28,7 +28,7 @@ $public-max-width: 800px;
 .public-banner {
 	flex: 0 0 $public-banner-height;
 	height: $public-banner-height;
-	padding: 0px 0.5rem;
+	padding: 0 0.5rem;
 	color: white;
 	background-color: $PR-blue;
 
@@ -115,7 +115,7 @@ $public-max-width: 800px;
 .public-footer {
 	position: fixed;
 	height: 50px;
-	bottom: 0px;
+	bottom: 0;
 	width: 100%;
 	background: rgba($gray-900, 0.75);
 	color: white;

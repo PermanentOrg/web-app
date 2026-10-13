@@ -56,7 +56,7 @@ nav.navbar {
 	.sidebar-align {
 		flex: 0 0 $sidebar-width;
 		display: none;
-		padding: 0px;
+		padding: 0;
 		padding-right: $grid-unit;
 
 		> * {
@@ -170,7 +170,7 @@ nav.nav-desktop {
 		outline: none;
 	}
 
-	border: 0px solid;
+	border: 0 solid;
 	margin-top: 9px;
 	margin-bottom: 9px;
 }
