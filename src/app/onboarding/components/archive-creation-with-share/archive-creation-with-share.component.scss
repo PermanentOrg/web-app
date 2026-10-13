@@ -7,7 +7,7 @@ p {
 
 .text > p {
 	font-size: 16px;
-	font-family: 'UsualLight', sans-serif;
+	font-family: UsualLight, sans-serif;
 }
 
 .invitation-info {
@@ -17,7 +17,7 @@ p {
 .text-share {
 	& > p {
 		margin-bottom: 1rem;
-		font-family: 'UsualRegular', sans-serif;
+		font-family: UsualRegular, sans-serif;
 	}
 
 	& > div {
@@ -30,7 +30,7 @@ p {
 }
 
 .shared-item-name {
-	font-family: 'UsualBold', sans-serif;
+	font-family: UsualBold, sans-serif;
 	margin-bottom: 5px;
 }
 
