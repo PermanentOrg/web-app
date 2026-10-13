@@ -143,7 +143,7 @@ nav.nav-desktop {
 		&.has-badge {
 			position: relative;
 
-			&:after {
+			&::after {
 				position: absolute;
 				top: 0;
 				right: -$grid-unit * 0.25;
