@@ -2,7 +2,7 @@
 @import 'fonts';
 
 .archive-type-select-dialog {
-	font-family: 'UsualRegular', sans-serif;
+	font-family: UsualRegular, sans-serif;
 	background: $PR-brand-white;
 	border-radius: 12px;
 	display: flex;
@@ -38,7 +38,7 @@
 	.dialog-label {
 		color: $darkBlue;
 		text-align: center;
-		font-family: 'Usual', sans-serif;
+		font-family: Usual, sans-serif;
 		font-size: 1em;
 		font-style: normal;
 		font-weight: 600;
@@ -77,7 +77,7 @@
 			color: $darkBlue;
 			font-weight: 600;
 			line-height: 24px;
-			font-family: 'UsualExtraBold', sans-serif;
+			font-family: UsualExtraBold, sans-serif;
 		}
 
 		.type-description {
