@@ -68,7 +68,7 @@
 
 	&-primary {
 		&.button-light {
-			@include darkButton();
+			@include darkButton;
 
 			&:focus {
 				border: 2px solid $PR-brand-white;
@@ -76,13 +76,13 @@
 		}
 
 		&.button-dark {
-			@include lightButton();
+			@include lightButton;
 		}
 	}
 
 	&-secondary {
 		&.button-light {
-			@include lightButton();
+			@include lightButton;
 
 			&:focus {
 				border: 2px solid $PR-brand-black;
@@ -90,7 +90,7 @@
 		}
 
 		&.button-dark {
-			@include darkButton();
+			@include darkButton;
 
 			border: 1px solid rgba($PR-brand-white, 0.32);
 		}
@@ -98,13 +98,13 @@
 
 	&-tertiary {
 		&.button-dark {
-			@include darkButton();
+			@include darkButton;
 
 			border: 1px solid transparent;
 		}
 
 		&.button-light {
-			@include lightButton();
+			@include lightButton;
 
 			border: 1px solid transparent;
 		}
