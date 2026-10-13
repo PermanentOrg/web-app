@@ -2,10 +2,7 @@
 
 :host {
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	inset: 0;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -121,7 +118,7 @@
 		font-size: small;
 
 		&:nth-child(3) {
-			@media screen and (max-width: 767px) {
+			@media screen and (width <= 767px) {
 				display: none;
 			}
 		}

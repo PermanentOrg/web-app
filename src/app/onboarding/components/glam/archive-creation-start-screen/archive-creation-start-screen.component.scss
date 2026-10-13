@@ -7,15 +7,15 @@
 	justify-content: space-evenly;
 	gap: 64px;
 
-	@media screen and (max-width: 600px) {
+	@media screen and (width <= 600px) {
 		flex-direction: column;
 	}
 
-	@media screen and (min-width: 602px) and (max-width: 900px) {
+	@media screen and (width >= 602px) and (width <= 900px) {
 		height: 100vh;
 	}
 
-	@media screen and (max-width: 364px) {
+	@media screen and (width <= 364px) {
 		height: auto;
 	}
 }
@@ -27,7 +27,7 @@ p {
 .greetings-container {
 	width: 50%;
 
-	@media screen and (max-width: 600px) {
+	@media screen and (width <= 600px) {
 		width: 100%;
 	}
 
@@ -51,11 +51,11 @@ p {
 	display: flex;
 	height: 76vh;
 
-	@media screen and (max-width: 600px) {
+	@media screen and (width <= 600px) {
 		height: auto;
 	}
 
-	@media screen and (max-width: 750px) {
+	@media screen and (width <= 750px) {
 		width: 100%;
 	}
 

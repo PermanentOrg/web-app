@@ -9,7 +9,7 @@ header {
 	justify-content: space-between;
 	align-items: center;
 
-	@media only screen and (max-width: 950px) {
+	@media only screen and (width <= 950px) {
 		padding: 1em;
 	}
 }

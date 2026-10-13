@@ -23,17 +23,14 @@
 }
 
 @mixin afterTabletBeforeDesktop {
-	@media screen and (min-width: $tablet-horizontal) and (max-width: 1200px) {
+	@media screen and (min-width: $tablet-horizontal) and (width <= 1200px) {
 		@content;
 	}
 }
 
 @mixin fullscreen {
 	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+	inset: 0;
 }
 
 .fullscreen {
@@ -42,10 +39,7 @@
 
 @mixin positionReset {
 	position: relative;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	inset: 0;
 }
 
 @mixin flexCenter {
@@ -170,10 +164,7 @@
 
 @mixin fullscreenComponent {
 	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+	inset: 0;
 	z-index: 10;
 	display: block;
 	background: white;

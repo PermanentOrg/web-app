@@ -55,10 +55,7 @@ select {
 .inline-value-placeholder {
 	position: absolute;
 	padding: $inline-padding-y $inline-padding-x;
-	left: -1 * $inline-padding-x;
-	right: -1 * $inline-padding-x;
-	top: 0;
-	bottom: 0;
+	inset: 0 -1 * $inline-padding-x 0 -1 * $inline-padding-x;
 
 	.placeholder-line {
 		height: 1.5rem;
@@ -144,10 +141,7 @@ div.form-control {
 	& > input,
 	& > textarea {
 		position: absolute;
-		top: 0;
-		left: -1 * $inline-padding-x;
-		right: -1 * $inline-padding-x;
-		bottom: 0;
+		inset: 0 -1 * $inline-padding-x 0 -1 * $inline-padding-x;
 		opacity: 0;
 		z-index: 0;
 		resize: none;
