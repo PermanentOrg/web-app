@@ -23,6 +23,7 @@
 
 	.row {
 		display: table-row;
+
 		& > * {
 			&:first-child {
 				font-weight: bold;
@@ -30,6 +31,7 @@
 				padding-bottom: 0.5em;
 				white-space: nowrap;
 			}
+
 			&:last-child {
 				color: $gray-dark;
 				white-space: pre-wrap;
@@ -62,6 +64,7 @@
 
 	.warning-icon {
 		padding-right: 1em;
+
 		fa-icon {
 			font-size: 2.5em;
 		}

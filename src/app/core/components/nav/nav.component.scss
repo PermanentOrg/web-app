@@ -48,6 +48,7 @@ nav.navbar {
 .nav-second-row {
 	display: flex;
 	align-items: center;
+
 	pr-breadcrumbs {
 		flex: 1 1 auto;
 	}
@@ -86,9 +87,11 @@ nav.navbar {
 		min-height: $breadcrumb-height-desktop;
 		padding-left: 1 * $grid-unit;
 		box-shadow: none;
+
 		.sidebar-align {
 			display: flex;
 			justify-content: center;
+
 			> *:not(:last-child) {
 				margin-right: $grid-unit;
 			}
@@ -107,6 +110,7 @@ nav.nav-desktop {
 		flex: 0 1 40rem;
 		margin-right: auto;
 	}
+
 	pr-account-dropdown {
 		margin-left: $grid-unit;
 	}

@@ -20,6 +20,7 @@ a.btn {
 
 .alert-wrapper {
 	max-width: $max-form-width + 100px;
+
 	.alert {
 		box-shadow: $box-shadow;
 	}
@@ -45,6 +46,7 @@ a.btn {
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
 	.mobile-safari:not(.mobile-safari-menu-bar-showing) {
 		--safe-area-inset-bottom: env(safe-area-inset-bottom);
+
 		.prompt,
 		pr-dialog .dialog-content .dialog-footer {
 			padding-bottom: calc(var(--safe-area-inset-bottom) + 30px) !important;
@@ -128,6 +130,7 @@ nav .btn {
 	height: $navbar-height;
 	display: flex;
 	align-items: center;
+
 	&:focus {
 		outline: none;
 		text-decoration: none;

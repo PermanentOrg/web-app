@@ -50,6 +50,7 @@
 
 		.col-title:only-child {
 			cursor: auto;
+
 			&::after {
 				display: none;
 			}
@@ -71,6 +72,7 @@
 	.dropdown + .save-sort {
 		padding-left: 0;
 	}
+
 	.active-sort {
 		.col-title::after {
 			opacity: 1;
@@ -147,6 +149,7 @@
 		font-size: $font-size-sm;
 		padding: 0.5rem 10px;
 		cursor: pointer;
+
 		&:hover {
 			background-color: $gray-200;
 		}
@@ -205,6 +208,7 @@ pr-folder-view-toggle {
 
 		@include until(1100px) {
 			font-size: $font-size-sm;
+
 			&:not(:last-child) {
 				margin-right: $grid-unit * 0.25;
 			}
@@ -258,9 +262,11 @@ pr-folder-view-toggle {
 
 .download-option {
 	cursor: pointer;
+
 	&:hover {
 		background-color: #eaeaea;
 	}
+
 	& > span {
 		font-size: 14px;
 		margin-left: 10px;

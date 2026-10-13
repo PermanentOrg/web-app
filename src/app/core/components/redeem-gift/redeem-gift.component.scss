@@ -17,6 +17,7 @@ form {
 	&.successful {
 		color: green;
 	}
+
 	&:not(.successful) {
 		color: $form-error-red;
 	}

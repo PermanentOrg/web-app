@@ -47,6 +47,7 @@
 	0% {
 		transform: scale(1.4) rotate(300deg);
 	}
+
 	100% {
 		transform: scale(1.4) rotate(660deg);
 	}
@@ -56,6 +57,7 @@
 	0% {
 		transform: scale(0.9) translate(-0.5px, 6.5px) rotate(45deg);
 	}
+
 	100% {
 		transform: scale(0.9) translate(-0.5px, 6px) rotate(-315deg);
 	}

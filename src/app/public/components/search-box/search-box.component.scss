@@ -48,11 +48,14 @@ form {
 		top: 9px;
 		right: 0;
 	}
+
 	&.gallery {
 		min-width: auto;
+
 		form {
 			max-width: 100%;
 		}
+
 		input {
 			&::placeholder {
 				color: $PR-blue;
@@ -212,6 +215,7 @@ form {
 	margin-top: 5px;
 	margin-left: 5px;
 }
+
 .hide-border {
 	border: none !important;
 }

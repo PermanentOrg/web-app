@@ -39,6 +39,7 @@
 	&.checked {
 		& > .toggle-switch {
 			background-color: $toggle-checked;
+
 			& > .toggle-knob {
 				left: 18.5px;
 			}

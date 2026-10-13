@@ -88,6 +88,7 @@ p {
 .button-container {
 	margin-top: 16px;
 	width: fit-content;
+
 	& > button {
 		margin: 0;
 	}
@@ -127,6 +128,7 @@ select {
 
 .button-group {
 	display: flex;
+
 	& > .btn-secondary {
 		margin-left: 20px;
 	}

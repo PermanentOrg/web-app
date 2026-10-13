@@ -34,7 +34,6 @@
 		"property-no-deprecated": null,
 		"property-no-unknown": null,
 		"property-no-vendor-prefix": null,
-		"rule-empty-line-before": null,
 		"scss/at-extend-no-missing-placeholder": null,
 		"scss/at-function-pattern": null,
 		"scss/at-mixin-argumentless-call-parentheses": null,
