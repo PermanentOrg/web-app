@@ -65,7 +65,7 @@ select {
 		width: 95%;
 		position: relative;
 
-		&:after {
+		&::after {
 			content: '';
 			background-color: $gray-200;
 			position: absolute;
@@ -75,13 +75,13 @@ select {
 		}
 
 		&.two-thirds {
-			&:after {
+			&::after {
 				width: 66.66%;
 			}
 		}
 
 		&.three-quarters {
-			&:after {
+			&::after {
 				width: 75%;
 			}
 		}
