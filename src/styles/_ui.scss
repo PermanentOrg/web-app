@@ -188,11 +188,11 @@ a {
 	--bs-btn-color: #{$PR-orange};
 	--bs-btn-hover-color: #{$PR-orange};
 	--bs-btn-active-color: #{$PR-orange};
-	--bs-btn-bg: #{rgba(white, 0.2)};
+	--bs-btn-bg: rgb(255 255 255 / 0.2);
 	--bs-btn-hover-bg: #{white};
 	--bs-btn-active-bg: #{white};
 
-	background: rgba(white, 0.2);
+	background: rgb(255 255 255 / 0.2);
 	height: $size;
 	border-radius: $size * 0.5;
 	color: $PR-orange;

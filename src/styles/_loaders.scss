@@ -64,15 +64,15 @@ $fade-ring-opacity: 0.6;
 	height: $fade-ring-size;
 	border-radius: 50%;
 	background: #fff;
-	background: -moz-linear-gradient(left, #fff 10%, rgba(255, 255, 255, 0) 42%);
+	background: -moz-linear-gradient(left, #fff 10%, rgb(255, 255, 255, 0) 42%);
 	background: -webkit-linear-gradient(
 		left,
 		#fff 10%,
-		rgba(255, 255, 255, 0) 42%
+		rgb(255, 255, 255, 0) 42%
 	);
-	background: -o-linear-gradient(left, #fff 10%, rgba(255, 255, 255, 0) 42%);
-	background: -ms-linear-gradient(left, #fff 10%, rgba(255, 255, 255, 0) 42%);
-	background: linear-gradient(to right, #fff 10%, rgba(255, 255, 255, 0) 42%);
+	background: -o-linear-gradient(left, #fff 10%, rgb(255, 255, 255, 0) 42%);
+	background: -ms-linear-gradient(left, #fff 10%, rgb(255, 255, 255, 0) 42%);
+	background: linear-gradient(to right, #fff 10%, rgb(255, 255, 255, 0) 42%);
 	position: relative;
 	animation:
 		load3 1.4s infinite linear,
