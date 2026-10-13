@@ -34,7 +34,6 @@
 		"scss/at-function-pattern": null,
 		"scss/at-mixin-argumentless-call-parentheses": null,
 		"scss/at-mixin-pattern": null,
-		"scss/dollar-variable-empty-line-before": null,
 		"scss/dollar-variable-pattern": null,
 		"scss/double-slash-comment-empty-line-before": null,
 		"scss/double-slash-comment-whitespace-inside": null,
