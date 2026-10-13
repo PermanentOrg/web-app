@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import 'colors';
 @import 'grid';
 @import 'z-index';
@@ -171,9 +172,9 @@ $box-shadow-dark: 0 0.5rem 1rem rgba($black, 0.3) !default;
 $font-size-xs: ($font-size-base * 0.75) !default;
 
 // Customizations to Bootstrap Variables
-$link-color: lighten($primary, 20%);
+$link-color: color.adjust($primary, $lightness: 20%);
 $link-decoration: underline;
-$link-hover-color: lighten($link-color, 20%);
+$link-hover-color: color.adjust($link-color, $lightness: 20%);
 $link-hover-decoration: none;
 
 @import 'dialog';

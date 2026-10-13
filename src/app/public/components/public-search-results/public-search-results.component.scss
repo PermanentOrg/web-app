@@ -8,7 +8,7 @@
 .search-results-container {
 	.search-results {
 		font-size: 1.75rem;
-		font-family: Usual;
+		font-family: Usual, sans-serif;
 		font-weight: 600;
 		font-stretch: normal;
 		font-style: normal;
@@ -26,7 +26,7 @@
 
 	.back-to-archive {
 		margin-left: 0.4rem;
-		font-family: Usual;
+		font-family: Usual, sans-serif;
 		font-size: 14px;
 		font-weight: 600;
 		letter-spacing: 0;
@@ -59,7 +59,7 @@
 	}
 
 	&-text {
-		font-family: Usual;
+		font-family: Usual, sans-serif;
 
 		@include marginBottomSearchResults;
 	}
