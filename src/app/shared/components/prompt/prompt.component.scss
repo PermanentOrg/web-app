@@ -43,10 +43,7 @@ $transition-length: 0.4s;
 	.prompt {
 		border-radius: $border-radius;
 		position: relative;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
+		inset: 0;
 		width: 400px;
 		height: auto;
 	}

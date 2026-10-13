@@ -36,10 +36,7 @@
 	width: calc(100% - #{$sidebar-width});
 	border: 5px solid $PR-orange;
 	position: fixed;
-	top: $file-list-controls-height;
-	left: 0;
-	right: $sidebar-width;
-	bottom: 0;
+	inset: $file-list-controls-height $sidebar-width 0 0;
 	z-index: -1;
 	opacity: 0;
 	font-weight: 700;
