@@ -11,15 +11,15 @@
 	gap: 16px;
 	margin-bottom: 24px;
 
-	@media (max-width: 1200px) and (min-width: 990px) {
+	@media (width <= 1200px) and (width >= 990px) {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	@media (max-width: 1062px) {
+	@media (width <= 1062px) {
 		grid-template-columns: repeat(2, 1fr);
 	}
 
-	@media (max-width: 768px) {
+	@media (width <= 768px) {
 		grid-template-columns: 1fr;
 	}
 }
@@ -34,7 +34,7 @@
 	font-size: 56px;
 	width: 60%;
 
-	@media screen and (max-width: 500px) {
+	@media screen and (width <= 500px) {
 		width: auto;
 	}
 }
@@ -48,7 +48,7 @@
 	font-size: 16px;
 	width: 40%;
 
-	@media screen and (max-width: 500px) {
+	@media screen and (width <= 500px) {
 		width: auto;
 	}
 }
@@ -61,12 +61,12 @@ p {
 	display: flex;
 	gap: 15rem;
 
-	@media (max-width: 1062px) {
+	@media (width <= 1062px) {
 		flex-direction: column;
 		gap: 2rem;
 	}
 
-	@media screen and (max-width: 425px) {
+	@media screen and (width <= 425px) {
 		padding: 0 60px;
 	}
 }
@@ -78,14 +78,14 @@ p {
 	gap: 16px;
 	padding-bottom: 100px;
 
-	@media (max-width: 1062px) {
+	@media (width <= 1062px) {
 		flex-direction: column;
 		gap: 2rem;
 	}
 }
 
 .reason-container {
-	@media (max-width: 768px) {
+	@media (width <= 768px) {
 		display: flex;
 		justify-content: center;
 	}
@@ -108,7 +108,7 @@ p {
 }
 
 .raesons-screen {
-	@media screen and (max-width: 465px) {
+	@media screen and (width <= 465px) {
 		margin-top: 20px;
 	}
 }

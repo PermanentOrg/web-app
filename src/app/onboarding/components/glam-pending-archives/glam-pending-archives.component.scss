@@ -29,7 +29,7 @@ p {
 	justify-content: space-between;
 	gap: 64px;
 
-	@media screen and (max-width: 900px) {
+	@media screen and (width <= 900px) {
 		flex-direction: column;
 	}
 }
@@ -41,11 +41,11 @@ p {
 	justify-content: space-between;
 	height: 70vh;
 
-	@media screen and (max-width: 900px) {
+	@media screen and (width <= 900px) {
 		height: 40vh;
 	}
 
-	@media screen and (max-width: 517px) {
+	@media screen and (width <= 517px) {
 		width: auto;
 	}
 }

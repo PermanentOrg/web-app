@@ -112,7 +112,7 @@ pr-create-new-archive {
 	align-items: center;
 	flex-direction: column;
 
-	@media screen and (max-width: 770px) {
+	@media screen and (width <= 770px) {
 		flex-direction: column;
 	}
 }
