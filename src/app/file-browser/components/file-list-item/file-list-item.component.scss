@@ -18,6 +18,7 @@ $bg-transition-length: 0.075s;
 		width: 50%;
 		float: left;
 		padding-bottom: 5px;
+
 		@for $i from 3 through 10 {
 			@media screen and (min-width: $i * $max-grid-width + 1) {
 				width: math.div(100%, $i);
@@ -43,6 +44,7 @@ $bg-transition-length: 0.075s;
 
 	.show-sidebar & {
 		width: 50%;
+
 		@for $i from 2 through 10 {
 			@media screen and (min-width: ($i * $max-grid-width-sidebar) + $sidebar-width + $left-menu-width + 1) {
 				width: math.div(100%, $i);

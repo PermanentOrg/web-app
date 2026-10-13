@@ -18,6 +18,7 @@ $mobile-transition-breakpoint: 1200px;
 	@media only screen and (max-width: $mobile-transition-breakpoint) {
 		width: 75%;
 	}
+
 	@media only screen and (max-width: $mobile-breakpoint) {
 		width: auto;
 		margin: 10px;
@@ -110,6 +111,7 @@ pr-create-new-archive {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+
 	@media screen and (max-width: 770px) {
 		flex-direction: column;
 	}

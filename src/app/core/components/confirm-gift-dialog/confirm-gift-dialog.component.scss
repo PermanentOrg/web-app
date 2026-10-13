@@ -65,6 +65,7 @@ pr-archive-small {
 
 	& .btn-primary {
 		width: 30%;
+
 		@include beforeDesktop {
 			width: 35%;
 		}

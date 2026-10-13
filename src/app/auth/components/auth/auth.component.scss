@@ -52,6 +52,7 @@
 	@media screen and (min-width: 1024px) and (max-width: 1279px) {
 		width: 40%;
 	}
+
 	@media screen and (min-width: 1279px) and (max-width: 1440px) {
 		width: 35%;
 	}
@@ -94,6 +95,7 @@
 
 .permanent-logo {
 	margin-bottom: 32px;
+
 	@include beforeDesktop {
 		width: 80%;
 

@@ -40,6 +40,7 @@ $desktop-size: pxToGrid(200px);
 
 	& hr {
 		width: 90%;
+
 		@include beforeDesktop {
 			margin-top: 3rem;
 		}
@@ -124,6 +125,7 @@ $desktop-size: pxToGrid(200px);
 		flex: 0 0 auto;
 		width: auto;
 		margin: 0;
+
 		@include gridHeightButton;
 	}
 
@@ -186,6 +188,7 @@ $desktop-size: pxToGrid(200px);
 
 	@include desktop {
 		padding-left: $grid-unit;
+
 		@include sidebarMargin;
 		@include banner-margin-offset;
 	}
@@ -293,6 +296,7 @@ $desktop-size: pxToGrid(200px);
 
 	&-text {
 		font-family: Usual;
+
 		@include marginBottomSearchResults();
 	}
 
@@ -369,6 +373,7 @@ $desktop-size: pxToGrid(200px);
 .profile-controls {
 	display: flex;
 	flex-direction: row;
+
 	@include beforeDesktop {
 		flex-direction: column;
 	}

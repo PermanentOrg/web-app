@@ -93,6 +93,7 @@ p {
 
 .back-button {
 	width: 280px;
+
 	@include beforeDesktop {
 		width: 100%;
 	}
@@ -100,6 +101,7 @@ p {
 
 .next-button {
 	width: 280px;
+
 	@include beforeDesktop {
 		width: 100%;
 	}

@@ -16,6 +16,7 @@ $profile-max-width: 1200px;
 		flex: 0 0 auto;
 		width: auto;
 		margin: 0;
+
 		@include gridHeightButton;
 	}
 }

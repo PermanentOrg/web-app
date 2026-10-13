@@ -70,6 +70,7 @@ $thumb-size: 50px;
 
 	button {
 		margin: 0;
+
 		@include gridHeightButtonSmall;
 
 		margin-left: $grid-unit * 0.5;

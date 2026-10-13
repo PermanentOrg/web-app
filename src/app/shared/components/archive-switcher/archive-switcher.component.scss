@@ -15,6 +15,7 @@
 	padding: 10px 0 0;
 
 	@include mainContentScrollDesktop;
+
 	@include desktop {
 		position: relative;
 		z-index: initial;
