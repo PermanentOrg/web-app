@@ -33,7 +33,6 @@
 		"scss/no-global-function-names": null,
 		"scss/operator-no-newline-after": null,
 		"selector-class-pattern": null,
-		"selector-not-notation": null,
 		"selector-pseudo-element-no-unknown": [
 			true,
 			{

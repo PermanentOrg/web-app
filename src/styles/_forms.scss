@@ -52,9 +52,9 @@ form {
 		position: relative;
 		display: block;
 
-		&:not(:first-child):not(:last-child),
-		&:not(:first-child):not(:last-child) > input,
-		&:not(:first-child):not(:last-child) > select {
+		&:not(:first-child, :last-child),
+		&:not(:first-child, :last-child) > input,
+		&:not(:first-child, :last-child) > select {
 			border-top: 0 solid;
 			border-bottom: 0 solid;
 			border-radius: 0;
