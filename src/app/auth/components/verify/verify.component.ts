@@ -13,6 +13,10 @@ import { AccountVO } from '@root/app/models';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { RecaptchaErrorParameters } from 'ng-recaptcha-2';
 import { EventService } from '@shared/services/event/event.service';
+import {
+	UNSUPPORTED_PHONE_COUNTRY_NOTICE,
+	storedPhoneNumberNeedsCountryWarning,
+} from '@shared/utilities/phone-number';
 
 @Component({
 	selector: 'pr-verify',
@@ -201,13 +205,9 @@ export class VerifyComponent implements OnInit {
 					});
 				}
 			})
-			.catch((response: AuthResponse) => {
+			.catch((response: unknown) => {
 				this.waiting = false;
-				let translateString = response.getMessage();
-				if (translateString === 'error.auth.lookup') {
-					translateString = 'warning.auth.token_does_not_match';
-				}
-				this.message.showError({ message: translateString, translate: true });
+				this.showCodeSendError(response);
 			});
 	}
 
@@ -239,12 +239,33 @@ export class VerifyComponent implements OnInit {
 
 	private showCodeSendError(response: unknown): void {
 		this.message.showError({
-			message:
-				response instanceof AuthResponse
-					? response.getMessage()
-					: 'error.generic.internal',
+			message: this.codeSendErrorMessage(response),
 			translate: true,
 		});
+	}
+
+	private codeSendErrorMessage(response: unknown): string {
+		const message =
+			response instanceof AuthResponse ? response.getMessage() : '';
+
+		if (message === 'error.auth.lookup') {
+			return 'warning.auth.token_does_not_match';
+		}
+
+		if (this.isSendingToUnsupportedPhoneCountry()) {
+			return UNSUPPORTED_PHONE_COUNTRY_NOTICE;
+		}
+
+		return message || 'error.generic.internal';
+	}
+
+	private isSendingToUnsupportedPhoneCountry(): boolean {
+		return (
+			this.currentVerifyFlow === 'phone' &&
+			storedPhoneNumberNeedsCountryWarning(
+				this.accountService.getAccount()?.primaryPhone,
+			)
+		);
 	}
 
 	public resolveCaptcha(response: string): void {

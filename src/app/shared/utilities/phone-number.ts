@@ -1,32 +1,18 @@
+import { phone } from 'phone';
+
 const NON_DIGITS = /\D/g;
 const NANP_COUNTRY_CODE = '1';
 const NANP_SUBSCRIBER_DIGITS = 10;
 const INTERNATIONAL_CALL_PREFIXES = ['011', '00'];
-const NANP_NUMBER = /^([2-9]\d\d)([2-9]\d\d)\d{4}$/;
-const SERVICE_CODE = /^\d11$/;
 
-const AREA_CODES_OUTSIDE_US_AND_CANADA = new Set([
-	'242', // The Bahamas
-	'246', // Barbados
-	'264', // Anguilla
-	'268', // Antigua and Barbuda
-	'284', // British Virgin Islands
-	'345', // Cayman Islands
-	'441', // Bermuda
-	'473', // Grenada
-	'649', // Turks and Caicos Islands
-	'658', // Jamaica
-	'664', // Montserrat
-	'721', // Sint Maarten
-	'758', // Saint Lucia
-	'767', // Dominica
-	'784', // Saint Vincent and the Grenadines
-	'809', // Dominican Republic
-	'829', // Dominican Republic
-	'849', // Dominican Republic
-	'868', // Trinidad and Tobago
-	'869', // Saint Kitts and Nevis
-	'876', // Jamaica
+const US_AND_CANADA_REGIONS = new Set([
+	'US',
+	'CA',
+	'PR', // Puerto Rico
+	'VI', // US Virgin Islands
+	'GU', // Guam
+	'AS', // American Samoa
+	'MP', // Northern Mariana Islands
 ]);
 
 export const UNSUPPORTED_PHONE_COUNTRY_NOTICE =
@@ -43,18 +29,31 @@ const internationalCallPrefixOf = (digits: string): string =>
 const countryCodeOf = (digits: string): string =>
 	digits.startsWith(NANP_COUNTRY_CODE) ? NANP_COUNTRY_CODE : '';
 
-const withoutDiallingPrefixes = (digits: string): string => {
-	const afterInternationalPrefix = digits.slice(
-		internationalCallPrefixOf(digits).length,
-	);
-	const hasCountryCode =
-		afterInternationalPrefix.startsWith(NANP_COUNTRY_CODE) &&
-		afterInternationalPrefix.length ===
-			NANP_SUBSCRIBER_DIGITS + NANP_COUNTRY_CODE.length;
+const startsWithPlusSign = (text: string | null | undefined): boolean =>
+	(text ?? '').trim().startsWith('+');
 
-	return hasCountryCode
-		? afterInternationalPrefix.slice(NANP_COUNTRY_CODE.length)
-		: afterInternationalPrefix;
+/**
+ * Rewrites the number the way it would be dialled from abroad (`+` and the
+ * country code), treating a number written without a country code as a
+ * US or Canada one.
+ */
+const asInternationalNumber = (text: string | null | undefined): string => {
+	const digits = onlyDigits(text);
+
+	if (startsWithPlusSign(text)) {
+		return `+${digits}`;
+	}
+
+	const internationalCallPrefix = internationalCallPrefixOf(digits);
+	if (internationalCallPrefix) {
+		return `+${digits.slice(internationalCallPrefix.length)}`;
+	}
+
+	const hasCountryCode =
+		digits.startsWith(NANP_COUNTRY_CODE) &&
+		digits.length === NANP_SUBSCRIBER_DIGITS + NANP_COUNTRY_CODE.length;
+
+	return hasCountryCode ? `+${digits}` : `+${NANP_COUNTRY_CODE}${digits}`;
 };
 
 const digitsNeededForAWholeNumber = (digits: string): number => {
@@ -69,20 +68,13 @@ const digitsNeededForAWholeNumber = (digits: string): number => {
 };
 
 const namesAUsOrCanadaNumber = (text: string | null | undefined): boolean => {
-	const wholeNumber = NANP_NUMBER.exec(
-		withoutDiallingPrefixes(onlyDigits(text)),
-	);
-
-	if (!wholeNumber) {
-		return false;
-	}
-
-	const [, areaCode, exchangeCode] = wholeNumber;
+	const recognisedNumber = phone(asInternationalNumber(text), {
+		strictDetection: true,
+	});
 
 	return (
-		!SERVICE_CODE.test(areaCode) &&
-		!SERVICE_CODE.test(exchangeCode) &&
-		!AREA_CODES_OUTSIDE_US_AND_CANADA.has(areaCode)
+		recognisedNumber.isValid &&
+		US_AND_CANADA_REGIONS.has(recognisedNumber.countryIso2)
 	);
 };
 

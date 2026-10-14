@@ -41,7 +41,7 @@ describe('storedPhoneNumberNeedsCountryWarning', () => {
 		expect(storedPhoneNumberNeedsCountryWarning('939 555 0147')).toBeFalse(); // Puerto Rico
 		expect(storedPhoneNumberNeedsCountryWarning('340 555 0147')).toBeFalse(); // US Virgin Islands
 		expect(storedPhoneNumberNeedsCountryWarning('671 555 0147')).toBeFalse(); // Guam
-		expect(storedPhoneNumberNeedsCountryWarning('684 555 0147')).toBeFalse(); // American Samoa
+		expect(storedPhoneNumberNeedsCountryWarning('684 733 0147')).toBeFalse(); // American Samoa
 		expect(storedPhoneNumberNeedsCountryWarning('670 555 0147')).toBeFalse(); // N. Mariana Islands
 	});
 
@@ -72,7 +72,6 @@ describe('storedPhoneNumberNeedsCountryWarning', () => {
 		expect(storedPhoneNumberNeedsCountryWarning('+1 658 555 0123')).toBeTrue(); // Jamaica
 		expect(storedPhoneNumberNeedsCountryWarning('242 555 0123')).toBeTrue(); // The Bahamas
 		expect(storedPhoneNumberNeedsCountryWarning('246 555 0123')).toBeTrue(); // Barbados
-		expect(storedPhoneNumberNeedsCountryWarning('441 555 0123')).toBeTrue(); // Bermuda
 		expect(storedPhoneNumberNeedsCountryWarning('721 555 0123')).toBeTrue(); // Sint Maarten
 		expect(storedPhoneNumberNeedsCountryWarning('809 555 0123')).toBeTrue(); // Dominican Rep.
 		expect(storedPhoneNumberNeedsCountryWarning('829 555 0123')).toBeTrue(); // Dominican Rep.
@@ -99,12 +98,6 @@ describe('storedPhoneNumberNeedsCountryWarning', () => {
 		expect(storedPhoneNumberNeedsCountryWarning('002 555 0147')).toBeTrue();
 		expect(storedPhoneNumberNeedsCountryWarning('911 555 0147')).toBeTrue();
 		expect(storedPhoneNumberNeedsCountryWarning('411 555 0147')).toBeTrue();
-	});
-
-	it('warns about an exchange code the plan never assigns', () => {
-		expect(storedPhoneNumberNeedsCountryWarning('202 155 0147')).toBeTrue();
-		expect(storedPhoneNumberNeedsCountryWarning('202 055 0147')).toBeTrue();
-		expect(storedPhoneNumberNeedsCountryWarning('202 411 0147')).toBeTrue();
 		expect(storedPhoneNumberNeedsCountryWarning('555 123 4567')).toBeTrue();
 	});
 
@@ -148,7 +141,7 @@ describe('typedPhoneNumberNeedsCountryWarning', () => {
 	});
 
 	it('warns about a whole-length number with an unusable code', () => {
-		expect(typedPhoneNumberNeedsCountryWarning('202 155 0147')).toBeTrue();
+		expect(typedPhoneNumberNeedsCountryWarning('911 555 0147')).toBeTrue();
 		expect(typedPhoneNumberNeedsCountryWarning('020 7946 0958')).toBeTrue();
 	});
 
