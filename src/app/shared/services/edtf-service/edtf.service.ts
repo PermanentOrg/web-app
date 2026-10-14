@@ -8,7 +8,10 @@ import {
 	isValid,
 	parse,
 } from 'date-fns';
-import { TimezoneService } from '@shared/services/timezone-service/timezone.service';
+import {
+	TimezoneService,
+	WallClockDateTime,
+} from '@shared/services/timezone-service/timezone.service';
 
 export enum DateQualifier {
 	Approximate = 'approximate',
@@ -479,10 +482,27 @@ export class EdtfService {
 	private inferTimezoneIdFromOffset(
 		dateTimeModel: DateTimeModel | null,
 	): string | null {
-		const timezoneOffset =
-			dateTimeModel?.time?.timezoneOffset ??
-			dateTimeModel?.endTime?.timezoneOffset;
-		return this.timezoneService.getFirstTimezoneIdForOffset(timezoneOffset);
+		return (
+			this.inferTimezoneIdFromSide(dateTimeModel?.date, dateTimeModel?.time) ??
+			this.inferTimezoneIdFromSide(
+				dateTimeModel?.endDate,
+				dateTimeModel?.endTime,
+			)
+		);
+	}
+
+	private inferTimezoneIdFromSide(
+		date: DateModel | undefined,
+		time: TimeModel | undefined,
+	): string | null {
+		const wallClock = this.toWallClock(date, time);
+		if (!time?.timezoneOffset || !wallClock) {
+			return null;
+		}
+		return this.timezoneService.getFirstTimezoneIdForOffset(
+			time.timezoneOffset,
+			wallClock,
+		);
 	}
 
 	/**
@@ -514,21 +534,32 @@ export class EdtfService {
 		time: TimeModel,
 		timezoneId: string | undefined,
 	): string | null {
-		if (!timezoneId || !date?.year || !date?.month || !date?.day) {
+		const wallClock = this.toWallClock(date, time);
+		if (!timezoneId || !wallClock) {
+			return null;
+		}
+		return this.timezoneService.getOffsetForWallClock(timezoneId, wallClock);
+	}
+
+	private toWallClock(
+		date: DateModel | undefined,
+		time: TimeModel | undefined,
+	): WallClockDateTime | null {
+		if (!date?.year || !date?.month || !date?.day || !time) {
 			return null;
 		}
 		const time24Hour = this.parseTimeAs24Hour(time);
 		if (!time24Hour) {
 			return null;
 		}
-		return this.timezoneService.getOffsetForWallClock(timezoneId, {
+		return {
 			year: parseInt(date.year, 10),
 			month: parseInt(date.month, 10),
 			day: parseInt(date.day, 10),
 			hour: time24Hour.hour,
 			minute: time24Hour.minute,
 			second: time24Hour.second,
-		});
+		};
 	}
 
 	private extDateToDateTimeModel(

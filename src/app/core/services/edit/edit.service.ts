@@ -380,7 +380,7 @@ export class EditService {
 			item.update(changes);
 			await this.updateItems([item], whitelist);
 		} catch (err) {
-			item.update(originalValues as Partial<ItemVO>);
+			this.restoreItemValues(item, originalValues);
 
 			if (err instanceof FolderResponse || err instanceof RecordResponse) {
 				this.message.showError({
@@ -395,6 +395,23 @@ export class EditService {
 				});
 			}
 		}
+	}
+
+	/**
+	 * VO update() skips undefined values, so a field that was unset before an
+	 * optimistic change has to be unset by hand or it keeps a value the server
+	 * never stored.
+	 */
+	private restoreItemValues(
+		item: ItemVO,
+		originalValues: Record<string, unknown>,
+	): void {
+		item.update(originalValues as Partial<ItemVO>);
+		Object.keys(originalValues).forEach((key) => {
+			if (originalValues[key] === undefined) {
+				item[key] = undefined;
+			}
+		});
 	}
 
 	async updateItems(

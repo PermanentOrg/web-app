@@ -548,6 +548,30 @@ describe('EditService', () => {
 		expect(record.timezone).toBe('America/Chicago');
 	});
 
+	it('should unset a property that had no value before a failed save', async () => {
+		const messageService = TestBed.inject(MessageService);
+		spyOn(messageService, 'showError');
+		spyOn(console, 'error');
+
+		const record = new RecordVO({ recordId: 1, displayTime: 'original-value' });
+
+		(apiService.record.updateStelaRecord as jasmine.Spy).and.returnValue(
+			Promise.reject({}),
+		);
+		(apiService.record.update as jasmine.Spy).and.returnValue(
+			Promise.resolve([]),
+		);
+
+		await service.saveItemVoProperties(
+			record,
+			{ displayTime: 'new-value', timezone: 'Europe/Bucharest' },
+			['displayTime'],
+		);
+
+		expect(record.displayTime).toBe('original-value');
+		expect(record.timezone).toBeUndefined();
+	});
+
 	it('should apply several properties before the update call', async () => {
 		const record = new RecordVO({ recordId: 1 });
 		let timezoneWhenSent: string;

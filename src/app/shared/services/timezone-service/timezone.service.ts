@@ -49,6 +49,12 @@ export class TimezoneService {
 	private groupedOptions: TimezoneGroup[] | null = null;
 	private optionsByTimezoneId: Map<string, TimezoneOption> | null = null;
 	private countryNameByTimezoneId: Map<string, string> | null = null;
+	// Building a formatter costs far more than using one, and inferring a zone
+	// asks every zone for its offset.
+	private readonly timezoneNameFormatters = new Map<
+		string,
+		Intl.DateTimeFormat
+	>();
 
 	getGroupedOptions(): TimezoneGroup[] {
 		this.buildOptionsOnce();
@@ -92,12 +98,18 @@ export class TimezoneService {
 	}
 
 	/**
-	 * The first zone whose current offset matches the one given, or null when no
-	 * zone sits there today. An offset belongs to many places at once, so this
-	 * can only ever be a guess; taking the first identifier in the list makes it
-	 * a stable one, so the same offset always infers the same zone.
+	 * The first zone that sat on the given offset at the given wall-clock
+	 * reading, or null when none did. Zones move between offsets across daylight
+	 * saving and history, so the comparison is made on the record's own date
+	 * rather than today's, which keeps the inferred zone writing back the same
+	 * offset it was inferred from. An offset belongs to many places at once, so
+	 * this can only ever be a guess; taking the first identifier in the list
+	 * makes it a stable one.
 	 */
-	getFirstTimezoneIdForOffset(offset: unknown): string | null {
+	getFirstTimezoneIdForOffset(
+		offset: unknown,
+		wallClock: WallClockDateTime,
+	): string | null {
 		if (typeof offset !== 'string' || !EDTF_OFFSET_PATTERN.test(offset)) {
 			return null;
 		}
@@ -106,12 +118,13 @@ export class TimezoneService {
 		if (offsetMinutes === null) {
 			return null;
 		}
-		const offsetLabel = `GMT${this.formatOffsetMinutes(offsetMinutes)}`;
 
 		this.buildOptionsOnce();
 		for (const group of this.groupedOptions) {
 			const match = group.options.find(
-				(option) => option.offsetLabel === offsetLabel,
+				(option) =>
+					this.getOffsetMinutesAtWallClock(option.timezoneId, wallClock) ===
+					offsetMinutes,
 			);
 			if (match) {
 				return match.timezoneId;
@@ -144,8 +157,23 @@ export class TimezoneService {
 			return null;
 		}
 
-		// A wall-clock reading has no offset yet, so read the offset as if it were
-		// UTC, shift by that much, then read again at the corrected instant.
+		const offsetMinutes = this.getOffsetMinutesAtWallClock(
+			timezoneId,
+			wallClock,
+		);
+		return offsetMinutes === null
+			? null
+			: this.formatOffsetMinutes(offsetMinutes);
+	}
+
+	/**
+	 * A wall-clock reading has no offset yet, so the offset is read as if it
+	 * were UTC, shifted by that much, then read again at the corrected instant.
+	 */
+	private getOffsetMinutesAtWallClock(
+		timezoneId: string,
+		wallClock: WallClockDateTime,
+	): number | null {
 		const wallClockAsUtcMs = this.toUtcMilliseconds(wallClock);
 		const approximateOffsetMinutes = this.getOffsetMinutesAtInstant(
 			timezoneId,
@@ -155,15 +183,12 @@ export class TimezoneService {
 			return null;
 		}
 
-		const offsetMinutes = this.getOffsetMinutesAtInstant(
+		return this.getOffsetMinutesAtInstant(
 			timezoneId,
 			new Date(
 				wallClockAsUtcMs - approximateOffsetMinutes * MILLISECONDS_PER_MINUTE,
 			),
 		);
-		return offsetMinutes === null
-			? null
-			: this.formatOffsetMinutes(offsetMinutes);
 	}
 
 	private buildOptionsOnce(): void {
@@ -349,13 +374,29 @@ export class TimezoneService {
 	): string {
 		try {
 			return (
-				new Intl.DateTimeFormat('en-US', { timeZone: timezoneId, timeZoneName })
+				this.getTimezoneNameFormatter(timezoneId, timeZoneName)
 					.formatToParts(instant)
 					.find((part) => part.type === 'timeZoneName')?.value ?? ''
 			);
 		} catch {
 			return '';
 		}
+	}
+
+	private getTimezoneNameFormatter(
+		timezoneId: string,
+		timeZoneName: 'longOffset' | 'longGeneric' | 'long',
+	): Intl.DateTimeFormat {
+		const cacheKey = `${timezoneId}|${timeZoneName}`;
+		let formatter = this.timezoneNameFormatters.get(cacheKey);
+		if (!formatter) {
+			formatter = new Intl.DateTimeFormat('en-US', {
+				timeZone: timezoneId,
+				timeZoneName,
+			});
+			this.timezoneNameFormatters.set(cacheKey, formatter);
+		}
+		return formatter;
 	}
 
 	private toUtcMilliseconds(wallClock: WallClockDateTime): number {
