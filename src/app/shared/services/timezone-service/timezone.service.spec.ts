@@ -284,51 +284,98 @@ describe('TimezoneService', () => {
 	});
 
 	describe('getFirstTimezoneIdForOffset', () => {
-		const offsetLabelOf = (timezoneId: string): string =>
-			service.getOption(timezoneId).offsetLabel;
+		const julyNoon: WallClockDateTime = {
+			year: 2026,
+			month: 7,
+			day: 15,
+			hour: 12,
+			minute: 0,
+			second: 0,
+		};
+		const januaryNoon: WallClockDateTime = { ...julyNoon, month: 1 };
 
 		it('should return null for anything that is not an EDTF offset', () => {
-			expect(service.getFirstTimezoneIdForOffset(undefined)).toBeNull();
-			expect(service.getFirstTimezoneIdForOffset(null)).toBeNull();
-			expect(service.getFirstTimezoneIdForOffset('')).toBeNull();
-			expect(
-				service.getFirstTimezoneIdForOffset('Europe/Bucharest'),
-			).toBeNull();
-
-			expect(service.getFirstTimezoneIdForOffset('GMT+02:00')).toBeNull();
-			expect(service.getFirstTimezoneIdForOffset('+2:00')).toBeNull();
-			expect(service.getFirstTimezoneIdForOffset('+0200')).toBeNull();
-			expect(service.getFirstTimezoneIdForOffset(120)).toBeNull();
-		});
-
-		it('should return a zone sitting on the offset asked for', () => {
-			for (const offset of ['+00:00', '+01:00', '+02:00', '+05:30', '-05:00']) {
-				const timezoneId = service.getFirstTimezoneIdForOffset(offset);
-
-				expect(timezoneId).toBeTruthy();
-				expect(offsetLabelOf(timezoneId)).toEqual(`GMT${offset}`);
+			for (const offset of [
+				undefined,
+				null,
+				'',
+				'Europe/Bucharest',
+				'GMT+02:00',
+				'+2:00',
+				'+0200',
+				120,
+			]) {
+				expect(
+					service.getFirstTimezoneIdForOffset(offset, julyNoon),
+				).toBeNull();
 			}
 		});
 
+		it('should return a zone sitting on the offset at the date asked for', () => {
+			for (const wallClock of [januaryNoon, julyNoon]) {
+				for (const offset of [
+					'+00:00',
+					'+01:00',
+					'+02:00',
+					'+05:30',
+					'+11:00',
+					'-05:00',
+				]) {
+					const timezoneId = service.getFirstTimezoneIdForOffset(
+						offset,
+						wallClock,
+					);
+
+					expect(timezoneId).toBeTruthy();
+					expect(service.getOffsetForWallClock(timezoneId, wallClock)).toEqual(
+						offset,
+					);
+				}
+			}
+		});
+
+		it('should skip a zone that only sits on the offset at another time of year', () => {
+			// Antarctica/Macquarie sits on +11:00 in January and +10:00 in July.
+			expect(
+				service.getOffsetForWallClock('Antarctica/Macquarie', januaryNoon),
+			).toEqual('+11:00');
+
+			expect(
+				service.getFirstTimezoneIdForOffset('+11:00', julyNoon),
+			).not.toEqual('Antarctica/Macquarie');
+		});
+
 		it('should return the first identifier in the grouped list', () => {
-			const timezoneId = service.getFirstTimezoneIdForOffset('+02:00');
+			const timezoneId = service.getFirstTimezoneIdForOffset(
+				'+02:00',
+				julyNoon,
+			);
 			const firstMatch = service
 				.getGroupedOptions()
 				.flatMap((group) => group.options)
-				.find((option) => option.offsetLabel === 'GMT+02:00');
+				.find(
+					(option) =>
+						service.getOffsetForWallClock(option.timezoneId, julyNoon) ===
+						'+02:00',
+				);
 
 			expect(timezoneId).toEqual(firstMatch.timezoneId);
 		});
 
-		it('should infer the same zone every time for the same offset', () => {
-			expect(service.getFirstTimezoneIdForOffset('-05:00')).toEqual(
-				service.getFirstTimezoneIdForOffset('-05:00'),
+		it('should infer the same zone every time for the same offset and date', () => {
+			expect(service.getFirstTimezoneIdForOffset('-05:00', julyNoon)).toEqual(
+				service.getFirstTimezoneIdForOffset('-05:00', julyNoon),
 			);
 		});
 
-		it('should return null for an offset no zone sits on at any time of year', () => {
-			expect(service.getFirstTimezoneIdForOffset('-12:00')).toBeNull();
-			expect(service.getFirstTimezoneIdForOffset('+13:15')).toBeNull();
+		it('should return null for an offset no zone sits on at that date', () => {
+			expect(
+				service.getFirstTimezoneIdForOffset('-12:00', julyNoon),
+			).toBeNull();
+
+			expect(
+				service.getFirstTimezoneIdForOffset('+13:15', julyNoon),
+			).toBeNull();
 		});
 	});
 

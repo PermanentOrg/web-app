@@ -543,6 +543,33 @@ describe('EditDateTimeModalComponent', () => {
 			expect(component.selectedTimezoneId()).toBeNull();
 		});
 
+		describe('when a clear empties the shared zone', () => {
+			beforeEach(() => {
+				component.time.update((time) => ({
+					...time,
+					timezoneOffset: '+02:00',
+				}));
+				component.endTime.update((time) => ({
+					...time,
+					timezoneOffset: '+02:00',
+				}));
+			});
+
+			it('should drop the offset on both sides when clearing the start', () => {
+				component.clearStart();
+
+				expect(component.time().timezoneOffset).toBeUndefined();
+				expect(component.endTime().timezoneOffset).toBeUndefined();
+			});
+
+			it('should drop the offset on both sides when clearing the end', () => {
+				component.clearEnd();
+
+				expect(component.time().timezoneOffset).toBeUndefined();
+				expect(component.endTime().timezoneOffset).toBeUndefined();
+			});
+		});
+
 		it('should accept being emptied again', () => {
 			component.onTimezoneChange('Europe/Bucharest');
 			component.onTimezoneChange(null);

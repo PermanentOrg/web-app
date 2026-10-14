@@ -278,7 +278,7 @@ export class EditDateTimeModalComponent implements OnInit {
 		this.date.set({ year: '', month: '', day: '' });
 		this.time.set({ ...DEFAULT_TIME });
 		this.savedStartState.set(null);
-		this.selectedTimezoneId.set(null);
+		this.onTimezoneChange(null);
 	}
 
 	clearEnd(): void {
@@ -286,7 +286,7 @@ export class EditDateTimeModalComponent implements OnInit {
 		this.endDate.set({ year: '', month: '', day: '' });
 		this.endTime.set({ ...DEFAULT_TIME });
 		this.savedEndState.set(null);
-		this.selectedTimezoneId.set(null);
+		this.onTimezoneChange(null);
 	}
 
 	onCancel(): void {

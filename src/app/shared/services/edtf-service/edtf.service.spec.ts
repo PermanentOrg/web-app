@@ -1,5 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { TimezoneService } from '@shared/services/timezone-service/timezone.service';
+import {
+	TimezoneService,
+	WallClockDateTime,
+} from '@shared/services/timezone-service/timezone.service';
 import {
 	EdtfService,
 	DateTimeModel,
@@ -1758,6 +1761,19 @@ describe('EdtfService', () => {
 	describe('withTimezone', () => {
 		const parsedWithOffset = (): DateTimeModel =>
 			service.toDateTimeModel('1985-05-12T12:45:00+02:00');
+		const firstZoneAt = (
+			offset: string,
+			wallClock: Partial<WallClockDateTime>,
+		): string =>
+			timezoneService.getFirstTimezoneIdForOffset(offset, {
+				year: 1985,
+				month: 5,
+				day: 12,
+				hour: 12,
+				minute: 45,
+				second: 0,
+				...wallClock,
+			});
 
 		it('should stamp the identifier the item stores', () => {
 			const model = service.withTimezone(
@@ -1771,9 +1787,7 @@ describe('EdtfService', () => {
 		it('should infer a zone from the offset when the item stores none', () => {
 			const model = service.withTimezone(parsedWithOffset(), null);
 
-			expect(model.time.timezoneId).toEqual(
-				timezoneService.getFirstTimezoneIdForOffset('+02:00'),
-			);
+			expect(model.time.timezoneId).toEqual(firstZoneAt('+02:00', {}));
 		});
 
 		it('should prefer the stored zone over the one the offset implies', () => {
@@ -1789,7 +1803,7 @@ describe('EdtfService', () => {
 			for (const stored of ['', '   ', 'Not/AZone', 42, {}]) {
 				expect(
 					service.withTimezone(parsedWithOffset(), stored).time.timezoneId,
-				).toEqual(timezoneService.getFirstTimezoneIdForOffset('+02:00'));
+				).toEqual(firstZoneAt('+02:00', {}));
 			}
 		});
 
@@ -1797,7 +1811,13 @@ describe('EdtfService', () => {
 			const model = service.toDateTimeModel('1985/2026-01-15T10:00:00-05:00');
 
 			expect(service.withTimezone(model, null).time.timezoneId).toEqual(
-				timezoneService.getFirstTimezoneIdForOffset('-05:00'),
+				firstZoneAt('-05:00', {
+					year: 2026,
+					month: 1,
+					day: 15,
+					hour: 10,
+					minute: 0,
+				}),
 			);
 		});
 
@@ -1846,6 +1866,17 @@ describe('EdtfService', () => {
 			);
 
 			expect(model.time.timezoneId).toEqual('Europe/Bucharest');
+		});
+
+		it('should infer a zone that writes back the offset it was read with', () => {
+			const edtfDate = '2026-07-15T12:00:00+11:00';
+			const model = service.withTimezone(
+				service.toDateTimeModel(edtfDate),
+				null,
+			);
+
+			expect(model.time.timezoneId).toBeTruthy();
+			expect(service.toEdtfDate(model)).toBe(edtfDate);
 		});
 
 		it('should persist the inferred zone once the date is saved', () => {
