@@ -7,7 +7,10 @@
 						tabindex="0"
 						(focus)="startEdit()"
 						type="text"
-						name="text"
+						[id]="inputElementId"
+						[name]="inputElementId"
+						[attr.name]="inputElementId"
+						autocomplete="off"
 						class="form-control"
 						[class.is-editing]="isEditing"
 						[(ngModel)]="editValue"
@@ -65,7 +68,10 @@
 					<textarea
 						tabindex="0"
 						(focus)="startEdit()"
-						name="textarea"
+						[id]="inputElementId"
+						[name]="inputElementId"
+						[attr.name]="inputElementId"
+						autocomplete="off"
 						class="form-control"
 						[class.is-editing]="isEditing"
 						[attr.maxlength]="maxLength > 0 ? maxLength : null"
@@ -125,7 +131,10 @@
 				@if (isEditing) {
 					<div class="inline-value-container" [class.can-edit]="canEdit">
 						<textarea
-							name="textarea"
+							[id]="inputElementId"
+							[name]="inputElementId"
+							[attr.name]="inputElementId"
+							autocomplete="off"
 							class="form-control"
 							[class.is-editing]="isEditing"
 							[attr.maxlength]="maxLength > 0 ? maxLength : null"
@@ -258,7 +267,10 @@
 					[class.showing-empty-message]="!displayValue && emptyMessage"
 				>
 					<select
-						name="select"
+						[id]="inputElementId"
+						[name]="inputElementId"
+						[attr.name]="inputElementId"
+						autocomplete="off"
 						class="form-select"
 						#input
 						#model="ngModel"
