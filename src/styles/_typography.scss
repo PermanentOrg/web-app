@@ -11,7 +11,6 @@ $font-family-base:
 	'Apple Color Emoji',
 	'Segoe UI Emoji',
 	'Segoe UI Symbol' !default;
-
 $base-size: 16px;
 $large-size: 1.25rem;
 $xl-size: 1.875rem;
@@ -31,6 +30,7 @@ $xl-size: 1.875rem;
 
 	/* Support for all WebKit browsers. */
 	-webkit-font-smoothing: antialiased;
+
 	/* Support for Safari and Chrome. */
 	text-rendering: optimizeLegibility;
 

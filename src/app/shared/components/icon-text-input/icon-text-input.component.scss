@@ -72,6 +72,7 @@
 
 .pr-icon-text-input-control {
 	@include input-segment;
+
 	// No `@font-face` declares a plain 'Usual'; the faces are named per weight.
 	font-family: 'UsualRegular', sans-serif;
 	text-align: left;
@@ -84,6 +85,7 @@
 	border: none;
 	padding: 0;
 	cursor: pointer;
+
 	// `display` rather than `visibility` so it leaves the tab order too.
 	display: none;
 	align-items: center;

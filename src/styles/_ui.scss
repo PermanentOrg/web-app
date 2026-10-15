@@ -301,6 +301,7 @@ $drag-outline-border: 5px;
 
 	&.active {
 		opacity: 1;
+
 		// $blur-size: 10px;
 		// backdrop-filter: blur($blur-size);
 		// -webkit-backdrop-filter: blur($blur-size);
@@ -322,6 +323,7 @@ $drag-outline-border: 5px;
 		justify-content: center;
 		min-width: 15rem;
 		max-width: calc($file-list-width-desktop / 3);
+
 		// transform-origin: 50% 50%;
 
 		.drag-service-cursor-item,

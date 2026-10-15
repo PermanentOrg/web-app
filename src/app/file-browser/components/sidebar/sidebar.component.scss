@@ -89,6 +89,7 @@ $sidebar-thumb-height: 200px;
 .shared-with-archive {
 	display: flex;
 	align-items: center;
+
 	$thumb-size: 30px;
 
 	&:not(:last-child) {

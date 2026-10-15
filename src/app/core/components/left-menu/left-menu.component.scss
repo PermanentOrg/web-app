@@ -1,13 +1,10 @@
 @import 'variables';
 
 $transition-length: $default-transition-length;
-
 $left-menu-icon-width: 3 * $grid-unit;
-
 $hover-color: lighten($PR-blue-900, 4%);
 $active-color: $PR-orange;
 $active-indicator-color: lighten($active-color, 7%);
-
 $archive-options-shadow-color: rgba($PR-brand-black, 0.1);
 $archive-options-shadow-spread: $grid-unit * 0.25;
 $archive-options-shadow-offset: 0.5rem;
