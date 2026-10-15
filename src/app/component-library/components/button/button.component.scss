@@ -7,6 +7,7 @@
 	& > .button-text {
 		color: $PR-brand-white;
 		margin: 0;
+
 		@include bodyMedium;
 
 		@if $isLink {
@@ -18,9 +19,11 @@
 @mixin lightButton($isLink: false) {
 	background-color: $PR-brand-white;
 	border: 1px solid rgba($PR-blue-200, 1);
+
 	& > .button-text {
 		color: rgba($PR-blue-900, 1);
 		margin: 0;
+
 		@include bodyMedium;
 
 		@if $isLink {
@@ -66,10 +69,12 @@
 	&-primary {
 		&.button-light {
 			@include darkButton();
+
 			&:focus {
 				border: 2px solid $PR-brand-white;
 			}
 		}
+
 		&.button-dark {
 			@include lightButton();
 		}
@@ -78,12 +83,15 @@
 	&-secondary {
 		&.button-light {
 			@include lightButton();
+
 			&:focus {
 				border: 2px solid $PR-brand-black;
 			}
 		}
+
 		&.button-dark {
 			@include darkButton();
+
 			border: 1px solid rgba($PR-brand-white, 0.32);
 		}
 	}
@@ -91,10 +99,13 @@
 	&-tertiary {
 		&.button-dark {
 			@include darkButton();
+
 			border: 1px solid transparent;
 		}
+
 		&.button-light {
 			@include lightButton();
+
 			border: 1px solid transparent;
 		}
 	}
@@ -108,6 +119,7 @@
 		padding: 12px 24px;
 		height: 56px;
 		justify-content: space-between;
+
 		&-no-icon {
 			justify-content: center;
 		}
@@ -120,19 +132,24 @@
 	&-text {
 		color: $PR-brand-white;
 		margin: 0;
+
 		@include bodyMedium;
 	}
 
 	&-link {
 		margin-left: 4px;
 		padding: 0px;
+
 		&.button-dark {
 			@include darkButton(true);
+
 			font-size: 14px;
 			border: 1px solid transparent;
 		}
+
 		&.button-light {
 			@include lightButton(true);
+
 			font-size: 14px;
 			border: 1px solid transparent;
 		}

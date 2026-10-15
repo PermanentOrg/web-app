@@ -75,7 +75,6 @@ p {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-
 	gap: 16px;
 	padding-bottom: 100px;
 
@@ -94,6 +93,7 @@ p {
 
 .back-button {
 	width: 280px;
+
 	@include beforeDesktop {
 		width: 100%;
 	}
@@ -101,6 +101,7 @@ p {
 
 .next-button {
 	width: 280px;
+
 	@include beforeDesktop {
 		width: 100%;
 	}

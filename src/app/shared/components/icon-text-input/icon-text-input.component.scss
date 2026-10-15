@@ -8,6 +8,7 @@
 
 .pr-icon-text-input {
 	@include input-container;
+
 	height: 48px;
 	border-radius: 6px;
 	border-color: $PR-blue-50;
@@ -16,6 +17,7 @@
 
 	&:focus-within {
 		@include input-focus-state;
+
 		border-color: $PR-blue-100;
 
 		.pr-icon-text-input-clear {

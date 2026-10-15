@@ -8,11 +8,13 @@ form {
 
 .page-title {
 	@include pageTitle;
+
 	margin-bottom: 32px;
 }
 
 .mfa-text {
 	@include pageText;
+
 	&-continue {
 		margin-bottom: 50px;
 	}

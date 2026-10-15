@@ -33,6 +33,7 @@
 		justify-content: center;
 		flex-direction: column;
 	}
+
 	& .label {
 		font-weight: 700;
 		font-family: 'Open-Sans', sans-serif;
@@ -54,7 +55,6 @@
 	& .gigabytes {
 		display: inline-flex;
 		align-items: center;
-
 		font-family: 'Open Sans';
 		font-style: italic;
 		font-weight: 400;
@@ -110,11 +110,13 @@
 .panel-title {
 	@include tabbedDialogPanelTitle;
 }
+
 .input-error {
 	margin-bottom: 1rem;
 	color: $red;
 	font-style: italic;
 }
+
 .error-message {
 	margin-left: 200px;
 	margin-bottom: 20px;
@@ -130,6 +132,7 @@
 
 .not-integer {
 	display: flex;
+
 	& > p {
 		margin-bottom: 0px;
 	}

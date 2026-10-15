@@ -1,5 +1,4 @@
 @use 'sass:math';
-
 @import 'variables';
 
 :host {
@@ -54,6 +53,7 @@
 .edit-tag {
 	padding: 0.5rem;
 	$multi-select-radius: 20px;
+
 	display: flex;
 	align-items: center;
 	cursor: pointer;

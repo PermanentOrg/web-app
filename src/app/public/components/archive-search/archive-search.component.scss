@@ -48,15 +48,19 @@ form {
 		top: 9px;
 		right: 0;
 	}
+
 	&.gallery {
 		min-width: auto;
+
 		form {
 			max-width: 100%;
 		}
+
 		input {
 			&::placeholder {
 				color: $PR-blue;
 			}
+
 			width: 100%;
 			outline: none;
 			color: $PR-blue;

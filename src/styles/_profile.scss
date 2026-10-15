@@ -11,7 +11,6 @@ $profile-sidebar-width: pxToGrid(360px);
 	background-size: cover;
 	background-position: 50% 50%;
 	position: relative;
-
 	cursor: pointer;
 
 	&.show-gradient {
@@ -19,6 +18,7 @@ $profile-sidebar-width: pxToGrid(360px);
 			$PR-blue-900 0%,
 			$PR-purple 66%,
 			mix($PR-purple, $PR-orange, 50%) 100%;
+
 		@include gradient(to top left, $list);
 	}
 
@@ -55,6 +55,7 @@ $profile-sidebar-width: pxToGrid(360px);
 	button {
 		margin: 0;
 		width: auto;
+
 		@include gridHeightButton;
 	}
 
@@ -72,13 +73,12 @@ $profile-sidebar-width: pxToGrid(360px);
 	margin-top: $grid-unit;
 	max-width: $profile-max-width;
 	$height: 3 * $grid-unit;
+
 	height: $height;
 	display: flex;
 	align-items: center;
 	padding-left: $grid-unit;
-
 	background-color: $gray-200;
-
 	font-size: $font-size-lg;
 	font-weight: $font-weight-bold;
 }
@@ -90,6 +90,7 @@ $profile-sidebar-width: pxToGrid(360px);
 
 	> * {
 		flex: 1 1 100%;
+
 		&:not(:last-child) {
 			margin-right: $grid-unit;
 		}

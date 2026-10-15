@@ -2,11 +2,13 @@
 
 :host {
 	display: block;
+
 	@include mainContentScrollDesktop;
 }
 
 .banner {
 	@include tabbedDialogPanelBanner;
+
 	background-image: url('/assets/svg/apps-banner.svg');
 	background-position: 50% 50%;
 	background-size: cover;
@@ -22,6 +24,7 @@
 		background-position: 24% 30%;
 		padding-right: $grid-unit;
 		padding-bottom: $grid-unit * 3;
+
 		.banner-text {
 			font-size: $font-size-sm;
 		}

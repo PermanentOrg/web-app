@@ -13,10 +13,12 @@ $bg-transition-length: 0.075s;
 
 :host {
 	display: block;
+
 	&.grid-view {
 		width: 50%;
 		float: left;
 		padding-bottom: 5px;
+
 		@for $i from 3 through 10 {
 			@media screen and (min-width: $i * $max-grid-width + 1) {
 				width: math.div(100%, $i);
@@ -42,6 +44,7 @@ $bg-transition-length: 0.075s;
 
 	.show-sidebar & {
 		width: 50%;
+
 		@for $i from 2 through 10 {
 			@media screen and (min-width: ($i * $max-grid-width-sidebar) + $sidebar-width + $left-menu-width + 1) {
 				width: math.div(100%, $i);
@@ -216,6 +219,7 @@ $bg-transition-length: 0.075s;
 
 .date {
 	@include file-list-col-date;
+
 	font-size: $font-size-sm;
 }
 
@@ -225,6 +229,7 @@ $bg-transition-length: 0.075s;
 
 .shared-by {
 	@include file-list-col-shared-by;
+
 	display: flex;
 	align-items: center;
 
@@ -302,6 +307,7 @@ $bg-transition-length: 0.075s;
 	.grid-view & {
 		position: relative;
 		font-size: 8rem;
+
 		> i,
 		> fa-icon {
 			font-size: 7rem;
@@ -326,6 +332,7 @@ $bg-transition-length: 0.075s;
 .grid-view .grid-item-type-icon {
 	$diameter: $grid-unit * 2;
 	$margin: $grid-unit * 0.5;
+
 	position: absolute;
 	bottom: $grid-info-section-height + $margin;
 	right: $margin;

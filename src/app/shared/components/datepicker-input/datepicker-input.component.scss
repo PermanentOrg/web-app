@@ -15,6 +15,7 @@
 
 .pr-date-input-group {
 	@include input-container;
+
 	padding: 0 0 0 12px;
 
 	&:focus-within,
@@ -33,6 +34,7 @@
 
 .pr-date-segment {
 	@include input-segment;
+
 	width: 36px;
 
 	&.year {
@@ -48,6 +50,7 @@
 
 .pr-calendar-icon-wrapper {
 	@include icon-wrapper;
+
 	margin-left: auto;
 }
 

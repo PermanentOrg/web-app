@@ -30,8 +30,10 @@
 	padding: $grid-unit * 0.5;
 	border-top: $file-list-border;
 	background-color: white;
+
 	.btn {
 		@include gridHeightButtonSmall;
+
 		width: auto;
 		flex: 0 0 auto;
 		margin: 0;

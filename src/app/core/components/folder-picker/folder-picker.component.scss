@@ -10,7 +10,6 @@ $row-height: 2 * $grid-unit;
 	right: $picker-margin;
 	transform: translateY(100%);
 	border-radius: $border-radius;
-
 	display: flex;
 	flex-direction: column;
 }
@@ -102,6 +101,7 @@ $row-height: 2 * $grid-unit;
 .picker-footer {
 	padding: 0px 10px;
 	display: flex;
+
 	button {
 		max-width: 100%;
 	}

@@ -23,9 +23,11 @@
 	margin-top: 50px;
 	margin-bottom: 20px;
 	gap: 32px;
+
 	& > .btn-link {
 		text-decoration: underline;
 	}
+
 	& > .btn {
 		width: 250px;
 		margin: 0;
@@ -44,6 +46,7 @@
 
 .name-archive-input {
 	position: relative;
+
 	& > p {
 		position: absolute;
 		color: $PR-blue-400;
@@ -56,6 +59,7 @@
 		left: 16px;
 		top: 5px;
 	}
+
 	& > .archive-text {
 		right: 50px;
 		top: 5px;
@@ -67,6 +71,7 @@
 	height: 75vh;
 	flex-direction: column;
 	justify-content: space-between;
+
 	@media screen and (max-width: 600px) {
 		width: 100%;
 	}

@@ -1,5 +1,4 @@
 @use 'sass:math';
-
 @import 'variables';
 
 @keyframes fadein {
@@ -29,17 +28,13 @@ $input-padding: 0.5rem;
 input {
 	width: 100%;
 	background: rgba(white, 0.2);
-
 	border: 1px solid transparent;
 	// border-bottom: 1px solid $PR-orange;
 	border-radius: $border-radius;
-
 	height: 2 * $grid-unit;
 	line-height: 2 * $grid-unit;
-
 	padding: 0 $input-padding;
 	padding-left: $icon-width + 2 * $input-padding;
-
 	color: white;
 	z-index: 11;
 	position: relative;
@@ -130,6 +125,7 @@ $result-padding-y: 0.25rem;
 		.thumbnail,
 		.folder-icon {
 			$size: $grid-unit;
+
 			flex: 0 0 $size;
 			height: $size;
 			background-size: contain;
@@ -186,6 +182,7 @@ $result-padding-y: 0.25rem;
 		flex-wrap: wrap;
 		padding: $result-padding-y * 2 $result-padding-x;
 		padding-bottom: $result-padding-y * 2 - 0.25rem;
+
 		.tag {
 			padding: 0.25rem 0.5rem;
 			border-radius: $border-radius;
@@ -205,8 +202,10 @@ $result-padding-y: 0.25rem;
 .fade-ring-loader {
 	margin: 0;
 	margin-left: 0.5rem;
+
 	&:after {
 		background: $PR-orange;
 	}
+
 	flex: 0 0 auto;
 }

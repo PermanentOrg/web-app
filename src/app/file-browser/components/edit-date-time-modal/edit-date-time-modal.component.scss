@@ -108,6 +108,7 @@
 	// Per-card clear link
 	.pr-clear-link {
 		@include clear-btn;
+
 		margin-left: auto;
 
 		i {
@@ -210,6 +211,7 @@
 	// Footer
 	.pr-dialog-footer {
 		@include panel-footer;
+
 		border-top: none;
 		padding: 24px;
 

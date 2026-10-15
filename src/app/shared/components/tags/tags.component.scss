@@ -1,5 +1,6 @@
 @import 'variables';
 $gutter-size: 0.25rem;
+
 .tags {
 	display: flex;
 	flex-wrap: wrap;
@@ -34,16 +35,19 @@ $gutter-size: 0.25rem;
 			hyphens: auto;
 			margin-bottom: 0;
 		}
+
 		.keyword {
 			background: rgba($PR-purple, 0.2);
 			max-width: 13rem;
 		}
+
 		.customMetadataField {
 			border-radius: 0.5rem 0rem 0rem 0.5rem;
 			color: $PR-brand-white;
 			background: $PR-blue-light;
 			max-width: 6.5rem;
 		}
+
 		.customMetadataValue {
 			border-radius: 0rem 0.5rem 0.5rem 0rem;
 			background: rgba($PR-blue-light, 0.2);

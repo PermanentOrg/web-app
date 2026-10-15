@@ -6,7 +6,6 @@ $header-height: 3 * $grid-unit;
 	background-color: $color;
 	display: flex;
 	align-items: center;
-
 	color: $text-color;
 	font-size: $font-size-lg;
 	padding: 0 $grid-unit;
@@ -21,7 +20,9 @@ $header-height: 3 * $grid-unit;
 		margin-left: auto;
 		flex: 0 0 auto;
 		width: auto;
+
 		@include gridHeightButton;
+
 		background: none;
 		outline: none;
 		display: flex;
@@ -35,6 +36,7 @@ $header-height: 3 * $grid-unit;
 	flex: 1 1 auto;
 	overflow-y: auto;
 	background-color: white;
+
 	@include desktop {
 		display: flex;
 		height: pxToGrid($height);
@@ -78,6 +80,7 @@ $header-height: 3 * $grid-unit;
 
 		&:hover {
 			text-decoration: none;
+
 			&::before {
 				transition: opacity 0ms;
 				opacity: 1;
@@ -86,6 +89,7 @@ $header-height: 3 * $grid-unit;
 
 		&.active {
 			font-weight: $font-weight-semibold;
+
 			&::before {
 				opacity: 1;
 				background-color: $color;
@@ -102,6 +106,7 @@ $header-height: 3 * $grid-unit;
 @mixin tabbedDialogPanel {
 	flex: 1 1 auto;
 	padding: 0 $grid-unit * 0.5;
+
 	@include desktop {
 		padding: $grid-unit;
 		overflow-y: auto;
@@ -164,6 +169,7 @@ $header-height: 3 * $grid-unit;
 			margin: 0;
 			margin-right: $grid-unit;
 		}
+
 		margin-bottom: $grid-unit;
 
 		@include beforeDesktop {
@@ -208,6 +214,7 @@ $header-height: 3 * $grid-unit;
 
 	button {
 		@include gridHeightButtonSmall;
+
 		margin: 0;
 		margin-right: auto;
 		margin-left: $labelWidth + $grid-unit;

@@ -52,6 +52,7 @@
 	@media screen and (min-width: 1024px) and (max-width: 1279px) {
 		width: 40%;
 	}
+
 	@media screen and (min-width: 1279px) and (max-width: 1440px) {
 		width: 35%;
 	}
@@ -85,7 +86,6 @@
 	background-position: center center;
 	flex-grow: 1;
 	border-radius: 1em;
-
 	margin-left: 20px;
 
 	@include beforeDesktop {
@@ -95,6 +95,7 @@
 
 .permanent-logo {
 	margin-bottom: 32px;
+
 	@include beforeDesktop {
 		width: 80%;
 

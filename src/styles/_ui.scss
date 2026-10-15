@@ -20,6 +20,7 @@ a.btn {
 
 .alert-wrapper {
 	max-width: $max-form-width + 100px;
+
 	.alert {
 		box-shadow: $box-shadow;
 	}
@@ -45,6 +46,7 @@ a.btn {
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
 	.mobile-safari:not(.mobile-safari-menu-bar-showing) {
 		--safe-area-inset-bottom: env(safe-area-inset-bottom);
+
 		.prompt,
 		pr-dialog .dialog-content .dialog-footer {
 			padding-bottom: calc(var(--safe-area-inset-bottom) + 30px) !important;
@@ -128,6 +130,7 @@ nav .btn {
 	height: $navbar-height;
 	display: flex;
 	align-items: center;
+
 	&:focus {
 		outline: none;
 		text-decoration: none;
@@ -181,12 +184,14 @@ a {
 .btn-wordpress,
 .btn-wordpress-alternate {
 	$size: 34px;
+
 	--bs-btn-color: #{$PR-orange};
 	--bs-btn-hover-color: #{$PR-orange};
 	--bs-btn-active-color: #{$PR-orange};
 	--bs-btn-bg: #{rgba(white, 0.2)};
 	--bs-btn-hover-bg: #{white};
 	--bs-btn-active-bg: #{white};
+
 	background: rgba(white, 0.2);
 	height: $size;
 	border-radius: $size * 0.5;
@@ -210,6 +215,7 @@ a {
 		--bs-btn-bg: #{$PR-purple};
 		--bs-btn-hover-bg: #{$PR-orange};
 		--bs-btn-active-bg: #{$PR-orange};
+
 		background: $PR-purple;
 		color: white;
 
@@ -314,7 +320,6 @@ $drag-outline-border: 5px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-
 		min-width: 15rem;
 		max-width: calc($file-list-width-desktop / 3);
 		// transform-origin: 50% 50%;
@@ -341,7 +346,6 @@ $drag-outline-border: 5px;
 		left: 50%;
 		transform: translateX(-50%);
 		background-color: $PR-orange;
-
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;
 

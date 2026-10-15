@@ -46,6 +46,7 @@ $share-preview-banner-height: 100px;
 
 	.banner-logo-wrapper {
 		flex: 0 0 200px;
+
 		img {
 			width: 100%;
 		}
@@ -147,6 +148,7 @@ $share-preview-banner-height: 100px;
 		flex: 0 1 auto;
 		display: flex;
 		margin-left: auto;
+
 		button {
 			display: inline;
 			margin-left: 5px;
@@ -155,7 +157,6 @@ $share-preview-banner-height: 100px;
 
 	@media screen and (max-width: $share-preview-max-width) {
 		width: 100%;
-
 		flex-wrap: wrap;
 
 		.share-preview-archive-thumb {
@@ -166,6 +167,7 @@ $share-preview-banner-height: 100px;
 			flex: 0 0 100%;
 			justify-content: space-evenly;
 			padding: 10px 5px 0px;
+
 			button {
 				margin: 0px 5px;
 				flex: 0 1 auto;
@@ -213,6 +215,7 @@ $share-preview-banner-height: 100px;
 		.buttons {
 			display: flex;
 			justify-content: space-evenly;
+
 			button:first-child {
 				margin-right: 5px;
 			}
@@ -231,6 +234,7 @@ $share-preview-banner-height: 100px;
 		flex: 1 1;
 		cursor: pointer;
 		margin: 0 auto;
+
 		@media screen and (max-width: 420px) {
 			padding: 0.5rem 0;
 		}
@@ -261,7 +265,6 @@ $share-preview-banner-height: 100px;
 	.share-preview-cover-content {
 		transform: translateY(100vh);
 		transition: transform $transition-length ease-in;
-
 		border-radius: 2rem;
 		flex: 0 1 500px;
 		padding: 4rem;

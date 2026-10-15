@@ -6,6 +6,7 @@
 	background: #fff;
 	padding: 20px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 	&-info {
 		display: flex;
 		flex-direction: column;
@@ -68,6 +69,7 @@
 	h3 {
 		margin-bottom: 40px;
 	}
+
 	@include beforeDesktop {
 		margin-left: 0;
 
@@ -92,6 +94,7 @@
 	& > a {
 		font-size: 22px;
 	}
+
 	@include beforeDesktop {
 		width: 390px;
 		height: 250px;
@@ -118,6 +121,7 @@
 
 .see-more {
 	display: none;
+
 	@include beforeDesktop {
 		display: inline;
 	}

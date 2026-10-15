@@ -13,7 +13,9 @@
 
 .page-title {
 	@include pageTitle;
+
 	margin-bottom: 16px;
+
 	@include beforeDesktop {
 		margin-bottom: 10%;
 	}
@@ -40,6 +42,7 @@
 	margin: 32px 0px;
 	display: flex;
 	justify-content: center;
+
 	& > a {
 		color: $PR-brand-white;
 		font-size: 14px;

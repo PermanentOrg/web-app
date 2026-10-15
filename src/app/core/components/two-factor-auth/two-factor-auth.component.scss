@@ -45,12 +45,12 @@ p {
 
 	.settings-item-content {
 		flex: 1 1 auto;
-
 		display: flex;
 		align-items: center;
 
 		.btn {
 			@include gridHeightButtonSmall;
+
 			margin: 0;
 			flex: 0 0 auto;
 			width: auto;
@@ -88,6 +88,7 @@ p {
 .button-container {
 	margin-top: 16px;
 	width: fit-content;
+
 	& > button {
 		margin: 0;
 	}
@@ -127,6 +128,7 @@ select {
 
 .button-group {
 	display: flex;
+
 	& > .btn-secondary {
 		margin-left: 20px;
 	}
