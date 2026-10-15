@@ -53,6 +53,11 @@ const customRedirects: RoutesWithData = [
 		redirectTo: '/p/archive/07r7-0000',
 		pathMatch: 'full',
 	},
+	{
+		path: 'earlyfordv8',
+		redirectTo: '/p/archive/0l37-0000',
+		pathMatch: 'full',
+	},
 ];
 
 const routes: RoutesWithData = [
