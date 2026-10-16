@@ -57,7 +57,6 @@ $tablet: 768px;
 $tablet-horizontal: 900px;
 $desktop: 1200px;
 $desktop-wide: 1440px;
-
 $scrollbar-margin: pxToGrid(20px);
 $taylor-ease: cubic-bezier(0.77, 0, 0.175, 1);
 $tweaked-ease: cubic-bezier(0.63, 0.01, 0.3, 1);
@@ -88,6 +87,7 @@ $linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 	$ui-width-px: $left-menu-width + $sidebar-width - (4 * $grid-unit);
 	$list-items-width-px: $scrollbar-margin + $file-list-row-height + $grid-unit;
 	$list-items-width-em: $file-list-type-col-width + $date-col-width;
+
 	@return calc(
 		100vw - #{$ui-width-px + $list-items-width-px} - #{$list-items-width-em}
 	);
