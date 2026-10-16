@@ -18,8 +18,20 @@ import { HttpService } from '@shared/services/http/http.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@shared/services/event/event.service';
+import { MessageService } from '@shared/services/message/message.service';
+import { UNSUPPORTED_PHONE_COUNTRY_NOTICE } from '@shared/utilities/phone-number';
 
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
+
+const UNITED_KINGDOM_PHONE_NUMBER = '+44 20 7946 0958';
+
+function unverifiedPhoneDataWithNumber(primaryPhone: string) {
+	const unverifiedPhoneData = cloneDeep(
+		require('@root/test/responses/auth.verify.unverifiedPhone.success.json'),
+	);
+	unverifiedPhoneData.Results[0].data[0].AccountVO.primaryPhone = primaryPhone;
+	return unverifiedPhoneData;
+}
 
 describe('VerifyComponent', () => {
 	let component: VerifyComponent;
@@ -167,6 +179,174 @@ describe('VerifyComponent', () => {
 		const verifyPhoneResponse = require('@root/test/responses/auth.verify.verifyPhone.success.json');
 		const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
 		req.flush(verifyPhoneResponse);
+	});
+
+	it('reports a phone code that fails to send on arrival', async () => {
+		const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+		await init(unverifiedPhoneData, { sendSms: true });
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendTextCreatedAccount'),
+		);
+		request.flush({ isSuccessful: false, isSystemUp: true, Results: [] });
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(showErrorSpy.calls.mostRecent().args[0].message).toBe(
+			'error.generic.internal',
+		);
+	});
+
+	it('reports a failed send that is not a response object', async () => {
+		const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+		await init(unverifiedPhoneData, { sendSms: true });
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendTextCreatedAccount'),
+		);
+		request.error(new ProgressEvent('network down'));
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(showErrorSpy.calls.mostRecent().args[0].message).toBe(
+			'error.generic.internal',
+		);
+	});
+
+	it('reports a resent phone code that fails without a response object', async () => {
+		const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+		await init(unverifiedPhoneData);
+		component.captchaEnabled = false;
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		component.resendCode();
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendTextCreatedAccount'),
+		);
+		request.error(new ProgressEvent('network down'));
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(component.waiting).toBeFalse();
+		expect(showErrorSpy.calls.mostRecent().args[0].message).toBe(
+			'error.generic.internal',
+		);
+	});
+
+	it('reports a resent phone code lookup failure as a code mismatch', async () => {
+		const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+		await init(unverifiedPhoneData);
+		component.captchaEnabled = false;
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		component.resendCode();
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendTextCreatedAccount'),
+		);
+		request.flush({
+			isSuccessful: false,
+			isSystemUp: true,
+			Results: [{ message: ['error.auth.lookup'] }],
+		});
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(component.waiting).toBeFalse();
+		expect(showErrorSpy.calls.mostRecent().args[0].message).toBe(
+			'warning.auth.token_does_not_match',
+		);
+	});
+
+	it('explains that only US and Canada numbers are supported when a phone code to another country fails to send', async () => {
+		await init(unverifiedPhoneDataWithNumber(UNITED_KINGDOM_PHONE_NUMBER), {
+			sendSms: true,
+		});
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendTextCreatedAccount'),
+		);
+		request.flush({
+			isSuccessful: false,
+			isSystemUp: true,
+			Results: [{ message: ['error.generic.internal'] }],
+		});
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(showErrorSpy.calls.mostRecent().args[0].message).toBe(
+			UNSUPPORTED_PHONE_COUNTRY_NOTICE,
+		);
+	});
+
+	it('explains that only US and Canada numbers are supported when a resend to another country gets no response', async () => {
+		await init(unverifiedPhoneDataWithNumber(UNITED_KINGDOM_PHONE_NUMBER));
+		component.captchaEnabled = false;
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		component.resendCode();
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendTextCreatedAccount'),
+		);
+		request.error(new ProgressEvent('network down'));
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(showErrorSpy.calls.mostRecent().args[0].message).toBe(
+			UNSUPPORTED_PHONE_COUNTRY_NOTICE,
+		);
+	});
+
+	it('keeps the code mismatch message for a lookup failure on a number in another country', async () => {
+		await init(unverifiedPhoneDataWithNumber(UNITED_KINGDOM_PHONE_NUMBER));
+		component.captchaEnabled = false;
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		component.resendCode();
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendTextCreatedAccount'),
+		);
+		request.flush({
+			isSuccessful: false,
+			isSystemUp: true,
+			Results: [{ message: ['error.auth.lookup'] }],
+		});
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(showErrorSpy.calls.mostRecent().args[0].message).toBe(
+			'warning.auth.token_does_not_match',
+		);
+	});
+
+	it('does not mention phone countries when an email code fails to send', async () => {
+		const unverifiedEmailData = cloneDeep(defaultAuthData);
+		unverifiedEmailData.Results[0].data[0].AccountVO.primaryPhone =
+			UNITED_KINGDOM_PHONE_NUMBER;
+		await init(unverifiedEmailData);
+
+		const showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError');
+		component.resendCode();
+		const request = httpMock.expectOne((candidate) =>
+			candidate.url.includes('resendMailCreatedAccount'),
+		);
+		request.error(new ProgressEvent('network down'));
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(showErrorSpy.calls.mostRecent().args[0].message).toBe(
+			'error.generic.internal',
+		);
 	});
 
 	it('should show CAPTCHA before verifying phone', async () => {

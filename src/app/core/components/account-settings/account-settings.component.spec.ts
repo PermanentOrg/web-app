@@ -120,6 +120,147 @@ describe('AccountSettingsComponent', () => {
 		}
 	});
 
+	it('warns about a number that arrived from the backend, without any editing', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
+
+		expect(instance.account).toBe(TestBed.inject(AccountService).getAccount());
+
+		instance.account.primaryPhone = '+44 20 7946 0958';
+		instance.account.phoneStatus = 'status.auth.unverified';
+		fixture.detectChanges();
+
+		expect(
+			ngMocks.find('.phone-number-warning').nativeElement.textContent,
+		).toContain('US and Canada');
+	});
+
+	it('renders no warning for a stored number the provider can reach', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
+
+		instance.account.primaryPhone = '+1 (202) 555-0147';
+		instance.account.phoneStatus = 'status.auth.unverified';
+		fixture.detectChanges();
+
+		expect(ngMocks.findAll('.phone-number-warning').length).toBe(0);
+	});
+
+	it('keeps the standing guidance separate from the warning', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
+
+		instance.account.primaryPhone = '416 555 0147';
+		instance.account.phoneStatus = 'status.auth.unverified';
+		fixture.detectChanges();
+
+		expect(
+			ngMocks.find('.settings-group-note').nativeElement.textContent,
+		).toContain('Permanent only supports US and Canada numbers.');
+
+		expect(ngMocks.findAll('.phone-number-warning').length).toBe(0);
+	});
+
+	it('warns in the same place once a typed number is long enough to judge', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
+
+		instance.account.phoneStatus = 'status.auth.unverified';
+		instance.onPhoneNumberEditingChange(true);
+		instance.onPhoneNumberTyped('+40 748');
+		fixture.detectChanges();
+
+		expect(ngMocks.findAll('.phone-number-warning').length).toBe(0);
+
+		instance.onPhoneNumberTyped('+40748498404');
+		fixture.detectChanges();
+
+		expect(
+			ngMocks.find('.phone-number-warning').nativeElement.textContent,
+		).toContain('US and Canada');
+	});
+
+	it('stays quiet while a reachable number is being typed', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
+
+		instance.account.phoneStatus = 'status.auth.unverified';
+		instance.onPhoneNumberEditingChange(true);
+
+		['2', '202', '(202) 555', '(202) 555-014', '(202) 555-0147'].forEach(
+			(partial) => {
+				instance.onPhoneNumberTyped(partial);
+
+				expect(instance.phoneNumberWarning).withContext(partial).toBeNull();
+			},
+		);
+	});
+
+	it('falls back to the stored number once editing ends', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
+
+		instance.account.primaryPhone = '+44 20 7946 0958';
+		instance.account.phoneStatus = 'status.auth.unverified';
+
+		instance.onPhoneNumberEditingChange(true);
+		instance.onPhoneNumberTyped('(202) 555-0147');
+
+		expect(instance.phoneNumberWarning).toBeNull();
+
+		instance.onPhoneNumberEditingChange(false);
+
+		expect(instance.phoneNumberWarning).toContain('US and Canada');
+	});
+
+	it('does not warn about a number that has already verified', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
+
+		instance.account.primaryPhone = '+44 20 7946 0958';
+		instance.account.phoneStatus = 'status.auth.verified';
+
+		expect(instance.phoneNumberWarning).toBeNull();
+
+		instance.account.phoneStatus = 'status.auth.unverified';
+
+		expect(instance.phoneNumberWarning).toContain('US and Canada');
+	});
+
+	it('does not warn about a number that was cleared', () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
+
+		instance.account.primaryPhone = '';
+
+		expect(instance.phoneNumberWarning).toBeNull();
+
+		instance.onPhoneNumberEditingChange(true);
+		instance.onPhoneNumberTyped('');
+
+		expect(instance.phoneNumberWarning).toBeNull();
+	});
+
+	it('still saves a number the provider cannot reach', async () => {
+		const fixture = MockRender(AccountSettingsComponent);
+		const instance = fixture.point.componentInstance;
+
+		const accountUpdateSpy = spyOn(
+			TestBed.inject(ApiService).account,
+			'update',
+		).and.resolveTo(new AccountVO({}));
+		const errorMessageSpy = spyOn(TestBed.inject(MessageService), 'showError');
+
+		await instance.onSaveProfileInfo('primaryPhone', '+44 20 7946 0958');
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
+
+		expect(accountUpdateSpy).toHaveBeenCalled();
+		expect(errorMessageSpy).not.toHaveBeenCalled();
+		expect(instance.account.primaryPhone).toBe('+44 20 7946 0958');
+	});
+
 	it('should disable "Verify Phone Number" button if primaryPhone is empty', () => {
 		const fixture = MockRender(AccountSettingsComponent);
 		const instance = fixture.point.componentInstance;

@@ -36,6 +36,9 @@
 	</div>
 </div>
 <div class="settings-group">
+	<p class="settings-group-note">
+		Permanent only supports US and Canada numbers.
+	</p>
 	<div class="settings-item">
 		<label
 			>Mobile Phone
@@ -50,6 +53,8 @@
 				[displayValue]="account.primaryPhone"
 				[noScroll]="true"
 				[emptyMessage]="'Mobile Phone Number'"
+				(editValueChange)="onPhoneNumberTyped($event)"
+				(editingChange)="onPhoneNumberEditingChange($event)"
 				(doneEditing)="onSaveProfileInfo('primaryPhone', $event)"
 			></pr-inline-value-edit>
 		</div>
@@ -73,4 +78,12 @@
 			}
 		</div>
 	</div>
+	@if (phoneNumberWarning) {
+		<div class="settings-item settings-item-note">
+			<span class="phone-number-warning">
+				<i class="material-icons">warning</i>
+				{{ phoneNumberWarning }}
+			</span>
+		</div>
+	}
 </div>
