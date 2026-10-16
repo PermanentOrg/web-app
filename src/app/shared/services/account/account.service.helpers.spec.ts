@@ -47,21 +47,15 @@ describe('savePropertyOnAccount', () => {
 			accountService: mockAccountService,
 		});
 
-		expect(mockAccount.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
-				primaryEmail: 'test@example.com',
-				primaryPhone: '9876543210',
-				phoneStatus: 'status.auth.verified',
-			}),
-		);
+		expect(mockAccount.update).toHaveBeenCalledWith({
+			primaryEmail: 'test@example.com',
+			primaryPhone: '9876543210',
+		});
 
-		expect(mockApiService.account.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
-				primaryEmail: 'test@example.com',
-				primaryPhone: '9876543210',
-				phoneStatus: 'status.auth.verified',
-			}),
-		);
+		expect(mockApiService.account.update).toHaveBeenCalledWith({
+			primaryEmail: 'test@example.com',
+			primaryPhone: '9876543210',
+		});
 
 		expect(mockAccountService.setAccount).toHaveBeenCalledWith(mockAccount);
 		expect(mockMessageService.showMessage).toHaveBeenCalledWith({
@@ -90,18 +84,14 @@ describe('savePropertyOnAccount', () => {
 		});
 	});
 
-	it('should set phoneStatus to unverified when primaryPhone is cleared', async () => {
-		const change = {
-			prop: 'primaryPhone' as keyof AccountVO,
-			value: '',
+	it('should leave phoneStatus to the server when primaryPhone is cleared', async () => {
+		const change: AccountChange = { prop: 'primaryPhone', value: '' };
+		const serverResponse = {
+			primaryPhone: '',
+			phoneStatus: 'status.auth.unverified',
 		};
 
-		mockApiService.account.update.and.returnValue(
-			Promise.resolve({
-				primaryPhone: '',
-				phoneStatus: 'status.auth.unverified',
-			}),
-		);
+		mockApiService.account.update.and.resolveTo(serverResponse);
 
 		await savePropertyOnAccount(mockAccount, change, {
 			messageService: mockMessageService,
@@ -109,28 +99,12 @@ describe('savePropertyOnAccount', () => {
 			accountService: mockAccountService,
 		});
 
-		expect(mockAccount.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
-				primaryPhone: '',
-				phoneStatus: 'status.auth.unverified',
-				primaryEmail: 'test@example.com',
-			}),
-		);
+		expect(mockApiService.account.update).toHaveBeenCalledWith({
+			primaryEmail: 'test@example.com',
+			primaryPhone: '',
+		});
 
-		expect(mockApiService.account.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
-				primaryPhone: '',
-				phoneStatus: 'status.auth.unverified',
-				primaryEmail: 'test@example.com',
-			}),
-		);
-
-		expect(mockAccount.update).toHaveBeenCalledWith(
-			jasmine.objectContaining({
-				primaryPhone: '',
-				phoneStatus: 'status.auth.unverified',
-			}),
-		);
+		expect(mockAccount.update).toHaveBeenCalledWith(serverResponse);
 
 		expect(mockMessageService.showMessage).toHaveBeenCalledWith({
 			message: 'Account information saved.',

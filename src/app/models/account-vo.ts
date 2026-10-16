@@ -110,7 +110,7 @@ export class AccountVO extends BaseVO {
 	}
 
 	phoneNeedsVerification(): boolean {
-		return this.phoneStatus === 'status.auth.unverified';
+		return !!this.primaryPhone && this.phoneStatus === 'status.auth.unverified';
 	}
 
 	emailNeedsVerification(): boolean {

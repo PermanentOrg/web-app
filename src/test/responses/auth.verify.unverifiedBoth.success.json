@@ -13,7 +13,7 @@
 						"city": null,
 						"state": null,
 						"zip": null,
-						"primaryPhone": null,
+						"primaryPhone": "+12025550100",
 						"defaultArchiveId": 9175,
 						"status": "status.auth.ok",
 						"type": "type.account.standard",
