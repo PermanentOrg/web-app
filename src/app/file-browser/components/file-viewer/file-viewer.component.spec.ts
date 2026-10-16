@@ -739,6 +739,31 @@ describe('FileViewerComponent', () => {
 
 			expect(component.getDocumentUrl()).toBeFalsy();
 		});
+
+		it('will skip a failed original listed before the good one', async () => {
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Test Doc',
+				TagVOs: [],
+				FileVOs: [
+					{
+						format: 'file.format.original',
+						type: 'pdf',
+						size: null,
+						fileURL: null,
+					},
+					{
+						format: 'file.format.original',
+						type: 'pdf',
+						size: 1315957,
+						fileURL: 'http://example.com/original',
+					},
+				],
+			});
+			recreateComponent();
+			await fixture.whenStable();
+			expectSantizedUrlToContain(component, 'original');
+		});
 	});
 
 	describe('Replay URLs for web archives', () => {

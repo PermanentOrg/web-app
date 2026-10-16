@@ -597,4 +597,61 @@ describe('DataService', () => {
 			})
 			.catch(done.fail);
 	});
+
+	describe('downloadFile', () => {
+		let clickedDownloadUrl: string;
+
+		beforeEach(() => {
+			clickedDownloadUrl = undefined;
+			const fakeLink = {
+				href: '',
+				click() {
+					clickedDownloadUrl = this.href;
+				},
+			};
+			spyOn(document, 'createElement').and.returnValue(
+				fakeLink as unknown as HTMLElement,
+			);
+		});
+
+		function makeRecordWithFailedOriginalFirst(): RecordVO {
+			return new RecordVO({
+				FileVOs: [
+					{
+						format: 'file.format.original',
+						type: 'type.file.image.jpg',
+						size: null,
+						fileURL: null,
+						downloadURL: 'failed-download',
+					},
+					{
+						format: 'file.format.original',
+						type: 'type.file.image.jpg',
+						size: 1315957,
+						fileURL: 'good-file',
+						downloadURL: 'good-download',
+					},
+				],
+			});
+		}
+
+		it('should download the good original instead of a failed one', async () => {
+			const service = TestBed.inject(DataService);
+
+			await service.downloadFile(makeRecordWithFailedOriginalFirst());
+
+			expect(clickedDownloadUrl).toBe('good-download');
+		});
+
+		it('should download the good file when asked for a type', async () => {
+			const service = TestBed.inject(DataService);
+
+			await service.downloadFile(
+				makeRecordWithFailedOriginalFirst(),
+				'type.file.image.jpg',
+			);
+
+			expect(clickedDownloadUrl).toBe('good-download');
+		});
+	});
 });
