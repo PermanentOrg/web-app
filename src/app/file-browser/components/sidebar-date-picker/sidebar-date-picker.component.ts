@@ -75,7 +75,6 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	container?: ElementRef<HTMLElement>;
 
 	constructor(
-		
 		private readonly edtfService: EdtfService,
 		private readonly edtfDisplayService: EdtfDisplayService,
 		private readonly timezoneService: TimezoneService,
