@@ -1,6 +1,10 @@
 <div
-	class="pr-video-wrapper loading"
-	[ngClass]="{ tall: item.imageRatio > 1, processing: isProcessing }"
+	class="pr-video-wrapper"
+	[ngClass]="{
+		tall: item.imageRatio > 1,
+		loading: isLoading,
+		processing: isProcessing
+	}"
 >
 	<video
 		[attr.aria-label]="item | getAltText"
