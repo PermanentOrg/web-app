@@ -1,57 +1,121 @@
-<div #dropdownContainer class="pr-timezone-row">
-	<div
-		class="pr-timezone-select"
-		[class.disabled]="disabled"
-		role="button"
-		tabindex="0"
+<div class="pr-timezone-dropdown">
+	<button
+		#triggerButton
+		type="button"
+		class="pr-timezone-trigger"
+		[disabled]="disabled()"
+		[attr.role]="showSearch() ? null : 'combobox'"
+		[attr.aria-haspopup]="'listbox'"
+		[attr.aria-expanded]="isOpen()"
+		[attr.aria-controls]="isOpen() ? listboxElementId : null"
+		[attr.aria-activedescendant]="showSearch() ? null : activeDescendantId()"
+		[attr.aria-label]="fieldLabel()"
 		(click)="toggle()"
-		(keydown.enter)="toggle()"
-		(keydown.space)="toggle()"
+		(keydown)="onKeydown($event)"
 	>
-		<span class="pr-timezone-value">{{ selected?.offset }}</span>
-		<span class="pr-timezone-label">{{
-			selected?.label || 'Select timezone'
-		}}</span>
-		<span class="pr-icon-button pr-chevron">
-			<i class="material-icons">unfold_more</i>
-		</span>
-	</div>
+		@if (selectedOption(); as option) {
+			<span class="pr-timezone-offset">{{ option.offsetLabel }}</span>
+			<span class="pr-timezone-label">{{ option.timezoneId }}</span>
+		} @else {
+			<span class="pr-timezone-placeholder">{{ placeholder }}</span>
+		}
+		<i class="material-icons pr-timezone-chevron" aria-hidden="true"
+			>unfold_more</i
+		>
+	</button>
+
 	@if (isOpen()) {
-		<div class="pr-timezone-dropdown">
-			<input
-				type="text"
-				class="pr-timezone-search"
-				placeholder="Search timezone..."
-				[value]="filter()"
-				(input)="filter.set($any($event.target).value)"
-			/>
-			<div class="pr-timezone-options">
-				<div
-					class="pr-timezone-option"
-					role="option"
-					tabindex="0"
-					[class.selected]="!selected"
-					(click)="select(null)"
-					(keydown.enter)="select(null)"
-					(keydown.space)="select(null)"
-				>
-					<span class="pr-tz-name">Select timezone</span>
-				</div>
-				@for (tz of filteredTimezones(); track tz.ianaZone) {
-					<div
-						class="pr-timezone-option"
+		<div class="pr-timezone-panel">
+			@if (showSearch()) {
+				<input
+					#searchInput
+					type="text"
+					class="pr-timezone-search"
+					role="combobox"
+					aria-autocomplete="list"
+					aria-expanded="true"
+					autocomplete="off"
+					placeholder="Search city, country or offset..."
+					[attr.aria-controls]="listboxElementId"
+					[attr.aria-activedescendant]="activeDescendantId()"
+					[attr.aria-label]="fieldLabel()"
+					[value]="searchTerm()"
+					(input)="onSearchTermChange($any($event.target).value)"
+					(keydown)="onKeydown($event)"
+				/>
+			}
+
+			<ul
+				class="pr-timezone-options"
+				role="listbox"
+				[id]="listboxElementId"
+				[attr.aria-label]="fieldLabel()"
+			>
+				@if (showClearOption()) {
+					<li
+						class="pr-timezone-option pr-timezone-option-clear"
 						role="option"
-						tabindex="0"
-						[class.selected]="tz.ianaZone === selected?.ianaZone"
-						(click)="select(tz)"
-						(keydown.enter)="select(tz)"
-						(keydown.space)="select(tz)"
+						tabindex="-1"
+						[id]="buildOptionElementId(0)"
+						[class.pr-timezone-option-active]="isOptionActive(0)"
+						[class.pr-timezone-option-selected]="isOptionSelected(clearOption)"
+						[attr.aria-selected]="isOptionSelected(clearOption)"
+						(click)="selectOption(clearOption)"
 					>
-						<span class="pr-tz-offset">{{ tz.offset }}</span>
-						<span class="pr-tz-name">{{ tz.label }}</span>
-					</div>
+						<span class="pr-timezone-option-placeholder">{{
+							placeholder
+						}}</span>
+					</li>
 				}
-			</div>
+
+				@for (group of indexedGroups(); track group.region) {
+					<li
+						class="pr-timezone-group"
+						role="group"
+						[attr.aria-labelledby]="buildRegionElementId(group.region)"
+					>
+						<span
+							class="pr-timezone-region"
+							[id]="buildRegionElementId(group.region)"
+							>{{ group.region }}</span
+						>
+						<ul class="pr-timezone-group-options" role="presentation">
+							@for (entry of group.options; track entry.option.timezoneId) {
+								<li
+									class="pr-timezone-option"
+									role="option"
+									tabindex="-1"
+									[id]="buildOptionElementId(entry.index)"
+									[class.pr-timezone-option-active]="
+										isOptionActive(entry.index)
+									"
+									[class.pr-timezone-option-selected]="
+										isOptionSelected(entry.option)
+									"
+									[attr.aria-selected]="isOptionSelected(entry.option)"
+									(click)="selectOption(entry.option)"
+								>
+									<span class="pr-timezone-option-offset">{{
+										entry.option.offsetLabel
+									}}</span>
+									<span class="pr-timezone-option-label">{{
+										entry.option.timezoneId
+									}}</span>
+									@if (entry.option.countryName) {
+										<span class="pr-timezone-option-country">{{
+											entry.option.countryName
+										}}</span>
+									}
+								</li>
+							}
+						</ul>
+					</li>
+				} @empty {
+					<li class="pr-timezone-empty" role="presentation">
+						{{ noMatchesMessage }}
+					</li>
+				}
+			</ul>
 		</div>
 	}
 </div>
