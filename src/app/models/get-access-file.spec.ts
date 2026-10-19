@@ -3,7 +3,7 @@ import {
 	GetAccessFile,
 	GetOriginalFile,
 	HasFiles,
-	prioritizeRetrievableFiles,
+	getFirstRetrievableFile,
 } from './get-access-file';
 
 function makeTestFile(params: Partial<PermanentFile> = {}): PermanentFile {
@@ -103,6 +103,73 @@ describe('GetAccessFile', () => {
 		).toEqual(goodOriginal);
 	});
 
+	it('should keep an archivematica copy without a size ahead of a good original', () => {
+		const archivematicaFileWithoutSize = makeTestFile({
+			fileId: 1,
+			format: FileFormat.ArchivematicaAccess,
+			size: null,
+		});
+
+		expect(
+			GetAccessFile({
+				FileVOs: [makeTestFile({ fileId: 2 }), archivematicaFileWithoutSize],
+			}),
+		).toEqual(archivematicaFileWithoutSize);
+	});
+
+	it('should keep a pdf conversion without a size ahead of other conversions', () => {
+		const pdfConversionWithoutSize = makeTestFile({
+			fileId: 1,
+			format: FileFormat.Converted,
+			type: 'type.file.pdf.pdfa',
+			size: null,
+		});
+
+		expect(
+			GetAccessFile({
+				FileVOs: [
+					makeTestFile({ fileId: 2, format: FileFormat.Converted }),
+					pdfConversionWithoutSize,
+				],
+			}),
+		).toEqual(pdfConversionWithoutSize);
+	});
+
+	it('should prefer a good pdf conversion over a failed one listed first', () => {
+		const failedPdfConversion = makeTestFile({
+			fileId: 1,
+			format: FileFormat.Converted,
+			type: 'type.file.pdf.pdfa',
+			size: null,
+			fileURL: null,
+		});
+		const goodPdfConversion = makeTestFile({
+			fileId: 2,
+			format: FileFormat.Converted,
+			type: 'type.file.pdf.pdfa',
+		});
+
+		expect(
+			GetAccessFile({
+				FileVOs: [failedPdfConversion, goodPdfConversion],
+			}),
+		).toEqual(goodPdfConversion);
+	});
+
+	it('should keep the format preference when no file has a size', () => {
+		const convertedFile = makeTestFile({
+			fileId: 1,
+			format: FileFormat.Converted,
+			size: undefined,
+		});
+
+		expect(
+			GetAccessFile({
+				FileVOs: [makeTestFile({ size: undefined }), convertedFile],
+			}),
+		).toEqual(convertedFile);
+	});
+
 	it('should still return a failed original when it is the only file', () => {
 		const failedOriginal = makeFailedOriginalFile();
 
@@ -141,34 +208,35 @@ describe('GetOriginalFile', () => {
 	});
 });
 
-describe('prioritizeRetrievableFiles', () => {
+describe('getFirstRetrievableFile', () => {
+	it('should return undefined for an empty list', () => {
+		expect(getFirstRetrievableFile([])).toBeUndefined();
+	});
+
 	it('should treat a file without a URL as not retrievable', () => {
 		const fileWithoutUrl = makeTestFile({ fileId: 1, fileURL: null });
 		const fileWithUrl = makeTestFile({ fileId: 2 });
 
-		expect(prioritizeRetrievableFiles([fileWithoutUrl, fileWithUrl])).toEqual([
+		expect(getFirstRetrievableFile([fileWithoutUrl, fileWithUrl])).toEqual(
 			fileWithUrl,
-			fileWithoutUrl,
-		]);
+		);
 	});
 
 	it('should keep the original order among retrievable files', () => {
 		const firstFile = makeTestFile({ fileId: 1 });
 		const secondFile = makeTestFile({ fileId: 2 });
 
-		expect(prioritizeRetrievableFiles([firstFile, secondFile])).toEqual([
-			firstFile,
-			secondFile,
-		]);
+		expect(getFirstRetrievableFile([firstFile, secondFile])).toEqual(firstFile);
 	});
 
-	it('should not reorder the array it was given', () => {
+	it('should fall back to the first file when none is retrievable', () => {
 		const failedOriginal = makeFailedOriginalFile();
-		const goodOriginal = makeTestFile({ fileId: 2 });
-		const files = [failedOriginal, goodOriginal];
 
-		prioritizeRetrievableFiles(files);
-
-		expect(files).toEqual([failedOriginal, goodOriginal]);
+		expect(
+			getFirstRetrievableFile([
+				failedOriginal,
+				makeTestFile({ fileId: 2, size: null }),
+			]),
+		).toEqual(failedOriginal);
 	});
 });

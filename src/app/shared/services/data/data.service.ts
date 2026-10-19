@@ -13,7 +13,7 @@ import { DataStatus } from '@models/data-status.enum';
 import { GetThumbnail } from '@models/get-thumbnail';
 import {
 	GetOriginalFile,
-	prioritizeRetrievableFiles,
+	getFirstRetrievableFile,
 } from '@models/get-access-file';
 import {
 	FolderResponse,
@@ -656,8 +656,8 @@ export class DataService {
 
 		function getFile(fileItem: RecordVO, type?: string) {
 			if (type) {
-				return prioritizeRetrievableFiles(fileItem.FileVOs).find(
-					(file) => file.type === type,
+				return getFirstRetrievableFile(
+					fileItem.FileVOs.filter((file) => file.type === type),
 				);
 			}
 

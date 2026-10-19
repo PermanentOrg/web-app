@@ -1,4 +1,3 @@
-import { prioritizeIf } from '@root/utils/prioritize-if';
 import { FileFormat, PermanentFile } from './file-vo';
 
 export interface HasFiles {
@@ -10,37 +9,47 @@ function hasRetrievableContent(file: PermanentFile): boolean {
 }
 
 /**
- * Moves files that have content to fetch ahead of failed, empty ones,
- * keeping the original order otherwise. Returns a new array.
+ * Returns the first file that has content to fetch, or the first file when
+ * none of them do, so a failed, empty file is picked only as a last resort.
  */
-export function prioritizeRetrievableFiles(
+export function getFirstRetrievableFile(
 	files: PermanentFile[],
-): PermanentFile[] {
-	return prioritizeIf([...files], hasRetrievableContent);
+): PermanentFile | undefined {
+	return files.find(hasRetrievableContent) ?? files[0];
 }
 
 function getArchivematicaAccess(files: PermanentFile[]) {
-	return files.find((file) => file.format === FileFormat.ArchivematicaAccess);
+	return getFirstRetrievableFile(
+		files.filter((file) => file.format === FileFormat.ArchivematicaAccess),
+	);
 }
 
 function getPrioritizedConvertedFile(files: PermanentFile[]) {
-	return prioritizeIf(
-		files.filter((file) => file.format === FileFormat.Converted),
-		(file) => file.type.includes('pdf'),
-	)[0];
+	const convertedFiles = files.filter(
+		(file) => file.format === FileFormat.Converted,
+	);
+	const pdfConvertedFiles = convertedFiles.filter((file) =>
+		file.type?.includes('pdf'),
+	);
+	return (
+		getFirstRetrievableFile(pdfConvertedFiles) ??
+		getFirstRetrievableFile(convertedFiles)
+	);
 }
 
 export function GetAccessFile(record: HasFiles): PermanentFile | undefined {
-	const files = prioritizeRetrievableFiles(record?.FileVOs ?? []);
+	const files = record?.FileVOs ?? [];
 	return (
 		getArchivematicaAccess(files) ||
 		getPrioritizedConvertedFile(files) ||
-		files[0]
+		getFirstRetrievableFile(files)
 	);
 }
 
 export function GetOriginalFile(record: HasFiles): PermanentFile | undefined {
-	return prioritizeRetrievableFiles(record?.FileVOs ?? []).find(
-		(file) => file.format === FileFormat.Original,
+	return getFirstRetrievableFile(
+		(record?.FileVOs ?? []).filter(
+			(file) => file.format === FileFormat.Original,
+		),
 	);
 }
