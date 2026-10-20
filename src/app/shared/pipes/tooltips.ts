@@ -59,7 +59,6 @@ export const TOOLTIPS = {
 				asc: 'Sort by date (earliest to latest)',
 				desc: 'Sort by date (latest to earliest)',
 			},
-			save: 'Save current sort as default for this folder',
 			singleCol: 'Choose sort for this folder',
 		},
 		col: {
