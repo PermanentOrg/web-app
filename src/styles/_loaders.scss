@@ -64,14 +64,6 @@ $fade-ring-opacity: 0.6;
 	height: $fade-ring-size;
 	border-radius: 50%;
 	background: #fff;
-	background: -moz-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0%) 42%);
-	background: -webkit-linear-gradient(
-		left,
-		#fff 10%,
-		rgb(255 255 255 / 0%) 42%
-	);
-	background: -o-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0%) 42%);
-	background: -ms-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0%) 42%);
 	background: linear-gradient(to right, #fff 10%, rgb(255 255 255 / 0%) 42%);
 	position: relative;
 	animation:
@@ -110,16 +102,6 @@ $fade-ring-opacity: 0.6;
 
 	100% {
 		opacity: $fade-ring-opacity;
-	}
-}
-
-@-webkit-keyframes load3 {
-	0% {
-		transform: rotate(0deg);
-	}
-
-	100% {
-		transform: rotate(360deg);
 	}
 }
 
