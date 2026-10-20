@@ -5,7 +5,6 @@
 		"at-rule-no-vendor-prefix": null,
 		"block-no-empty": null,
 		"declaration-block-no-shorthand-property-overrides": null,
-		"declaration-property-value-keyword-no-deprecated": null,
 		"font-family-no-missing-generic-family-keyword": null,
 		"function-name-case": [
 			"lower",
@@ -17,9 +16,7 @@
 		"no-empty-source": null,
 		"no-invalid-position-at-import-rule": null,
 		"number-max-precision": null,
-		"property-no-deprecated": null,
 		"property-no-unknown": null,
-		"property-no-vendor-prefix": null,
 		"scss/at-extend-no-missing-placeholder": null,
 		"scss/at-function-pattern": null,
 		"scss/at-mixin-pattern": null,
@@ -33,7 +30,13 @@
 				"ignorePseudoElements": ["ng-deep"]
 			}
 		],
-		"value-keyword-case": null,
+		"value-keyword-case": [
+			"lower",
+			{
+				"camelCaseSvgKeywords": true,
+				"ignoreProperties": ["/^\\$/"]
+			}
+		],
 		"value-no-vendor-prefix": null
 	}
 }
