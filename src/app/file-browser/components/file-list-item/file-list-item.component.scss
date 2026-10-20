@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use 'sass:math';
 @import 'variables';
 
@@ -291,7 +292,8 @@ $bg-transition-length: 0.075s;
 
 	.grid-view:hover & {
 		transition: box-shadow 0ms $tweaked-ease;
-		box-shadow: inset 0 0 0 $grid-selected-border - 1px darken($gray-300, 10%);
+		box-shadow: inset 0 0 0 $grid-selected-border - 1px
+			color.adjust($gray-300, $lightness: -10%);
 	}
 
 	.grid-view.selected & {
@@ -413,7 +415,7 @@ $multi-select-radius: 30px;
 }
 
 .public-archive-name {
-	font-family: Usual;
+	font-family: Usual, sans-serif;
 	font-size: 1rem;
 	font-weight: 600;
 	line-height: 24px;
@@ -428,7 +430,7 @@ $multi-select-radius: 30px;
 }
 
 .public-archive-date {
-	font-family: Usual;
+	font-family: Usual, sans-serif;
 	font-size: 0.7rem;
 	font-weight: 600;
 	line-height: 24px;
