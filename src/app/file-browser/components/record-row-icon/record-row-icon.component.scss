@@ -1,0 +1,63 @@
+@import 'variables';
+
+$tile-size: 48px;
+
+:host {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.tile {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: $tile-size;
+	height: $tile-size;
+	flex-shrink: 0;
+
+	&[data-icon='failed'],
+	&[data-icon='file-type'] {
+		border: 1px solid $PR-blue-50;
+		background-color: $PR-blue-25;
+	}
+}
+
+.glyph {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	[data-icon='file-type'] & {
+		width: 32px;
+		height: 32px;
+	}
+}
+
+.glyph-image {
+	display: block;
+}
+
+.glyph-extension {
+	position: absolute;
+	left: 8px;
+	bottom: 5px;
+	display: flex;
+	align-items: center;
+	height: 10px;
+	padding: 0 3px;
+	border-radius: 2px;
+	background-image: linear-gradient(
+		117deg,
+		$PR-brand-purple 0%,
+		$PR-brand-yellow 100%
+	);
+	font-family: 'UsualMedium', sans-serif;
+	font-size: 7px;
+	line-height: 10px;
+	letter-spacing: 1.12px;
+	text-transform: uppercase;
+	color: $PR-brand-white;
+}

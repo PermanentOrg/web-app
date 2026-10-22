@@ -47,7 +47,15 @@
 			</div>
 		}
 		@if (!item.isFolder && !isZip) {
-			<div prBgImage [bgSrc]="recordThumbnailUrl" [cover]="inGridView"></div>
+			@let listRowIcon = inGridView ? undefined : generatedRowIcon;
+			@if (listRowIcon) {
+				<pr-record-row-icon
+					[icon]="listRowIcon"
+					[fileExtension]="originalFileExtension"
+				></pr-record-row-icon>
+			} @else {
+				<div prBgImage [bgSrc]="recordThumbnailUrl" [cover]="inGridView"></div>
+			}
 		}
 	</ng-container>
 	@if (inGridView && item.isFolder ? item.view : true) {
@@ -102,6 +110,16 @@
 				<span> Shared by The {{ item.ShareArchiveVO?.fullName }} Archive </span>
 			}
 		</div>
+		@let previewStatus = inGridView ? undefined : previewStatusLine;
+		@if (previewStatus) {
+			<div class="preview-status" [attr.data-state]="previewStatus">
+				<span class="preview-status-label">{{
+					previewStatusLabels[previewStatus]
+				}}</span>
+				<span class="preview-status-separator">•</span>
+				<span>Stored</span>
+			</div>
+		}
 	</div>
 	@if (!showAccess && !inGridView) {
 		<div class="type">

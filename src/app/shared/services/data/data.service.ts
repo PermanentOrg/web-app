@@ -12,6 +12,10 @@ import {
 import { DataStatus } from '@models/data-status.enum';
 import { GetThumbnail } from '@models/get-thumbnail';
 import {
+	RecordPreviewState,
+	getRecordPreviewState,
+} from '@models/record-preview-state';
+import {
 	FolderResponse,
 	RecordResponse,
 } from '@shared/services/api/index.repo';
@@ -305,6 +309,10 @@ export class DataService {
 						item.fetched = null;
 
 						const thumbnailUrl = GetThumbnail(item);
+						const isPreviewBeingPrepared =
+							!item.isFolder &&
+							getRecordPreviewState(item as RecordVO) ===
+								RecordPreviewState.Preparing;
 
 						if (thumbnailUrl) {
 							this.thumbnailUpdatedSubject.next(item);
@@ -312,7 +320,7 @@ export class DataService {
 
 						if (
 							!item.isFolder &&
-							!thumbnailUrl &&
+							(!thumbnailUrl || isPreviewBeingPrepared) &&
 							isSameId(item.parentFolderId, this.currentFolder.folderId)
 						) {
 							this.debug('thumbRefreshQueue push %s', item.archiveNbr);
