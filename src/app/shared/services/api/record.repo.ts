@@ -86,9 +86,7 @@ export interface StelaLocation {
 	longitude?: number | null;
 	altitudeMeters?: number | null;
 	precision?: LocationPrecision | null;
-	// Stela treats the timezone as location metadata but stores it on the record
-	// or folder row, so it arrives here even when there is no location to speak
-	// of. It is a free-text column, so nothing guarantees a usable value.
+	// Free text, so not guaranteed to be a valid zone.
 	timezone?: string | null;
 	// Legacy columns still returned by stela for backwards compatibility. Used
 	// to shim locations that predate (or were geocoded without) the new fields.
@@ -178,11 +176,7 @@ export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 		},
 	});
 
-/**
- * Stela takes the timezone as location metadata. Its location schema rejects an
- * empty object and may not be sent alongside locationId, so an untouched
- * timezone omits the key entirely and only an explicit clear sends null.
- */
+// Stela rejects an empty location object, so an untouched timezone omits the key.
 export const buildTimezonePatch = (
 	timezone: string | null | undefined,
 ): { location?: { timezone: string | null } } =>
@@ -194,8 +188,6 @@ export const convertStelaLocationToLocnVOData = (
 	if (!stelaLocation?.id) {
 		return null;
 	}
-	// The timezone rides along on the location but belongs to the record or
-	// folder, so it is lifted onto the item rather than into the location VO.
 	const { state, precision, timezone, ...rest } = stelaLocation;
 	// Legacy shim: locations geocoded before the IPTC fields existed — or by
 	// backend paths (e.g. EXIF geocoding on upload) that still only write the

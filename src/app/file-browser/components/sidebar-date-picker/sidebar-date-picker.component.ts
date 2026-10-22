@@ -286,9 +286,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	onTimezoneChange(timezoneId: string | null): void {
 		this._selectedTimezoneId.set(timezoneId);
 		if (!timezoneId) {
-			// The offset the cleared zone was inferred from has to go with it, or
-			// the next read infers the same zone straight back and the clear is
-			// undone without anyone touching it.
+			// Otherwise the next read infers the same zone back from the offset.
 			this._time.update(dropTimezoneOffset);
 			this._endTime.update(dropTimezoneOffset);
 		}
@@ -361,8 +359,6 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	}
 
 	private updateFromDisplayTime(): void {
-		// No fallback to the browser zone: an item that stores none stays empty
-		// rather than being handed a zone nobody chose.
 		this._selectedTimezoneId.set(
 			this.timezoneService.resolveTimezoneId(
 				this.displayTime?.time?.timezoneId,
@@ -415,10 +411,6 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 		return this.edtfService.formatDateForDisplay(date);
 	}
 
-	/**
-	 * Shows the offset the item's own zone was on at the item's date, rather
-	 * than whatever zone the person reading the page happens to be in.
-	 */
 	private formatTimezone(date: DateModel, time: TimeModel): string {
 		if (!time?.hours) {
 			return '';

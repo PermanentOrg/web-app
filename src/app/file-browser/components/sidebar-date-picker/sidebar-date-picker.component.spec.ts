@@ -223,8 +223,6 @@ describe('SidebarDatePickerComponent', () => {
 		});
 
 		it('should show no timezone label when the item stores no zone', () => {
-			// The viewer's own zone used to be shown here, which said nothing
-			// about when the item was actually recorded.
 			host.displayTime = {
 				date: { year: '1985', month: '05', day: '20' },
 				time: {
@@ -919,8 +917,6 @@ describe('SidebarDatePickerComponent', () => {
 		});
 
 		it('should drop the parsed offset when the zone is cleared', () => {
-			// Without this the offset survives the clear, the same zone is
-			// inferred straight back on the next read, and the clear is undone.
 			host.displayTime = displayTimeIn('Europe/Bucharest', '+03:00');
 			fixture.detectChanges();
 			component.open();

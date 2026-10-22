@@ -414,8 +414,6 @@ describe('RecordRepo', () => {
 		});
 
 		it('should omit location entirely when the timezone is untouched', async () => {
-			// Stela rejects an empty location object, so an untouched timezone
-			// must not send the key at all.
 			const recordVO = new RecordVO({
 				recordId: 42,
 				displayTime: '1985-05-20T00:00:00.000Z',
@@ -518,8 +516,7 @@ describe('RecordRepo', () => {
 		});
 
 		it('should keep the timezone even when there is no location row', () => {
-			// Stela reads the timezone off the record row but nests it in the
-			// location object, so it arrives with a null location id.
+			// Stela nests the record's timezone in a location with a null id.
 			const record = convertStelaRecordToRecordVO({
 				...baseStelaRecord,
 				location: { id: null, timezone: 'Europe/Bucharest' },

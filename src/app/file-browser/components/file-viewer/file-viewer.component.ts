@@ -485,8 +485,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		try {
 			const edtfDate = this.edtfService.toEdtfDate(result);
 			const newDisplayTime = edtfDate === '' ? null : edtfDate;
-			// The date and the zone it was recorded in go out together so one
-			// request carries both and a failure reverts both.
 			await this.editService.saveItemVoProperties(
 				this.currentRecord as ItemVO,
 				{

@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 
 export interface TimezoneOption {
-	/** The tz database identifier, e.g. 'Europe/Bucharest'. Shown as the label
-	 * and stored on the record, so what is picked is what is persisted. */
 	timezoneId: string;
 	offsetLabel: string;
 	region: string;
-	/** Empty when the engine cannot map zones to countries, or for zones that
-	 * belong to no country such as UTC. */
 	countryName: string;
-	/** Also covers the zone's display name and country, so 'eastern european'
-	 * and 'romania' both find Europe/Bucharest. */
 	searchText: string;
 }
 
@@ -32,13 +26,10 @@ const FALLBACK_REGION = 'Other';
 const MILLISECONDS_PER_MINUTE = 60000;
 const MINUTES_PER_HOUR = 60;
 const OFFSET_PATTERN = /([+-])(\d{1,2})(?::(\d{2}))?(?::\d{2})?/;
-// The exact shape an EDTF datetime carries, so a stray string cannot be
-// mistaken for an offset by the looser pattern above.
 const EDTF_OFFSET_PATTERN = /^[+-]\d{2}:\d{2}$/;
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-// ISO 3166-1 alpha-2 is a closed two-letter space, and there is no API that
-// enumerates it, so every pair is offered to Intl and the misses discarded.
+// No API enumerates ISO 3166-1 codes, so every two-letter pair is tried.
 const buildCandidateRegionCodes = (): string[] =>
 	LETTERS.flatMap((first) => LETTERS.map((second) => `${first}${second}`));
 
@@ -49,8 +40,6 @@ export class TimezoneService {
 	private groupedOptions: TimezoneGroup[] | null = null;
 	private optionsByTimezoneId: Map<string, TimezoneOption> | null = null;
 	private countryNameByTimezoneId: Map<string, string> | null = null;
-	// Building a formatter costs far more than using one, and inferring a zone
-	// asks every zone for its offset.
 	private readonly timezoneNameFormatters = new Map<
 		string,
 		Intl.DateTimeFormat
@@ -61,12 +50,7 @@ export class TimezoneService {
 		return this.groupedOptions;
 	}
 
-	/**
-	 * Accepts anything the backend might send and returns a timezone identifier
-	 * the Intl APIs will accept, or null. Intl also canonicalizes casing and
-	 * legacy aliases, so 'europe/berlin' resolves to 'Europe/Berlin' and
-	 * 'US/Eastern' to 'America/New_York'.
-	 */
+	// Intl also canonicalizes casing and aliases, e.g. 'US/Eastern' to 'America/New_York'.
 	resolveTimezoneId(value: unknown): string | null {
 		if (typeof value !== 'string' || !value.trim()) {
 			return null;
@@ -80,11 +64,7 @@ export class TimezoneService {
 		}
 	}
 
-	/**
-	 * Intl.supportedValuesOf omits identifiers it still accepts elsewhere (UTC,
-	 * Etc/UTC, GMT), so a resolvable identifier missing from the list gets an
-	 * option built on the spot rather than being treated as unselectable.
-	 */
+	// supportedValuesOf omits ids Intl still accepts, such as UTC, so those are built on the spot.
 	getOption(value: unknown): TimezoneOption | null {
 		const timezoneId = this.resolveTimezoneId(value);
 		if (!timezoneId) {
@@ -97,15 +77,7 @@ export class TimezoneService {
 		);
 	}
 
-	/**
-	 * The first zone that sat on the given offset at the given wall-clock
-	 * reading, or null when none did. Zones move between offsets across daylight
-	 * saving and history, so the comparison is made on the record's own date
-	 * rather than today's, which keeps the inferred zone writing back the same
-	 * offset it was inferred from. An offset belongs to many places at once, so
-	 * this can only ever be a guess; taking the first identifier in the list
-	 * makes it a stable one.
-	 */
+	// Compared at the record's own date, since zones change offset across DST and history.
 	getFirstTimezoneIdForOffset(
 		offset: unknown,
 		wallClock: WallClockDateTime,
@@ -143,11 +115,6 @@ export class TimezoneService {
 		}
 	}
 
-	/**
-	 * The UTC offset a zone was on at a given wall-clock reading, as the
-	 * '+HH:MM' an EDTF datetime expects. Returns null when the identifier is
-	 * unusable so callers can fall back to their previous behaviour.
-	 */
 	getOffsetForWallClock(
 		value: unknown,
 		wallClock: WallClockDateTime,
@@ -166,10 +133,7 @@ export class TimezoneService {
 			: this.formatOffsetMinutes(offsetMinutes);
 	}
 
-	/**
-	 * A wall-clock reading has no offset yet, so the offset is read as if it
-	 * were UTC, shifted by that much, then read again at the corrected instant.
-	 */
+	// Reads the offset as if the wall clock were UTC, then again at the corrected instant.
 	private getOffsetMinutesAtWallClock(
 		timezoneId: string,
 		wallClock: WallClockDateTime,
@@ -243,7 +207,6 @@ export class TimezoneService {
 			offsetLabel,
 			region,
 			countryName,
-			// Separators are spaced out so 'new york' matches America/New_York.
 			searchText: [
 				timezoneId.replace(/[/_]/g, ' '),
 				displayName,
@@ -260,12 +223,7 @@ export class TimezoneService {
 		return this.countryNameByTimezoneId.get(timezoneId) ?? '';
 	}
 
-	/**
-	 * The tz database knows which country each zone belongs to, and the browser
-	 * exposes it the other way round: per region code, which zones it holds.
-	 * Inverting that over every ISO region gives the zone's country. Engines
-	 * without the API simply leave every country name blank.
-	 */
+	// Intl only maps regions to zones, so that mapping is inverted over every region code.
 	private buildCountryNamesOnce(): void {
 		if (this.countryNameByTimezoneId) {
 			return;
@@ -313,8 +271,7 @@ export class TimezoneService {
 
 	private getTimezoneIdsForRegion(regionCode: string): string[] {
 		try {
-			// getTimeZones() is the current form; older engines expose the same
-			// data as a timeZones accessor, and some expose neither.
+			// Older engines expose a timeZones accessor instead, and some neither.
 			const locale = new Intl.Locale(`und-${regionCode}`) as Intl.Locale & {
 				getTimeZones?: () => string[] | undefined;
 				timeZones?: string[];
@@ -344,18 +301,13 @@ export class TimezoneService {
 		if (!rawOffsetName) {
 			return null;
 		}
-		// Zones sitting at zero report a bare 'GMT' rather than an offset.
 		if (rawOffsetName === 'GMT') {
 			return 0;
 		}
 		return this.parseOffsetMinutes(rawOffsetName);
 	}
 
-	/**
-	 * Dates predating standard time report local mean time down to the second
-	 * (Africa/Accra reads GMT-00:16:08 in the year 85); EDTF offsets only carry
-	 * hours and minutes, so any seconds are dropped.
-	 */
+	// Pre-standard-time dates can report seconds (GMT-00:16:08); EDTF offsets drop them.
 	private parseOffsetMinutes(timezoneName: string): number | null {
 		const offsetMatch = OFFSET_PATTERN.exec(timezoneName);
 		if (!offsetMatch) {

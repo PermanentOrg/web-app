@@ -275,8 +275,7 @@ describe('TimezoneService', () => {
 		});
 
 		it('should drop the seconds from pre-standard-time local mean offsets', () => {
-			// Two-digit years must not be shifted into the 1900s, and Africa/Accra
-			// reports GMT-00:16:08 that far back.
+			// Africa/Accra reports GMT-00:16:08 in the year 85.
 			expect(
 				service.getOffsetForWallClock('Africa/Accra', { ...noon, year: 85 }),
 			).toEqual('-00:16');

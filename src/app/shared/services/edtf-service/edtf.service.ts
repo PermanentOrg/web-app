@@ -425,12 +425,7 @@ export class EdtfService {
 			throw new Error('Invalid time');
 		}
 
-		// A chosen timezone wins, because its offset depends on the date being
-		// edited; an unusable one falls back to whatever the string was parsed
-		// with. With neither, the time is written unmarked rather than stamped
-		// with the offset of whoever happens to be editing — clearing the
-		// timezone has to actually clear it, and the reader's own zone was never
-		// a fact about the item.
+		// Never fall back to the editor's own zone, so a cleared timezone stays cleared.
 		const timezoneOffset =
 			this.getTimezoneOffset(date, time, time.timezoneId) ??
 			time.timezoneOffset ??
@@ -439,12 +434,6 @@ export class EdtfService {
 		return `T${pad(converted.hour)}:${pad(converted.minute)}:${pad(converted.second)}${timezoneOffset}`;
 	}
 
-	/**
-	 * An EDTF string only carries an offset, and an offset cannot be turned back
-	 * into a place, so the identifier the item stores is stamped onto the parsed
-	 * model here. An item holding a zone but no date still yields a model, so
-	 * the pickers can show that zone instead of silently replacing it.
-	 */
 	withTimezone(
 		dateTimeModel: DateTimeModel | null,
 		timezone: unknown,
@@ -472,13 +461,7 @@ export class EdtfService {
 		};
 	}
 
-	/**
-	 * An item written before timezones were stored carries no place, only the
-	 * offset its EDTF string was stamped with. An offset belongs to many places
-	 * at once, so the zone recovered from it is a guess rather than a fact — but
-	 * it reads the same offset the date already has, and it becomes the item's
-	 * stored zone the next time the date is saved.
-	 */
+	// For items saved before timezones were stored; many zones share an offset, so this is a guess.
 	private inferTimezoneIdFromOffset(
 		dateTimeModel: DateTimeModel | null,
 	): string | null {
@@ -505,11 +488,6 @@ export class EdtfService {
 		);
 	}
 
-	/**
-	 * A timezone only means something next to a time, since a bare date carries
-	 * no offset. Returns the identifier worth storing on the item, or null when
-	 * neither side of the model holds a time that can be read.
-	 */
 	getPersistableTimezoneId(dateTimeModel: DateTimeModel): string | null {
 		if (!dateTimeModel) {
 			return null;
@@ -524,11 +502,6 @@ export class EdtfService {
 		return !!time?.hours && this.parseTimeAs24Hour(time) !== null;
 	}
 
-	/**
-	 * The '+/-HH:MM' a zone was on at the given wall-clock reading, or null when
-	 * the zone or the date is incomplete. A timezone alone is not enough: the
-	 * same zone sits on different offsets across daylight saving and history.
-	 */
 	getTimezoneOffset(
 		date: DateModel,
 		time: TimeModel,
@@ -624,9 +597,7 @@ export class EdtfService {
 		};
 	}
 
-	// Only an explicit '+HH:MM' or '-HH:MM' is read as an offset. 'Z' is UTC but
-	// names no place, and an unmarked time names neither, so both leave the
-	// offset absent and nothing is inferred from them.
+	// 'Z' and unmarked times yield no offset, so no zone is inferred from them.
 	private extractRawTime(edtfString: string): {
 		hours: number;
 		minutes: number;

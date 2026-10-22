@@ -72,8 +72,6 @@ export class EditDateTimeModalComponent implements OnInit {
 
 	endTime = signal<TimeModel>({ ...DEFAULT_TIME });
 
-	// Both sides share one zone: a record carries a single timezone, so letting
-	// the two halves of a range diverge would leave no way to persist the pair.
 	selectedTimezoneId = signal<string | null>(null);
 
 	private edtfResult = computed<{
@@ -120,8 +118,6 @@ export class EditDateTimeModalComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		// No fallback to the browser zone: an item that stores none stays empty
-		// rather than being handed a zone nobody chose.
 		this.selectedTimezoneId.set(
 			this.timezoneService.resolveTimezoneId(this.data?.time?.timezoneId),
 		);
@@ -176,9 +172,7 @@ export class EditDateTimeModalComponent implements OnInit {
 	onTimezoneChange(timezoneId: string | null): void {
 		this.selectedTimezoneId.set(timezoneId);
 		if (!timezoneId) {
-			// The offset the cleared zone was inferred from has to go with it, or
-			// the next read infers the same zone straight back and the clear is
-			// undone without anyone touching it.
+			// Otherwise the next read infers the same zone back from the offset.
 			this.time.update(dropTimezoneOffset);
 			this.endTime.update(dropTimezoneOffset);
 		}

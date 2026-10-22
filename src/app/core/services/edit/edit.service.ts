@@ -357,11 +357,6 @@ export class EditService {
 		await this.saveItemVoProperties(item, newData, [property]);
 	}
 
-	/**
-	 * Applies several properties in one optimistic update so fields that belong
-	 * together — a date and the timezone it was recorded in — reach the backend
-	 * in a single request and revert together when it fails.
-	 */
 	public async saveItemVoProperties(
 		item: ItemVO,
 		changes: Partial<ItemVO>,
@@ -397,11 +392,7 @@ export class EditService {
 		}
 	}
 
-	/**
-	 * VO update() skips undefined values, so a field that was unset before an
-	 * optimistic change has to be unset by hand or it keeps a value the server
-	 * never stored.
-	 */
+	// update() skips undefined values, so unset fields are cleared by hand.
 	private restoreItemValues(
 		item: ItemVO,
 		originalValues: Record<string, unknown>,

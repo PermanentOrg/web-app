@@ -192,8 +192,6 @@ describe('EdtfService', () => {
 			});
 
 			it('should not set a timezone offset for a Z-marked time', () => {
-				// 'Z' names no place, so there is nothing in it to recover a zone
-				// from and nothing is invented from the reader's own machine.
 				const utcMarked = service.toDateTimeModel('1985-05-20T14:30:45Z');
 
 				expect(utcMarked.time.timezoneOffset).toBeUndefined();
@@ -1735,7 +1733,6 @@ describe('EdtfService', () => {
 
 			expect(reopened.time.timezoneId).toBe('Europe/Bucharest');
 
-			// What the picker does on clear: the offset goes with the zone.
 			const cleared = {
 				...reopened,
 				time: {
@@ -1947,16 +1944,12 @@ describe('EdtfService', () => {
 		});
 
 		it('should write no offset when nothing else is known', () => {
-			// The editing machine's zone is a fact about the reader, never the
-			// item, so an unknown zone leaves the time unmarked instead.
 			expect(service.toEdtfDate(dateTimeIn(undefined))).toBe(
 				'1985-05-12T12:45:00',
 			);
 		});
 
 		it('should drop the parsed offset once the zone is cleared', () => {
-			// Clearing the picker strips time.timezoneOffset, which is what stops
-			// the same zone being inferred straight back on the next read.
 			const model = dateTimeIn(undefined);
 			delete model.time.timezoneOffset;
 

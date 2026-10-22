@@ -509,8 +509,7 @@ describe('EditDateTimeModalComponent', () => {
 
 	describe('timezone', () => {
 		beforeEach(() => {
-			// The shared dialog data is flagged approximate, and the EDTF grammar
-			// rejects a qualifier on a datetime, so clear it before serializing.
+			// EDTF rejects a qualifier on a datetime.
 			component.qualifiers.set({
 				approximate: false,
 				uncertain: false,

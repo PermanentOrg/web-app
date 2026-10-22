@@ -29,8 +29,6 @@ export interface IndexedTimezoneGroup {
 	options: IndexedTimezoneOption[];
 }
 
-/** Stands for "no timezone" so clearing is reachable by mouse and keyboard
- * alike; an empty identifier is what marks it apart from a real zone. */
 const CLEAR_OPTION: TimezoneOption = {
 	timezoneId: '',
 	offsetLabel: '',
@@ -91,8 +89,7 @@ export class TimezoneDropdownComponent {
 			.filter((group) => group.options.length > 0);
 	});
 
-	/** Hidden while searching so the first arrow-down lands on a match rather
-	 * than on the clear row. */
+	// Hidden while searching so arrow-down lands on the first match.
 	readonly showClearOption = computed(() => !this.searchTerm().trim());
 
 	readonly clearOption = CLEAR_OPTION;
@@ -102,10 +99,6 @@ export class TimezoneDropdownComponent {
 		return this.showClearOption() ? [CLEAR_OPTION, ...options] : options;
 	});
 
-	/**
-	 * Each option carries its position in the flattened list so the template can
-	 * bind element ids and the active row without searching the list per option.
-	 */
 	readonly indexedGroups = computed<IndexedTimezoneGroup[]>(() => {
 		let nextOptionIndex = this.showClearOption() ? 1 : 0;
 		return this.groups().map((group) => ({
@@ -128,10 +121,6 @@ export class TimezoneDropdownComponent {
 			: null,
 	);
 
-	/**
-	 * Intl.supportedValuesOf omits identifiers it still accepts elsewhere, so a
-	 * selection missing from the list is folded in rather than left unselectable.
-	 */
 	private readonly selectableGroups = computed<TimezoneGroup[]>(() => {
 		const groups = this.timezoneService.getGroupedOptions();
 		const selectedOption = this.selectedOption();
@@ -158,8 +147,7 @@ export class TimezoneDropdownComponent {
 	});
 
 	constructor() {
-		// The search field only exists once the panel has rendered, so focus has
-		// to wait for the view child rather than move inside open().
+		// The search input only exists once the panel has rendered.
 		effect(() => {
 			if (this.isOpen() && this.showSearch()) {
 				this.searchInput()?.nativeElement.focus();
@@ -278,8 +266,7 @@ export class TimezoneDropdownComponent {
 					this.closeAndRefocusTrigger();
 				}
 				break;
-			// Tab closes the panel but must still move focus, so it is not
-			// prevented.
+			// Not prevented, so focus still moves on.
 			case 'Tab':
 				this.close();
 				break;
@@ -332,8 +319,6 @@ export class TimezoneDropdownComponent {
 			: -1;
 	}
 
-	// Every option stays in the DOM while the panel is open, so the row can be
-	// looked up and scrolled without waiting for another render pass.
 	private scrollActiveOptionIntoView(optionIndex: number): void {
 		const optionElement = (
 			this.elementRef.nativeElement as HTMLElement
