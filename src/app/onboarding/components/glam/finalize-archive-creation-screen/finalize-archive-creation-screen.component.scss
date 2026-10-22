@@ -51,7 +51,7 @@ p {
 		gap: 16px;
 
 		& > p {
-			margin-bottom: 0px;
+			margin-bottom: 0;
 		}
 	}
 
@@ -62,7 +62,7 @@ p {
 }
 
 hr {
-	margin: 32px 0px;
+	margin: 32px 0;
 	border-top: 1px solid rgba($PR-brand-white, 0.3);
 }
 
@@ -77,7 +77,7 @@ hr {
 	}
 
 	@media screen and (max-width: 465px) {
-		padding: 0px 50px;
+		padding: 0 50px;
 
 		& .archive-info {
 			justify-content: center;

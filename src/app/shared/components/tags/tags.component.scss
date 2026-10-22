@@ -15,12 +15,12 @@ $gutter-size: 0.25rem;
 	&:not(.read-only) {
 		.empty {
 			color: $text-muted;
-			padding: 0.25rem 0rem;
+			padding: 0.25rem 0;
 		}
 	}
 
 	.tag {
-		padding: 0.5rem 0rem;
+		padding: 0.5rem 0;
 		border-radius: 0.5rem;
 		margin-right: $gutter-size;
 		margin-bottom: $gutter-size;
@@ -43,14 +43,14 @@ $gutter-size: 0.25rem;
 		}
 
 		.customMetadataField {
-			border-radius: 0.5rem 0rem 0rem 0.5rem;
+			border-radius: 0.5rem 0 0 0.5rem;
 			color: $PR-brand-white;
 			background: $PR-blue-light;
 			max-width: 6.5rem;
 		}
 
 		.customMetadataValue {
-			border-radius: 0rem 0.5rem 0.5rem 0rem;
+			border-radius: 0 0.5rem 0.5rem 0;
 			background: rgba($PR-blue-light, 0.2);
 			max-width: 6.5rem;
 			margin-right: 0.25em;
@@ -70,5 +70,5 @@ $gutter-size: 0.25rem;
 
 .not-empty {
 	color: $text-muted;
-	padding: 0.25rem 0rem;
+	padding: 0.25rem 0;
 }

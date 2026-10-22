@@ -31,7 +31,7 @@
 
 .edit-tags {
 	border: 1px solid $input-border-color;
-	border-top: 0px solid;
+	border-top: 0 solid;
 	max-height: 10rem;
 	overflow-y: auto;
 	border-bottom-left-radius: $border-radius;
@@ -101,7 +101,7 @@
 }
 
 .edit-tags-dialog-body {
-	padding: 0px 10px;
+	padding: 0 10px;
 }
 
 .input-vertical-error {
@@ -112,7 +112,7 @@
 	pointer-events: none;
 	opacity: 1;
 	transition: 0.1s ease-in opacity;
-	bottom: 0px;
+	bottom: 0;
 	right: 3.75rem;
 	color: $red;
 	z-index: 100;

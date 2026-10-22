@@ -19,7 +19,7 @@
 }
 
 .phase-progress {
-	padding: 10px 0px;
+	padding: 10px 0;
 }
 
 .progress-bar {
@@ -27,7 +27,7 @@
 	border-radius: 0.25rem;
 	height: 40px;
 	background: rgba($gray-300, 0.5);
-	border: 0px solid $PR-orange;
+	border: 0 solid $PR-orange;
 	overflow: hidden;
 }
 
@@ -52,7 +52,7 @@
 
 @media screen and (max-width: 767px) {
 	:host {
-		padding: 20px 0px;
+		padding: 20px 0;
 	}
 
 	.pledge-progress-header {

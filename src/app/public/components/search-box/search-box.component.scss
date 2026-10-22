@@ -24,9 +24,9 @@ form {
 
 	input {
 		background: none;
-		border: 0px solid;
+		border: 0 solid;
 		border-bottom: 1px solid $PR-orange;
-		border-radius: 0px;
+		border-radius: 0;
 		padding: 0.25rem 0;
 		color: white;
 	}
@@ -75,7 +75,7 @@ form {
 	color: $PR-blue;
 	background: $PR-orange;
 	z-index: 10;
-	padding: 0px 10px 10px;
+	padding: 0 10px 10px;
 	box-shadow: $box-shadow;
 	border-bottom-left-radius: 0.25rem;
 	border-bottom-right-radius: 0.25rem;
@@ -109,7 +109,7 @@ form {
 		color: $PR-blue;
 		letter-spacing: 0.1em;
 		padding: 5px 10px;
-		margin: 0px -10px 5px;
+		margin: 0 -10px 5px;
 	}
 }
 
@@ -153,7 +153,7 @@ form {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 0px 5px;
+	padding: 0 5px;
 
 	@media screen and (min-width: 801px) {
 		width: 800px;
@@ -197,7 +197,7 @@ form {
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background: rgba(0, 0, 0, 0.3);
+		background: rgb(0 0 0 / 0.3);
 	}
 }
 

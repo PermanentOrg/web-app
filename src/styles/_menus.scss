@@ -3,7 +3,7 @@
 	top: 0;
 	bottom: 0;
 	width: 100%;
-	background-color: rgba(black, 0);
+	background-color: rgb(0 0 0 / 0);
 	transition:
 		background-color $menu-transition-length $menu-open-ease,
 		visibility 0s linear $menu-transition-length;
@@ -77,7 +77,7 @@ pr-dialog {
 		}
 
 		.dialog-footer {
-			padding: 0px 10px;
+			padding: 0 10px;
 			flex: 0 0 auto;
 			display: flex;
 

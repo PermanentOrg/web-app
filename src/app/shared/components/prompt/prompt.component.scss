@@ -63,14 +63,14 @@ $transition-length: 0.4s;
 }
 
 .prompt-buttons {
-	padding: 0px 10px;
+	padding: 0 10px;
 }
 
 .prompt-title {
-	padding: 10px 10px 0px;
+	padding: 10px 10px 0;
 	font-weight: 600;
 	max-width: 420px;
-	margin: 0px auto;
+	margin: 0 auto;
 	user-select: none;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -79,5 +79,5 @@ $transition-length: 0.4s;
 .prompt-template {
 	max-width: 420px;
 	margin: 0 auto;
-	padding: 10px 10px 0px;
+	padding: 10px 10px 0;
 }
