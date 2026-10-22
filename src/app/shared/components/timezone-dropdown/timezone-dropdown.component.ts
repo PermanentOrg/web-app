@@ -49,6 +49,7 @@ export class TimezoneDropdownComponent {
 	readonly selectedTimezone = input<unknown>(undefined);
 	readonly disabled = input(false);
 	readonly showSearch = input(false);
+	readonly compact = input(false);
 	readonly fieldLabel = input('Timezone');
 
 	readonly timezoneChange = output<string | null>();

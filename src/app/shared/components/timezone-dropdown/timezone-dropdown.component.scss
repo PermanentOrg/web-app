@@ -156,6 +156,18 @@
 		white-space: nowrap;
 	}
 
+	&.pr-timezone-dropdown-compact {
+		.pr-timezone-option-offset {
+			flex-shrink: 0;
+		}
+
+		.pr-timezone-option-label {
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+
 	.pr-timezone-empty {
 		@include usual-text;
 

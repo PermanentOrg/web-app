@@ -173,6 +173,25 @@ describe('TimezoneDropdownComponent', () => {
 			).toEqual('Ghana');
 		});
 
+		it('should leave the country out when compact', () => {
+			setInput('compact', true);
+			setInput('showSearch', true);
+			trigger().click();
+			fixture.detectChanges();
+			instance.onSearchTermChange('accra');
+			fixture.detectChanges();
+
+			expect(
+				options()[0].querySelector('.pr-timezone-option-country'),
+			).toBeNull();
+
+			expect(
+				element
+					.querySelector('.pr-timezone-dropdown')
+					.classList.contains('pr-timezone-dropdown-compact'),
+			).toBeTrue();
+		});
+
 		it('should find a zone by its country name', () => {
 			setInput('showSearch', true);
 			trigger().click();
