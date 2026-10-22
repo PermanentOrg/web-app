@@ -86,6 +86,8 @@ export interface StelaLocation {
 	longitude?: number | null;
 	altitudeMeters?: number | null;
 	precision?: LocationPrecision | null;
+	// Free text, so not guaranteed to be a valid zone.
+	timezone?: string | null;
 	// Legacy columns still returned by stela for backwards compatibility. Used
 	// to shim locations that predate (or were geocoded without) the new fields.
 	streetNumber?: string | null;
@@ -174,13 +176,19 @@ export const convertStelaSharetoShareVO = (stelaShare: StelaShare): ShareVO =>
 		},
 	});
 
+// Stela rejects an empty location object, so an untouched timezone omits the key.
+export const buildTimezonePatch = (
+	timezone: string | null | undefined,
+): { location?: { timezone: string | null } } =>
+	timezone === undefined ? {} : { location: { timezone } };
+
 export const convertStelaLocationToLocnVOData = (
 	stelaLocation: StelaLocation | null | undefined,
 ): LocnVOData | null => {
 	if (!stelaLocation?.id) {
 		return null;
 	}
-	const { state, precision, ...rest } = stelaLocation;
+	const { state, precision, timezone, ...rest } = stelaLocation;
 	// Legacy shim: locations geocoded before the IPTC fields existed — or by
 	// backend paths (e.g. EXIF geocoding on upload) that still only write the
 	// legacy columns — arrive without name/sublocation/city. Fall back to the
@@ -225,6 +233,7 @@ export const convertStelaRecordToRecordVO = (
 		...getOptionalAccessRoleField(stelaAccessRole),
 		displayDT: stelaRecord.displayDate,
 		displayTime: stelaRecord.displayTime,
+		timezone: stelaRecord.location?.timezone ?? null,
 		folder_linkId: Number.parseInt(stelaRecord.folderLinkId, 10),
 		folder_linkType: stelaRecord.folderLinkType,
 		LocnVO: convertStelaLocationToLocnVOData(stelaRecord.location),
@@ -525,11 +534,12 @@ export class RecordRepo extends BaseRepo {
 			recordVO.recordId ??
 			(await this.getRecordIdByArchiveNbr(recordVO.archiveNbr));
 
-		// For now we only send displayTime. This will evolve until we can
-		// update the whole record using this method.
+		// For now we only send displayTime and the timezone. This will evolve
+		// until we can update the whole record using this method.
 		const stelaRecord = await firstValueFrom(
 			this.httpV2.patch<StelaRecord>(`v2/records/${recordId}`, {
 				displayTime: recordVO.displayTime,
+				...buildTimezonePatch(recordVO.timezone),
 			}),
 		);
 

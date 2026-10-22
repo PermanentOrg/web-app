@@ -11,6 +11,8 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
 import { TimepickerInputComponent } from '@shared/components/timepicker-input/timepicker-input.component';
+import { TimezoneDropdownComponent } from '@shared/components/timezone-dropdown/timezone-dropdown.component';
+import { TimezoneService } from '@shared/services/timezone-service/timezone.service';
 import {
 	EdtfService,
 	DateQualifier,
@@ -22,6 +24,11 @@ import {
 	DEFAULT_DATE_QUALIFIERS,
 	UNKNOWN_VALUE,
 } from '@shared/services/edtf-service/edtf.service';
+
+const dropTimezoneOffset = (time: TimeModel): TimeModel => {
+	const { timezoneOffset, ...withoutOffset } = time;
+	return withoutOffset;
+};
 
 interface SavedSideState {
 	qualifiers: DateQualifierFlags;
@@ -37,6 +44,7 @@ interface SavedSideState {
 		NgbTooltipModule,
 		DatepickerInputComponent,
 		TimepickerInputComponent,
+		TimezoneDropdownComponent,
 	],
 	templateUrl: './edit-date-time-modal.component.html',
 	styleUrls: ['./edit-date-time-modal.component.scss'],
@@ -64,6 +72,8 @@ export class EditDateTimeModalComponent implements OnInit {
 
 	endTime = signal<TimeModel>({ ...DEFAULT_TIME });
 
+	selectedTimezoneId = signal<string | null>(null);
+
 	private edtfResult = computed<{
 		value: string;
 		valid: boolean;
@@ -75,13 +85,13 @@ export class EditDateTimeModalComponent implements OnInit {
 
 		const dateTimeModel: DateTimeModel = {
 			date: this.date(),
-			time: this.time(),
+			time: this.withSelectedTimezone(this.time()),
 			qualifiers: { ...this.qualifiers() },
 		};
 
 		if (this.useDateRange()) {
 			dateTimeModel.endDate = this.endDate();
-			dateTimeModel.endTime = this.endTime();
+			dateTimeModel.endTime = this.withSelectedTimezone(this.endTime());
 			dateTimeModel.endQualifiers = { ...this.endQualifiers() };
 		}
 		try {
@@ -104,9 +114,14 @@ export class EditDateTimeModalComponent implements OnInit {
 		public dialogRef: DialogRef<DateTimeModel>,
 		@Inject(DIALOG_DATA) public data: DateTimeModel,
 		private edtfService: EdtfService,
+		private timezoneService: TimezoneService,
 	) {}
 
 	ngOnInit(): void {
+		this.selectedTimezoneId.set(
+			this.timezoneService.resolveTimezoneId(this.data?.time?.timezoneId),
+		);
+
 		if (this.data) {
 			this.qualifiers.set(
 				this.data.qualifiers ?? { ...DEFAULT_DATE_QUALIFIERS },
@@ -152,6 +167,19 @@ export class EditDateTimeModalComponent implements OnInit {
 			seconds: timeInputValue.seconds,
 			format: timeInputValue.format,
 		}));
+	}
+
+	onTimezoneChange(timezoneId: string | null): void {
+		this.selectedTimezoneId.set(timezoneId);
+		if (!timezoneId) {
+			// Otherwise the next read infers the same zone back from the offset.
+			this.time.update(dropTimezoneOffset);
+			this.endTime.update(dropTimezoneOffset);
+		}
+	}
+
+	private withSelectedTimezone(time: TimeModel): TimeModel {
+		return { ...time, timezoneId: this.selectedTimezoneId() ?? undefined };
 	}
 
 	onQualifierChange(newDateQualifier: DateQualifier, isEnd: boolean): void {
@@ -244,6 +272,7 @@ export class EditDateTimeModalComponent implements OnInit {
 		this.date.set({ year: '', month: '', day: '' });
 		this.time.set({ ...DEFAULT_TIME });
 		this.savedStartState.set(null);
+		this.onTimezoneChange(null);
 	}
 
 	clearEnd(): void {
@@ -251,6 +280,7 @@ export class EditDateTimeModalComponent implements OnInit {
 		this.endDate.set({ year: '', month: '', day: '' });
 		this.endTime.set({ ...DEFAULT_TIME });
 		this.savedEndState.set(null);
+		this.onTimezoneChange(null);
 	}
 
 	onCancel(): void {
@@ -261,13 +291,13 @@ export class EditDateTimeModalComponent implements OnInit {
 		const newDateModel: DateTimeModel = {
 			qualifiers: { ...this.qualifiers() },
 			date: { ...this.date() },
-			time: { ...this.time() },
+			time: this.withSelectedTimezone(this.time()),
 		};
 
 		if (this.useDateRange()) {
 			newDateModel.endQualifiers = { ...this.endQualifiers() };
 			newDateModel.endDate = { ...this.endDate() };
-			newDateModel.endTime = { ...this.endTime() };
+			newDateModel.endTime = this.withSelectedTimezone(this.endTime());
 		}
 
 		this.dialogRef.close(newDateModel);
