@@ -1,0 +1,33 @@
+@import 'variables';
+
+:host {
+	display: block;
+	min-width: 0;
+}
+
+.value {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	column-gap: 0.35em;
+}
+
+.part {
+	white-space: nowrap;
+}
+
+.separator {
+	margin-left: 0.35em;
+}
+
+.annotation {
+	opacity: 0.65;
+}
+
+.more-info {
+	font-size: 1.1em;
+	line-height: 1;
+	vertical-align: text-bottom;
+	margin-left: 0.4em;
+	opacity: 0.65;
+}

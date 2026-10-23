@@ -8,7 +8,9 @@ pr-shares {
 
 	@include after($tablet-horizontal) {
 		&.show-sidebar {
-			width: calc(100% - #{$sidebar-width});
+			// The fixed sidebar sits outside .main-content's right padding.
+			width: calc(100% - #{$sidebar-width} + #{$grid-unit});
+			margin-right: -$grid-unit;
 			height: calc(100vh - #{$navbar-total-height-desktop});
 
 			pr-sidebar {
@@ -26,8 +28,6 @@ pr-shares {
 				max-height: calc(
 					100vh - #{$navbar-total-height-desktop + $file-list-controls-height}
 				);
-				margin-right: -$grid-unit;
-				padding-right: $grid-unit;
 				padding-bottom: $file-list-row-height * 1;
 			}
 		}

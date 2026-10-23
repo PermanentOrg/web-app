@@ -87,3 +87,23 @@ ngb-timepicker {
 		justify-content: center;
 	}
 }
+
+// Global because the tooltip is appended to body; Bootstrap caps it at 200px.
+.edtf-date-tooltip {
+	.tooltip-inner {
+		max-width: none;
+		padding: $grid-unit * 0.5 $grid-unit * 0.75;
+		text-align: left;
+	}
+
+	.tooltip-line {
+		white-space: nowrap;
+		line-height: 1.5;
+
+		.label {
+			display: inline-block;
+			width: 3.2em;
+			opacity: 0.65;
+		}
+	}
+}

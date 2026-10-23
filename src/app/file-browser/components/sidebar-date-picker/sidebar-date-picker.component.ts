@@ -22,6 +22,7 @@ import {
 	DateQualifierFlags,
 	DEFAULT_DATE_QUALIFIERS,
 } from '@shared/services/edtf-service/edtf.service';
+import { EdtfDisplayService } from '@shared/services/edtf-service/edtf-display.service';
 import { DatepickerInputComponent } from '@shared/components/datepicker-input/datepicker-input.component';
 import { TimepickerInputComponent } from '@shared/components/timepicker-input/timepicker-input.component';
 import { TimezoneDropdownComponent } from '@shared/components/timezone-dropdown/timezone-dropdown.component';
@@ -75,6 +76,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 
 	constructor(
 		private readonly edtfService: EdtfService,
+		private readonly edtfDisplayService: EdtfDisplayService,
 		private readonly timezoneService: TimezoneService,
 	) {}
 
@@ -110,7 +112,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	formattedStartDate = computed(() => {
 		if (this._qualifiers().unknown) return 'Unknown';
 		if (this._isOpenStart()) return '..';
-		return this.formatDate(this._date());
+		return this.edtfDisplayService.formatDateForDisplay(this._date());
 	});
 
 	formattedStartTime = computed(() => this.formatTime(this._time()));
@@ -135,7 +137,7 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	formattedEndDate = computed(() => {
 		if (this._endQualifiers().unknown) return 'Unknown';
 		if (this._isOpenEnd()) return '..';
-		return this.formatDate(this._endDate());
+		return this.edtfDisplayService.formatDateForDisplay(this._endDate());
 	});
 
 	formattedEndTime = computed(() => this.formatTime(this._endTime()));
