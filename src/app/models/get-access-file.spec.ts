@@ -1,21 +1,30 @@
 import { FileFormat, PermanentFile } from './file-vo';
-import { GetAccessFile, HasFiles } from './get-access-file';
+import {
+	GetAccessFile,
+	GetOriginalFile,
+	HasFiles,
+	getFirstRetrievableFile,
+} from './get-access-file';
+
+function makeTestFile(params: Partial<PermanentFile> = {}): PermanentFile {
+	return Object.assign(
+		{
+			fileId: 0,
+			size: 0,
+			format: FileFormat.Original,
+			fileURL: 'test',
+			downloadURL: 'test',
+			type: 'test',
+		},
+		params,
+	);
+}
+
+function makeFailedOriginalFile(): PermanentFile {
+	return makeTestFile({ fileId: 1, size: null, fileURL: null });
+}
 
 describe('GetAccessFile', () => {
-	function makeTestFile(params: Partial<PermanentFile> = {}): PermanentFile {
-		return Object.assign(
-			{
-				fileId: 0,
-				size: 0,
-				format: FileFormat.Original,
-				fileURL: 'test',
-				downloadURL: 'test',
-				type: 'test',
-			},
-			params,
-		);
-	}
-
 	it('should return null for an undefined object being passed in', () => {
 		let files: HasFiles;
 
@@ -82,5 +91,152 @@ describe('GetAccessFile', () => {
 				],
 			}),
 		).toEqual(convertedFile);
+	});
+
+	it('should skip a failed original that comes before a good one', () => {
+		const goodOriginal = makeTestFile({ fileId: 2, size: 1315957 });
+
+		expect(
+			GetAccessFile({
+				FileVOs: [makeFailedOriginalFile(), goodOriginal],
+			}),
+		).toEqual(goodOriginal);
+	});
+
+	it('should keep an archivematica copy without a size ahead of a good original', () => {
+		const archivematicaFileWithoutSize = makeTestFile({
+			fileId: 1,
+			format: FileFormat.ArchivematicaAccess,
+			size: null,
+		});
+
+		expect(
+			GetAccessFile({
+				FileVOs: [makeTestFile({ fileId: 2 }), archivematicaFileWithoutSize],
+			}),
+		).toEqual(archivematicaFileWithoutSize);
+	});
+
+	it('should keep a pdf conversion without a size ahead of other conversions', () => {
+		const pdfConversionWithoutSize = makeTestFile({
+			fileId: 1,
+			format: FileFormat.Converted,
+			type: 'type.file.pdf.pdfa',
+			size: null,
+		});
+
+		expect(
+			GetAccessFile({
+				FileVOs: [
+					makeTestFile({ fileId: 2, format: FileFormat.Converted }),
+					pdfConversionWithoutSize,
+				],
+			}),
+		).toEqual(pdfConversionWithoutSize);
+	});
+
+	it('should prefer a good pdf conversion over a failed one listed first', () => {
+		const failedPdfConversion = makeTestFile({
+			fileId: 1,
+			format: FileFormat.Converted,
+			type: 'type.file.pdf.pdfa',
+			size: null,
+			fileURL: null,
+		});
+		const goodPdfConversion = makeTestFile({
+			fileId: 2,
+			format: FileFormat.Converted,
+			type: 'type.file.pdf.pdfa',
+		});
+
+		expect(
+			GetAccessFile({
+				FileVOs: [failedPdfConversion, goodPdfConversion],
+			}),
+		).toEqual(goodPdfConversion);
+	});
+
+	it('should keep the format preference when no file has a size', () => {
+		const convertedFile = makeTestFile({
+			fileId: 1,
+			format: FileFormat.Converted,
+			size: undefined,
+		});
+
+		expect(
+			GetAccessFile({
+				FileVOs: [makeTestFile({ size: undefined }), convertedFile],
+			}),
+		).toEqual(convertedFile);
+	});
+
+	it('should still return a failed original when it is the only file', () => {
+		const failedOriginal = makeFailedOriginalFile();
+
+		expect(GetAccessFile({ FileVOs: [failedOriginal] })).toEqual(
+			failedOriginal,
+		);
+	});
+});
+
+describe('GetOriginalFile', () => {
+	it('should return undefined for a record with no FileVOs', () => {
+		expect(GetOriginalFile({ FileVOs: [] })).toBeUndefined();
+	});
+
+	it('should ignore files that are not originals', () => {
+		const original = makeTestFile({ fileId: 2 });
+
+		expect(
+			GetOriginalFile({
+				FileVOs: [
+					makeTestFile({ fileId: 1, format: FileFormat.Converted }),
+					original,
+				],
+			}),
+		).toEqual(original);
+	});
+
+	it('should prefer a good original over a failed one listed first', () => {
+		const goodOriginal = makeTestFile({ fileId: 2, size: 1315957 });
+
+		expect(
+			GetOriginalFile({
+				FileVOs: [makeFailedOriginalFile(), goodOriginal],
+			}),
+		).toEqual(goodOriginal);
+	});
+});
+
+describe('getFirstRetrievableFile', () => {
+	it('should return undefined for an empty list', () => {
+		expect(getFirstRetrievableFile([])).toBeUndefined();
+	});
+
+	it('should treat a file without a URL as not retrievable', () => {
+		const fileWithoutUrl = makeTestFile({ fileId: 1, fileURL: null });
+		const fileWithUrl = makeTestFile({ fileId: 2 });
+
+		expect(getFirstRetrievableFile([fileWithoutUrl, fileWithUrl])).toEqual(
+			fileWithUrl,
+		);
+	});
+
+	it('should keep the original order among retrievable files', () => {
+		const firstFile = makeTestFile({ fileId: 1 });
+		const secondFile = makeTestFile({ fileId: 2 });
+
+		expect(getFirstRetrievableFile([firstFile, secondFile])).toEqual(firstFile);
+	});
+
+	it('should fall back to the first file when none is retrievable', () => {
+		const failedOriginal = makeFailedOriginalFile();
+
+		expect(
+			getFirstRetrievableFile([
+				failedOriginal,
+				makeTestFile({ fileId: 2, size: null }),
+			]),
+		).toEqual(failedOriginal);
 	});
 });
