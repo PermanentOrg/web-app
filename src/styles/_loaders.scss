@@ -87,7 +87,7 @@ $fade-ring-opacity: 0.6;
 	width: 50%;
 	height: 50%;
 	background: #fff;
-	border-radius: 100% 0 0 0;
+	border-radius: 100% 0 0;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -102,10 +102,7 @@ $fade-ring-opacity: 0.6;
 	content: '';
 	margin: auto;
 	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
+	inset: 0;
 }
 
 @keyframes fadeInHalf {
