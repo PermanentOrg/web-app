@@ -34,7 +34,6 @@ describe('EdtfDisplayService', () => {
 	});
 
 	describe('every value in the supported-values sheet', () => {
-		// Ranks are the EDTF_sort_ranking sheet's, so a failure names its row.
 		const supportedValues: [
 			rank: number,
 			storedValue: string,
@@ -319,11 +318,9 @@ describe('EdtfDisplayService', () => {
 		});
 
 		it('should say nothing for anything that is not a range hiding a time', () => {
-			// a single value always shows its own time, seconds included or not
 			expect(service.formatForTooltip('1985-04-12T23:20:30')).toBeNull();
 			expect(service.formatForTooltip('1985-04-12T23:20:00')).toBeNull();
 			expect(service.formatForTooltip('1985-04-12')).toBeNull();
-			// a range carrying no time has nothing to reveal
 			expect(service.formatForTooltip('1985-04-12/1985-06-10')).toBeNull();
 			expect(service.formatForTooltip('XXXX-XX-XX')).toBeNull();
 			expect(service.formatForTooltip('')).toBeNull();

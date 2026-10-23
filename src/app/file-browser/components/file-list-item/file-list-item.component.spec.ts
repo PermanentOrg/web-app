@@ -590,8 +590,7 @@ describe('FileListItemComponent', () => {
 			mockFeatureFlagService.isEnabled.and.callFake(
 				(flag: string) => flag === 'edtf-date',
 			);
-			// The flag is read in the constructor, so the fixture has to be
-			// built again for the new value to take.
+			// The flag is read in the constructor, so the fixture must be rebuilt.
 			fixture = TestBed.createComponent(FileListItemComponent);
 			component = fixture.componentInstance;
 			component.item = buildTestItem();

@@ -15,9 +15,7 @@ export interface EdtfDisplaySegment {
 }
 
 export interface EdtfDisplayText {
-	/** The value, or the start of a range together with its dash. */
 	date: EdtfDisplaySegment[];
-	/** The end of a range, so it can wrap onto its own line. Empty otherwise. */
 	dateEnd: EdtfDisplaySegment[];
 	time: EdtfDisplaySegment[];
 }
@@ -109,8 +107,7 @@ export class EdtfDisplayService {
 
 		const hasYear = !!yearValue;
 		const hasMonth = !!monthValue;
-		// A lone '0' day is an unfinished value ('05' minus a keystroke), so it
-		// is treated as absent rather than guessed at.
+		// A lone '0' day is a half-typed value, so treat it as absent.
 		const hasDay = !!dayValue && parseInt(dayValue, 10) !== 0;
 
 		if (!hasYear && !hasMonth && !hasDay) {
@@ -164,11 +161,6 @@ export class EdtfDisplayService {
 			: this.buildSingleValue(sides.start);
 	}
 
-	/**
-	 * The full value for a range whose times the row does not show, or null for
-	 * anything else — a single value shows its own time, and a range inside one
-	 * day shows both of them.
-	 */
 	formatForTooltip(
 		displayTime: string | null | undefined,
 	): EdtfTooltipText | null {

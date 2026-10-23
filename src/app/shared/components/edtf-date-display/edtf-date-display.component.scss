@@ -5,8 +5,6 @@
 	min-width: 0;
 }
 
-// Each part is unbreakable and the row wraps between them, so a value too wide
-// for its column moves its end onto a second line instead of being cut off.
 .value {
 	display: flex;
 	flex-wrap: wrap;
@@ -22,8 +20,6 @@
 	margin-left: 0.35em;
 }
 
-// Opacity rather than a fixed colour so an annotation reads as lighter both in
-// the Date column and in the already-muted row under the item name.
 .annotation {
 	opacity: 0.65;
 }

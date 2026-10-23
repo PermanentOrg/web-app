@@ -8,9 +8,7 @@ pr-shares {
 
 	@include after($tablet-horizontal) {
 		&.show-sidebar {
-			// The sidebar is fixed to the viewport edge, so it sits outside
-			// .main-content's right padding. Reaching back across that padding is
-			// what stops the rows ending short of it.
+			// The fixed sidebar sits outside .main-content's right padding.
 			width: calc(100% - #{$sidebar-width} + #{$grid-unit});
 			margin-right: -$grid-unit;
 			height: calc(100vh - #{$navbar-total-height-desktop});
