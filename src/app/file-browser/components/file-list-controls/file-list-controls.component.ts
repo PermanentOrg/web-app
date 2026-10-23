@@ -17,7 +17,7 @@ import {
 import { Subscription, Subject } from 'rxjs';
 import { min } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
-import { ItemVO, AccessRole, SortType, RecordVO } from '@models';
+import { ItemVO, AccessRole, SortType, RecordVO, FolderVO } from '@models';
 import { getAccessAsEnum } from '@models/access-role';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { EditService } from '@core/services/edit/edit.service';
@@ -77,7 +77,6 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 	isShareRoot = false;
 	isPublic = false;
 
-	isSavingSort = false;
 	isSorting = false;
 	canSaveSort = false;
 	displayDownloadDropdown = false;
@@ -99,7 +98,8 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 	subscriptions: Subscription[] = [];
 	selectedItems: ItemVO[] = [];
 
-	initialSortType: SortType;
+	savedSortType: SortType;
+	private isSavingSort = false;
 
 	private debug = debug('component:fileListControls');
 	constructor(
@@ -113,7 +113,7 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 		private event: EventService,
 	) {
 		this.getSortFromCurrentFolder();
-		this.initialSortType = this.data.currentFolder?.sort;
+		this.savedSortType = this.data.currentFolder?.sort;
 		this.subscriptions.push(
 			this.data.selectedItems$().subscribe((items) => {
 				this.selectedItems = Array.from(items);
@@ -252,7 +252,15 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 		this.sortDesc = sort && sort.includes('desc');
 	}
 
+	get canSort(): boolean {
+		return this.allowSort && this.canSaveSort;
+	}
+
 	onSortClick(column: FileListColumn) {
+		if (!this.canSort) {
+			return;
+		}
+
 		let desc = false;
 		if (this.currentSort === column) {
 			desc = !this.sortDesc;
@@ -275,10 +283,6 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 		this.setSort(sortType);
 	}
 
-	isSortChanged() {
-		return this.initialSortType !== this.data.currentFolder?.sort;
-	}
-
 	setSort(sort: SortType) {
 		if (this.isSorting) {
 			return;
@@ -293,20 +297,43 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 			this.isSorting = false;
 			this.isSorting$.next(false);
 		}
+
+		if (this.canSaveSort) {
+			void this.saveLatestSort();
+		}
 	}
 
-	async saveSort() {
+	private async saveLatestSort(): Promise<void> {
 		if (this.isSavingSort) {
 			return;
 		}
 
+		const folder = this.data.currentFolder;
+		this.isSavingSort = true;
 		try {
-			this.isSavingSort = true;
-			await this.api.folder.sort([this.data.currentFolder]);
-			this.initialSortType = this.data.currentFolder.sort;
+			while (folder.sort !== this.savedSortType) {
+				const sortBeingSaved = folder.sort;
+				await this.api.folder.sort([folder]);
+				this.savedSortType = sortBeingSaved;
+			}
+		} catch {
+			this.revertToSavedSort(folder);
 		} finally {
 			this.isSavingSort = false;
 		}
+	}
+
+	private revertToSavedSort(folder: FolderVO): void {
+		this.message.showError({
+			message: 'There was a problem saving the sort for this folder',
+			translate: false,
+		});
+
+		if (this.data.currentFolder !== folder || !this.savedSortType) {
+			return;
+		}
+
+		this.setSort(this.savedSortType);
 	}
 
 	async onDeleteClick() {
