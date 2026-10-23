@@ -27,7 +27,7 @@ $input-padding: 0.5rem;
 
 input {
 	width: 100%;
-	background: rgb(255 255 255 / 0.2);
+	background: rgb(255 255 255 / 20%);
 	border: 1px solid transparent;
 
 	// border-bottom: 1px solid $PR-orange;
@@ -41,7 +41,7 @@ input {
 	position: relative;
 
 	&::placeholder {
-		color: rgb(255 255 255 / 0.5);
+		color: rgb(255 255 255 / 50%);
 	}
 
 	&:focus {
@@ -205,7 +205,7 @@ $result-padding-y: 0.25rem;
 	margin: 0;
 	margin-left: 0.5rem;
 
-	&:after {
+	&::after {
 		background: $PR-orange;
 	}
 

@@ -10,7 +10,7 @@ $dual-ring-size: 95px;
 	transform: translate(-50%, -50%);
 }
 
-.lds-dual-ring:after {
+.lds-dual-ring::after {
 	content: ' ';
 	display: block;
 	width: $dual-ring-size;
@@ -23,14 +23,14 @@ $dual-ring-size: 95px;
 }
 
 .lds-dual-ring-purple {
-	&:after {
+	&::after {
 		border: 6px solid $PR-purple;
 		border-color: $PR-purple transparent $PR-purple transparent;
 	}
 }
 
 .lds-dual-ring-orange {
-	&:after {
+	&::after {
 		border: 6px solid $PR-orange;
 		border-color: $PR-orange transparent $PR-orange transparent;
 	}
@@ -64,11 +64,15 @@ $fade-ring-opacity: 0.6;
 	height: $fade-ring-size;
 	border-radius: 50%;
 	background: #fff;
-	background: -moz-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0) 42%);
-	background: -webkit-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0) 42%);
-	background: -o-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0) 42%);
-	background: -ms-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0) 42%);
-	background: linear-gradient(to right, #fff 10%, rgb(255 255 255 / 0) 42%);
+	background: -moz-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0%) 42%);
+	background: -webkit-linear-gradient(
+		left,
+		#fff 10%,
+		rgb(255 255 255 / 0%) 42%
+	);
+	background: -o-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0%) 42%);
+	background: -ms-linear-gradient(left, #fff 10%, rgb(255 255 255 / 0%) 42%);
+	background: linear-gradient(to right, #fff 10%, rgb(255 255 255 / 0%) 42%);
 	position: relative;
 	animation:
 		load3 1.4s infinite linear,
@@ -79,7 +83,7 @@ $fade-ring-opacity: 0.6;
 	opacity: $fade-ring-opacity;
 }
 
-.fade-ring-loader:before {
+.fade-ring-loader::before {
 	width: 50%;
 	height: 50%;
 	background: #fff;
@@ -90,7 +94,7 @@ $fade-ring-opacity: 0.6;
 	content: '';
 }
 
-.fade-ring-loader:after {
+.fade-ring-loader::after {
 	background: $PR-blue-900;
 	width: 75%;
 	height: 75%;

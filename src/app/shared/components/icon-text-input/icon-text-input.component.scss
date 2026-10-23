@@ -74,7 +74,7 @@
 	@include input-segment;
 
 	// No `@font-face` declares a plain 'Usual'; the faces are named per weight.
-	font-family: 'UsualRegular', sans-serif;
+	font-family: UsualRegular, sans-serif;
 	text-align: left;
 	flex: 1 1 auto;
 	min-width: 0;

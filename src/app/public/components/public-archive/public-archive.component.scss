@@ -93,7 +93,7 @@ $desktop-size: pxToGrid(200px);
 	font-weight: $font-weight-bold;
 	margin-bottom: $grid-unit * 0.4;
 	color: $darkBlue;
-	font-family: 'Usual';
+	font-family: Usual;
 
 	@include beforeDesktop {
 		font-size: $font-size-base;
@@ -104,7 +104,7 @@ $desktop-size: pxToGrid(200px);
 	font-size: $font-size-base * 0.9;
 	font-weight: $font-weight-light;
 	color: #777;
-	font-family: 'Usual';
+	font-family: Usual;
 
 	&-date {
 		color: #555;
@@ -244,7 +244,7 @@ $desktop-size: pxToGrid(200px);
 
 	.search-results {
 		font-size: 1.75rem;
-		font-family: 'Usual';
+		font-family: Usual;
 		font-weight: 600;
 		font-stretch: normal;
 		font-style: normal;
@@ -321,8 +321,8 @@ $desktop-size: pxToGrid(200px);
 
 			background: linear-gradient(
 				179.15deg,
-				rgb(19 27 74 / 0.08) 0%,
-				rgb(54 68 147 / 0.08) 100%
+				rgb(19 27 74 / 8%) 0%,
+				rgb(54 68 147 / 8%) 100%
 			);
 			border-radius: $border-radius;
 			display: flex;

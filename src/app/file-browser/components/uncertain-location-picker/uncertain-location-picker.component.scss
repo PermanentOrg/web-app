@@ -22,7 +22,7 @@
 	.pr-qualifiers-label {
 		@include usual-text;
 
-		font-family: 'UsualRegular', sans-serif;
+		font-family: UsualRegular, sans-serif;
 		color: $PR-blue-900;
 		white-space: nowrap;
 		margin-right: auto;
@@ -44,7 +44,7 @@
 		.pr-qualifier-option-label {
 			@include usual-text;
 
-			font-family: 'UsualRegular', sans-serif;
+			font-family: UsualRegular, sans-serif;
 			color: $PR-blue-900;
 			white-space: nowrap;
 		}
@@ -118,7 +118,7 @@
 	@include clear-btn;
 	@include usual-text;
 
-	font-family: 'UsualRegular', sans-serif;
+	font-family: UsualRegular, sans-serif;
 
 	// `clear-btn` colours these red; this action is not destructive.
 	i,

@@ -1,7 +1,7 @@
 .shepherd-element {
 	background: #fff;
 	border-radius: 5px;
-	box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
+	box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
 	max-width: 400px;
 	opacity: 0;
 	outline: none;
@@ -26,20 +26,20 @@
 
 .shepherd-element,
 .shepherd-element *,
-.shepherd-element :after,
-.shepherd-element :before {
+.shepherd-element ::after,
+.shepherd-element ::before {
 	box-sizing: border-box;
 }
 
 .shepherd-arrow,
-.shepherd-arrow:before {
+.shepherd-arrow::before {
 	position: absolute;
 	width: 16px;
 	height: 16px;
 	z-index: -1;
 }
 
-.shepherd-arrow:before {
+.shepherd-arrow::before {
 	content: '';
 	transform: rotate(45deg);
 	background: #fff;
@@ -66,7 +66,7 @@
 }
 
 .shepherd-element.shepherd-has-title[data-popper-placement^='bottom']
-	> .shepherd-arrow:before {
+	> .shepherd-arrow::before {
 	background-color: #e6e6e6;
 }
 
@@ -140,7 +140,7 @@
 }
 
 .shepherd-text {
-	color: rgb(0 0 0 / 0.75);
+	color: rgb(0 0 0 / 75%);
 	font-size: 1rem;
 	line-height: 1.3em;
 	padding: 0.75em;
@@ -157,7 +157,7 @@
 .shepherd-cancel-icon {
 	background: transparent;
 	border: none;
-	color: hsl(0 0% 50.2% / 0.75);
+	color: hsl(0deg 0% 50.2% / 75%);
 	font-size: 2em;
 	cursor: pointer;
 	font-weight: 400;
@@ -167,19 +167,19 @@
 }
 
 .shepherd-cancel-icon:hover {
-	color: rgb(0 0 0 / 0.75);
+	color: rgb(0 0 0 / 75%);
 }
 
 .shepherd-has-title .shepherd-content .shepherd-cancel-icon {
-	color: hsl(0 0% 50.2% / 0.75);
+	color: hsl(0deg 0% 50.2% / 75%);
 }
 
 .shepherd-has-title .shepherd-content .shepherd-cancel-icon:hover {
-	color: rgb(0 0 0 / 0.75);
+	color: rgb(0 0 0 / 75%);
 }
 
 .shepherd-title {
-	color: rgb(0 0 0 / 0.75);
+	color: rgb(0 0 0 / 75%);
 	display: flex;
 	font-size: 1rem;
 	font-weight: 400;
@@ -189,7 +189,7 @@
 }
 
 .shepherd-element,
-.shepherd-arrow:before {
+.shepherd-arrow::before {
 	background-color: $PR-blue-light;
 }
 
