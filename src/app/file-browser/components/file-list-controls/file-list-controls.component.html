@@ -96,9 +96,7 @@
 <div
 	class="file-list-header"
 	[ngClass]="{
-		'is-sort-changed': isSortChanged(),
 		'is-sorting': isSorting,
-		'is-saving-sort': isSavingSort,
 		'hide-sort': !allowSort
 	}"
 >
@@ -111,18 +109,11 @@
 			>
 				<span
 					class="col-title"
+					[class.has-sort-indicator]="canSort"
 					(click)="onSortClick('name')"
 					[ngbTooltip]="getTooltipConstantForSort('name') | prTooltip"
 					>Name</span
 				>
-				@if (canSaveSort) {
-					<span
-						class="save-sort"
-						(click)="saveSort()"
-						[ngbTooltip]="'fileList.sort.save' | prTooltip"
-						>Save</span
-					>
-				}
 			</div>
 			@if (!showAccess) {
 				<div
@@ -132,18 +123,11 @@
 				>
 					<span
 						class="col-title"
+						[class.has-sort-indicator]="canSort"
 						(click)="onSortClick('type')"
 						[ngbTooltip]="getTooltipConstantForSort('type') | prTooltip"
 						>Type</span
 					>
-					@if (canSaveSort) {
-						<span
-							class="save-sort"
-							(click)="saveSort()"
-							[ngbTooltip]="'fileList.sort.save' | prTooltip"
-							>Save</span
-						>
-					}
 				</div>
 			}
 			@if (!showAccess) {
@@ -154,18 +138,11 @@
 				>
 					<span
 						class="col-title"
+						[class.has-sort-indicator]="canSort"
 						(click)="onSortClick('date')"
 						[ngbTooltip]="getTooltipConstantForSort('date') | prTooltip"
 						>Date</span
 					>
-					@if (canSaveSort) {
-						<span
-							class="save-sort"
-							(click)="saveSort()"
-							[ngbTooltip]="'fileList.sort.save' | prTooltip"
-							>Save</span
-						>
-					}
 				</div>
 			}
 			@if (showAccess) {
@@ -188,48 +165,47 @@
 			}
 		}
 		@default {
-			<div ngbDropdown #dropdown="ngbDropdown">
-				<div
-					class="single-col-sort active-sort"
-					[class.sort-desc]="sortDesc"
-					ngbDropdownToggle
-					[ngbTooltip]="'fileList.sort.singleCol' | prTooltip"
-				>
-					<span
-						>Sorted by {{ currentSort }} ({{
-							sortDesc ? 'descending' : 'ascending'
-						}})</span
+			@if (canSort) {
+				<div ngbDropdown #dropdown="ngbDropdown">
+					<div
+						class="single-col-sort active-sort"
+						[class.sort-desc]="sortDesc"
+						ngbDropdownToggle
+						[ngbTooltip]="'fileList.sort.singleCol' | prTooltip"
 					>
-					<div ngbDropdownMenu (click)="dropdown.close()">
-						<div class="single-col-sort-option" (click)="onSortClick('name')">
-							Sort by name
-							{{
-								!sortDesc && currentSort === 'name'
-									? '(descending)'
-									: '(ascending)'
-							}}
-						</div>
-						<div class="single-col-sort-option" (click)="onSortClick('type')">
-							Sort by type
-							{{
-								!sortDesc && currentSort === 'type'
-									? '(descending)'
-									: '(ascending)'
-							}}
-						</div>
-						<div class="single-col-sort-option" (click)="onSortClick('date')">
-							Sort by date
-							{{
-								!sortDesc && currentSort === 'date'
-									? '(descending)'
-									: '(ascending)'
-							}}
+						<span
+							>Sorted by {{ currentSort }} ({{
+								sortDesc ? 'descending' : 'ascending'
+							}})</span
+						>
+						<div ngbDropdownMenu (click)="dropdown.close()">
+							<div class="single-col-sort-option" (click)="onSortClick('name')">
+								Sort by name
+								{{
+									!sortDesc && currentSort === 'name'
+										? '(descending)'
+										: '(ascending)'
+								}}
+							</div>
+							<div class="single-col-sort-option" (click)="onSortClick('type')">
+								Sort by type
+								{{
+									!sortDesc && currentSort === 'type'
+										? '(descending)'
+										: '(ascending)'
+								}}
+							</div>
+							<div class="single-col-sort-option" (click)="onSortClick('date')">
+								Sort by date
+								{{
+									!sortDesc && currentSort === 'date'
+										? '(descending)'
+										: '(ascending)'
+								}}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			@if (canSaveSort) {
-				<span class="save-sort" (click)="saveSort()">Save</span>
 			}
 		}
 	}
