@@ -28,7 +28,7 @@ $sidebar-thumb-height: 200px;
 			border-right: $sidebar-border;
 		}
 
-		&:not(.active):not(.disabled) {
+		&:not(.active, .disabled) {
 			cursor: pointer;
 
 			&:hover {

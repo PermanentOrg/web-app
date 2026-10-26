@@ -9,7 +9,7 @@ p {
 	display: flex;
 	gap: 64px;
 
-	@media screen and (max-width: 1000px) {
+	@media screen and (width <= 1000px) {
 		flex-direction: column;
 	}
 
@@ -19,7 +19,7 @@ p {
 		font-family: UsualLight, sans-serif;
 		line-height: 72px;
 
-		@media screen and (max-width: 1440px) {
+		@media screen and (width <= 1440px) {
 			width: 100%;
 		}
 	}
@@ -46,7 +46,7 @@ p {
 		justify-content: space-between;
 		height: 60vh;
 
-		@media screen and (max-width: 1000px) {
+		@media screen and (width <= 1000px) {
 			gap: 50px;
 		}
 	}

@@ -62,7 +62,7 @@ $progress-bar-height-desktop: 4px;
 $easing: $tweaked-ease;
 
 .upload-wrapper {
-	padding: 10px 10px;
+	padding: 10px;
 	transform: translateY(0);
 	transition:
 		transform $transition-length $tweaked-ease $delay-length,

@@ -45,15 +45,15 @@
 		width: 50%;
 	}
 
-	@media screen and (min-width: 900px) {
+	@media screen and (width >= 900px) {
 		padding-right: 64px;
 	}
 
-	@media screen and (min-width: 1024px) and (max-width: 1279px) {
+	@media screen and (width >= 1024px) and (width <= 1279px) {
 		width: 40%;
 	}
 
-	@media screen and (min-width: 1279px) and (max-width: 1440px) {
+	@media screen and (width >= 1279px) and (width <= 1440px) {
 		width: 35%;
 	}
 }
