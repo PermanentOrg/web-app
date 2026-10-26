@@ -29,6 +29,7 @@ describe('FileListControlsComponent', () => {
 			sort: 'sort.alphabetical_asc',
 			accessRole: AccessRole.Manager,
 		},
+		currentFolderChange: new Subject<unknown>(),
 		selectedItems$: () => of([]),
 		sortCurrentFolder: jasmine
 			.createSpy('sortCurrentFolder')
@@ -93,6 +94,7 @@ describe('FileListControlsComponent', () => {
 		apiServiceMock.folder.sort.calls.reset();
 		apiServiceMock.folder.sort.and.returnValue(Promise.resolve(true));
 		messageServiceMock.showError.calls.reset();
+		accountServiceMock.checkMinimumAccess.and.returnValue(true);
 
 		await TestBed.configureTestingModule({
 			imports: [NgbDropdownModule],
@@ -227,6 +229,87 @@ describe('FileListControlsComponent', () => {
 		expect(otherFolder.sort).toBe('sort.type_asc');
 		expect(messageServiceMock.showError).toHaveBeenCalledTimes(1);
 	}));
+
+	describe('after navigating to another folder', () => {
+		const otherFolder = {
+			sort: 'sort.display_date_desc',
+			accessRole: AccessRole.Manager,
+		};
+
+		function navigateToOtherFolder() {
+			dataServiceMock.currentFolder = otherFolder;
+			dataServiceMock.currentFolderChange.next(otherFolder);
+		}
+
+		beforeEach(() => {
+			otherFolder.sort = 'sort.display_date_desc';
+		});
+
+		it('should show the sort of the new folder', () => {
+			navigateToOtherFolder();
+
+			expect(component.currentSort).toBe('date');
+			expect(component.sortDesc).toBeTrue();
+			expect(component.savedSortType).toBe('sort.display_date_desc');
+		});
+
+		it('should check the save permission against the new folder', () => {
+			accountServiceMock.checkMinimumAccess.and.returnValue(false);
+
+			navigateToOtherFolder();
+
+			expect(accountServiceMock.checkMinimumAccess).toHaveBeenCalledWith(
+				otherFolder.accessRole,
+				AccessRole.Curator,
+			);
+
+			expect(component.canSaveSort).toBeFalse();
+		});
+
+		it('should go back to the new folder saved sort when saving there fails', fakeAsync(() => {
+			navigateToOtherFolder();
+			apiServiceMock.folder.sort.and.returnValue(Promise.reject(new Error()));
+
+			component.onSortClick('name');
+			flushMicrotasks();
+
+			expect(dataServiceMock.sortCurrentFolder).toHaveBeenCalledWith(
+				'sort.display_date_desc',
+			);
+
+			expect(otherFolder.sort).toBe('sort.display_date_desc');
+		}));
+
+		it('should save the new folder sort while the previous folder is still saving', fakeAsync(() => {
+			const previousFolder = dataServiceMock.currentFolder;
+			const savedFolders: unknown[] = [];
+			const pendingSaves: Array<() => void> = [];
+			apiServiceMock.folder.sort.and.callFake(async (folders: unknown[]) => {
+				savedFolders.push(folders[0]);
+				await new Promise<void>((resolve) => {
+					pendingSaves.push(resolve);
+				});
+				return true;
+			});
+
+			component.onSortClick('type');
+			navigateToOtherFolder();
+			component.onSortClick('name');
+
+			expect(savedFolders).toEqual([previousFolder, otherFolder]);
+
+			pendingSaves.shift()();
+			flushMicrotasks();
+
+			expect(component.savedSortType).toBe('sort.display_date_desc');
+
+			pendingSaves.shift()();
+			flushMicrotasks();
+
+			expect(component.savedSortType).toBe('sort.alphabetical_asc');
+			expect(apiServiceMock.folder.sort).toHaveBeenCalledTimes(2);
+		}));
+	});
 
 	it('should ignore a new sort while a sort is still being applied', () => {
 		const isSortingSubscription = component.isSorting$.subscribe(
