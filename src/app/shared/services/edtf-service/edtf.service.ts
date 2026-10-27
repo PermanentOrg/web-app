@@ -514,6 +514,25 @@ export class EdtfService {
 		return this.timezoneService.getOffsetForWallClock(timezoneId, wallClock);
 	}
 
+	// Never guesses a zone from the offset; an offset alone is written as tzdata would ('-04').
+	getTimezoneAbbreviation(
+		date: DateModel | undefined,
+		time: TimeModel | undefined,
+		timezoneId: string | null | undefined,
+	): string | null {
+		if (!time?.hours) {
+			return null;
+		}
+		const wallClock = this.toWallClock(date, time);
+		const zoneAbbreviation = wallClock
+			? this.timezoneService.getAbbreviationForWallClock(timezoneId, wallClock)
+			: null;
+		return (
+			zoneAbbreviation ??
+			this.timezoneService.formatOffsetAsAbbreviation(time.timezoneOffset)
+		);
+	}
+
 	private toWallClock(
 		date: DateModel | undefined,
 		time: TimeModel | undefined,
