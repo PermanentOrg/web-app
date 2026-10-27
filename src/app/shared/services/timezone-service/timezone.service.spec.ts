@@ -282,6 +282,144 @@ describe('TimezoneService', () => {
 		});
 	});
 
+	describe('the offset and the abbreviation at the same wall clock', () => {
+		it('should agree in the hour that happens twice when clocks go back', () => {
+			const repeatedHour: WallClockDateTime = {
+				year: 2026,
+				month: 10,
+				day: 25,
+				hour: 1,
+				minute: 30,
+				second: 0,
+			};
+
+			expect(
+				service.getOffsetForWallClock('Asia/Jerusalem', repeatedHour),
+			).toEqual('+03:00');
+
+			expect(
+				service.getAbbreviationForWallClock('Asia/Jerusalem', repeatedHour),
+			).toEqual('IDT');
+		});
+
+		it('should agree in the hour that is skipped when clocks go forward', () => {
+			const skippedHour: WallClockDateTime = {
+				year: 2026,
+				month: 3,
+				day: 29,
+				hour: 2,
+				minute: 30,
+				second: 0,
+			};
+
+			expect(
+				service.getOffsetForWallClock('Europe/Berlin', skippedHour),
+			).toEqual('+02:00');
+
+			expect(
+				service.getAbbreviationForWallClock('Europe/Berlin', skippedHour),
+			).toEqual('CEST');
+		});
+	});
+
+	describe('getAbbreviationForWallClock', () => {
+		const midsummer1985: WallClockDateTime = {
+			year: 1985,
+			month: 7,
+			day: 12,
+			hour: 23,
+			minute: 20,
+			second: 30,
+		};
+
+		it('should return null for a value that is not a zone', () => {
+			expect(
+				service.getAbbreviationForWallClock(undefined, midsummer1985),
+			).toBeNull();
+
+			expect(service.getAbbreviationForWallClock('', midsummer1985)).toBeNull();
+			expect(
+				service.getAbbreviationForWallClock('Not/AZone', midsummer1985),
+			).toBeNull();
+		});
+
+		it('should return the tzdata abbreviation, including for zones browsers only name in words', () => {
+			expect(
+				service.getAbbreviationForWallClock('Europe/Berlin', midsummer1985),
+			).toEqual('CEST');
+
+			expect(
+				service.getAbbreviationForWallClock('Asia/Tokyo', midsummer1985),
+			).toEqual('JST');
+
+			expect(
+				service.getAbbreviationForWallClock('Asia/Jerusalem', {
+					...midsummer1985,
+					year: 2026,
+				}),
+			).toEqual('IDT');
+		});
+
+		it('should follow daylight saving at the date asked for', () => {
+			expect(
+				service.getAbbreviationForWallClock('America/Chicago', midsummer1985),
+			).toEqual('CDT');
+
+			expect(
+				service.getAbbreviationForWallClock('America/Chicago', {
+					...midsummer1985,
+					month: 1,
+				}),
+			).toEqual('CST');
+		});
+
+		it('should return the numeric abbreviation tzdata uses for a zone without letters', () => {
+			expect(
+				service.getAbbreviationForWallClock('Asia/Dubai', midsummer1985),
+			).toEqual('+04');
+		});
+
+		it('should return local mean time before the zone adopted standard time', () => {
+			expect(
+				service.getAbbreviationForWallClock('America/Chicago', {
+					...midsummer1985,
+					year: 1850,
+				}),
+			).toEqual('LMT');
+		});
+
+		it('should resolve aliases', () => {
+			expect(
+				service.getAbbreviationForWallClock('US/Central', midsummer1985),
+			).toEqual('CDT');
+
+			expect(service.getAbbreviationForWallClock('UTC', midsummer1985)).toEqual(
+				'UTC',
+			);
+		});
+	});
+
+	describe('formatOffsetAsAbbreviation', () => {
+		it('should return null for a value that is not an EDTF offset', () => {
+			expect(service.formatOffsetAsAbbreviation(undefined)).toBeNull();
+			expect(service.formatOffsetAsAbbreviation('')).toBeNull();
+			expect(service.formatOffsetAsAbbreviation('+3')).toBeNull();
+			expect(service.formatOffsetAsAbbreviation('Z')).toBeNull();
+		});
+
+		it('should drop the colon and empty minutes the way tzdata does', () => {
+			expect(service.formatOffsetAsAbbreviation('+03:00')).toEqual('+03');
+			expect(service.formatOffsetAsAbbreviation('-04:00')).toEqual('-04');
+			expect(service.formatOffsetAsAbbreviation('-10:00')).toEqual('-10');
+			expect(service.formatOffsetAsAbbreviation('+00:00')).toEqual('+00');
+		});
+
+		it('should keep the minutes of a partial-hour offset', () => {
+			expect(service.formatOffsetAsAbbreviation('+05:30')).toEqual('+0530');
+			expect(service.formatOffsetAsAbbreviation('+05:45')).toEqual('+0545');
+		});
+	});
+
 	describe('getFirstTimezoneIdForOffset', () => {
 		const julyNoon: WallClockDateTime = {
 			year: 2026,
@@ -395,15 +533,6 @@ describe('TimezoneService', () => {
 	});
 
 	describe('when the Intl APIs are missing or misbehave', () => {
-		const noon: WallClockDateTime = {
-			year: 2026,
-			month: 1,
-			day: 15,
-			hour: 12,
-			minute: 0,
-			second: 0,
-		};
-
 		const stubTimezoneName = (timezoneName: string): void => {
 			spyOn(Intl.DateTimeFormat.prototype, 'formatToParts').and.returnValue([
 				{ type: 'timeZoneName', value: timezoneName },
@@ -441,8 +570,8 @@ describe('TimezoneService', () => {
 		it('should read a bare GMT name as a zero offset', () => {
 			stubTimezoneName('GMT');
 
-			expect(service.getOffsetForWallClock('Europe/Bucharest', noon)).toEqual(
-				'+00:00',
+			expect(service.getOption('Europe/Bucharest').offsetLabel).toEqual(
+				'GMT+00:00',
 			);
 		});
 
@@ -452,14 +581,12 @@ describe('TimezoneService', () => {
 			expect(service.getOption('Europe/Bucharest').offsetLabel).toEqual('');
 		});
 
-		it('should return null when the offset cannot be read', () => {
+		it('should leave the offset label blank when the offset cannot be read', () => {
 			spyOn(Intl.DateTimeFormat.prototype, 'formatToParts').and.throwError(
 				'unsupported',
 			);
 
-			expect(
-				service.getOffsetForWallClock('Europe/Bucharest', noon),
-			).toBeNull();
+			expect(service.getOption('Europe/Bucharest').offsetLabel).toEqual('');
 		});
 	});
 });
