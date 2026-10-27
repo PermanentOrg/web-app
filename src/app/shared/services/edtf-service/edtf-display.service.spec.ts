@@ -349,6 +349,22 @@ describe('EdtfDisplayService', () => {
 			});
 		});
 
+		it('should show the zone after the start time of a same-day range whose end has none', () => {
+			stubParsedModel({
+				date: { year: '2001', month: '09', day: '24' },
+				time: { hours: '09', minutes: '45', format: 'am' },
+				endDate: { year: '2001', month: '09', day: '24' },
+				endTime: { format: 'am' },
+			});
+
+			expect(
+				service
+					.formatForDisplay('stubbed/stubbed', 'America/Chicago')
+					.time.map((segment) => segment.text)
+					.join(''),
+			).toBe('9:45 AM CDT');
+		});
+
 		it('should treat a missing date as unknown', () => {
 			expect(renderModel({ date: undefined, time: { format: 'am' } })).toBe(
 				'Unknown',

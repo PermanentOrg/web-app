@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import { TimezoneService, WallClockDateTime } from './timezone.service';
 
 describe('TimezoneService', () => {
@@ -319,6 +320,50 @@ describe('TimezoneService', () => {
 			expect(
 				service.getAbbreviationForWallClock('Europe/Berlin', skippedHour),
 			).toEqual('CEST');
+		});
+	});
+
+	describe('a zone the browser knows but our timezone data does not', () => {
+		const noon: WallClockDateTime = {
+			year: 2026,
+			month: 7,
+			day: 15,
+			hour: 12,
+			minute: 0,
+			second: 0,
+		};
+
+		beforeEach(() => {
+			spyOn(moment.tz, 'zone').and.returnValue(null);
+		});
+
+		it('should have no offset', () => {
+			expect(
+				service.getOffsetForWallClock('Europe/Bucharest', noon),
+			).toBeNull();
+		});
+
+		it('should have no abbreviation', () => {
+			expect(
+				service.getAbbreviationForWallClock('Europe/Bucharest', noon),
+			).toBeNull();
+		});
+	});
+
+	describe('a zone whose timezone data carries an empty abbreviation', () => {
+		it('should have no abbreviation rather than an empty one', () => {
+			spyOn(moment.fn, 'format').and.returnValue('');
+
+			expect(
+				service.getAbbreviationForWallClock('Europe/Bucharest', {
+					year: 2026,
+					month: 7,
+					day: 15,
+					hour: 12,
+					minute: 0,
+					second: 0,
+				}),
+			).toBeNull();
 		});
 	});
 

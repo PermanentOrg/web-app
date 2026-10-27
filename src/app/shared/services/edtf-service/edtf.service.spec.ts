@@ -6,6 +6,7 @@ import {
 import {
 	EdtfService,
 	DateTimeModel,
+	TimeModel,
 	MONTH_RANGE_ERROR,
 	DAY_RANGE_ERROR,
 	INVALID_DAY_FOR_MONTH_ERROR,
@@ -1752,6 +1753,45 @@ describe('EdtfService', () => {
 			);
 
 			expect(reloaded.time.timezoneId).toBeUndefined();
+		});
+	});
+
+	describe('getTimezoneAbbreviation', () => {
+		const eveningWithOffset: TimeModel = {
+			hours: '11',
+			minutes: '20',
+			format: 'pm',
+			timezoneOffset: '+03:00',
+		};
+
+		it('should have nothing to show without a time', () => {
+			expect(
+				service.getTimezoneAbbreviation(
+					{ year: '1985', month: '07', day: '12' },
+					{ format: 'am' },
+					'Asia/Jerusalem',
+				),
+			).toBeNull();
+		});
+
+		it('should use the abbreviation of the zone at that date', () => {
+			expect(
+				service.getTimezoneAbbreviation(
+					{ year: '1985', month: '07', day: '12' },
+					eveningWithOffset,
+					'America/Chicago',
+				),
+			).toBe('CDT');
+		});
+
+		it('should fall back to the stored offset when the date is too partial to place in a zone', () => {
+			expect(
+				service.getTimezoneAbbreviation(
+					{ year: '1985' },
+					eveningWithOffset,
+					'America/Chicago',
+				),
+			).toBe('+03');
 		});
 	});
 
