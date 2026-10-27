@@ -891,11 +891,50 @@ describe('SidebarDatePickerComponent', () => {
 			expect(component._selectedTimezoneId()).toBeNull();
 		});
 
-		it('should show the offset that zone was on at the item date', () => {
+		it('should show the abbreviation that zone had at the item date', () => {
 			host.displayTime = displayTimeIn('Europe/Bucharest');
 			fixture.detectChanges();
 
-			expect(component.startTimezone()).toBe('GMT+03:00');
+			expect(component.startTimezone()).toBe('EEST');
+		});
+
+		it('should show the tzdata abbreviation browsers do not provide', () => {
+			host.displayTime = displayTimeIn('Asia/Jerusalem');
+			fixture.detectChanges();
+
+			expect(component.startTimezone()).toBe('IDT');
+		});
+
+		it('should show the numeric abbreviation tzdata uses for a zone without letters', () => {
+			host.displayTime = displayTimeIn('Asia/Kathmandu');
+			fixture.detectChanges();
+
+			expect(component.startTimezone()).toBe('+0530');
+		});
+
+		it('should write a bare offset as tzdata would when no zone is stored', () => {
+			host.displayTime = displayTimeIn(undefined, '+03:00');
+			fixture.detectChanges();
+
+			expect(component.startTimezone()).toBe('+03');
+		});
+
+		it('should follow the zone the user picks', () => {
+			host.displayTime = displayTimeIn('Europe/Bucharest');
+			fixture.detectChanges();
+			component.open();
+			component.onTimezoneChange('Asia/Jerusalem');
+
+			expect(component.startTimezone()).toBe('IDT');
+		});
+
+		it('should drop the label when the zone is cleared', () => {
+			host.displayTime = displayTimeIn('Europe/Bucharest', '+03:00');
+			fixture.detectChanges();
+			component.open();
+			component.onTimezoneChange(null);
+
+			expect(component.startTimezone()).toBe('');
 		});
 
 		it('should hand the chosen zone to the save handler', () => {

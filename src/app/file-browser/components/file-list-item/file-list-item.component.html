@@ -92,6 +92,7 @@
 				@if (showEdtfDate) {
 					<pr-edtf-date-display
 						[displayTime]="item.displayTime"
+						[timezone]="item.timezone"
 						[showTime]="item.dataStatus > 0"
 					/>
 				} @else {
@@ -121,6 +122,7 @@
 				@if (item.dataStatus > 0) {
 					<pr-edtf-date-display
 						[displayTime]="item.displayTime"
+						[timezone]="item.timezone"
 						@ngIfFadeInAnimation
 					/>
 				}
