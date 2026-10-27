@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import moment from 'moment-timezone';
 
 export interface TimezoneOption {
 	timezoneId: string;
@@ -23,11 +24,12 @@ export interface WallClockDateTime {
 }
 
 const FALLBACK_REGION = 'Other';
-const MILLISECONDS_PER_MINUTE = 60000;
 const MINUTES_PER_HOUR = 60;
 const OFFSET_PATTERN = /([+-])(\d{1,2})(?::(\d{2}))?(?::\d{2})?/;
 const EDTF_OFFSET_PATTERN = /^[+-]\d{2}:\d{2}$/;
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+type TimezoneNameStyle = 'longOffset' | 'longGeneric' | 'long';
 
 // No API enumerates ISO 3166-1 codes, so every two-letter pair is tried.
 const buildCandidateRegionCodes = (): string[] =>
@@ -105,6 +107,27 @@ export class TimezoneService {
 		return null;
 	}
 
+	// Browsers expose only CLDR names ('Israel Time'), never tzdata's own abbreviations ('IDT').
+	getAbbreviationForWallClock(
+		value: unknown,
+		wallClock: WallClockDateTime,
+	): string | null {
+		const timezoneId = this.resolveTimezoneId(value);
+		if (!timezoneId || !moment.tz.zone(timezoneId)) {
+			return null;
+		}
+
+		return this.toZonedMoment(timezoneId, wallClock).format('z') || null;
+	}
+
+	// Written the way tzdata writes a numeric abbreviation: '+03', '+0530'.
+	formatOffsetAsAbbreviation(offset: unknown): string | null {
+		if (typeof offset !== 'string' || !EDTF_OFFSET_PATTERN.test(offset)) {
+			return null;
+		}
+		return offset.replace(':', '').replace(/00$/, '');
+	}
+
 	getBrowserTimezoneId(): string | null {
 		try {
 			return this.resolveTimezoneId(
@@ -133,25 +156,32 @@ export class TimezoneService {
 			: this.formatOffsetMinutes(offsetMinutes);
 	}
 
-	// Reads the offset as if the wall clock were UTC, then again at the corrected instant.
+	// Same tzdata as the abbreviation, so a written offset never contradicts the label next to it.
+	// Pre-standard-time offsets carry seconds (-350.6 minutes); EDTF offsets drop them.
 	private getOffsetMinutesAtWallClock(
 		timezoneId: string,
 		wallClock: WallClockDateTime,
 	): number | null {
-		const wallClockAsUtcMs = this.toUtcMilliseconds(wallClock);
-		const approximateOffsetMinutes = this.getOffsetMinutesAtInstant(
-			timezoneId,
-			new Date(wallClockAsUtcMs),
-		);
-		if (approximateOffsetMinutes === null) {
+		if (!moment.tz.zone(timezoneId)) {
 			return null;
 		}
+		return Math.trunc(this.toZonedMoment(timezoneId, wallClock).utcOffset());
+	}
 
-		return this.getOffsetMinutesAtInstant(
+	private toZonedMoment(
+		timezoneId: string,
+		wallClock: WallClockDateTime,
+	): moment.Moment {
+		return moment.tz(
+			[
+				wallClock.year,
+				wallClock.month - 1,
+				wallClock.day,
+				wallClock.hour,
+				wallClock.minute,
+				wallClock.second,
+			],
 			timezoneId,
-			new Date(
-				wallClockAsUtcMs - approximateOffsetMinutes * MILLISECONDS_PER_MINUTE,
-			),
 		);
 	}
 
@@ -321,7 +351,7 @@ export class TimezoneService {
 
 	private extractTimezoneNamePart(
 		timezoneId: string,
-		timeZoneName: 'longOffset' | 'longGeneric' | 'long',
+		timeZoneName: TimezoneNameStyle,
 		instant: Date,
 	): string {
 		try {
@@ -337,7 +367,7 @@ export class TimezoneService {
 
 	private getTimezoneNameFormatter(
 		timezoneId: string,
-		timeZoneName: 'longOffset' | 'longGeneric' | 'long',
+		timeZoneName: TimezoneNameStyle,
 	): Intl.DateTimeFormat {
 		const cacheKey = `${timezoneId}|${timeZoneName}`;
 		let formatter = this.timezoneNameFormatters.get(cacheKey);
@@ -349,22 +379,6 @@ export class TimezoneService {
 			this.timezoneNameFormatters.set(cacheKey, formatter);
 		}
 		return formatter;
-	}
-
-	private toUtcMilliseconds(wallClock: WallClockDateTime): number {
-		// Date.UTC maps years 0-99 into the 1900s, so set the year explicitly.
-		const instant = new Date(
-			Date.UTC(
-				2000,
-				wallClock.month - 1,
-				wallClock.day,
-				wallClock.hour,
-				wallClock.minute,
-				wallClock.second,
-			),
-		);
-		instant.setUTCFullYear(wallClock.year);
-		return instant.getTime();
 	}
 
 	private formatOffsetMinutes(offsetMinutes: number): string {
