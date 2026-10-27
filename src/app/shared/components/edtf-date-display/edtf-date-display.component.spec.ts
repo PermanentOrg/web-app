@@ -11,8 +11,12 @@ describe('EdtfDateDisplayComponent', () => {
 			.keep(NoopAnimationsModule);
 	});
 
-	const render = (displayTime: string | null, showTime = true) =>
-		MockRender(EdtfDateDisplayComponent, { displayTime, showTime });
+	const render = (
+		displayTime: string | null,
+		showTime = true,
+		timezone: string | null = null,
+	) =>
+		MockRender(EdtfDateDisplayComponent, { displayTime, showTime, timezone });
 
 	const partTexts = (): string[] =>
 		ngMocks
@@ -50,6 +54,18 @@ describe('EdtfDateDisplayComponent', () => {
 
 		expect(partTexts()).toEqual(['Apr. 12, 1985•', '11:20 PM']);
 		expect(ngMocks.findAll('.separator').length).toBe(1);
+	});
+
+	it('should render the zone of the item after the time', () => {
+		render('2026-06-24T15:00:00', true, 'Asia/Jerusalem');
+
+		expect(partTexts()).toEqual(['Jun. 24, 2026•', '3:00 PM IDT']);
+	});
+
+	it('should not render the zone when showTime is off', () => {
+		render('1985-04-12T23:20:30', false, 'America/Chicago');
+
+		expect(partTexts()).toEqual(['Apr. 12, 1985']);
 	});
 
 	it('should hide the time when showTime is off', () => {

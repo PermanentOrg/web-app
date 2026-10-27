@@ -21,11 +21,15 @@ import { EdtfDisplayService } from '@shared/services/edtf-service/edtf-display.s
 export class EdtfDateDisplayComponent {
 	readonly displayTime = input<string | null | undefined>();
 	readonly showTime = input(true);
+	readonly timezone = input<string | null | undefined>();
 
 	private readonly edtfDisplayService = inject(EdtfDisplayService);
 
 	private readonly displayText = computed(() =>
-		this.edtfDisplayService.formatForDisplay(this.displayTime()),
+		this.edtfDisplayService.formatForDisplay(
+			this.displayTime(),
+			this.timezone(),
+		),
 	);
 
 	readonly dateSegments = computed(() => this.displayText().date);
@@ -35,6 +39,9 @@ export class EdtfDateDisplayComponent {
 		() => this.showTime() && this.timeSegments().length > 0,
 	);
 	readonly tooltip = computed(() =>
-		this.edtfDisplayService.formatForTooltip(this.displayTime()),
+		this.edtfDisplayService.formatForTooltip(
+			this.displayTime(),
+			this.timezone(),
+		),
 	);
 }
