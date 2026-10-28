@@ -303,6 +303,52 @@ describe('TimezoneService', () => {
 			).toEqual('IDT');
 		});
 
+		it('should take the later occurrence of the repeated hour when the stored offset says so', () => {
+			const repeatedHour: WallClockDateTime = {
+				year: 2026,
+				month: 10,
+				day: 25,
+				hour: 1,
+				minute: 30,
+				second: 0,
+			};
+
+			expect(
+				service.getOffsetForWallClock('Asia/Jerusalem', repeatedHour, '+02:00'),
+			).toEqual('+02:00');
+
+			expect(
+				service.getAbbreviationForWallClock(
+					'Asia/Jerusalem',
+					repeatedHour,
+					'+02:00',
+				),
+			).toEqual('IST');
+		});
+
+		it('should ignore a stored offset the zone is not on at that wall clock', () => {
+			const repeatedHour: WallClockDateTime = {
+				year: 2026,
+				month: 10,
+				day: 25,
+				hour: 1,
+				minute: 30,
+				second: 0,
+			};
+
+			expect(
+				service.getOffsetForWallClock('Asia/Jerusalem', repeatedHour, '-05:00'),
+			).toEqual('+03:00');
+
+			expect(
+				service.getAbbreviationForWallClock(
+					'Asia/Jerusalem',
+					repeatedHour,
+					'-05:00',
+				),
+			).toEqual('IDT');
+		});
+
 		it('should agree in the hour that is skipped when clocks go forward', () => {
 			const skippedHour: WallClockDateTime = {
 				year: 2026,
@@ -320,6 +366,29 @@ describe('TimezoneService', () => {
 			expect(
 				service.getAbbreviationForWallClock('Europe/Berlin', skippedHour),
 			).toEqual('CEST');
+		});
+	});
+
+	describe('a wall clock that is not a real date', () => {
+		const impossibleDates: WallClockDateTime[] = [
+			{ year: 2026, month: 2, day: 31, hour: 12, minute: 0, second: 0 },
+			{ year: 2026, month: 2, day: 0, hour: 12, minute: 0, second: 0 },
+		];
+
+		it('should have no offset rather than a NaN one', () => {
+			for (const wallClock of impossibleDates) {
+				expect(
+					service.getOffsetForWallClock('Asia/Jerusalem', wallClock),
+				).toBeNull();
+			}
+		});
+
+		it('should have no abbreviation rather than "Invalid date"', () => {
+			for (const wallClock of impossibleDates) {
+				expect(
+					service.getAbbreviationForWallClock('Asia/Jerusalem', wallClock),
+				).toBeNull();
+			}
 		});
 	});
 
