@@ -282,6 +282,23 @@ describe('EdtfDisplayService', () => {
 			).toBe('9:45 AM — 4:00 PM CDT');
 		});
 
+		it('should show each zone of a same-day range whose sides differ', () => {
+			const acrossSpringForward =
+				'2026-03-29T01:30:00+01:00/2026-03-29T03:30:00+02:00';
+
+			expect(timeTextOf(acrossSpringForward, 'Europe/Berlin')).toBe(
+				'1:30 AM CET — 3:30 AM CEST',
+			);
+
+			expect(timeTextOf(acrossSpringForward)).toBe('1:30 AM +01 — 3:30 AM +02');
+		});
+
+		it('should label the later occurrence of a repeated hour by its stored offset', () => {
+			expect(timeTextOf('2026-10-25T01:30:00+02:00', 'Asia/Jerusalem')).toBe(
+				'1:30 AM IST',
+			);
+		});
+
 		it('should show the zone after the one time a same-day range carries', () => {
 			expect(
 				timeTextOf('2001-09-24/2001-09-24T16:00:00Z', 'America/Chicago'),

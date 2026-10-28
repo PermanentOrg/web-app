@@ -430,6 +430,7 @@ export class EdtfDisplayService {
 		if (start.timeText && end.timeText) {
 			return joinSegments([
 				...start.timeSegments,
+				...this.timezoneSegments(this.distinctStartTimezoneLabel(start, end)),
 				content(`${RANGE_SEPARATOR} `),
 				...end.timeSegments,
 				...this.timezoneSegments(end.timezoneLabel || start.timezoneLabel),
@@ -440,6 +441,15 @@ export class EdtfDisplayService {
 			...sideWithTime.timeSegments,
 			...this.timezoneSegments(sideWithTime.timezoneLabel),
 		]);
+	}
+
+	private distinctStartTimezoneLabel(
+		start: EdtfIntervalSide,
+		end: EdtfIntervalSide,
+	): string {
+		const isLabelSharedByBothSides =
+			!end.timezoneLabel || start.timezoneLabel === end.timezoneLabel;
+		return isLabelSharedByBothSides ? '' : start.timezoneLabel;
 	}
 
 	private timezoneSegments(timezoneLabel: string): EdtfDisplaySegment[] {

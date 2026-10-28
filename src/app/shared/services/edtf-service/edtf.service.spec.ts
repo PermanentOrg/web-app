@@ -1793,6 +1793,21 @@ describe('EdtfService', () => {
 				),
 			).toBe('+03');
 		});
+
+		it('should label the later occurrence of a repeated hour by its stored offset', () => {
+			expect(
+				service.getTimezoneAbbreviation(
+					{ year: '2026', month: '10', day: '25' },
+					{
+						hours: '01',
+						minutes: '30',
+						format: 'am',
+						timezoneOffset: '+02:00',
+					},
+					'Asia/Jerusalem',
+				),
+			).toBe('IST');
+		});
 	});
 
 	describe('withTimezone', () => {
@@ -1974,6 +1989,15 @@ describe('EdtfService', () => {
 			model.time.timezoneOffset = '-05:00';
 
 			expect(service.toEdtfDate(model)).toBe('1985-05-12T12:45:00+03:00');
+		});
+
+		it('should keep the later occurrence of a repeated hour on resave', () => {
+			const model = service.withTimezone(
+				service.toDateTimeModel('2026-10-25T01:30:00+02:00'),
+				'Asia/Jerusalem',
+			);
+
+			expect(service.toEdtfDate(model)).toBe('2026-10-25T01:30:00+02:00');
 		});
 
 		it('should fall back to the parsed offset when the zone is unusable', () => {
