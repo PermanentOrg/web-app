@@ -542,6 +542,10 @@ export class AccountService {
 		);
 	}
 
+	public canShareItem(itemAccessRole: AccessRoleType) {
+		return this.checkMinimumAccess(itemAccessRole, AccessRole.Manager);
+	}
+
 	public async signUp(
 		email: string,
 		fullName: string,

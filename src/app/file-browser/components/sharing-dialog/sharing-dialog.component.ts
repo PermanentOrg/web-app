@@ -166,7 +166,7 @@ export class SharingDialogComponent implements OnInit {
 			}) as any;
 		}
 
-		this.canShare = this.shareItem.accessRole === 'access.role.owner';
+		this.canShare = this.accountService.canShareItem(this.shareItem.accessRole);
 
 		this.relationshipService.update();
 

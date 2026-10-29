@@ -201,10 +201,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 			this.canShare =
 				!this.isPublicItem &&
 				!this.isRootFolder &&
-				this.accountService.checkMinimumAccess(
-					this.selectedItem.accessRole,
-					AccessRole.Owner,
-				);
+				this.accountService.canShareItem(this.selectedItem.accessRole);
 		} else {
 			this.canShare = false;
 		}

@@ -124,6 +124,9 @@ class MockAccountService {
 	checkMinimumAccess() {
 		return true;
 	}
+	canShareItem() {
+		return true;
+	}
 }
 
 const mockFeatureFlagService = {
@@ -253,6 +256,40 @@ describe('SidebarComponent', () => {
 
 		expect(component.canEdit).toBe(false);
 		expect(component.canShare).toBe(true);
+	});
+
+	it('should let a manager share the selected item', () => {
+		const canShareItemSpy = spyOn(
+			TestBed.inject(AccountService),
+			'canShareItem',
+		).and.callThrough();
+		component.selectedItem = new RecordVO({
+			accessRole: 'access.role.manager',
+		});
+		component.selectedItems = [component.selectedItem];
+		component.isRootFolder = false;
+		component.isPublicItem = false;
+
+		component.checkPermissions();
+
+		expect(canShareItemSpy).toHaveBeenCalledWith('access.role.manager');
+		expect(component.canShare).toBe(true);
+	});
+
+	it('should not let the account share when it cannot share the selected item', () => {
+		spyOn(TestBed.inject(AccountService), 'canShareItem').and.returnValue(
+			false,
+		);
+		component.selectedItem = new RecordVO({
+			accessRole: 'access.role.curator',
+		});
+		component.selectedItems = [component.selectedItem];
+		component.isRootFolder = false;
+		component.isPublicItem = false;
+
+		component.checkPermissions();
+
+		expect(component.canShare).toBe(false);
 	});
 
 	it('should prefer displayTime over displayDT when both are set', () => {
