@@ -137,7 +137,7 @@
 		"karma-verbose-reporter": "^0.0.8",
 		"ng-mocks": "^14.15.3",
 		"prettier": "^3.6.2",
-		"storybook": "10.6.0",
+		"storybook": "10.6.5",
 		"stylelint": "^17.16.0",
 		"stylelint-config-standard-scss": "^17.0.0",
 		"ts-node": "^10.9.1",
