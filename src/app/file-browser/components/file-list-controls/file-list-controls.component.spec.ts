@@ -120,6 +120,19 @@ describe('FileListControlsComponent', () => {
 		fixture.detectChanges();
 	});
 
+	['type.folder.root.share', 'share-root'].forEach((shareRootType) => {
+		it(`should treat ${shareRootType} as the share root`, () => {
+			dataServiceMock.currentFolder = {
+				...initialFolder,
+				type: shareRootType,
+			} as typeof initialFolder;
+
+			component.setAvailableActions();
+
+			expect(component.isShareRoot).toBeTrue();
+		});
+	});
+
 	it('should create the component', () => {
 		expect(component).toBeTruthy();
 	});

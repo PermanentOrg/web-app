@@ -15,6 +15,7 @@ import {
 } from '@shared/services/drag/drag.service';
 import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
+import { isPrivateRootFolder, isPublicRootFolder } from '@models/folder-type';
 
 @Directive({
 	selector: '[prDragTargetRouterLink]',
@@ -79,13 +80,13 @@ export class DragTargetRouterLinkDirective
 		}
 
 		if (this.routerLink.includes('/private')) {
-			if (folder.type.includes('root.private')) {
+			if (isPrivateRootFolder(folder)) {
 				return false;
 			}
 		}
 
 		if (this.routerLink.includes('/public')) {
-			if (folder.type.includes('root.public')) {
+			if (isPublicRootFolder(folder)) {
 				return false;
 			}
 		}
