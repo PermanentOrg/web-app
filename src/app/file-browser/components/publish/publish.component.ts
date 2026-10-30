@@ -1,8 +1,9 @@
 import { Component, ViewChild, ElementRef, Inject } from '@angular/core';
 import { RecordVO, FolderVO } from '@models';
+import { findPublicRootFolder } from '@models/folder-type';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { find, maxBy } from 'lodash';
+import { maxBy } from 'lodash';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { AccountService } from '@shared/services/account/account.service';
@@ -78,10 +79,9 @@ export class PublishComponent {
 
 		this.waiting = true;
 		try {
-			const publicRoot = find(
-				this.accountService.getRootFolder().ChildItemVOs,
-				{ type: 'type.folder.root.public' },
-			) as FolderVO;
+			const publicRoot = findPublicRootFolder(
+				this.accountService.getRootFolder(),
+			);
 			if (this.sourceItem instanceof FolderVO) {
 				await this.api.folder.copy([this.sourceItem], publicRoot);
 				let tries = 0;
