@@ -8,6 +8,14 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
+import { AccountService } from '@shared/services/account/account.service';
+import { RootFolderService } from '@shared/services/root-folder/root-folder.service';
+import {
+	isAppsRootFolder,
+	isArchiveRootFolder,
+	isDeprecatedFolder,
+	isPublicFolder,
+} from '@models/folder-type';
 
 export enum FolderPickerOperations {
 	Move = 1,
@@ -52,6 +60,8 @@ export class FolderPickerComponent implements OnDestroy {
 		private message: MessageService,
 		private folderPickerService: FolderPickerService,
 		private prompt: PromptService,
+		private accountService: AccountService,
+		private rootFolderService: RootFolderService,
 	) {
 		this.folderPickerService.registerComponent(this);
 	}
@@ -133,17 +143,11 @@ export class FolderPickerComponent implements OnDestroy {
 	async setFolder(folder: FolderVO): Promise<boolean> {
 		this.waiting = true;
 		try {
-			// The root keeps loading through getRoot -- see isRootRootFolder.
-			const folderResponse = this.isRootRootFolder(folder)
-				? await this.api.folder.getRoot()
-				: await this.api.folder.getWithChildren([
-						new FolderVO({
-							folder_linkId: folder.folder_linkId,
-							folderId: folder.folderId,
-							archiveNbr: folder.archiveNbr,
-						}),
-					]);
-			this.currentFolder = folderResponse.getFolderVO(true);
+			this.currentFolder = isArchiveRootFolder(folder)
+				? await this.rootFolderService.loadRootFolder(
+						this.accountService.getArchive(),
+					)
+				: await this.loadFolder(folder);
 
 			// Copy and Move send only the destination's folder_linkId to the
 			// legacy endpoints, and Stela's folder response does not reliably
@@ -152,9 +156,7 @@ export class FolderPickerComponent implements OnDestroy {
 			this.currentFolder.folder_linkId ??= folder.folder_linkId;
 			this.currentFolder.archiveNbr ??= folder.archiveNbr;
 
-			this.isRootFolder = this.currentFolder.type.includes(
-				'type.folder.root.root',
-			);
+			this.isRootFolder = isArchiveRootFolder(this.currentFolder);
 			if (!this.allowRecords) {
 				remove(this.currentFolder.ChildItemVOs, 'isRecord');
 			}
@@ -163,12 +165,11 @@ export class FolderPickerComponent implements OnDestroy {
 					this.filterFolderLinkIds.includes(f.folder_linkId),
 				);
 			}
-			remove(this.currentFolder.ChildItemVOs, (item) =>
-				item.type.includes('type.folder.root.app'),
-			);
+			remove(this.currentFolder.ChildItemVOs, isAppsRootFolder);
 			remove(this.currentFolder.ChildItemVOs, (item) =>
 				item.type.includes('type.folder.root.vault'),
 			);
+			remove(this.currentFolder.ChildItemVOs, isDeprecatedFolder);
 			return true;
 		} catch (err) {
 			if (err instanceof FolderResponse) {
@@ -273,7 +274,7 @@ export class FolderPickerComponent implements OnDestroy {
 	}
 
 	public cannotCopyToFolder(): boolean {
-		return this.isRootFolder || this.currentFolder?.type.includes('root.app');
+		return this.isRootFolder || isAppsRootFolder(this.currentFolder);
 	}
 
 	protected setChosenFolder(): void {
@@ -299,13 +300,17 @@ export class FolderPickerComponent implements OnDestroy {
 	}
 
 	protected shouldConfirmFolderSelection(): boolean {
-		return this.currentFolder.type.endsWith('public');
+		return isPublicFolder(this.currentFolder);
 	}
 
-	// Stela serves the archive root as an ordinary folder -- it lists Apps and
-	// reports a type that does not read as root -- so the root keeps loading
-	// through the legacy getRoot endpoint.
-	private isRootRootFolder(folder: FolderVO): boolean {
-		return !!folder.type?.includes('type.folder.root.root');
+	private async loadFolder(folder: FolderVO): Promise<FolderVO> {
+		const folderResponse = await this.api.folder.getWithChildren([
+			new FolderVO({
+				folder_linkId: folder.folder_linkId,
+				folderId: folder.folderId,
+				archiveNbr: folder.archiveNbr,
+			}),
+		]);
+		return folderResponse.getFolderVO(true);
 	}
 }

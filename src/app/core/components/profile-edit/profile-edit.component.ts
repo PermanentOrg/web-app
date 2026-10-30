@@ -53,6 +53,7 @@ import {
 export class ProfileEditComponent implements OnInit, AfterViewInit {
 	archive: ArchiveVO;
 	publicRoot: FolderVO;
+	private isPublicRootFromV1 = false;
 	profileItems: ProfileItemVODictionary;
 
 	canEdit: boolean;
@@ -112,7 +113,10 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 		});
 		this.archive = this.account.getArchive();
 		this.publicRoot = new FolderVO(this.account.getPublicRoot());
-		await this.profile.fetchProfileItems();
+		await Promise.all([
+			this.profile.fetchProfileItems(),
+			this.loadPublicRootFromV1IfMissing().catch(() => undefined),
+		]);
 		this.loading = false;
 		this.profileItems = this.profile.getProfileItemDictionary();
 		this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
@@ -164,6 +168,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 	}
 
 	async chooseBannerPicture() {
+		try {
+			await this.loadPublicRootFromV1IfMissing();
+		} catch {
+			return;
+		}
 		const originalValue = this.publicRoot.thumbArchiveNbr;
 		try {
 			const record = await this.folderPicker.chooseRecord(
@@ -186,6 +195,16 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 				this.publicRoot.thumbArchiveNbr = originalValue;
 			}
 		}
+	}
+
+	// updateRootColumns saves view and viewProperty as sent, so they must be v1's values, not stela's.
+	private async loadPublicRootFromV1IfMissing(): Promise<void> {
+		if (this.isPublicRootFromV1) {
+			return;
+		}
+		const response = await this.api.folder.get([this.publicRoot]);
+		this.publicRoot = response.getFolderVO();
+		this.isPublicRootFromV1 = true;
 	}
 
 	async onSaveProfileItem(

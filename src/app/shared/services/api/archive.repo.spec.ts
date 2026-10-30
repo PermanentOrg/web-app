@@ -7,6 +7,8 @@ import { environment } from '@root/environments/environment';
 
 import { TEST_DATA, TEST_DATA_2 } from '@core/core.module.spec';
 import { HttpService } from '@shared/services/http/http.service';
+import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
+import { of } from 'rxjs';
 import {
 	ArchiveRepo,
 	ArchiveResponse,
@@ -103,5 +105,18 @@ describe('ArchiveRepo', () => {
 
 		const req = httpMock.expectOne(`${environment.apiUrl}/archive/post`);
 		req.flush(archive);
+	});
+
+	it('should read the root folder id from the Stela archive', async () => {
+		const httpV2Spy = jasmine.createSpyObj<HttpV2Service>('HttpV2Service', [
+			'get',
+		]);
+		httpV2Spy.get.and.returnValue(of([{ data: { rootFolderId: '48584' } }]));
+		const stelaRepo = new ArchiveRepo(TestBed.inject(HttpService), httpV2Spy);
+
+		const rootFolderId = await stelaRepo.getRootFolderId(2977);
+
+		expect(httpV2Spy.get).toHaveBeenCalledWith('v2/archive/2977');
+		expect(rootFolderId).toBe('48584');
 	});
 });
