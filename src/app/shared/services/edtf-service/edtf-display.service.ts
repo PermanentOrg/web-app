@@ -57,7 +57,9 @@ interface EdtfIntervalSide {
 	date: DateModel;
 	dateText: string;
 	timeText: string;
+	timeSegments: EdtfDisplaySegment[];
 	timeTextWithSeconds: string;
+	timezoneLabel: string;
 	qualifierSymbol: string;
 	isEmpty: boolean;
 }
@@ -74,6 +76,10 @@ function content(text: string): EdtfDisplaySegment {
 
 function annotation(text: string): EdtfDisplaySegment {
 	return { text, isAnnotation: true };
+}
+
+function segmentsToText(segments: EdtfDisplaySegment[]): string {
+	return segments.map((segment) => segment.text).join('');
 }
 
 function joinSegments(segments: EdtfDisplaySegment[]): EdtfDisplaySegment[] {
@@ -145,12 +151,15 @@ export class EdtfDisplayService {
 		return parts.join('-');
 	}
 
-	formatForDisplay(displayTime: string | null | undefined): EdtfDisplayText {
+	formatForDisplay(
+		displayTime: string | null | undefined,
+		timezone?: string | null,
+	): EdtfDisplayText {
 		if (!displayTime) {
 			return EMPTY_DISPLAY_TEXT;
 		}
 
-		const sides = this.toIntervalSides(displayTime);
+		const sides = this.toIntervalSides(displayTime, timezone);
 
 		if (!sides) {
 			return { ...EMPTY_DISPLAY_TEXT, date: [content(displayTime)] };
@@ -163,8 +172,9 @@ export class EdtfDisplayService {
 
 	formatForTooltip(
 		displayTime: string | null | undefined,
+		timezone?: string | null,
 	): EdtfTooltipText | null {
-		const sides = this.toIntervalSides(displayTime);
+		const sides = this.toIntervalSides(displayTime, timezone);
 		if (!sides) {
 			return null;
 		}
@@ -191,6 +201,7 @@ export class EdtfDisplayService {
 
 	private toIntervalSides(
 		displayTime: string | null | undefined,
+		timezone: string | null | undefined,
 	): EdtfIntervalSides | null {
 		const model = this.parseOrNull(displayTime);
 
@@ -202,9 +213,19 @@ export class EdtfDisplayService {
 
 		return {
 			isInterval,
-			start: this.toIntervalSide(model.qualifiers, model.date, model.time),
+			start: this.toIntervalSide(
+				model.qualifiers,
+				model.date,
+				model.time,
+				timezone,
+			),
 			end: isInterval
-				? this.toIntervalSide(model.endQualifiers, model.endDate, model.endTime)
+				? this.toIntervalSide(
+						model.endQualifiers,
+						model.endDate,
+						model.endTime,
+						timezone,
+					)
 				: null,
 		};
 	}
@@ -214,9 +235,11 @@ export class EdtfDisplayService {
 			return UNKNOWN_LABEL;
 		}
 		const dateText = `${side.dateText}${side.qualifierSymbol ? ` ${side.qualifierSymbol}` : ''}`;
-		return side.timeTextWithSeconds
-			? `${dateText}${SEPARATOR} ${side.timeTextWithSeconds}`
-			: dateText;
+		if (!side.timeTextWithSeconds) {
+			return dateText;
+		}
+		const timezoneSuffix = side.timezoneLabel ? ` ${side.timezoneLabel}` : '';
+		return `${dateText}${SEPARATOR} ${side.timeTextWithSeconds}${timezoneSuffix}`;
 	}
 
 	private parseOrNull(
@@ -242,17 +265,22 @@ export class EdtfDisplayService {
 		qualifiers: DateQualifierFlags | undefined,
 		date: DateModel | undefined,
 		time: TimeModel | undefined,
+		timezone: string | null | undefined,
 	): EdtfIntervalSide {
 		const hasAnyDatePart = !!(date?.year || date?.month || date?.day);
 		const isEmpty = !!qualifiers?.unknown || !hasAnyDatePart;
+		const timeSegments = this.formatTimeSegments(time);
 
 		return {
 			date: date ?? { year: '' },
 			dateText: isEmpty
 				? ''
 				: this.formatDateForDisplay(date, FILE_LIST_DATE_OPTIONS),
-			timeText: this.formatTimeForDisplay(time),
-			timeTextWithSeconds: this.formatTimeForDisplay(time, true),
+			timeText: segmentsToText(timeSegments),
+			timeSegments,
+			timeTextWithSeconds: segmentsToText(this.formatTimeSegments(time, true)),
+			timezoneLabel:
+				this.edtfService.getTimezoneAbbreviation(date, time, timezone) ?? '',
 			qualifierSymbol: this.toQualifierSymbol(qualifiers),
 			isEmpty,
 		};
@@ -269,7 +297,12 @@ export class EdtfDisplayService {
 				content(side.dateText),
 				...this.qualifierSegments(side),
 			]),
-			time: side.timeText ? [content(side.timeText)] : [],
+			time: side.timeText
+				? joinSegments([
+						...side.timeSegments,
+						...this.timezoneSegments(side.timezoneLabel),
+					])
+				: [],
 		};
 	}
 
@@ -395,10 +428,32 @@ export class EdtfDisplayService {
 		end: EdtfIntervalSide,
 	): EdtfDisplaySegment[] {
 		if (start.timeText && end.timeText) {
-			return [content(`${start.timeText}${RANGE_SEPARATOR} ${end.timeText}`)];
+			return joinSegments([
+				...start.timeSegments,
+				...this.timezoneSegments(this.distinctStartTimezoneLabel(start, end)),
+				content(`${RANGE_SEPARATOR} `),
+				...end.timeSegments,
+				...this.timezoneSegments(end.timezoneLabel || start.timezoneLabel),
+			]);
 		}
-		const singleTime = start.timeText || end.timeText;
-		return singleTime ? [content(singleTime)] : [];
+		const sideWithTime = start.timeText ? start : end;
+		return joinSegments([
+			...sideWithTime.timeSegments,
+			...this.timezoneSegments(sideWithTime.timezoneLabel),
+		]);
+	}
+
+	private distinctStartTimezoneLabel(
+		start: EdtfIntervalSide,
+		end: EdtfIntervalSide,
+	): string {
+		const isLabelSharedByBothSides =
+			!end.timezoneLabel || start.timezoneLabel === end.timezoneLabel;
+		return isLabelSharedByBothSides ? '' : start.timezoneLabel;
+	}
+
+	private timezoneSegments(timezoneLabel: string): EdtfDisplaySegment[] {
+		return timezoneLabel ? [annotation(` ${timezoneLabel}`)] : [];
 	}
 
 	private qualifierSegments(side: EdtfIntervalSide): EdtfDisplaySegment[] {
@@ -410,13 +465,13 @@ export class EdtfDisplayService {
 		return `${monthName} ${this.withoutLeadingZeros(date.day)}`;
 	}
 
-	private formatTimeForDisplay(
+	private formatTimeSegments(
 		time: TimeModel | undefined,
 		withSeconds = false,
-	): string {
+	): EdtfDisplaySegment[] {
 		const hours = time?.hours ?? '';
 		if (!hours) {
-			return '';
+			return [];
 		}
 
 		const minutes = (time.minutes || '00').padStart(2, '0');
@@ -425,10 +480,13 @@ export class EdtfDisplayService {
 			: '';
 
 		if (time.format === 'h24') {
-			return `${hours.padStart(2, '0')}:${minutes}${seconds}`;
+			return [content(`${hours.padStart(2, '0')}:${minutes}${seconds}`)];
 		}
 
-		return `${this.withoutLeadingZeros(hours)}:${minutes}${seconds} ${TIME_FORMAT_LABEL[time.format]}`;
+		return [
+			content(`${this.withoutLeadingZeros(hours)}:${minutes}${seconds}`),
+			annotation(` ${TIME_FORMAT_LABEL[time.format]}`),
+		];
 	}
 
 	private toMonthIndex(month: string | undefined): number {

@@ -23,9 +23,9 @@ describe('EdtfDisplayService', () => {
 			.dateEnd.map((segment) => segment.text)
 			.join('');
 
-	const timeTextOf = (displayTime: string): string =>
+	const timeTextOf = (displayTime: string, timezone?: string | null): string =>
 		service
-			.formatForDisplay(displayTime)
+			.formatForDisplay(displayTime, timezone)
 			.time.map((segment) => segment.text)
 			.join('');
 
@@ -58,7 +58,7 @@ describe('EdtfDisplayService', () => {
 			[16, '1985-04', 'April 1985', ''],
 			[17, '1985-04-12', 'Apr. 12, 1985', ''],
 			[18, '1985-04-12T23:20:30', 'Apr. 12, 1985', '11:20 PM'],
-			[19, '1985-04-12T23:20:30-04:00', 'Apr. 12, 1985', '11:20 PM'],
+			[19, '1985-04-12T23:20:30-04:00', 'Apr. 12, 1985', '11:20 PM -04'],
 			[20, '1985-04-12/1985-06-10', 'Apr. 12 — Jun. 10, 1985', ''],
 			[21, '1985-04-12/', 'After Apr. 12, 1985', ''],
 			[22, '1985-04-12/..', 'After Apr. 12, 1985', ''],
@@ -175,13 +175,11 @@ describe('EdtfDisplayService', () => {
 			expect(timeTextOf('1985-04-12T23:20:59')).toBe('11:20 PM');
 		});
 
-		it('should not show a timezone next to the time', () => {
-			const rendered = service.formatForDisplay('1985-04-12T23:20:30-04:00');
-			const allText = [...rendered.date, ...rendered.time]
-				.map((segment) => segment.text)
-				.join('');
-
-			expect(allText).not.toMatch(/C[SD]T|UTC|GMT|[+-]\d{2}:\d{2}/);
+		it('should mute the meridiem', () => {
+			expect(service.formatForDisplay('1985-04-12T23:20:30').time).toEqual([
+				{ text: '11:20', isAnnotation: false },
+				{ text: ' PM', isAnnotation: true },
+			]);
 		});
 
 		it('should drop the time on an interval that is not inside one day', () => {
@@ -201,6 +199,125 @@ describe('EdtfDisplayService', () => {
 		});
 	});
 
+	describe('the timezone next to the time', () => {
+		it('should show the tzdata abbreviation of the stored zone at that date', () => {
+			expect(timeTextOf('1985-04-12T23:20:30', 'America/Chicago')).toBe(
+				'11:20 PM CST',
+			);
+
+			expect(timeTextOf('1985-07-12T23:20:30', 'America/Chicago')).toBe(
+				'11:20 PM CDT',
+			);
+
+			expect(timeTextOf('2026-06-24T15:00:00', 'Asia/Jerusalem')).toBe(
+				'3:00 PM IDT',
+			);
+
+			expect(timeTextOf('2026-01-24T15:00:00', 'Asia/Jerusalem')).toBe(
+				'3:00 PM IST',
+			);
+		});
+
+		it('should mute the timezone together with the meridiem', () => {
+			expect(
+				service.formatForDisplay('1985-04-12T23:20:30', 'America/Chicago').time,
+			).toEqual([
+				{ text: '11:20', isAnnotation: false },
+				{ text: ' PM CST', isAnnotation: true },
+			]);
+		});
+
+		it('should show what tzdata shows for a zone without letters', () => {
+			expect(timeTextOf('1985-07-12T23:20:30', 'Asia/Dubai')).toBe(
+				'11:20 PM +04',
+			);
+		});
+
+		it('should show local mean time before the zone adopted standard time', () => {
+			expect(timeTextOf('1850-04-12T23:20:30', 'America/Chicago')).toBe(
+				'11:20 PM LMT',
+			);
+		});
+
+		it('should prefer the stored zone over the offset in the string', () => {
+			expect(timeTextOf('1985-04-12T23:20:30-04:00', 'America/Chicago')).toBe(
+				'11:20 PM CST',
+			);
+		});
+
+		it('should write the offset in the string as tzdata would when no zone is stored', () => {
+			expect(timeTextOf('1985-04-12T23:20:30+03:00')).toBe('11:20 PM +03');
+			expect(timeTextOf('1985-04-12T23:20:30+05:30')).toBe('11:20 PM +0530');
+		});
+
+		it('should treat an unusable stored zone as absent', () => {
+			expect(timeTextOf('1985-04-12T23:20:30-04:00', 'Not/AZone')).toBe(
+				'11:20 PM -04',
+			);
+
+			expect(timeTextOf('1985-04-12T23:20:30', '')).toBe('11:20 PM');
+		});
+
+		it('should show nothing when neither a zone nor an offset is known', () => {
+			expect(timeTextOf('1985-04-12T23:20:30')).toBe('11:20 PM');
+			expect(timeTextOf('1985-04-12T23:20:30Z')).toBe('11:20 PM');
+		});
+
+		it('should not add a zone to a value without a time', () => {
+			const rendered = service.formatForDisplay(
+				'1985-04-12',
+				'America/Chicago',
+			);
+
+			expect(rendered.time).toEqual([]);
+			expect(service.formatToPlainText('1985-04-12')).toBe('Apr. 12, 1985');
+		});
+
+		it('should show the zone once at the end of a same-day range', () => {
+			expect(
+				timeTextOf(
+					'2001-09-24T09:45:00Z/2001-09-24T16:00:00Z',
+					'America/Chicago',
+				),
+			).toBe('9:45 AM — 4:00 PM CDT');
+		});
+
+		it('should show each zone of a same-day range whose sides differ', () => {
+			const acrossSpringForward =
+				'2026-03-29T01:30:00+01:00/2026-03-29T03:30:00+02:00';
+
+			expect(timeTextOf(acrossSpringForward, 'Europe/Berlin')).toBe(
+				'1:30 AM CET — 3:30 AM CEST',
+			);
+
+			expect(timeTextOf(acrossSpringForward)).toBe('1:30 AM +01 — 3:30 AM +02');
+		});
+
+		it('should label the later occurrence of a repeated hour by its stored offset', () => {
+			expect(timeTextOf('2026-10-25T01:30:00+02:00', 'Asia/Jerusalem')).toBe(
+				'1:30 AM IST',
+			);
+		});
+
+		it('should show the zone after the one time a same-day range carries', () => {
+			expect(
+				timeTextOf('2001-09-24/2001-09-24T16:00:00Z', 'America/Chicago'),
+			).toBe('4:00 PM CDT');
+		});
+
+		it('should give each side of a range hiding its times its own zone in the tooltip', () => {
+			expect(
+				service.formatForTooltip(
+					'1985-04-12T09:00:00/1985-06-10T17:00:00',
+					'America/Chicago',
+				),
+			).toEqual({
+				from: 'Apr. 12, 1985 \u2022 9:00:00 AM CST',
+				to: 'Jun. 10, 1985 \u2022 5:00:00 PM CDT',
+			});
+		});
+	});
+
 	describe('models the parser does not produce today', () => {
 		const stubParsedModel = (model: DateTimeModel): void => {
 			spyOn(TestBed.inject(EdtfService), 'toDateTimeModel').and.returnValue(
@@ -211,8 +328,9 @@ describe('EdtfDisplayService', () => {
 		const renderModel = (model: DateTimeModel): string => {
 			stubParsedModel(model);
 			const rendered = service.formatForDisplay('stubbed');
-			return [...rendered.date, ...rendered.time]
-				.map((segment) => segment.text)
+			return [rendered.date, rendered.time]
+				.map((segments) => segments.map((segment) => segment.text).join(''))
+				.filter(Boolean)
 				.join(' ');
 		};
 
@@ -246,6 +364,22 @@ describe('EdtfDisplayService', () => {
 				from: 'Apr. 12, 1985 • 9:00:00 AM',
 				to: 'Jun. 10, 1985',
 			});
+		});
+
+		it('should show the zone after the start time of a same-day range whose end has none', () => {
+			stubParsedModel({
+				date: { year: '2001', month: '09', day: '24' },
+				time: { hours: '09', minutes: '45', format: 'am' },
+				endDate: { year: '2001', month: '09', day: '24' },
+				endTime: { format: 'am' },
+			});
+
+			expect(
+				service
+					.formatForDisplay('stubbed/stubbed', 'America/Chicago')
+					.time.map((segment) => segment.text)
+					.join(''),
+			).toBe('9:45 AM CDT');
 		});
 
 		it('should treat a missing date as unknown', () => {

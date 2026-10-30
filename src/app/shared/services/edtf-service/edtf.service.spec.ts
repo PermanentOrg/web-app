@@ -6,6 +6,7 @@ import {
 import {
 	EdtfService,
 	DateTimeModel,
+	TimeModel,
 	MONTH_RANGE_ERROR,
 	DAY_RANGE_ERROR,
 	INVALID_DAY_FOR_MONTH_ERROR,
@@ -1755,6 +1756,60 @@ describe('EdtfService', () => {
 		});
 	});
 
+	describe('getTimezoneAbbreviation', () => {
+		const eveningWithOffset: TimeModel = {
+			hours: '11',
+			minutes: '20',
+			format: 'pm',
+			timezoneOffset: '+03:00',
+		};
+
+		it('should have nothing to show without a time', () => {
+			expect(
+				service.getTimezoneAbbreviation(
+					{ year: '1985', month: '07', day: '12' },
+					{ format: 'am' },
+					'Asia/Jerusalem',
+				),
+			).toBeNull();
+		});
+
+		it('should use the abbreviation of the zone at that date', () => {
+			expect(
+				service.getTimezoneAbbreviation(
+					{ year: '1985', month: '07', day: '12' },
+					eveningWithOffset,
+					'America/Chicago',
+				),
+			).toBe('CDT');
+		});
+
+		it('should fall back to the stored offset when the date is too partial to place in a zone', () => {
+			expect(
+				service.getTimezoneAbbreviation(
+					{ year: '1985' },
+					eveningWithOffset,
+					'America/Chicago',
+				),
+			).toBe('+03');
+		});
+
+		it('should label the later occurrence of a repeated hour by its stored offset', () => {
+			expect(
+				service.getTimezoneAbbreviation(
+					{ year: '2026', month: '10', day: '25' },
+					{
+						hours: '01',
+						minutes: '30',
+						format: 'am',
+						timezoneOffset: '+02:00',
+					},
+					'Asia/Jerusalem',
+				),
+			).toBe('IST');
+		});
+	});
+
 	describe('withTimezone', () => {
 		const parsedWithOffset = (): DateTimeModel =>
 			service.toDateTimeModel('1985-05-12T12:45:00+02:00');
@@ -1934,6 +1989,15 @@ describe('EdtfService', () => {
 			model.time.timezoneOffset = '-05:00';
 
 			expect(service.toEdtfDate(model)).toBe('1985-05-12T12:45:00+03:00');
+		});
+
+		it('should keep the later occurrence of a repeated hour on resave', () => {
+			const model = service.withTimezone(
+				service.toDateTimeModel('2026-10-25T01:30:00+02:00'),
+				'Asia/Jerusalem',
+			);
+
+			expect(service.toEdtfDate(model)).toBe('2026-10-25T01:30:00+02:00');
 		});
 
 		it('should fall back to the parsed offset when the zone is unusable', () => {
