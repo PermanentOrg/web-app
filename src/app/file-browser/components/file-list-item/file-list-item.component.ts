@@ -32,6 +32,7 @@ import {
 	ItemVO,
 } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
+import { isShareRootFolder } from '@models/folder-type';
 import { EditService } from '@core/services/edit/edit.service';
 import { EdtfService } from '@shared/services/edtf-service/edtf.service';
 import { EdtfDisplayService } from '@shared/services/edtf-service/edtf-display.service';
@@ -637,7 +638,7 @@ export class FileListItemComponent
 		} else if (
 			!this.isInSharePreview &&
 			!this.isMyItem &&
-			this.dataService.currentFolder.type === 'type.folder.root.share'
+			isShareRootFolder(this.dataService.currentFolder)
 		) {
 			this.router.navigate(['/shares/record', this.item.archiveNbr]);
 		} else if (this.isUnlistedShare) {

@@ -3,7 +3,7 @@ import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, ArchiveVO, AccountVO } from '@root/app/models';
+import { FolderVO, ArchiveVO, AccountVO, FolderType } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -72,6 +72,27 @@ describe('UploadButtonComponent', () => {
 
 		expect(component.hidden).toBeFalsy();
 		expect(component.disabled).toBeTruthy();
+	});
+
+	(
+		[
+			'type.folder.root.app',
+			'app-root',
+			'type.folder.root.share',
+			'share-root',
+		] as FolderType[]
+	).forEach((hiddenFolderType) => {
+		it(`should be hidden in ${hiddenFolderType}`, async () => {
+			dataService.setCurrentFolder(
+				new FolderVO({
+					accessRole: 'access.role.owner',
+					type: hiddenFolderType,
+				}),
+			);
+			await fixture.whenStable();
+
+			expect(component.hidden).toBeTrue();
+		});
 	});
 
 	it('should be disabled when current folder does not have write access', async () => {
