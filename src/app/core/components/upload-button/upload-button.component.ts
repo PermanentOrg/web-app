@@ -13,6 +13,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
+import { isAppsRootFolder, isShareRootFolder } from '@models/folder-type';
 import { AccountService } from '@shared/services/account/account.service';
 import {
 	HasSubscriptions,
@@ -71,8 +72,8 @@ export class UploadButtonComponent implements OnDestroy, HasSubscriptions {
 	checkCurrentFolder() {
 		if (this.currentFolder) {
 			this.hidden =
-				this.currentFolder.type === 'type.folder.root.share' ||
-				this.currentFolder.type === 'type.folder.root.app' ||
+				isShareRootFolder(this.currentFolder) ||
+				isAppsRootFolder(this.currentFolder) ||
 				this.currentFolder.type === 'page';
 			this.disabled =
 				!checkMinimumAccess(

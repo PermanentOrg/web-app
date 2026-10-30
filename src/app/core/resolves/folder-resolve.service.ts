@@ -5,11 +5,16 @@ import {
 	Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { find, cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { FolderVO } from '@root/app/models';
+import {
+	findAppsRootFolder,
+	findPrivateRootFolder,
+	findPublicRootFolder,
+} from '@models/folder-type';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { findRouteData } from '@shared/utilities/router';
 import { getFolderErrorMessage } from '@shared/utilities/folder-error-message';
@@ -37,9 +42,7 @@ export class FolderResolveService {
 				folder_linkId: toFolderLinkId(route.params.folderLinkId),
 			});
 		} else if (state.url === '/apps') {
-			const apps = find(this.accountService.getRootFolder().ChildItemVOs, {
-				type: 'type.folder.root.app',
-			});
+			const apps = findAppsRootFolder(this.accountService.getRootFolder());
 			targetFolder = new FolderVO(apps);
 		} else if (state.url.includes('/share/')) {
 			const sharedFolder = route.parent.data.sharePreviewVO.FolderVO;
@@ -58,15 +61,14 @@ export class FolderResolveService {
 			const publicRoot = findRouteData(route, 'publicRoot');
 			targetFolder = new FolderVO(publicRoot);
 		} else if (state.url.includes('/public')) {
-			const publicRoot = find(
-				this.accountService.getRootFolder().ChildItemVOs,
-				{ type: 'type.folder.root.public' },
+			const publicRoot = findPublicRootFolder(
+				this.accountService.getRootFolder(),
 			);
 			targetFolder = new FolderVO(publicRoot);
 		} else {
-			const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {
-				type: 'type.folder.root.private',
-			});
+			const myFiles = findPrivateRootFolder(
+				this.accountService.getRootFolder(),
+			);
 			targetFolder = new FolderVO(myFiles);
 		}
 

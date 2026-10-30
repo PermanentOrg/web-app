@@ -11,12 +11,12 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { find } from 'lodash';
 import * as Sentry from '@sentry/browser';
 import debug from 'debug';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
+import { findAppsRootFolder } from '@models/folder-type';
 import { Subscription } from 'rxjs';
 import {
 	ngIfSlideInAnimation,
@@ -217,9 +217,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
 	async loadAppsSubfolders() {
 		try {
-			const apps = find(this.accountService.getRootFolder().ChildItemVOs, {
-				type: 'type.folder.root.app',
-			});
+			const apps = findAppsRootFolder(this.accountService.getRootFolder());
 			const appsFolder = await this.filesystemService.getFolder(
 				new FolderVO(apps),
 			);

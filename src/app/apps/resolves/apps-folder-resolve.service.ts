@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { find } from 'lodash';
-
 import { AccountService } from '@shared/services/account/account.service';
 import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 
 import { FolderVO } from '@root/app/models';
+import { findAppsRootFolder } from '@models/folder-type';
 
 @Injectable()
 export class AppsFolderResolveService {
@@ -18,9 +17,7 @@ export class AppsFolderResolveService {
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Promise<any> {
-		const appsFolder = find(this.accountService.getRootFolder().ChildItemVOs, {
-			type: 'type.folder.root.app',
-		});
+		const appsFolder = findAppsRootFolder(this.accountService.getRootFolder());
 
 		return await this.filesystemService.getFolder(new FolderVO(appsFolder));
 	}

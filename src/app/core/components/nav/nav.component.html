@@ -48,10 +48,7 @@
 			"
 			[hidden]="uploadButton.hidden"
 		>
-			@if (
-				rightMenu.currentFolder?.type !== 'type.folder.root.share' &&
-				rightMenu.currentFolder?.type !== 'type.folder.root.app'
-			) {
+			@if (canShowNewFolderButton(rightMenu.currentFolder)) {
 				<button
 					class="btn btn-primary"
 					(click)="rightMenu.createNewFolder()"
