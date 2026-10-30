@@ -4,6 +4,7 @@ import { Subject, of } from 'rxjs';
 import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
+import { DataStatus } from '@models/data-status.enum';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -506,6 +507,20 @@ describe('FileListItemComponent', () => {
 		thumbnailUpdatedSubject.next(component.item);
 
 		expect(component.recordThumbnailUrl).toBeUndefined();
+	});
+
+	['type.folder.root.share', 'share-root'].forEach((shareRootType) => {
+		it(`should open a record shared with you in the shares viewer (${shareRootType})`, async () => {
+			const router = TestBed.inject(Router);
+			spyOn(router, 'navigate');
+			TestBed.inject(DataService).currentFolder.type = shareRootType as any;
+			component.isMyItem = false;
+			component.item = { ...buildTestItem(), dataStatus: DataStatus.Lean };
+
+			await component.goToItem();
+
+			expect(router.navigate).toHaveBeenCalledWith(['/shares/record', '123']);
+		});
 	});
 
 	it('should display displayTime instead of displayDT when displayTime is set', () => {
