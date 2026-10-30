@@ -13,7 +13,6 @@ import {
 	AuthResponse,
 	AccountResponse,
 	ArchiveResponse,
-	FolderResponse,
 } from '@shared/services/api/index.repo';
 import { LocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
@@ -28,6 +27,7 @@ import * as Sentry from '@sentry/browser';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { EventService } from '../event/event.service';
 import { HttpService } from '../http/http.service';
+import { RootFolderService } from '../root-folder/root-folder.service';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -67,6 +67,7 @@ export class AccountService {
 		private httpv2: HttpV2Service,
 		private location: LocationStrategy,
 		private event: EventService,
+		private rootFolderService: RootFolderService,
 	) {
 		const cachedAccount = this.getStorage(ACCOUNT_KEY);
 
@@ -283,8 +284,7 @@ export class AccountService {
 	}
 
 	public async refreshRoot() {
-		const response = await this.api.folder.getRoot();
-		const root = response.getFolderVO();
+		const root = await this.rootFolderService.loadRootFolder(this.archive);
 		this.setRootFolder(root);
 	}
 
@@ -307,9 +307,8 @@ export class AccountService {
 				archive = response.getArchiveVO();
 				this.setArchive(archive);
 			})
-			.then(async () => await this.api.folder.getRoot())
-			.then((response: FolderResponse) => {
-				const root = response.getFolderVO();
+			.then(async () => await this.rootFolderService.loadRootFolder(archive))
+			.then((root: FolderVO) => {
 				this.setRootFolder(root);
 				this.archiveChange.emit(this.archive);
 				return this.getArchive();
