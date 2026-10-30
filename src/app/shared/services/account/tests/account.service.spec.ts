@@ -6,7 +6,8 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { AuthResponse } from '@shared/services/api/index.repo';
-import { AccountVO, FolderVO, RecordVO } from '@root/app/models';
+import { AccountVO, ArchiveVO, FolderVO, RecordVO } from '@root/app/models';
+import { AccessRoleType } from '@models/access-role';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { HttpService } from '@shared/services/http/http.service';
 import { LocationStrategy } from '@angular/common';
@@ -280,6 +281,39 @@ describe('AccountService', () => {
 
 		it('should be false when there is no account', () => {
 			expect(instance.isEmailOrPhoneUnverified()).toBeFalse();
+		});
+	});
+
+	describe('canShareItem', () => {
+		const signInToArchiveWithRole = (archiveAccessRole: AccessRoleType) => {
+			instance.setAccount(
+				new AccountVO({ primaryEmail: 'test@permanent.org' }),
+			);
+			instance.setArchive(new ArchiveVO({ accessRole: archiveAccessRole }));
+		};
+
+		it('should allow a manager of the archive to share an item they manage', () => {
+			signInToArchiveWithRole('access.role.manager');
+
+			expect(instance.canShareItem('access.role.manager')).toBeTrue();
+		});
+
+		it('should allow an owner of the archive to share an item they own', () => {
+			signInToArchiveWithRole('access.role.owner');
+
+			expect(instance.canShareItem('access.role.owner')).toBeTrue();
+		});
+
+		it('should not allow sharing an item the caller only curates', () => {
+			signInToArchiveWithRole('access.role.manager');
+
+			expect(instance.canShareItem('access.role.curator')).toBeFalse();
+		});
+
+		it('should not allow a curator of the archive to share, even an owned item', () => {
+			signInToArchiveWithRole('access.role.curator');
+
+			expect(instance.canShareItem('access.role.owner')).toBeFalse();
 		});
 	});
 

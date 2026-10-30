@@ -383,6 +383,30 @@ describe('SharingDialogComponent - Share Link Test', () => {
 		fixture.detectChanges();
 	});
 
+	it('should let a manager of the item create share links', () => {
+		const accountService = TestBed.inject(AccountService);
+		const canShareItemSpy = spyOn(
+			accountService,
+			'canShareItem',
+		).and.returnValue(true);
+		component.shareItem.accessRole = 'access.role.manager';
+
+		component.ngOnInit();
+
+		expect(canShareItemSpy).toHaveBeenCalledWith('access.role.manager');
+		expect(component.canShare).toBeTrue();
+	});
+
+	it('should hide share link creation when the account cannot share the item', () => {
+		spyOn(TestBed.inject(AccountService), 'canShareItem').and.returnValue(
+			false,
+		);
+
+		component.ngOnInit();
+
+		expect(component.canShare).toBeFalse();
+	});
+
 	it('should be able to save default access role on a share link', async () => {
 		await component.generateShareLink();
 

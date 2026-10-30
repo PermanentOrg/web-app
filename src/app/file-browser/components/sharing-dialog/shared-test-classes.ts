@@ -1,5 +1,6 @@
 import { Subject } from 'rxjs';
 import { ArchiveVO, ShareByUrlVO } from '@models/index';
+import { AccessRoleType } from '@models/access-role';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { Expiration } from '@root/app/share-links/services/share-link-mapping.service';
 
@@ -7,6 +8,8 @@ export class MockAccountService {
 	public archiveChange = new Subject();
 
 	public getArchive = () => new ArchiveVO({});
+
+	public canShareItem = (_itemAccessRole: AccessRoleType) => true;
 }
 export class MockShareLinksApiService {
 	public static readonly initialData = {
