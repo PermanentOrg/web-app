@@ -10,7 +10,19 @@ export type SortType =
 	| 'sort.type_asc'
 	| 'sort.type_desc';
 
+export type StelaFolderType =
+	| 'root'
+	| 'app-root'
+	| 'app'
+	| 'private-root'
+	| 'private'
+	| 'public-root'
+	| 'public'
+	| 'share-root'
+	| 'deprecated';
+
 export type FolderType =
+	| 'type.folder.root.root'
 	| 'type.folder.root.app'
 	| 'type.folder.root.private'
 	| 'type.folder.root.public'
@@ -21,7 +33,8 @@ export type FolderType =
 	| 'type.folder.public'
 	| 'type.folder.share'
 	| 'type.folder.vault'
-	| 'page';
+	| 'page'
+	| StelaFolderType;
 
 export type FolderLinkType =
 	| 'type.folder_link.root.app'
