@@ -12,6 +12,8 @@ import { EventService } from '@shared/services/event/event.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { NotificationDialogComponent } from '@root/app/notifications/components/notification-dialog/notification-dialog.component';
 import { Overlay } from '@angular/cdk/overlay';
+import { FolderVO } from '@models/folder-vo';
+import { isAppsRootFolder, isShareRootFolder } from '@models/folder-type';
 
 @Component({
 	selector: 'pr-nav',
@@ -63,6 +65,12 @@ export class NavComponent implements AfterViewInit, OnDestroy {
 
 	hideRightMenu() {
 		this.rightMenuVisible = false;
+	}
+
+	canShowNewFolderButton(currentFolder: FolderVO | undefined): boolean {
+		return (
+			!isShareRootFolder(currentFolder) && !isAppsRootFolder(currentFolder)
+		);
 	}
 
 	showNotificationMenu() {
