@@ -42,14 +42,56 @@ describe('ProfileEditComponent', () => {
 	mockProfileService.getProfileItemDictionary.and.returnValue({});
 	mockProfileService.fetchProfileItems.and.returnValue(Promise.resolve());
 	mockProfileService.checkProfilePublic.and.returnValue(true);
+	const publicRootFromStela = new FolderVO({
+		folderId: 3,
+		folder_linkId: 4,
+		archiveNbr: '0001-0003',
+		type: 'public-root',
+		view: 'grid' as any,
+	});
+
 	const mockAccountService = {
 		getPrivateRoot: jasmine
 			.createSpy('getPrivateRoot')
 			.and.returnValue('root-folder'),
+		getArchive: () => new ArchiveVO({ archiveNbr: 'a-1' }),
+		getPublicRoot: () => publicRootFromStela,
+		checkMinimumArchiveAccess: () => true,
 	};
+
+	const publicRootFromV1 = new FolderVO({
+		folderId: 3,
+		folder_linkId: 4,
+		archiveNbr: '0001-0003',
+		type: 'type.folder.root.public',
+		view: 'folder.view.timeline',
+		viewProperty: 'timeline-property',
+		thumbArchiveNbr: '0001-0111',
+		thumbURL200: 'old200',
+		thumbURL500: 'old500',
+		thumbURL1000: 'old1000',
+		thumbURL2000: 'old2000',
+	});
+
+	function respondWithPublicRootFromV1(): void {
+		mockApiService.folder.get.and.resolveTo(
+			new FolderResponse({
+				isSuccessful: true,
+				Results: [{ data: [{ FolderVO: publicRootFromV1 }] }],
+			}),
+		);
+	}
+
+	async function openEditor(): Promise<void> {
+		fixture = TestBed.createComponent(ProfileEditComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+		await fixture.whenStable();
+	}
 
 	const mockApiService = {
 		folder: {
+			get: jasmine.createSpy('get'),
 			updateRoot: jasmine
 				.createSpy('updateRoot')
 				.and.returnValue(Promise.resolve()),
@@ -63,6 +105,10 @@ describe('ProfileEditComponent', () => {
 	beforeEach(async () => {
 		mockDialogService.open.calls.reset();
 		mockFeatureFlagService.isEnabled.and.returnValue(false);
+		mockApiService.folder.get.calls.reset();
+		mockApiService.folder.updateRoot.calls.reset();
+		mockFolderPickerService.chooseRecord.calls.reset();
+		respondWithPublicRootFromV1();
 
 		TestBed.configureTestingModule({
 			declarations: [ProfileEditComponent, GetThumbnailPipe],
@@ -87,17 +133,8 @@ describe('ProfileEditComponent', () => {
 			],
 		}).compileComponents();
 
-		fixture = TestBed.createComponent(ProfileEditComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-
-		component.publicRoot = new FolderVO({
-			thumbArchiveNbr: 111,
-			thumbURL200: 'old200',
-			thumbURL500: 'old500',
-			thumbURL1000: 'old1000',
-			thumbURL2000: 'old2000',
-		});
+		await openEditor();
+		mockDialogService.open.calls.reset();
 	});
 
 	it('should create', () => {
@@ -173,6 +210,62 @@ describe('ProfileEditComponent', () => {
 		expect(component.publicRoot.thumbURL500).toBe('new500');
 		expect(component.publicRoot.thumbURL1000).toBe('new1000');
 		expect(component.publicRoot.thumbURL2000).toBe('new2000');
+	});
+
+	it('should show the banner already set when the editor opens', () => {
+		expect(mockApiService.folder.get).toHaveBeenCalledOnceWith([
+			jasmine.objectContaining({ folderId: 3, type: 'public-root' }),
+		]);
+
+		expect(component.bannerThumbnail).toBe('old2000');
+	});
+
+	it('should write the banner with the view the v1 public root has, not the stela one', async () => {
+		mockFolderPickerService.chooseRecord.and.resolveTo(
+			new RecordVO({ archiveNbr: '0001-0999' }),
+		);
+
+		await component.chooseBannerPicture();
+
+		const [[writtenFolder]] =
+			mockApiService.folder.updateRoot.calls.mostRecent().args;
+
+		expect(writtenFolder.folderId).toBe(3);
+		expect(writtenFolder.view).toBe('folder.view.timeline');
+		expect(writtenFolder.viewProperty).toBe('timeline-property');
+		expect(writtenFolder.thumbArchiveNbr).toBe('0001-0999');
+		expect(mockApiService.folder.get).toHaveBeenCalledTimes(1);
+	});
+
+	it('should load the v1 public root before the write when it failed to load on open', async () => {
+		mockApiService.folder.get.and.rejectWith(
+			new FolderResponse({ isSuccessful: false }),
+		);
+		await openEditor();
+		respondWithPublicRootFromV1();
+		mockFolderPickerService.chooseRecord.and.resolveTo(
+			new RecordVO({ archiveNbr: '0001-0999' }),
+		);
+
+		await component.chooseBannerPicture();
+
+		const [[writtenFolder]] =
+			mockApiService.folder.updateRoot.calls.mostRecent().args;
+
+		expect(writtenFolder.view).toBe('folder.view.timeline');
+		expect(writtenFolder.viewProperty).toBe('timeline-property');
+	});
+
+	it('should write nothing when the v1 public root cannot be loaded at all', async () => {
+		mockApiService.folder.get.and.rejectWith(
+			new FolderResponse({ isSuccessful: false }),
+		);
+		await openEditor();
+
+		await component.chooseBannerPicture();
+
+		expect(mockFolderPickerService.chooseRecord).not.toHaveBeenCalled();
+		expect(mockApiService.folder.updateRoot).not.toHaveBeenCalled();
 	});
 
 	it('should show a profile photo written onto the archive after the picker closes', () => {
