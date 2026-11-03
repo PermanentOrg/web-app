@@ -51,8 +51,23 @@ describe('DownloadOptionsComponent', () => {
 
 	it('labels each option', () => {
 		expect(textOf('.download-option-label')).toEqual([
-			'Original Format:',
-			'Permanent Format:',
+			'Original:',
+			'Access copy:',
+		]);
+	});
+
+	it('labels options by file format rather than position', () => {
+		const recordWithoutOriginal = new RecordVO({});
+		recordWithoutOriginal.FileVOs = [
+			makeFile(FileFormat.Converted, 'photo.pdf'),
+			makeFile(FileFormat.ArchivematicaAccess, 'photo.jpg'),
+		];
+		fixture.componentRef.setInput('record', recordWithoutOriginal);
+		fixture.detectChanges();
+
+		expect(textOf('.download-option-label')).toEqual([
+			'Access copy:',
+			'Access copy:',
 		]);
 	});
 

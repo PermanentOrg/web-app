@@ -10,6 +10,7 @@ import { some } from 'lodash';
 import { ItemVO, FolderVO, ArchiveVO, AccessRole } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { getOriginalFileExtension } from '@models/record-preview-state';
+import { FileFormat, getFileFormatLabel } from '@models/file-vo';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 
@@ -48,6 +49,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 	canUseViews: boolean;
 
 	originalFileExtension: string = '';
+	readonly originalFormatLabel = getFileFormatLabel(FileFormat.Original);
 
 	showEdtfDatePicker: boolean;
 
