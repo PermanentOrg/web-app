@@ -1,0 +1,16 @@
+:host {
+	display: block;
+}
+
+.download-option {
+	cursor: pointer;
+
+	&:hover {
+		background-color: #eaeaea;
+	}
+
+	& > span {
+		font-size: 14px;
+		margin-left: 10px;
+	}
+}
