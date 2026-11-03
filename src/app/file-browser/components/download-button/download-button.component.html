@@ -14,21 +14,12 @@
 		}
 	</div>
 </div>
-@if (displayDownloadDropdown) {
+@if (displayDownloadDropdown && selectedRecord; as record) {
 	<div
 		#downloadButtonDropdown
 		class="download-options"
 		[ngClass]="{ 'download-options-file-viewer': isFileView }"
 	>
-		@for (item of downloadOptions; track item; let i = $index) {
-			<div class="download-option" (click)="onFileTypeClick(item?.name)">
-				<span>{{ i === 0 ? 'Original Format:' : 'Permanent Format:' }}</span>
-				<span>{{
-					item?.extension && item?.extension !== 'null'
-						? '.' + item?.extension
-						: 'unknown'
-				}}</span>
-			</div>
-		}
+		<pr-download-options [record]="record" />
 	</div>
 }

@@ -71,20 +71,9 @@
 					>keyboard_arrow_down</i
 				>
 			}
-			@if (displayDownloadDropdown) {
+			@if (displayDownloadDropdown && singleSelectedRecord; as record) {
 				<div class="download-options">
-					@for (item of downloadOptions; track item; let i = $index) {
-						<div class="download-option" (click)="onFileTypeClick(item?.name)">
-							<span>{{
-								i === 0 ? 'Original Format:' : 'Permanent Format:'
-							}}</span>
-							<span>{{
-								item?.extension && item!.extension !== 'null'
-									? '.' + item?.extension
-									: 'unknown'
-							}}</span>
-						</div>
-					}
+					<pr-download-options [record]="record" />
 				</div>
 			}
 		</div>

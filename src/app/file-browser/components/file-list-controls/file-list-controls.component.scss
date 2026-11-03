@@ -229,16 +229,3 @@ pr-folder-view-toggle {
 		margin-left: 0;
 	}
 }
-
-.download-option {
-	cursor: pointer;
-
-	&:hover {
-		background-color: #eaeaea;
-	}
-
-	& > span {
-		font-size: 14px;
-		margin-left: 10px;
-	}
-}
