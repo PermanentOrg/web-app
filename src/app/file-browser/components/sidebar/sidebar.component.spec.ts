@@ -4,6 +4,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, FolderVO, RecordVO } from '@models/index';
+import { FileFormat, PermanentFile } from '@models/file-vo';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { DateTimeModel } from '@shared/services/edtf-service/edtf.service';
@@ -331,6 +332,40 @@ describe('SidebarComponent', () => {
 			enabledFixture.detectChanges();
 
 			expect(enabledFixture.componentInstance.showEdtfDatePicker).toBe(true);
+		});
+	});
+
+	describe('original file extension', () => {
+		const originalFile = (type: string): PermanentFile => ({
+			fileId: 0,
+			fileURL: '',
+			downloadURL: '',
+			size: 0,
+			format: FileFormat.Original,
+			type,
+		});
+
+		const selectRecord = async (record: RecordVO) => {
+			selectedItemsSubject.next(new Set([record]));
+			await fixture.whenStable();
+		};
+
+		it('should show the extension of the original file', async () => {
+			const record = new RecordVO({});
+			record.FileVOs = [originalFile('type.image.tiff')];
+
+			await selectRecord(record);
+
+			expect(component.originalFileExtension).toBe('tiff');
+		});
+
+		it('should fall back to the upload filename for an unknown file type', async () => {
+			const record = new RecordVO({ uploadFileName: 'scan.pages' });
+			record.FileVOs = [originalFile('type.file.unknown.null')];
+
+			await selectRecord(record);
+
+			expect(component.originalFileExtension).toBe('pages');
 		});
 	});
 
