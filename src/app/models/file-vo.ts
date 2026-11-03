@@ -23,3 +23,15 @@ export interface PermanentFile {
 export function getFileExtension(file: PermanentFile): string {
 	return file.type.split('.').pop();
 }
+
+const UNRECOGNIZED_FILE_FORMAT_LABEL = 'Other copy';
+
+const FILE_FORMAT_LABELS: Record<FileFormat, string> = {
+	[FileFormat.Original]: 'Original',
+	[FileFormat.Converted]: 'Access copy',
+	[FileFormat.ArchivematicaAccess]: 'Access copy',
+};
+
+export function getFileFormatLabel(format: FileFormat): string {
+	return FILE_FORMAT_LABELS[format] ?? UNRECOGNIZED_FILE_FORMAT_LABEL;
+}
