@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { some } from 'lodash';
 import { ItemVO, FolderVO, ArchiveVO, AccessRole } from '@models';
 import { DataStatus } from '@models/data-status.enum';
+import { getOriginalFileExtension } from '@models/record-preview-state';
 import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 
@@ -163,11 +164,9 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 					this.selectedItem.FileVOs &&
 					this.selectedItem.FileVOs[0]
 				) {
-					this.originalFileExtension = this.selectedItem.FileVOs.find(
-						(item) => item.format === 'file.format.original',
-					)
-						?.type.split('.')
-						.pop();
+					this.originalFileExtension = getOriginalFileExtension(
+						this.selectedItem,
+					);
 				} else {
 					this.originalFileExtension = '';
 					this.isRecord = !this.selectedItem.isFolder;
