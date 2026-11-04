@@ -19,7 +19,6 @@ pr-breadcrumb {
 	min-width: 0; // ✅ allow shrinking in flex layout
 	color: $PR-brand-white;
 	white-space: normal;
-	word-break: break-word;
 	overflow-wrap: anywhere;
 
 	@include after($tablet-horizontal) {
@@ -31,7 +30,6 @@ pr-breadcrumb {
 		text-decoration: none;
 		display: inline;
 		white-space: normal;
-		word-break: break-word;
 		overflow-wrap: anywhere;
 	}
 
