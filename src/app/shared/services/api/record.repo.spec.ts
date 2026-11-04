@@ -525,6 +525,24 @@ describe('RecordRepo', () => {
 			expect(record.accessCopyStatus).toBeUndefined();
 		});
 
+		it('should map publicAt from the stela record to publicDT', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				publicAt: '2023-01-21T00:00:00.000Z',
+			} as any);
+
+			expect(record.publicDT).toBe('2023-01-21T00:00:00.000Z');
+		});
+
+		it('should keep a null publicAt as a null publicDT for private records', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				publicAt: null,
+			} as any);
+
+			expect(record.publicDT).toBeNull();
+		});
+
 		it('should leave displayTime undefined when not present in stela record', () => {
 			const record = convertStelaRecordToRecordVO({
 				...baseStelaRecord,

@@ -132,6 +132,7 @@ export type StelaRecord = Omit<RecordVO, 'files' | 'accessRole'> & {
 	files: Array<StelaFile>;
 	createdAt: string;
 	updatedAt: string;
+	publicAt: string | null;
 	archive: StelaArchive;
 	shares: Array<StelaShare> | null;
 };
@@ -240,6 +241,7 @@ export const convertStelaRecordToRecordVO = (
 		FileVOs: stelaRecord.files?.map(convertStelaFileToPermanentFile),
 		createdDT: stelaRecord.createdAt,
 		updatedDT: stelaRecord.updatedAt,
+		publicDT: stelaRecord.publicAt,
 		locnId: stelaRecord.location?.id || null,
 		parentFolder_linkId: stelaRecord.parentFolderLinkId,
 		TextDataVOs: [],
