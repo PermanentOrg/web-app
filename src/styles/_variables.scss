@@ -25,7 +25,7 @@ $metadata-width: 350px;
 $public-max-width: 800px;
 $public-banner-height: pxToGrid(100px);
 $public-archive-header-height: pxToGrid(70px);
-$breadcrumb-divider: quote('>');
+$breadcrumb-divider: '>';
 $breadcrumb-height: pxToGrid(34px);
 $breadcrumb-height-desktop: 4 * $grid-unit;
 $timeline-breadcrumb-height: $breadcrumb-height;

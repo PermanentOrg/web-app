@@ -61,7 +61,7 @@
 	&-text {
 		font-family: Usual;
 
-		@include marginBottomSearchResults();
+		@include marginBottomSearchResults;
 	}
 
 	&-archive-info {
@@ -81,7 +81,7 @@
 		margin-left: 5px;
 
 		&-container {
-			@include marginBottomSearchResults();
+			@include marginBottomSearchResults;
 
 			background: linear-gradient(
 				179.15deg,
