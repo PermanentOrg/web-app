@@ -511,7 +511,34 @@ export class EdtfService {
 		if (!timezoneId || !wallClock) {
 			return null;
 		}
-		return this.timezoneService.getOffsetForWallClock(timezoneId, wallClock);
+		return this.timezoneService.getOffsetForWallClock(
+			timezoneId,
+			wallClock,
+			time.timezoneOffset,
+		);
+	}
+
+	// Never guesses a zone from the offset; an offset alone is written as tzdata would ('-04').
+	getTimezoneAbbreviation(
+		date: DateModel | undefined,
+		time: TimeModel | undefined,
+		timezoneId: string | null | undefined,
+	): string | null {
+		if (!time?.hours) {
+			return null;
+		}
+		const wallClock = this.toWallClock(date, time);
+		const zoneAbbreviation = wallClock
+			? this.timezoneService.getAbbreviationForWallClock(
+					timezoneId,
+					wallClock,
+					time.timezoneOffset,
+				)
+			: null;
+		return (
+			zoneAbbreviation ??
+			this.timezoneService.formatOffsetAsAbbreviation(time.timezoneOffset)
+		);
 	}
 
 	private toWallClock(

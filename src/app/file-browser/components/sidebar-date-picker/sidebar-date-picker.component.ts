@@ -414,18 +414,13 @@ export class SidebarDatePickerComponent implements OnInit, OnChanges {
 	}
 
 	private formatTimezone(date: DateModel, time: TimeModel): string {
-		if (!time?.hours) {
-			return '';
-		}
-		const timezoneId = this._selectedTimezoneId();
-		const offset = this.edtfService.getTimezoneOffset(
-			date,
-			time,
-			timezoneId ?? undefined,
+		return (
+			this.edtfService.getTimezoneAbbreviation(
+				date,
+				time,
+				this._selectedTimezoneId(),
+			) ?? ''
 		);
-		return offset
-			? `GMT${offset}`
-			: (this.timezoneService.getOption(timezoneId)?.offsetLabel ?? '');
 	}
 
 	private formatTime(time: TimeModel): string {
