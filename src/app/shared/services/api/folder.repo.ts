@@ -229,16 +229,6 @@ const convertStelaFolderToFolderVO = (stelaFolder: StelaFolder): FolderVO => {
 };
 
 export class FolderRepo extends BaseRepo {
-	public async getRoot(): Promise<FolderResponse> {
-		return await this.http.sendRequestPromise<FolderResponse>(
-			'/folder/getRoot',
-			[],
-			{
-				ResponseClass: FolderResponse,
-			},
-		);
-	}
-
 	public async get(folderVOs: FolderVO[]): Promise<FolderResponse> {
 		const data = folderVOs.map((folderVO) => ({
 			FolderVO: {
