@@ -19,6 +19,7 @@ import { min } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { ItemVO, AccessRole, SortType, RecordVO, FolderVO } from '@models';
 import { getAccessAsEnum } from '@models/access-role';
+import { isShareRootFolder } from '@models/folder-type';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { EditService } from '@core/services/edit/edit.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -156,8 +157,7 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 	}
 
 	setAvailableActions() {
-		this.isShareRoot =
-			this.data.currentFolder.type === 'type.folder.root.share';
+		this.isShareRoot = isShareRootFolder(this.data.currentFolder);
 		this.isPublic = this.data.currentFolder.type.includes('public');
 		this.setAllActions(false);
 
