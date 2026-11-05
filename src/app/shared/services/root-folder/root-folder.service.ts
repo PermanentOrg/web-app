@@ -31,14 +31,6 @@ export class RootFolderService {
 	constructor(private api: ApiService) {}
 
 	public async loadRootFolder(archive: ArchiveVO): Promise<FolderVO> {
-		try {
-			return await this.loadRootFolderFromStela(archive);
-		} catch {
-			return await this.loadRootFolderFromV1();
-		}
-	}
-
-	private async loadRootFolderFromStela(archive: ArchiveVO): Promise<FolderVO> {
 		const rootFolderId = await this.api.archive.getRootFolderId(
 			archive.archiveId,
 		);
@@ -50,10 +42,5 @@ export class RootFolderService {
 			throw new Error('Stela returned an incomplete archive root');
 		}
 		return rootFolder;
-	}
-
-	private async loadRootFolderFromV1(): Promise<FolderVO> {
-		const response = await this.api.folder.getRoot();
-		return response.getFolderVO(true);
 	}
 }

@@ -44,19 +44,10 @@ function buildStelaArchiveRoot(
 	};
 }
 
-const V1_ARCHIVE_ROOT: FolderVOData = {
-	folderId: 1,
-	type: 'type.folder.root.root',
-	ChildItemVOs: [
-		new FolderVO({ folderId: 2, type: 'type.folder.root.private' }),
-	],
-};
-
 describe('RootFolderService', () => {
 	let service: RootFolderService;
 	let getRootFolderIdSpy: jasmine.Spy;
 	let getWithChildrenSpy: jasmine.Spy;
-	let getRootSpy: jasmine.Spy;
 	const archive = new ArchiveVO({ archiveId: 2977, archiveNbr: '01it-0000' });
 
 	beforeEach(() => {
@@ -66,9 +57,6 @@ describe('RootFolderService', () => {
 		getWithChildrenSpy = jasmine
 			.createSpy('getWithChildren')
 			.and.resolveTo(buildFolderResponse(buildStelaArchiveRoot()));
-		getRootSpy = jasmine
-			.createSpy('getRoot')
-			.and.resolveTo(buildFolderResponse(V1_ARCHIVE_ROOT));
 
 		TestBed.configureTestingModule({
 			providers: [
@@ -77,10 +65,7 @@ describe('RootFolderService', () => {
 					provide: ApiService,
 					useValue: {
 						archive: { getRootFolderId: getRootFolderIdSpy },
-						folder: {
-							getWithChildren: getWithChildrenSpy,
-							getRoot: getRootSpy,
-						},
+						folder: { getWithChildren: getWithChildrenSpy },
 					},
 				},
 			],
@@ -96,7 +81,6 @@ describe('RootFolderService', () => {
 			(getWithChildrenSpy.calls.mostRecent().args[0] as FolderVO[])[0].folderId,
 		).toBe('48584');
 
-		expect(getRootSpy).not.toHaveBeenCalled();
 		expect(rootFolder.type).toBe('root');
 		expect(rootFolder.ChildItemVOs.map((child) => child.type)).toEqual([
 			'app-root',
@@ -109,59 +93,58 @@ describe('RootFolderService', () => {
 			.toBeTrue();
 	});
 
-	it('should fall back to v1 when the Stela archive cannot be read', async () => {
-		getRootFolderIdSpy.and.rejectWith(new Error('404'));
+	it('should reject with the Stela error when the archive cannot be read', async () => {
+		const archiveFailure = new Error('404');
+		getRootFolderIdSpy.and.rejectWith(archiveFailure);
 
-		const rootFolder = await service.loadRootFolder(archive);
+		await expectAsync(service.loadRootFolder(archive)).toBeRejectedWith(
+			archiveFailure,
+		);
 
 		expect(getWithChildrenSpy).not.toHaveBeenCalled();
-		expect(rootFolder.type).toBe('type.folder.root.root');
 	});
 
-	it('should fall back to v1 when the Stela root folder cannot be loaded', async () => {
-		getWithChildrenSpy.and.rejectWith(new Error('500'));
+	it('should reject with the Stela error when the root folder cannot be loaded', async () => {
+		const rootFolderFailure = new Error('500');
+		getWithChildrenSpy.and.rejectWith(rootFolderFailure);
 
-		const rootFolder = await service.loadRootFolder(archive);
-
-		expect(getRootSpy).toHaveBeenCalledTimes(1);
-		expect(rootFolder.type).toBe('type.folder.root.root');
+		await expectAsync(service.loadRootFolder(archive)).toBeRejectedWith(
+			rootFolderFailure,
+		);
 	});
 
-	it('should fall back to v1 when there is no archive to look up', async () => {
-		const rootFolder = await service.loadRootFolder(undefined);
-
-		expect(getRootFolderIdSpy).not.toHaveBeenCalled();
-		expect(rootFolder.type).toBe('type.folder.root.root');
-	});
-
-	it('should fall back to v1 when Stela does not answer with an archive root', async () => {
+	it('should reject when Stela does not answer with an archive root', async () => {
 		getWithChildrenSpy.and.resolveTo(
 			buildFolderResponse({ ...buildStelaArchiveRoot(), type: 'private' }),
 		);
 
-		const rootFolder = await service.loadRootFolder(archive);
+		await expectAsync(service.loadRootFolder(archive)).toBeRejected();
+	});
 
-		expect(rootFolder.type).toBe('type.folder.root.root');
+	it('should reject when Stela answers with no folder at all', async () => {
+		getWithChildrenSpy.and.resolveTo(
+			new FolderResponse({ isSuccessful: true, Results: [] }),
+		);
+
+		await expectAsync(service.loadRootFolder(archive)).toBeRejected();
 	});
 
 	['app-root', 'private-root', 'public-root'].forEach(
 		(missingWorkspaceRoot) => {
-			it(`should fall back to v1 when the Stela root has no ${missingWorkspaceRoot}`, async () => {
+			it(`should reject when the Stela root has no ${missingWorkspaceRoot}`, async () => {
 				getWithChildrenSpy.and.resolveTo(
 					buildFolderResponse(
 						buildStelaArchiveRoot({ [missingWorkspaceRoot]: undefined }),
 					),
 				);
 
-				const rootFolder = await service.loadRootFolder(archive);
-
-				expect(rootFolder.type).toBe('type.folder.root.root');
+				await expectAsync(service.loadRootFolder(archive)).toBeRejected();
 			});
 		},
 	);
 
 	['folderId', 'folder_linkId', 'archiveNbr'].forEach((missingId) => {
-		it(`should fall back to v1 when a Stela workspace root has no ${missingId}`, async () => {
+		it(`should reject when a Stela workspace root has no ${missingId}`, async () => {
 			const privateRootWithoutId: FolderVOData = {
 				folderId: 48586,
 				folder_linkId: 126708,
@@ -175,19 +158,7 @@ describe('RootFolderService', () => {
 				),
 			);
 
-			const rootFolder = await service.loadRootFolder(archive);
-
-			expect(rootFolder.type).toBe('type.folder.root.root');
+			await expectAsync(service.loadRootFolder(archive)).toBeRejected();
 		});
-	});
-
-	it('should reject with the v1 error when both Stela and v1 fail', async () => {
-		const v1Failure = new FolderResponse({ isSuccessful: false });
-		getRootFolderIdSpy.and.rejectWith(new Error('404'));
-		getRootSpy.and.rejectWith(v1Failure);
-
-		await expectAsync(service.loadRootFolder(archive)).toBeRejectedWith(
-			v1Failure,
-		);
 	});
 });
