@@ -16,6 +16,7 @@ import {
 	GeneratedFileStatus,
 	PermanentFile,
 	getFileExtension,
+	getFileFormatLabel,
 } from './file-vo';
 
 interface RecordVoOptions {
@@ -176,6 +177,7 @@ export class RecordVO
 		).map((file) => ({
 			name: file.type,
 			extension: getFileExtension(file),
+			label: getFileFormatLabel(file.format),
 		}));
 	}
 }

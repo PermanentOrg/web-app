@@ -198,7 +198,7 @@
 				}
 				@if (originalFileExtension && originalFileExtension !== 'null') {
 					<div class="sidebar-detail">
-						<label>Original Format</label>
+						<label>{{ originalFormatLabel }}</label>
 						<div class="sidebar-detail-content">
 							.{{ originalFileExtension }}
 						</div>
@@ -209,7 +209,7 @@
 					(!originalFileExtension || originalFileExtension === 'null')
 				) {
 					<div class="sidebar-detail unknown">
-						<label>Original Format</label>
+						<label>{{ originalFormatLabel }}</label>
 						<div class="sidebar-detail-content">unknown</div>
 					</div>
 				}

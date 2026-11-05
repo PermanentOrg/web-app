@@ -30,6 +30,7 @@ import { SharingDialogComponent } from './components/sharing-dialog/sharing-dial
 import { DownloadButtonComponent } from './components/download-button/download-button.component';
 import { SidebarDatePickerComponent } from './components/sidebar-date-picker/sidebar-date-picker.component';
 import { SidebarLocationComponent } from './components/sidebar-location/sidebar-location.component';
+import { DownloadOptionsComponent } from './components/download-options/download-options.component';
 import { RecordPreviewStateComponent } from './components/record-preview-state/record-preview-state.component';
 
 @NgModule({
@@ -43,6 +44,7 @@ import { RecordPreviewStateComponent } from './components/record-preview-state/r
 		SidebarDatePickerComponent,
 		SidebarLocationComponent,
 		RecordPreviewStateComponent,
+		DownloadOptionsComponent,
 		EdtfDateDisplayComponent,
 	],
 	exports: [

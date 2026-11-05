@@ -174,5 +174,44 @@ describe('RecordVO', () => {
 			expect(downloadOptions[0].name).toBe('test.docx');
 			expect(downloadOptions[0].extension).toBe('docx');
 		});
+
+		it('labels each option by its file format', () => {
+			const record = new RecordVO({});
+			const baseFile = {
+				fileId: 0,
+				fileURL: 'test',
+				downloadURL: 'test',
+				size: 0,
+			};
+			record.FileVOs = [
+				{ ...baseFile, format: FileFormat.Converted, type: 'test.pdf' },
+				{
+					...baseFile,
+					format: FileFormat.ArchivematicaAccess,
+					type: 'test.jpg',
+				},
+				{ ...baseFile, format: FileFormat.Original, type: 'test.tiff' },
+			];
+
+			expect(
+				record.getDownloadOptionsList().map((option) => option.label),
+			).toEqual(['Original', 'Access copy', 'Access copy']);
+		});
+
+		it('labels an unrecognized file format as another copy', () => {
+			const record = new RecordVO({});
+			record.FileVOs = [
+				{
+					fileId: 0,
+					fileURL: 'test',
+					downloadURL: 'test',
+					size: 0,
+					format: 'file.format.unexpected' as FileFormat,
+					type: 'test.mp4',
+				},
+			];
+
+			expect(record.getDownloadOptionsList()[0].label).toBe('Other copy');
+		});
 	});
 });

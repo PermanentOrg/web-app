@@ -9,11 +9,6 @@ import { RecordVO } from '@models/index';
 import { DataService } from '@shared/services/data/data.service';
 import { MessageService } from '../../../shared/services/message/message.service';
 
-interface Format {
-	name: string;
-	extension: string;
-}
-
 @Component({
 	selector: 'pr-download-button',
 	templateUrl: './download-button.component.html',
@@ -24,7 +19,6 @@ export class DownloadButtonComponent {
 	@Input() selectedItem;
 
 	displayDownloadDropdown = false;
-	downloadOptions: Format[] = [];
 	@Input() isFileView = false;
 
 	@ViewChild('downloadButton') downloadButton: ElementRef;
@@ -46,13 +40,18 @@ export class DownloadButtonComponent {
 		}
 	}
 
+	get selectedRecord(): RecordVO | undefined {
+		return this.selectedItem instanceof RecordVO
+			? this.selectedItem
+			: undefined;
+	}
+
 	async downloadClick() {
-		if (this.selectedItem instanceof RecordVO) {
+		if (this.selectedRecord) {
 			if (this.displayDownloadDropdown) {
 				this.displayDownloadDropdown = false;
-				this.downloadOptions = [];
 			} else {
-				this.displayDownloadOptions();
+				this.displayDownloadDropdown = true;
 				this.bringDropdownIntoView();
 			}
 		} else {
@@ -70,17 +69,6 @@ export class DownloadButtonComponent {
 				});
 			}
 		}
-	}
-
-	onFileTypeClick(fileName: string) {
-		this.data.downloadFile(this.selectedItem, fileName);
-	}
-
-	displayDownloadOptions() {
-		this.displayDownloadDropdown = true;
-		this.downloadOptions = (
-			this.selectedItem as RecordVO
-		).getDownloadOptionsList();
 	}
 
 	bringDropdownIntoView() {
