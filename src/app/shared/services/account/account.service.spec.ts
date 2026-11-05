@@ -68,6 +68,56 @@ describe('AccountService root folder', () => {
 		expect(accountService.getRootFolder()).toBe(stelaRootFolder);
 	});
 
+	it('should keep the root of the archive switched to last when an earlier switch loads slower', async () => {
+		const api = TestBed.inject(ApiService);
+		spyOn(api.archive, 'change').and.callFake(
+			async (archive: ArchiveVO) =>
+				new ArchiveResponse({
+					isSuccessful: true,
+					Results: [{ data: [{ ArchiveVO: archive }] }],
+				}),
+		);
+		const firstArchiveRoot = new FolderVO({ folderId: 1, type: 'root' });
+		const secondArchiveRoot = new FolderVO({ folderId: 2, type: 'root' });
+		let resolveFirstArchiveRoot: (root: FolderVO) => void;
+		loadRootFolderSpy.and.callFake(async (archive: ArchiveVO) =>
+			archive.archiveId === 1
+				? await new Promise<FolderVO>((resolve) => {
+						resolveFirstArchiveRoot = resolve;
+					})
+				: secondArchiveRoot,
+		);
+		const archiveChangeSpy = spyOn(accountService.archiveChange, 'emit');
+
+		const firstSwitch = accountService.changeArchive(
+			new ArchiveVO({ archiveId: 1 }),
+		);
+		await accountService.changeArchive(new ArchiveVO({ archiveId: 2 }));
+		resolveFirstArchiveRoot(firstArchiveRoot);
+		await firstSwitch;
+
+		expect(accountService.getArchive().archiveId).toBe(2);
+		expect(accountService.getRootFolder()).toBe(secondArchiveRoot);
+		expect(archiveChangeSpy).toHaveBeenCalledTimes(1);
+	});
+
+	it('should drop a refreshed root when the archive changed while it loaded', async () => {
+		accountService.setArchive(new ArchiveVO({ archiveId: 1 }));
+		let resolveRefreshedRoot: (root: FolderVO) => void;
+		loadRootFolderSpy.and.returnValue(
+			new Promise<FolderVO>((resolve) => {
+				resolveRefreshedRoot = resolve;
+			}),
+		);
+
+		const refresh = accountService.refreshRoot();
+		accountService.setArchive(new ArchiveVO({ archiveId: 2 }));
+		resolveRefreshedRoot(stelaRootFolder);
+		await refresh;
+
+		expect(accountService.getRootFolder()).toBeUndefined();
+	});
+
 	it('should find the workspace roots in a root loaded from Stela', () => {
 		accountService.setRootFolder(stelaRootFolder);
 
