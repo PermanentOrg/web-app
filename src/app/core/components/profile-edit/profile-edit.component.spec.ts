@@ -268,6 +268,18 @@ describe('ProfileEditComponent', () => {
 		expect(mockApiService.folder.updateRoot).not.toHaveBeenCalled();
 	});
 
+	it('should write nothing when v1 answers without the public root', async () => {
+		mockApiService.folder.get.and.resolveTo(
+			new FolderResponse({ isSuccessful: true, Results: [] }),
+		);
+		await openEditor();
+
+		await component.chooseBannerPicture();
+
+		expect(mockFolderPickerService.chooseRecord).not.toHaveBeenCalled();
+		expect(mockApiService.folder.updateRoot).not.toHaveBeenCalled();
+	});
+
 	it('should show a profile photo written onto the archive after the picker closes', () => {
 		component.archive = new ArchiveVO({ archiveNbr: 'a-1' });
 

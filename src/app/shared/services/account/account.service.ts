@@ -284,8 +284,20 @@ export class AccountService {
 	}
 
 	public async refreshRoot() {
-		const root = await this.rootFolderService.loadRootFolder(this.archive);
+		const archiveToLoad = this.archive;
+		const root = await this.rootFolderService.loadRootFolder(archiveToLoad);
+		this.setRootFolderIfArchiveIsCurrent(archiveToLoad, root);
+	}
+
+	private setRootFolderIfArchiveIsCurrent(
+		loadedArchive: ArchiveVO,
+		root: FolderVO,
+	): boolean {
+		if (loadedArchive.archiveId !== this.archive?.archiveId) {
+			return false;
+		}
 		this.setRootFolder(root);
+		return true;
 	}
 
 	public async updateAccount(accountChanges: AccountVO) {
@@ -309,8 +321,9 @@ export class AccountService {
 			})
 			.then(async () => await this.rootFolderService.loadRootFolder(archive))
 			.then((root: FolderVO) => {
-				this.setRootFolder(root);
-				this.archiveChange.emit(this.archive);
+				if (this.setRootFolderIfArchiveIsCurrent(archive, root)) {
+					this.archiveChange.emit(this.archive);
+				}
 				return this.getArchive();
 			});
 	}

@@ -203,7 +203,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 			return;
 		}
 		const response = await this.api.folder.get([this.publicRoot]);
-		this.publicRoot = response.getFolderVO();
+		const publicRootFromV1 = response.getFolderVO();
+		if (!publicRootFromV1) {
+			throw new Error('v1 did not return the public root');
+		}
+		this.publicRoot = publicRootFromV1;
 		this.isPublicRootFromV1 = true;
 	}
 
