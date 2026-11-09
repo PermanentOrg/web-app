@@ -41,13 +41,14 @@
 				</div>
 			}
 		}
-		@if (!item.isFolder && isZip) {
-			<div class="file-list-item-folder-icon zip-icon">
-				<fa-icon [icon]="['fas', 'file-archive']"></fa-icon>
-			</div>
-		}
-		@if (!item.isFolder && !isZip) {
-			<div prBgImage [bgSrc]="recordThumbnailUrl" [cover]="inGridView"></div>
+		@if (!item.isFolder) {
+			@if (recordThumbnailUrl) {
+				<div prBgImage [bgSrc]="recordThumbnailUrl" [cover]="inGridView"></div>
+			} @else {
+				<pr-record-type-thumbnail
+					[recordType]="item.type"
+				></pr-record-type-thumbnail>
+			}
 		}
 	</ng-container>
 	@if (inGridView && item.isFolder ? item.view : true) {

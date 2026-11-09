@@ -297,6 +297,7 @@ $bg-transition-length: 0.075s;
 }
 
 [prBgImage],
+pr-record-type-thumbnail,
 .file-list-item-folder-icon {
 	height: $row-height - ($grid-unit * 0.5);
 	width: $row-height - ($grid-unit * 0.5);
@@ -350,6 +351,10 @@ $bg-transition-length: 0.075s;
 	}
 }
 
+.grid-view pr-record-type-thumbnail {
+	--record-type-icon-size: 6rem;
+}
+
 .grid-item-type-icon {
 	display: none;
 }
@@ -389,6 +394,7 @@ $bg-transition-length: 0.075s;
 	}
 
 	[prBgImage],
+	pr-record-type-thumbnail,
 	.file-list-item-folder-icon {
 		margin-right: pxToGrid(5px) + $grid-unit;
 	}

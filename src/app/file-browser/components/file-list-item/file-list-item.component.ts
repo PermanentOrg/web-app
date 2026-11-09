@@ -214,7 +214,6 @@ export class FileListItemComponent
 	public allowActions = true;
 	public isMyItem = true;
 	public canEdit = true;
-	public isZip = false;
 	public date: string = '';
 	public showEdtfDate = false;
 	public isUnlistedShare = false;
@@ -299,10 +298,14 @@ export class FileListItemComponent
 	private get showsProcessingStatus(): boolean {
 		return (
 			this.item.isRecord &&
-			!this.isZip &&
+			!this.isArchiveRecord &&
 			!this.inGridView &&
 			!this.showsStockPreviewImage
 		);
+	}
+
+	private get isArchiveRecord(): boolean {
+		return this.item.type === 'type.record.archive';
 	}
 
 	private get showsStockPreviewImage(): boolean {
@@ -392,8 +395,6 @@ export class FileListItemComponent
 		}
 
 		this.inGridView = this.folderView === FolderView.Grid;
-
-		this.isZip = this.item.type === 'type.record.archive';
 
 		if (this.drag) {
 			this.subscriptions.push(

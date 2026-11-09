@@ -20,6 +20,7 @@ import { EdtfDateDisplayComponent } from '@shared/components/edtf-date-display/e
 import { By } from '@angular/platform-browser';
 import { FileFormat, GeneratedFileStatus } from '@models/file-vo';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { RecordTypeThumbnailComponent } from '../record-type-thumbnail/record-type-thumbnail.component';
 import { FileListItemComponent } from './file-list-item.component';
 
 @Pipe({ name: 'itemTypeIcon' })
@@ -103,6 +104,7 @@ describe('FileListItemComponent', () => {
 				MockPrDatePipe,
 				MockPrConstantsPipe,
 				EdtfDateDisplayComponent,
+				RecordTypeThumbnailComponent,
 			],
 			declarations: [FileListItemComponent, GetThumbnailPipe],
 			providers: [
@@ -496,6 +498,51 @@ describe('FileListItemComponent', () => {
 		});
 
 		expect(component.recordThumbnailUrl).toBeUndefined();
+	});
+
+	it('should show the record type tile instead of a blank square when there is no thumbnail', async () => {
+		component.ngOnDestroy();
+		component.item.isRecord = true;
+		component.item.type = 'type.record.document';
+
+		await component.ngOnInit();
+		fixture.detectChanges();
+
+		const element: HTMLElement = fixture.nativeElement;
+
+		expect(element.querySelector('pr-record-type-thumbnail')).not.toBeNull();
+		expect(element.querySelector('[prBgImage]')).toBeNull();
+	});
+
+	it('should swap the record type tile for the thumbnail once it arrives', async () => {
+		component.ngOnDestroy();
+		component.item.isRecord = true;
+		component.item.type = 'type.record.image';
+
+		await component.ngOnInit();
+		fixture.detectChanges();
+
+		component.item.thumbnail256 = 'https://example.com/256';
+		thumbnailUpdatedSubject.next(component.item);
+		fixture.detectChanges();
+
+		const element: HTMLElement = fixture.nativeElement;
+
+		expect(element.querySelector('pr-record-type-thumbnail')).toBeNull();
+		expect(element.querySelector('[prBgImage]')).not.toBeNull();
+	});
+
+	it('should show the record type tile for archives', async () => {
+		component.ngOnDestroy();
+		component.item.isRecord = true;
+		component.item.type = 'type.record.archive';
+
+		await component.ngOnInit();
+		fixture.detectChanges();
+
+		const element: HTMLElement = fixture.nativeElement;
+
+		expect(element.querySelector('pr-record-type-thumbnail')).not.toBeNull();
 	});
 
 	it('should stop applying thumbnail updates once destroyed', async () => {
