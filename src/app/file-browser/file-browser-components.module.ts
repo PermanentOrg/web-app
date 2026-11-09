@@ -32,6 +32,7 @@ import { SidebarDatePickerComponent } from './components/sidebar-date-picker/sid
 import { SidebarLocationComponent } from './components/sidebar-location/sidebar-location.component';
 import { DownloadOptionsComponent } from './components/download-options/download-options.component';
 import { RecordPreviewStateComponent } from './components/record-preview-state/record-preview-state.component';
+import { RecordTypeThumbnailComponent } from './components/record-type-thumbnail/record-type-thumbnail.component';
 
 @NgModule({
 	imports: [
@@ -45,6 +46,7 @@ import { RecordPreviewStateComponent } from './components/record-preview-state/r
 		SidebarLocationComponent,
 		RecordPreviewStateComponent,
 		DownloadOptionsComponent,
+		RecordTypeThumbnailComponent,
 		EdtfDateDisplayComponent,
 	],
 	exports: [
