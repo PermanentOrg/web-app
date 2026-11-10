@@ -14,11 +14,28 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { EventService } from '@shared/services/event/event.service';
 import { Subject, of } from 'rxjs';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
-import { AccessRole } from '@models';
+import { AccessRole, RecordVO } from '@models';
+import { FileFormat, PermanentFile } from '@models/file-vo';
 import { ElementRef } from '@angular/core';
 import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { DownloadOptionsComponent } from '../download-options/download-options.component';
 import { FileListControlsComponent } from './file-list-controls.component';
+
+const makeRecord = (...types: string[]): RecordVO => {
+	const record = new RecordVO({});
+	record.FileVOs = types.map(
+		(type): PermanentFile => ({
+			fileId: 0,
+			fileURL: '',
+			downloadURL: '',
+			size: 0,
+			format: FileFormat.Original,
+			type,
+		}),
+	);
+	return record;
+};
 
 describe('FileListControlsComponent', () => {
 	let component: FileListControlsComponent;
@@ -31,6 +48,9 @@ describe('FileListControlsComponent', () => {
 		},
 		currentFolderChange: new Subject<unknown>(),
 		selectedItems$: () => of([]),
+		createZipForDownload: jasmine
+			.createSpy('createZipForDownload')
+			.and.returnValue(Promise.resolve()),
 		sortCurrentFolder: jasmine
 			.createSpy('sortCurrentFolder')
 			.and.callFake((sort: string) => {
@@ -97,7 +117,7 @@ describe('FileListControlsComponent', () => {
 		accountServiceMock.checkMinimumAccess.and.returnValue(true);
 
 		await TestBed.configureTestingModule({
-			imports: [NgbDropdownModule],
+			imports: [NgbDropdownModule, DownloadOptionsComponent],
 			declarations: [FileListControlsComponent, TooltipsPipe],
 			providers: [
 				{ provide: DataService, useValue: dataServiceMock },
@@ -122,6 +142,53 @@ describe('FileListControlsComponent', () => {
 
 	it('should create the component', () => {
 		expect(component).toBeTruthy();
+	});
+
+	describe('download options', () => {
+		const optionExtensions = (): string[] =>
+			Array.from(
+				fixture.nativeElement.querySelectorAll('.download-option-extension'),
+				(element: HTMLElement) => element.textContent.trim(),
+			);
+
+		beforeEach(async () => {
+			component.can.download = true;
+			component.selectedItems = [makeRecord('photo.tiff')];
+			await component.onDownloadClick();
+			fixture.detectChanges();
+		});
+
+		it('should show the options for a single selected record', () => {
+			expect(optionExtensions()).toEqual(['.tiff']);
+		});
+
+		it('should hide the options when clicked again', async () => {
+			await component.onDownloadClick();
+			fixture.detectChanges();
+
+			expect(optionExtensions()).toEqual([]);
+		});
+
+		it('should zip the selection instead when more than one item is selected', async () => {
+			const selection = [makeRecord('photo.tiff'), makeRecord('letter.pdf')];
+			component.selectedItems = selection;
+
+			await component.onDownloadClick();
+
+			expect(dataServiceMock.createZipForDownload).toHaveBeenCalledWith(
+				selection,
+			);
+		});
+
+		it('should hide the options once more than one item is selected', () => {
+			component.selectedItems = [
+				makeRecord('photo.tiff'),
+				makeRecord('letter.pdf'),
+			];
+			fixture.detectChanges();
+
+			expect(optionExtensions()).toEqual([]);
+		});
 	});
 
 	it('should sort and save the sort as the folder default', fakeAsync(() => {

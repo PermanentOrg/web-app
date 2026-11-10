@@ -42,11 +42,6 @@ interface FileListActions {
 	unshare: boolean;
 }
 
-interface Format {
-	name: string;
-	extension: string;
-}
-
 type FileListColumn = 'name' | 'date' | 'type';
 
 @Component({
@@ -80,8 +75,6 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 	isSorting = false;
 	canSaveSort = false;
 	displayDownloadDropdown = false;
-
-	downloadOptions: Format[] = [];
 
 	@ViewChild('downloadButton') downloadButton: ElementRef;
 
@@ -458,16 +451,8 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 			return;
 		}
 
-		if (
-			this.selectedItems.length === 1 &&
-			this.selectedItems[0] instanceof RecordVO
-		) {
-			if (this.displayDownloadDropdown) {
-				this.displayDownloadDropdown = false;
-				this.downloadOptions = [];
-			} else {
-				this.displayDownloadOptions();
-			}
+		if (this.singleSelectedRecord) {
+			this.displayDownloadDropdown = !this.displayDownloadDropdown;
 		} else {
 			try {
 				await this.data.createZipForDownload(this.selectedItems);
@@ -485,12 +470,11 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 		}
 	}
 
-	async onFileTypeClick(fileName: string) {
-		if (
-			this.selectedItems.length === 1 &&
-			this.selectedItems[0] instanceof RecordVO
-		)
-			this.data.downloadFile(this.selectedItems[0], fileName);
+	get singleSelectedRecord(): RecordVO | undefined {
+		const [onlyItem] = this.selectedItems;
+		return this.selectedItems.length === 1 && onlyItem instanceof RecordVO
+			? onlyItem
+			: undefined;
 	}
 
 	getTooltipConstantForAction(action: keyof FileListActions) {
@@ -526,12 +510,5 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 			direction = 'desc';
 		}
 		return `fileList.sort.${column}.${direction}`;
-	}
-
-	displayDownloadOptions() {
-		this.displayDownloadDropdown = true;
-		this.downloadOptions = (
-			this.selectedItems[0] as RecordVO
-		).getDownloadOptionsList();
 	}
 }

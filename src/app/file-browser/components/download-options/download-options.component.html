@@ -1,0 +1,10 @@
+@for (option of options(); track $index) {
+	<div class="download-option" (click)="download(option.name)">
+		<span class="download-option-label">{{ option.label }}:</span>
+		<span class="download-option-extension">{{
+			option.extension && option.extension !== 'null'
+				? '.' + option.extension
+				: 'unknown'
+		}}</span>
+	</div>
+}
