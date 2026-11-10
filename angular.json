@@ -212,6 +212,7 @@
 						"browserTarget": "mdot:build",
 						"outputDir": "storybook-static",
 						"compodoc": false,
+						"sourceMap": false,
 						"styles": ["src/styles/main.scss"],
 						"stylePreprocessorOptions": {
 							"includePaths": ["src/styles"]
