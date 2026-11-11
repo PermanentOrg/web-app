@@ -11,6 +11,7 @@ import {
 } from '@shared/services/api/index.repo';
 import { of } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
+import { FileFormat, GeneratedFileStatus } from '@models/file-vo';
 
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '@shared/services/api/api.service';
@@ -719,6 +720,51 @@ describe('DataService', () => {
 			.then(() => {
 				expect(record.thumbURL500).toBe('https://example.com/500');
 				expect(service.getThumbRefreshQueue()).not.toContain(record);
+				done();
+			})
+			.catch(done.fail);
+	});
+
+	it('should keep a lean item with a thumbnail in thumbRefreshQueue while its copy is being prepared', (done) => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
+		service.setCurrentFolder(currentFolder);
+
+		const record = currentFolder.ChildItemVOs.find(
+			(item) => item.isRecord,
+		) as RecordVO;
+		service.registerItem(record);
+
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({
+					ChildItemVOs: [
+						{
+							folder_linkId: record.folder_linkId,
+							archiveNbr: record.archiveNbr,
+							parentFolderId: currentFolder.folderId,
+							type: 'type.record.document',
+							FileVOs: [
+								{
+									format: FileFormat.Original,
+									type: 'type.file.document.docx',
+								},
+							],
+							accessCopyStatus: GeneratedFileStatus.Processing,
+							thumbURL500: 'https://example.com/500',
+						},
+					],
+				}),
+			} as unknown as FolderResponse),
+		);
+
+		service
+			.fetchLeanItems([record])
+			.then(() => {
+				expect(service.getThumbRefreshQueue()).toContain(record);
 				done();
 			})
 			.catch(done.fail);
