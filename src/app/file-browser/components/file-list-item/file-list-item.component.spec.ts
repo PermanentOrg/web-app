@@ -16,6 +16,9 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { EdtfDateDisplayComponent } from '@shared/components/edtf-date-display/edtf-date-display.component';
+import { By } from '@angular/platform-browser';
+import { FileFormat, GeneratedFileStatus } from '@models/file-vo';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FileListItemComponent } from './file-list-item.component';
 
 @Pipe({ name: 'itemTypeIcon' })
@@ -661,6 +664,72 @@ describe('FileListItemComponent', () => {
 			await component.ngOnInit();
 
 			expect(component.date).toBe('');
+		});
+	});
+
+	describe('the processing status in the list view', () => {
+		function showRecord(
+			recordType: string,
+			originalFileType: string,
+			accessCopyStatus: GeneratedFileStatus,
+		): void {
+			Object.assign(component.item, {
+				isRecord: true,
+				type: recordType,
+				FileVOs: [{ format: FileFormat.Original, type: originalFileType }],
+				accessCopyStatus,
+			});
+			fixture.detectChanges();
+		}
+
+		function shownProcessingStatus(): string | undefined {
+			return fixture.debugElement
+				.query(By.css('.processing-status'))
+				?.queryAll(By.css('span'))
+				.map((span) => span.nativeElement.textContent.trim())
+				.join(' ');
+		}
+
+		it('shows processing for a document whose copy is being made', () => {
+			showRecord(
+				'type.record.document',
+				'type.file.document.docx',
+				GeneratedFileStatus.Processing,
+			);
+
+			expect(shownProcessingStatus()).toBe('Stored • Processing...');
+		});
+
+		it('shows the failed conversion for a document whose copy failed', () => {
+			showRecord(
+				'type.record.document',
+				'type.file.document.docx',
+				GeneratedFileStatus.Failed,
+			);
+
+			expect(shownProcessingStatus()).toBe("Couldn't convert");
+		});
+
+		it('shows nothing for an MP3, which plays from its original', () => {
+			showRecord(
+				'type.record.audio',
+				'type.file.audio.mp3',
+				GeneratedFileStatus.Processing,
+			);
+
+			expect(shownProcessingStatus()).toBeUndefined();
+		});
+
+		it('shows nothing in the grid view', () => {
+			component.folderView = FolderView.Grid;
+			component.ngOnChanges();
+			showRecord(
+				'type.record.document',
+				'type.file.document.docx',
+				GeneratedFileStatus.Failed,
+			);
+
+			expect(shownProcessingStatus()).toBeUndefined();
 		});
 	});
 });
