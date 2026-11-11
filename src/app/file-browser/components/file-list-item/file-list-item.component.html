@@ -56,7 +56,10 @@
 		</div>
 	}
 	<div
-		[ngClass]="{ 'name-expanded': isNameHovered && isTextOverflowing }"
+		[ngClass]="{
+			'name-expanded': isNameHovered && isTextOverflowing,
+			'with-processing-status': isProcessing || hasFailedConversion
+		}"
 		class="name"
 	>
 		<div
@@ -110,6 +113,20 @@
 				<span> Shared by The {{ item.ShareArchiveVO?.fullName }} Archive </span>
 			}
 		</div>
+		@if (isProcessing) {
+			<div class="processing-status">
+				<span>Stored</span>
+				<span>•</span>
+				<fa-icon class="processing-icon" [icon]="processingIcon"></fa-icon>
+				<span>Processing...</span>
+			</div>
+		}
+		@if (hasFailedConversion) {
+			<div class="processing-status failed">
+				<fa-icon [icon]="failedIcon"></fa-icon>
+				<span>Couldn't convert</span>
+			</div>
+		}
 	</div>
 	@if (!showAccess && !inGridView) {
 		<div class="type">
