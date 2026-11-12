@@ -36,6 +36,19 @@ export enum EdtfPrecision {
 
 export const UNKNOWN_VALUE = 'XXXX-XX-XX';
 
+const DISPLAY_DT_DATE_TIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+
+export interface ItemDateSource {
+	displayTime?: string | null;
+	displayDT?: unknown;
+	timezone?: string | null;
+}
+
+export interface ItemDisplayTime {
+	displayTime: string | null;
+	timezone: string | null;
+}
+
 export const MONTH_RANGE_ERROR = 'Month must be between 1 and 12.';
 export const DAY_RANGE_ERROR = 'Day must be between 1 and 31.';
 export const INVALID_DAY_FOR_MONTH_ERROR =
@@ -147,6 +160,20 @@ export class EdtfService {
 
 		const [startPart] = edtfString.split('/');
 		return startPart === '..' ? '' : (startPart ?? '');
+	}
+
+	getItemDisplayTime(item: ItemDateSource | null | undefined): ItemDisplayTime {
+		const storedTimezone = item?.timezone ?? null;
+		if (item?.displayTime) {
+			return { displayTime: item.displayTime, timezone: storedTimezone };
+		}
+		const displayDtDateTime =
+			typeof item?.displayDT === 'string'
+				? (item.displayDT.match(DISPLAY_DT_DATE_TIME_PATTERN)?.[0] ?? null)
+				: null;
+		return displayDtDateTime
+			? { displayTime: displayDtDateTime, timezone: null }
+			: { displayTime: null, timezone: storedTimezone };
 	}
 
 	private parseInterval(edtfString: string): DateTimeModel | null {

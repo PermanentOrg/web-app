@@ -16,6 +16,8 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { GetThumbnailPipe } from '@shared/pipes/get-thumbnail.pipe';
 import { EdtfDateDisplayComponent } from '@shared/components/edtf-date-display/edtf-date-display.component';
+import { By } from '@angular/platform-browser';
+import { DataStatus } from '@models/data-status.enum';
 import { FileListItemComponent } from './file-list-item.component';
 
 @Pipe({ name: 'itemTypeIcon' })
@@ -597,18 +599,18 @@ describe('FileListItemComponent', () => {
 			component.folderView = '' as any;
 		});
 
-		it('should not fall back to displayDT when displayTime is missing', () => {
+		it('should fall back to displayDT when displayTime is missing', () => {
 			component.item.displayTime = undefined;
 			component.item.displayDT = '2023-01-01T00:00:00.000Z';
 
-			expect(component.startDisplayTime).toBe('');
+			expect(component.startDisplayTime).toBe('2023-01-01T00:00:00.000Z');
 		});
 
-		it('should show nothing when displayTime was explicitly cleared', () => {
+		it('should fall back to displayDT when displayTime is null', () => {
 			component.item.displayTime = null;
 			component.item.displayDT = '2023-01-01T00:00:00.000Z';
 
-			expect(component.startDisplayTime).toBe('');
+			expect(component.startDisplayTime).toBe('2023-01-01T00:00:00.000Z');
 		});
 
 		it('should still show the displayTime start date', () => {
@@ -627,13 +629,35 @@ describe('FileListItemComponent', () => {
 			expect(component.date).toBe('April 1985');
 		});
 
-		it('should leave the public-archive date empty when there is no EDTF value', async () => {
+		it('should render the public-archive date from displayDT when there is no EDTF value', async () => {
 			component.item.displayTime = undefined;
-			component.item.displayDT = '2023-01-01T00:00:00.000Z';
+			component.item.displayDT = '2023-01-01T03:00:00.000Z';
+
+			await component.ngOnInit();
+
+			expect(component.date).toBe('Jan. 1, 2023');
+		});
+
+		it('should leave the public-archive date empty when there is neither displayTime nor displayDT', async () => {
+			component.item.displayTime = undefined;
+			component.item.displayDT = undefined;
 
 			await component.ngOnInit();
 
 			expect(component.date).toBe('');
+		});
+
+		it('should pass displayDT on to the date display', () => {
+			component.item.displayTime = undefined;
+			component.item.displayDT = '2023-01-01T03:00:00.000Z';
+			component.item.dataStatus = DataStatus.Full;
+			fixture.detectChanges();
+
+			const dateDisplay = fixture.debugElement.query(
+				By.directive(EdtfDateDisplayComponent),
+			).componentInstance as EdtfDateDisplayComponent;
+
+			expect(dateDisplay.displayDT()).toBe('2023-01-01T03:00:00.000Z');
 		});
 
 		it('should never put an unreadable value in the public-archive date', async () => {

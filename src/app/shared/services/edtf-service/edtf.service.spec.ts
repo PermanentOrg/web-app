@@ -1619,6 +1619,73 @@ describe('EdtfService', () => {
 		});
 	});
 
+	describe('getItemDisplayTime', () => {
+		it('should return displayTime and the stored zone when displayTime is set', () => {
+			expect(
+				service.getItemDisplayTime({
+					displayTime: '1985-05-20',
+					displayDT: '2023-01-01T03:00:00.000Z',
+					timezone: 'Europe/Bucharest',
+				}),
+			).toEqual({ displayTime: '1985-05-20', timezone: 'Europe/Bucharest' });
+		});
+
+		it('should fall back to the displayDT date and time, without a zone, when displayTime is null', () => {
+			expect(
+				service.getItemDisplayTime({
+					displayTime: null,
+					displayDT: '2023-01-01T03:00:00.000Z',
+					timezone: 'America/Chicago',
+				}),
+			).toEqual({ displayTime: '2023-01-01T03:00:00', timezone: null });
+		});
+
+		it('should fall back to displayDT when displayTime is undefined or empty', () => {
+			expect(
+				service.getItemDisplayTime({ displayDT: '2023-01-01T03:00:00.000Z' })
+					.displayTime,
+			).toBe('2023-01-01T03:00:00');
+
+			expect(
+				service.getItemDisplayTime({
+					displayTime: '',
+					displayDT: '2023-01-01T03:00:00.000Z',
+				}).displayTime,
+			).toBe('2023-01-01T03:00:00');
+		});
+
+		it('should write the displayDT fallback the way a saved displayTime without a zone is written', () => {
+			const savedDisplayTime = service.toEdtfDate({
+				date: { year: '2023', month: '01', day: '01' },
+				time: { hours: '03', minutes: '00', seconds: '00', format: 'am' },
+			});
+
+			expect(
+				service.getItemDisplayTime({ displayDT: '2023-01-01T03:00:00.000Z' })
+					.displayTime,
+			).toBe(savedDisplayTime);
+		});
+
+		it('should return no display time when neither value is set', () => {
+			expect(
+				service.getItemDisplayTime({ timezone: 'Europe/Bucharest' }),
+			).toEqual({ displayTime: null, timezone: 'Europe/Bucharest' });
+		});
+
+		it('should return no display time for an unreadable displayDT', () => {
+			expect(
+				service.getItemDisplayTime({ displayDT: 'not a date' }).displayTime,
+			).toBeNull();
+		});
+
+		it('should return no display time for a missing item', () => {
+			expect(service.getItemDisplayTime(null)).toEqual({
+				displayTime: null,
+				timezone: null,
+			});
+		});
+	});
+
 	describe('getEdtfIntervalStartDate', () => {
 		it('should return the start date of an interval', () => {
 			expect(service.getEdtfIntervalStartDate('1985-05-20/1990-06-15')).toBe(
