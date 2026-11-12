@@ -36,6 +36,9 @@ describe('SidebarDatePickerComponent', () => {
 	let fixture: ComponentFixture<TestHostComponent>;
 	let component: SidebarDatePickerComponent;
 
+	const queryClearButton = (): HTMLButtonElement | null =>
+		fixture.nativeElement.querySelector('.pr-clear-btn');
+
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			imports: [SidebarDatePickerComponent],
@@ -532,6 +535,20 @@ describe('SidebarDatePickerComponent', () => {
 	});
 
 	describe('clearAll', () => {
+		const savedDisplayTime: DateTimeModel = {
+			date: { year: '1985', month: '05', day: '20' },
+			time: { hours: '10', minutes: '30', seconds: '00', format: 'am' },
+		};
+
+		it('should not show a clear button', () => {
+			host.displayTime = savedDisplayTime;
+			fixture.detectChanges();
+			component.open();
+			fixture.detectChanges();
+
+			expect(queryClearButton()).toBeNull();
+		});
+
 		it('should clear all fields but keep dropdown open', () => {
 			host.displayTime = {
 				date: { year: '1985', month: '05', day: '20' },

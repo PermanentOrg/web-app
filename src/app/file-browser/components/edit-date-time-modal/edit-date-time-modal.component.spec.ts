@@ -11,6 +11,9 @@ describe('EditDateTimeModalComponent', () => {
 	let fixture: ComponentFixture<EditDateTimeModalComponent>;
 	let dialogRefSpy: jasmine.SpyObj<DialogRef>;
 
+	const queryClearButtons = (): NodeListOf<HTMLButtonElement> =>
+		fixture.nativeElement.querySelectorAll('.pr-clear-link');
+
 	const mockDialogData: DateTimeModel = {
 		qualifiers: {
 			approximate: true,
@@ -362,6 +365,17 @@ describe('EditDateTimeModalComponent', () => {
 	});
 
 	// --- clearStart / clearEnd ---
+
+	describe('clearing the date', () => {
+		beforeEach(() => {
+			component.useDateRange.set(true);
+			fixture.detectChanges();
+		});
+
+		it('should not show any clear buttons', () => {
+			expect(queryClearButtons().length).toBe(0);
+		});
+	});
 
 	it('should clear start fields only', () => {
 		component.date.set({ year: '2026', month: '02', day: '18' });
