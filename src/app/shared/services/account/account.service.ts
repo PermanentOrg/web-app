@@ -6,6 +6,10 @@ import { ApiService } from '@shared/services/api/api.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
 import {
+	findPrivateRootFolder,
+	findPublicRootFolder,
+} from '@models/folder-type';
+import {
 	AuthResponse,
 	AccountResponse,
 	ArchiveResponse,
@@ -181,15 +185,11 @@ export class AccountService {
 	}
 
 	public getPrivateRoot() {
-		return find(this.rootFolder.ChildItemVOs, {
-			type: 'type.folder.root.private',
-		}) as FolderVO;
+		return findPrivateRootFolder(this.rootFolder);
 	}
 
 	public getPublicRoot() {
-		return find(this.rootFolder.ChildItemVOs, {
-			type: 'type.folder.root.public',
-		}) as FolderVO;
+		return findPublicRootFolder(this.rootFolder);
 	}
 
 	public async refreshAccount() {
