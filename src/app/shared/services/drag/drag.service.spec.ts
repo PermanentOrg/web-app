@@ -2,7 +2,7 @@ import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { BASE_TEST_CONFIG } from '@root/test/testbedConfig';
-import { FolderVO } from '@models/index';
+import { FolderVO, FolderType } from '@models/index';
 import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
 import { AccountService } from '../account/account.service';
 import { DataService } from '../data/data.service';
@@ -35,23 +35,65 @@ describe('DragService', () => {
 		expect(service).toBeTruthy();
 	});
 
-	it('should drop onto My Files through the My Files sidebar link', () => {
-		const privateRoot = new FolderVO({ folderId: 1, type: 'private-root' });
-		spyOn(accountService, 'getPrivateRoot').and.returnValue(privateRoot);
+	const rootCases: Array<{
+		rootSource: string;
+		archiveRootType: FolderType;
+		privateRootType: FolderType;
+		publicRootType: FolderType;
+	}> = [
+		{
+			rootSource: 'Stela',
+			archiveRootType: 'root',
+			privateRootType: 'private-root',
+			publicRootType: 'public-root',
+		},
+		{
+			rootSource: 'v1',
+			archiveRootType: 'type.folder.root.root',
+			privateRootType: 'type.folder.root.private',
+			publicRootType: 'type.folder.root.public',
+		},
+	];
 
-		expect(
-			service.getDestinationFromDropTarget(buildSidebarLink('/private')),
-		).toBe(privateRoot);
-	});
+	rootCases.forEach(
+		({ rootSource, archiveRootType, privateRootType, publicRootType }) => {
+			describe(`with a root loaded from ${rootSource}`, () => {
+				const privateRoot = new FolderVO({
+					folderId: 1,
+					type: privateRootType,
+				});
+				const publicRoot = new FolderVO({
+					folderId: 2,
+					type: publicRootType,
+				});
 
-	it('should drop onto Public through the Public sidebar link', () => {
-		const publicRoot = new FolderVO({ folderId: 2, type: 'public-root' });
-		spyOn(accountService, 'getPublicRoot').and.returnValue(publicRoot);
+				beforeEach(() => {
+					accountService.setRootFolder(
+						new FolderVO({
+							type: archiveRootType,
+							ChildItemVOs: [privateRoot, publicRoot],
+						}),
+					);
+				});
 
-		expect(
-			service.getDestinationFromDropTarget(buildSidebarLink('/public')),
-		).toBe(publicRoot);
-	});
+				afterEach(() => {
+					accountService.clearRootFolder();
+				});
+
+				it('should drop onto My Files through the My Files sidebar link', () => {
+					expect(
+						service.getDestinationFromDropTarget(buildSidebarLink('/private')),
+					).toBe(privateRoot);
+				});
+
+				it('should drop onto Public through the Public sidebar link', () => {
+					expect(
+						service.getDestinationFromDropTarget(buildSidebarLink('/public')),
+					).toBe(publicRoot);
+				});
+			});
+		},
+	);
 
 	it('should have no destination for a sidebar link outside the workspaces', () => {
 		expect(

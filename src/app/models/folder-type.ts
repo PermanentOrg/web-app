@@ -29,6 +29,15 @@ const PUBLIC_FOLDER_TYPES: FolderType[] = [
 	'type.folder.public',
 	'public',
 ];
+const APPS_FOLDER_TYPES: FolderType[] = [
+	...APPS_ROOT_FOLDER_TYPES,
+	'type.folder.app',
+	'app',
+];
+const SHARE_FOLDER_TYPES: FolderType[] = [
+	...SHARE_ROOT_FOLDER_TYPES,
+	'type.folder.share',
+];
 
 function hasFolderType(
 	item: ItemVO | undefined,
@@ -45,6 +54,10 @@ export function isAppsRootFolder(item: ItemVO | undefined): boolean {
 	return hasFolderType(item, APPS_ROOT_FOLDER_TYPES);
 }
 
+export function isAppsFolder(item: ItemVO | undefined): boolean {
+	return hasFolderType(item, APPS_FOLDER_TYPES);
+}
+
 export function isPrivateRootFolder(item: ItemVO | undefined): boolean {
 	return hasFolderType(item, PRIVATE_ROOT_FOLDER_TYPES);
 }
@@ -59,6 +72,10 @@ export function isPublicFolder(item: ItemVO | undefined): boolean {
 
 export function isShareRootFolder(item: ItemVO | undefined): boolean {
 	return hasFolderType(item, SHARE_ROOT_FOLDER_TYPES);
+}
+
+export function isShareFolder(item: ItemVO | undefined): boolean {
+	return hasFolderType(item, SHARE_FOLDER_TYPES);
 }
 
 export function isDeprecatedFolder(item: ItemVO | undefined): boolean {

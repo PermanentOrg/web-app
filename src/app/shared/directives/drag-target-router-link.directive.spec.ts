@@ -40,6 +40,28 @@ describe('DragTargetRouterLinkDirective', () => {
 		},
 	);
 
+	(
+		[
+			'type.folder.root.app',
+			'app-root',
+			'type.folder.app',
+			'app',
+			'type.folder.root.share',
+			'share-root',
+			'type.folder.share',
+		] as FolderType[]
+	).forEach((appsOrShareType) => {
+		it(`should not offer the workspace links as drop targets from inside apps or shares (${appsOrShareType})`, () => {
+			expect(
+				buildDirective('/private', appsOrShareType).checkCurrentFolder(),
+			).toBeFalse();
+
+			expect(
+				buildDirective('/public', appsOrShareType).checkCurrentFolder(),
+			).toBeFalse();
+		});
+	});
+
 	it('should offer the My Files link as a drop target from a folder inside My Files', () => {
 		expect(
 			buildDirective('/private', 'private').checkCurrentFolder(),

@@ -15,7 +15,12 @@ import {
 } from '@shared/services/drag/drag.service';
 import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
-import { isPrivateRootFolder, isPublicRootFolder } from '@models/folder-type';
+import {
+	isAppsFolder,
+	isPrivateRootFolder,
+	isPublicRootFolder,
+	isShareFolder,
+} from '@models/folder-type';
 
 @Directive({
 	selector: '[prDragTargetRouterLink]',
@@ -75,7 +80,7 @@ export class DragTargetRouterLinkDirective
 	checkCurrentFolder() {
 		const folder = this.data.currentFolder;
 
-		if (folder.type.includes('apps') || folder.type.includes('share')) {
+		if (isAppsFolder(folder) || isShareFolder(folder)) {
 			return false;
 		}
 

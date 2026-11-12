@@ -2,12 +2,14 @@ import {
 	findAppsRootFolder,
 	findPrivateRootFolder,
 	findPublicRootFolder,
+	isAppsFolder,
 	isAppsRootFolder,
 	isArchiveRootFolder,
 	isDeprecatedFolder,
 	isPrivateRootFolder,
 	isPublicFolder,
 	isPublicRootFolder,
+	isShareFolder,
 	isShareRootFolder,
 } from './folder-type';
 import { FolderVO } from './folder-vo';
@@ -58,6 +60,25 @@ describe('folder type', () => {
 			predicateName: 'isShareRootFolder',
 			predicate: isShareRootFolder,
 			matchingTypes: ['type.folder.root.share', 'share-root'],
+		},
+		{
+			predicateName: 'isAppsFolder',
+			predicate: isAppsFolder,
+			matchingTypes: [
+				'type.folder.root.app',
+				'app-root',
+				'type.folder.app',
+				'app',
+			],
+		},
+		{
+			predicateName: 'isShareFolder',
+			predicate: isShareFolder,
+			matchingTypes: [
+				'type.folder.root.share',
+				'share-root',
+				'type.folder.share',
+			],
 		},
 		{
 			predicateName: 'isDeprecatedFolder',
