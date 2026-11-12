@@ -430,25 +430,46 @@ describe('FileViewerComponent', () => {
 			expect(component.displayTimeObject?.date.year).toBe('1985');
 		});
 
-		it('should show an empty date when displayTime is explicitly null', async () => {
-			activatedRouteData.currentRecord = new RecordVO({
-				type: 'document',
-				displayName: 'Cleared Doc',
-				TagVOs: [],
-				displayTime: null,
-				displayDT: '1985-05-20T00:00:00Z',
-			});
-			await recreateComponent();
-
-			expect(component.displayTimeObject).toBeNull();
-		});
-
-		it('should ignore displayDT entirely, matching the info sidebar', async () => {
+		it('should fall back to the displayDT date and time, without a zone, when displayTime is null', async () => {
 			activatedRouteData.currentRecord = new RecordVO({
 				type: 'document',
 				displayName: 'Legacy Doc',
 				TagVOs: [],
-				displayDT: '1985-05-20T00:00:00Z',
+				displayTime: null,
+				displayDT: '1985-05-20T15:00:00Z',
+				timezone: 'America/New_York',
+			});
+			await recreateComponent();
+
+			expect(component.displayTimeObject.date).toEqual({
+				year: '1985',
+				month: '05',
+				day: '20',
+			});
+
+			expect(component.displayTimeObject.time.hours).toBe('03');
+			expect(component.displayTimeObject.time.timezoneId).toBeUndefined();
+		});
+
+		it('should prefer displayTime over displayDT', async () => {
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Dated Doc',
+				TagVOs: [],
+				displayTime: '1990-06-15',
+				displayDT: '1985-05-20T15:00:00Z',
+			});
+			await recreateComponent();
+
+			expect(component.displayTimeObject.date.year).toBe('1990');
+		});
+
+		it('should show an empty date when neither displayTime nor displayDT is set', async () => {
+			activatedRouteData.currentRecord = new RecordVO({
+				type: 'document',
+				displayName: 'Undated Doc',
+				TagVOs: [],
+				displayTime: null,
 			});
 			await recreateComponent();
 
