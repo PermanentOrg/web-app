@@ -137,6 +137,7 @@ describe('RecordVO', () => {
 
 			expect(downloadOptions.length).toBe(2);
 			expect(downloadOptions[0].name).toBe('test.pdf');
+			expect(downloadOptions[0].format).toBe(FileFormat.Converted);
 			expect(downloadOptions[0].extension).toBe('pdf');
 		});
 

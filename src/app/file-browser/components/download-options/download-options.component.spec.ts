@@ -74,6 +74,34 @@ describe('DownloadOptionsComponent', () => {
 	it('downloads the clicked option', () => {
 		fixture.nativeElement.querySelectorAll('.download-option')[1].click();
 
-		expect(dataService.downloadFile).toHaveBeenCalledWith(record, 'photo.jpg');
+		expect(dataService.downloadFile).toHaveBeenCalledWith(record, {
+			format: FileFormat.Converted,
+			type: 'photo.jpg',
+		});
+	});
+
+	it('distinguishes an access copy with the same type as the original', () => {
+		const sameTypeRecord = new RecordVO({});
+		sameTypeRecord.FileVOs = [
+			makeFile(FileFormat.Original, 'type.file.image.jpg'),
+			makeFile(FileFormat.ArchivematicaAccess, 'type.file.image.jpg'),
+		];
+		fixture.componentRef.setInput('record', sameTypeRecord);
+		fixture.detectChanges();
+
+		const options = fixture.nativeElement.querySelectorAll('.download-option');
+		options[0].click();
+		options[1].click();
+
+		expect(dataService.downloadFile.calls.allArgs()).toEqual([
+			[
+				sameTypeRecord,
+				{ format: FileFormat.Original, type: 'type.file.image.jpg' },
+			],
+			[
+				sameTypeRecord,
+				{ format: FileFormat.ArchivematicaAccess, type: 'type.file.image.jpg' },
+			],
+		]);
 	});
 });

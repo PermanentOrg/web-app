@@ -15,6 +15,7 @@ import {
 	GetOriginalFile,
 	getFirstRetrievableFile,
 } from '@models/get-access-file';
+import { PermanentFile } from '@models/file-vo';
 import {
 	FolderResponse,
 	RecordResponse,
@@ -637,27 +638,39 @@ export class DataService {
 		return folderLinkIds.map((id) => this.getItemByFolderLinkId(Number(id)));
 	}
 
-	public async downloadFile(item: RecordVO, type?: string): Promise<any> {
+	public async downloadFile(
+		item: RecordVO,
+		requested?: Pick<PermanentFile, 'format' | 'type'>,
+	): Promise<any> {
 		if (item.FileVOs && item.FileVOs.length) {
-			downloadFile(item, type);
+			downloadFile(item, requested);
 			return await Promise.resolve();
 		} else {
 			return await this.fetchFullItems([item]).then(() => {
-				downloadFile(item, type);
+				downloadFile(item, requested);
 			});
 		}
 
-		function downloadFile(fileItem: any, type?: string) {
-			const fileVO = getFile(fileItem, type) as any;
+		function downloadFile(
+			fileItem: any,
+			requested?: Pick<PermanentFile, 'format' | 'type'>,
+		) {
+			const fileVO = getFile(fileItem, requested) as any;
 			const link = document.createElement('a');
 			link.href = fileVO.downloadURL;
 			link.click();
 		}
 
-		function getFile(fileItem: RecordVO, type?: string) {
-			if (type) {
+		function getFile(
+			fileItem: RecordVO,
+			requested?: Pick<PermanentFile, 'format' | 'type'>,
+		) {
+			if (requested) {
 				return getFirstRetrievableFile(
-					fileItem.FileVOs.filter((file) => file.type === type),
+					fileItem.FileVOs.filter(
+						(file) =>
+							file.format === requested.format && file.type === requested.type,
+					),
 				);
 			}
 

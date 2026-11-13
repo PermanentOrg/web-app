@@ -176,6 +176,7 @@ export class RecordVO
 			(file) => file.format === FileFormat.Original,
 		).map((file) => ({
 			name: file.type,
+			format: file.format,
 			extension: getFileExtension(file),
 			label: getFileFormatLabel(file.format),
 		}));

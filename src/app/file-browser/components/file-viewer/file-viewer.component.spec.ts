@@ -214,7 +214,7 @@ describe('FileViewerComponent', () => {
 						},
 						fetchFullItems: async () => {},
 						fetchLeanItems: async () => {},
-						async downloadFile(_item: RecordVO, _type: string) {
+						async downloadFile(_item: RecordVO) {
 							downloaded = true;
 						},
 					},

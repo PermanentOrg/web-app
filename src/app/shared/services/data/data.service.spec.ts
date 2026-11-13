@@ -11,6 +11,7 @@ import {
 } from '@shared/services/api/index.repo';
 import { of } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
+import { FileFormat } from '@models/file-vo';
 
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '@shared/services/api/api.service';
@@ -1046,15 +1047,60 @@ describe('DataService', () => {
 			expect(clickedDownloadUrl).toBe('good-download');
 		});
 
-		it('should download the good file when asked for a type', async () => {
+		it('should download the good file when asked for a format and type', async () => {
 			const service = TestBed.inject(DataService);
 
-			await service.downloadFile(
-				makeRecordWithFailedOriginalFirst(),
-				'type.file.image.jpg',
-			);
+			await service.downloadFile(makeRecordWithFailedOriginalFirst(), {
+				format: FileFormat.Original,
+				type: 'type.file.image.jpg',
+			});
 
 			expect(clickedDownloadUrl).toBe('good-download');
+		});
+
+		describe('when the access copy has the same type as the original', () => {
+			function makeRecordWithSameTypeAccessCopy(): RecordVO {
+				return new RecordVO({
+					FileVOs: [
+						{
+							format: 'file.format.original',
+							type: 'type.file.image.jpg',
+							size: 1865665,
+							fileURL: 'original-file',
+							downloadURL: 'original-download',
+						},
+						{
+							format: 'file.format.archivematica.access',
+							type: 'type.file.image.jpg',
+							size: 228156,
+							fileURL: 'access-file',
+							downloadURL: 'access-download',
+						},
+					],
+				});
+			}
+
+			it('should download the access copy when asked for it', async () => {
+				const service = TestBed.inject(DataService);
+
+				await service.downloadFile(makeRecordWithSameTypeAccessCopy(), {
+					format: FileFormat.ArchivematicaAccess,
+					type: 'type.file.image.jpg',
+				});
+
+				expect(clickedDownloadUrl).toBe('access-download');
+			});
+
+			it('should download the original when asked for it', async () => {
+				const service = TestBed.inject(DataService);
+
+				await service.downloadFile(makeRecordWithSameTypeAccessCopy(), {
+					format: FileFormat.Original,
+					type: 'type.file.image.jpg',
+				});
+
+				expect(clickedDownloadUrl).toBe('original-download');
+			});
 		});
 	});
 });
