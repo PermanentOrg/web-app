@@ -24,7 +24,7 @@ import {
 	PromptField,
 } from '@shared/services/prompt/prompt.service';
 import { FolderVO, RecordVO, AccountVO } from '@root/app/models';
-import { find } from 'lodash';
+import { findPublicRootFolder } from '@models/folder-type';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { Validators } from '@angular/forms';
@@ -217,9 +217,9 @@ export class MainComponent
 			secondScreenTemplate,
 		);
 
-		const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, {
-			type: 'type.folder.root.public',
-		}) as FolderVO;
+		const publicRoot = findPublicRootFolder(
+			this.accountService.getRootFolder(),
+		);
 		const folder = new FolderVO({
 			displayName: promptData.displayName,
 			description: promptData.description,

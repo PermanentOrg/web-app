@@ -86,6 +86,34 @@ describe('FolderResolveService', () => {
 		expect(result.displayName).toBe('My Files');
 	});
 
+	[
+		{ url: '/private', expectedFolderId: '44' },
+		{ url: '/apps', expectedFolderId: '55' },
+		{ url: '/public', expectedFolderId: '66' },
+	].forEach(({ url, expectedFolderId }) => {
+		it(`should find the ${url} workspace in a root loaded from Stela`, async () => {
+			(accountService.getRootFolder as jasmine.Spy).and.returnValue(
+				new FolderVO({
+					type: 'root',
+					ChildItemVOs: [
+						new FolderVO({ folderId: '44', type: 'private-root' }),
+						new FolderVO({ folderId: '55', type: 'app-root' }),
+						new FolderVO({ folderId: '66', type: 'public-root' }),
+					],
+				}),
+			);
+			const getFolderSpy = spyOn(filesystem, 'getFolder').and.resolveTo(
+				buildFolder({ type: 'private-root' }),
+			);
+
+			await service.resolve({ params: {}, data: {} } as any, { url } as any);
+
+			expect(
+				(getFolderSpy.calls.mostRecent().args[0] as FolderVO).folderId,
+			).toBe(expectedFolderId);
+		});
+	});
+
 	it('should load the apps folder on /apps', async () => {
 		const getFolderSpy = spyOn(filesystem, 'getFolder').and.resolveTo(
 			buildFolder({ displayName: 'Apps', type: 'type.folder.root.app' }),

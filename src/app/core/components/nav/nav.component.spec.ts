@@ -4,6 +4,7 @@ import { cloneDeep } from 'lodash';
 
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
+import { FolderVO, FolderType } from '@models/index';
 import { RightMenuComponent } from '../right-menu/right-menu.component';
 
 describe('NavComponent', () => {
@@ -26,5 +27,29 @@ describe('NavComponent', () => {
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
+	});
+
+	it('should show the new folder button outside the special folders', () => {
+		expect(component.canShowNewFolderButton(undefined)).toBeTrue();
+		expect(
+			component.canShowNewFolderButton(new FolderVO({ type: 'private' })),
+		).toBeTrue();
+	});
+
+	(
+		[
+			'type.folder.root.share',
+			'share-root',
+			'type.folder.root.app',
+			'app-root',
+		] as FolderType[]
+	).forEach((hiddenFolderType) => {
+		it(`should hide the new folder button in ${hiddenFolderType}`, () => {
+			expect(
+				component.canShowNewFolderButton(
+					new FolderVO({ type: hiddenFolderType }),
+				),
+			).toBeFalse();
+		});
 	});
 });

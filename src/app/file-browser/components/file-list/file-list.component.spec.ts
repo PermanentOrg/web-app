@@ -148,6 +148,35 @@ describe('FileListComponent', () => {
 		});
 	});
 
+	[
+		{ folderType: 'private-root', workspaceAction: 'open_private_workspace' },
+		{ folderType: 'public-root', workspaceAction: 'open_public_workspace' },
+		{
+			folderType: 'type.folder.root.public',
+			workspaceAction: 'open_public_workspace',
+		},
+	].forEach(({ folderType, workspaceAction }) => {
+		it(`should dispatch ${workspaceAction} for a ${folderType} folder`, () => {
+			const originalFolderType = mockFolder.type;
+			mockFolder.type = folderType;
+			mockEventService.dispatch.calls.reset();
+
+			try {
+				const workspaceFixture = TestBed.createComponent(FileListComponent);
+				workspaceFixture.detectChanges();
+
+				expect(mockEventService.dispatch).toHaveBeenCalledWith({
+					action: workspaceAction,
+					entity: 'account',
+				});
+
+				workspaceFixture.destroy();
+			} finally {
+				mockFolder.type = originalFolderType;
+			}
+		});
+	});
+
 	it('should handle ngAfterViewInit and scroll to item', fakeAsync(() => {
 		component = fixture.componentInstance;
 		spyOn(component, 'scrollToItem');
