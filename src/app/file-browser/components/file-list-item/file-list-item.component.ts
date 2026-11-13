@@ -263,17 +263,14 @@ export class FileListItemComponent
 		const edtfStartDate = this.edtfService.getEdtfIntervalStartDate(
 			this.item.displayTime,
 		);
-
-		if (this.showEdtfDate) {
-			return edtfStartDate;
-		}
-
 		return edtfStartDate || this.item.displayDT;
 	}
 
 	private getPublicArchiveDate(): string {
 		if (this.showEdtfDate) {
-			return this.edtfDisplayService.formatToPlainText(this.item.displayTime);
+			return this.edtfDisplayService.formatToPlainText(
+				this.edtfService.getItemDisplayTime(this.item).displayTime,
+			);
 		}
 
 		const legacyDate = new Date(this.startDisplayTime);
