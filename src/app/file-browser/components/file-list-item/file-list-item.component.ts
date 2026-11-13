@@ -70,6 +70,14 @@ import { ngIfFadeInAnimation } from '@shared/animations';
 import { RouteData } from '@root/app/app.routes';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
 import { GetThumbnail } from '@models/get-thumbnail';
+import {
+	faExclamationCircle,
+	faHourglassHalf,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+	RecordPreviewState,
+	getRecordPreviewState,
+} from '@models/record-preview-state';
 import { ShareLinksService } from '@root/app/share-links/services/share-links.service';
 import { ItemClickEvent } from '../file-list/file-list.component';
 import { SharingComponent } from '../sharing/sharing.component';
@@ -210,6 +218,8 @@ export class FileListItemComponent
 	public showEdtfDate = false;
 	public isUnlistedShare = false;
 	public recordThumbnailUrl: string | undefined;
+	public readonly processingIcon = faHourglassHalf;
+	public readonly failedIcon = faExclamationCircle;
 
 	private folderThumb: string;
 	private folderContentsType: FolderContentsType = FolderContentsType.NORMAL;
@@ -269,6 +279,33 @@ export class FileListItemComponent
 		}
 
 		return edtfStartDate || this.item.displayDT;
+	}
+
+	get isProcessing(): boolean {
+		return this.previewState === RecordPreviewState.Preparing;
+	}
+
+	get hasFailedConversion(): boolean {
+		return this.previewState === RecordPreviewState.Failed;
+	}
+
+	private get previewState(): RecordPreviewState | undefined {
+		return this.showsProcessingStatus
+			? getRecordPreviewState(this.item as RecordVO)
+			: undefined;
+	}
+
+	private get showsProcessingStatus(): boolean {
+		return (
+			this.item.isRecord &&
+			!this.isZip &&
+			!this.inGridView &&
+			!this.showsStockPreviewImage
+		);
+	}
+
+	private get showsStockPreviewImage(): boolean {
+		return this.isInSharePreview && !this.isUnlistedShare;
 	}
 
 	private getPublicArchiveDate(): string {
@@ -1085,7 +1122,7 @@ export class FileListItemComponent
 	// Called once the share type is known, since the thumbnail cannot be resolved
 	// before then.
 	private initializeThumbnail(): void {
-		if (this.isInSharePreview && !this.isUnlistedShare) {
+		if (this.showsStockPreviewImage) {
 			this.recordThumbnailUrl = this.getRandomPreviewImage();
 			return;
 		}
