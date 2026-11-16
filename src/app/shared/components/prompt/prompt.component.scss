@@ -19,7 +19,6 @@ $transition-length: 0.4s;
 	// transition:  transform $transition-length ease-in;
 	max-height: 85vh;
 	overflow-y: auto;
-	webkit-overflow-scrolling: touch;
 
 	@include after($tablet-horizontal) {
 		opacity: 0;

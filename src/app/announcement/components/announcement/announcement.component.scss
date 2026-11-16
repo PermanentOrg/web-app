@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $banner-bg: #fff3cd;
 $banner-text: #856404;
 
@@ -26,7 +28,7 @@ $banner-text: #856404;
 
 .dismiss-button {
 	&:hover {
-		color: lighten($banner-text, 25%);
+		color: color.adjust($banner-text, $lightness: 25%);
 	}
 
 	transition: color 0.3s;
