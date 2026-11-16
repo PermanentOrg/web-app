@@ -285,6 +285,9 @@ export class AccountService {
 
 	public async refreshRoot() {
 		const archiveToLoad = this.archive;
+		if (!archiveToLoad) {
+			return;
+		}
 		const root = await this.rootFolderService.loadRootFolder(archiveToLoad);
 		this.setRootFolderIfArchiveIsCurrent(archiveToLoad, root);
 	}

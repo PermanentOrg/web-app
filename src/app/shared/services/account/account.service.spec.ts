@@ -6,6 +6,7 @@ import { ArchiveVO, FolderVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { RootFolderService } from '@shared/services/root-folder/root-folder.service';
+import { StorageService } from '@shared/services/storage/storage.service';
 import { AccountService } from './account.service';
 
 describe('AccountService root folder', () => {
@@ -25,6 +26,9 @@ describe('AccountService root folder', () => {
 
 	beforeEach(() => {
 		TestBed.configureTestingModule(cloneDeep(Testing.BASE_TEST_CONFIG));
+		const storage = TestBed.inject(StorageService);
+		storage.local.clear();
+		storage.session.clear();
 		loadRootFolderSpy = spyOn(
 			TestBed.inject(RootFolderService),
 			'loadRootFolder',
@@ -115,6 +119,13 @@ describe('AccountService root folder', () => {
 		resolveRefreshedRoot(stelaRootFolder);
 		await refresh;
 
+		expect(accountService.getRootFolder()).toBeUndefined();
+	});
+
+	it('should skip refreshing the root when there is no current archive', async () => {
+		await accountService.refreshRoot();
+
+		expect(loadRootFolderSpy).not.toHaveBeenCalled();
 		expect(accountService.getRootFolder()).toBeUndefined();
 	});
 
