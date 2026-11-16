@@ -7,7 +7,7 @@ import {
 	DOCUMENT,
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { throttle, find } from 'lodash';
+import { throttle } from 'lodash';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.component';
 
@@ -341,9 +341,14 @@ export class DragService {
 				}
 			}
 		} else if (dropTarget instanceof DragTargetRouterLinkDirective) {
-			const type = dropTarget.getFolderTypeFromLink();
-			const root = this.accountService.getRootFolder();
-			destination = find(root.ChildItemVOs, { type }) as FolderVO;
+			switch (dropTarget.getFolderTypeFromLink()) {
+				case 'type.folder.root.private':
+					destination = this.accountService.getPrivateRoot();
+					break;
+				case 'type.folder.root.public':
+					destination = this.accountService.getPublicRoot();
+					break;
+			}
 		}
 
 		return destination;

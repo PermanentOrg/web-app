@@ -40,6 +40,7 @@ import {
 } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO, ItemVO } from '@root/app/models';
+import { isPrivateRootFolder, isPublicRootFolder } from '@models/folder-type';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import {
@@ -195,18 +196,14 @@ export class FileListComponent
 		this.registerDataServiceHandlers();
 		this.registerDragServiceHandlers();
 
-		const isPrivateRoot =
-			this.currentFolder.type === 'type.folder.root.private';
-		const isPublicRoot = this.currentFolder.type === 'type.folder.root.public';
-
-		if (isPrivateRoot) {
+		if (isPrivateRootFolder(this.currentFolder)) {
 			this.event.dispatch({
 				action: 'open_private_workspace',
 				entity: 'account',
 			});
 		}
 
-		if (isPublicRoot) {
+		if (isPublicRootFolder(this.currentFolder)) {
 			this.event.dispatch({
 				action: 'open_public_workspace',
 				entity: 'account',
