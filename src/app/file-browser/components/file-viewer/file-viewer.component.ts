@@ -504,12 +504,13 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 		if (!this.showEdtfDatePicker) {
 			return;
 		}
-		const record = this.currentRecord;
-		const timeSource = record?.displayTime;
+		const { displayTime, timezone } = this.edtfService.getItemDisplayTime(
+			this.currentRecord,
+		);
 		try {
 			this.displayTimeObject = this.edtfService.withTimezone(
-				timeSource ? this.edtfService.toDateTimeModel(timeSource) : null,
-				record?.timezone,
+				displayTime ? this.edtfService.toDateTimeModel(displayTime) : null,
+				timezone,
 			);
 		} catch (err) {
 			this.displayTimeObject = null;

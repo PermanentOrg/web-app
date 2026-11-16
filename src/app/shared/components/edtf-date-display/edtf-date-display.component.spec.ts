@@ -25,6 +25,41 @@ describe('EdtfDateDisplayComponent', () => {
 
 	const moreInfoIconCount = (): number => ngMocks.findAll('.more-info').length;
 
+	describe('displayDT fallback', () => {
+		it('should render the displayDT date and time, without a zone, when displayTime is empty', () => {
+			MockRender(EdtfDateDisplayComponent, {
+				displayTime: null,
+				displayDT: '2023-01-01T03:00:00.000Z',
+				timezone: 'America/Chicago',
+			});
+
+			expect(partTexts()).toEqual(['Jan. 1, 2023•', '3:00 AM']);
+		});
+
+		it('should render displayDT the same way as the equivalent displayTime', () => {
+			MockRender(EdtfDateDisplayComponent, {
+				displayTime: '2023-01-01T03:00:00',
+			});
+			const renderedFromDisplayTime = partTexts();
+			ngMocks.flushTestBed();
+			MockRender(EdtfDateDisplayComponent, {
+				displayTime: null,
+				displayDT: '2023-01-01T03:00:00.000Z',
+			});
+
+			expect(partTexts()).toEqual(renderedFromDisplayTime);
+		});
+
+		it('should prefer displayTime over displayDT', () => {
+			MockRender(EdtfDateDisplayComponent, {
+				displayTime: '1985-04-12',
+				displayDT: '2023-01-01T03:00:00.000Z',
+			});
+
+			expect(partTexts()).toEqual(['Apr. 12, 1985']);
+		});
+	});
+
 	it('should create', () => {
 		const fixture = render('1985-04-12');
 
