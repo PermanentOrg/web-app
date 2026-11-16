@@ -176,6 +176,30 @@ $bg-transition-length: 0.075s;
 		}
 	}
 
+	&.with-processing-status .item-name {
+		margin-bottom: 0;
+	}
+
+	.processing-status {
+		align-items: center;
+		gap: 6px;
+		margin-top: 4px;
+		font-size: $font-size-sm;
+		color: $PR-blue-400;
+
+		fa-icon {
+			margin: 0;
+		}
+
+		.processing-icon {
+			color: $PR-yellow-500;
+		}
+
+		&.failed {
+			color: $PR-red-500;
+		}
+	}
+
 	.grid-view & {
 		height: $grid-info-section-height;
 		position: absolute;
