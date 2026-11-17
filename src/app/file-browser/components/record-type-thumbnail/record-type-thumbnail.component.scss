@@ -1,0 +1,19 @@
+@import 'variables';
+
+:host {
+	position: relative;
+	display: block;
+	border-radius: 6px;
+	background-color: $PR-blue-25;
+
+	--record-type-icon-size: 24px;
+}
+
+.record-type-icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: var(--record-type-icon-size);
+	height: var(--record-type-icon-size);
+	transform: translate(-50%, -50%);
+}
