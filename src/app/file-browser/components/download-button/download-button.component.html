@@ -15,11 +15,5 @@
 	</div>
 </div>
 @if (displayDownloadDropdown && selectedRecord; as record) {
-	<div
-		#downloadButtonDropdown
-		class="download-options"
-		[ngClass]="{ 'download-options-file-viewer': isFileView }"
-	>
-		<pr-download-options [record]="record" />
-	</div>
+	<pr-download-options class="download-options" [record]="record" />
 }
