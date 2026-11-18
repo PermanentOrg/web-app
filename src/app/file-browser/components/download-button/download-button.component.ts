@@ -19,11 +19,8 @@ export class DownloadButtonComponent {
 	@Input() selectedItem;
 
 	displayDownloadDropdown = false;
-	@Input() isFileView = false;
 
 	@ViewChild('downloadButton') downloadButton: ElementRef;
-	@ViewChild('downloadButtonDropdown', { static: false })
-	downloadButtonDropdown: ElementRef;
 
 	constructor(
 		private data: DataService,
@@ -48,12 +45,7 @@ export class DownloadButtonComponent {
 
 	async downloadClick() {
 		if (this.selectedRecord) {
-			if (this.displayDownloadDropdown) {
-				this.displayDownloadDropdown = false;
-			} else {
-				this.displayDownloadDropdown = true;
-				this.bringDropdownIntoView();
-			}
+			this.displayDownloadDropdown = !this.displayDownloadDropdown;
 		} else {
 			try {
 				await this.data.createZipForDownload([this.selectedItem]);
@@ -69,9 +61,5 @@ export class DownloadButtonComponent {
 				});
 			}
 		}
-	}
-
-	bringDropdownIntoView() {
-		this.downloadButton.nativeElement.scrollIntoView();
 	}
 }

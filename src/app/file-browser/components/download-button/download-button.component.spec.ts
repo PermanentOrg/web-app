@@ -73,7 +73,7 @@ describe('DownloadButtonComponent', () => {
 			);
 
 		beforeEach(async () => {
-			const record = new RecordVO({});
+			const record = new RecordVO({ type: 'type.record.image' });
 			record.FileVOs = [
 				makeFile(FileFormat.Converted, 'photo.jpg'),
 				makeFile(FileFormat.Original, 'photo.tiff'),
@@ -84,7 +84,7 @@ describe('DownloadButtonComponent', () => {
 		});
 
 		it('shows the download options', () => {
-			expect(optionExtensions()).toEqual(['.tiff', '.jpg']);
+			expect(optionExtensions()).toEqual(['tiff', 'jpg']);
 		});
 
 		it('hides the download options when clicked again', async () => {
