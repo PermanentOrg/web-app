@@ -1,10 +1,36 @@
-@for (option of options(); track $index) {
-	<div class="download-option" (click)="download(option.name)">
-		<span class="download-option-label">{{ option.label }}:</span>
-		<span class="download-option-extension">{{
-			option.extension && option.extension !== 'null'
-				? '.' + option.extension
-				: 'unknown'
-		}}</span>
+<ul class="download-option-list">
+	@for (option of options(); track $index) {
+		<li>
+			<button
+				type="button"
+				class="download-option"
+				(click)="download(option.name)"
+			>
+				<span
+					class="download-option-icon"
+					[style.mask-image]="recordTypeIconMask()"
+				></span>
+				<span class="download-option-label">{{ option.label }}</span>
+				<span class="download-option-extension">{{
+					option.extensionLabel
+				}}</span>
+			</button>
+		</li>
+	}
+</ul>
+@if (isProcessing()) {
+	<div
+		class="download-options-processing"
+		role="status"
+		(click)="$event.stopPropagation()"
+	>
+		<fa-icon class="processing-icon" [icon]="processingIcon"></fa-icon>
+		<div>
+			<p class="processing-heading">More formats are on the way.</p>
+			<p class="processing-body">
+				Converted copies appear here when processing finishes. This can take a
+				few seconds or several hours.
+			</p>
+		</div>
 	</div>
 }

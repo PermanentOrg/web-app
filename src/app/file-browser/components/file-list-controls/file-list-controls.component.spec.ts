@@ -23,7 +23,7 @@ import { DownloadOptionsComponent } from '../download-options/download-options.c
 import { FileListControlsComponent } from './file-list-controls.component';
 
 const makeRecord = (...types: string[]): RecordVO => {
-	const record = new RecordVO({});
+	const record = new RecordVO({ type: 'type.record.image' });
 	record.FileVOs = types.map(
 		(type): PermanentFile => ({
 			fileId: 0,
@@ -172,7 +172,7 @@ describe('FileListControlsComponent', () => {
 		});
 
 		it('should show the options for a single selected record', () => {
-			expect(optionExtensions()).toEqual(['.tiff']);
+			expect(optionExtensions()).toEqual(['tiff']);
 		});
 
 		it('should hide the options when clicked again', async () => {
