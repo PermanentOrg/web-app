@@ -6,6 +6,7 @@ import {
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, isArray } from 'lodash';
+import { firstValueFrom } from 'rxjs';
 import { ProfileItemVOData } from '@models/profile-item-vo';
 import { getFirst } from '../http-v2/http-v2.service';
 
@@ -279,6 +280,17 @@ export class ArchiveRepo extends BaseRepo {
 		await this.httpV2
 			.patch(`v2/archive/${archiveId}`, updatedValues)
 			.toPromise();
+	}
+
+	public async getRootFolderId(archiveId: number): Promise<string> {
+		const response = await firstValueFrom(
+			getFirst(
+				this.httpV2.get<{ data: { rootFolderId: string } }>(
+					`v2/archive/${archiveId}`,
+				),
+			),
+		);
+		return response.data.rootFolderId;
 	}
 
 	public async getPublicArchiveTags(archiveId: string) {
