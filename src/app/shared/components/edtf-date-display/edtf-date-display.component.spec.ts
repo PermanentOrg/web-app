@@ -79,9 +79,9 @@ describe('EdtfDateDisplayComponent', () => {
 	});
 
 	it('should mark annotation segments so they can be muted', () => {
-		render('1984~');
+		render('1984?');
 
-		expect(ngMocks.find('.annotation').nativeElement.textContent).toBe(' ~');
+		expect(ngMocks.find('.annotation').nativeElement.textContent).toBe(' ?');
 	});
 
 	it('should render the time as its own part behind a separator', () => {

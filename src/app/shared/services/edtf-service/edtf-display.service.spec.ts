@@ -50,9 +50,9 @@ describe('EdtfDisplayService', () => {
 			[8, '1900-01-01', 'Jan. 1, 1900', ''],
 			[9, '1964/2008', '1964 — 2008', ''],
 			[10, '198X?', '198X ?', ''],
-			[11, '1984%', '1984 %', ''],
+			[11, '1984%', 'c. 1984 ?', ''],
 			[12, '1984?', '1984 ?', ''],
-			[13, '1984~', '1984 ~', ''],
+			[13, '1984~', 'c. 1984', ''],
 			[14, '1985', '1985', ''],
 			[15, '1985-XX-03', '1985-XX-03', ''],
 			[16, '1985-04', 'April 1985', ''],
@@ -132,25 +132,59 @@ describe('EdtfDisplayService', () => {
 	});
 
 	describe('qualifiers', () => {
-		it('should append the stored symbol rather than an abbreviation', () => {
-			expect(dateTextOf('1962-03~')).toBe('March 1962 ~');
-			expect(dateTextOf('1962-03~')).not.toContain('c.');
+		it('should put a question mark after an uncertain date', () => {
+			expect(dateTextOf('1985?')).toBe('1985 ?');
+		});
+
+		it('should put c. before an approximate date', () => {
+			expect(dateTextOf('1985~')).toBe('c. 1985');
+			expect(dateTextOf('1962-03~')).toBe('c. March 1962');
+		});
+
+		it('should put both around a date that is approximate and uncertain', () => {
+			expect(dateTextOf('1985%')).toBe('c. 1985 ?');
+		});
+
+		it('should never show the raw EDTF symbols', () => {
+			expect(dateTextOf('1985~')).not.toContain('~');
+			expect(dateTextOf('1985%')).not.toContain('%');
 		});
 
 		it('should keep a qualifier on the side that carries it', () => {
-			expect(dateTextOf('1984?/1990~')).toBe('1984 ? — 1990 ~');
+			expect(dateTextOf('1984?/1990~')).toBe('1984 ? — c. 1990');
+			expect(dateTextOf('1984%/1990')).toBe('c. 1984 ? — 1990');
 		});
 
-		it('should not stop a qualified side from merging', () => {
-			expect(dateTextOf('2001-09-24?/2001-09-30')).toBe('Sep. 24 ? — 30, 2001');
+		it('should print both full dates when a side is qualified', () => {
+			expect(dateTextOf('2001-09-24?/2001-09-30')).toBe(
+				'Sep. 24, 2001 ? — Sep. 30, 2001',
+			);
+
+			expect(dateTextOf('2001-09-24/2001-09-30~')).toBe(
+				'Sep. 24, 2001 — c. Sep. 30, 2001',
+			);
+
+			expect(dateTextOf('2026-11-12%/2026-11-27%')).toBe(
+				'c. Nov. 12, 2026 ? — c. Nov. 27, 2026 ?',
+			);
+
+			expect(dateTextOf('2001-03-24~/2001-09-30')).toBe(
+				'c. Mar. 24, 2001 — Sep. 30, 2001',
+			);
 		});
 
-		it('should mark a qualifier as an annotation so it can be muted', () => {
-			const segments = service.formatForDisplay('1984~').date;
+		it('should qualify the known side of an open range', () => {
+			expect(dateTextOf('../1985~')).toBe('Before c. 1985');
+			expect(dateTextOf('1985%/..')).toBe('After c. 1985 ?');
+		});
+
+		it('should mark the qualifiers as annotations so they can be muted', () => {
+			const segments = service.formatForDisplay('1984%').date;
 
 			expect(segments).toEqual([
+				{ text: 'c. ', isAnnotation: true },
 				{ text: '1984', isAnnotation: false },
-				{ text: ' ~', isAnnotation: true },
+				{ text: ' ?', isAnnotation: true },
 			]);
 		});
 	});
@@ -382,6 +416,20 @@ describe('EdtfDisplayService', () => {
 			).toBe('9:45 AM CDT');
 		});
 
+		it('should qualify a same-day range once', () => {
+			stubParsedModel({
+				qualifiers: { approximate: true, uncertain: false, unknown: false },
+				date: { year: '2001', month: '09', day: '24' },
+				time: { format: 'am' },
+				endQualifiers: { approximate: true, uncertain: true, unknown: false },
+				endDate: { year: '2001', month: '09', day: '24' },
+			});
+
+			expect(service.formatToPlainText('stubbed/stubbed')).toBe(
+				'c. Sep. 24, 2001 ?',
+			);
+		});
+
 		it('should treat a missing date as unknown', () => {
 			expect(renderModel({ date: undefined, time: { format: 'am' } })).toBe(
 				'Unknown',
@@ -471,7 +519,7 @@ describe('EdtfDisplayService', () => {
 				service.formatForTooltip('1985-04-12T09:00:00Z/1985-06-10~'),
 			).toEqual({
 				from: 'Apr. 12, 1985 • 9:00:00 AM',
-				to: 'Jun. 10, 1985 ~',
+				to: 'c. Jun. 10, 1985',
 			});
 		});
 
