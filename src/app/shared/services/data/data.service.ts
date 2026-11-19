@@ -10,7 +10,7 @@ import {
 	RecordVOData,
 } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
-import { GetThumbnail } from '@models/get-thumbnail';
+import { GetThumbnail, isThumbnailStillExpected } from '@models/get-thumbnail';
 import {
 	RecordPreviewState,
 	getRecordPreviewState,
@@ -338,9 +338,13 @@ export class DataService {
 							this.thumbnailUpdatedSubject.next(item);
 						}
 
-						if (
+						const isThumbnailBeingPrepared =
 							!item.isFolder &&
-							(!thumbnailUrl || isPreviewBeingPrepared) &&
+							!thumbnailUrl &&
+							isThumbnailStillExpected(item as RecordVO);
+
+						if (
+							(isThumbnailBeingPrepared || isPreviewBeingPrepared) &&
 							isSameId(item.parentFolderId, this.currentFolder.folderId)
 						) {
 							this.debug('thumbRefreshQueue push %s', item.archiveNbr);

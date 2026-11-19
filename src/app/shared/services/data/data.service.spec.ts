@@ -1011,6 +1011,89 @@ describe('DataService', () => {
 			.catch(done.fail);
 	});
 
+	it('should not add a lean item to thumbRefreshQueue when its thumbnail failed', (done) => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
+		service.setCurrentFolder(currentFolder);
+
+		const record = currentFolder.ChildItemVOs.find(
+			(item) => item.isRecord,
+		) as RecordVO;
+		service.registerItem(record);
+
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({
+					ChildItemVOs: [
+						{
+							folder_linkId: record.folder_linkId,
+							archiveNbr: record.archiveNbr,
+							parentFolderId: currentFolder.folderId,
+							type: 'type.record.image',
+							thumbnail256Status: GeneratedFileStatus.Failed,
+						},
+					],
+				}),
+			} as unknown as FolderResponse),
+		);
+
+		service
+			.fetchLeanItems([record])
+			.then(() => {
+				expect(service.getThumbRefreshQueue()).not.toContain(record);
+				done();
+			})
+			.catch(done.fail);
+	});
+
+	it('should keep a lean item whose thumbnail failed in thumbRefreshQueue while its copy is being prepared', (done) => {
+		const service = TestBed.inject(DataService);
+		const api = TestBed.inject(ApiService);
+		const navigateResponse = new FolderResponse(navigateMinData);
+		const currentFolder = navigateResponse.getFolderVO(true) as FolderVO;
+		service.setCurrentFolder(currentFolder);
+
+		const record = currentFolder.ChildItemVOs.find(
+			(item) => item.isRecord,
+		) as RecordVO;
+		service.registerItem(record);
+
+		spyOn(api.folder, 'getWithChildren').and.returnValue(
+			Promise.resolve({
+				isSuccessful: true,
+				getFolderVO: () => ({
+					ChildItemVOs: [
+						{
+							folder_linkId: record.folder_linkId,
+							archiveNbr: record.archiveNbr,
+							parentFolderId: currentFolder.folderId,
+							type: 'type.record.document',
+							FileVOs: [
+								{
+									format: FileFormat.Original,
+									type: 'type.file.document.docx',
+								},
+							],
+							accessCopyStatus: GeneratedFileStatus.Processing,
+							thumbnail256Status: GeneratedFileStatus.Failed,
+						},
+					],
+				}),
+			} as unknown as FolderResponse),
+		);
+
+		service
+			.fetchLeanItems([record])
+			.then(() => {
+				expect(service.getThumbRefreshQueue()).toContain(record);
+				done();
+			})
+			.catch(done.fail);
+	});
+
 	it('should add a lean item to thumbRefreshQueue when no thumbnail size is present', (done) => {
 		const service = TestBed.inject(DataService);
 		const api = TestBed.inject(ApiService);

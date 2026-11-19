@@ -1,3 +1,7 @@
+import { GeneratedFileStatus } from './file-vo';
+import { isAudioRecord, isVideoRecord } from './record-media-type';
+import { RecordVO } from './record-vo';
+
 interface ThumbnailData {
 	size: number;
 	url: string;
@@ -39,4 +43,16 @@ export function GetBannerInfo(item: HasThumbnails): ThumbnailData | undefined {
 
 export function GetBanner(item: HasThumbnails): string | undefined {
 	return GetBannerInfo(item)?.url;
+}
+
+export function isThumbnailStillExpected(record: RecordVO): boolean {
+	switch (record.thumbnail256Status) {
+		case GeneratedFileStatus.Failed:
+			return false;
+		case null:
+			// Stela has no 256px status for video and audio, but the legacy pipeline may still deliver their thumbnails.
+			return isVideoRecord(record) || isAudioRecord(record);
+		default:
+			return true;
+	}
 }

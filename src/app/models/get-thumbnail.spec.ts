@@ -1,4 +1,9 @@
-import { GetThumbnail, GetBanner } from './get-thumbnail';
+import {
+	GetThumbnail,
+	GetBanner,
+	isThumbnailStillExpected,
+} from './get-thumbnail';
+import { GeneratedFileStatus } from './file-vo';
 import { FolderVO, RecordVO } from '.';
 
 describe('GetThumbnail', () => {
@@ -116,5 +121,54 @@ describe('GetBanner', () => {
 		});
 
 		expect(GetBanner(folder)).toBe('https://example.com/2000');
+	});
+});
+
+function buildRecord(
+	type: string,
+	thumbnail256Status?: GeneratedFileStatus | null,
+): RecordVO {
+	return new RecordVO({ type, thumbnail256Status });
+}
+
+describe('isThumbnailStillExpected', () => {
+	it('should expect a thumbnail that is still processing', () => {
+		expect(
+			isThumbnailStillExpected(
+				buildRecord('type.record.image', GeneratedFileStatus.Processing),
+			),
+		).toBeTrue();
+	});
+
+	it('should not expect a thumbnail that failed', () => {
+		expect(
+			isThumbnailStillExpected(
+				buildRecord('type.record.image', GeneratedFileStatus.Failed),
+			),
+		).toBeFalse();
+	});
+
+	it('should not expect a thumbnail for a type stela does not make one for', () => {
+		expect(
+			isThumbnailStillExpected(buildRecord('type.record.archive', null)),
+		).toBeFalse();
+	});
+
+	it('should still expect a thumbnail for video without a stela status', () => {
+		expect(
+			isThumbnailStillExpected(buildRecord('type.record.video', null)),
+		).toBeTrue();
+	});
+
+	it('should still expect a thumbnail for audio without a stela status', () => {
+		expect(
+			isThumbnailStillExpected(buildRecord('type.record.audio', null)),
+		).toBeTrue();
+	});
+
+	it('should expect a thumbnail when stela does not send a status', () => {
+		expect(
+			isThumbnailStillExpected(buildRecord('type.record.archive')),
+		).toBeTrue();
 	});
 });
