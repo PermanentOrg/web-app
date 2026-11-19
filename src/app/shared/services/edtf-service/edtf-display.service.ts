@@ -48,6 +48,8 @@ const OPEN_END_PREFIX = 'After ';
 const RANGE_SEPARATOR = ' —';
 const NO_MONTH_INDEX = -1;
 const SEPARATOR = ' \u2022';
+const APPROXIMATE_PREFIX = 'c. ';
+const UNCERTAIN_SUFFIX = ' ?';
 
 const EMPTY_DISPLAY_TEXT: EdtfDisplayText = { date: [], dateEnd: [], time: [] };
 
@@ -60,7 +62,8 @@ interface EdtfIntervalSide {
 	timeSegments: EdtfDisplaySegment[];
 	timeTextWithSeconds: string;
 	timezoneLabel: string;
-	qualifierSymbol: string;
+	isApproximate: boolean;
+	isUncertain: boolean;
 	isEmpty: boolean;
 }
 
@@ -234,7 +237,7 @@ export class EdtfDisplayService {
 		if (side.isEmpty) {
 			return UNKNOWN_LABEL;
 		}
-		const dateText = `${side.dateText}${side.qualifierSymbol ? ` ${side.qualifierSymbol}` : ''}`;
+		const dateText = segmentsToText(this.qualifiedSideSegments(side));
 		if (!side.timeTextWithSeconds) {
 			return dateText;
 		}
@@ -250,15 +253,6 @@ export class EdtfDisplayService {
 		} catch {
 			return null;
 		}
-	}
-
-	private toQualifierSymbol(
-		qualifiers: DateQualifierFlags | undefined,
-	): string {
-		if (qualifiers?.approximate && qualifiers?.uncertain) return '%';
-		if (qualifiers?.approximate) return '~';
-		if (qualifiers?.uncertain) return '?';
-		return '';
 	}
 
 	private toIntervalSide(
@@ -281,7 +275,8 @@ export class EdtfDisplayService {
 			timeTextWithSeconds: segmentsToText(this.formatTimeSegments(time, true)),
 			timezoneLabel:
 				this.edtfService.getTimezoneAbbreviation(date, time, timezone) ?? '',
-			qualifierSymbol: this.toQualifierSymbol(qualifiers),
+			isApproximate: !!qualifiers?.approximate,
+			isUncertain: !!qualifiers?.uncertain,
 			isEmpty,
 		};
 	}
@@ -293,10 +288,7 @@ export class EdtfDisplayService {
 
 		return {
 			...EMPTY_DISPLAY_TEXT,
-			date: joinSegments([
-				content(side.dateText),
-				...this.qualifierSegments(side),
-			]),
+			date: joinSegments(this.qualifiedSideSegments(side)),
 			time: side.timeText
 				? joinSegments([
 						...side.timeSegments,
@@ -323,8 +315,7 @@ export class EdtfDisplayService {
 				...EMPTY_DISPLAY_TEXT,
 				date: joinSegments([
 					annotation(OPEN_START_PREFIX),
-					content(end.dateText),
-					...this.qualifierSegments(end),
+					...this.qualifiedSideSegments(end),
 				]),
 			};
 		}
@@ -334,8 +325,7 @@ export class EdtfDisplayService {
 				...EMPTY_DISPLAY_TEXT,
 				date: joinSegments([
 					annotation(OPEN_END_PREFIX),
-					content(start.dateText),
-					...this.qualifierSegments(start),
+					...this.qualifiedSideSegments(start),
 				]),
 			};
 		}
@@ -352,27 +342,29 @@ export class EdtfDisplayService {
 		if (mergeLevel === 'day') {
 			return {
 				...EMPTY_DISPLAY_TEXT,
-				date: joinSegments([
-					content(start.dateText),
-					...this.qualifierSegments(start),
-					...this.qualifierSegments(end),
-				]),
+				date: joinSegments(
+					this.qualifiedSegments(
+						start.dateText,
+						start.isApproximate || end.isApproximate,
+						start.isUncertain || end.isUncertain,
+					),
+				),
 				time: this.buildTimeRange(start, end),
 			};
 		}
 
-		if (mergeLevel === 'none') {
+		if (
+			mergeLevel === 'none' ||
+			this.isQualified(start) ||
+			this.isQualified(end)
+		) {
 			return {
 				...EMPTY_DISPLAY_TEXT,
 				date: joinSegments([
-					content(start.dateText),
-					...this.qualifierSegments(start),
+					...this.qualifiedSideSegments(start),
 					content(RANGE_SEPARATOR),
 				]),
-				dateEnd: joinSegments([
-					content(end.dateText),
-					...this.qualifierSegments(end),
-				]),
+				dateEnd: joinSegments(this.qualifiedSideSegments(end)),
 			};
 		}
 
@@ -384,13 +376,11 @@ export class EdtfDisplayService {
 		return {
 			...EMPTY_DISPLAY_TEXT,
 			date: joinSegments([
-				content(this.monthAndDayLabel(start.date)),
-				...this.qualifierSegments(start),
+				...this.qualifiedSideSegments(start, this.monthAndDayLabel(start.date)),
 				content(RANGE_SEPARATOR),
 			]),
 			dateEnd: joinSegments([
-				content(endLabel),
-				...this.qualifierSegments(end),
+				...this.qualifiedSideSegments(end, endLabel),
 				content(`, ${this.edtfService.padWithX(start.date.year, 4)}`),
 			]),
 		};
@@ -456,8 +446,31 @@ export class EdtfDisplayService {
 		return timezoneLabel ? [annotation(` ${timezoneLabel}`)] : [];
 	}
 
-	private qualifierSegments(side: EdtfIntervalSide): EdtfDisplaySegment[] {
-		return side.qualifierSymbol ? [annotation(` ${side.qualifierSymbol}`)] : [];
+	private isQualified(side: EdtfIntervalSide): boolean {
+		return side.isApproximate || side.isUncertain;
+	}
+
+	private qualifiedSideSegments(
+		side: EdtfIntervalSide,
+		dateLabel = side.dateText,
+	): EdtfDisplaySegment[] {
+		return this.qualifiedSegments(
+			dateLabel,
+			side.isApproximate,
+			side.isUncertain,
+		);
+	}
+
+	private qualifiedSegments(
+		dateLabel: string,
+		isApproximate: boolean,
+		isUncertain: boolean,
+	): EdtfDisplaySegment[] {
+		return [
+			...(isApproximate ? [annotation(APPROXIMATE_PREFIX)] : []),
+			content(dateLabel),
+			...(isUncertain ? [annotation(UNCERTAIN_SUFFIX)] : []),
+		];
 	}
 
 	private monthAndDayLabel(date: DateModel): string {
