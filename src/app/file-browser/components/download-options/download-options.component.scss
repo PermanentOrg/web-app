@@ -1,16 +1,90 @@
+@import 'variables';
+
 :host {
 	display: block;
+	overflow: hidden;
+	border-radius: 12px;
+	background-color: $PR-brand-white;
+	box-shadow: 0 8px 24px rgba($PR-blue-900, 0.16);
+	color: $PR-blue-900;
+}
+
+.download-option-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
 .download-option {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	padding: 16px;
+	border: none;
+	background: none;
+	color: inherit;
+	text-align: left;
 	cursor: pointer;
 
-	&:hover {
-		background-color: #eaeaea;
+	&:hover,
+	&:focus-visible {
+		background-color: $PR-blue-25;
 	}
+}
 
-	& > span {
+.download-option-icon {
+	flex-shrink: 0;
+	width: 24px;
+	height: 24px;
+	background-color: $PR-blue-900;
+	mask-position: center;
+	mask-repeat: no-repeat;
+	mask-size: contain;
+}
+
+.download-option-label {
+	flex-grow: 1;
+	font-family: UsualMedium, sans-serif;
+	font-size: 14px;
+}
+
+.download-option-extension {
+	padding: 2px 8px;
+	border-radius: 4px;
+	background-color: $PR-blue-25;
+	font-family: UsualRegular, sans-serif;
+	font-size: 10px;
+	line-height: 16px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+}
+
+.download-options-processing {
+	display: flex;
+	gap: 12px;
+	padding: 16px;
+	border-top: 1px solid $PR-blue-50;
+	background-color: $PR-blue-25;
+	cursor: default;
+
+	p {
+		margin: 0;
 		font-size: 14px;
-		margin-left: 10px;
+		line-height: 1.6;
 	}
+}
+
+.processing-icon {
+	margin-top: 2px;
+	color: $PR-yellow-500;
+}
+
+.processing-heading {
+	font-family: UsualMedium, sans-serif;
+}
+
+.processing-body {
+	font-family: UsualRegular, sans-serif;
+	color: $PR-blue-600;
 }

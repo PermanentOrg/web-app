@@ -5,6 +5,11 @@
 	align-items: center;
 }
 
+:host {
+	position: relative;
+	display: block;
+}
+
 .download-container {
 	cursor: pointer;
 	display: flex;
@@ -30,15 +35,9 @@
 }
 
 .download-options {
-	width: 211px;
-	height: fit-content;
-	box-shadow:
-		0 2px 2px rgba($PR-brand-black, 0.24),
-		0 0 2px rgba($PR-brand-black, 0.12);
-	padding: 0.5rem 0;
-	margin-left: 3rem;
-
-	&-file-viewer {
-		position: absolute;
-	}
+	position: absolute;
+	bottom: calc(100% + 8px);
+	left: 0;
+	right: 0;
+	z-index: 1;
 }
