@@ -86,7 +86,7 @@ describe('EdtfDisplayService', () => {
 			expect(dateTextOf('2001-09-24/2001-09-30')).toBe('Sep. 24 — 30, 2001');
 		});
 
-		it('should render a range with both sides unknown', () => {
+		it('should render a range with both bounds unknown', () => {
 			expect(dateTextOf('/')).toBe('Unknown — Unknown');
 		});
 
@@ -117,11 +117,11 @@ describe('EdtfDisplayService', () => {
 			expect(dateEndTextOf('1964/2008')).toBe('2008');
 		});
 
-		it('should split a range with both sides unknown', () => {
+		it('should split a range with both bounds unknown', () => {
 			expect(dateEndTextOf('/')).toBe('Unknown');
 		});
 
-		it('should not split a value that is not a two-sided range', () => {
+		it('should not split a value that is not a closed range', () => {
 			expect(dateEndTextOf('1985-04-12')).toBe('');
 			expect(dateEndTextOf('1985-04-12/..')).toBe('');
 			expect(dateEndTextOf('../1985-04-12')).toBe('');
@@ -150,12 +150,12 @@ describe('EdtfDisplayService', () => {
 			expect(dateTextOf('1985%')).not.toContain('%');
 		});
 
-		it('should keep a qualifier on the side that carries it', () => {
+		it('should keep a qualifier on the bound that carries it', () => {
 			expect(dateTextOf('1984?/1990~')).toBe('1984 ? — c. 1990');
 			expect(dateTextOf('1984%/1990')).toBe('c. 1984 ? — 1990');
 		});
 
-		it('should print both full dates when a side is qualified', () => {
+		it('should print both full dates when a bound is qualified', () => {
 			expect(dateTextOf('2001-09-24?/2001-09-30')).toBe(
 				'Sep. 24, 2001 ? — Sep. 30, 2001',
 			);
@@ -173,7 +173,7 @@ describe('EdtfDisplayService', () => {
 			);
 		});
 
-		it('should qualify the known side of an open range', () => {
+		it('should qualify the known bound of an open range', () => {
 			expect(dateTextOf('../1985~')).toBe('Before c. 1985');
 			expect(dateTextOf('1985%/..')).toBe('After c. 1985 ?');
 		});
@@ -316,7 +316,7 @@ describe('EdtfDisplayService', () => {
 			).toBe('9:45 AM — 4:00 PM CDT');
 		});
 
-		it('should show each zone of a same-day range whose sides differ', () => {
+		it('should show each zone of a same-day range whose bounds differ', () => {
 			const acrossSpringForward =
 				'2026-03-29T01:30:00+01:00/2026-03-29T03:30:00+02:00';
 
@@ -339,7 +339,7 @@ describe('EdtfDisplayService', () => {
 			).toBe('4:00 PM CDT');
 		});
 
-		it('should give each side of a range hiding its times its own zone in the tooltip', () => {
+		it('should give each bound of a range hiding its times its own zone in the tooltip', () => {
 			expect(
 				service.formatForTooltip(
 					'1985-04-12T09:00:00/1985-06-10T17:00:00',
@@ -514,7 +514,7 @@ describe('EdtfDisplayService', () => {
 			).toBeNull();
 		});
 
-		it('should keep the qualifier and skip the time on a side without one', () => {
+		it('should keep the qualifier and skip the time on a bound without one', () => {
 			expect(
 				service.formatForTooltip('1985-04-12T09:00:00Z/1985-06-10~'),
 			).toEqual({
@@ -528,7 +528,7 @@ describe('EdtfDisplayService', () => {
 			expect(service.formatForTooltip(undefined)).toBeNull();
 		});
 
-		it('should name an unknown side rather than leaving it blank', () => {
+		it('should name an unknown bound rather than leaving it blank', () => {
 			expect(service.formatForTooltip('1985-04-12T09:00:00Z/')).toEqual({
 				from: 'Apr. 12, 1985 \u2022 9:00:00 AM',
 				to: 'Unknown',

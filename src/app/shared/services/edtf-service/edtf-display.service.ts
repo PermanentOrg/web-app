@@ -55,7 +55,7 @@ const EMPTY_DISPLAY_TEXT: EdtfDisplayText = { date: [], dateEnd: [], time: [] };
 
 type IntervalMergeLevel = 'day' | 'month' | 'year' | 'none';
 
-interface EdtfIntervalSide {
+interface EdtfIntervalBound {
 	date: DateModel;
 	dateText: string;
 	timeText: string;
@@ -67,10 +67,10 @@ interface EdtfIntervalSide {
 	isEmpty: boolean;
 }
 
-interface EdtfIntervalSides {
+interface EdtfIntervalBounds {
 	isInterval: boolean;
-	start: EdtfIntervalSide;
-	end: EdtfIntervalSide | null;
+	start: EdtfIntervalBound;
+	end: EdtfIntervalBound | null;
 }
 
 function content(text: string): EdtfDisplaySegment {
@@ -162,27 +162,27 @@ export class EdtfDisplayService {
 			return EMPTY_DISPLAY_TEXT;
 		}
 
-		const sides = this.toIntervalSides(displayTime, timezone);
+		const bounds = this.toIntervalBounds(displayTime, timezone);
 
-		if (!sides) {
+		if (!bounds) {
 			return { ...EMPTY_DISPLAY_TEXT, date: [content(displayTime)] };
 		}
 
-		return sides.end
-			? this.buildInterval(sides.start, sides.end)
-			: this.buildSingleValue(sides.start);
+		return bounds.end
+			? this.buildInterval(bounds.start, bounds.end)
+			: this.buildSingleValue(bounds.start);
 	}
 
 	formatForTooltip(
 		displayTime: string | null | undefined,
 		timezone?: string | null,
 	): EdtfTooltipText | null {
-		const sides = this.toIntervalSides(displayTime, timezone);
-		if (!sides) {
+		const bounds = this.toIntervalBounds(displayTime, timezone);
+		if (!bounds) {
 			return null;
 		}
 
-		const { start, end } = sides;
+		const { start, end } = bounds;
 		const showsItsTimes =
 			!end || this.intervalMergeLevel(start.date, end.date) === 'day';
 
@@ -202,10 +202,10 @@ export class EdtfDisplayService {
 			.trim();
 	}
 
-	private toIntervalSides(
+	private toIntervalBounds(
 		displayTime: string | null | undefined,
 		timezone: string | null | undefined,
-	): EdtfIntervalSides | null {
+	): EdtfIntervalBounds | null {
 		const model = this.parseOrNull(displayTime);
 
 		if (!model) {
@@ -216,14 +216,14 @@ export class EdtfDisplayService {
 
 		return {
 			isInterval,
-			start: this.toIntervalSide(
+			start: this.toIntervalBound(
 				model.qualifiers,
 				model.date,
 				model.time,
 				timezone,
 			),
 			end: isInterval
-				? this.toIntervalSide(
+				? this.toIntervalBound(
 						model.endQualifiers,
 						model.endDate,
 						model.endTime,
@@ -233,16 +233,16 @@ export class EdtfDisplayService {
 		};
 	}
 
-	private toFullText(side: EdtfIntervalSide): string {
-		if (side.isEmpty) {
+	private toFullText(bound: EdtfIntervalBound): string {
+		if (bound.isEmpty) {
 			return UNKNOWN_LABEL;
 		}
-		const dateText = segmentsToText(this.qualifiedSideSegments(side));
-		if (!side.timeTextWithSeconds) {
+		const dateText = segmentsToText(this.qualifiedBoundSegments(bound));
+		if (!bound.timeTextWithSeconds) {
 			return dateText;
 		}
-		const timezoneSuffix = side.timezoneLabel ? ` ${side.timezoneLabel}` : '';
-		return `${dateText}${SEPARATOR} ${side.timeTextWithSeconds}${timezoneSuffix}`;
+		const timezoneSuffix = bound.timezoneLabel ? ` ${bound.timezoneLabel}` : '';
+		return `${dateText}${SEPARATOR} ${bound.timeTextWithSeconds}${timezoneSuffix}`;
 	}
 
 	private parseOrNull(
@@ -255,12 +255,12 @@ export class EdtfDisplayService {
 		}
 	}
 
-	private toIntervalSide(
+	private toIntervalBound(
 		qualifiers: DateQualifierFlags | undefined,
 		date: DateModel | undefined,
 		time: TimeModel | undefined,
 		timezone: string | null | undefined,
-	): EdtfIntervalSide {
+	): EdtfIntervalBound {
 		const hasAnyDatePart = !!(date?.year || date?.month || date?.day);
 		const isEmpty = !!qualifiers?.unknown || !hasAnyDatePart;
 		const timeSegments = this.formatTimeSegments(time);
@@ -281,26 +281,26 @@ export class EdtfDisplayService {
 		};
 	}
 
-	private buildSingleValue(side: EdtfIntervalSide): EdtfDisplayText {
-		if (side.isEmpty) {
+	private buildSingleValue(bound: EdtfIntervalBound): EdtfDisplayText {
+		if (bound.isEmpty) {
 			return { ...EMPTY_DISPLAY_TEXT, date: [annotation(UNKNOWN_LABEL)] };
 		}
 
 		return {
 			...EMPTY_DISPLAY_TEXT,
-			date: joinSegments(this.qualifiedSideSegments(side)),
-			time: side.timeText
+			date: joinSegments(this.qualifiedBoundSegments(bound)),
+			time: bound.timeText
 				? joinSegments([
-						...side.timeSegments,
-						...this.timezoneSegments(side.timezoneLabel),
+						...bound.timeSegments,
+						...this.timezoneSegments(bound.timezoneLabel),
 					])
 				: [],
 		};
 	}
 
 	private buildInterval(
-		start: EdtfIntervalSide,
-		end: EdtfIntervalSide,
+		start: EdtfIntervalBound,
+		end: EdtfIntervalBound,
 	): EdtfDisplayText {
 		if (start.isEmpty && end.isEmpty) {
 			return {
@@ -315,7 +315,7 @@ export class EdtfDisplayService {
 				...EMPTY_DISPLAY_TEXT,
 				date: joinSegments([
 					annotation(OPEN_START_PREFIX),
-					...this.qualifiedSideSegments(end),
+					...this.qualifiedBoundSegments(end),
 				]),
 			};
 		}
@@ -325,7 +325,7 @@ export class EdtfDisplayService {
 				...EMPTY_DISPLAY_TEXT,
 				date: joinSegments([
 					annotation(OPEN_END_PREFIX),
-					...this.qualifiedSideSegments(start),
+					...this.qualifiedBoundSegments(start),
 				]),
 			};
 		}
@@ -334,8 +334,8 @@ export class EdtfDisplayService {
 	}
 
 	private buildClosedInterval(
-		start: EdtfIntervalSide,
-		end: EdtfIntervalSide,
+		start: EdtfIntervalBound,
+		end: EdtfIntervalBound,
 	): EdtfDisplayText {
 		const mergeLevel = this.intervalMergeLevel(start.date, end.date);
 
@@ -361,10 +361,10 @@ export class EdtfDisplayService {
 			return {
 				...EMPTY_DISPLAY_TEXT,
 				date: joinSegments([
-					...this.qualifiedSideSegments(start),
+					...this.qualifiedBoundSegments(start),
 					content(RANGE_SEPARATOR),
 				]),
-				dateEnd: joinSegments(this.qualifiedSideSegments(end)),
+				dateEnd: joinSegments(this.qualifiedBoundSegments(end)),
 			};
 		}
 
@@ -376,11 +376,14 @@ export class EdtfDisplayService {
 		return {
 			...EMPTY_DISPLAY_TEXT,
 			date: joinSegments([
-				...this.qualifiedSideSegments(start, this.monthAndDayLabel(start.date)),
+				...this.qualifiedBoundSegments(
+					start,
+					this.monthAndDayLabel(start.date),
+				),
 				content(RANGE_SEPARATOR),
 			]),
 			dateEnd: joinSegments([
-				...this.qualifiedSideSegments(end, endLabel),
+				...this.qualifiedBoundSegments(end, endLabel),
 				content(`, ${this.edtfService.padWithX(start.date.year, 4)}`),
 			]),
 		};
@@ -414,8 +417,8 @@ export class EdtfDisplayService {
 	}
 
 	private buildTimeRange(
-		start: EdtfIntervalSide,
-		end: EdtfIntervalSide,
+		start: EdtfIntervalBound,
+		end: EdtfIntervalBound,
 	): EdtfDisplaySegment[] {
 		if (start.timeText && end.timeText) {
 			return joinSegments([
@@ -426,38 +429,38 @@ export class EdtfDisplayService {
 				...this.timezoneSegments(end.timezoneLabel || start.timezoneLabel),
 			]);
 		}
-		const sideWithTime = start.timeText ? start : end;
+		const boundWithTime = start.timeText ? start : end;
 		return joinSegments([
-			...sideWithTime.timeSegments,
-			...this.timezoneSegments(sideWithTime.timezoneLabel),
+			...boundWithTime.timeSegments,
+			...this.timezoneSegments(boundWithTime.timezoneLabel),
 		]);
 	}
 
 	private distinctStartTimezoneLabel(
-		start: EdtfIntervalSide,
-		end: EdtfIntervalSide,
+		start: EdtfIntervalBound,
+		end: EdtfIntervalBound,
 	): string {
-		const isLabelSharedByBothSides =
+		const isLabelSharedByBothBounds =
 			!end.timezoneLabel || start.timezoneLabel === end.timezoneLabel;
-		return isLabelSharedByBothSides ? '' : start.timezoneLabel;
+		return isLabelSharedByBothBounds ? '' : start.timezoneLabel;
 	}
 
 	private timezoneSegments(timezoneLabel: string): EdtfDisplaySegment[] {
 		return timezoneLabel ? [annotation(` ${timezoneLabel}`)] : [];
 	}
 
-	private isQualified(side: EdtfIntervalSide): boolean {
-		return side.isApproximate || side.isUncertain;
+	private isQualified(bound: EdtfIntervalBound): boolean {
+		return bound.isApproximate || bound.isUncertain;
 	}
 
-	private qualifiedSideSegments(
-		side: EdtfIntervalSide,
-		dateLabel = side.dateText,
+	private qualifiedBoundSegments(
+		bound: EdtfIntervalBound,
+		dateLabel = bound.dateText,
 	): EdtfDisplaySegment[] {
 		return this.qualifiedSegments(
 			dateLabel,
-			side.isApproximate,
-			side.isUncertain,
+			bound.isApproximate,
+			bound.isUncertain,
 		);
 	}
 
