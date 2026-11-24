@@ -525,6 +525,32 @@ describe('RecordRepo', () => {
 			expect(record.accessCopyStatus).toBeUndefined();
 		});
 
+		it('should map the 256px thumbnail status from the stela thumbnail urls', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				thumbnailUrls: { width256Status: GeneratedFileStatus.Failed },
+			} as any);
+
+			expect(record.thumbnail256Status).toBe(GeneratedFileStatus.Failed);
+		});
+
+		it('should keep a null 256px thumbnail status', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+				thumbnailUrls: { width256Status: null },
+			} as any);
+
+			expect(record.thumbnail256Status).toBeNull();
+		});
+
+		it('should leave the 256px thumbnail status undefined when stela sends no thumbnail urls', () => {
+			const record = convertStelaRecordToRecordVO({
+				...baseStelaRecord,
+			} as any);
+
+			expect(record.thumbnail256Status).toBeUndefined();
+		});
+
 		it('should map publicAt from the stela record to publicDT', () => {
 			const record = convertStelaRecordToRecordVO({
 				...baseStelaRecord,
