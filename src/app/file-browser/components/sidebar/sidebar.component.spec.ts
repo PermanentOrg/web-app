@@ -510,6 +510,10 @@ describe('SidebarComponent', () => {
 	});
 
 	describe('displayTimeObject', () => {
+		beforeEach(() => {
+			component.showEdtfDatePicker = true;
+		});
+
 		it('should keep a stable reference across reads instead of creating a new object each time', async () => {
 			component.selectedItem = new RecordVO({ displayTime: '1985-05-20' });
 
@@ -622,20 +626,45 @@ describe('SidebarComponent', () => {
 	});
 
 	describe('updateDisplayTimeObject', () => {
-		it('should show an empty date when displayTime is explicitly null, ignoring displayDT', () => {
+		beforeEach(() => {
+			component.showEdtfDatePicker = true;
+		});
+
+		it('should fall back to the displayDT date and time, without a zone, when displayTime is null', () => {
 			component.selectedItem = new RecordVO({
 				displayTime: null,
-				displayDT: '1985-05-20T00:00:00Z',
+				displayDT: '1985-05-20T15:00:00Z',
+				timezone: 'America/New_York',
 			});
 
 			(component as any).updateDisplayTimeObject();
 
-			expect(component.displayTimeObject).toBeNull();
+			expect(component.displayTimeObject.date).toEqual({
+				year: '1985',
+				month: '05',
+				day: '20',
+			});
+
+			expect(component.displayTimeObject.time.hours).toBe('03');
+			expect(component.displayTimeObject.time.format).toBe('pm');
+			expect(component.displayTimeObject.time.timezoneId).toBeUndefined();
 		});
 
-		it('should not fall back to displayDT when displayTime is undefined', () => {
+		it('should prefer displayTime over displayDT', () => {
 			component.selectedItem = new RecordVO({
-				displayDT: '1985-05-20T00:00:00Z',
+				displayTime: '1990-06-15',
+				displayDT: '1985-05-20T15:00:00Z',
+			});
+
+			(component as any).updateDisplayTimeObject();
+
+			expect(component.displayTimeObject.date.year).toBe('1990');
+		});
+
+		it('should leave the display time object alone when the edtf-date flag is off', () => {
+			component.showEdtfDatePicker = false;
+			component.selectedItem = new RecordVO({
+				displayDT: '1985-05-20T15:00:00Z',
 			});
 
 			(component as any).updateDisplayTimeObject();
@@ -699,6 +728,7 @@ describe('SidebarComponent', () => {
 		});
 
 		it('should refresh the cached display time after saving from the modal', async () => {
+			component.showEdtfDatePicker = true;
 			spyOn(mockEditService, 'saveItemVoProperties').and.callFake(
 				async (item: any, changes: any) => {
 					Object.assign(item, changes);

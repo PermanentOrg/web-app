@@ -55,14 +55,17 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 
 	displayTimeObject: DateTimeModel | null = null;
 
-	// No displayDT fallback needed here because this feeds the edtf-date picker only,
-	// which is already hidden behind a flag
 	private updateDisplayTimeObject(): void {
-		const timeSource = this.selectedItem?.displayTime;
+		if (!this.showEdtfDatePicker) {
+			return;
+		}
+		const { displayTime, timezone } = this.edtfService.getItemDisplayTime(
+			this.selectedItem,
+		);
 		try {
 			this.displayTimeObject = this.edtfService.withTimezone(
-				timeSource ? this.edtfService.toDateTimeModel(timeSource) : null,
-				this.selectedItem?.timezone,
+				displayTime ? this.edtfService.toDateTimeModel(displayTime) : null,
+				timezone,
 			);
 		} catch (err) {
 			this.displayTimeObject = null;

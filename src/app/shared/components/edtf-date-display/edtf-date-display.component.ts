@@ -8,6 +8,7 @@ import {
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { EdtfDisplayService } from '@shared/services/edtf-service/edtf-display.service';
+import { EdtfService } from '@shared/services/edtf-service/edtf.service';
 
 @Component({
 	selector: 'pr-edtf-date-display',
@@ -20,15 +21,25 @@ import { EdtfDisplayService } from '@shared/services/edtf-service/edtf-display.s
 })
 export class EdtfDateDisplayComponent {
 	readonly displayTime = input<string | null | undefined>();
+	readonly displayDT = input<string | null | undefined>();
 	readonly showTime = input(true);
 	readonly timezone = input<string | null | undefined>();
 
+	private readonly edtfService = inject(EdtfService);
 	private readonly edtfDisplayService = inject(EdtfDisplayService);
+
+	private readonly itemDisplayTime = computed(() =>
+		this.edtfService.getItemDisplayTime({
+			displayTime: this.displayTime(),
+			displayDT: this.displayDT(),
+			timezone: this.timezone(),
+		}),
+	);
 
 	private readonly displayText = computed(() =>
 		this.edtfDisplayService.formatForDisplay(
-			this.displayTime(),
-			this.timezone(),
+			this.itemDisplayTime().displayTime,
+			this.itemDisplayTime().timezone,
 		),
 	);
 
@@ -40,8 +51,8 @@ export class EdtfDateDisplayComponent {
 	);
 	readonly tooltip = computed(() =>
 		this.edtfDisplayService.formatForTooltip(
-			this.displayTime(),
-			this.timezone(),
+			this.itemDisplayTime().displayTime,
+			this.itemDisplayTime().timezone,
 		),
 	);
 }
