@@ -169,6 +169,35 @@ describe('SharePreviewComponent', () => {
 		expect(component.isUnlistedShare).toEqual(true);
 	}));
 
+	describe('when a logged-out visitor is inside the full view', () => {
+		beforeEach(() => {
+			mockAccountService.isLoggedIn.and.returnValue(false);
+			mockAccountService.getArchive.and.returnValue(null);
+			(router.navigate as jasmine.Spy).calls.reset();
+		});
+
+		afterEach(() => {
+			mockAccountService.isLoggedIn.and.returnValue(true);
+			mockAccountService.getArchive.and.returnValue(defaultArchive);
+		});
+
+		it('should stay in the full view of an unlisted share', () => {
+			component.isUnlistedShare = true;
+			component.checkAccess();
+
+			expect(router.navigate).not.toHaveBeenCalled();
+		});
+
+		it('should send the visitor back to the preview of a share that is not unlisted', () => {
+			component.isUnlistedShare = false;
+			component.checkAccess();
+
+			expect(router.navigate).toHaveBeenCalledWith(['.'], {
+				relativeTo: jasmine.anything(),
+			});
+		});
+	});
+
 	it('should open dialog shortly after loading if user is logged out and it is not an unlisted share', fakeAsync(() => {
 		const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
 		const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);

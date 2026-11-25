@@ -324,6 +324,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 			this.sendGaEvent('viewed');
 		} else if (
 			!this.hasAccess &&
+			!this.isUnlistedShare &&
 			this.route.snapshot.firstChild.data.sharePreviewView
 		) {
 			// inside full view, send back to preview

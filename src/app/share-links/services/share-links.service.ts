@@ -20,12 +20,16 @@ export class ShareLinksService {
 	}
 
 	public async isUnlistedShare() {
-		if (!this._currentShareToken) {
+		return await this.isUnlistedShareToken(this._currentShareToken);
+	}
+
+	public async isUnlistedShareToken(shareToken: string) {
+		if (!shareToken) {
 			return false;
 		}
 		if (!this._shareLinks) {
 			this._shareLinks = await this.shareLinksApiService.getShareLinksByToken([
-				this._currentShareToken,
+				shareToken,
 			]);
 		}
 		if (this._shareLinks && this._shareLinks.length) {
