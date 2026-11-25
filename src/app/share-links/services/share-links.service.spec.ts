@@ -68,6 +68,23 @@ describe('ShareLinksService', () => {
 		expect(result).toBeFalse();
 	});
 
+	it('should look up a given token without a current share token', async () => {
+		apiSpy.getShareLinksByToken.and.resolveTo([
+			{ accessRestrictions: 'none' } as ShareLink,
+		]);
+		const result = await service.isUnlistedShareToken('given-token');
+
+		expect(result).toBeTrue();
+		expect(apiSpy.getShareLinksByToken).toHaveBeenCalledWith(['given-token']);
+	});
+
+	it('should return false for a missing given token', async () => {
+		const result = await service.isUnlistedShareToken(undefined);
+
+		expect(result).toBeFalse();
+		expect(apiSpy.getShareLinksByToken).not.toHaveBeenCalled();
+	});
+
 	it('should cache shareLinks after first fetch', async () => {
 		service.currentShareToken = 'abc123';
 		apiSpy.getShareLinksByToken.and.resolveTo([
